@@ -1,7 +1,6 @@
 package markehme.factionsplus.Cmds;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.P;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 

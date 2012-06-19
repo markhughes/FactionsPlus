@@ -2,10 +2,6 @@ package markehme.factionsplus;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
-
-import com.avaje.ebean.enhance.asm.commons.Method;
-import com.massivecraft.factions.P;
 import com.massivecraft.factions.cmd.FCommand;
 
 public class FactionsPlusHelpModifier extends FCommand {

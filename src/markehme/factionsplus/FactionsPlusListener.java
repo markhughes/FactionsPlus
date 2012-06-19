@@ -138,9 +138,14 @@ public class FactionsPlusListener implements Listener {
 					return;
 				}
 	        }
+	        
+			if(FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther") > 0) {
+				Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther"));
+				return;
+			}
 		}
 		
-		// TODO: extraPowerLossIfDeathByOther
+
 	}
 	
 	@EventHandler

@@ -4,8 +4,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
-import org.bukkit.ChatColor;
-
 public class FactionsPlusUpdate {
 	static public void checkUpdates() {
 		String content = null;
