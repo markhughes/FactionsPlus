@@ -132,10 +132,9 @@ public class FactionsPlusListener implements Listener {
         	        Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPotion"));
         	        return;
           }
-          if((causeOfDeath == "CUSTOM" && 
-        		  	(FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther") > 0)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther"));
-					return;
+          if(FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther") > 0) {
+			Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther"));
+			return;
       }
     }
 
