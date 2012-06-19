@@ -256,6 +256,10 @@ public class FactionsPlus extends JavaPlugin {
 				config.set("membersCanToggleState", wconfig.getBoolean("membersCanToggleState"));
 			} else config.set("membersCanToggleState", false);
 			
+			if(wconfig.isSet("extraPowerLossIfDeathByOther")) {
+				config.set("extraPowerLossIfDeathByOther", wconfig.getDouble("extraPowerLossIfDeathByOther"));
+			} else config.set("extraPowerLossIfDeathByOther", Double.valueOf(0));
+			
 			if(wconfig.isSet("extraPowerWhenKillPlayer")) {
 				config.set("extraPowerWhenKillPlayer", wconfig.getDouble("extraPowerWhenKillPlayer"));
 			} else config.set("extraPowerWhenKillPlayer", Double.valueOf(0));
