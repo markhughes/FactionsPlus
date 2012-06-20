@@ -16,7 +16,7 @@ import com.massivecraft.factions.FPlayers;
 
 public class LWCFunctions {
 	private static LWC lwc;
-
+ 
 	public static void integrateLWC(LWCPlugin plugin) {
 		lwc = plugin.getLWC();
 	}
@@ -28,8 +28,11 @@ public class LWCFunctions {
 		List<Block> furnaces = new LinkedList<Block>();
 		List<Block> wooddoor = new LinkedList<Block>();
 		List<Block> irondoor = new LinkedList<Block>();
+		List<Block> trapdoor = new LinkedList<Block>();
+		List<Block> sign = new LinkedList<Block>();
 
-		
+
+
 		for(int x = 0; x < blocks.length; x++)
 		{
 			if(blocks[x].getType() == Material.CHEST)
@@ -40,21 +43,29 @@ public class LWCFunctions {
 			{
 				furnaces.add(blocks[x].getBlock());
 			}
-			if(blocks[x].getType() == Material.WOOD_DOOR)
+			if(blocks[x].getType() == Material.WOODEN_DOOR)
 			{
 				wooddoor.add(blocks[x].getBlock());
 			}
-			if(blocks[x].getType() == Material.IRON_DOOR)
+			if(blocks[x].getType() == Material.IRON_DOOR_BLOCK)
 			{
 				irondoor.add(blocks[x].getBlock());
 			}
-				
+			if(blocks[x].getType() == Material.TRAP_DOOR)
+			{
+				trapdoor.add(blocks[x].getBlock());
+			}
+			if(blocks[x].getType() == Material.SIGN || blocks[x].getType() == Material.WALL_SIGN)
+			{
+				sign.add(blocks[x].getBlock());
+			}
+
 		}
 		for(int x = 0; x < chests.size(); x++)
 		{
 			if(lwc.findProtection(chests.get(x)) != null)
 			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(chests.get(x)).getBukkitOwner())))
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(chests.get(x)).getOwner())))
 					lwc.findProtection(chests.get(x)).remove();
 			}
 		}
@@ -62,7 +73,7 @@ public class LWCFunctions {
 		{
 			if(lwc.findProtection(furnaces.get(x)) != null)
 			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(furnaces.get(x)).getBukkitOwner())))
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(furnaces.get(x)).getOwner())))
 					lwc.findProtection(furnaces.get(x)).remove();
 			}
 		}
@@ -70,7 +81,7 @@ public class LWCFunctions {
 		{
 			if(lwc.findProtection(wooddoor.get(x)) != null)
 			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(wooddoor.get(x)).getBukkitOwner())))
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(wooddoor.get(x)).getOwner())))
 					lwc.findProtection(wooddoor.get(x)).remove();
 			}
 		}
@@ -78,10 +89,28 @@ public class LWCFunctions {
 		{
 			if(lwc.findProtection(irondoor.get(x)) != null)
 			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(irondoor.get(x)).getBukkitOwner())))
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(irondoor.get(x)).getOwner())))
 					lwc.findProtection(irondoor.get(x)).remove();
 			}
 		}
+		for(int x = 0; x < trapdoor.size(); x++)
+		{
+			if(lwc.findProtection(trapdoor.get(x)) != null)
+			{
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(trapdoor.get(x)).getOwner())))
+					lwc.findProtection(trapdoor.get(x)).remove();
+			}
+		}
+		for(int x = 0; x < sign.size(); x++)
+		{
+			if(lwc.findProtection(sign.get(x)) != null)
+			{
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(sign.get(x)).getOwner())))
+					lwc.findProtection(sign.get(x)).remove();
+					
+			}
+		}
 	}
+
 
 }
