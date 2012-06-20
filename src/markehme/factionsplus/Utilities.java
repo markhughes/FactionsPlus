@@ -138,7 +138,6 @@ public class Utilities {
 				DataInputStream in = new DataInputStream(fstream);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				String strLine;
-				int c = 0;
 
 				while ((strLine = br.readLine()) != null) {
 					if(strLine.contains(":")) {
