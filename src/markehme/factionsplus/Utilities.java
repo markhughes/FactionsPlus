@@ -55,6 +55,8 @@ public class Utilities {
 	
 	/* ********** JAIL RELATED ********** */
 	
+    
+    // add check to see if player is still in faction, if not remove jail effects
 	public static boolean isJailed(Player thePlayer) {
 		File jailDataFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + thePlayer.getName());
 
@@ -130,29 +132,26 @@ public class Utilities {
 	public static int getCountOfWarps(Faction faction) {
 		File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
 		
-		try {
-			FileInputStream fstream = new FileInputStream(currentWarpFile);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			Integer c = 0;
-			
-			while ((strLine = br.readLine()) != null) {
-				if(!strLine.contains(":")) {
-					return c;
+		// Check if file exists
+		int c = 0;
+		if (currentWarpFile.exists()) {	
+			try {
+				FileInputStream fstream = new FileInputStream(currentWarpFile);
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+
+				while ((strLine = br.readLine()) != null) {
+					if(strLine.contains(":")) {
+						c++;
+					}
 				}
-				
-				c++;
+				in.close();
+			} catch (Exception e) {
+				e.printStackTrace();			
 			}
-			
-			
-			in.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();			
 		}
-		
-		return 0;
+		return c;
 	}
 
 }

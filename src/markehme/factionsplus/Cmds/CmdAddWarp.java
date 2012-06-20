@@ -1,8 +1,12 @@
 package markehme.factionsplus.Cmds;
 
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
@@ -93,7 +97,7 @@ public class CmdAddWarp extends FCommand {
 		
 		if(FactionsPlus.config.getInt("maxWarps") != 0) {
 			if(Utilities.getCountOfWarps(currentFaction) >= FactionsPlus.config.getInt("maxWarps")) {
-				sender.sendMessage("You can not max any more warps.");
+				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}
 		}
@@ -109,6 +113,24 @@ public class CmdAddWarp extends FCommand {
 		        return;
 		      }
 		} else {
+			try {
+				FileInputStream fstream = new FileInputStream(currentWarpFile);
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+				
+				while ((strLine = br.readLine()) != null) {
+					String[] warp_data =  strLine.split(":");
+					
+					if(warp_data[0].equalsIgnoreCase(warpname)) {
+						in.close();
+						sender.sendMessage(ChatColor.RED + "A warp already exists with that name.");
+						return;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			/*
 			currentWarpFile.delete();
 			try {
