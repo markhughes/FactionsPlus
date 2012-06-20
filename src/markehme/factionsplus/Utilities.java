@@ -131,7 +131,8 @@ public class Utilities {
 		File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
 		
 		// Check if file exists
-		if (currentWarpFile.exists()) {
+		int c = 0;
+		if (currentWarpFile.exists()) {	
 			try {
 				FileInputStream fstream = new FileInputStream(currentWarpFile);
 				DataInputStream in = new DataInputStream(fstream);
@@ -144,14 +145,12 @@ public class Utilities {
 						c++;
 					}
 				}
-
 				in.close();
-				return c;
 			} catch (Exception e) {
 				e.printStackTrace();			
 			}
 		}
-		return 0;
+		return c;
 	}
 
 }
