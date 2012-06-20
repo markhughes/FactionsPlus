@@ -1,0 +1,45 @@
+In order to be able to compile this without errors in Eclipse, here's what you need:
+
+A. jars needed (put them in the "lib" folder in the FactionsPlus project)
+
+1. bukkit.jar
+    get one from here:
+    http://dl.bukkit.org/downloads/bukkit/
+    
+    the jar name may vary so you might have to:
+    left click FactionsPlus project then right click, choose Properties, left click
+    Java Build Path  then Libraries tab, click the "bukkit..." in list and Edit and choose the
+    downloaded file, click Open, then Ok
+
+2. DisguiseCraft.jar
+   get the top one from here:
+   http://dev.bukkit.org/server-mods/disguisecraft/files/
+   v2.5 tested
+   
+3. MobDisguise.jar
+    get top one from here:
+    http://dev.bukkit.org/server-mods/mobdisguise/files/
+    MobDisguise 1.81 tested
+    
+4. Vault.jar
+    get top one from here:
+    http://dev.bukkit.org/server-mods/vault/files/
+    Vault 1.2.16 tested
+    
+5. WorldGuard.jar
+    get second one (the .zip )from here (and extract the jar from it):
+    http://dev.bukkit.org/server-mods/worldguard/files/
+    WorldGuard 5.5.2 tested
+    
+6. WorldEdit.jar
+    get the top .zip from here(and extract the jar from it):
+    http://dev.bukkit.org/server-mods/worldedit/files/
+    WorldEdit 5.3 tested
+
+B. Projects needed:
+
+1. Factions
+   from: https://github.com/MassiveCraft/Factions
+   
+If you have all these, the FactionsPlus should compile without errors.
+ 

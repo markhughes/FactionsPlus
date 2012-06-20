@@ -140,7 +140,7 @@ public class FactionsPlusListener implements Listener {
 
     }
   }
-		
+  }	
 
 	
 	@EventHandler
