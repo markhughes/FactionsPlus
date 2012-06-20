@@ -138,7 +138,7 @@ public class FactionsPlusListener implements Listener {
       }
     }
 
-
+    }
   }
 		
 
