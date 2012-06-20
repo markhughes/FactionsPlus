@@ -130,28 +130,27 @@ public class Utilities {
 	public static int getCountOfWarps(Faction faction) {
 		File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
 		
-		try {
-			FileInputStream fstream = new FileInputStream(currentWarpFile);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine;
-			Integer c = 0;
-			
-			while ((strLine = br.readLine()) != null) {
-				if(!strLine.contains(":")) {
-					return c;
+		// Check if file exists
+		if (currentWarpFile.exists()) {
+			try {
+				FileInputStream fstream = new FileInputStream(currentWarpFile);
+				DataInputStream in = new DataInputStream(fstream);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				String strLine;
+				int c = 0;
+
+				while ((strLine = br.readLine()) != null) {
+					if(strLine.contains(":")) {
+						c++;
+					}
 				}
-				
-				c++;
+
+				in.close();
+				return c;
+			} catch (Exception e) {
+				e.printStackTrace();			
 			}
-			
-			
-			in.close();
-			
-		} catch (Exception e) {
-			e.printStackTrace();			
 		}
-		
 		return 0;
 	}
 
