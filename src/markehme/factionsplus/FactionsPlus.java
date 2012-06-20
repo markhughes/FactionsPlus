@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.extras.DCListener;
+import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.LWCListener;
 import markehme.factionsplus.extras.MDListener;
 import markehme.factionsplus.extras.Metrics;
 import net.milkbowl.vault.economy.Economy;
@@ -16,6 +18,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.griefcraft.lwc.LWCPlugin;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
@@ -53,11 +56,15 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isDisguiseCraftEnabled = false;
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
+	public static boolean isLWCEnabled = false;
+	
+	public static boolean useLWCIntegrationFix = false;
 	
 	public final FactionsPlusListener FPListener = new FactionsPlusListener();
 	
 	public final DCListener DCListener = new DCListener();
 	public final MDListener MDListener = new MDListener();
+	public final LWCListener LWCListener = new LWCListener();
 
 	public static WorldEditPlugin worldEditPlugin = null;
 	public static WorldGuardPlugin worldGuardPlugin = null;
@@ -336,6 +343,10 @@ public class FactionsPlus extends JavaPlugin {
 				config.set("economy_costToToggleDownPeaceful", wconfig.getInt("economy_costToToggleDownPeaceful"));
 			} else config.set("economy_costToToggleDownPeaceful", Integer.valueOf(0));
 			
+			if(wconfig.isSet("useLWCIntegrationFix")) {
+				config.set("useLWCIntegrationFix", wconfig.getBoolean("useLWCIntegrationFix"));
+			} else config.set("useLWCIntegrationFix", false);
+			
 			config.set("DoNotChangeMe", Integer.valueOf(8));
 			
 			config.save(configFile);
@@ -396,9 +407,24 @@ public class FactionsPlus extends JavaPlugin {
         	log.info("[FactionsPlus] Hooked into WorldGuard!");
         	isWorldGuardEnabled = true;
         }
+        if(config.getBoolean("useLWCIntegrationFix") == true) {
+            if(getServer().getPluginManager().isPluginEnabled("LWC")) {
+            	pm.registerEvents(this.LWCListener, this);
+            	log.info("[FactionsPlus] Hooked into LWC!");
+            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
+            	isLWCEnabled = true;
+            	
+            }
+            else {
+            	log.info("[FactionsPlus] No LWC Found but Integration Option Is Enabled!");
+            }
+        }
+
+        
         
         FactionsPlus.config = YamlConfiguration.loadConfiguration(FactionsPlus.configFile);
         
+
         version = getDescription().getVersion();
         
         FactionsPlusUpdate.checkUpdates();
