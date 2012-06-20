@@ -55,6 +55,8 @@ public class Utilities {
 	
 	/* ********** JAIL RELATED ********** */
 	
+    
+    // add check to see if player is still in faction, if not remove jail effects
 	public static boolean isJailed(Player thePlayer) {
 		File jailDataFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + thePlayer.getName());
 
