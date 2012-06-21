@@ -184,8 +184,8 @@ public class FactionsPlus extends JavaPlugin {
 			} else config.set("mustBeInOwnTerritoryToCreate", true);
 			
 			if(wconfig.isSet("warpTeleportAllowedFromEnemyTerritory")){
-				config.set("homesTeleportAllowedFromEnemyTerritory", wconfig.getBoolean("homesTeleportAllowedFromEnemyTerritory"));
-			} else config.set("homesTeleportAllowedFromEnemyTerritory", true);
+				config.set("warpTeleportAllowedFromEnemyTerritory", wconfig.getBoolean("warpTeleportAllowedFromEnemyTerritory"));
+			} else config.set("warpTeleportAllowedFromEnemyTerritory", true);
 			
 			if(wconfig.isSet("warpTeleportAllowedFromDifferentWorld")){
 				config.set("warpTeleportAllowedFromDifferentWorld", wconfig.getBoolean("warpTeleportAllowedFromDifferentWorld"));
