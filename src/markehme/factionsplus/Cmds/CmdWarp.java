@@ -75,7 +75,7 @@ public class CmdWarp extends FCommand {
 
 		// Check if player can teleport from enemy territory
 		if(!Conf.homesTeleportAllowedFromEnemyTerritory && fplayer.isInEnemyTerritory() ){
-			fplayer.msg("<b>You cannot teleport to your faction home while in the territory of an enemy faction.");
+			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
 
