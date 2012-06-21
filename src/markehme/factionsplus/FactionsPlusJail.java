@@ -176,7 +176,6 @@ public class FactionsPlusJail {
 			    	filewrite.flush();
 			    	filewrite.write(t);
 			    	sender.sendMessage(ChatColor.GREEN + jplayer.getName() +" has been jailed!");
-			    	player.sendMessage(ChatColor.RED + "You have been jailed!");
 			    	filewrite.close();
 			    } else {
 			    	sender.sendMessage(ChatColor.RED + jplayer.getName() +" is already jailed!");

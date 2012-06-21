@@ -70,16 +70,17 @@ public class FactionsPlusListener implements Listener {
 		}
 		tempFile = null;
 		
-		// Jails
+		// Jailed Players and Jail locations
 		tempDir = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator);
 		if(tempDir.isDirectory()){
 			for(File file : tempDir.listFiles()){
 				if(file.getName().startsWith("jaildata." + faction.getId() + ".")){
 					file.delete();
+				} else if (file.getName().equals("loc." + faction.getId())){
+					file.delete();
 				}
 			}
 		}
-		tempDir = null;
 		
 		// Warps
 		tempFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
@@ -108,6 +109,11 @@ public class FactionsPlusListener implements Listener {
 			if(event.getFaction().isPeaceful()) { // TODO: Prepare for 1.7.x and the removal of isPeaceful()
 				Utilities.addPower(event.getFPlayer(), FactionsPlus.config.getInt("powerBoostIfPeaceful"));
 			}
+		}
+		
+		// If player is still jailed, SEND THEM TO THE BRIG!
+		if(Utilities.isJailed(event.getFPlayer().getPlayer())){
+			event.getFPlayer().getPlayer().teleport(FactionsPlusJail.getJailLocation(event.getFPlayer().getPlayer()));
 		}
 	}
 

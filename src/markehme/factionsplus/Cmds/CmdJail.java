@@ -28,7 +28,7 @@ public class CmdJail extends FCommand {
 		String playerToJail = this.argAsString(0);
 		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
 		
-		if(fPlayerBanThisPlayer.getFactionId() != fme.getFactionId()) {
+		if(!fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId())) {
 			fme.msg("You can only jail players in your Faction.");
 			return;
 		}

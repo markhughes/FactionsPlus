@@ -65,7 +65,7 @@ public class CmdBan extends FCommand {
 			return;
 		}
 
-		if(fPlayerBanThisPlayer.getFactionId() != fme.getFactionId()) {
+		if(!fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId())) {
 			fme.msg("You can only ban players in your Faction.");
 			return;
 		}
