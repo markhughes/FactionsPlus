@@ -31,6 +31,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
+import com.massivecraft.factions.event.FactionDisbandEvent;
 
 public class FactionsPlusListener implements Listener {
 	Factions factions;
@@ -38,6 +39,56 @@ public class FactionsPlusListener implements Listener {
 	Faction faction;
 	Server server;
 
+	@EventHandler
+	public void onFactionDisband(FactionDisbandEvent event){
+		// Clean up old files used by faction
+		// Announcements, bans, rules, jails, warps
+		Faction faction = event.getFaction();
+		
+		// Annoucements
+		File tempFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator + faction.getId());
+		if(tempFile.exists()){
+			tempFile.delete();
+		}
+		tempFile = null;
+		
+		// Bans
+		File tempDir = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator);
+		if(tempDir.isDirectory()){
+			for(File file : tempDir.listFiles()){
+				if(file.getName().startsWith(faction.getId() + ".")){
+					file.delete();
+				}
+			}
+		}
+		tempDir = null;
+		
+		// Rules
+		tempFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator + faction.getId());
+		if(tempFile.exists()){
+			tempFile.delete();
+		}
+		tempFile = null;
+		
+		// Jails
+		tempDir = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator);
+		if(tempDir.isDirectory()){
+			for(File file : tempDir.listFiles()){
+				if(file.getName().startsWith("jaildata." + faction.getId() + ".")){
+					file.delete();
+				}
+			}
+		}
+		tempDir = null;
+		
+		// Warps
+		tempFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
+		if(tempFile.exists()){
+			tempFile.delete();
+		}
+		tempFile = null;
+	}
+	
 	@EventHandler
 	public void onFPlayerJoinEvent(FPlayerJoinEvent event) {
 		if(event.isCancelled()) {
