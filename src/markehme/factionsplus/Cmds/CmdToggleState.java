@@ -80,23 +80,23 @@ public class CmdToggleState extends FCommand {
 		}
 		
 		if(factiont.isPeaceful()) {
-			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleUpPeaceful"), "asdf", "meow")) {
+			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleUpPeaceful"), "set faction to unpeaceful", "setting faction to unpeaceful")) {
 				
 				
 				if(FactionsPlus.FactionsVersion.startsWith("1.7")) {
 					//factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, false);
 				} else {
-					//factiont.setPeaceful(true);
+					factiont.setPeaceful(true);
 				}
 				
 				sender.sendMessage("You have toggle the Faction to Peaceful!");
 			}
 		} else {
-			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleDownPeaceful"), "asdf", "meow")) {
+			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleDownPeaceful"), "set faction to peaceful", "setting faction to peaceful")) {
 				if(FactionsPlus.FactionsVersion.startsWith("1.7")) {
 					//factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
 				} else {
-					//factiont.setPeaceful(false);
+					factiont.setPeaceful(false);
 				}
 				sender.sendMessage("You have removed peaceful status from the Faction!");
 			}
