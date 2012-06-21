@@ -47,21 +47,15 @@ public class CmdAnnounce extends FCommand {
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
-		
+
 		Boolean authallow = false;
-		
-		if(FactionsPlus.config.getBoolean("leadersCanAnnounce")) {
-			if(Utilities.isLeader(fplayer)) { 
-				authallow = true;
-			}
+
+		if(FactionsPlus.config.getBoolean("leadersCanAnnounce") && Utilities.isLeader(fplayer)) {
+			authallow = true;
+		} else if(FactionsPlus.config.getBoolean("officersCanAnnounce") && Utilities.isOfficer(fplayer)) {
+			authallow = true;
 		}
-		
-		if(FactionsPlus.config.getBoolean("officersCanAnnounce")) {
-			if(Utilities.isOfficer(fplayer)) {
-				authallow = true;
-			}
-		}
-		
+
 		if(!authallow) {
 			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
 			return;

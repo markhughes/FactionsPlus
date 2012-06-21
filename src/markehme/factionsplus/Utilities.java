@@ -77,18 +77,18 @@ public class Utilities {
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(FPlayer fplayer) {
-		if(fplayer.getRole().toString().toLowerCase().trim().contains("officer") || fplayer.getRole().toString().toLowerCase().trim().contains("admin")) {
+		String role = fplayer.getRole().toString().toLowerCase().trim();
+		if(role.contains("officer") || role.contains("moderator")) {
 			return true;
 		}
-
 		return false;
 	}
 
 	public static boolean isLeader(FPlayer fplayer) {
-		if(fplayer.getRole().toString().toLowerCase().trim().contains("leader") || fplayer.getRole().toString().toLowerCase().trim().contains("admin")) {
+		String role = fplayer.getRole().toString().toLowerCase().trim();
+		if(role.contains("leader") || role.contains("admin")) {
 			return true;
 		}
-
 		return false;
 	}
 

@@ -61,20 +61,14 @@ public class CmdAddWarp extends FCommand {
 
 		Boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean("leadersCanSetWarps")) {
-			if(Utilities.isLeader(fplayer)) {
-				authallow = true;
-			}
-		}
-
-		if(FactionsPlus.config.getBoolean("officersCanSetWarps")) {
-			if(Utilities.isOfficer(fplayer)) {
-				authallow = true;
-			}
-		}
-
 		if(FactionsPlus.config.getBoolean("membersCanSetWarps")) {
 			authallow = true;
+		} else {
+			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean("officersCanSetWarps")) {
+				authallow = true;
+			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean("leadersCanSetWarps")) {
+				authallow = true;
+			}
 		}
 
 		if(!authallow) {

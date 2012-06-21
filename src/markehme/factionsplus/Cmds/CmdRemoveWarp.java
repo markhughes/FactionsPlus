@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
 
 import org.bukkit.ChatColor;
 
@@ -49,10 +50,21 @@ public class CmdRemoveWarp extends FCommand {
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		
-		if(FactionsPlus.config.getInt("economy_costToDeleteWarp") > 0 && !FactionsPlus.config.getBoolean("economy_enable")) {
-			if (!payForCommand(FactionsPlus.config.getInt("economy_costToDeleteWarp"), "to remove this warp", "for removing the warp")) {
-				return;
+		Boolean authallow = false;
+
+		if(FactionsPlus.config.getBoolean("membersCanSetWarps")) {
+			authallow = true;
+		} else {
+			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean("officersCanSetWarps")) {
+				authallow = true;
+			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean("leadersCanSetWarps")) {
+				authallow = true;
 			}
+		}
+
+		if(!authallow) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+			return;
 		}
 		
 		Faction currentFaction = fplayer.getFaction();
@@ -82,6 +94,12 @@ public class CmdRemoveWarp extends FCommand {
 		    if (!found) {
 		    	return;
 		    }
+		    
+		    if(FactionsPlus.config.getInt("economy_costToDeleteWarp") > 0 && !FactionsPlus.config.getBoolean("economy_enable")) {
+				if (!payForCommand(FactionsPlus.config.getInt("economy_costToDeleteWarp"), "to remove this warp", "for removing the warp")) {
+					return;
+				}
+			}
 
 		    PrintWriter wrt = new PrintWriter(new FileWriter(currentWarpFileTMP));
 		    BufferedReader rdr = new BufferedReader(new FileReader(currentWarpFile));
