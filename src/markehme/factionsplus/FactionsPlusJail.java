@@ -24,12 +24,14 @@ import com.massivecraft.factions.Factions;
 public class FactionsPlusJail {
 	public static Server server;
 	
-	public static boolean removeFromJail(String unJailingPlayer) {
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + unJailingPlayer);
-		
-		jailingFile.delete();
-		
-		return false;
+	public static boolean removeFromJail(String unJailingPlayer, String id) {
+		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + id + "." + unJailingPlayer);
+		if(jailingFile.exists()){
+			jailingFile.delete();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public static Location getJailLocation(Player player) {
@@ -70,8 +72,9 @@ public class FactionsPlusJail {
 		// 0 	=	Not jailed, so remove the file
 		// -1	=	Permentaly Jailed
 		// 1	=	Any number larger than 1 stands for minutes 
+		FPlayer fplayer = FPlayers.i.get(player.getName());
 		
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + player.getName());
+		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + player.getName());
 		
 		if(!jailingFile.exists()) {
 			try {
@@ -113,7 +116,7 @@ public class FactionsPlusJail {
 		
 		name = jplayer == null ? name.toLowerCase() : jplayer.getName().toLowerCase();
 		
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + player.getName());
+		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + PcurrentID + "." + player.getName());
 		
 		if(!jailingFile.exists()) {
 			try {
@@ -169,10 +172,11 @@ public class FactionsPlusJail {
 			    
 			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
-			    File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + jplayer.getName());
+			    Faction f = Factions.i.get(jplayer.getName());
+			    File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fjplayer.getFactionId() + "." + jplayer.getName());
 				
 				FileWriter filewrite = new FileWriter(jailingFile, true);
-				filewrite.write("0");
+				filewrite.write(""+t);
 				
 			    player.sendMessage(ChatColor.GREEN + "Jailed!");
 			       	
@@ -264,8 +268,9 @@ public class FactionsPlusJail {
 		
 	}
 
-	public static void unjailPlayer(String name) {
-		new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + name).delete();
+	@Deprecated
+	public static void unjailPlayer(String name, int id) {
+		new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + id + "." + name).delete();
 	}
 
 	public static double getTempJailTime(Player p) {

@@ -27,18 +27,22 @@ public class CmdUnJail extends FCommand {
 		
 		if((FactionsPlus.config.getBoolean("officersCanJail") && Utilities.isOfficer(fme))) {
 			if(FactionsPlus.permission.playerHas(fme.getPlayer(), "factionsplus.unjail")) {
-				FactionsPlusJail.removeFromJail(unJailingPlayer);
-				
-				fme.sendMessage(unJailingPlayer + " has been removed from jail.");
+				if(FactionsPlusJail.removeFromJail(unJailingPlayer, fme.getFactionId())){
+					fme.sendMessage(unJailingPlayer + " has been removed from jail.");
+				} else {
+					fme.sendMessage(unJailingPlayer + " is not jailed.");
+				}
 				return;
 			}
 		}
 		
 		if((FactionsPlus.config.getBoolean("leadersCanJail") && Utilities.isLeader(fme))) {
 			if(FactionsPlus.permission.playerHas(fme.getPlayer(), "factionsplus.unjail")) {
-				FactionsPlusJail.removeFromJail(unJailingPlayer);
-				
-				fme.sendMessage(unJailingPlayer + " has been removed from jail.");
+				if(FactionsPlusJail.removeFromJail(unJailingPlayer, fme.getFactionId())){
+					fme.sendMessage(unJailingPlayer + " has been removed from jail.");
+				} else {
+					fme.sendMessage(unJailingPlayer + " is not jailed.");
+				}
 				return;
 			}
 		}
