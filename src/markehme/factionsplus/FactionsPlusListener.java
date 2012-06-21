@@ -126,9 +126,6 @@ public class FactionsPlusListener implements Listener {
 						Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPVP"));
 					}
 
-					if (FactionsPlus.config.getDouble("extraPowerLossIfDeathByPVP") > 0.0D) {
-						Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPVP"));
-					}
 
 					if (FactionsPlus.config.getDouble("extraPowerWhenKillPlayer") > 0.0D) {
 						Player k = p.getKiller();
