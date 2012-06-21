@@ -183,6 +183,22 @@ public class FactionsPlus extends JavaPlugin {
 				config.set("mustBeInOwnTerritoryToCreate", wconfig.getBoolean("mustBeInOwnTerritoryToCreate"));
 			} else config.set("mustBeInOwnTerritoryToCreate", true);
 			
+			if(wconfig.isSet("warpTeleportAllowedFromEnemyTerritory")){
+				config.set("homesTeleportAllowedFromEnemyTerritory", wconfig.getBoolean("homesTeleportAllowedFromEnemyTerritory"));
+			} else config.set("homesTeleportAllowedFromEnemyTerritory", true);
+			
+			if(wconfig.isSet("warpTeleportAllowedFromDifferentWorld")){
+				config.set("warpTeleportAllowedFromDifferentWorld", wconfig.getBoolean("warpTeleportAllowedFromDifferentWorld"));
+			} else config.set("warpTeleportAllowedFromDifferentWorld", true);
+			
+			if(wconfig.isSet("warpTeleportAllowedEnemyDistance")) {
+				config.set("warpTeleportAllowedEnemyDistance", wconfig.getInt("warpTeleportAllowedEnemyDistance"));
+			} else config.set("warpTeleportAllowedEnemyDistance", Integer.valueOf(35));
+			
+			if(wconfig.isSet("warpTeleportIgnoreEnemiesIfInOwnTerritory")){
+				config.set("warpTeleportIgnoreEnemiesIfInOwnTerritory", wconfig.getBoolean("warpTeleportIgnoreEnemiesIfInOwnTerritory"));
+			} else config.set("warpTeleportIgnoreEnemiesIfInOwnTerritory", true);
+			
 			if(wconfig.isSet("smokeEffectOnWarp")) {
 				config.set("smokeEffectOnWarp", wconfig.getBoolean("smokeEffectOnWarp"));
 			} else config.set("smokeEffectOnWarp", true);

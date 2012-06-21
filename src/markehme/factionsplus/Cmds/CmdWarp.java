@@ -74,7 +74,7 @@ public class CmdWarp extends FCommand {
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!Conf.homesTeleportAllowedFromEnemyTerritory && fplayer.isInEnemyTerritory() ){
+		if(!FactionsPlus.config.getBoolean("warpTeleportAllowedFromEnemyTerritory") && fplayer.isInEnemyTerritory() ){
 			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
@@ -94,9 +94,9 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				Conf.homesTeleportAllowedEnemyDistance > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance") > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
 				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! Conf.homesTeleportIgnoreEnemiesIfInOwnTerritory))){
+						|| ( fplayer.isInOwnTerritory() && ! FactionsPlus.config.getBoolean("warpTeleportIgnoreEnemiesIfInOwnTerritory")))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
@@ -115,13 +115,13 @@ public class CmdWarp extends FCommand {
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
-				double max = Conf.homesTeleportAllowedEnemyDistance;
+				double max = FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance");
 
 				// box-shaped distance check
 				if (dx > max || dy > max || dz > max)
 					continue;
 
-				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + Conf.homesTeleportAllowedEnemyDistance + " blocks of you.");
+				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance") + " blocks of you.");
 				return;
 			}
 		}
