@@ -56,7 +56,8 @@ public class Utilities {
 	/* ********** JAIL RELATED ********** */
 
 	public static boolean isJailed(Player thePlayer) {
-		File jailDataFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + thePlayer.getName());
+		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
+		File jailDataFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
@@ -64,7 +65,7 @@ public class Utilities {
 
 		String JailData = null;
 
-		JailData = Utilities.readFileAsString("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + thePlayer.getName());
+		JailData = Utilities.readFileAsString("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(JailData == "0") {
 			return false;

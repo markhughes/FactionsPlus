@@ -35,12 +35,10 @@ public class FactionsPlusJail {
 	}
 	
 	public static Location getJailLocation(Player player) {
-		
 		Faction CWFaction = Factions.i.get(player.getName());
+		World world;
 		
 		File currentJailFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "loc." + CWFaction.getId());
-		
-		World world;
 				
 		if(currentJailFile.exists()) {
 			try {
@@ -63,10 +61,10 @@ public class FactionsPlusJail {
 				e.printStackTrace();
 			}
 		}
-		
 		return null;
 	}
 	
+	@Deprecated
 	public static void OrganiseJail(Player player) {
 		// creates jail file for a certain player TODO: Implant timed jails 
 		// 0 	=	Not jailed, so remove the file
@@ -88,9 +86,9 @@ public class FactionsPlusJail {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
+	@Deprecated
 	public static boolean doJailPlayer(Player player, String name, int time) {
 		if(!FactionsPlus.permission.has(player, "factionsplus.jail")) {
 			player.sendMessage(ChatColor.RED + "No permission!");
@@ -168,17 +166,21 @@ public class FactionsPlusJail {
 			    
 			    world = (World)server.getWorld(jail_data[5]);
 			       	
-			    
-			    
 			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
 			    Faction f = Factions.i.get(jplayer.getName());
 			    File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fjplayer.getFactionId() + "." + jplayer.getName());
-				
-				FileWriter filewrite = new FileWriter(jailingFile, true);
-				filewrite.write(""+t);
-				
-			    player.sendMessage(ChatColor.GREEN + "Jailed!");
+			    
+			    if(!jailingFile.exists()){
+			    	FileWriter filewrite = new FileWriter(jailingFile, true);
+			    	filewrite.flush();
+			    	filewrite.write(t);
+			    	sender.sendMessage(ChatColor.GREEN + jplayer.getName() +" has been jailed!");
+			    	player.sendMessage(ChatColor.RED + "You have been jailed!");
+			    	filewrite.close();
+			    } else {
+			    	sender.sendMessage(ChatColor.RED + jplayer.getName() +" is already jailed!");
+			    }
 			       	
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -273,6 +275,7 @@ public class FactionsPlusJail {
 		new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + id + "." + name).delete();
 	}
 
+	@Deprecated
 	public static double getTempJailTime(Player p) {
 		// TODO: getTempJailTime Function
 		return 0;
