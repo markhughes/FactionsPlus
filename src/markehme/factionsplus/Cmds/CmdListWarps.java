@@ -71,6 +71,7 @@ public class CmdListWarps extends FCommand  {
 	    try {
 	    	Scanner scanner = new Scanner(new FileReader(currentWarpFile));
 	        String buffer = ChatColor.RED + "Your Factions warps: " + ChatColor.WHITE;
+	        boolean warps = false;
 	        while (scanner.hasNextLine()) {
 	        	String item = scanner.nextLine();
 	        	if(item.trim() != "") {
@@ -81,12 +82,16 @@ public class CmdListWarps extends FCommand  {
 	        				buffer = items[0] + ", ";
 	        			} else {
 	        				buffer = buffer + items[0] + ", ";
+	        				warps = true;
 	        			}
 	        		}
 	        	}
 	        	
 	        }
-	        
+	        if(warps){
+	        	buffer = buffer.substring(0, buffer.length() - 2);
+	        	buffer += ". ";
+	        }
 	        sender.sendMessage(buffer);
 	        scanner.close();
 	    } catch (Exception e) {
