@@ -332,7 +332,7 @@ public class FactionsPlus extends JavaPlugin {
 	 * complain about NPEs because it doesn't see that it can "throw"
 	 * @param fpInstance
 	 * @param msg
-	 * @return
+	 * @return is a dummy return so that it can be used like: throw bailOut(...);
 	 */
 	public static RuntimeException bailOut(FactionsPlus fpInstance, String msg) {
 		severe(msg);

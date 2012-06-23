@@ -11,10 +11,10 @@ import com.massivecraft.factions.struct.*;
 
 public class Factions17 extends FactionsBase implements FactionsAny {
 	
-	private Method			mSetFlag		= null;
-	private Class			classFFlag		= null;
-	private Object			enumPeaceful	= null;
-	private Field			fPeaceful		= null;
+	private Method			mSetFlag		= null;// Faction.setFlag(FFlag);
+	private Class			classFFlag		= null;// FFlag.class
+	private Object			enumPeaceful	= null;// FFlag.PEACEFUL as instance/enum
+	private Field			fPeaceful		= null;// FFlag.PEACEFUL as field /useless
 	
 	
 	protected Factions17( FactionsPlus fpInstance ) {
@@ -35,7 +35,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 				failed = true;
 				return;
 			}
-			enumPeaceful = fPeaceful.get( classFFlag );
+			enumPeaceful = fPeaceful.get( classFFlag );//this is safe to get here, this soon.
 			if ( null == enumPeaceful ) {// this is likely never null, it would rather just throw instead
 				failed = true;
 				return;

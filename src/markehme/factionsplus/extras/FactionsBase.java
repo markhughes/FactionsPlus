@@ -12,11 +12,11 @@ import com.massivecraft.factions.cmd.*;
 public abstract class FactionsBase implements FactionsAny {
 	
 	protected FactionsPlus	fpInst;
-	private Class			classRP			= null;
-	private Class			classRel		= null;
-	private Field			fRelEnemy		= null;
-	private Object			enumRelEnemy	= null;
-	private Method			mGetRelationTo	= null;
+	private Class			classRP			= null;//the class/interface RelationParticipator
+	private Class			classRel		= null;//the class or enum class Rel or Relation
+	private Field			fRelEnemy		= null;//the ENEMY as field not instance
+	private Object			enumRelEnemy	= null;//Rel.ENEMY or Relation.ENEMY (as instance well, as enum really)
+	private Method			mGetRelationTo	= null;//the method getRelationTo(RelationParticipator rp)
 	
 	
 	protected FactionsBase( FactionsPlus fpInstance ) {
@@ -51,7 +51,7 @@ public abstract class FactionsBase implements FactionsAny {
 				return;
 			}
 			
-			enumRelEnemy = fRelEnemy.get( classRel );
+			enumRelEnemy = fRelEnemy.get( classRel );//safe to get here this soon;
 			if ( null == enumRelEnemy ) {// this is likely never null, it would rather just throw instead
 				failed = true;
 				return;
