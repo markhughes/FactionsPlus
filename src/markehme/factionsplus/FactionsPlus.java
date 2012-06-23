@@ -269,6 +269,7 @@ public class FactionsPlus extends JavaPlugin {
 			getConfig().save( fileConfig );
 		} catch ( IOException e ) {
 			e.printStackTrace();
+			severe("could not save config file: "+fileConfig.getAbsolutePath());
 			disableSelf( this, STOP );
 		}
 	}
