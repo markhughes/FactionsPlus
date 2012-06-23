@@ -68,6 +68,7 @@ public class CmdAnnounce extends FCommand {
 			}
 		}
 		
+		@SuppressWarnings( "hiding" )
 		String[] args = new String[3];
 		args[1] = sender.getName();
 		args[2] = message;

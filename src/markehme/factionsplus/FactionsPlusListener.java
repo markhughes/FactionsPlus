@@ -36,7 +36,6 @@ import com.massivecraft.factions.event.FactionDisbandEvent;
 public class FactionsPlusListener implements Listener {
 	Factions factions;
 	FPlayers fplayers;
-	Faction faction;
 	Server server;
 
 	@EventHandler

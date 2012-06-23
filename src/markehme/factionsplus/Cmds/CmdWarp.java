@@ -102,7 +102,7 @@ public class CmdWarp extends FCommand {
 			double y = loc.getY();
 			double z = loc.getZ();
 
-			for (Player p : me.getServer().getOnlinePlayers())
+			for (@SuppressWarnings( "hiding" ) Player p : me.getServer().getOnlinePlayers())
 			{
 				if (p == null || !p.isOnline() || p.isDead() || p == fme || p.getWorld() != w)
 					continue;
@@ -156,6 +156,7 @@ public class CmdWarp extends FCommand {
 					double z = Double.parseDouble(warp_data[3]);
 
 					float Y = Float.parseFloat(warp_data[4]); // yaw
+					@SuppressWarnings( "hiding" )
 					float p = Float.parseFloat(warp_data[5]);
 
 					world = (World) Bukkit.getServer().getWorld(warp_data[6]);

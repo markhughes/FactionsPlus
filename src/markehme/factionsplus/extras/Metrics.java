@@ -139,12 +139,12 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    public Metrics(final Plugin plugin) throws IOException {
-        if (plugin == null) {
+    public Metrics(final Plugin argPlugin) throws IOException {
+        if (argPlugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
 
-        this.plugin = plugin;
+        this.plugin = argPlugin;
 
         // load the config
         configurationFile = new File(CONFIG_FILE);
@@ -488,8 +488,8 @@ public class Metrics {
          */
         private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
 
-        private Graph(final String name) {
-            this.name = name;
+		private Graph(final String argName) {
+            this.name = argName;
         }
 
         /**
@@ -570,10 +570,10 @@ public class Metrics {
         /**
          * Construct a plotter with a specific plot name
          *
-         * @param name
+         * @param argName
          */
-        public Plotter(final String name) {
-            this.name = name;
+		public Plotter(final String argName) {
+            this.name = argName;
         }
 
         /**

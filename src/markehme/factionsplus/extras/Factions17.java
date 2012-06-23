@@ -12,7 +12,6 @@ import com.massivecraft.factions.struct.*;
 public class Factions17 extends FactionsBase implements FactionsAny {
 	
 	private Method			mSetFlag		= null;
-	private FactionsPlus	fpInst			= null;
 	private Class			classFFlag		= null;
 	private Object			enumPeaceful	= null;
 	private Field			fPeaceful		= null;
