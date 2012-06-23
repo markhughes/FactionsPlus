@@ -47,7 +47,7 @@ public class FactionsPlus extends JavaPlugin {
     public static Economy economy = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
-	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" + File.separator );
+	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );
 	public static final File	folderWarps	= new File( folderBase, "warps" );
 	public static final File	folderJails	= new File( folderBase, "jails" );
 	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
