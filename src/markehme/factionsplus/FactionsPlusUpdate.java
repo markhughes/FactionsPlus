@@ -23,6 +23,8 @@ public class FactionsPlusUpdate {
 			content = scanner.next();
 		} catch ( Exception ex ) {
 		    ex.printStackTrace();
+		    FactionsPlus.info("Failed to check for updates.");
+		    return;
 		}
 		
 		if(!content.trim().equalsIgnoreCase(v.trim())) {
