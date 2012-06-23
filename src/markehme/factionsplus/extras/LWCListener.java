@@ -15,11 +15,10 @@ public class LWCListener implements Listener {
 	public void onLandClaim(LandClaimEvent event) {
 		if(event.isCancelled()==true) {
 			return;
-		}
-		else{
-		FPlayer fPlayer = event.getFPlayer();
-		Location location = fPlayer.getPlayer().getLocation();
-		LWCFunctions.clearLocks(location, fPlayer);
+		} else {
+			FPlayer fPlayer = event.getFPlayer();
+			Location location = fPlayer.getPlayer().getLocation();
+			LWCFunctions.clearLocks(location, fPlayer);
 		}
 	}
 }
