@@ -24,16 +24,16 @@ public class CmdGC extends FCommand  {
 			return;
 		}
 		
-		// TODO: Find solution to this! 
+		// FIXME: Find solution to this! 
 		
-		if(!FactionsPlus.FactionsVersion.startsWith("1.7")) {
-			//fme.setChatMode(com.massivecraft.factions.struct.ChatMode.PUBLIC);
-			
-			fme.msg("Your chat mode has been changed to global.");
-		} else {
-			fme.msg("This version of Factions does not support changing chat mode.");
-		}
-		fme.msg("Your chat mode has been changed to global.");
+//		if(!FactionsPlus.FactionsVersion.startsWith("1.7")) {
+//			//fme.setChatMode(com.massivecraft.factions.struct.ChatMode.PUBLIC);
+//			
+//			fme.msg("Your chat mode has been changed to global.");
+//		} else {
+//			fme.msg("This version of Factions does not support changing chat mode.");
+//		}
+		fme.msg("This feature is currently broken!");
 	}
 
 }
