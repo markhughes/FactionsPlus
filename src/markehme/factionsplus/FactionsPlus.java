@@ -1,7 +1,7 @@
 package markehme.factionsplus;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.extras.DCListener;
@@ -12,6 +12,7 @@ import markehme.factionsplus.extras.Metrics;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -34,6 +35,7 @@ TODO: LIST OF STUFF TO DO
 */
 
 public class FactionsPlus extends JavaPlugin {
+
 	public static FactionsPlus plugin;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
@@ -45,10 +47,25 @@ public class FactionsPlus extends JavaPlugin {
     public static Permission permission = null;
     public static Economy economy = null;
     
-	public static File templatesFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "templates.yml");
-	public static File configFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "config.yml");
+    public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
+    //FIXME: use getDataFolder() and move these to onEnable() or onLoad() else will likely NPE
+	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );
+	public static final File	folderWarps	= new File( folderBase, "warps" );
+	public static final File	folderJails	= new File( folderBase, "jails" );
+	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
+	public static final File	folderFRules	= new File( folderBase, "frules" );
+	public static final File	folderFBans	= new File( folderBase, "fbans" );
+	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
 	
-	public static FileConfiguration wconfig;
+	private static final File currentFolder_OnClassInit=Utilities.getCurrentFolder();
+	private static       File currentFolder_OnEnable=null;
+
+    public static File templatesFile = new File(folderBase , "templates.yml");
+	public static File fileConfig = new File(folderBase , "config.yml");
+	private static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
+	//and it contains the defaults, so that they are no longer hardcoded in java code
+
+	
 	public static FileConfiguration config;
 	public static FileConfiguration templates;
 
@@ -71,309 +88,49 @@ public class FactionsPlus extends JavaPlugin {
 	
 	public static String version;
 	public static String FactionsVersion;
-	public static Boolean isOnePointSix;
+	public static boolean isOnePointSix;
+	
+	public static final boolean STOP=true;
 
-	public void onEnable() { 
-		
+	@Override
+	public void onEnable() {
+		config=null;//must be here to cause config reload later
+		ensureConfigFilesLocationSafety();
+	    
 		PluginManager pm = this.getServer().getPluginManager();
 		
 		pm.registerEvents(this.FPListener, this);
 		
 		FactionsPlusJail.server = getServer();
 		
-		FactionsVersion = (this.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion());
+		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 		if(FactionsVersion.startsWith("1.6")) {
 			isOnePointSix = true;
 		} else {
 			isOnePointSix = false;
 		}
-		log.info("[FactionsPlus] Factions version " + FactionsVersion + " - " + isOnePointSix.toString());
+		info("Factions version " + FactionsVersion + " - " + isOnePointSix);
+		
 		
 		try {
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator).exists()) {
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator);
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator).mkdir();
-			}
-		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator);
-			}
+			addDir(folderBase).addDir( folderWarps ).addDir( folderJails ).addDir( folderAnnouncements );
+			addDir(folderFRules).addDir( folderFBans );
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator);
+			if(!fileDisableInWarzone.exists()) {
+				fileDisableInWarzone.createNewFile();
+				info("Created file: "+fileDisableInWarzone);
 			}
-		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").createNewFile();
-				log.info("[FactionsPlus] Created file: plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt");
-			}
-			
-
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			severe("something failed");
+			disableSelf(this);
+			return;
 		}
 		
-		if(!FactionsPlus.configFile.exists()) {
-			try {
-				FactionsPlus.configFile.createNewFile();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		
-		try {
-			wconfig = YamlConfiguration.loadConfiguration(configFile);
-			
-			configFile.delete();
-			configFile.createNewFile();
-			
-			config = YamlConfiguration.loadConfiguration(configFile);
-			
-			if(wconfig.isSet("disableUpdateCheck")) {
-				config.set("disableUpdateCheck", wconfig.getBoolean("disableUpdateCheck"));
-			} else config.set("disableUpdateCheck", false);
-			
-			if(wconfig.isSet("unDisguiseIfInOwnTerritory")) {
-				config.set("unDisguiseIfInOwnTerritory", wconfig.getBoolean("unDisguiseIfInOwnTerritory"));
-			} else config.set("unDisguiseIfInOwnTerritory", Boolean.valueOf(false));
-			
-			if(wconfig.isSet("unDisguiseIfInEnemyTerritory")) {
-				config.set("unDisguiseIfInEnemyTerritory", wconfig.getBoolean("unDisguiseIfInEnemyTerritory"));
-			} else config.set("unDisguiseIfInEnemyTerritory", Boolean.valueOf(false));
-			
-			if(wconfig.isSet("leadersCanSetWarps")) {
-				config.set("leadersCanSetWarps", wconfig.getBoolean("leadersCanSetWarps"));
-			} else config.set("leadersCanSetWarps", true);
-			
-			if(wconfig.isSet("officersCanSetWarps")) {
-				config.set("officersCanSetWarps", wconfig.getBoolean("officersCanSetWarps"));
-			} else config.set("officersCanSetWarps", true);
-			
-			if(wconfig.isSet("membersCanSetWarps")) {
-				config.set("membersCanSetWarps", wconfig.getBoolean("membersCanSetWarps"));
-			} else config.set("membersCanSetWarps", false);
-			
-			if(wconfig.isSet("warpSetting")) {
-				config.set("warpSetting", wconfig.getInt("warpSetting"));
-			} else config.set("warpSetting", Integer.valueOf(1));
-			
-			if(wconfig.isSet("maxWarps")) {
-				config.set("maxWarps", wconfig.getInt("maxWarps"));
-			} else config.set("maxWarps", Integer.valueOf(5));
-			
-			if(wconfig.isSet("mustBeInOwnTerritoryToCreate")) {
-				config.set("mustBeInOwnTerritoryToCreate", wconfig.getBoolean("mustBeInOwnTerritoryToCreate"));
-			} else config.set("mustBeInOwnTerritoryToCreate", true);
-			
-			if(wconfig.isSet("warpTeleportAllowedFromEnemyTerritory")){
-				config.set("warpTeleportAllowedFromEnemyTerritory", wconfig.getBoolean("warpTeleportAllowedFromEnemyTerritory"));
-			} else config.set("warpTeleportAllowedFromEnemyTerritory", true);
-			
-			if(wconfig.isSet("warpTeleportAllowedFromDifferentWorld")){
-				config.set("warpTeleportAllowedFromDifferentWorld", wconfig.getBoolean("warpTeleportAllowedFromDifferentWorld"));
-			} else config.set("warpTeleportAllowedFromDifferentWorld", true);
-			
-			if(wconfig.isSet("warpTeleportAllowedEnemyDistance")) {
-				config.set("warpTeleportAllowedEnemyDistance", wconfig.getInt("warpTeleportAllowedEnemyDistance"));
-			} else config.set("warpTeleportAllowedEnemyDistance", Integer.valueOf(35));
-			
-			if(wconfig.isSet("warpTeleportIgnoreEnemiesIfInOwnTerritory")){
-				config.set("warpTeleportIgnoreEnemiesIfInOwnTerritory", wconfig.getBoolean("warpTeleportIgnoreEnemiesIfInOwnTerritory"));
-			} else config.set("warpTeleportIgnoreEnemiesIfInOwnTerritory", true);
-			
-			if(wconfig.isSet("smokeEffectOnWarp")) {
-				config.set("smokeEffectOnWarp", wconfig.getBoolean("smokeEffectOnWarp"));
-			} else config.set("smokeEffectOnWarp", true);
-			
-			if(wconfig.isSet("powerBoostIfPeaceful")) {
-				config.set("powerBoostIfPeaceful", wconfig.getInt("powerBoostIfPeaceful"));
-			} else config.set("powerBoostIfPeaceful", Integer.valueOf(0));
-			
-			if(wconfig.isSet("leadersCanSetJails")) {
-				config.set("leadersCanSetJails", wconfig.getBoolean("leadersCanSetJails"));
-			} else config.set("leadersCanSetJails", true);
-			
-			if(wconfig.isSet("officersCanSetJails")) {
-				config.set("officersCanSetJails", wconfig.getBoolean("officersCanSetJails"));
-			} else config.set("officersCanSetJails", true);
-			
-			if(wconfig.isSet("leadersCanSetRules")) {
-				config.set("leadersCanSetRules", wconfig.getBoolean("leadersCanSetRules"));
-			} else config.set("leadersCanSetRules", true);
-			
-			if(wconfig.isSet("officersCanSetRules")) {
-				config.set("officersCanSetRules", wconfig.getBoolean("officersCanSetRules"));
-			} else config.set("officersCanSetRules", true);
-			
-			if(wconfig.isSet("maxRulesPerFaction")) {
-				config.set("maxRulesPerFaction", wconfig.getInt("maxRulesPerFaction"));
-			} else config.set("maxRulesPerFaction", Integer.valueOf(12));
-			
-			if(wconfig.isSet("membersCanSetJails")) {
-				config.set("membersCanSetJails", wconfig.getBoolean("membersCanSetJails"));
-			} else config.set("membersCanSetJails", false);
-			
-			if(wconfig.isSet("leadersCanJail")) {
-				config.set("leadersCanJail", wconfig.getBoolean("leadersCanJail"));
-			} else config.set("leadersCanJail", true);
-			
-			if(wconfig.isSet("officersCanJail")) {
-				config.set("officersCanJail", wconfig.getBoolean("officersCanJail"));
-			} else config.set("officersCanJail", true);
-			
-			if(wconfig.isSet("leadersCanAnnounce")) {
-				config.set("leadersCanAnnounce", wconfig.getBoolean("leadersCanAnnounce"));
-			} else config.set("leadersCanAnnounce", true);
-			
-			if(wconfig.isSet("officersCanAnnounce")) {
-				config.set("officersCanAnnounce", wconfig.getBoolean("officersCanAnnounce"));
-			} else config.set("officersCanAnnounce", true);
-			
-			if(wconfig.isSet("showLastAnnounceOnLogin")) {
-				config.set("showLastAnnounceOnLogin", wconfig.getBoolean("showLastAnnounceOnLogin"));
-			} else config.set("showLastAnnounceOnLogin", true);
-			
-			if(wconfig.isSet("showLastAnnounceOnLandEnter")) {
-				config.set("showLastAnnounceOnLandEnter", wconfig.getBoolean("showLastAnnounceOnLandEnter"));
-			} else config.set("showLastAnnounceOnLandEnter", true);
-			
-			if(wconfig.isSet("leadersCanFactionBan")) {
-				config.set("leadersCanFactionBan", wconfig.getBoolean("leadersCanFactionBan"));
-			} else config.set("leadersCanFactionBan", true);
-				
-			if(wconfig.isSet("officersCanFactionBan")) {
-				config.set("officersCanFactionBan", wconfig.getBoolean("officersCanFactionBan"));
-			} else config.set("officersCanFactionBan", true);
-				
-			if(wconfig.isSet("leaderCanNotBeBanned")) {
-				config.set("leaderCanNotBeBanned", wconfig.getBoolean("leaderCanNotBeBanned"));
-			} else config.set("leaderCanNotBeBanned", true);
-			
-			if(wconfig.isSet("leadersCanToggleState")) {
-				config.set("leadersCanToggleState", wconfig.getBoolean("leadersCanToggleState"));
-			} else config.set("leadersCanToggleState", false);
-			
-			if(wconfig.isSet("officersCanToggleState")) {
-				config.set("officersCanToggleState", wconfig.getBoolean("officersCanToggleState"));
-			} else config.set("officersCanToggleState", false);
-			
-			if(wconfig.isSet("membersCanToggleState")) {
-				config.set("membersCanToggleState", wconfig.getBoolean("membersCanToggleState"));
-			} else config.set("membersCanToggleState", false);
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByOther")) {
-				config.set("extraPowerLossIfDeathByOther", wconfig.getDouble("extraPowerLossIfDeathByOther"));
-			} else config.set("extraPowerLossIfDeathByOther", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerWhenKillPlayer")) {
-				config.set("extraPowerWhenKillPlayer", wconfig.getDouble("extraPowerWhenKillPlayer"));
-			} else config.set("extraPowerWhenKillPlayer", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathBySuicide")) {
-				config.set("extraPowerLossIfDeathBySuicide", wconfig.getDouble("extraPowerLossIfDeathBySuicide"));
-			} else config.set("extraPowerLossIfDeathBySuicide", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByPVP")) {
-				config.set("extraPowerLossIfDeathByPVP", wconfig.getDouble("extraPowerLossIfDeathByPVP"));
-			} else config.set("extraPowerLossIfDeathByPVP", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByMob")) {
-				config.set("extraPowerLossIfDeathByMob", wconfig.getDouble("extraPowerLossIfDeathByMob"));
-			} else config.set("extraPowerLossIfDeathByMob", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByCactus")) {
-				config.set("extraPowerLossIfDeathByCactus", wconfig.getDouble("extraPowerLossIfDeathByCactus"));
-			} else config.set("extraPowerLossIfDeathByCactus", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByTNT")) {
-				config.set("extraPowerLossIfDeathByTNT", wconfig.getDouble("extraPowerLossIfDeathByTNT"));
-			} else config.set("extraPowerLossIfDeathByTNT", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByFire")) {
-				config.set("extraPowerLossIfDeathByFire", wconfig.getDouble("extraPowerLossIfDeathByFire"));
-			} else config.set("extraPowerLossIfDeathByFire", Double.valueOf(0));
-			
-			if(wconfig.isSet("extraPowerLossIfDeathByPotion")) {
-				config.set("extraPowerLossIfDeathByPotion", wconfig.getDouble("extraPowerLossIfDeathByPotion"));
-			} else config.set("extraPowerLossIfDeathByPotion", Double.valueOf(0));
-			
-			if(wconfig.isSet("enablePermissionGroups")) {
-				config.set("enablePermissionGroups", wconfig.getBoolean("enablePermissionGroups"));
-			} else config.set("enablePermissionGroups", Boolean.valueOf(false));
-			
-			if(wconfig.isSet("economy_enable")) {
-				config.set("economy_enable", wconfig.getBoolean("economy_enable"));
-			} else config.set("economy_enable", Boolean.valueOf(false));
-				
-			if(wconfig.isSet("economy_costToWarp")) {
-				config.set("economy_costToWarp", wconfig.getInt("economy_costToWarp"));
-			} else config.set("economy_costToWarp", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToCreateWarp")) {
-				config.set("economy_costToCreateWarp", wconfig.getInt("economy_costToCreateWarp"));
-			} else config.set("economy_costToCreateWarp", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToDeleteWarp")) {
-				config.set("economy_costToDeleteWarp", wconfig.getInt("economy_costToDeleteWarp"));
-			} else config.set("economy_costToDeleteWarp", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToAnnounce")) {
-				config.set("economy_costToAnnounce", wconfig.getInt("economy_costToAnnounce"));
-			} else config.set("economy_costToAnnounce", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToJail")) {
-				config.set("economy_costToJail", wconfig.getInt("economy_costToJail"));
-			} else config.set("economy_costToJail", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToSetJail")) {
-				config.set("economy_costToSetJail", wconfig.getInt("economy_costToSetJail"));
-			} else config.set("economy_costToSetJail", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToUnJail")) {
-				config.set("economy_costToUnJail", wconfig.getInt("economy_costToUnJail"));
-			} else config.set("economy_costToUnJail", Integer.valueOf(0));
-				
-			if(wconfig.isSet("economy_costToToggleUpPeaceful")) {
-				config.set("economy_costToToggleUpPeaceful", wconfig.getInt("economy_costToToggleUpPeaceful"));
-			} else config.set("economy_costToToggleUpPeaceful", Integer.valueOf(0));
-			
-			if(wconfig.isSet("economy_costToToggleDownPeaceful")) {
-				config.set("economy_costToToggleDownPeaceful", wconfig.getInt("economy_costToToggleDownPeaceful"));
-			} else config.set("economy_costToToggleDownPeaceful", Integer.valueOf(0));
-			
-			if(wconfig.isSet("useLWCIntegrationFix")) {
-				config.set("useLWCIntegrationFix", wconfig.getBoolean("useLWCIntegrationFix"));
-			} else config.set("useLWCIntegrationFix", false);
-			
-			config.set("DoNotChangeMe", Integer.valueOf(8));
-			
-			config.save(configFile);
-			
-			saveConfig();
-		} catch(Exception e) {
-		   	e.printStackTrace();
-		   	log.info("[FactionsPlus] An error occured while managing the configuration file (-18)");
-		   	getPluginLoader().disablePlugin(this);
-		}		
-		
+		config = getConfig();//load config
+
 		if (!templatesFile.exists()) {
 			
 			FactionsPlusTemplates.createTemplatesFile();
@@ -381,7 +138,6 @@ public class FactionsPlus extends JavaPlugin {
 		} 
 		
 		templates = YamlConfiguration.loadConfiguration(templatesFile);	
-		config = YamlConfiguration.loadConfiguration(configFile);
 		
 		FactionsPlusCommandManager.setup();
 		FactionsPlusHelpModifier.modify();
@@ -402,62 +158,176 @@ public class FactionsPlus extends JavaPlugin {
         
         if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         	pm.registerEvents(this.DCListener, this);
-        	log.info("[FactionsPlus] Hooked into DisguiseCraft!");
+        	info("Hooked into DisguiseCraft!");
         	isDisguiseCraftEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
         	pm.registerEvents(this.MDListener, this);
-        	log.info("[FactionsPlus] Hooked into MobDisguise!");
+        	info("Hooked into MobDisguise!");
         	isMobDisguiseEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
         	worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-        	log.info("[FactionsPlus] Hooked into WorldEdit!");
+        	info("Hooked into WorldEdit!");
         	isWorldEditEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
         	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-        	log.info("[FactionsPlus] Hooked into WorldGuard!");
+        	info("Hooked into WorldGuard!");
         	isWorldGuardEnabled = true;
         }
         if(config.getBoolean("useLWCIntegrationFix") == true) {
             if(getServer().getPluginManager().isPluginEnabled("LWC")) {
             	pm.registerEvents(this.LWCListener, this);
-            	log.info("[FactionsPlus] Hooked into LWC!");
+            	info("Hooked into LWC!");
             	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
             	isLWCEnabled = true;
             	
             }
             else {
-            	log.info("[FactionsPlus] No LWC Found but Integration Option Is Enabled!");
+            	info("No LWC Found but Integration Option Is Enabled!");
             }
         }
 
         
         
-        FactionsPlus.config = YamlConfiguration.loadConfiguration(FactionsPlus.configFile);
-        
-
         version = getDescription().getVersion();
         
         FactionsPlusUpdate.checkUpdates();
         
-		log.info("[FactionsPlus] Ready.");
+		info("Ready.");
 		
 		try {
 		    Metrics metrics = new Metrics(this);
 		    metrics.start();
 		} catch (IOException e) {
-		    log.info("[FactionsPlus] Waah! Couldn't metrics-up! :'(");
+		    info("Waah! Couldn't metrics-up! :'(");
+		}
+	}
+
+
+
+	@Override
+	public void onDisable() {
+		info("Disabled.");
+	}
+	
+	@Override
+	public FileConfiguration getConfig() {
+		if (null == config) {
+			reloadConfig();
+		}
+		if (null == config) {
+			severe("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
+			disableSelf( this, STOP );
+		}
+		return config;
+	}
+	
+	@Override
+	public void reloadConfig() {
+		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
+		InputStream defConfigStream = getResource( fileConfigDefaults );// this is the one inside the .jar
+		if ( defConfigStream != null ) {
+			config = YamlConfiguration.loadConfiguration( defConfigStream );
+		} else {
+			severe( "There is no '"+fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
+				+ "which means that the plugin author forgot to include it" );
+			disableSelf( this, STOP );
+		}
+		
+		if ( FactionsPlus.fileConfig.exists() ) {
+			if (!fileConfig.isFile()) {
+				severe( "While '"+fileConfig.getAbsolutePath()+"' exists, it is not a file!");
+				disableSelf( this, STOP );
+			}
+			// config file exists? we add the settings on top, overwriting the defaults
+			try {
+				//even though this config exists, some defaults might be new so we still need to write the config out later with saveConfig();
+				YamlConfiguration realConfig = YamlConfiguration.loadConfiguration( fileConfig );
+				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
+					config.set( entry.getKey(), entry.getValue() );// overwrites existing defaults already in config
+				}
+			} catch ( Exception e ) {
+				e.printStackTrace();
+				severe( "failed to load existing config file '"+fileConfig.getAbsolutePath()+"'");
+				disableSelf( this, STOP );
+			}
+		}else {
+			info(fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
+		}
+		
+		saveConfig();
+	}
+	
+	@Override
+	public void saveConfig() {
+		try {
+			getConfig().save( fileConfig );
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			severe("could not save config file: "+fileConfig.getAbsolutePath());
+			disableSelf( this, STOP );
 		}
 	}
 	
-
-	public void onDisable() {
-		log.info("[FactionsPlus] Disabled.");
+	/**
+	 * to be called only in onEnable();
+	 */
+	private void ensureConfigFilesLocationSafety() throws RuntimeException {
+		// the following paranoid check is to make sure the configs don't get corrupted (so to speak) if the current folder
+		// miraculously changed(ie. a different folder is now the current folder) by the time onEnable was called
+		currentFolder_OnEnable = Utilities.getCurrentFolder();
+		if ( ( null == currentFolder_OnEnable ) || ( null == currentFolder_OnClassInit )
+			|| ( !currentFolder_OnEnable.equals( currentFolder_OnClassInit ) ) )
+		{
+			severe( "Bukkit(or something) changed current folder between the time the class was inited & "
+				+ "the time onEnable() was issued.\nThis will mess up some thing as this was not expected, therefore we stop here" );
+//			this.getServer().getPluginManager().disablePlugin( this );
+			disableSelf(this);
+			throw new RuntimeException( "currentFolder_OnClassInit=`" + currentFolder_OnClassInit
+				+ "` differs from currentFolder_OnEnable=`" + currentFolder_OnEnable + "`" );
+			// this typically means that any new File(path) calls in the above class fields have a different current folder than
+			// any of the new File() calls after onEnable() was issued, which further means FactionPlus configs may be
+			// read/written to a different location
+			// but the thing is, this is expected/assumed from bukkit that the current folder between class init and
+			// onEnable() would not be changed
+		}
 	}
 	
+	private FactionsPlus addDir(File dir) {
+		if(!dir.exists()) {
+			info("Added directory: "+dir);
+			dir.mkdirs();
+		}
+		return this;
+	}
+	
+	public static void info(String logInfoMsg) {
+		log.info( FP_TAG_IN_LOGS+logInfoMsg );
+	}
+	
+	public static void severe(String logInfoMsg) {
+		log.severe( FP_TAG_IN_LOGS+logInfoMsg );
+	}
+	
+	/**
+	 * calling this will not stop execution at the point where the call is made, but will mark the plugin as disabled<br>
+	 * ie. shown in red when /plugins  is issued
+	 * @param fpInstance
+	 */
+	public static void disableSelf(FactionsPlus fpInstance) {
+		info("disableSelf()");
+		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call this.onDisable()
+	}
+	
+	public static void disableSelf(FactionsPlus fpInstance, boolean forceStop) {
+		disableSelf(fpInstance);
+		if (STOP == forceStop) {
+			throw new RuntimeException(FP_TAG_IN_LOGS+" execution stopped by disableSelf()");
+		}
+	}
 }

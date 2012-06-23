@@ -25,7 +25,7 @@ public class FactionsPlusJail {
 	public static Server server;
 	
 	public static boolean removeFromJail(String unJailingPlayer, String id) {
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + id + "." + unJailingPlayer);
+		File jailingFile = new File(FactionsPlus.folderJails, "jaildata." + id + "." + unJailingPlayer);
 		if(jailingFile.exists()){
 			jailingFile.delete();
 			return true;
@@ -38,7 +38,7 @@ public class FactionsPlusJail {
 		Faction CWFaction = Factions.i.get(player.getName());
 		World world;
 		
-		File currentJailFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "loc." + CWFaction.getId());
+		File currentJailFile = new File(FactionsPlus.folderJails, "loc." + CWFaction.getId());
 				
 		if(currentJailFile.exists()) {
 			try {
@@ -72,7 +72,7 @@ public class FactionsPlusJail {
 		// 1	=	Any number larger than 1 stands for minutes 
 		FPlayer fplayer = FPlayers.i.get(player.getName());
 		
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + player.getName());
+		File jailingFile = new File(FactionsPlus.folderJails,"jaildata." + fplayer.getFactionId() + "." + player.getName());
 		
 		if(!jailingFile.exists()) {
 			try {
@@ -114,7 +114,7 @@ public class FactionsPlusJail {
 		
 		name = jplayer == null ? name.toLowerCase() : jplayer.getName().toLowerCase();
 		
-		File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + PcurrentID + "." + player.getName());
+		File jailingFile = new File(FactionsPlus.folderJails, "jaildata." + PcurrentID + "." + player.getName());
 		
 		if(!jailingFile.exists()) {
 			try {
@@ -140,7 +140,7 @@ public class FactionsPlusJail {
 		Faction currentFaction = fplayer.getFaction();
 		
 		
-		File currentJailFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "loc." + currentFaction.getId());
+		File currentJailFile = new File(FactionsPlus.folderJails, "loc." + currentFaction.getId());
 		
 		World world;
 		Player jplayer = server.getPlayer(jailingplayer);
@@ -169,7 +169,7 @@ public class FactionsPlusJail {
 			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
 			    Faction f = Factions.i.get(jplayer.getName());
-			    File jailingFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fjplayer.getFactionId() + "." + jplayer.getName());
+			    File jailingFile = new File(FactionsPlus.folderJails, "jaildata." + fjplayer.getFactionId() + "." + jplayer.getName());
 			    
 			    if(!jailingFile.exists()){
 			    	FileWriter filewrite = new FileWriter(jailingFile, true);
@@ -239,7 +239,7 @@ public class FactionsPlusJail {
 			}
 		}
 		
-		File currentJailFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "loc." + currentFaction.getId());
+		File currentJailFile = new File(FactionsPlus.folderJails,"loc." + currentFaction.getId());
 		
 		Player player = (Player)sender;
 		
@@ -271,7 +271,7 @@ public class FactionsPlusJail {
 
 	@Deprecated
 	public static void unjailPlayer(String name, int id) {
-		new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + id + "." + name).delete();
+		new File(FactionsPlus.folderJails, "jaildata." + id + "." + name).delete();
 	}
 
 	@Deprecated
