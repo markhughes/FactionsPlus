@@ -1,10 +1,6 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +43,7 @@ public class CmdWarp extends FCommand {
 
 	}
 
+	@Override
 	public void perform() {
 		String warpname = this.argAsString(0);
 		String setPassword = null;
@@ -138,10 +135,14 @@ public class CmdWarp extends FCommand {
 
 			return;
 		}
+		
+		FileInputStream fstream=null;
+		DataInputStream in=null;
+		BufferedReader br=null;
 		try {
-			FileInputStream fstream = new FileInputStream(currentWarpFile);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			fstream = new FileInputStream(currentWarpFile);
+			in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
 
 			while ((strLine = br.readLine()) != null) {
@@ -159,7 +160,7 @@ public class CmdWarp extends FCommand {
 					@SuppressWarnings( "hiding" )
 					float p = Float.parseFloat(warp_data[5]);
 
-					world = (World) Bukkit.getServer().getWorld(warp_data[6]);
+					world = Bukkit.getServer().getWorld(warp_data[6]);
 
 					if(warp_data.length == 8) {
 						if(warp_data[7] != "nullvalue") {
@@ -194,7 +195,7 @@ public class CmdWarp extends FCommand {
 
 					player.teleport(new Location(world, x, y, z, Y, p));
 
-					in.close();
+//					in.close();
 
 					return;
 				}	
@@ -202,12 +203,34 @@ public class CmdWarp extends FCommand {
 
 			player.sendMessage("Could not find the warp " + warpname);
 
-			in.close();
+//			in.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 			sender.sendMessage(ChatColor.RED + "An internal error occured (02)");
-		}	    
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != in) {
+				try {
+					in.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != fstream) {
+				try {
+					fstream.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

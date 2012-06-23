@@ -23,6 +23,7 @@ public class CmdSetJail extends FCommand {
 		this.setHelpShort("sets the Faction's jail");
 	}
 	
+	@Override
 	public void perform() {
 		FactionsPlusJail.setJail(fme.getPlayer());
 	}

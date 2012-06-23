@@ -35,6 +35,7 @@ public class CmdRules extends FCommand {
 		this.setHelpShort("view/manage Faction rules");
 	}
 	
+	@Override
 	public void perform() {
 		fme.msg("This is not yet ready.");
 		

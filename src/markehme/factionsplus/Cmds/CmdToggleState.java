@@ -56,7 +56,7 @@ public class CmdToggleState extends FCommand {
 			
 			factiont = Factions.i.get(factionToggling);			
 			
-			Boolean authallow = false;
+			boolean authallow = false;
 			
 			if(FactionsPlus.config.getBoolean("leadersCanToggleState")) {
 				if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x

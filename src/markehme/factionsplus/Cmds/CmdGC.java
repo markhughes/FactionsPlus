@@ -18,6 +18,7 @@ public class CmdGC extends FCommand  {
 		this.setHelpShort("set your chat to global (public)");
 	}
 	
+	@Override
 	public void perform() {
 		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.factionglobalchatcommand")) {
 			fme.msg("No permission!");

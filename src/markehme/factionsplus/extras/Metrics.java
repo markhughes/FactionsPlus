@@ -112,7 +112,8 @@ public class Metrics {
     /**
      * The default graph, used for addCustomData when you don't want a specific graph
      */
-    private final Graph defaultGraph = new Graph("Default");
+    @SuppressWarnings( "synthetic-access" )
+	private final Graph defaultGraph = new Graph("Default");
 
     /**
      * The plugin configuration file
@@ -177,7 +178,8 @@ public class Metrics {
         }
 
         // Construct the graph object
-        final Graph graph = new Graph(name);
+        @SuppressWarnings( "synthetic-access" )
+		final Graph graph = new Graph(name);
 
         // Now we can add our graph
         graphs.add(graph);
@@ -240,7 +242,9 @@ public class Metrics {
 
                 private boolean firstPost = true;
 
-                public void run() {
+                @Override
+				@SuppressWarnings( "synthetic-access" )
+				public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
@@ -341,7 +345,7 @@ public class Metrics {
      * Generic method that posts a plugin to the metrics website
      */
     private void postPlugin(final boolean isPing) throws IOException {
-        // The plugin's description file containg all of the plugin data such as name, version, author, etc
+        // The plugin's description file containing all of the plugin data such as name, version, author, etc
         final PluginDescriptionFile description = plugin.getDescription();
 
         // Construct the post data
