@@ -1,9 +1,12 @@
 package markehme.factionsplus;
 
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
 
 import markehme.factionsplus.Cmds.*;
+import markehme.factionsplus.extras.*;
 
-import com.massivecraft.factions.P;
+
 
 /*
 	/f warp [name]	Warps to the Faction warp!	factionsplus.warp
@@ -21,40 +24,40 @@ public class FactionsPlusCommandManager {
 	
 	public static void setup() {
 		// Warp Commands 
-		P.p.cmdBase.addSubCommand(new CmdAddWarp()); 
-		P.p.cmdBase.addSubCommand(new CmdRemoveWarp());
-		P.p.cmdBase.addSubCommand(new CmdWarp());
-		P.p.cmdBase.addSubCommand(new CmdListWarps());
+		addSC(new CmdAddWarp()); 
+		addSC(new CmdRemoveWarp());
+		addSC(new CmdWarp());
+		addSC(new CmdListWarps());
 		
 		// Jail Commands
-		P.p.cmdBase.addSubCommand(new CmdSetJail());
-		P.p.cmdBase.addSubCommand(new CmdUnsetJail());
-		P.p.cmdBase.addSubCommand(new CmdJail());
-		P.p.cmdBase.addSubCommand(new CmdUnJail());
+		addSC(new CmdSetJail());
+		addSC(new CmdUnsetJail());
+		addSC(new CmdJail());
+		addSC(new CmdUnJail());
 		
 		// General Commands
-		P.p.cmdBase.addSubCommand(new CmdAnnounce());
-		P.p.cmdBase.addSubCommand(new CmdBan());
-		P.p.cmdBase.addSubCommand(new CmdToggleState());
-		P.p.cmdBase.addSubCommand(new CmdFC());
-		P.p.cmdBase.addSubCommand(new CmdGC());
+		addSC(new CmdAnnounce());
+		addSC(new CmdBan());
+		addSC(new CmdToggleState());
+		addSC(new CmdFC());
+		addSC(new CmdGC());
 		
 		// Region based Commands
-		//P.p.cmdBase.addSubCommand(new CmdPlot());
+		//addSC(new CmdPlot());
 		
 		// New Admin commands 
-		P.p.cmdBase.addSubCommand(new CmdFactionHome());
+		addSC(new CmdFactionHome());
 		
-		P.p.cmdBase.cmdMoney.addSubCommand(new CmdMoneyTop());
+		P.p.cmdBase.cmdMoney.addSubCommand(new CmdMoneyTop());//FIXME: add this too on 1.6 help
 		
-		P.p.cmdBase.addSubCommand(new CmdDebug());
+		addSC(new CmdDebug());
 		
+		
+		Bridge.factions.finalizeHelp(); 
 	}
 
-	public void perform() {
-		
+	private static final void addSC(FCommand subCommand) {
+		Bridge.factions.addSubCommand(subCommand);
 	}
-
-
 	
 }

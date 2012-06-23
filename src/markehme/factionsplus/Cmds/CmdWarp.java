@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.extras.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,8 +25,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.EssentialsFeatures;
-import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.struct.*;
 import com.massivecraft.factions.zcore.util.SmokeUtil;
 
 public class CmdWarp extends FCommand {
@@ -108,8 +108,15 @@ public class CmdWarp extends FCommand {
 					continue;
 
 				FPlayer fp = FPlayers.i.get(p);
-				if (fplayer.getRelationTo(fp) != Relation.ENEMY)
-					continue;
+				if ( ! FactionsAny.Relation.ENEMY.equals( 
+					Bridge.factions.getRelationTo( fplayer, fp ) 
+					)) {
+						//fplayer.getRelationTo(fp) != 
+//						Rel.ENEMY)
+//					 Relation.ENEMY)
+					
+					continue;//if not enemies, continue
+				}
 
 				Location l = p.getLocation();
 				double dx = Math.abs(x - l.getX());

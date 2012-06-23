@@ -4,11 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-import markehme.factionsplus.extras.DCListener;
-import markehme.factionsplus.extras.LWCFunctions;
-import markehme.factionsplus.extras.LWCListener;
-import markehme.factionsplus.extras.MDListener;
-import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.extras.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -48,7 +44,7 @@ public class FactionsPlus extends JavaPlugin {
     public static Economy economy = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
-    //FIXME: use getDataFolder() and move these to onEnable() or onLoad() else will likely NPE
+    //FIXME: use getDataFolder() and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
 	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );
 	public static final File	folderWarps	= new File( folderBase, "warps" );
 	public static final File	folderJails	= new File( folderBase, "jails" );
@@ -103,6 +99,7 @@ public class FactionsPlus extends JavaPlugin {
 		
 		FactionsPlusJail.server = getServer();
 		
+		Bridge.init( this );
 		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 		if(FactionsVersion.startsWith("1.6")) {
 			isOnePointSix = true;
@@ -140,7 +137,6 @@ public class FactionsPlus extends JavaPlugin {
 		templates = YamlConfiguration.loadConfiguration(templatesFile);	
 		
 		FactionsPlusCommandManager.setup();
-		FactionsPlusHelpModifier.modify();
 		
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
@@ -320,14 +316,26 @@ public class FactionsPlus extends JavaPlugin {
 	 * @param fpInstance
 	 */
 	public static void disableSelf(FactionsPlus fpInstance) {
-		info("disableSelf()");
 		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call this.onDisable()
 	}
 	
-	public static void disableSelf(FactionsPlus fpInstance, boolean forceStop) {
+	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
 		disableSelf(fpInstance);
 		if (STOP == forceStop) {
 			throw new RuntimeException(FP_TAG_IN_LOGS+" execution stopped by disableSelf()");
 		}
+		return null;
+	}
+	
+	/**
+	 * allowed to be used as: throw bailOut(..); for obvious reasons that it will throw but also so that eclipse won't 
+	 * complain about NPEs because it doesn't see that it can "throw"
+	 * @param fpInstance
+	 * @param msg
+	 * @return
+	 */
+	public static RuntimeException bailOut(FactionsPlus fpInstance, String msg) {
+		severe(msg);
+		throw disableSelf(fpInstance, STOP);
 	}
 }
