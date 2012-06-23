@@ -139,7 +139,7 @@ public class FactionsPlusJail {
 
 	}
 	
-	public static boolean sendToJail(String jailingplayer, CommandSender sender, Integer t) {
+	public static boolean sendToJail(String jailingplayer, CommandSender sender, int argTime) {
 		Player player = (Player)sender;
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
@@ -182,7 +182,7 @@ public class FactionsPlusJail {
 			    if(!jailingFile.exists()){
 			    	FileWriter filewrite = new FileWriter(jailingFile, true);
 			    	filewrite.flush();
-			    	filewrite.write(t);
+			    	filewrite.write(argTime);
 			    	sender.sendMessage(ChatColor.GREEN + jplayer.getName() +" has been jailed!");
 			    	filewrite.close();
 			    } else {
