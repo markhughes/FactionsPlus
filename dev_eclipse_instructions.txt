@@ -1,3 +1,20 @@
+======================================
+
+To get FactionsPlus from github into your Eclipse workspace:
+------
+File->Import,  Git->Projects From Git, Next, URI, Next
+fill in URI: with one of the following:
+git://github.com/MarkehMe/FactionsPlus.git
+https://github.com/MarkehMe/FactionsPlus.git
+(for read-only access!)
+Next, Next
+Choose a location in your eclipse workspace under a folder named "FactionsPlus"
+ie. Directory: C:\eclipse.workspace\FactionsPlus
+or wherever else you want to store the git part
+
+Finish
+======================================
+
 In order to be able to compile this without errors in Eclipse, here's what you need:
 
 ------
