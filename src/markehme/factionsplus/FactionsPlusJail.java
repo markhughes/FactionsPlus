@@ -158,8 +158,10 @@ public class FactionsPlusJail {
 		}
 		
 		if(currentJailFile.exists()) {
+			Scanner scanner=null;
 			try {
-				String JailData = new Scanner(currentJailFile).useDelimiter("\\A").next();
+				scanner=new Scanner(currentJailFile);
+				String JailData = scanner.useDelimiter("\\A").next();
 					
 				String[] jail_data =  JailData.split(":");
 					
@@ -190,6 +192,10 @@ public class FactionsPlusJail {
 			} catch (Exception e) {
 				e.printStackTrace();
 				sender.sendMessage(ChatColor.RED + "Can not read the jail data, is a jail set?");
+			}finally {
+				if (null != scanner) {
+					scanner.close();
+				}
 			}
 
 		} else {
@@ -208,7 +214,7 @@ public class FactionsPlusJail {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
-		Boolean authallow = false;
+		boolean authallow = false;
 		
 		if(FactionsPlus.config.getBoolean("leadersCanSetJails")) {
 			if(fplayer.getRole().toString().contains("admin") || fplayer.getRole().toString().contains("LEADER")) { // 1.6.x
