@@ -171,7 +171,7 @@ public class FactionsPlusListener implements Listener {
 					return;
 				}
 			}
-			if (p.getKiller() instanceof Player) {
+//			if (p.getKiller() instanceof Player) {//The expression of type Player is already an instance of type Player
 				if ((p.getKiller().getName() == p.getName()) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide"));
@@ -188,7 +188,7 @@ public class FactionsPlusListener implements Listener {
 					}
 					return;
 				}
-			}
+//			}
 		}
 	}
 
