@@ -55,7 +55,7 @@ public class FactionsPlusJail {
 			    float Y = Float.parseFloat(jail_data[3]); // Yaw
 			    float p = Float.parseFloat(jail_data[4]);
 			        	
-			    world = (World)server.getWorld(jail_data[5]);
+			    world = server.getWorld(jail_data[5]);
 			    
 			    return(new Location(world, x, y, z, Y, p));
 			    
@@ -170,7 +170,7 @@ public class FactionsPlusJail {
 			    float Y = Float.parseFloat(jail_data[3]); // yaw
 			    float p = Float.parseFloat(jail_data[4]);
 			    
-			    world = (World)server.getWorld(jail_data[5]);
+			    world = server.getWorld(jail_data[5]);
 			       	
 			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
