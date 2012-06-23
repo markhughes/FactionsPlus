@@ -55,13 +55,13 @@ public class CmdRules extends FCommand {
 		args[2] = message;
 		
 		try {
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator + fplayer.getFactionId()).exists()) {
+			if(!new File(FactionsPlus.BASE_FOLDER + "frules" + File.separator + fplayer.getFactionId()).exists()) {
 				fme.msg("No rules have been set for your Faction.");
 				return;
 			}
 			
 			try {
-				FileInputStream fstream = new FileInputStream("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator + fplayer.getFactionId());
+				FileInputStream fstream = new FileInputStream(FactionsPlus.BASE_FOLDER + "frules" + File.separator + fplayer.getFactionId());
 				
 				DataInputStream in = new DataInputStream(fstream);
 				BufferedReader br = new BufferedReader(new InputStreamReader(in));

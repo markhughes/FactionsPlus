@@ -81,11 +81,11 @@ public class CmdAnnounce extends FCommand {
 		}
 		
 		try {
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator + fplayer.getFactionId()).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator + fplayer.getFactionId()).createNewFile();
+			if(!new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + fplayer.getFactionId()).exists()) {
+				new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + fplayer.getFactionId()).createNewFile();
 			}
 			formatedMessage = "Previously, " + formatedMessage;
-			announceWrite = new DataOutputStream(new FileOutputStream(new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator + fplayer.getFactionId()), false));
+			announceWrite = new DataOutputStream(new FileOutputStream(new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + fplayer.getFactionId()), false));
 			announceWrite.write(formatedMessage.getBytes());
 			announceWrite.close();
 			

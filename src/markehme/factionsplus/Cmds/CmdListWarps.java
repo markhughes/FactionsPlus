@@ -48,7 +48,7 @@ public class CmdListWarps extends FCommand  {
 			return;
 			
 		}
-		File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + currentFaction.getId());
+		File currentWarpFile = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId());
 		
 	    if (!currentWarpFile.exists()) {
 	    	sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
@@ -56,7 +56,7 @@ public class CmdListWarps extends FCommand  {
 	    }
 	    
 	    try {
-	    	FileInputStream fis = new FileInputStream(new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + currentFaction.getId()));
+	    	FileInputStream fis = new FileInputStream(new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId()));
 	    	int b = fis.read();
 	    	
 	    	if (b == -1) {

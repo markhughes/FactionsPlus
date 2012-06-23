@@ -34,6 +34,7 @@ TODO: LIST OF STUFF TO DO
 */
 
 public class FactionsPlus extends JavaPlugin {
+
 	public static FactionsPlus plugin;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
@@ -45,8 +46,9 @@ public class FactionsPlus extends JavaPlugin {
     public static Permission permission = null;
     public static Economy economy = null;
     
-	public static File templatesFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "templates.yml");
-	public static File configFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "config.yml");
+    public static final String	BASE_FOLDER	= "plugins" + File.separator + "FactionsPlus" + File.separator;
+	public static File templatesFile = new File(BASE_FOLDER + "templates.yml");
+	public static File configFile = new File(BASE_FOLDER + "config.yml");
 	
 	public static FileConfiguration wconfig;
 	public static FileConfiguration config;
@@ -90,39 +92,39 @@ public class FactionsPlus extends JavaPlugin {
 		log.info("[FactionsPlus] Factions version " + FactionsVersion + " - " + isOnePointSix.toString());
 		
 		try {
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator).exists()) {
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator);
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator).mkdir();
+			if(!new File(BASE_FOLDER).exists()) {
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER);
+				new File(BASE_FOLDER).mkdir();
 			}
 		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator);
+			if(!new File(BASE_FOLDER + "warps" + File.separator).exists()) {
+				new File(BASE_FOLDER + "warps" + File.separator).mkdir();
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER + "warps" + File.separator);
 			}
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator);
+			if(!new File(BASE_FOLDER + "jails" + File.separator).exists()) {
+				new File(BASE_FOLDER + "jails" + File.separator).mkdir();
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER + "jails" + File.separator);
 			}
 		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator);
+			if(!new File(BASE_FOLDER + "announcements" + File.separator).exists()) {
+				new File(BASE_FOLDER + "announcements" + File.separator).mkdir();
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER + "announcements" + File.separator);
 			}
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator);
+			if(!new File(BASE_FOLDER + "frules" + File.separator).exists()) {
+				new File(BASE_FOLDER + "frules" + File.separator).mkdir();
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER + "frules" + File.separator);
 			}
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator);
+			if(!new File(BASE_FOLDER + "fbans" + File.separator).exists()) {
+				new File(BASE_FOLDER + "fbans" + File.separator).mkdir();
+				log.info("[FactionsPlus] Added directory: "+BASE_FOLDER + "fbans" + File.separator);
 			}
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").createNewFile();
-				log.info("[FactionsPlus] Created file: plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt");
+			if(!new File(BASE_FOLDER + "disabled_in_warzone.txt").exists()) {
+				new File(BASE_FOLDER + "disabled_in_warzone.txt").createNewFile();
+				log.info("[FactionsPlus] Created file: "+BASE_FOLDER + "disabled_in_warzone.txt");
 			}
 			
 

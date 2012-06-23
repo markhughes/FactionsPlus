@@ -73,8 +73,8 @@ public class CmdRemoveWarp extends FCommand {
 			boolean found = false;
 			
 			// Get out working files
-			File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + currentFaction.getId());
-			File currentWarpFileTMP = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + currentFaction.getId() + ".tmp");
+			File currentWarpFile = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId());
+			File currentWarpFileTMP = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId() + ".tmp");
 			
 			// Scan through the warp file for the correct 
 			Scanner scanner = new Scanner(new FileReader(currentWarpFile));
