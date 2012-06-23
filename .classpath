@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/Factions"/>
+	<classpathentry kind="lib" path="lib/DisguiseCraft.jar"/>
+	<classpathentry kind="lib" path="lib/MobDisguise.jar"/>
+	<classpathentry kind="lib" path="lib/Vault.jar"/>
+	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
+	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
+	<classpathentry kind="lib" path="lib/LWC.jar"/>
+	<classpathentry kind="lib" path="lib/bukkit-1.2.5-R4.1-20120618.060128-13.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
