@@ -41,8 +41,10 @@ public class FactionsPlusJail {
 		File currentJailFile = new File(FactionsPlus.folderJails, "loc." + CWFaction.getId());
 				
 		if(currentJailFile.exists()) {
+			Scanner scanner=null;
 			try {
-				String JailData = new Scanner(currentJailFile).useDelimiter("\\A").next();
+				scanner = new Scanner(currentJailFile);
+				String JailData =scanner.useDelimiter("\\A").next();
 					
 				String[] jail_data =  JailData.split(":");
 					
@@ -59,6 +61,10 @@ public class FactionsPlusJail {
 			    
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if (null != scanner) {
+					scanner.close();
+				}
 			}
 		}
 		return null;
