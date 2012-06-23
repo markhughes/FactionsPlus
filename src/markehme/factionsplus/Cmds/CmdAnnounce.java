@@ -37,6 +37,7 @@ public class CmdAnnounce extends FCommand {
 		this.setHelpShort("sends an announcment to your Faction");
 	}
 	
+	@Override
 	public void perform() {
 		String message = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
 		
@@ -48,7 +49,7 @@ public class CmdAnnounce extends FCommand {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 
-		Boolean authallow = false;
+		boolean authallow = false;
 
 		if(FactionsPlus.config.getBoolean("leadersCanAnnounce") && Utilities.isLeader(fplayer)) {
 			authallow = true;
