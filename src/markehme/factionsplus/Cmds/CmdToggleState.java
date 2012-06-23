@@ -79,7 +79,7 @@ public class CmdToggleState extends FCommand {
 			factiont = fme.getFaction();
 		}
 		
-		//TODO: investigate if using "peaceful" from Factions will bypass the pay for toggling states
+		//TODO: using "/f peaceful factiontag" from Factions will bypass the payment when "/f togglestate" here
 		if(!factiont.isPeaceful()) {
 			//if faction wasn't already peaceful, then we set it
 			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleUpPeaceful"), "to set faction to peaceful", "for setting faction to peaceful")) {
