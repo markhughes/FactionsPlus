@@ -18,7 +18,6 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	private Field			fPeaceful		= null;
 	
 	
-	// factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
 	protected Factions17( FactionsPlus fpInstance ) {
 		super( fpInstance );
 		
@@ -49,36 +48,6 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 				return;
 			}
 			
-			// classRP=Class.forName( "com.massivecraft.factions.iface.RelationParticipator");
-			// if (null == classRP) {//this is likely never null, it would rather just throw instead
-			// failed=true;
-			// return;
-			// }
-			//
-			// mGetRelationTo=FPlayer.class.getMethod("getRelationTo",classRP);
-			// if (null == mGetRelationTo) {//this is likely never null, it would rather just throw instead
-			// failed=true;
-			// return;
-			// }
-			//
-			// classRel=Class.forName( "com.massivecraft.factions.struct.Rel");
-			// if (null == classRel) {//this is likely never null, it would rather just throw instead
-			// failed=true;
-			// return;
-			// }
-			//
-			// fRelEnemy=classRel.getField( "ENEMY" );
-			// if (null == fRelEnemy) {//this is likely never null, it would rather just throw instead
-			// failed=true;
-			// return;
-			// }
-			//
-			// enumRelEnemy=fRelEnemy.get( classRel );
-			// if (null == enumRelEnemy) {//this is likely never null, it would rather just throw instead
-			// failed=true;
-			// return;
-			// }
-			
 		} catch ( NoSuchMethodException e ) {// multi catch could've worked but unsure if using jdk7 to compile
 			e.printStackTrace();
 			failed = true;
@@ -105,27 +74,6 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	}
 	
 	
-	// @Override
-	// public void setPeaceful(Faction faction, Boolean state ) {
-	// boolean failed = false;
-	// try {
-	// mSetFlag.invoke(faction, enumPeaceful, state );
-	// } catch ( IllegalAccessException e ) {
-	// e.printStackTrace();
-	// failed=true;
-	// } catch ( IllegalArgumentException e ) {
-	// e.printStackTrace();
-	// failed=true;
-	// } catch ( InvocationTargetException e ) {
-	// e.printStackTrace();
-	// failed=true;
-	// }finally{
-	// if (failed) {
-	// throw FactionsPlus.bailOut( fpInst, "failed to invoke "+mSetFlag );
-	// }
-	// }
-	// }
-	
 	@Override
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState ) {
 		boolean failed = false;
@@ -141,6 +89,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 					+ whichFlag );
 				// or forgot to put a "break;"
 			}
+			// factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
 			mSetFlag.invoke( forFaction, flag, whatState );
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
@@ -161,6 +110,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	
 	@Override
 	public final void finalizeHelp() {
-		//not required for 1.7
+		// not required for 1.7
+		return;
 	}
 }

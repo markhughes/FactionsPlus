@@ -160,8 +160,8 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			throw FactionsPlus.bailOut( fpInst, "this should not happen, bad call order" );
 		} else {
 			instanceOfHelpPages.add( pageLines );
-			pageLines=null;
-			perPage=0;
+			pageLines = null;
+			perPage = 0;
 		}
 	}
 }

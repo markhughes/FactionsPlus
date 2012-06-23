@@ -36,8 +36,10 @@ public abstract class FactionsBase implements FactionsAny {
 				failed = true;
 				return;
 			}
-
-			classRel = Class.forName( "com.massivecraft.factions.struct."+(Factions16.class.equals( this.getClass() )?"Relation":"Rel") );
+			
+			classRel =
+				Class.forName( "com.massivecraft.factions.struct."
+					+ ( Factions16.class.equals( this.getClass() ) ? "Relation" : "Rel" ) );
 			if ( null == classRel ) {// this is likely never null, it would rather just throw instead
 				failed = true;
 				return;
@@ -56,34 +58,28 @@ public abstract class FactionsBase implements FactionsAny {
 			}
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} catch ( IllegalArgumentException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} catch ( NoSuchFieldException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} catch ( SecurityException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} catch ( NoSuchMethodException e ) {
 			e.printStackTrace();
-			failed=true;
+			failed = true;
 		} finally {
 			if ( failed ) {
 				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
 			}
 		}
 	}
-	
-	
-//	@Override
-//	public void setFlag( Faction forFaction, FFlag whichFlag, Boolean whatState ) {
-//		throw FactionsPlus.bailOut( fpInst, "plugin author forgot to override w/o calling super() on this method");
-//	}
 	
 	
 	@Override
@@ -121,10 +117,10 @@ public abstract class FactionsBase implements FactionsAny {
 		}
 		return ret;// not reached
 	}
-
-
+	
+	
 	@Override
 	public void addSubCommand( FCommand subCommand ) {
-		P.p.cmdBase.addSubCommand(subCommand);//practically all that we need to do for 1.7 to have the commands in help
+		P.p.cmdBase.addSubCommand( subCommand );// practically all that we need to do for 1.7 to have the commands in help
 	}
 }
