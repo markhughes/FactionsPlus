@@ -48,7 +48,7 @@ public class CmdListWarps extends FCommand  {
 			return;
 			
 		}
-		File currentWarpFile = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId());
+		File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
 		
 	    if (!currentWarpFile.exists()) {
 	    	sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
@@ -56,7 +56,7 @@ public class CmdListWarps extends FCommand  {
 	    }
 	    
 	    try {
-	    	FileInputStream fis = new FileInputStream(new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId()));
+	    	FileInputStream fis = new FileInputStream(new File(FactionsPlus.folderWarps, currentFaction.getId()));
 	    	int b = fis.read();
 	    	
 	    	if (b == -1) {
@@ -95,7 +95,7 @@ public class CmdListWarps extends FCommand  {
 	        sender.sendMessage(buffer);
 	        scanner.close();
 	    } catch (Exception e) {
-	    	FactionsPlus.log.info("[FactionsPlus] Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
+	    	FactionsPlus.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 	    	
 	        sender.sendMessage(ChatColor.RED + "An internetal error occured (03)");
 	        

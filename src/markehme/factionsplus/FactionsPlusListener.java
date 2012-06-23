@@ -46,14 +46,14 @@ public class FactionsPlusListener implements Listener {
 		Faction faction = event.getFaction();
 		
 		// Annoucements
-		File tempFile = new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + faction.getId());
+		File tempFile = new File(FactionsPlus.folderAnnouncements, faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
 		tempFile = null;
 		
 		// Bans
-		File tempDir = new File(FactionsPlus.BASE_FOLDER + "fbans" + File.separator);
+		File tempDir =FactionsPlus.folderFBans;
 		if(tempDir.isDirectory()){
 			for(File file : tempDir.listFiles()){
 				if(file.getName().startsWith(faction.getId() + ".")){
@@ -64,14 +64,14 @@ public class FactionsPlusListener implements Listener {
 		tempDir = null;
 		
 		// Rules
-		tempFile = new File(FactionsPlus.BASE_FOLDER + "frules" + File.separator + faction.getId());
+		tempFile = new File(FactionsPlus.folderFRules, faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
 		tempFile = null;
 		
 		// Jailed Players and Jail locations
-		tempDir = new File(FactionsPlus.BASE_FOLDER + "jails" + File.separator);
+		tempDir =FactionsPlus.folderJails;
 		if(tempDir.isDirectory()){
 			for(File file : tempDir.listFiles()){
 				if(file.getName().startsWith("jaildata." + faction.getId() + ".")){
@@ -83,7 +83,7 @@ public class FactionsPlusListener implements Listener {
 		}
 		
 		// Warps
-		tempFile = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + faction.getId());
+		tempFile = new File(FactionsPlus.folderWarps,  faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
@@ -96,7 +96,7 @@ public class FactionsPlusListener implements Listener {
 			return;
 		}
 
-		File banFile = new File(FactionsPlus.BASE_FOLDER + "fbans" + File.separator + event.getFaction().getId() + "." + event.getFPlayer().getName().toLowerCase());
+		File banFile = new File(FactionsPlus.folderFBans, event.getFaction().getId() + "." + event.getFPlayer().getName().toLowerCase());
 
 		if(banFile.exists()) {
 			event.getFPlayer().msg("You can't join this Faction as you have been banned!");
@@ -211,9 +211,10 @@ public class FactionsPlusListener implements Listener {
 		FPlayer me = FPlayers.i.get(player);
 
 		if(FactionsPlus.config.getBoolean("showLastAnnounceOnLogin")) {
-			if(new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + me.getFactionId()).exists()) {
+			File fAF = new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+			if(fAF.exists()) {
 				try {
-					event.getPlayer().sendMessage(Utilities.readFileAsString(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + me.getFactionId()));
+					event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -333,9 +334,10 @@ public class FactionsPlusListener implements Listener {
 
 			if (Board.getFactionAt(new FLocation(event.getFrom())) != Board.getFactionAt(new FLocation(event.getTo()))) {
 				if(factionHere.getId().equals(me.getFactionId())) {
-					if(new File(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + me.getFactionId()).exists()) {
+					File fAF=new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+					if(fAF.exists()) {
 						try {
-							event.getPlayer().sendMessage(Utilities.readFileAsString(FactionsPlus.BASE_FOLDER + "announcements" + File.separator + me.getFactionId()));
+							event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -365,7 +367,7 @@ public class FactionsPlusListener implements Listener {
 
 			if (!player.isOp()) {
 				try {
-					BufferedReader buff = new BufferedReader(new FileReader(FactionsPlus.BASE_FOLDER + "disabled_in_warzone.txt"));
+					BufferedReader buff = new BufferedReader(new FileReader(FactionsPlus.fileDisableInWarzone));
 
 					while ((filterRow = buff.readLine()) != null) {
 						if ((event.getMessage().equalsIgnoreCase(filterRow)) || (event.getMessage().toLowerCase().startsWith(filterRow + " "))) {

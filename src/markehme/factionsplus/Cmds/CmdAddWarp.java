@@ -96,7 +96,7 @@ public class CmdAddWarp extends FCommand {
 			}
 		}
 
-		File currentWarpFile = new File(FactionsPlus.BASE_FOLDER + "warps" + File.separator + currentFaction.getId());
+		File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
 
 		if (!currentWarpFile.exists()) {
 			try {

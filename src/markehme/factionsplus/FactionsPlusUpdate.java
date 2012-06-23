@@ -14,7 +14,7 @@ public class FactionsPlusUpdate {
 			return;
 		}
 		
-		FactionsPlus.log.info("[FactionsPlus] Checking for updates ... ");
+		FactionsPlus.info("Checking for updates ... ");
 		
 		try {
 			connection =  new URL("http://www.markeh.me/factionsplus.php?v=" + v).openConnection();
@@ -32,7 +32,7 @@ public class FactionsPlusUpdate {
 			FactionsPlus.log.warning("http://dev.bukkit.org/server-mods/factionsplus/");
 			FactionsPlus.log.warning("! -=====================================- !");
 		} else {
-			FactionsPlus.log.info("[FactionsPlus] Up to date!");
+			FactionsPlus.info("Up to date!");
 		}
 	}
 }
