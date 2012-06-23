@@ -18,8 +18,8 @@ import com.massivecraft.factions.Faction;
 
 public class Utilities {
 	/* ********** FILE RELATED ********** */
-
-	public static String readFileAsString(String filePath) {
+	
+	public static String readFileAsString(File filePath) {
 		try {
 			FileInputStream fstream = new FileInputStream(filePath);
 			DataInputStream in = new DataInputStream(fstream);
@@ -57,15 +57,13 @@ public class Utilities {
 
 	public static boolean isJailed(Player thePlayer) {
 		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
-		File jailDataFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
+		File jailDataFile = new File(FactionsPlus.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
 		}
 
-		String JailData = null;
-
-		JailData = Utilities.readFileAsString("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator + "jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
+		String JailData = Utilities.readFileAsString(jailDataFile);
 
 		if(JailData == "0") {
 			return false;
@@ -129,7 +127,7 @@ public class Utilities {
 	}
 
 	public static int getCountOfWarps(Faction faction) {
-		File currentWarpFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator + faction.getId());
+		File currentWarpFile = new File(FactionsPlus.folderWarps, faction.getId());
 
 		int c = 0;
 		if (currentWarpFile.exists()) {	
@@ -151,4 +149,9 @@ public class Utilities {
 		}
 		return c;
 	}
+	
+	public static File getCurrentFolder() {
+		return new File("");
+	}
+	
 }
