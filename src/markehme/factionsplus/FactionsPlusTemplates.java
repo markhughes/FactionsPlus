@@ -104,7 +104,7 @@ public class FactionsPlusTemplates {
 			
 		} catch (Exception e) {
 	    	e.printStackTrace();
-	    	FactionsPlus.log.info("[FactionsPlus] ERROR: Couldn't create templates file.");
+	    	FactionsPlus.info("ERROR: Couldn't create templates file.");
 	    	return; 
 	    }
 	}

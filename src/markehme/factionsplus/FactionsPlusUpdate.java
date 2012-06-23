@@ -14,15 +14,22 @@ public class FactionsPlusUpdate {
 			return;
 		}
 		
-		FactionsPlus.log.info("[FactionsPlus] Checking for updates ... ");
+		FactionsPlus.info("Checking for updates ... ");
 		
+		Scanner scanner=null;
 		try {
 			connection =  new URL("http://www.markeh.me/factionsplus.php?v=" + v).openConnection();
-			Scanner scanner = new Scanner(connection.getInputStream());
+			scanner = new Scanner(connection.getInputStream());
 			scanner.useDelimiter("\\Z");
 			content = scanner.next();
 		} catch ( Exception ex ) {
 		    ex.printStackTrace();
+		    FactionsPlus.info("Failed to check for updates.");
+		    return;
+		}finally{
+			if (null != scanner) {
+				scanner.close();
+			}
 		}
 		
 		if(!content.trim().equalsIgnoreCase(v.trim())) {
@@ -32,7 +39,7 @@ public class FactionsPlusUpdate {
 			FactionsPlus.log.warning("http://dev.bukkit.org/server-mods/factionsplus/");
 			FactionsPlus.log.warning("! -=====================================- !");
 		} else {
-			FactionsPlus.log.info("[FactionsPlus] Up to date!");
+			FactionsPlus.info("Up to date!");
 		}
 	}
 }

@@ -34,6 +34,7 @@ TODO: LIST OF STUFF TO DO
 */
 
 public class FactionsPlus extends JavaPlugin {
+
 	public static FactionsPlus plugin;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
@@ -45,8 +46,20 @@ public class FactionsPlus extends JavaPlugin {
     public static Permission permission = null;
     public static Economy economy = null;
     
-	public static File templatesFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "templates.yml");
-	public static File configFile = new File("plugins" + File.separator + "FactionsPlus" + File.separator + "config.yml");
+    public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
+	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );
+	public static final File	folderWarps	= new File( folderBase, "warps" );
+	public static final File	folderJails	= new File( folderBase, "jails" );
+	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
+	public static final File	folderFRules	= new File( folderBase, "frules" );
+	public static final File	folderFBans	= new File( folderBase, "fbans" );
+	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
+	
+	private static final File currentFolder_OnClassInit=Utilities.getCurrentFolder();
+	private static       File currentFolder_OnEnable=null;
+
+    public static File templatesFile = new File(folderBase , "templates.yml");
+	public static File configFile = new File(folderBase , "config.yml");
 	
 	public static FileConfiguration wconfig;
 	public static FileConfiguration config;
@@ -71,10 +84,12 @@ public class FactionsPlus extends JavaPlugin {
 	
 	public static String version;
 	public static String FactionsVersion;
-	public static Boolean isOnePointSix;
+	public static boolean isOnePointSix;
 
+	@Override
 	public void onEnable() { 
-		
+		ensureConfigFilesLocationSafety();
+	    
 		PluginManager pm = this.getServer().getPluginManager();
 		
 		pm.registerEvents(this.FPListener, this);
@@ -87,47 +102,21 @@ public class FactionsPlus extends JavaPlugin {
 		} else {
 			isOnePointSix = false;
 		}
-		log.info("[FactionsPlus] Factions version " + FactionsVersion + " - " + isOnePointSix.toString());
+		info("Factions version " + FactionsVersion + " - " + isOnePointSix);
 		
 		try {
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator).exists()) {
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator);
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator).mkdir();
-			}
-		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "warps" + File.separator);
-			}
+			addDir(folderBase).addDir( folderWarps ).addDir( folderJails ).addDir( folderAnnouncements );
+			addDir(folderFRules).addDir( folderFBans );
 			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "jails" + File.separator);
-			}
-		
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "announcements" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "frules" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator).mkdir();
-				log.info("[FactionsPlus] Added directory: plugins" + File.separator + "FactionsPlus" + File.separator + "fbans" + File.separator);
-			}
-			
-			if(!new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").exists()) {
-				new File("plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt").createNewFile();
-				log.info("[FactionsPlus] Created file: plugins" + File.separator + "FactionsPlus" + File.separator + "disabled_in_warzone.txt");
+			if(!fileDisableInWarzone.exists()) {
+				fileDisableInWarzone.createNewFile();
+				info("Created file: "+fileDisableInWarzone);
 			}
 			
 
 			
 		} catch (Exception e) {
+			//FIXME: are we gonna allow the plugin to ignore exception here which means later will possibly fail to save config? 
 			e.printStackTrace();
 		}
 		
@@ -370,7 +359,7 @@ public class FactionsPlus extends JavaPlugin {
 			saveConfig();
 		} catch(Exception e) {
 		   	e.printStackTrace();
-		   	log.info("[FactionsPlus] An error occured while managing the configuration file (-18)");
+		   	info("An error occured while managing the configuration file (-18)");
 		   	getPluginLoader().disablePlugin(this);
 		}		
 		
@@ -402,37 +391,37 @@ public class FactionsPlus extends JavaPlugin {
         
         if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         	pm.registerEvents(this.DCListener, this);
-        	log.info("[FactionsPlus] Hooked into DisguiseCraft!");
+        	info("Hooked into DisguiseCraft!");
         	isDisguiseCraftEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
         	pm.registerEvents(this.MDListener, this);
-        	log.info("[FactionsPlus] Hooked into MobDisguise!");
+        	info("Hooked into MobDisguise!");
         	isMobDisguiseEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
         	worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-        	log.info("[FactionsPlus] Hooked into WorldEdit!");
+        	info("Hooked into WorldEdit!");
         	isWorldEditEnabled = true;
         }
         
         if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
         	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-        	log.info("[FactionsPlus] Hooked into WorldGuard!");
+        	info("Hooked into WorldGuard!");
         	isWorldGuardEnabled = true;
         }
         if(config.getBoolean("useLWCIntegrationFix") == true) {
             if(getServer().getPluginManager().isPluginEnabled("LWC")) {
             	pm.registerEvents(this.LWCListener, this);
-            	log.info("[FactionsPlus] Hooked into LWC!");
+            	info("Hooked into LWC!");
             	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
             	isLWCEnabled = true;
             	
             }
             else {
-            	log.info("[FactionsPlus] No LWC Found but Integration Option Is Enabled!");
+            	info("No LWC Found but Integration Option Is Enabled!");
             }
         }
 
@@ -445,19 +434,55 @@ public class FactionsPlus extends JavaPlugin {
         
         FactionsPlusUpdate.checkUpdates();
         
-		log.info("[FactionsPlus] Ready.");
+		info("Ready.");
 		
 		try {
 		    Metrics metrics = new Metrics(this);
 		    metrics.start();
 		} catch (IOException e) {
-		    log.info("[FactionsPlus] Waah! Couldn't metrics-up! :'(");
+		    info("Waah! Couldn't metrics-up! :'(");
+		}
+	}
+
+
+
+	@Override
+	public void onDisable() {
+		info("Disabled.");
+	}
+	
+	
+	/**
+	 * to be called only in onEnable();
+	 */
+	private static void ensureConfigFilesLocationSafety() throws RuntimeException {
+		// the following paranoid check is to make sure the configs don't get corrupted (so to speak) if the current folder
+		// miraculously changed(ie. a different folder is now the current folder) by the time onEnable was called
+		currentFolder_OnEnable = Utilities.getCurrentFolder();
+		if ( ( null == currentFolder_OnEnable ) || ( null == currentFolder_OnClassInit )
+			|| ( !currentFolder_OnEnable.equals( currentFolder_OnClassInit ) ) )
+		{
+			log.severe( FP_TAG_IN_LOGS+"Bukkit(or something) changed current folder between the time the class was inited & "
+				+ "the time onEnable() was issued.\nThis will mess up some thing as this was not expected, therefore we stop here" );
+			throw new RuntimeException( "currentFolder_OnClassInit=`" + currentFolder_OnClassInit
+				+ "` differs from currentFolder_OnEnable=`" + currentFolder_OnEnable + "`" );
+			// this typically means that any new File(path) calls in the above class fields have a different current folder than
+			// any of the new File() calls after onEnable() was issued, which further means FactionPlus configs may be
+			// read/written to a different location
+			// but the thing is, this is expected/assumed from bukkit that the current folder between class init and
+			// onEnable() would not be changed
 		}
 	}
 	
-
-	public void onDisable() {
-		log.info("[FactionsPlus] Disabled.");
+	private FactionsPlus addDir(File dir) {
+		if(!dir.exists()) {
+			info("Added directory: "+dir);
+			dir.mkdirs();
+		}
+		return this;
 	}
 	
+	public static void info(String logInfoMsg) {
+		log.info( FP_TAG_IN_LOGS+logInfoMsg );
+	}
 }
