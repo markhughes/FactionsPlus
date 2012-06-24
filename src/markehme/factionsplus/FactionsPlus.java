@@ -95,7 +95,7 @@ public class FactionsPlus extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		config=null;//must be here to cause config reload later
+		config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		ensureConfigFilesLocationSafety();
 	    
 		PluginManager pm = this.getServer().getPluginManager();
