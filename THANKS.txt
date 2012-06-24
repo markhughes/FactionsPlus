@@ -1,0 +1,5 @@
+This is the thanks file, if you add major changes that greatly influence the plugin please add your name and feature here.
+
+andrew2060: LWC Locks Reset Fixing
+unv_annihilator: Huge fast rapid bug fixes on most things!
+basicsensei: Bridge between 1.6 and 1.7
