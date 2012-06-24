@@ -108,10 +108,6 @@ public class CmdWarp extends FCommand {
 				if ( ! FactionsAny.Relation.ENEMY.equals( 
 					Bridge.factions.getRelationTo( fplayer, fp ) 
 					)) {
-						//fplayer.getRelationTo(fp) != 
-//						Rel.ENEMY)
-//					 Relation.ENEMY)
-					
 					continue;//if not enemies, continue
 				}
 
