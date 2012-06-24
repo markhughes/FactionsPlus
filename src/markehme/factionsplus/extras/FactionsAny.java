@@ -33,7 +33,7 @@ public interface FactionsAny {
 	public static enum ChatMode {
 		FACTION( "Faction-only" ), 
 		ALLIANCE( "Alliance-only" ), 
-		PUBLIC( "Public" );
+		PUBLIC( "Public(Global)" );//this basically just means you're not in any of FACTION or ALLIANCE chats
 		
 		private String	description;//description will be used in when showing info/help to the player
 		
