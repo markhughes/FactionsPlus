@@ -15,8 +15,18 @@ public interface FactionsAny {
 	}
 	
 	public static enum Relation {
-		ENEMY
-		// same should apply here, Ctrl+Alt+H (in eclipse) to see where to add code if you add more flags
+		LEADER, // only 1.7 has this 
+		OFFICER, // only 1.7 has this
+		TRUCE, // only 1.7 has this
+
+		MEMBER,//both 1.6 and 1.7 have this 
+		ALLY, //both 1.6 and 1.7 have this
+		NEUTRAL, //both 1.6 and 1.7 have this
+		ENEMY //both 1.6 and 1.7 have this
+
+		//while you can use these in any case (regardless of Factions v 1.6 or 1.7) you should know that if you're 
+		//expecting a 1.7 flag like LEADER while using 1.6 Factions, you won't ever see it returned, though you may find
+		//yourself wrongly comparing against it (in this case a comparison which will always be false while using 1.6)
 	}
 	
 	

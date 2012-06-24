@@ -320,7 +320,7 @@ public class FactionsPlus extends JavaPlugin {
 		//nvm; find another way to display colored msgs in console without having [INFO] prefix
 		//there's no other way it's done via ColouredConsoleSender of craftbukkit
 		//there are only two ways: colors+[INFO] prefix, or no colors + whichever prefix
-		Bukkit.getConsoleSender().sendMessage( msg);
+		Bukkit.getConsoleSender().sendMessage( msg);//this will log with [INFO] level
 	}
 	
 	/**
@@ -329,7 +329,8 @@ public class FactionsPlus extends JavaPlugin {
 	 * @param fpInstance
 	 */
 	public static void disableSelf(FactionsPlus fpInstance) {
-		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call this.onDisable()
+		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call onDisable()
+		//it won't deregister commands ie. /f fc  will still work
 	}
 	
 	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
