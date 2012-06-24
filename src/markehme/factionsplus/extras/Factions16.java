@@ -82,7 +82,8 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			case PEACEFUL:
 				mSetPeaceful.invoke( forFaction, whatState );
 				break;
-			// add new flags here
+			// TODO: add all flags here, those from FactionsAny.FFlag
+				//or make a mapping between the methods and the flags, clearly. 
 			default:
 				throw FactionsPlus.bailOut( "plugin author forgot to define a case to handle this flag: "
 					+ whichFlag );
@@ -174,8 +175,8 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		try {
 			Object factionsChatMode_Enum = mapChatMode.getLeftSide( chatMode );
 			if ( null == factionsChatMode_Enum ) {
-				// would never be null if .init() above did its job
 				failed = true;
+				throw FactionsPlus.bailOut( "would never be null if .init() above failed to properly map ...");
 			} else {
 				ret=getChatMode( forWhatPlayer );
 				mSetChatMode.invoke( forWhatPlayer, factionsChatMode_Enum );

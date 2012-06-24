@@ -80,8 +80,7 @@ public interface FactionsAny {
 	public void finalizeHelp();
 	
 	/**
-	 * @param forWhatPlayer 
-	 * @param sender the FPlayer to inform of any messages
+	 * @param forWhatPlayer the FPlayer whose chat mode we're setting
 	 * @param chatMode
 	 * @return null if nothing was done(aka not implemented) ie. it's 1.7 and this has no effect because 1.7 doesn't
 	 * support changing chat mode<br>
