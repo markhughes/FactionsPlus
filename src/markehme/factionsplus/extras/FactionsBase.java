@@ -16,7 +16,7 @@ public abstract class FactionsBase implements FactionsAny {
 	private Method											mGetRelationTo	= null; // the method
 																					// getRelationTo(RelationParticipator rp)
 																					
-	// this will hold a mapping between our Factions.version independent FactionsAny.Relation and the specific Factions version
+	// this will hold a mapping between our Factions.version-independent FactionsAny.Relation and the specific Factions-version
 	// Relation
 	// except it's mapped in reversed order
 	private Map<Object, FactionsAny.Relation>	mapRelation		= new HashMap<Object, FactionsAny.Relation>();
@@ -62,7 +62,7 @@ public abstract class FactionsBase implements FactionsAny {
 	
 
 	@Override
-	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two ) {
+	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two ) {
 		boolean failed = false;
 		FactionsAny.Relation ret = null;
 		try {

@@ -10,9 +10,19 @@ import com.massivecraft.factions.cmd.*;
 public interface FactionsAny {
 	
 	public static enum FFlag {
-		PEACEFUL
+		PEACEFUL,
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where
 		//this is mainly because 1.6 requires a different method to be called for setting each flag
+		
+		PERMANENT,
+		INFPOWER,
+		POWERLOSS,
+		PVP,
+		FRIENDLYFIRE,
+		MONSTERS,
+		EXPLOSIONS,
+		FIRESPREAD,
+		ENDERGRIEF,
 	}
 	
 	public static enum Relation {
@@ -57,7 +67,7 @@ public interface FactionsAny {
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
 	
 	
-	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two );
+	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two );
 	
 	
 	public void addSubCommand( FCommand subCommand );
