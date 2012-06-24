@@ -26,7 +26,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	private Method 							mGetChatMode		= null;
 	
 	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
-	private TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayMapOfNonNulls<>();
+	private TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>();
 		
 	
 	protected Factions16( ) {

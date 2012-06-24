@@ -19,8 +19,8 @@ import org.bukkit.map.*;
 public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, RIGHTSIDE> {// beware of some paranoid
 																							// programming below hehe, for fun:)
 
-	private AbstractMap<LEFTSIDE, RIGHTSIDE>	mapLRForward	= new HashMap<>();
-	private AbstractMap<RIGHTSIDE, LEFTSIDE>	mapRLBackward	= new HashMap<>();
+	private AbstractMap<LEFTSIDE, RIGHTSIDE>	mapLRForward	= new HashMap<LEFTSIDE, RIGHTSIDE>();
+	private AbstractMap<RIGHTSIDE, LEFTSIDE>	mapRLBackward	= new HashMap<RIGHTSIDE, LEFTSIDE>();
 	
 	
 	private final static void nn( Object toTest ) {
