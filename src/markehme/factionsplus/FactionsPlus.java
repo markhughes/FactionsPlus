@@ -32,7 +32,7 @@ TODO: LIST OF STUFF TO DO
 
 public class FactionsPlus extends JavaPlugin {
 
-	public static FactionsPlus plugin;
+	public static FactionsPlus instance;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	
@@ -86,12 +86,15 @@ public class FactionsPlus extends JavaPlugin {
 	public static String FactionsVersion;
 	public static boolean isOnePointSix;
 	
-	public static final boolean STOP=true;
 	private static Metrics metrics=null;
+	
+	public FactionsPlus() {//constructor
+		instance=this;
+	}
 	
 	@Override
 	public void onEnable() {
-		config=null;//must be here to cause config reload later
+		config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		ensureConfigFilesLocationSafety();
 	    
 		PluginManager pm = this.getServer().getPluginManager();
@@ -100,7 +103,7 @@ public class FactionsPlus extends JavaPlugin {
 		
 		FactionsPlusJail.server = getServer();
 		
-		Bridge.init( this );
+		Bridge.init();
 		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 		if(FactionsVersion.startsWith("1.6")) {
 			isOnePointSix = true;
@@ -121,9 +124,7 @@ public class FactionsPlus extends JavaPlugin {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			severe("something failed");
-			disableSelf(this);
-			return;
+			throw bailOut("something failed when ensuring the folders exist");
 		}
 		
 		
@@ -232,8 +233,7 @@ public class FactionsPlus extends JavaPlugin {
 			reloadConfig();
 		}
 		if (null == config) {
-			severe("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
-			disableSelf( this, STOP );
+			throw bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
 		}
 		return config;
 	}
@@ -245,15 +245,13 @@ public class FactionsPlus extends JavaPlugin {
 		if ( defConfigStream != null ) {
 			config = YamlConfiguration.loadConfiguration( defConfigStream );
 		} else {
-			severe( "There is no '"+fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
+			throw bailOut( "There is no '"+fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
 				+ "which means that the plugin author forgot to include it" );
-			disableSelf( this, STOP );
 		}
 		
 		if ( FactionsPlus.fileConfig.exists() ) {
 			if (!fileConfig.isFile()) {
-				severe( "While '"+fileConfig.getAbsolutePath()+"' exists, it is not a file!");
-				disableSelf( this, STOP );
+				throw bailOut( "While '"+fileConfig.getAbsolutePath()+"' exists, it is not a file!");
 			}
 			// config file exists? we add the settings on top, overwriting the defaults
 			try {
@@ -264,8 +262,7 @@ public class FactionsPlus extends JavaPlugin {
 				}
 			} catch ( Exception e ) {
 				e.printStackTrace();
-				severe( "failed to load existing config file '"+fileConfig.getAbsolutePath()+"'");
-				disableSelf( this, STOP );
+				throw bailOut( "failed to load existing config file '"+fileConfig.getAbsolutePath()+"'");
 			}
 		}else {
 			info(fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
@@ -280,8 +277,7 @@ public class FactionsPlus extends JavaPlugin {
 			getConfig().save( fileConfig );
 		} catch ( IOException e ) {
 			e.printStackTrace();
-			severe("could not save config file: "+fileConfig.getAbsolutePath());
-			disableSelf( this, STOP );
+			throw bailOut("could not save config file: "+fileConfig.getAbsolutePath());
 		}
 	}
 	
@@ -350,7 +346,7 @@ public class FactionsPlus extends JavaPlugin {
 	
 	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
 		disableSelf(fpInstance);
-		if (STOP == forceStop) {
+		if (forceStop) {
 			throw new RuntimeException(FP_TAG_IN_LOGS+" execution stopped by disableSelf()");
 		}
 		return null;
@@ -363,8 +359,8 @@ public class FactionsPlus extends JavaPlugin {
 	 * @param msg
 	 * @return is a dummy return so that it can be used like: throw bailOut(...);
 	 */
-	public static RuntimeException bailOut(FactionsPlus fpInstance, String msg) {
+	public static RuntimeException bailOut(String msg) {
 		severe(msg);
-		throw disableSelf(fpInstance, STOP);
+		throw disableSelf(instance, true);
 	}
 }

@@ -106,7 +106,7 @@ public class CmdWarp extends FCommand {
 
 				FPlayer fp = FPlayers.i.get(p);
 				if ( ! FactionsAny.Relation.ENEMY.equals( 
-					Bridge.factions.getRelationTo( fplayer, fp ) 
+					Bridge.factions.getRelationBetween( fplayer, fp ) 
 					)) {
 					continue;//if not enemies, continue
 				}

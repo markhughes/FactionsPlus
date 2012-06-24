@@ -10,9 +10,19 @@ import com.massivecraft.factions.cmd.*;
 public interface FactionsAny {
 	
 	public static enum FFlag {
-		PEACEFUL
+		PEACEFUL,
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where
 		//this is mainly because 1.6 requires a different method to be called for setting each flag
+		
+		PERMANENT,
+		INFPOWER,
+		POWERLOSS,
+		PVP,
+		FRIENDLYFIRE,
+		MONSTERS,
+		EXPLOSIONS,
+		FIRESPREAD,
+		ENDERGRIEF,
 	}
 	
 	public static enum Relation {
@@ -30,11 +40,34 @@ public interface FactionsAny {
 		//yourself wrongly comparing against it (in this case a comparison which will always be false while using 1.6)
 	}
 	
+	public static enum ChatMode {
+		FACTION( "Faction-only" ), 
+		ALLIANCE( "Alliance-only" ), 
+		PUBLIC( "Public(Global)" );//this basically just means you're not in any of FACTION or ALLIANCE chats
+		
+		private String	description;//description will be used in when showing info/help to the player
+		
+		
+		private ChatMode( String desc ) {
+			description = desc;
+		}
+		
+		
+		public String getDescription() {
+			return description;
+		}
+		
+		
+		@Override
+		public String toString() {
+			return description;
+		}
+	}
 	
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
 	
 	
-	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two );
+	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two );
 	
 	
 	public void addSubCommand( FCommand subCommand );
@@ -45,4 +78,16 @@ public interface FactionsAny {
 	 * this will update the help just in case last commands didn't fit the page entirely<br>
 	 */
 	public void finalizeHelp();
+	
+	/**
+	 * @param forWhatPlayer the FPlayer whose chat mode we're setting
+	 * @param chatMode
+	 * @return null if nothing was done(aka not implemented) ie. it's 1.7 and this has no effect because 1.7 doesn't
+	 * support changing chat mode<br>
+	 * 		or just the previous chat mode
+	 */
+	public FactionsAny.ChatMode setChatMode(FPlayer forWhatPlayer, FactionsAny.ChatMode chatMode);
+
+
+	public FactionsAny.ChatMode getChatMode(FPlayer forWhatPlayer);
 }

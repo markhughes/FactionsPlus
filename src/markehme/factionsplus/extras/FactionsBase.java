@@ -1,7 +1,7 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
-import java.util.concurrent.*;
+import java.util.*;
 
 import markehme.factionsplus.*;
 
@@ -12,62 +12,30 @@ import com.massivecraft.factions.cmd.*;
 
 public abstract class FactionsBase implements FactionsAny {
 	
-	protected FactionsPlus									fpInst;
 	private Class											classRP			= null; // the class/interface RelationParticipator
-	private Class											classRel		= null; // the class or enum class Rel or Relation
 	private Method											mGetRelationTo	= null; // the method
 																					// getRelationTo(RelationParticipator rp)
 																					
-	// this will hold a mapping between our Factions.version independent FactionsAny.Relation and the specific Factions version
+	// this will hold a mapping between our Factions.version-independent FactionsAny.Relation and the specific Factions-version
 	// Relation
 	// except it's mapped in reversed order
-	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation		= null;
+	private Map<Object, FactionsAny.Relation>	mapRelation		= new HashMap<Object, FactionsAny.Relation>();
 	
 	
-	protected FactionsBase( FactionsPlus fpInstance ) {
+	protected FactionsBase( ) {
 		boolean failed = false;
-		fpInst = fpInstance;
-		assert null != fpInst;
 		
 		try {
 			classRP = Class.forName( "com.massivecraft.factions.iface.RelationParticipator" );
 			
 			mGetRelationTo = FPlayer.class.getMethod( "getRelationTo", classRP );
 			
-			classRel =
-				Class.forName( "com.massivecraft.factions.struct."
-					+ ( Factions16.class.equals( this.getClass() ) ? "Relation" : "Rel" ) );
 			
-			mapRelation = new ConcurrentHashMap<>();
+			String sourceEnum="com.massivecraft.factions.struct."
+					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
+
+			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
 			
-			for ( Field eachField : classRel.getFields() ) {
-				try {
-					if ( ( classRel.equals( eachField.getType() ) ) ) {
-						FactionsAny.Relation ourFieldInstance =
-							(Relation)( FactionsAny.Relation.class.getField( eachField.getName() )
-								.get( FactionsAny.Relation.class ) );
-						Object factionsFieldInstance = eachField.get( classRel );
-						mapRelation.put( factionsFieldInstance, ourFieldInstance );
-					}
-				} catch ( IllegalArgumentException e ) {// I didn't want to catch Exception e though
-					e.printStackTrace();
-					failed = true;
-				} catch ( IllegalAccessException e ) {
-					e.printStackTrace();
-					failed = true;
-				} catch ( NoSuchFieldException e ) {
-					e.printStackTrace();
-					failed = true;
-				} catch ( SecurityException e ) {
-					e.printStackTrace();
-					failed = true;
-				} finally {
-					if ( failed ) {
-						throw FactionsPlus.bailOut( fpInst, "the plugin author forgot to define some flags in "
-							+ FactionsAny.Relation.class + " for " + eachField );
-					}
-				}
-			}
 			
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
@@ -83,16 +51,18 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
+				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 		
 		
 	}
+
 	
 	
+
 	@Override
-	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two ) {
+	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two ) {
 		boolean failed = false;
 		FactionsAny.Relation ret = null;
 		try {
@@ -104,7 +74,8 @@ public abstract class FactionsBase implements FactionsAny {
 			Object isReturn = mGetRelationTo.invoke( one, two );
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
-				FactionsPlus.severe( "impossible" );
+				FactionsPlus.severe( "impossible to be null here, because it would've errored on .init()," +
+						"assuming the mapping was done right" );
 			}
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
@@ -117,7 +88,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( ( failed ) || ( null == ret ) ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to invoke " + mGetRelationTo );
+				throw FactionsPlus.bailOut( "failed to invoke " + mGetRelationTo );
 			}
 		}
 		return ret;// actually reached
