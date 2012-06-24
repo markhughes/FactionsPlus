@@ -303,11 +303,24 @@ public class FactionsPlus extends JavaPlugin {
 	}
 	
 	public static void info(String logInfoMsg) {
-		log.info( FP_TAG_IN_LOGS+logInfoMsg );
+//		log.info( FP_TAG_IN_LOGS+logInfoMsg );
+		tellConsole(ChatColor.GOLD+FP_TAG_IN_LOGS+ChatColor.RESET+logInfoMsg );//they are logged with [INFO] level
 	}
 	
 	public static void severe(String logInfoMsg) {
-		log.severe( FP_TAG_IN_LOGS+logInfoMsg );
+		log.severe( FP_TAG_IN_LOGS+logInfoMsg );//allowed so that [SEVERE] appears
+		tellConsole(ChatColor.RED+FP_TAG_IN_LOGS+ChatColor.DARK_PURPLE+logInfoMsg);
+	}
+	
+	/**
+	 * allows the use of ChatColor in messages but they will be prefixed by [INFO]
+	 * @param msg
+	 */
+	public static void tellConsole(String msg) {
+		//nvm; find another way to display colored msgs in console without having [INFO] prefix
+		//there's no other way it's done via ColouredConsoleSender of craftbukkit
+		//there are only two ways: colors+[INFO] prefix, or no colors + whichever prefix
+		Bukkit.getConsoleSender().sendMessage( msg);
 	}
 	
 	/**
