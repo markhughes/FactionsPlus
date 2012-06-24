@@ -11,7 +11,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -133,39 +134,39 @@ public class FactionsPlusListener implements Listener {
 	{
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
-
-			String causeOfDeath = event.getEntity().getLastDamageCause().getCause().toString();
+			DamageCause causeOfDeath = event.getEntity().getLastDamageCause().getCause();
 			if (p.getKiller() == null) {
-				if ((causeOfDeath == "ENTITY_ATTACK"||causeOfDeath == "PROJECTILE"||causeOfDeath == "ENTITY_EXPLOSION") &&
+				if ((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE 
+						|| causeOfDeath == DamageCause.ENTITY_EXPLOSION) &&
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathByMob") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByMob"));
 					return;
 				}
-				if ((causeOfDeath == "CONTACT") && 
+				if ((causeOfDeath == DamageCause.CONTACT) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathByCactus") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByCactus"));
 					return;
 				}
 
-				if ((causeOfDeath == "BLOCK_EXPLOSION") && 
+				if ((causeOfDeath == DamageCause.BLOCK_EXPLOSION) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathByTNT") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByTNT"));
 					return;
 				}
 
-				if (((causeOfDeath == "FIRE") || (causeOfDeath == "FIRE_TICK")) && 
+				if (((causeOfDeath == DamageCause.FIRE) || (causeOfDeath == DamageCause.FIRE_TICK)) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathByFire") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByFire"));
 					return;
 				}
 
-				if ((causeOfDeath == "MAGIC") && 
+				if ((causeOfDeath == DamageCause.MAGIC) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathByPotion") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPotion"));
 					return;
 				}
 				
-				if ((causeOfDeath.equals("SUICIDE"))
+				if ((causeOfDeath == DamageCause.SUICIDE)
 						&& ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathBySuicide" ) > 0.0D ) )
 				{
 					Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathBySuicide" ) );
@@ -177,7 +178,7 @@ public class FactionsPlusListener implements Listener {
 					return;
 				}
 			} else {//non-null killer
-				if ( ( causeOfDeath == "ENTITY_ATTACK" ) || ( causeOfDeath == "PROJECTILE" ) ) {
+				if ( ( causeOfDeath == DamageCause.ENTITY_ATTACK ) || ( causeOfDeath == DamageCause.PROJECTILE ) ) {
 					if ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) > 0.0D ) {
 						Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) );
 					}
