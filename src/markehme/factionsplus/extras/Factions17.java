@@ -17,8 +17,8 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	private Field			fPeaceful		= null;// FFlag.PEACEFUL as field /useless
 	
 	
-	protected Factions17( FactionsPlus fpInstance ) {
-		super( fpInstance );
+	protected Factions17( ) {
+		super();
 		
 		boolean failed = false;
 		
@@ -55,7 +55,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
+				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 	}
@@ -72,7 +72,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 				break;
 			// add new flags here
 			default:
-				throw FactionsPlus.bailOut( fpInst, "plugin author forgot to define a case to handle this flag: "
+				throw FactionsPlus.bailOut( "plugin author forgot to define a case to handle this flag: "
 					+ whichFlag );
 				// or forgot to put a "break;"
 			}
@@ -89,7 +89,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to invoke " + mSetFlag );
+				throw FactionsPlus.bailOut( "failed to invoke " + mSetFlag );
 			}
 		}
 	}

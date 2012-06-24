@@ -12,9 +12,7 @@ import com.massivecraft.factions.cmd.*;
 
 public abstract class FactionsBase implements FactionsAny {
 	
-	protected FactionsPlus									fpInst;
 	private Class											classRP			= null; // the class/interface RelationParticipator
-	private Class											classRel		= null; // the class or enum class Rel or Relation
 	private Method											mGetRelationTo	= null; // the method
 																					// getRelationTo(RelationParticipator rp)
 																					
@@ -24,50 +22,23 @@ public abstract class FactionsBase implements FactionsAny {
 	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation		= null;
 	
 	
-	protected FactionsBase( FactionsPlus fpInstance ) {
+	protected FactionsBase( ) {
 		boolean failed = false;
-		fpInst = fpInstance;
-		assert null != fpInst;
 		
 		try {
 			classRP = Class.forName( "com.massivecraft.factions.iface.RelationParticipator" );
 			
 			mGetRelationTo = FPlayer.class.getMethod( "getRelationTo", classRP );
 			
-			classRel =
-				Class.forName( "com.massivecraft.factions.struct."
-					+ ( Factions16.class.equals( this.getClass() ) ? "Relation" : "Rel" ) );
 			
+			String sourceEnum="com.massivecraft.factions.struct."
+					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
+
 			mapRelation = new ConcurrentHashMap<>();
+			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
 			
-			for ( Field eachField : classRel.getFields() ) {
-				try {
-					if ( ( classRel.equals( eachField.getType() ) ) ) {
-						FactionsAny.Relation ourFieldInstance =
-							(Relation)( FactionsAny.Relation.class.getField( eachField.getName() )
-								.get( FactionsAny.Relation.class ) );
-						Object factionsFieldInstance = eachField.get( classRel );
-						mapRelation.put( factionsFieldInstance, ourFieldInstance );
-					}
-				} catch ( IllegalArgumentException e ) {// I didn't want to catch Exception e though
-					e.printStackTrace();
-					failed = true;
-				} catch ( IllegalAccessException e ) {
-					e.printStackTrace();
-					failed = true;
-				} catch ( NoSuchFieldException e ) {
-					e.printStackTrace();
-					failed = true;
-				} catch ( SecurityException e ) {
-					e.printStackTrace();
-					failed = true;
-				} finally {
-					if ( failed ) {
-						throw FactionsPlus.bailOut( fpInst, "the plugin author forgot to define some flags in "
-							+ FactionsAny.Relation.class + " for " + eachField );
-					}
-				}
-			}
+			//com.massivecraft.factions.struct.ChatMode
+			
 			
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
@@ -83,7 +54,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
+				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 		
@@ -91,6 +62,9 @@ public abstract class FactionsBase implements FactionsAny {
 	}
 	
 	
+	
+
+
 	@Override
 	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two ) {
 		boolean failed = false;
@@ -117,7 +91,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( ( failed ) || ( null == ret ) ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to invoke " + mGetRelationTo );
+				throw FactionsPlus.bailOut( "failed to invoke " + mGetRelationTo );
 			}
 		}
 		return ret;// actually reached

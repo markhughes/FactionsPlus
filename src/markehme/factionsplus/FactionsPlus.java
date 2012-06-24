@@ -32,7 +32,7 @@ TODO: LIST OF STUFF TO DO
 
 public class FactionsPlus extends JavaPlugin {
 
-	public static FactionsPlus plugin;
+	public static FactionsPlus instance;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	
@@ -89,6 +89,10 @@ public class FactionsPlus extends JavaPlugin {
 	public static final boolean STOP=true;
 	private static Metrics metrics=null;
 	
+	public FactionsPlus() {//constructor
+		instance=this;
+	}
+	
 	@Override
 	public void onEnable() {
 		config=null;//must be here to cause config reload later
@@ -100,7 +104,7 @@ public class FactionsPlus extends JavaPlugin {
 		
 		FactionsPlusJail.server = getServer();
 		
-		Bridge.init( this );
+		Bridge.init();
 		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 		if(FactionsVersion.startsWith("1.6")) {
 			isOnePointSix = true;
@@ -363,8 +367,8 @@ public class FactionsPlus extends JavaPlugin {
 	 * @param msg
 	 * @return is a dummy return so that it can be used like: throw bailOut(...);
 	 */
-	public static RuntimeException bailOut(FactionsPlus fpInstance, String msg) {
+	public static RuntimeException bailOut(String msg) {
 		severe(msg);
-		throw disableSelf(fpInstance, STOP);
+		throw disableSelf(instance, STOP);
 	}
 }

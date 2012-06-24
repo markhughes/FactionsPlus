@@ -15,22 +15,22 @@ public class Bridge {
 	public static FactionsAny factions;
 	private final static String factionsPluginName="Factions";//case sensitive
 	
-	public static void init(FactionsPlus pluginSelf) {
+	public static void init() {
 		
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(factionsPluginName);
 		if (null == plugin) {
-			throw FactionsPlus.bailOut( pluginSelf, "missing required plugin "+factionsPluginName );
+			throw FactionsPlus.bailOut( "missing required plugin "+factionsPluginName );
 		}
 		
 		String factionsVersion = plugin.getDescription().getVersion();
 		
 		if(factionsVersion.startsWith("1.6")) {
-			factions=new Factions16(pluginSelf);
+			factions=new Factions16();
 		} else {
 			if (factionsVersion.startsWith("1.7")) {
-				factions=new Factions17(pluginSelf);
+				factions=new Factions17();
 			}else {
-				throw FactionsPlus.bailOut( pluginSelf, "Unknown "+factionsPluginName+" version `"+factionsVersion+"`" );
+				throw FactionsPlus.bailOut( "Unknown "+factionsPluginName+" version `"+factionsVersion+"`" );
 			}
 		}
 		

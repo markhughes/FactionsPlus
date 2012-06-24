@@ -30,6 +30,11 @@ public interface FactionsAny {
 		//yourself wrongly comparing against it (in this case a comparison which will always be false while using 1.6)
 	}
 	
+	public static enum ChatMode {
+		FACTION,
+		ALLIANCE,
+		PUBLIC
+	}
 	
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
 	

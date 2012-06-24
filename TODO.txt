@@ -6,5 +6,5 @@ TODO:
   see if we're considering peaceful and togglestate the same thing, or they use different permissions ?
   ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 
-- /f gc  is non-functional
+- /f gc  is non-functional and /f fc
 

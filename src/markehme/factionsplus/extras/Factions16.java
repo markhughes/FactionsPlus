@@ -23,8 +23,8 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	private ArrayList<ArrayList<String>>	instanceOfHelpPages	= null;
 	
 	
-	protected Factions16( FactionsPlus fpInstance ) {
-		super( fpInstance );
+	protected Factions16( ) {
+		super( );
 		
 		boolean failed = false;
 		
@@ -55,7 +55,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
+				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 	}
@@ -71,7 +71,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 				break;
 			// add new flags here
 			default:
-				throw FactionsPlus.bailOut( fpInst, "plugin author forgot to define a case to handle this flag: "
+				throw FactionsPlus.bailOut( "plugin author forgot to define a case to handle this flag: "
 					+ whichFlag );
 				// or forgot to put a "break;"
 			}
@@ -87,7 +87,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( fpInst, "failed to invoke " + mSetPeaceful );
+				throw FactionsPlus.bailOut( "failed to invoke " + mSetPeaceful );
 			}
 		}
 	}
@@ -121,7 +121,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 				failed = true;
 			} finally {
 				if ( failed ) {
-					throw FactionsPlus.bailOut( fpInst, "failed to invoke " + methodUpdateHelp );
+					throw FactionsPlus.bailOut( "failed to invoke " + methodUpdateHelp );
 				}
 			}
 		}
@@ -146,7 +146,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	@Override
 	public final void finalizeHelp() {
 		if ( null == instanceOfHelpPages ) {
-			throw FactionsPlus.bailOut( fpInst, "this should not happen, bad call order" );
+			throw FactionsPlus.bailOut( "this should not happen, bad call order" );
 		} else {
 			instanceOfHelpPages.add( pageLines );
 			pageLines = null;
