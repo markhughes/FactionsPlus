@@ -11,6 +11,8 @@ TODO:
 - maybe don't add /f gc and /f fc commands if Factions is 1.7 (easy to do but then the player might wonder why these 
 commands aren't there, thus by allowing them to exist in 1.7 also they are showing the message that 1.7 actually doesn't
 support chat modes)
+  Actually 1.7 can still do these commands but only if we tell the chats (which could be 3: EssentialsChat, HeroChat, CAPI)
+  to switch channels somehow, seems tough... more info in this pkg(s): com.massivecraft.factions.integration.*
 
 //done - try compiling with jdk6 and see what needs to be reduced from being only jdk7 compatible (tho so far compiling with only jdk7 works fine on tests)
 
