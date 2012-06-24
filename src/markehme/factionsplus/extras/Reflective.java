@@ -9,8 +9,20 @@ import markehme.factionsplus.*;
 
 public abstract class Reflective {
 	
+	/**
+	 * it will try to map every field of class/enum sourceEnum which is of the same type as sourceEnum (since it is enum)
+	 * to their same named counterpart in the destinationEnum class (which is again expected to be enum, 
+	 * so all its fields must be of the same type as this destinationEnum class) even though the two enum classes are 
+	 * (of) different (type)
+	 * @param destinationMap
+	 *            maps that holds source->dest tuple
+	 * @param sourceEnum
+	 *            this may or may not exist at compile time, but it's assumed to exist at run time(if you called this)
+	 * @param destinationEnum
+	 *            exists at compile time
+	 */
 	public static <K extends Object, V extends Object> void mapEnums( AbstractMap<K, V> destinationMap,
-		String sourceEnum, Class destinationEnum )
+		String sourceEnum, Class<V> destinationEnum )
 	{
 		
 		Class<?> sourceClass;
@@ -25,7 +37,14 @@ public abstract class Reflective {
 			boolean failed = false;
 			try {
 				if ( ( sourceClass.equals( eachField.getType() ) ) ) {
-					V ourFieldInstance = (V)destinationEnum.getField( eachField.getName() ).get( destinationEnum );
+					Field destField = destinationEnum.getField( eachField.getName() );
+					if ( !destField.getType().equals( destinationEnum ) ) {
+						//tipically this won't be reached
+						FactionsPlus.severe( "plugin author has set the wrong field type in " + destinationEnum
+							+ " for " + eachField + " it should be of the same type as the class" );
+						failed = true;
+					}
+					V ourFieldInstance = (V)( destField.get( destinationEnum ) );
 					K factionsFieldInstance = (K)eachField.get( sourceClass );
 					destinationMap.put( factionsFieldInstance, ourFieldInstance );
 				}

@@ -20,7 +20,6 @@ public abstract class FactionsBase implements FactionsAny {
 	// Relation
 	// except it's mapped in reversed order
 	private AbstractMap<Object, FactionsAny.Relation>	mapRelation		= new HashMap<>();
-	private AbstractMap<Object, FactionsAny.Relation>	mapChatMode		= new HashMap<>();
 	
 	
 	protected FactionsBase( ) {
@@ -36,9 +35,6 @@ public abstract class FactionsBase implements FactionsAny {
 					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
 
 			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
-			
-			sourceEnum="com.massivecraft.factions.struct.ChatMode";
-			
 			
 			
 		} catch ( ClassNotFoundException e ) {

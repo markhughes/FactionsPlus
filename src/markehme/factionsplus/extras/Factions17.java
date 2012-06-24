@@ -1,6 +1,7 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
+import java.util.*;
 
 import markehme.factionsplus.*;
 
@@ -16,6 +17,8 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	private Object			enumPeaceful	= null;// FFlag.PEACEFUL as instance/enum
 	private Field			fPeaceful		= null;// FFlag.PEACEFUL as field /useless
 	
+	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
+	private AbstractMap<Object, FactionsAny.ChatMode>	mapChatMode		= new HashMap<>();
 	
 	protected Factions17( ) {
 		super();
@@ -34,6 +37,8 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			}
 			
 			mSetFlag = Faction.class.getMethod( "setFlag", classFFlag, boolean.class );
+			
+			Reflective.mapEnums( mapChatMode, "com.massivecraft.factions.struct.ChatMode", FactionsAny.ChatMode.class);
 			
 		} catch ( NoSuchMethodException e ) {// multi catch could've worked but unsure if using jdk7 to compile
 			e.printStackTrace();
