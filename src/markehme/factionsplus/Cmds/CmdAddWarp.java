@@ -1,12 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
@@ -42,6 +37,7 @@ public class CmdAddWarp extends FCommand {
 
 	}
 
+	@Override
 	public void perform() {
 		String warpname = this.argAsString(0);
 
@@ -59,7 +55,7 @@ public class CmdAddWarp extends FCommand {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = myFaction;
 
-		Boolean authallow = false;
+		boolean authallow = false;
 
 		if(FactionsPlus.config.getBoolean("membersCanSetWarps")) {
 			authallow = true;
@@ -107,23 +103,47 @@ public class CmdAddWarp extends FCommand {
 				return;
 			}
 		} else {
+			DataInputStream in =null;
+			BufferedReader br=null;
+			FileInputStream fstream=null;
 			try {
-				FileInputStream fstream = new FileInputStream(currentWarpFile);
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				fstream = new FileInputStream(currentWarpFile);
+				in = new DataInputStream(fstream);
+				br = new BufferedReader(new InputStreamReader(in));
 				String strLine;
 
 				while ((strLine = br.readLine()) != null) {
 					String[] warp_data =  strLine.split(":");
 
 					if(warp_data[0].equalsIgnoreCase(warpname)) {
-						in.close();
 						sender.sendMessage(ChatColor.RED + "A warp already exists with that name.");
 						return;
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally {
+				if (null != br) {
+					try {
+						br.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+				if (null != in) {
+					try {
+						in.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+				if (null != fstream) {
+					try {
+						fstream.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
 			}
 			/*
 			currentWarpFile.delete();
@@ -166,6 +186,7 @@ public class CmdAddWarp extends FCommand {
 
 		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
 
+		@SuppressWarnings( "hiding" )
 		String[] args;
 
 		args = new String[3];

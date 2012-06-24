@@ -1,8 +1,6 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.FactionsPlus;
@@ -31,6 +29,7 @@ public class CmdListWarps extends FCommand  {
 		
 	}
 	
+	@Override
 	public void perform() {
 		Faction currentFaction = myFaction;
 		
@@ -55,8 +54,9 @@ public class CmdListWarps extends FCommand  {
 	        return;
 	    }
 	    
+	    FileInputStream fis=null;
 	    try {
-	    	FileInputStream fis = new FileInputStream(new File(FactionsPlus.folderWarps, currentFaction.getId()));
+	    	fis = new FileInputStream(new File(FactionsPlus.folderWarps, currentFaction.getId()));
 	    	int b = fis.read();
 	    	
 	    	if (b == -1) {
@@ -66,6 +66,14 @@ public class CmdListWarps extends FCommand  {
 	    } catch (Exception e) {
 	    	fme.msg("Internal error (-90571)");
 	    	return;
+	    }finally{
+	    	if (null != fis) {
+	    		try {
+					fis.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+	    	}
 	    }
 	    
 	    try {

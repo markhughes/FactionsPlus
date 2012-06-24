@@ -26,6 +26,7 @@ public class CmdUnsetJail extends FCommand {
 		this.setHelpShort("removes the Jail location");
 	}
 	
+	@Override
 	public void perform() {
 		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.unsetjail")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
@@ -34,7 +35,7 @@ public class CmdUnsetJail extends FCommand {
 		
 		Faction currentFaction = fme.getFaction();
 		
-		Boolean authallow = false;
+		boolean authallow = false;
 		
 		if(FactionsPlus.config.getBoolean("leadersCanSetJails")) {
 			if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x

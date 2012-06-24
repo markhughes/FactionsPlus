@@ -112,7 +112,8 @@ public class Metrics {
     /**
      * The default graph, used for addCustomData when you don't want a specific graph
      */
-    private final Graph defaultGraph = new Graph("Default");
+    @SuppressWarnings( "synthetic-access" )
+	private final Graph defaultGraph = new Graph("Default");
 
     /**
      * The plugin configuration file
@@ -139,12 +140,12 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    public Metrics(final Plugin plugin) throws IOException {
-        if (plugin == null) {
+    public Metrics(final Plugin argPlugin) throws IOException {
+        if (argPlugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
 
-        this.plugin = plugin;
+        this.plugin = argPlugin;
 
         // load the config
         configurationFile = new File(CONFIG_FILE);
@@ -177,7 +178,8 @@ public class Metrics {
         }
 
         // Construct the graph object
-        final Graph graph = new Graph(name);
+        @SuppressWarnings( "synthetic-access" )
+		final Graph graph = new Graph(name);
 
         // Now we can add our graph
         graphs.add(graph);
@@ -240,7 +242,9 @@ public class Metrics {
 
                 private boolean firstPost = true;
 
-                public void run() {
+                @Override
+				@SuppressWarnings( "synthetic-access" )
+				public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
@@ -341,7 +345,7 @@ public class Metrics {
      * Generic method that posts a plugin to the metrics website
      */
     private void postPlugin(final boolean isPing) throws IOException {
-        // The plugin's description file containg all of the plugin data such as name, version, author, etc
+        // The plugin's description file containing all of the plugin data such as name, version, author, etc
         final PluginDescriptionFile description = plugin.getDescription();
 
         // Construct the post data
@@ -488,8 +492,8 @@ public class Metrics {
          */
         private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
 
-        private Graph(final String name) {
-            this.name = name;
+		private Graph(final String argName) {
+            this.name = argName;
         }
 
         /**
@@ -570,10 +574,10 @@ public class Metrics {
         /**
          * Construct a plotter with a specific plot name
          *
-         * @param name
+         * @param argName
          */
-        public Plotter(final String name) {
-            this.name = name;
+		public Plotter(final String argName) {
+            this.name = argName;
         }
 
         /**

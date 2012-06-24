@@ -40,6 +40,7 @@ public class CmdRemoveWarp extends FCommand {
 		this.setHelpShort("removes a warp");
 	}
 	
+	@Override
 	public void perform() {
 		String warpname = this.argAsString(0);
 		
@@ -50,7 +51,7 @@ public class CmdRemoveWarp extends FCommand {
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		
-		Boolean authallow = false;
+		boolean authallow = false;
 
 		if(FactionsPlus.config.getBoolean("membersCanSetWarps")) {
 			authallow = true;

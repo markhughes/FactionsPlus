@@ -1,6 +1,9 @@
 package markehme.factionsplus.Cmds;
 
+import java.lang.reflect.*;
+
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.extras.*;
 
 import org.bukkit.ChatColor;
 
@@ -34,6 +37,7 @@ public class CmdToggleState extends FCommand {
 	// /f togglestate <faction>
 	
 	
+	@Override
 	public void perform() {
 		
 		String factionToggling = this.argAsString(0);
@@ -52,7 +56,7 @@ public class CmdToggleState extends FCommand {
 			
 			factiont = Factions.i.get(factionToggling);			
 			
-			Boolean authallow = false;
+			boolean authallow = false;
 			
 			if(FactionsPlus.config.getBoolean("leadersCanToggleState")) {
 				if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
@@ -79,28 +83,23 @@ public class CmdToggleState extends FCommand {
 			factiont = fme.getFaction();
 		}
 		
-		//TODO: using "/f peaceful factiontag" from Factions will bypass the payment when "/f togglestate" here
+		//TODO: using "/f peaceful factiontag" from Factions will bypass the payment employed for "/f togglestate" here
+		//see if we're considering peaceful and togglestate the same thing, or they use different permissions ?
+		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
+		
+		
 		if(!factiont.isPeaceful()) {
 			//if faction wasn't already peaceful, then we set it
 			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleUpPeaceful"), "to set faction to peaceful", "for setting faction to peaceful")) {
 				
-				
-				if(FactionsPlus.FactionsVersion.startsWith("1.7")) {
-					//factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
-				} else {
-					factiont.setPeaceful(true);
-				}
+				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
 				sender.sendMessage("You have toggled the Faction to Peaceful!");
 			}
 		} else {
 			//faction was peaceful, we now remove this flag
 			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleDownPeaceful"), "to remove the peaceful status", "for setting faction to unpeaceful")) {
-				if(FactionsPlus.FactionsVersion.startsWith("1.7")) {
-					//factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, false);
-				} else {
-					factiont.setPeaceful(false);
-				}
+				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
 				sender.sendMessage("You have removed peaceful status from the Faction!");
 			}
 			

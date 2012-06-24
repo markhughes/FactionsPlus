@@ -34,6 +34,7 @@ public class CmdBan extends FCommand {
 		this.setHelpShort("kicks a player out of your Faction, and stops them from re-joining");
 	}
 
+	@Override
 	public void perform() {
 		String banningThisPlayer = this.argAsString(0);
 		Faction pFaction = fme.getFaction();
@@ -43,7 +44,7 @@ public class CmdBan extends FCommand {
 			return;
 		}
 
-		Boolean authallow = false;
+		boolean authallow = false;
 
 		if(FactionsPlus.config.getBoolean("leadersCanFactionBan") && Utilities.isLeader(fme)) {
 			authallow = true;

@@ -17,6 +17,7 @@ public class CmdMoneyTop extends FCommand {
 		senderMustBeMember = false;
 	}
 	
+	@Override
 	public void perform() {
 		Factions.i.getByTag("");
 		fme.sendMessage("On the to do list!");

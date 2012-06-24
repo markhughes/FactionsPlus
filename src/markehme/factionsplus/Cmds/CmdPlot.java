@@ -24,6 +24,7 @@ public class CmdPlot extends FCommand {
 		this.setHelpShort("plot management for Factions");
 	}
 
+	@Override
 	public void perform() {
 		if(! (FactionsPlus.isWorldEditEnabled && FactionsPlus.isWorldGuardEnabled)) {
 			fme.msg("This server does not have WorldGuard and WorldEdit enabled, and therefore this command can not be used.");

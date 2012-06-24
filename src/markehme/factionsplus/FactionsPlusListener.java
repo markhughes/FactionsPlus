@@ -1,8 +1,6 @@
 package markehme.factionsplus;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 
@@ -36,7 +34,6 @@ import com.massivecraft.factions.event.FactionDisbandEvent;
 public class FactionsPlusListener implements Listener {
 	Factions factions;
 	FPlayers fplayers;
-	Faction faction;
 	Server server;
 
 	@EventHandler
@@ -172,7 +169,7 @@ public class FactionsPlusListener implements Listener {
 					return;
 				}
 			}
-			if (p.getKiller() instanceof Player) {
+//			if (p.getKiller() instanceof Player) {//The expression of type Player is already an instance of type Player
 				if ((p.getKiller().getName() == p.getName()) && 
 						(FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide") > 0.0D)) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide"));
@@ -189,7 +186,7 @@ public class FactionsPlusListener implements Listener {
 					}
 					return;
 				}
-			}
+//			}
 		}
 	}
 
@@ -366,8 +363,9 @@ public class FactionsPlusListener implements Listener {
 		if(factionHere.getTag().trim().equalsIgnoreCase("WarZone")) {
 
 			if (!player.isOp()) {
+				BufferedReader buff=null;
 				try {
-					BufferedReader buff = new BufferedReader(new FileReader(FactionsPlus.fileDisableInWarzone));
+					buff = new BufferedReader(new FileReader(FactionsPlus.fileDisableInWarzone));
 
 					while ((filterRow = buff.readLine()) != null) {
 						if ((event.getMessage().equalsIgnoreCase(filterRow)) || (event.getMessage().toLowerCase().startsWith(filterRow + " "))) {
@@ -377,6 +375,14 @@ public class FactionsPlusListener implements Listener {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
+				}finally{
+					if (null != buff) {
+						try {
+							buff.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
