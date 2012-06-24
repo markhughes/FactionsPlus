@@ -16,3 +16,5 @@ support chat modes)
 
 //done - try compiling with jdk6 and see what needs to be reduced from being only jdk7 compatible (tho so far compiling with only jdk7 works fine on tests)
 
+- newest version tosses a 'Strange argument. Use the command like this: /f' whenever using any commands. Figure it has something to do with some changes
+	made by basicsensei. I'll look into it tomorrow if it isn't fixed.
