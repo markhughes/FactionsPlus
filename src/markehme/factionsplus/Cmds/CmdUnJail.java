@@ -22,6 +22,7 @@ public class CmdUnJail extends FCommand {
 		this.setHelpShort("removes a player from jail");
 	}
 
+	@Override
 	public void perform() {
 		String unJailingPlayer = this.argAsString(0);
 		

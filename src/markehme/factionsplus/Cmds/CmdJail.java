@@ -24,6 +24,7 @@ public class CmdJail extends FCommand {
 		this.setHelpShort("send a player to jail!");
 	}
 
+	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
 		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);

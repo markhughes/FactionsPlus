@@ -1,0 +1,10 @@
+TODO:
+
+- hook /f reload  to cause FactionsPlus to reload from disk too
+
+- using "/f peaceful factiontag" from Factions will bypass the payment employed for "/f togglestate" 
+  see if we're considering peaceful and togglestate the same thing, or they use different permissions ?
+  ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
+
+- /f gc  is non-functional
+

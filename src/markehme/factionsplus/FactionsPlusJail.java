@@ -41,8 +41,10 @@ public class FactionsPlusJail {
 		File currentJailFile = new File(FactionsPlus.folderJails, "loc." + CWFaction.getId());
 				
 		if(currentJailFile.exists()) {
+			Scanner scanner=null;
 			try {
-				String JailData = new Scanner(currentJailFile).useDelimiter("\\A").next();
+				scanner = new Scanner(currentJailFile);
+				String JailData =scanner.useDelimiter("\\A").next();
 					
 				String[] jail_data =  JailData.split(":");
 					
@@ -53,12 +55,16 @@ public class FactionsPlusJail {
 			    float Y = Float.parseFloat(jail_data[3]); // Yaw
 			    float p = Float.parseFloat(jail_data[4]);
 			        	
-			    world = (World)server.getWorld(jail_data[5]);
+			    world = server.getWorld(jail_data[5]);
 			    
 			    return(new Location(world, x, y, z, Y, p));
 			    
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if (null != scanner) {
+					scanner.close();
+				}
 			}
 		}
 		return null;
@@ -133,7 +139,7 @@ public class FactionsPlusJail {
 
 	}
 	
-	public static boolean sendToJail(String jailingplayer, CommandSender sender, Integer t) {
+	public static boolean sendToJail(String jailingplayer, CommandSender sender, int argTime) {
 		Player player = (Player)sender;
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
@@ -152,8 +158,10 @@ public class FactionsPlusJail {
 		}
 		
 		if(currentJailFile.exists()) {
+			Scanner scanner=null;
 			try {
-				String JailData = new Scanner(currentJailFile).useDelimiter("\\A").next();
+				scanner=new Scanner(currentJailFile);
+				String JailData = scanner.useDelimiter("\\A").next();
 					
 				String[] jail_data =  JailData.split(":");
 					
@@ -164,7 +172,7 @@ public class FactionsPlusJail {
 			    float Y = Float.parseFloat(jail_data[3]); // yaw
 			    float p = Float.parseFloat(jail_data[4]);
 			    
-			    world = (World)server.getWorld(jail_data[5]);
+			    world = server.getWorld(jail_data[5]);
 			       	
 			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
@@ -174,7 +182,7 @@ public class FactionsPlusJail {
 			    if(!jailingFile.exists()){
 			    	FileWriter filewrite = new FileWriter(jailingFile, true);
 			    	filewrite.flush();
-			    	filewrite.write(t);
+			    	filewrite.write(argTime);
 			    	sender.sendMessage(ChatColor.GREEN + jplayer.getName() +" has been jailed!");
 			    	filewrite.close();
 			    } else {
@@ -184,6 +192,10 @@ public class FactionsPlusJail {
 			} catch (Exception e) {
 				e.printStackTrace();
 				sender.sendMessage(ChatColor.RED + "Can not read the jail data, is a jail set?");
+			}finally {
+				if (null != scanner) {
+					scanner.close();
+				}
 			}
 
 		} else {
@@ -202,7 +214,7 @@ public class FactionsPlusJail {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
-		Boolean authallow = false;
+		boolean authallow = false;
 		
 		if(FactionsPlus.config.getBoolean("leadersCanSetJails")) {
 			if(fplayer.getRole().toString().contains("admin") || fplayer.getRole().toString().contains("LEADER")) { // 1.6.x

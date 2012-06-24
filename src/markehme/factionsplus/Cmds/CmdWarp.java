@@ -1,14 +1,11 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.extras.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,8 +21,7 @@ import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.EssentialsFeatures;
-import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.struct.Relation;
+import com.massivecraft.factions.struct.*;
 import com.massivecraft.factions.zcore.util.SmokeUtil;
 
 public class CmdWarp extends FCommand {
@@ -47,6 +43,7 @@ public class CmdWarp extends FCommand {
 
 	}
 
+	@Override
 	public void perform() {
 		String warpname = this.argAsString(0);
 		String setPassword = null;
@@ -102,14 +99,21 @@ public class CmdWarp extends FCommand {
 			double y = loc.getY();
 			double z = loc.getZ();
 
-			for (Player p : me.getServer().getOnlinePlayers())
+			for (@SuppressWarnings( "hiding" ) Player p : me.getServer().getOnlinePlayers())
 			{
 				if (p == null || !p.isOnline() || p.isDead() || p == fme || p.getWorld() != w)
 					continue;
 
 				FPlayer fp = FPlayers.i.get(p);
-				if (fplayer.getRelationTo(fp) != Relation.ENEMY)
-					continue;
+				if ( ! FactionsAny.Relation.ENEMY.equals( 
+					Bridge.factions.getRelationTo( fplayer, fp ) 
+					)) {
+						//fplayer.getRelationTo(fp) != 
+//						Rel.ENEMY)
+//					 Relation.ENEMY)
+					
+					continue;//if not enemies, continue
+				}
 
 				Location l = p.getLocation();
 				double dx = Math.abs(x - l.getX());
@@ -131,10 +135,14 @@ public class CmdWarp extends FCommand {
 
 			return;
 		}
+		
+		FileInputStream fstream=null;
+		DataInputStream in=null;
+		BufferedReader br=null;
 		try {
-			FileInputStream fstream = new FileInputStream(currentWarpFile);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			fstream = new FileInputStream(currentWarpFile);
+			in = new DataInputStream(fstream);
+			br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
 
 			while ((strLine = br.readLine()) != null) {
@@ -149,9 +157,10 @@ public class CmdWarp extends FCommand {
 					double z = Double.parseDouble(warp_data[3]);
 
 					float Y = Float.parseFloat(warp_data[4]); // yaw
+					@SuppressWarnings( "hiding" )
 					float p = Float.parseFloat(warp_data[5]);
 
-					world = (World) Bukkit.getServer().getWorld(warp_data[6]);
+					world = Bukkit.getServer().getWorld(warp_data[6]);
 
 					if(warp_data.length == 8) {
 						if(warp_data[7] != "nullvalue") {
@@ -186,7 +195,7 @@ public class CmdWarp extends FCommand {
 
 					player.teleport(new Location(world, x, y, z, Y, p));
 
-					in.close();
+//					in.close();
 
 					return;
 				}	
@@ -194,12 +203,34 @@ public class CmdWarp extends FCommand {
 
 			player.sendMessage("Could not find the warp " + warpname);
 
-			in.close();
+//			in.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 			sender.sendMessage(ChatColor.RED + "An internal error occured (02)");
-		}	    
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != in) {
+				try {
+					in.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != fstream) {
+				try {
+					fstream.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

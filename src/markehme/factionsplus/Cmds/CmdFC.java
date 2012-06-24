@@ -18,6 +18,7 @@ public class CmdFC extends FCommand  {
 		this.setHelpShort("set your chat to Faction-only");
 	}
 	
+	@Override
 	public void perform() {
 		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.factionchatcommand")) {
 			fme.msg("No permission!");

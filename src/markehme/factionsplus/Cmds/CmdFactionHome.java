@@ -30,6 +30,7 @@ public class CmdFactionHome extends FCommand {
 		this.setHelpShort("teleport to another Factions home");
 	}
 	
+	@Override
 	public void perform() {
 		String factionName = this.argAsString(0).toString();
 		Faction currentF = Factions.i.getByTag(factionName);
