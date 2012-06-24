@@ -140,7 +140,8 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    public Metrics(final Plugin argPlugin) throws IOException {
+    @SuppressWarnings("boxing")
+	public Metrics(final Plugin argPlugin) throws IOException {
         if (argPlugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
@@ -303,7 +304,8 @@ public class Metrics {
     *
     * @throws IOException
     */
-    public void enable() throws IOException {
+    @SuppressWarnings("boxing")
+	public void enable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
         	// Check if the server owner has already set opt-out, if not, set it.
@@ -324,7 +326,8 @@ public class Metrics {
      *
      * @throws IOException
      */
-    public void disable() throws IOException {
+    @SuppressWarnings("boxing")
+	public void disable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.

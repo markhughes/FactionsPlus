@@ -77,6 +77,7 @@ public class FactionsPlusTemplates {
 		
 	}
 	
+	@SuppressWarnings("boxing")
 	public static void createTemplatesFile() {
 		try { 
 			if(FactionsPlus.templatesFile.exists()) {

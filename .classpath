@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/Factions"/>
 	<classpathentry kind="lib" path="lib/DisguiseCraft.jar" sourcepath="/disguisecraft"/>
 	<classpathentry kind="lib" path="lib/MobDisguise.jar" sourcepath="/MobDisguise"/>
 	<classpathentry kind="lib" path="lib/Vault.jar"/>
@@ -10,5 +9,7 @@
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="lib/LWC.jar"/>
 	<classpathentry kind="lib" path="lib/bukkit-1.2.5-R4.1-20120618.060128-13.jar" sourcepath="/bukkit"/>
+	<classpathentry kind="lib" path="C:/Users/Sean/Documents/GitHub/FactionsPlus/lib/Factions 1.6.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Sean/Documents/GitHub/FactionsPlus/lib/Factions 1.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
