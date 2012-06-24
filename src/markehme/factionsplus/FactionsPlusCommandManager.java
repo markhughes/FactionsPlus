@@ -38,6 +38,7 @@ public class FactionsPlusCommandManager {
 		// General Commands
 		addSC(new CmdAnnounce());
 		addSC(new CmdBan());
+		addSC(new CmdUnban());
 		addSC(new CmdToggleState());
 		addSC(new CmdFC());
 		addSC(new CmdGC());

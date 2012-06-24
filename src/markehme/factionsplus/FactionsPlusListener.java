@@ -95,7 +95,7 @@ public class FactionsPlusListener implements Listener {
 		}
 
 		File banFile = new File(FactionsPlus.folderFBans, event.getFaction().getId() + "." + event.getFPlayer().getName().toLowerCase());
-
+		
 		if(banFile.exists()) {
 			event.getFPlayer().msg("You can't join this Faction as you have been banned!");
 			event.getFPlayer().leave(true);

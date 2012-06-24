@@ -65,7 +65,7 @@ public class Utilities {
 			return true;
 		}
 	}
-
+	
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(FPlayer fplayer) {

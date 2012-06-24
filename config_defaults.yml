@@ -27,6 +27,8 @@ showLastAnnounceOnLogin: true
 showLastAnnounceOnLandEnter: true
 leadersCanFactionBan: true
 officersCanFactionBan: true
+leadersCanFactionUnban: true
+officersCanFactionUnban: true
 leaderCanNotBeBanned: true
 leadersCanToggleState: false
 officersCanToggleState: false
