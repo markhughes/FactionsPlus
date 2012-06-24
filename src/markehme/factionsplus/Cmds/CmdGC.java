@@ -6,32 +6,9 @@ import markehme.factionsplus.extras.*;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdGC extends FCommand  {
+public class CmdGC extends CmdChatModeBase  {
 	public CmdGC() {
-		this.aliases.add("gc");
-		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
-		
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
-		
-		this.setHelpShort("set your chat to global (public)");
+		super(FactionsAny.ChatMode.PUBLIC,"factionsplus.factionglobalchatcommand", "gc","cg","cp" );
 	}
 	
-	@Override
-	public void perform() {
-		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.factionglobalchatcommand")) {
-			fme.msg("No permission!");
-			return;
-		}
-		
-		if ( Bridge.factions.setChatMode( FactionsAny.ChatMode.PUBLIC ) ) {
-			// fme.setChatMode(com.massivecraft.factions.struct.ChatMode.PUBLIC);
-			fme.msg( "Your chat mode has been changed to global." );
-		} else {
-			fme.msg( "This version of Factions does not support changing chat mode." );
-		}
-	}
-
 }

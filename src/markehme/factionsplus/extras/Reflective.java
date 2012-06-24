@@ -9,7 +9,7 @@ import markehme.factionsplus.*;
 
 public abstract class Reflective {
 	
-	public static <K extends Object, V extends Object> void mapEnums( AbstractMap<K, V> destinationMap,
+	public static <K extends Object, V extends Object> void mapEnums( Map<K, V> destinationMap,
 		String sourceEnum, Class<V> destinationEnum )
 	{
 		Class<?> sourceClass;
@@ -35,7 +35,7 @@ public abstract class Reflective {
 	 * @param destinationEnum
 	 *            exists at compile time
 	 */
-	public static <K extends Object, V extends Object> void mapEnums( AbstractMap<K, V> destinationMap,
+	public static <K extends Object, V extends Object> void mapEnums( Map<K, V> destinationMap,
 		Class<?> sourceEnumClass, Class<V> destinationEnum )
 	{
 		

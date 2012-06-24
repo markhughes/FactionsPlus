@@ -31,9 +31,27 @@ public interface FactionsAny {
 	}
 	
 	public static enum ChatMode {
-		FACTION,
-		ALLIANCE,
-		PUBLIC
+		FACTION( "Faction-only" ), 
+		ALLIANCE( "Alliance-only" ), 
+		PUBLIC( "Public" );
+		
+		private String	description;//description will be used in when showing info/help to the player
+		
+		
+		private ChatMode( String desc ) {
+			description = desc;
+		}
+		
+		
+		public String getDescription() {
+			return description;
+		}
+		
+		
+		@Override
+		public String toString() {
+			return description;
+		}
 	}
 	
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
@@ -52,10 +70,15 @@ public interface FactionsAny {
 	public void finalizeHelp();
 	
 	/**
+	 * @param forWhatPlayer 
 	 * @param sender the FPlayer to inform of any messages
 	 * @param chatMode
-	 * @return false if nothing was done(aka not implemented) ie. it's 1.7 and this has no effect because 1.7 doesn't
-	 * support changing chat mode
+	 * @return null if nothing was done(aka not implemented) ie. it's 1.7 and this has no effect because 1.7 doesn't
+	 * support changing chat mode<br>
+	 * 		or just the previous chat mode
 	 */
-	public boolean setChatMode(FactionsAny.ChatMode chatMode);
+	public FactionsAny.ChatMode setChatMode(FPlayer forWhatPlayer, FactionsAny.ChatMode chatMode);
+
+
+	public FactionsAny.ChatMode getChatMode(FPlayer forWhatPlayer);
 }

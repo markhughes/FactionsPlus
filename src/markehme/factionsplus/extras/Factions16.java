@@ -26,7 +26,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	private Method 							mGetChatMode		= null;
 	
 	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
-	private TwoWayHashMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayHashMapOfNonNulls<>();
+	private TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayMapOfNonNulls<>();
 		
 	
 	protected Factions16( ) {
@@ -168,11 +168,18 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 
 
 	@Override
-	public boolean setChatMode( ChatMode chatMode ) {
+	public FactionsAny.ChatMode setChatMode(FPlayer forWhatPlayer, FactionsAny.ChatMode chatMode ) {
 		boolean failed=false;
+		FactionsAny.ChatMode ret=null;
 		try {
-			mapChatMode.get( key )
-			mSetChatMode.invoke(chatMode);
+			Object factionsChatMode_Enum = mapChatMode.getLeftSide( chatMode );
+			if ( null == factionsChatMode_Enum ) {
+				// would never be null if .init() above did its job
+				failed = true;
+			} else {
+				ret=getChatMode( forWhatPlayer );
+				mSetChatMode.invoke( forWhatPlayer, factionsChatMode_Enum );
+			}
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
 			failed=true;
@@ -186,7 +193,42 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			if ( failed ) {
 				throw FactionsPlus.bailOut( "failed to invoke " + mSetChatMode );
 			}
+			if (null == ret) {
+				throw FactionsPlus.bailOut( "failure within the code logic");
+			}
 		}
-		return true;//even if there was actually no chatMode change when compared to the previous, true means it 
+		return ret;//even if there was actually no chatMode change when compared to the previous, true means it 
+	}
+
+
+	@Override
+	public ChatMode getChatMode(FPlayer forWhatPlayer) {
+		boolean failed=false;
+		try {
+			Object factionsEnum = mGetChatMode.invoke(forWhatPlayer);
+			if ( null == factionsEnum ) {
+				failed = true;
+			} else {
+				ChatMode cm = mapChatMode.getRightSide( factionsEnum );
+				if ( null == cm ) {
+					failed = true;
+				}
+				return cm;
+			}
+		} catch ( IllegalAccessException e ) {
+			e.printStackTrace();
+			failed=true;
+		} catch ( IllegalArgumentException e ) {
+			e.printStackTrace();
+			failed=true;
+		} catch ( InvocationTargetException e ) {
+			e.printStackTrace();
+			failed=true;
+		}finally {
+			if ( failed ) {
+				throw FactionsPlus.bailOut( "failed to invoke " + mGetChatMode );
+			}
+		}
+		throw null;//not reached!
 	}
 }

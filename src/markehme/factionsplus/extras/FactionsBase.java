@@ -19,7 +19,7 @@ public abstract class FactionsBase implements FactionsAny {
 	// this will hold a mapping between our Factions.version independent FactionsAny.Relation and the specific Factions version
 	// Relation
 	// except it's mapped in reversed order
-	private AbstractMap<Object, FactionsAny.Relation>	mapRelation		= new HashMap<>();
+	private Map<Object, FactionsAny.Relation>	mapRelation		= new HashMap<>();
 	
 	
 	protected FactionsBase( ) {

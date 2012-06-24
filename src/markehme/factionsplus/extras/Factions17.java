@@ -103,7 +103,18 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 
 
 	@Override
-	public boolean setChatMode( ChatMode chatMode ) {
-		return false;//telling caller it didn't happen
+	@Deprecated
+	public ChatMode setChatMode(FPlayer forWhatPlayer, ChatMode chatMode ) {
+		return null;//telling caller it didn't happen
+	}
+
+
+	@Override
+	@Deprecated
+	public ChatMode getChatMode(FPlayer forWhatPlayer) {//not supported in 1.7
+		//basically if this call is reached, then the caller/coder didn't make the required checks to see if it's non 1.7 Factions version
+		//and by not doing those, you could end up expecting certain results from this method which will not happen ie. causing bugs later
+		throw new RuntimeException("not supposed to be called in 1.7");
+//		return null;
 	}
 }
