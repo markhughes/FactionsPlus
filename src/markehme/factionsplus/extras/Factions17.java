@@ -24,17 +24,9 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 		
 		try {
 			classFFlag = Class.forName( "com.massivecraft.factions.struct.FFlag" );
-			// FIXME: remove such redundant 'if' checks where it clearly only throws instead of being ever null
-			if ( null == classFFlag ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 			fPeaceful = classFFlag.getField( "PEACEFUL" );
-			if ( null == fPeaceful ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
+
 			enumPeaceful = fPeaceful.get( classFFlag );//this is safe to get here, this soon.
 			if ( null == enumPeaceful ) {// this is likely never null, it would rather just throw instead
 				failed = true;
@@ -42,10 +34,6 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			}
 			
 			mSetFlag = Faction.class.getMethod( "setFlag", classFFlag, boolean.class );
-			if ( null == mSetFlag ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 		} catch ( NoSuchMethodException e ) {// multi catch could've worked but unsure if using jdk7 to compile
 			e.printStackTrace();

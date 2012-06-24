@@ -26,36 +26,21 @@ public abstract class FactionsBase implements FactionsAny {
 		
 		try {
 			classRP = Class.forName( "com.massivecraft.factions.iface.RelationParticipator" );
-			if ( null == classRP ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 			mGetRelationTo = FPlayer.class.getMethod( "getRelationTo", classRP );
-			if ( null == mGetRelationTo ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 			classRel =
 				Class.forName( "com.massivecraft.factions.struct."
 					+ ( Factions16.class.equals( this.getClass() ) ? "Relation" : "Rel" ) );
-			if ( null == classRel ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 			fRelEnemy = classRel.getField( "ENEMY" );
-			if ( null == fRelEnemy ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
-			}
 			
 			enumRelEnemy = fRelEnemy.get( classRel );//safe to get here this soon;
 			if ( null == enumRelEnemy ) {// this is likely never null, it would rather just throw instead
 				failed = true;
 				return;
 			}
+			
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
 			failed = true;
@@ -115,7 +100,7 @@ public abstract class FactionsBase implements FactionsAny {
 				throw FactionsPlus.bailOut( fpInst, "failed to invoke " + mGetRelationTo );
 			}
 		}
-		return ret;// not reached
+		return ret;// actually reached
 	}
 	
 	

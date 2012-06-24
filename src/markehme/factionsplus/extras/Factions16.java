@@ -61,11 +61,6 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	}
 	
 	
-	// @Override
-	// public void setPeaceful(Faction faction, Boolean state ) {
-	//
-	// }
-	
 	@Override
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState ) {
 		boolean failed = false;
@@ -99,7 +94,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	
 	private final static byte	howManyPerPage	= 5;
-	private static byte			perPage			= 0;
+	private static byte			currentPerPage			= 0;
 	private ArrayList<String>	pageLines		= null;
 	
 	
@@ -134,21 +129,15 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		
 		if ( null == pageLines ) {
 			pageLines = new ArrayList<String>();
-			perPage = 0;
-			System.out.println( "new line" );
+			currentPerPage = 0;
 		}
 		
-		// pageLines.add( P.p.txt.parse(ChatColor.AQUA + subCommand.getUseageTemplate( false )+ ChatColor.YELLOW + " "+
-		// subCommand.getHelpShort()));
-		pageLines.add( subCommand.getUseageTemplate( true ) );// + "!" + subCommand.getHelpShort() );
-		System.out.println( subCommand.getUseageTemplate( true ) );
-		// pageLines.add( subCommand.getUseageTemplate( false ) + "!" + subCommand.getHelpShort() );
-		if ( perPage >= howManyPerPage ) {
+		pageLines.add( subCommand.getUseageTemplate( true ) );
+		if ( currentPerPage >= howManyPerPage ) {
 			instanceOfHelpPages.add( pageLines );
-			System.out.println( "line added - end" );
 			pageLines = null;
 		} else {
-			perPage++;
+			currentPerPage++;
 		}
 		
 	}
@@ -161,7 +150,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		} else {
 			instanceOfHelpPages.add( pageLines );
 			pageLines = null;
-			perPage = 0;
+			currentPerPage = 0;
 		}
 	}
 }
