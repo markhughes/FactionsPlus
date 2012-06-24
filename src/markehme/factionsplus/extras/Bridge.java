@@ -15,6 +15,8 @@ public abstract class Bridge {
 	public static FactionsAny factions;
 	private final static String factionsPluginName="Factions";//case sensitive
 	
+	//technically this should not have a deinit() unless plugin totally disables when onDisable() which it doesn't
+	//ie. commands still work, in which case we don't want NPEs due to Bridge.factions being null
 	public static void init() {
 		
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(factionsPluginName);

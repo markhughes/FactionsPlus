@@ -108,7 +108,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	
 	private final static byte	howManyPerPage	= 5;
-	private static byte			currentPerPage			= 0;
+	private byte				currentPerPage	= 0;
 	private ArrayList<String>	pageLines		= null;
 	
 	
