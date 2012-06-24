@@ -164,29 +164,33 @@ public class FactionsPlusListener implements Listener {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPotion"));
 					return;
 				}
+				
+				if ((causeOfDeath.equals("SUICIDE"))
+						&& ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathBySuicide" ) > 0.0D ) )
+				{
+					Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathBySuicide" ) );
+					return;
+				}
+				
 				if(FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther") > 0) {
 					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByOther"));
 					return;
 				}
+			} else {//non-null killer
+//				if ( p.getKiller() instanceof Player ) {// The expression of type Player is already an instance of type Player
+					if ( ( causeOfDeath == "ENTITY_ATTACK" ) || ( causeOfDeath == "PROJECTILE" ) ) {
+						if ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) > 0.0D ) {
+							Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) );
+						}
+						
+						if ( FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) > 0.0D ) {
+							Player k = p.getKiller();
+							Utilities.addPower( k, FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) );
+						}
+						return;
+					}
+//				}
 			}
-//			if (p.getKiller() instanceof Player) {//The expression of type Player is already an instance of type Player
-				if ((p.getKiller().getName() == p.getName()) && 
-						(FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide") > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathBySuicide"));
-					return;
-				}
-				if ((causeOfDeath == "ENTITY_ATTACK") || (causeOfDeath == "PROJECTILE")) {
-					if (FactionsPlus.config.getDouble("extraPowerLossIfDeathByPVP") > 0.0D) {
-						Utilities.removePower(p, FactionsPlus.config.getDouble("extraPowerLossIfDeathByPVP"));
-					}
-
-					if (FactionsPlus.config.getDouble("extraPowerWhenKillPlayer") > 0.0D) {
-						Player k = p.getKiller();
-						Utilities.addPower(k, FactionsPlus.config.getDouble("extraPowerWhenKillPlayer"));
-					}
-					return;
-				}
-//			}
 		}
 	}
 
