@@ -1,6 +1,7 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
+import java.util.concurrent.*;
 
 import markehme.factionsplus.*;
 
@@ -11,12 +12,15 @@ import com.massivecraft.factions.cmd.*;
 
 public abstract class FactionsBase implements FactionsAny {
 	
-	protected FactionsPlus	fpInst;
-	private Class			classRP			= null;//the class/interface RelationParticipator
-	private Class			classRel		= null;//the class or enum class Rel or Relation
-	private Field			fRelEnemy		= null;//the ENEMY as field not instance
-	private Object			enumRelEnemy	= null;//Rel.ENEMY or Relation.ENEMY (as instance well, as enum really)
-	private Method			mGetRelationTo	= null;//the method getRelationTo(RelationParticipator rp)
+	protected FactionsPlus									fpInst;
+	private Class											classRP			= null; // the class/interface RelationParticipator
+	private Class											classRel		= null; // the class or enum class Rel or Relation
+	private Method											mGetRelationTo	= null; // the method
+																					// getRelationTo(RelationParticipator rp)
+																					
+	// this will hold a mapping between our Factions.version independent  FactionsAny.Relation and the specific Factions version Relation
+	//except it's mapped in reversed order
+	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation				= null;
 	
 	
 	protected FactionsBase( FactionsPlus fpInstance ) {
@@ -33,24 +37,43 @@ public abstract class FactionsBase implements FactionsAny {
 				Class.forName( "com.massivecraft.factions.struct."
 					+ ( Factions16.class.equals( this.getClass() ) ? "Relation" : "Rel" ) );
 			
-			fRelEnemy = classRel.getField( "ENEMY" );
+			mapRelation = new ConcurrentHashMap<>();
 			
-			enumRelEnemy = fRelEnemy.get( classRel );//safe to get here this soon;
-			if ( null == enumRelEnemy ) {// this is likely never null, it would rather just throw instead
-				failed = true;
-				return;
+			for ( Field eachField : classRel.getFields() ) {
+				try {
+					if ( ( classRel.equals( eachField.getDeclaringClass() ) )
+						&& ( eachField.getName().equals( eachField.getName().toUpperCase() ) ) )
+					{
+						FactionsAny.Relation ourFieldInstance =
+							(Relation)( FactionsAny.Relation.class.getField( eachField.getName() )
+								.get( FactionsAny.Relation.class ) );
+						Object factionsFieldInstance = eachField.get( classRel );
+						mapRelation.put( factionsFieldInstance, ourFieldInstance );
+					}
+				} catch ( IllegalArgumentException e ) {//I didn't want to catch Exception e though
+					e.printStackTrace();
+					failed = true;
+				} catch ( IllegalAccessException e ) {
+					e.printStackTrace();
+					failed = true;
+				} catch ( NoSuchFieldException e ) {
+					e.printStackTrace();
+					failed = true;
+				} catch ( SecurityException e ) {
+					e.printStackTrace();
+					failed = true;
+				}finally{
+					if (failed) {
+						throw FactionsPlus.bailOut( fpInst, "the plugin author forgot to define some flags in "
+								+ FactionsAny.Relation.class + " for " + eachField );
+					}
+				}
 			}
 			
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
 			failed = true;
 		} catch ( IllegalArgumentException e ) {
-			e.printStackTrace();
-			failed = true;
-		} catch ( IllegalAccessException e ) {
-			e.printStackTrace();
-			failed = true;
-		} catch ( NoSuchFieldException e ) {
 			e.printStackTrace();
 			failed = true;
 		} catch ( SecurityException e ) {
@@ -64,6 +87,8 @@ public abstract class FactionsBase implements FactionsAny {
 				throw FactionsPlus.bailOut( fpInst, "failed to hook into Factions 1.6.x" );
 			}
 		}
+		
+		
 	}
 	
 	
@@ -78,13 +103,9 @@ public abstract class FactionsBase implements FactionsAny {
 			}
 			
 			Object isReturn = mGetRelationTo.invoke( one, two );
-			if ( enumRelEnemy.equals( isReturn ) ) {
-				ret = FactionsAny.Relation.ENEMY;
-			} else {
-				// add more flags here
-				failed = true;
-				throw FactionsPlus
-					.bailOut( fpInst, "the plugin author forgot to define any more flags for " + isReturn );
+			ret = mapRelation.get( isReturn );
+			if ( null == ret ) {
+				FactionsPlus.severe( "impossible" );
 			}
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
