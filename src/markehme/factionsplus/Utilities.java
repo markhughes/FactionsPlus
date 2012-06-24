@@ -1,12 +1,6 @@
 package markehme.factionsplus;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -131,10 +125,13 @@ public class Utilities {
 
 		int c = 0;
 		if (currentWarpFile.exists()) {	
+			FileInputStream fstream=null;
+			DataInputStream in=null;
+			BufferedReader br =null;
 			try {
-				FileInputStream fstream = new FileInputStream(currentWarpFile);
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				fstream = new FileInputStream(currentWarpFile);
+				in = new DataInputStream(fstream);
+				br= new BufferedReader(new InputStreamReader(in));
 				String strLine;
 
 				while ((strLine = br.readLine()) != null) {
@@ -142,9 +139,30 @@ public class Utilities {
 						c++;
 					}
 				}
-				in.close();
 			} catch (Exception e) {
 				e.printStackTrace();			
+			} finally {
+				if ( null != br ) {
+					try {
+						br.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+				if ( null != in ) {
+					try {
+						in.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+				if ( null != fstream ) {
+					try {
+						fstream.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		return c;

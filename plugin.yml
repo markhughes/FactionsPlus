@@ -4,4 +4,4 @@ authors: ['MarkehMe', 'unv_annihilator', 'andrew2060']
 website: http://markeh.me
 version: 0.4.7
 depend: [ Factions, Vault ]
-soft-depend: [DisguiseCraft, MobDisguise, LWC, WorldGuard]
+soft-depend: [DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit]

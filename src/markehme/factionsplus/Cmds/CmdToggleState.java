@@ -53,7 +53,7 @@ public class CmdToggleState extends FCommand {
 				sender.sendMessage(ChatColor.RED + "No permission!");
 				return;
 			}
-			
+			//TODO: investigate what's the desired behaviour here, seems odd...
 			factiont = Factions.i.get(factionToggling);			
 			
 			boolean authallow = false;
