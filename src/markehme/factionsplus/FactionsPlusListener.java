@@ -177,19 +177,17 @@ public class FactionsPlusListener implements Listener {
 					return;
 				}
 			} else {//non-null killer
-//				if ( p.getKiller() instanceof Player ) {// The expression of type Player is already an instance of type Player
-					if ( ( causeOfDeath == "ENTITY_ATTACK" ) || ( causeOfDeath == "PROJECTILE" ) ) {
-						if ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) > 0.0D ) {
-							Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) );
-						}
-						
-						if ( FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) > 0.0D ) {
-							Player k = p.getKiller();
-							Utilities.addPower( k, FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) );
-						}
-						return;
+				if ( ( causeOfDeath == "ENTITY_ATTACK" ) || ( causeOfDeath == "PROJECTILE" ) ) {
+					if ( FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) > 0.0D ) {
+						Utilities.removePower( p, FactionsPlus.config.getDouble( "extraPowerLossIfDeathByPVP" ) );
 					}
-//				}
+					
+					if ( FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) > 0.0D ) {
+						Player k = p.getKiller();
+						Utilities.addPower( k, FactionsPlus.config.getDouble( "extraPowerWhenKillPlayer" ) );
+					}
+					return;
+				}
 			}
 		}
 	}
