@@ -1,7 +1,7 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
-import java.util.concurrent.*;
+import java.util.*;
 
 import markehme.factionsplus.*;
 
@@ -9,7 +9,7 @@ import markehme.factionsplus.*;
 
 public abstract class Reflective {
 	
-	public static <K extends Object, V extends Object> void mapEnums( ConcurrentHashMap<K, V> destinationMap,
+	public static <K extends Object, V extends Object> void mapEnums( AbstractMap<K, V> destinationMap,
 		String sourceEnum, Class destinationEnum )
 	{
 		

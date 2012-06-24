@@ -11,7 +11,7 @@ import markehme.factionsplus.*;
  * all bindings are updated on init()<br>
  * for now used only for Factions
  */
-public class Bridge {
+public abstract class Bridge {
 	public static FactionsAny factions;
 	private final static String factionsPluginName="Factions";//case sensitive
 	

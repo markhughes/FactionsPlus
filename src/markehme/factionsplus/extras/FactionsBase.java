@@ -1,7 +1,7 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
-import java.util.concurrent.*;
+import java.util.*;
 
 import markehme.factionsplus.*;
 
@@ -19,7 +19,8 @@ public abstract class FactionsBase implements FactionsAny {
 	// this will hold a mapping between our Factions.version independent FactionsAny.Relation and the specific Factions version
 	// Relation
 	// except it's mapped in reversed order
-	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation		= null;
+	private AbstractMap<Object, FactionsAny.Relation>	mapRelation		= new HashMap<>();
+	private AbstractMap<Object, FactionsAny.Relation>	mapChatMode		= new HashMap<>();
 	
 	
 	protected FactionsBase( ) {
@@ -34,10 +35,10 @@ public abstract class FactionsBase implements FactionsAny {
 			String sourceEnum="com.massivecraft.factions.struct."
 					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
 
-			mapRelation = new ConcurrentHashMap<>();
 			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
 			
-			//com.massivecraft.factions.struct.ChatMode
+			sourceEnum="com.massivecraft.factions.struct.ChatMode";
+			
 			
 			
 		} catch ( ClassNotFoundException e ) {
@@ -60,10 +61,9 @@ public abstract class FactionsBase implements FactionsAny {
 		
 		
 	}
-	
-	
-	
 
+	
+	
 
 	@Override
 	public FactionsAny.Relation getRelationTo( FPlayer one, FPlayer two ) {
@@ -78,7 +78,8 @@ public abstract class FactionsBase implements FactionsAny {
 			Object isReturn = mGetRelationTo.invoke( one, two );
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
-				FactionsPlus.severe( "impossible" );
+				FactionsPlus.severe( "impossible to be null here, because it would've errored on .init()," +
+						"assuming the mapping was done right" );
 			}
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
