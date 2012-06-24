@@ -87,7 +87,8 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isOnePointSix;
 	
 	public static final boolean STOP=true;
-
+	private static Metrics metrics=null;
+	
 	@Override
 	public void onEnable() {
 		config=null;//must be here to cause config reload later
@@ -197,8 +198,15 @@ public class FactionsPlus extends JavaPlugin {
 		info("Ready.");
 		
 		try {
-		    Metrics metrics = new Metrics(this);
-		    metrics.start();
+			if (null == metrics) {
+				//first time
+				metrics = new Metrics(this);
+				metrics.start();
+			}else{
+				//second+  time(s)
+				metrics.enable();
+			}
+		    
 		} catch (IOException e) {
 		    info("Waah! Couldn't metrics-up! :'(");
 		}
@@ -208,6 +216,13 @@ public class FactionsPlus extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		if (null != metrics) {
+			try {
+				metrics.disable();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+		}
 		info("Disabled.");
 	}
 	
