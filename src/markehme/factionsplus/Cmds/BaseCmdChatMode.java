@@ -9,11 +9,11 @@ import com.massivecraft.factions.cmd.*;
 import com.massivecraft.factions.struct.*;
 
 
-public abstract class CmdChatModeBase extends FCommand{
+public abstract class BaseCmdChatMode extends FCommand{
 	protected final FactionsAny.ChatMode cMode;
 	private final String strPermission;
 
-	public CmdChatModeBase( FactionsAny.ChatMode cm, String perm, String... arrayOfAliases) {
+	protected BaseCmdChatMode( FactionsAny.ChatMode cm, String perm, String... arrayOfAliases) {
 		cMode=cm;
 		if (0 >= arrayOfAliases.length) {
 			FactionsPlus.bailOut( "coder forgot to add at least one alias for a command "+this.getClass() );
