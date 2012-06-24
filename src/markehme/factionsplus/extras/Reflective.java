@@ -70,7 +70,7 @@ public abstract class Reflective {
 				if ( failed ) {
 					// this will likely never happen, unless Factions' authors add new flags in 1.7's Relation enum
 					throw FactionsPlus.bailOut( "the plugin author forgot to define some flags in "
-						+ FactionsAny.Relation.class + " for " + eachField );
+						+ destinationEnum + " for " + eachField );
 				}
 			}
 		}
