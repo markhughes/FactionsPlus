@@ -1,6 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.extras.*;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
@@ -25,16 +26,12 @@ public class CmdGC extends FCommand  {
 			return;
 		}
 		
-		// FIXME: Find solution to this! 
-		
-//		if(!FactionsPlus.FactionsVersion.startsWith("1.7")) {
-//			//fme.setChatMode(com.massivecraft.factions.struct.ChatMode.PUBLIC);
-//			
-//			fme.msg("Your chat mode has been changed to global.");
-//		} else {
-//			fme.msg("This version of Factions does not support changing chat mode.");
-//		}
-		fme.msg("This feature is currently broken!");
+		if ( Bridge.factions.setChatMode( FactionsAny.ChatMode.PUBLIC ) ) {
+			// fme.setChatMode(com.massivecraft.factions.struct.ChatMode.PUBLIC);
+			fme.msg( "Your chat mode has been changed to global." );
+		} else {
+			fme.msg( "This version of Factions does not support changing chat mode." );
+		}
 	}
 
 }

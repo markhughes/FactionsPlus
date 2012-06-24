@@ -7,6 +7,7 @@ import org.bukkit.*;
 
 import markehme.factionsplus.*;
 
+import com.google.common.collect.*;
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
 
@@ -21,10 +22,15 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	private Object							instField			= null;
 	private Field							fHelpPages			= null;
 	private ArrayList<ArrayList<String>>	instanceOfHelpPages	= null;
+	private Method 							mSetChatMode		= null;
+	private Method 							mGetChatMode		= null;
 	
+	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
+	private TwoWayHashMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayHashMapOfNonNulls<>();
+		
 	
 	protected Factions16( ) {
-		super( );
+		super();
 		
 		boolean failed = false;
 		
@@ -40,6 +46,13 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			fieldCmdHelp = fcmdroot.getField( "cmdHelp" );
 			
 			fHelpPages = clas.getField( "helpPages" );
+			
+			Class classChatMode=Class.forName("com.massivecraft.factions.struct.ChatMode");
+			Reflective.mapEnums( mapChatMode, classChatMode, FactionsAny.ChatMode.class);
+			
+			Class classFPlayer= Class.forName( "com.massivecraft.factions.FPlayer" );
+			mSetChatMode=classFPlayer.getMethod("setChatMode", classChatMode);
+			mGetChatMode=classFPlayer.getMethod("getChatMode");
 			
 		} catch ( NoSuchMethodException e ) {// multi catch could've worked but unsure if using jdk7 to compile
 			e.printStackTrace();
@@ -105,8 +118,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		if ( null == instanceOfCmdHelp ) {
 			boolean failed = false;
 			try {
-				
-				// lazy init this, cause on .init() was probably too soon
+				// lazy init this(one time since plugin.onEnable()), cause on .init() was probably too soon
 				instanceOfCmdHelp = fieldCmdHelp.get( P.p.cmdBase );
 				methodUpdateHelp.invoke( instanceOfCmdHelp );// P.p.cmdBase.cmdHelp.updateHelp();
 				instanceOfHelpPages = (ArrayList<ArrayList<String>>)fHelpPages.get( instanceOfCmdHelp );
@@ -152,5 +164,29 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			pageLines = null;
 			currentPerPage = 0;
 		}
+	}
+
+
+	@Override
+	public boolean setChatMode( ChatMode chatMode ) {
+		boolean failed=false;
+		try {
+			mapChatMode.get( key )
+			mSetChatMode.invoke(chatMode);
+		} catch ( IllegalAccessException e ) {
+			e.printStackTrace();
+			failed=true;
+		} catch ( IllegalArgumentException e ) {
+			e.printStackTrace();
+			failed=true;
+		} catch ( InvocationTargetException e ) {
+			e.printStackTrace();
+			failed=true;
+		}finally {
+			if ( failed ) {
+				throw FactionsPlus.bailOut( "failed to invoke " + mSetChatMode );
+			}
+		}
+		return true;//even if there was actually no chatMode change when compared to the previous, true means it 
 	}
 }

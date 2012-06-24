@@ -50,4 +50,12 @@ public interface FactionsAny {
 	 * this will update the help just in case last commands didn't fit the page entirely<br>
 	 */
 	public void finalizeHelp();
+	
+	/**
+	 * @param sender the FPlayer to inform of any messages
+	 * @param chatMode
+	 * @return false if nothing was done(aka not implemented) ie. it's 1.7 and this has no effect because 1.7 doesn't
+	 * support changing chat mode
+	 */
+	public boolean setChatMode(FactionsAny.ChatMode chatMode);
 }
