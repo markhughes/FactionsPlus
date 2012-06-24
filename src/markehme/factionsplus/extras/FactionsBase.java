@@ -18,9 +18,10 @@ public abstract class FactionsBase implements FactionsAny {
 	private Method											mGetRelationTo	= null; // the method
 																					// getRelationTo(RelationParticipator rp)
 																					
-	// this will hold a mapping between our Factions.version independent  FactionsAny.Relation and the specific Factions version Relation
-	//except it's mapped in reversed order
-	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation				= null;
+	// this will hold a mapping between our Factions.version independent FactionsAny.Relation and the specific Factions version
+	// Relation
+	// except it's mapped in reversed order
+	private ConcurrentHashMap<Object, FactionsAny.Relation>	mapRelation		= null;
 	
 	
 	protected FactionsBase( FactionsPlus fpInstance ) {
@@ -41,16 +42,14 @@ public abstract class FactionsBase implements FactionsAny {
 			
 			for ( Field eachField : classRel.getFields() ) {
 				try {
-					if ( ( classRel.equals( eachField.getDeclaringClass() ) )
-						&& ( eachField.getName().equals( eachField.getName().toUpperCase() ) ) )
-					{
+					if ( ( classRel.equals( eachField.getType() ) ) ) {
 						FactionsAny.Relation ourFieldInstance =
 							(Relation)( FactionsAny.Relation.class.getField( eachField.getName() )
 								.get( FactionsAny.Relation.class ) );
 						Object factionsFieldInstance = eachField.get( classRel );
 						mapRelation.put( factionsFieldInstance, ourFieldInstance );
 					}
-				} catch ( IllegalArgumentException e ) {//I didn't want to catch Exception e though
+				} catch ( IllegalArgumentException e ) {// I didn't want to catch Exception e though
 					e.printStackTrace();
 					failed = true;
 				} catch ( IllegalAccessException e ) {
@@ -62,10 +61,10 @@ public abstract class FactionsBase implements FactionsAny {
 				} catch ( SecurityException e ) {
 					e.printStackTrace();
 					failed = true;
-				}finally{
-					if (failed) {
+				} finally {
+					if ( failed ) {
 						throw FactionsPlus.bailOut( fpInst, "the plugin author forgot to define some flags in "
-								+ FactionsAny.Relation.class + " for " + eachField );
+							+ FactionsAny.Relation.class + " for " + eachField );
 					}
 				}
 			}

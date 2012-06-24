@@ -12,6 +12,7 @@ public interface FactionsAny {
 	public static enum FFlag {
 		PEACEFUL
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where
+		//this is mainly because 1.6 requires a different method to be called for setting each flag
 	}
 	
 	public static enum Relation {
