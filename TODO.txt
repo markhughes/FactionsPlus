@@ -6,6 +6,7 @@ TODO:
   see if we're considering peaceful and togglestate the same thing, or they use different permissions ?
   ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 
-- /f gc  is non-functional and /f fc
+//done - /f gc  is non-functional and /f fc
 
 - try compiling with jdk6 and see what needs to be reduced from being only jdk7 compatible (tho so far compiling with only jdk7 works fine on tests)
+
