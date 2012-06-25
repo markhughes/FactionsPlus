@@ -42,7 +42,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
+				throw FactionsPlus.bailOut( "failed to hook into Factions 1.7.x" );
 			}
 		}
 	}
