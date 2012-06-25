@@ -1,0 +1,13 @@
+stuff that was previously in TODO but it is now done, so they are moved here,
+for historical reasons and to perhaps prevent someone from attempting to do the same thing, if it was already done
+this is also to keep out the clutter within the TODO file
+
+
+//done - try compiling with jdk6 and see what needs to be reduced from being only jdk7 compatible (tho so far compiling with only jdk7 works fine on tests)
+
+//done - look into how Factions is preventing commands to be executed while in enemy territory, to perhaps use that strategy to trap
+  only certain commands like /home  rather than what we currently use: PlayerCommandPreprocessEvent
+  //checked: it's using the same Event but with a LOW priority so they are trapped before the MONITOR event
+
+//done - /f gc  is non-functional and /f fc
+  
