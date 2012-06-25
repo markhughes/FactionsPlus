@@ -45,7 +45,7 @@ public class TeleportsListener implements Listener {
 	private Map<Player, String>	mapLastExecutedCommand	= new HashMap<Player, String>();
 	
 	
-	@EventHandler( priority = EventPriority.MONITOR )
+	@EventHandler( priority = EventPriority.MONITOR )//MONITOR means it will be called last, after ie. HIGHEST
 	public void onCommand( PlayerCommandPreprocessEvent event ) {
 		// this hook will trigger on any command ie. only those chat messages preceeded by "/"
 		Player sender = event.getPlayer();
