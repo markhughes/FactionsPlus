@@ -2,6 +2,7 @@ package markehme.factionsplus.extras;
 
 import java.util.*;
 
+import org.apache.commons.lang.*;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ public class LWCFunctions {
 		lwc = plugin.getLWC();
 	}
 	
-	private final static Material[] protectionsToRemove={
+	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST
 		,Material.FURNACE
 		,Material.WOODEN_DOOR
@@ -39,34 +40,20 @@ public class LWCFunctions {
 	 */
 	public static void clearLocks(Location location, FPlayer fPlayer)
 	{
-		Map<Material, LinkedList<Block> > map=new HashMap<Material, LinkedList<Block> >();
-		
 		Chunk chunk = location.getChunk();
 		BlockState[] blocks = chunk.getTileEntities();
 
-		//allocate a linked list for each protection type
-		for ( int i = 0; i < protectionsToRemove.length; i++ ) {
-			map.put( protectionsToRemove[i], new LinkedList<Block>() );
-		}
-
-		//parse each block(of the claimed chunk) and if it's of protectionsToRemove add it to the list
+		//parse each block(in the chunk) and if it's of protectionsTypesToRemove then remove the protection from it
 		for(int x = 0; x < blocks.length; x++)
 		{
 			Material type = blocks[x].getType();
-			LinkedList<Block> list = map.get( type );
-			if (null == list) {
-				//that block is not one of the supported types to remove protection from ie. it's Stone
-				continue;//go next block
-			}
-			list.add( blocks[x].getBlock() );
-		}
-		
-		//for each protection type, attempt to remove every protection in that (claimed) chunk
-		for ( int i = 0; i < protectionsToRemove.length; i++ ) {
-			for ( Block block : map.get( protectionsToRemove[i] ) ) {
+			if (isProtectionTypeToRemove(type)) {
+				Block block = blocks[x].getBlock();
+				//if the chunk contents never get lost somehow then we don't need to cache(in a list) all protected blocks
+				//so we can thus remove the protection here while parsing every block of the chunk (within this 'for')
 				Protection protectedBlock = lwc.findProtection(block);
 				if (null != protectedBlock) {
-					//there is a lock for that block
+					//there is a lock for that block ie. it's a chest
 					FPlayer fpOwner = FPlayers.i.get(protectedBlock.getOwner());
 					if (!fPlayer.getFaction().getFPlayers().contains(fpOwner)) {
 						//protection owner is not in the faction? then clear the lock 
@@ -78,6 +65,25 @@ public class LWCFunctions {
 			}
 		}
 		
+	}
+
+	private static boolean isProtectionTypeToRemove( Material type ) {
+		return isReferenceInArray(type, protectionsTypesToRemove);
+	}
+
+	/**
+	 * the object is checked by reference (ie. == as opposed to .equals ) to see if it's contained in the array
+	 * @param objRef
+	 * @param array
+	 * @return
+	 */
+	private static boolean isReferenceInArray( Object objRef, Object[] array ) {
+		for ( int i = 0; i < array.length; i++ ) {
+			if (objRef == array[i]) { //not .equals(), we just want to know if that reference is in the array
+				return true;
+			}
+		}
+		return false;
 	}
 
 
