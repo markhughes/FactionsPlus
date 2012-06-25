@@ -1,7 +1,6 @@
 package markehme.factionsplus.extras;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -11,6 +10,7 @@ import org.bukkit.block.BlockState;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.lwc.LWCPlugin;
+import com.griefcraft.model.*;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 
@@ -20,109 +20,61 @@ public class LWCFunctions {
 	public static void integrateLWC(LWCPlugin plugin) {
 		lwc = plugin.getLWC();
 	}
+	
+	private final static Material[] protectionsToRemove={
+		 Material.CHEST
+		,Material.FURNACE
+		,Material.WOODEN_DOOR
+		,Material.IRON_DOOR_BLOCK
+		,Material.TRAP_DOOR
+		,Material.SIGN
+		,Material.WALL_SIGN
+	};
+	
+	/**
+	 * Clears all LWC locks for the chunk at passed location
+	 * except the locks that are of players in the same faction as passed fPlayer
+	 * @param location
+	 * @param fPlayer
+	 */
 	public static void clearLocks(Location location, FPlayer fPlayer)
 	{
+		Map<Material, LinkedList<Block> > map=new HashMap<Material, LinkedList<Block> >();
+		
 		Chunk chunk = location.getChunk();
 		BlockState[] blocks = chunk.getTileEntities();
-		List<Block> chests = new LinkedList<Block>();
-		List<Block> furnaces = new LinkedList<Block>();
-		List<Block> wooddoor = new LinkedList<Block>();
-		List<Block> irondoor = new LinkedList<Block>();
-		List<Block> trapdoor = new LinkedList<Block>();
-		List<Block> sign = new LinkedList<Block>();
-		List<Block> wallsign = new LinkedList<Block>();
 
+		//allocate a linked list for each protection type
+		for ( int i = 0; i < protectionsToRemove.length; i++ ) {
+			map.put( protectionsToRemove[i], new LinkedList<Block>() );
+		}
 
-
-
+		//parse each block(of the claimed chunk) and if it's of protectionsToRemove add it to the list
 		for(int x = 0; x < blocks.length; x++)
 		{
-			if(blocks[x].getType() == Material.CHEST)
-			{
-				chests.add(blocks[x].getBlock());
+			Material type = blocks[x].getType();
+			LinkedList<Block> list = map.get( type );
+			if (null == list) {
+				//that block is not one of the supported types to remove protection from ie. it's Stone
+				continue;//go next block
 			}
-			if(blocks[x].getType() == Material.FURNACE)
-			{
-				furnaces.add(blocks[x].getBlock());
-			}
-			if(blocks[x].getType() == Material.WOODEN_DOOR)
-			{
-				wooddoor.add(blocks[x].getBlock());
-			}
-			if(blocks[x].getType() == Material.IRON_DOOR_BLOCK)
-			{
-				irondoor.add(blocks[x].getBlock());
-			}
-			if(blocks[x].getType() == Material.TRAP_DOOR)
-			{
-				trapdoor.add(blocks[x].getBlock());
-			}
-			if(blocks[x].getType() == Material.SIGN || blocks[x].getType() == Material.WALL_SIGN)
-			{
-				sign.add(blocks[x].getBlock());
-			}
-			if(blocks[x].getType() == Material.WALL_SIGN)
-			{
-				wallsign.add(blocks[x].getBlock());
-			}
-
+			list.add( blocks[x].getBlock() );
 		}
-		for(int x = 0; x < chests.size(); x++)
-		{
-			if(lwc.findProtection(chests.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(chests.get(x)).getOwner())))
-					lwc.findProtection(chests.get(x)).remove();
-			}
-		}
-		for(int x = 0; x < furnaces.size(); x++)
-		{
-			if(lwc.findProtection(furnaces.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(furnaces.get(x)).getOwner())))
-					lwc.findProtection(furnaces.get(x)).remove();
-			}
-		}
-		for(int x = 0; x < wooddoor.size(); x++)
-		{
-			if(lwc.findProtection(wooddoor.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(wooddoor.get(x)).getOwner())))
-					lwc.findProtection(wooddoor.get(x)).remove();
-			}
-		}
-		for(int x = 0; x < irondoor.size(); x++)
-		{
-			if(lwc.findProtection(irondoor.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(irondoor.get(x)).getOwner())))
-					lwc.findProtection(irondoor.get(x)).remove();
-			}
-		}
-		for(int x = 0; x < trapdoor.size(); x++)
-		{
-			if(lwc.findProtection(trapdoor.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(trapdoor.get(x)).getOwner())))
-					lwc.findProtection(trapdoor.get(x)).remove();
-			}
-		}
-		for(int x = 0; x < sign.size(); x++)
-		{
-			if(lwc.findProtection(sign.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(sign.get(x)).getOwner())))
-					lwc.findProtection(sign.get(x)).remove();
-					
-			}
-		}
-		for(int x = 0; x < wallsign.size(); x++)
-		{
-			if(lwc.findProtection(wallsign.get(x)) != null)
-			{
-				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(wallsign.get(x)).getOwner())))
-					lwc.findProtection(wallsign.get(x)).remove();
-					
+		
+		//for each protection type, attempt to remove every protection in that (claimed) chunk
+		for ( int i = 0; i < protectionsToRemove.length; i++ ) {
+			for ( Block block : map.get( protectionsToRemove[i] ) ) {
+				Protection protectedBlock = lwc.findProtection(block);
+				if (null != protectedBlock) {
+					//there is a lock for that block
+					FPlayer fpOwner = FPlayers.i.get(protectedBlock.getOwner());
+					if (!fPlayer.getFaction().getFPlayers().contains(fpOwner)) {
+						//protection owner is not in the faction? then clear the lock 
+						//only if the owner of the protected block is not in the same faction as fPlayer
+						//only then remove the lwc protection from that block (ie. chest)
+						protectedBlock.remove();
+					}
+				}
 			}
 		}
 		
