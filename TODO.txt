@@ -18,6 +18,7 @@ support chat modes)
 
 
 - must check what's /f toggle  supposed to do exactly, because the behaviour seems odd (also fix the possible NPE when faction inexistent)
+  do this before release
 
 - newest version tosses a 'Strange argument. Use the command like this: /f' whenever using any commands. Figure it has something to do with some changes
 	made by basicsensei. I'll look into it tomorrow if it isn't fixed.
