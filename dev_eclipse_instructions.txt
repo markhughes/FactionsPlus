@@ -67,3 +67,52 @@ B. Projects needed:
    
 If you have all these, the FactionsPlus project should compile without errors.
 ======================================
+
+
+To actually export the .jar file  which would be named FactionsPlus.jar
+------
+Legend:
+[ ] means deselected
+[v] means selected
+(*) radio button selected
+
+left click the FactionsPlus project 
+then right click on it or Alt+F  to open File menu
+choose Export, Java->Jar file, Next, 
+Expand FactionPlus, 
+make sure only "src" folder is selected
+click FactionsPlus
+make sure only the following files are selected:
+config_defaults.yml
+plugin.yml
+
+now go below and ensure the options look like so:
+[v] Export generated class files and resources
+[ ] Export all output folders for checked projects
+[v] (Optional)Export Java source files and resources(if you want to include sourcecode)
+[ ] Export refactorings for checked projects.
+
+Jar file: x:\XXX\FactionsPlus.jar
+    where x:\XXX\ is your location like c:\dumps\
+
+Options:
+[v] Compress the contents of the JAR file
+[v] Add directory entries
+[v] Overwrite existing files without warning (Optional, up to you: it will not ask you if destination .jar exists already)
+
+Next,
+[ ] Export class files with compile errors
+[v] Export class files with compile warnings
+
+Next,
+(*) Generate the manifest file
+[ ] Save the manifest in the workspace
+
+(*) Seal the JAR  (irrelevant)
+
+leave empty at Main class:
+Finish
+--------------
+
+================
+
