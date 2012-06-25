@@ -150,7 +150,15 @@ public class FactionsPlusJail {
 		
 		World world;
 		Player jplayer = server.getPlayer(jailingplayer);
-		FPlayer fjplayer = FPlayers.i.get(jplayer);
+		FPlayer fjplayer;
+		
+		// Prevent null pointer
+		if(jplayer != null){
+			fjplayer = FPlayers.i.get(jplayer);
+		} else {
+			jplayer = (Player) server.getOfflinePlayer(jailingplayer);
+			fjplayer = FPlayers.i.get(jplayer);
+		}
 		
 		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {
 			fplayer.msg("You can only Jail players that are in your Faction!");
