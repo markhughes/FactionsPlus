@@ -89,7 +89,7 @@ plugin.yml
 now go below and ensure the options look like so:
 [v] Export generated class files and resources
 [ ] Export all output folders for checked projects
-[v] (Optional)Export Java source files and resources(if you want to include sourcecode)
+[v] (Optional)Export Java source files and resources(if you want to include sourcecode *.java files)
 [ ] Export refactorings for checked projects.
 
 Jar file: x:\XXX\FactionsPlus.jar
