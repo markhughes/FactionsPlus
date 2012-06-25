@@ -11,6 +11,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -127,9 +128,8 @@ public class FactionsPlus extends JavaPlugin {
 			throw bailOut("something failed when ensuring the folders exist");
 		}
 		
-		
 		config = getConfig();//load config
-
+		
 		if (!templatesFile.exists()) {
 			
 			FactionsPlusTemplates.createTemplatesFile();
@@ -139,6 +139,7 @@ public class FactionsPlus extends JavaPlugin {
 		templates = YamlConfiguration.loadConfiguration(templatesFile);	
 		
 		FactionsPlusCommandManager.setup();
+		TeleportsListener.init(this);
 		
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
