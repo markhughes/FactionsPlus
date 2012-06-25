@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.iface.*;
 
 
 
@@ -67,7 +68,7 @@ public interface FactionsAny {
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
 	
 	
-	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two );
+	public FactionsAny.Relation getRelationBetween( RelationParticipator one, RelationParticipator two );
 	
 	
 	public void addSubCommand( FCommand subCommand );

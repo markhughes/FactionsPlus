@@ -54,4 +54,5 @@ economy_costToUnJail: 0
 economy_costToToggleUpPeaceful: 0
 economy_costToToggleDownPeaceful: 0
 useLWCIntegrationFix: false
+disallowTeleportingToEnemyLandViaHomeCommand: true
 DoNotChangeMe: 8

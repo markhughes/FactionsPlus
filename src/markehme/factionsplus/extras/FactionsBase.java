@@ -7,6 +7,8 @@ import markehme.factionsplus.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.iface.*;
+import com.massivecraft.factions.util.*;
 
 
 
@@ -28,7 +30,9 @@ public abstract class FactionsBase implements FactionsAny {
 		try {
 			classRP = Class.forName( "com.massivecraft.factions.iface.RelationParticipator" );
 			
-			mGetRelationTo = FPlayer.class.getMethod( "getRelationTo", classRP );
+			mGetRelationTo = RelationUtil.class.getMethod( 
+				( Factions16.class.equals( this.getClass() ) ? /*1.6*/"getRelationTo" : /*1.7*/"getRelationOfThatToMe"), 
+				classRP,classRP );
 			
 			
 			String sourceEnum="com.massivecraft.factions.struct."
@@ -62,7 +66,7 @@ public abstract class FactionsBase implements FactionsAny {
 	
 
 	@Override
-	public FactionsAny.Relation getRelationBetween( FPlayer one, FPlayer two ) {
+	public FactionsAny.Relation getRelationBetween( RelationParticipator one, RelationParticipator two ) {
 		boolean failed = false;
 		FactionsAny.Relation ret = null;
 		try {
@@ -71,7 +75,7 @@ public abstract class FactionsBase implements FactionsAny {
 				return null;// not gonna happen really
 			}
 			
-			Object isReturn = mGetRelationTo.invoke( one, two );
+			Object isReturn = mGetRelationTo.invoke(RelationUtil.class/*or null cause it's static class*/, one, two );
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
 				FactionsPlus.severe( "impossible to be null here, because it would've errored on .init()," +
