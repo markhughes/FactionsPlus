@@ -30,6 +30,8 @@ public class LWCFunctions {
 		List<Block> irondoor = new LinkedList<Block>();
 		List<Block> trapdoor = new LinkedList<Block>();
 		List<Block> sign = new LinkedList<Block>();
+		List<Block> wallsign = new LinkedList<Block>();
+
 
 
 
@@ -58,6 +60,10 @@ public class LWCFunctions {
 			if(blocks[x].getType() == Material.SIGN || blocks[x].getType() == Material.WALL_SIGN)
 			{
 				sign.add(blocks[x].getBlock());
+			}
+			if(blocks[x].getType() == Material.WALL_SIGN)
+			{
+				wallsign.add(blocks[x].getBlock());
 			}
 
 		}
@@ -110,6 +116,16 @@ public class LWCFunctions {
 					
 			}
 		}
+		for(int x = 0; x < wallsign.size(); x++)
+		{
+			if(lwc.findProtection(wallsign.get(x)) != null)
+			{
+				if(!fPlayer.getFaction().getFPlayers().contains(FPlayers.i.get(lwc.findProtection(wallsign.get(x)).getOwner())))
+					lwc.findProtection(wallsign.get(x)).remove();
+					
+			}
+		}
+		
 	}
 
 
