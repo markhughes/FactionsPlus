@@ -81,7 +81,11 @@ public class TeleportsListener implements Listener {
 			return;
 		}
 		
-		// TODO: investigate how Factions is preventing /sethome in enemy land cause it's better than Event seemingly
+		// FIXME: problem is if the player can execute another command before the teleport is issued such as if warmup delays
+		//	are enabled for teleports, it will completely bypass this, because /home won't be the last seen command
+		//	find another way to fix this: maybe deny all teleports(to enemy land) unless the last command is in the 
+		//  whitelist of allowed ones  
+		
 		TeleportCause cause = event.getCause();
 		if ( cause == PlayerTeleportEvent.TeleportCause.COMMAND ) {
 			// possibly could be the /home command
