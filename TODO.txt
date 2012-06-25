@@ -24,6 +24,9 @@ support chat modes)
 - make bridging methods call-able from Utilities instead via Bridge.factions similar to existing ones like isLeader()
 - make bridge for something like FPLayer.getRole()
 
-- teleporting to /home could be bypassed if /home has a cooldown/warmup and another command is executed right after but before
+- teleporting to /home could be bypassed if /home has a warmup and another command is executed right after but before
   teleport actually happens
+  note to self: can be bypasses only if /home has a warmup delay, but not if it has a cooldown delay
+  
+  
   
