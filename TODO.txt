@@ -21,3 +21,9 @@ support chat modes)
 
 - newest version tosses a 'Strange argument. Use the command like this: /f' whenever using any commands. Figure it has something to do with some changes
 	made by basicsensei. I'll look into it tomorrow if it isn't fixed.
+	//I can't see anything wrong because I cannot reproduce - basicsensei.
+
+- look into setting permissions or groups of perms inside plugins.yml  with their description
+
+- look into how Factions is preventing commands to be executed while in enemy territory, to perhaps use that strategy to trap
+  only certain commands like /home  rather than what we currently use: PlayerCommandPreprocessEvent
