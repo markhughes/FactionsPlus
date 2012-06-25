@@ -54,7 +54,7 @@ public class CmdToggleState extends FCommand {
 				return;
 			}
 			//TODO: investigate what's the desired behaviour here, seems odd...
-			factiont = Factions.i.get(factionToggling);			
+			factiont = Factions.i.get(factionToggling);//FIXME: this will NPE later if inexistent faction			
 			
 			boolean authallow = false;
 			
