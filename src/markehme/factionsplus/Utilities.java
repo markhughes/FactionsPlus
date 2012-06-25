@@ -168,8 +168,25 @@ public class Utilities {
 		return c;
 	}
 	
+	
+	// ---------------- other simple utils
+	
 	public static File getCurrentFolder() {
 		return new File("");
 	}
 	
+	/**
+	 * the object is checked by reference (ie. == as opposed to .equals ) to see if it's contained in the array
+	 * @param objRef
+	 * @param array
+	 * @return
+	 */
+	public static boolean isReferenceInArray( Object objRef, Object[] array ) {
+		for ( int i = 0; i < array.length; i++ ) {
+			if (objRef == array[i]) { //not .equals(), we just want to know if that reference is in the array
+				return true;
+			}
+		}
+		return false;
+	}
 }

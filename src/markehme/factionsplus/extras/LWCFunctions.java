@@ -2,6 +2,8 @@ package markehme.factionsplus.extras;
 
 import java.util.*;
 
+import markehme.factionsplus.*;
+
 import org.apache.commons.lang.*;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -68,22 +70,7 @@ public class LWCFunctions {
 	}
 
 	private static boolean isProtectionTypeToRemove( Material type ) {
-		return isReferenceInArray(type, protectionsTypesToRemove);
-	}
-
-	/**
-	 * the object is checked by reference (ie. == as opposed to .equals ) to see if it's contained in the array
-	 * @param objRef
-	 * @param array
-	 * @return
-	 */
-	private static boolean isReferenceInArray( Object objRef, Object[] array ) {
-		for ( int i = 0; i < array.length; i++ ) {
-			if (objRef == array[i]) { //not .equals(), we just want to know if that reference is in the array
-				return true;
-			}
-		}
-		return false;
+		return Utilities.isReferenceInArray(type, protectionsTypesToRemove);
 	}
 
 
