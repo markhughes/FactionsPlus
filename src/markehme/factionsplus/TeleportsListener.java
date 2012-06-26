@@ -45,8 +45,8 @@ public class TeleportsListener implements Listener {
 			//don't hook if neither of the two are set
 			return;
 		}
-		
-		Bukkit.getServer().getPluginManager().registerEvents( preventTeleports, plugin );
+//		Bukkit.getPluginManager().getPlugin(
+		Bukkit.getPluginManager().registerEvents( preventTeleports, plugin );
 	}
 	//done: investigate what happens on reload(from console) when the hooks here were loaded and now the flag says don't load them
 	//are the hooks still on ? since there's no deRegisterEvents... ? - ok, looks like they are gone on reload; 
