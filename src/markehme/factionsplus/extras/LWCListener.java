@@ -61,8 +61,11 @@ public class LWCListener implements Listener {
 		Faction owner = Board.getFactionAt(floc);
 
 		if(!owner.isNone() && owner != fp.getFaction()){
+			//if it's not wilderness && it's not player's own faction land
+			//then you can't create locks
+			//TODO: what about if it's safezone/warzone ? & should op be allowed to bypass this?
 			event.setCancelled(true);
-			fp.sendMessage("You can only create locks in your own territory!");
+			fp.sendMessage("You cannot create locks in another faction's territory!");
 		}
 	}
 }
