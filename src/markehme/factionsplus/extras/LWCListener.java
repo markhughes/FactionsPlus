@@ -56,7 +56,7 @@ public class LWCListener implements Listener {
 //			return;
 //		}
 		
-		Player p = event.getPlayer();
+		Player p = event.getPlayer();//it wouldn't be null
 		Block b = event.getBlock();
 		FPlayer fp = FPlayers.i.get(p);
 		FLocation floc = new FLocation(b.getLocation());
@@ -68,6 +68,7 @@ public class LWCListener implements Listener {
 		}else {
 			event.setCancelled( true );
 			fp.sendMessage( ChatColor.RED + "You can lock only within your faction or unclaimed land!" );
+//		if(!LWCFunctions.checkInTerritory(p,b)) {
 		}
 	}
 }
