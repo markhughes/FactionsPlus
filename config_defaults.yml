@@ -55,4 +55,5 @@ economy_costToToggleUpPeaceful: 0
 economy_costToToggleDownPeaceful: 0
 useLWCIntegrationFix: false
 disallowTeleportingToEnemyLandViaHomeCommand: true
+reportSuccessfulByCommandTeleportsIntoEnemyLand: true
 DoNotChangeMe: 8

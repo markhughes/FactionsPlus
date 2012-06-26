@@ -13,3 +13,14 @@ this is also to keep out the clutter within the TODO file
 
 //done- fix lwc to remove also wooden/iron/trapdoor when claiming land
 
+//done - using disallowTeleportingToEnemyLandViaHomeCommand will attempt to prevent /home to be used to teleport into enemy land
+        this can be bypassed if essentials if it has warmup on teleports, but the new flag below may help with finding out if 
+        someone did bypass by showing a message on console when teleport was into enemy land and done by a command  
+
+//done - reportSuccessfulByCommandTeleportsIntoEnemyLand config flag when true will report on console the player and command
+        used to teleport into enemy faction (and which faction was it) this will aid in detecting if someone bypassed /home
+        checks
+        this flag is independent, ie. doesn't need disallowTeleportingToEnemyLandViaHomeCommand to be true
+        
+        if any of disallowTeleportingToEnemyLandViaHomeCommand or reportSuccessfulByCommandTeleportsIntoEnemyLand are set
+        then the teleport hooks will be enabled, if both are false then the hooks won't be in.

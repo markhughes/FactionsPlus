@@ -21,7 +21,13 @@ public class TeleportsListener implements Listener {
 	
 	private static final Permission	permissionForHomeToEnemy	= new Permission( "factionsplus.allowTeleportingToEnemyLandViaHomeCommand" );
 	private static final String configForDisallowHomeToEnemy    = "disallowTeleportingToEnemyLandViaHomeCommand";
+	private static final String	configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand	= "reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	private static final ChatColor constOneColor = ChatColor.DARK_RED;
 	private static Listener	preventTeleports	= new TeleportsListener();
+	
+	private static boolean	reportSuccessfulByCommandTeleportsIntoEnemyLand;
+	private static boolean disallowTeleportingToEnemyLandViaHomeCommand;
+	//XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
 	
 	public static void init( Plugin plugin ) {
@@ -32,9 +38,11 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlus.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		if ( !FactionsPlus.config.getBoolean( configForDisallowHomeToEnemy ) ) {
-			// since this is the only thing this class does at this time, we can do this 'if'
-			// which means, if this config isn't <"true" aka disallow>, then we don't even do the hooks
+		reportSuccessfulByCommandTeleportsIntoEnemyLand=FactionsPlus.config.getBoolean( configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand );
+		disallowTeleportingToEnemyLandViaHomeCommand=FactionsPlus.config.getBoolean( configForDisallowHomeToEnemy );
+		
+		if ( ( !disallowTeleportingToEnemyLandViaHomeCommand ) && ( !reportSuccessfulByCommandTeleportsIntoEnemyLand ) ) {
+			//don't hook if neither of the two are set
 			return;
 		}
 		
@@ -71,7 +79,7 @@ public class TeleportsListener implements Listener {
 	// LOWEST=executed prior to others with like NORMAL or HIGHEST priorities
 	// however if two plugins use the same, one of them will be executed first
 	// but in this case we don't need a specific priority, tested with HIGHEST and it still worked with setCancelled()
-	@EventHandler( priority = EventPriority.NORMAL )
+	@EventHandler( priority = EventPriority.MONITOR )//using this to be the last or as last to be called as possible just to allow other plugins to deny
 	public void onTeleport( PlayerTeleportEvent event ) {
 		Player player = event.getPlayer();
 		if ( event.isCancelled() ) {
@@ -93,27 +101,56 @@ public class TeleportsListener implements Listener {
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
 			//this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 			//( null != lastExecutedCommandByPlayer ) &&  (
-			if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
-				if ( player.hasPermission( permissionForHomeToEnemy ) ) {
-					return;
+			if ((disallowTeleportingToEnemyLandViaHomeCommand)&&(!player.hasPermission( permissionForHomeToEnemy ))) {
+				//disallowed and no permission to bypass ? then check
+				if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
+					//TODO: think about having a list of commands here which when used to teleport into X territory 
+					// would be denied; X is configurable too
+					
+					// it is home, then let us check if his home is in enemy territory
+					Location targetLocation = event.getTo();
+					if ( isEnemyLandAt( player, targetLocation ) ) {
+						player.sendMessage( ChatColor.RED
+							+ "You are not allowed to teleport to your /home which is now in enemy territory" );
+						event.setCancelled( true );
+						// not just cancel it, make sure that the canceling isn't ignored
+						// worst case they'll teleport in the same spot where the command was issued from
+						Location from = event.getFrom();
+						event.setTo( from );
+					}
 				}
-				// TODO: have a list of commands here which when used to teleport into X territory would be denied
-				// X is configurable too
-				
-				// oh it is home, then let us check if his home is in enemy territory
+			}
+			
+			if (( reportSuccessfulByCommandTeleportsIntoEnemyLand )&&(!event.isCancelled())) {
+				//yeah report even if player had bypass permission but only if it will be a successful teleport
 				Location targetLocation = event.getTo();
-				Faction factionAtTarget = Board.getFactionAt( new FLocation( targetLocation ) );
-				FPlayer fp = FPlayers.i.get( player );
-				if ( FactionsAny.Relation.ENEMY == Bridge.factions.getRelationBetween( factionAtTarget, fp ) ) {
-					player.sendMessage( ChatColor.RED
-						+ "You are not allowed to teleport to your /home which is now in enemy territory" );
-					event.setCancelled( true );
-					// not just cancel it, make sure that the cancelling isn't ignored
-					// worst case they'll teleport in the same spot where the command was issued from
-					Location from = event.getFrom();
-					event.setTo( from );
-				}// otherwise just allow it
+				Faction fac = getFactionAt( targetLocation );
+				if ( areEnemies( player, fac ) ) {
+					FactionsPlus.info( constOneColor + "Player '" + ChatColor.DARK_AQUA+player.getName()
+						+ constOneColor+"' teleported into enemy land faction '" + ChatColor.DARK_AQUA+fac.getTag() + constOneColor+"' using command: '"+ChatColor.AQUA
+						+ lastExecutedCommandByPlayer+constOneColor+"'." );
+				}
 			}
 		}
+	}
+	
+	private boolean isEnemyLandAt(Player player, Location targetLocation) 
+	{
+		Faction factionAtTarget = getFactionAt(targetLocation);//Board.getFactionAt( new FLocation( targetLocation ) );
+		return areEnemies(player, factionAtTarget);
+	}
+	
+	private boolean areEnemies(Player player, Faction faction) 
+	{
+		FPlayer fp = FPlayers.i.get( player );//should be able to get offline players too, js
+		if ( FactionsAny.Relation.ENEMY == Bridge.factions.getRelationBetween( faction, fp ) ) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	private Faction getFactionAt( Location targetLocation) {
+		return Board.getFactionAt( new FLocation( targetLocation ) );
 	}
 }
