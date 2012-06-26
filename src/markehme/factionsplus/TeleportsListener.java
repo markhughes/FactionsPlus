@@ -51,6 +51,7 @@ public class TeleportsListener implements Listener {
 	
 	// keeps track of the last executed command for each of the online players
 	private Map<Player, String>	mapLastExecutedCommand	= new HashMap<Player, String>();
+	//TODO: unsure here if it should be ConcurrentHashMap instead, i assume though they are not parallelizing events
 	
 	
 	@EventHandler( priority = EventPriority.MONITOR )//MONITOR means it will be called last, after ie. HIGHEST
@@ -68,11 +69,16 @@ public class TeleportsListener implements Listener {
 		mapLastExecutedCommand.remove( event.getPlayer() );
 	}
 	
-	
+	//TODO: detect if essentials warmup>0 and suggest, on console, using boosCooldown for warmup to avoid bypassing this prevention of /home into enemy land
 	
 	/**
 	 * this will prevent teleports by "/home" command (only) if they land into enemy territory,
-	 * unless you have a specific permission node
+	 * unless you have a specific permission node<br />
+	 * warning: if something happens between the command event and the actual teleport event, so that you can actually
+	 * send another command inbetween those, then this prevention won't work; ie. essentials warmup can allow many other commands
+	 * to be executed after doing /home   until the warmup timer reaches 0 and the teleport event happens;
+	 * use boosCooldown plugin for warmups for commands like /home /tp etc. instead of essentials' warmup, if you care about this 
+	 * prevention working 
 	 * 
 	 * @param event
 	 */
