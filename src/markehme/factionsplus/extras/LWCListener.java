@@ -59,8 +59,7 @@ public class LWCListener implements Listener {
 
 		if(!LWCFunctions.checkInTerritory(p,b)) {
 			event.setCancelled(true);
+			return;
 		}
-		return;
-		
 	}
 }

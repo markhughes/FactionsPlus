@@ -1,4 +1,4 @@
-package markehme.factionsplus;
+package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.extras.LWCFunctions;
 
