@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
 	<classpathentry kind="lib" path="lib/LWC.jar" sourcepath="/LWC/java"/>
 	<classpathentry kind="lib" path="lib/bukkit-1.2.5-R4.1-20120618.060128-13.jar" sourcepath="/bukkit"/>
-	<classpathentry kind="lib" path="lib/Factions 1.6.jar"/>
-	<classpathentry kind="lib" path="lib/Factions 1.7.jar"/>
+	<classpathentry kind="lib" path="lib/Factions 1.6.jar" sourcepath="/Factions"/>
+	<classpathentry kind="lib" path="lib/Factions 1.7.jar" sourcepath="/Factions"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
