@@ -27,6 +27,9 @@ support chat modes)
 - teleporting to /home could be bypassed if /home has a warmup and another command is executed right after but before
   teleport actually happens
   note to self: can be bypasses only if /home has a warmup delay, but not if it has a cooldown delay
+  note2: if using boosCooldown plugin (which allows both warmup & cooldown for /home ) our constraint cannot be bypassed
+    therefore, best workaround for this(can only be done by server owners) would be to stop essentials from having a
+    warmup on teleport (ie. set to 0) and instead use the boosCooldown plugin for the warmups for commands
   
 - prevent non-faction members from LWC locking stuff in our faction land
 
