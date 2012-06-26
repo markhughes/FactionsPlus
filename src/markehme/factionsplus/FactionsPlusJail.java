@@ -11,6 +11,7 @@ import markehme.factionsplus.Cmds.CmdSetJail;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -150,7 +151,7 @@ public class FactionsPlusJail {
 		
 		World world;
 		Player jplayer = server.getPlayer(jailingplayer);
-		FPlayer fjplayer = FPlayers.i.get(jplayer);
+		FPlayer fjplayer = FPlayers.i.get(jailingplayer);
 		
 		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {
 			fplayer.msg("You can only Jail players that are in your Faction!");
@@ -173,20 +174,22 @@ public class FactionsPlusJail {
 			    float p = Float.parseFloat(jail_data[4]);
 			    
 			    world = server.getWorld(jail_data[5]);
-			       	
-			    jplayer.teleport(new Location(world, x, y, z, Y, p));
 			    
-			    Faction f = Factions.i.get(jplayer.getName());
-			    File jailingFile = new File(FactionsPlus.folderJails, "jaildata." + fjplayer.getFactionId() + "." + jplayer.getName());
+			    if(jplayer != null){
+			    	jplayer.teleport(new Location(world, x, y, z, Y, p));
+			    }
+			    
+			    Faction f = Factions.i.get(fjplayer.getName());
+			    File jailingFile = new File(FactionsPlus.folderJails, "jaildata." + fjplayer.getFactionId() + "." + fjplayer.getName());
 			    
 			    if(!jailingFile.exists()){
 			    	FileWriter filewrite = new FileWriter(jailingFile, true);
 			    	filewrite.flush();
 			    	filewrite.write(argTime);
-			    	sender.sendMessage(ChatColor.GREEN + jplayer.getName() +" has been jailed!");
+			    	sender.sendMessage(ChatColor.GREEN + fjplayer.getName() +" has been jailed!");
 			    	filewrite.close();
 			    } else {
-			    	sender.sendMessage(ChatColor.RED + jplayer.getName() +" is already jailed!");
+			    	sender.sendMessage(ChatColor.RED + fjplayer.getName() +" is already jailed!");
 			    }
 			       	
 			} catch (Exception e) {

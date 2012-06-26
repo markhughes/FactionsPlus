@@ -59,6 +59,14 @@ A. jars needed (put them in the "lib" folder in the FactionsPlus project)
    http://dev.bukkit.org/server-mods/lwc/files/
    LWC 4.2.0 tested
    
+8. Factions 1.7
+   Rename the file from factions -> Factions 1.7
+   http://dev.bukkit.org/media/files/593/841/Factions_1.7.5_beta.zip
+   
+9. Factions 1.6
+   Rename the file from factions -> Factions 1.6
+   http://dev.bukkit.org/media/files/593/842/Factions.jar
+   
 ------   
 B. Projects needed:
 
