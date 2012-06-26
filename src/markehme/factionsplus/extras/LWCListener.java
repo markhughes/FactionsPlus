@@ -62,6 +62,7 @@ public class LWCListener implements Listener {
 
 		if(!owner.isNone() && owner != fp.getFaction()){
 			event.setCancelled(true);
+			fp.sendMessage("You can only create locks in your own territory!");
 		}
 	}
 }
