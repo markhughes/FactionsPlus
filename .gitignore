@@ -1,7 +1,6 @@
 /lib
 /bin
 *.pydevproject
-.project
 .metadata
 *.tmp
 *.bak
