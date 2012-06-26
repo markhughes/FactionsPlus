@@ -41,8 +41,10 @@ support chat modes)
   either warn or auto remove those that have renamed while carrying the old value to the newly renamed one or
   simply only keep the config options that have valid names that are actually used in the current FP version
   (note: this doesn't currently apply for we have no such old/obsolete config options)
+  -definitely warn if some unused options are found in the config, so that admin doesn't try to set those and expect effects
 
 
-- fix deny LWC locks to actually hook in, by creating LWC module (can't otherwise) currently doesn't hook in
+- fix deny LWC locks to actually hook in, by creating LWC module (can't otherwise) currently doesn't hook in ie:
+  [SEVERE] Wrong method arguments used for event type registered
 
-
+- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseed due to using both Factions .jar in classpath instead of Factions project ;)
