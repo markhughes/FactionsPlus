@@ -73,7 +73,9 @@ public class CmdBan extends FCommand {
 
 		fPlayerBanThisPlayer.leave(true);
 
-		playerBanThisPlayer.sendMessage("You have been banned from this Faction!");
+		if(playerBanThisPlayer != null){
+			playerBanThisPlayer.sendMessage("You have been banned from this Faction!");
+		}
 
 		File banFile = new File(FactionsPlus.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase());
 
