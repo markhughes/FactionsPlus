@@ -1,4 +1,13 @@
 /lib
 /bin
+*.pydevproject
+.project
+.metadata
+*.tmp
+*.bak
+*.swp
 *~
+.classpath
+.settings/
+.loadpath
 
