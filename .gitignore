@@ -8,6 +8,6 @@
 *.swp
 *~
 .classpath
-.settings/
+/.settings
 .loadpath
 
