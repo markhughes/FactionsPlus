@@ -10,4 +10,6 @@ this is also to keep out the clutter within the TODO file
   //checked: it's using the same Event but with a LOW priority so they are trapped before the MONITOR event
 
 //done - /f gc  is non-functional and /f fc
-  
+
+//done- fix lwc to remove also wooden/iron/trapdoor when claiming land
+

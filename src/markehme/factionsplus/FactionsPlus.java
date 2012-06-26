@@ -180,11 +180,11 @@ public class FactionsPlus extends JavaPlugin {
         }
         if(config.getBoolean("useLWCIntegrationFix") == true) {
             if(getServer().getPluginManager().isPluginEnabled("LWC")) {
+            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
+            	//register after we integrate
             	pm.registerEvents(this.LWCListener, this);
             	info("Hooked into LWC!");
-            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
             	isLWCEnabled = true;
-            	
             }
             else {
             	info("No LWC Found but Integration Option Is Enabled!");
