@@ -48,6 +48,9 @@ public class TeleportsListener implements Listener {
 		
 		Bukkit.getServer().getPluginManager().registerEvents( preventTeleports, plugin );
 	}
+	//done: investigate what happens on reload(from console) when the hooks here were loaded and now the flag says don't load them
+	//are the hooks still on ? since there's no deRegisterEvents... ? - ok, looks like they are gone on reload; 
+	//I guess then only disablePlugin keeps them on still.
 	
 	// keeps track of the last executed command for each of the online players
 	private Map<Player, String>	mapLastExecutedCommand	= new HashMap<Player, String>();
