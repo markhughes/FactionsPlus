@@ -91,7 +91,9 @@ public class TeleportsListener implements Listener {
 			// possibly could be the /home command
 			// now we check if the last command the player executed was /home
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
-			if ( ( null != lastExecutedCommandByPlayer ) && ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) ) {
+			//this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
+			//( null != lastExecutedCommandByPlayer ) &&  (
+			if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
 				if ( player.hasPermission( permissionForHomeToEnemy ) ) {
 					return;
 				}
