@@ -56,13 +56,11 @@ public class LWCListener implements Listener {
 		
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
-		FPlayer fp = FPlayers.i.get(p);
-		FLocation floc = new FLocation(b.getLocation());
-		Faction owner = Board.getFactionAt(floc);
 
-		if(!owner.isNone() && owner != fp.getFaction()){
+		if(!LWCFunctions.checkInTerritory(p,b)) {
 			event.setCancelled(true);
-			fp.sendMessage("You can only create locks in your own territory!")
 		}
+		return;
+		
 	}
 }

@@ -8,6 +8,7 @@ import org.apache.commons.lang.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.lwc.LWCPlugin;
@@ -112,6 +113,53 @@ public class LWCFunctions {
 	
 	private static boolean isProtectionTypeToRemove( Material type ) {
 		return Utilities.isReferenceInArray( type, protectionsTypesToRemove );
+	}
+
+
+	public static boolean checkInTerritory(Player p, Block b) {
+		FPlayer fp = FPlayers.i.get(p);
+		FLocation floc = new FLocation(b.getLocation());
+		Faction owner = Board.getFactionAt(floc);
+
+		if(!owner.isNone() && owner != fp.getFaction()){
+			fp.sendMessage("You can only create locks in your own territory!");
+			return false;
+		}
+		return true;
+	}
+
+
+	public static int clearLocksCommand(Player name, Location loc) {
+		FPlayer fp = FPlayers.i.get(name);
+		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
+			name.sendMessage(ChatColor.RED + "No Permission!");
+			return -1; //-1 return signifies lack of permissions.
+		}
+		Chunk chunk = loc.getChunk();
+		int numberOfRemovedProtections = 0;
+		for ( int x = 0; x < 16; x++ ) {
+			for ( int z = 0; z < 16; z++ ) {
+				for ( int y = 0; y < 256; y++ ) {
+					Block block = chunk.getBlock( x, y, z );
+					Material type = block.getType();
+					if ( type == Material.AIR ) {
+						continue;
+					}
+					if ( isProtectionTypeToRemove( type ) ) {
+
+						Protection protectedBlock = lwc.findProtection( block );
+						if ( null != protectedBlock ) {
+							FPlayer fpOwner = FPlayers.i.get( protectedBlock.getOwner() );
+							if ( !fp.getFaction().getFPlayers().contains( fpOwner ) ) {
+								protectedBlock.remove();
+								numberOfRemovedProtections ++;
+							}
+						}
+					}
+				}
+			}
+		}
+		return numberOfRemovedProtections;
 	}
 
 }

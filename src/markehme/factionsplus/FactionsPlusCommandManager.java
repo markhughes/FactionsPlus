@@ -53,6 +53,9 @@ public class FactionsPlusCommandManager {
 		
 		addSC(new CmdDebug());
 		
+		//LWC Officer/Faction Owner clear chunk of non-member claims command
+		addSC(new CmdClearLocks());
+		
 		
 		Bridge.factions.finalizeHelp(); 
 	}
