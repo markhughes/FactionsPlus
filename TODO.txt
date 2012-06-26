@@ -43,4 +43,6 @@ support chat modes)
   (note: this doesn't currently apply for we have no such old/obsolete config options)
 
 
-  
+- fix deny LWC locks to actually hook in, by creating LWC module (can't otherwise) currently doesn't hook in
+
+
