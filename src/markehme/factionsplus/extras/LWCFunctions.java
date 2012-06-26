@@ -136,6 +136,13 @@ public class LWCFunctions {
 			return -1; //-1 return signifies lack of permissions.
 		}
 		Chunk chunk = loc.getChunk();
+		FLocation floc = new FLocation(loc);
+		Faction owner = Board.getFactionAt(floc);
+
+		if(!owner.isNone() && owner != fp.getFaction()){
+			fp.sendMessage("You can only clear locks in your own territory!");
+			return -1;
+		}
 		int numberOfRemovedProtections = 0;
 		for ( int x = 0; x < 16; x++ ) {
 			for ( int z = 0; z < 16; z++ ) {
