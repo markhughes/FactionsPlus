@@ -22,6 +22,10 @@ public abstract class Bridge {
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(factionsPluginName);
 		if (null == plugin) {
 			throw FactionsPlus.bailOut( "missing required plugin "+factionsPluginName );
+		} else {//I think the depend inside plugin.yml will make sure Factions is enabled prior to FactionsPlus yes?
+			if ( !plugin.isEnabled() ) {
+				throw FactionsPlus.bailOut( factionsPluginName+" is not yet enabled" );
+			}
 		}
 		
 		String factionsVersion = plugin.getDescription().getVersion();
