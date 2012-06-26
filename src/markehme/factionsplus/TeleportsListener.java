@@ -21,7 +21,7 @@ import com.massivecraft.factions.*;
 
 public class TeleportsListener implements Listener {
 	
-	private static final Permission	permissionForHomeToEnemy	= new Permission( "factionsplus.allowTeleportingToEnemyLandViaHomeCommand" );
+	private static final Permission	permissionForHomeToEnemy	= new Permission( "factionsplus.allowTeleportingToEnemyLandViaHomeCommand", PermissionDefault.FALSE );
 	private static final String configForDisallowHomeToEnemy    = "disallowTeleportingToEnemyLandViaHomeCommand";
 	private static final String	configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand	= "reportSuccessfulByCommandTeleportsIntoEnemyLand";
 	private static final ChatColor constOneColor = ChatColor.DARK_RED;
@@ -151,7 +151,7 @@ public class TeleportsListener implements Listener {
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
 			//this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 			//( null != lastExecutedCommandByPlayer ) &&  (
-			if ((disallowTeleportingToEnemyLandViaHomeCommand)&&(!player.hasPermission( permissionForHomeToEnemy ))) {
+			if ((disallowTeleportingToEnemyLandViaHomeCommand)&&(!Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ))) {
 				//disallowed and no permission to bypass ? then check
 				if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
 					//TODO: think about having a list of commands here which when used to teleport into X territory 
