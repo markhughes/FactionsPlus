@@ -124,3 +124,25 @@ Finish
 
 ================
 
+Caveats:
+---
+Note: If you're getting these errors in bukkit:
+
+[SEVERE] Could not load 'plugins\FactionsPlus.jar' in folder 'plugins'
+org.bukkit.plugin.InvalidPluginException: java.lang.UnsupportedClassVersionError
+: markehme/factionsplus/FactionsPlus : Unsupported major.minor version 51.0
+
+Caused by: java.lang.UnsupportedClassVersionError: markehme/factionsplus/Faction
+sPlus : Unsupported major.minor version 51.0
+
+It just means, that your server is running in jvm with a lower version that the compiled FactionsPlus.jar  
+ie. your server running on jre6 and your jar was compiled with jre7 (well compiler compliance level 1.7 to be more exact)
+
+Fix:
+1. either run the server in jre7
+2. or recompile FactionsPlus.jar with jre6 (which automatically means it'll use 1.6 ccl)
+
+(we should have the project set to ccl 1.6 at the time of this writing, so you shouldn't have to worry about this)
+---
+
+================
