@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/LWC.jar" sourcepath="/LWC/java"/>
 	<classpathentry kind="lib" path="lib/bukkit-1.2.5-R4.1-20120618.060128-13.jar" sourcepath="/bukkit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Factions"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
+ 	<classpathentry kind="output" path="bin"/>
+
+</classpath> 
