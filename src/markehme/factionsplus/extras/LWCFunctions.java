@@ -30,6 +30,7 @@ public class LWCFunctions {
 	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST //is TileEntity
 		,Material.FURNACE //is TileEntity
+		,Material.BURNING_FURNACE // unsure if it's TileEntity
 		,Material.WALL_SIGN //is TileEntity
 		,Material.SIGN_POST //is TileEntity
 		,Material.DISPENSER //is TileEntity
