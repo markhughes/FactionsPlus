@@ -92,6 +92,21 @@ public class FactionsPlus extends JavaPlugin {
 	}
 	
 	@Override
+	public void onDisable() {
+		//hmm looks like events are deregistered anyway onDisable ie. by bailOut()
+		if (null != metrics) {
+			try {
+				metrics.disable();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+		}
+		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
+		info("Disabled.");
+	}
+	
+	
+	@Override
 	public void onEnable() {
 		config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		ensureConfigFilesLocationSafety();
@@ -221,22 +236,9 @@ public class FactionsPlus extends JavaPlugin {
 		} catch (IOException e) {
 		    info("Waah! Couldn't metrics-up! :'(");
 		}
+		
 	}
 
-
-
-	@Override
-	public void onDisable() {
-		if (null != metrics) {
-			try {
-				metrics.disable();
-			} catch ( IOException e ) {
-				e.printStackTrace();
-			}
-		}
-		info("Disabled.");
-	}
-	
 	@Override
 	public FileConfiguration getConfig() {
 		if (null == config) {

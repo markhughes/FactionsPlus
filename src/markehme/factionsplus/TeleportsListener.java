@@ -12,6 +12,8 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.permissions.*;
 import org.bukkit.plugin.*;
 
+//import com.earth2me.essentials.*;
+//import com.earth2me.essentials.api.*;
 import com.massivecraft.factions.*;
 
 
@@ -29,6 +31,13 @@ public class TeleportsListener implements Listener {
 	private static boolean disallowTeleportingToEnemyLandViaHomeCommand;
 	//XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
+//	private static Essentials ess=null;
+//	private static ESS_HAVE haveEssentials=ESS_HAVE.NOT_INITED;//since last Plugin.onEnable()
+//	private enum ESS_HAVE {
+//		INITED_AND_HAVE,
+//		NOT_INITED,
+//		INITED_AND_NOT_HAVE
+//	}
 	
 	public static void init( Plugin plugin ) {
 		if ( !plugin.isEnabled() ) {
@@ -45,9 +54,40 @@ public class TeleportsListener implements Listener {
 			//don't hook if neither of the two are set
 			return;
 		}
-//		Bukkit.getPluginManager().getPlugin(
+		
+		//must init these every time on reload
+//		ess=null;
+//		haveEssentials=ESS_HAVE.NOT_INITED;
+		
 		Bukkit.getPluginManager().registerEvents( preventTeleports, plugin );
 	}
+	
+//	/**
+//	 * with lazy init
+//	 * @return
+//	 */
+//	public static final Essentials getEssentialsInstance() {
+//		if (ESS_HAVE.NOT_INITED == haveEssentials) {
+//			//lazyly init or XXX: maybe add depend (not soft) in plugin.yml
+//			Plugin essPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
+//			if ((null != essPlugin) && (essPlugin.isEnabled()) ) {
+//				haveEssentials=ESS_HAVE.INITED_AND_HAVE;
+//				ess=(Essentials)essPlugin;
+//			}else{
+//				haveEssentials=ESS_HAVE.INITED_AND_NOT_HAVE;
+//			}
+//		}
+//		return ess;//can be null
+//	}
+	
+//	private double getTeleportDelay(Player player) {
+//		Essentials esi = getEssentialsInstance();
+//		if (null != esi) {
+//			return esi.getRanks().getTeleportDelay( esi.getUser( player ) );fail no such method 
+//		}
+//		return -1;
+//	}
+	
 	//done: investigate what happens on reload(from console) when the hooks here were loaded and now the flag says don't load them
 	//are the hooks still on ? since there's no deRegisterEvents... ? - ok, looks like they are gone on reload; 
 	//I guess then only disablePlugin keeps them on still.
@@ -98,6 +138,7 @@ public class TeleportsListener implements Listener {
 			return;
 		}
 		
+//		event.getPlayer().sendMessage( "tpdelay="+ getTeleportDelay( event.getPlayer()));
 		// FIXME: problem is if the player can execute another command before the teleport is issued such as if warmup delays
 		//	are enabled for teleports, it will completely bypass this, because /home won't be the last seen command
 		//	find another way to fix this: maybe deny all teleports(to enemy land) unless the last command is in the 
