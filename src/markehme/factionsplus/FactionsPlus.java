@@ -17,9 +17,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.griefcraft.lwc.LWCPlugin;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.*;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -62,6 +60,8 @@ public class FactionsPlus extends JavaPlugin {
 	private static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
 	//and it contains the defaults, so that they are no longer hardcoded in java code
 
+	private static final String	confStr_useLWCIntegrationFix	= "useLWCIntegrationFix";
+
 	
 	public static FileConfiguration config;
 	public static FileConfiguration templates;
@@ -71,8 +71,6 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
 	public static boolean isLWCEnabled = false;
-	
-	public static boolean useLWCIntegrationFix = false;
 	
 	public final FactionsPlusListener FPListener = new FactionsPlusListener();
 	
@@ -92,6 +90,21 @@ public class FactionsPlus extends JavaPlugin {
 	public FactionsPlus() {//constructor
 		instance=this;
 	}
+	
+	@Override
+	public void onDisable() {
+		//hmm looks like events are deregistered anyway onDisable ie. by bailOut()
+		if (null != metrics) {
+			try {
+				metrics.disable();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+		}
+		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
+		info("Disabled.");
+	}
+	
 	
 	@Override
 	public void onEnable() {
@@ -178,13 +191,24 @@ public class FactionsPlus extends JavaPlugin {
         	info("Hooked into WorldGuard!");
         	isWorldGuardEnabled = true;
         }
-        if(config.getBoolean("useLWCIntegrationFix") == true) {
+        
+        boolean useLWCIntegrationFix=config.getBoolean(confStr_useLWCIntegrationFix);
+        if ((Conf.lwcIntegration)&&(Conf.onCaptureResetLwcLocks)) {
+        	//if Faction plugin has setting to reset locks (which only resets for chests)
+        	//then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
+        	if (!useLWCIntegrationFix) {
+        		//TODO: maybe someone can modify this message so that it would make sense to the console reader
+        		info("Consider setting "+confStr_useLWCIntegrationFix+" to reset locks for more than just the chests");
+        		//this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
+        	}
+        }
+        if( useLWCIntegrationFix ) {
             if(getServer().getPluginManager().isPluginEnabled("LWC")) {
+            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
+            	//register after we integrate
             	pm.registerEvents(this.LWCListener, this);
             	info("Hooked into LWC!");
-            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
             	isLWCEnabled = true;
-            	
             }
             else {
             	info("No LWC Found but Integration Option Is Enabled!");
@@ -212,22 +236,9 @@ public class FactionsPlus extends JavaPlugin {
 		} catch (IOException e) {
 		    info("Waah! Couldn't metrics-up! :'(");
 		}
+		
 	}
 
-
-
-	@Override
-	public void onDisable() {
-		if (null != metrics) {
-			try {
-				metrics.disable();
-			} catch ( IOException e ) {
-				e.printStackTrace();
-			}
-		}
-		info("Disabled.");
-	}
-	
 	@Override
 	public FileConfiguration getConfig() {
 		if (null == config) {

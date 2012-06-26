@@ -63,7 +63,7 @@ A. jars needed (put them in the "lib" folder in the FactionsPlus project)
    Rename the file from factions -> Factions 1.7
    http://dev.bukkit.org/media/files/593/841/Factions_1.7.5_beta.zip
    
-8. Factions 1.6
+9. Factions 1.6
    Rename the file from factions -> Factions 1.6
    http://dev.bukkit.org/media/files/593/842/Factions.jar
    
@@ -97,7 +97,7 @@ plugin.yml
 now go below and ensure the options look like so:
 [v] Export generated class files and resources
 [ ] Export all output folders for checked projects
-[v] (Optional)Export Java source files and resources(if you want to include sourcecode)
+[v] (Optional)Export Java source files and resources(if you want to include sourcecode *.java files)
 [ ] Export refactorings for checked projects.
 
 Jar file: x:\XXX\FactionsPlus.jar
@@ -124,3 +124,25 @@ Finish
 
 ================
 
+Caveats:
+---
+Note: If you're getting these errors in bukkit:
+
+[SEVERE] Could not load 'plugins\FactionsPlus.jar' in folder 'plugins'
+org.bukkit.plugin.InvalidPluginException: java.lang.UnsupportedClassVersionError
+: markehme/factionsplus/FactionsPlus : Unsupported major.minor version 51.0
+
+Caused by: java.lang.UnsupportedClassVersionError: markehme/factionsplus/Faction
+sPlus : Unsupported major.minor version 51.0
+
+It just means, that your server is running in jvm with a lower version that the compiled FactionsPlus.jar  
+ie. your server running on jre6 and your jar was compiled with jre7 (well compiler compliance level 1.7 to be more exact)
+
+Fix:
+1. either run the server in jre7
+2. or recompile FactionsPlus.jar with jre6 (which automatically means it'll use 1.6 ccl)
+
+(we should have the project set to ccl 1.6 at the time of this writing, so you shouldn't have to worry about this)
+---
+
+================
