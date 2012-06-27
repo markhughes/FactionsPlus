@@ -1,6 +1,7 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.*;
+import markehme.factionsplus.extras.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,7 +20,8 @@ public class CmdClearLocks extends FCommand {
 		
 		senderMustBePlayer = true;
 		senderMustBeMember = false;
-		senderMustBeAdmin = true;
+//		senderMustBeAdmin = true;
+		Bridge.factions.setSenderMustBeFactionAdmin(this, true);
 		
 		this.setHelpShort("Clears all LWC protections not owned by a faction member of the user's faction");
 	}

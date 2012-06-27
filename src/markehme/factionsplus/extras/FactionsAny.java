@@ -89,4 +89,14 @@ public interface FactionsAny {
 
 
 	public FactionsAny.ChatMode getChatMode(FPlayer forWhatPlayer);
+
+
+	/**
+	 * use this instead of the FCommand fields:<br>
+	 * senderMustBeAdmin  (Factions 1.6.x only)<br>
+	 * senderMustBeLeader  (Factions 1.7.x only)<br>
+	 * @param fCommandInstance
+	 * @param flagState
+	 */
+	public void setSenderMustBeFactionAdmin( FCommand fCommandInstance, boolean flagState );
 }
