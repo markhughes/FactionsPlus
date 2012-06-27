@@ -13,10 +13,20 @@ import com.massivecraft.factions.*;
 
 public class LWCFunctions {
 	private static LWC lwc;
+	private static LWCModule lwcMod=new LWCModule();
  
 	public static void integrateLWC(LWCPlugin plugin) {
 		lwc = plugin.getLWC();
+//TODO: better way of keeping track of lwc for onDisable
+		lwc.getModuleLoader().registerModule( FactionsPlus.instance, lwcMod);
 	}
+	
+	public static void disableModules() {
+		if (null != lwc) {
+			lwc.getModuleLoader().removeModules(  FactionsPlus.instance );
+		}
+	}
+	
 	
 	//TODO: maybe also prevent non-faction members from LWC locking stuff in our faction land
 	
@@ -163,5 +173,6 @@ public class LWCFunctions {
 		}
 		return numberOfRemovedProtections;
 	}
+
 
 }

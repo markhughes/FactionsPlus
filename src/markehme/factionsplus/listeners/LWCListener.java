@@ -43,18 +43,4 @@ public class LWCListener implements Listener {
 		}
 	}
 	
-	@EventHandler
-	public void onLWCProtectionRegister(LWCProtectionRegisterEvent event){
-		if(event.isCancelled()){
-			return;
-		}
-		
-		Player p = event.getPlayer();
-		Block b = event.getBlock();
-
-		if(!LWCFunctions.checkInTerritory(p,b)) {
-			event.setCancelled(true);
-			return;
-		}
-	}
 }

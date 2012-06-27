@@ -6,28 +6,66 @@ File->Import,  Git->Projects From Git, Next, URI, Next
 fill in URI: with one of the following:
 git://github.com/MarkehMe/FactionsPlus.git
 https://github.com/MarkehMe/FactionsPlus.git
-(for read-only access!)
+(for read-only access! if you're a dev with write access, log into github before you get the url from here:
+ https://github.com/MarkehMe/FactionsPlus
+)
 Next, Next
 Choose a location in your eclipse workspace under a folder named "FactionsPlus"
 ie. Directory: C:\eclipse.workspace\FactionsPlus
 or wherever else you want to store the git part
+copy this path to clipboard ie. Ctrl+D Ctlr+A then Ctrl+C
+click Next, after the cloning is done (requires internet connection *doh* ) then
+open explorer or Winkey+E
+select the address/location  or Alt+D
+paste the previously copied path ie. Ctrl+V
+press Enter to go into that folder, 
+you're now in the folder where you cloned the project
 
+now you have 2 options:
+1. run eclipsify.bat file which does 2. automatically for you
+OR
+2. copy the folder .settings.eclipse  to .settings
+   and the file .classpath.eclipse to .classpath
+   (this will not work within explorer, at least in win7 due to it needing
+    a name before the "." part)
+note: if you're dev with write access to the repo then don't rename instead of 
+copying because then you may accidentally commit these changes later: 
+the deletion of the folder+file . 
+ If you did 2. but renamed instead of copying then you'll need
+to do Team->Reset, Local->master, select Hard (...working directory updated)
+then click Reset button and answer Yes to lose local changes (assuming you 
+didn't edit files yourself yet - workdir would be already changed because of the
+rename you did)
+
+you may close explorer, ie. Ctrl+W
+then go back to the Cloning window in eclipse
+Select Import existing projects
+Next,
 Finish
+
+You now have the project but it likely has a red "!" on it, because of missing required .jar files
+and the Factions project (which should be in your workspace), read below
 ======================================
 
 In order to be able to compile this without errors in Eclipse, here's what you need:
 
 ------
 A. jars needed (put them in the "lib" folder in the FactionsPlus project)
+note: if "lib" doesn't exist just create it:
+File->New->Folder
+select FactionsPlus
+type: lib
+in the Folder name:
+Finish
 
 1. bukkit.jar
     get one from here:
     http://dl.bukkit.org/downloads/bukkit/
     
     the jar name may vary so you might have to:
-    left click FactionsPlus project then right click, choose Properties, left click
-    Java Build Path  then Libraries tab, click the "bukkit..." in list and Edit and choose the
-    downloaded file, click Open, then Ok
+    left click FactionsPlus project then right click, choose Properties, 
+    left click Java Build Path  then Libraries tab, click the "bukkit...jar" in list and Edit and 
+    choose the downloaded file, click Open, then Ok
 
 2. DisguiseCraft.jar
    get the top one from here:
@@ -59,25 +97,39 @@ A. jars needed (put them in the "lib" folder in the FactionsPlus project)
    http://dev.bukkit.org/server-mods/lwc/files/
    LWC 4.2.0 tested
    
-8. Factions 1.7
-   Rename the file from factions -> Factions 1.7
-   http://dev.bukkit.org/media/files/593/841/Factions_1.7.5_beta.zip
-   
-9. Factions 1.6
-   Rename the file from factions -> Factions 1.6
-   http://dev.bukkit.org/media/files/593/842/Factions.jar
-   
-------   
-B. Projects needed:
+8. At this point if you don't care about correctly following the sourcecode (ie. F3) you can get one of the 
+Factions.jar files
+instead of the Factions project, so choose one variant to follow below(using both will fail with correct sourcecode following 
+ie. you end up at wrong lines in code upon F3 -ing in some Factions method)
+choose one: (B. recommended)
+    A) Factions.jar
+        get any of 1.6 or 1.7 versions:
+        http://dev.bukkit.org/server-mods/factions/files/
+        -make sure the file name is Factions.jar  or modify the classpath yourself to point to it see step. 1
+        -if you use this make sure you don't add both .jar or else you would never spot when you'll use a feature that
+        exists in one version but doesn't in the other, ie. the field senderMustBeModerator exists in 1.6 but not in 1.7
+        and using both jars would not err about this, and you cannot switch between the versions and spot this, unless ofc
+        you'd remove the Factions 1.7 jar 
 
-1. Factions, the 1.6.x branch
-   from: https://github.com/MassiveCraft/Factions
-   
+    B) the Factions eclipse project, the 1.6.x branch
+       from: https://github.com/MassiveCraft/Factions
+       -checkout this project in the same way that you checked out FactionsPlus project (aka this project)
+       -and make sure that you compile it with jre6 just as FactionsPlus is (unless you use jre7 for running bukkit server
+        then you can use jre7 for both projects, but u won't be able to run bukkit with jre6 without minor major version 
+        errors which effectively disables FactionsPlus from loading, see below)
+       -getting this from github would allow you to switch between the master (which is 1.7) 
+        and the 1.6.x branches, just in case you want to see code differences when F3-ing around
+        
+Note: F3 key in Eclipse does: Open Declaration  (of the text that's under the cursor ie. a method name)
+      
+After you put all the files in the lib folder don't forget to F5 aka refresh, in
+eclipse on the project or the lib folder, else eclipse won't see them.
 If you have all these, the FactionsPlus project should compile without errors.
 ======================================
 
 
 To actually export the .jar file  which would be named FactionsPlus.jar
+This is the manual(unrecommended) cumbersome method(skip below for the epic method):
 ------
 Legend:
 [ ] means deselected
@@ -122,10 +174,36 @@ leave empty at Main class:
 Finish
 --------------
 
+This is how to export the .jar the "right" way:
+double click the "fpexport_release_template.jardesc"  file from within Eclipse
+you shouldn't have to modify anything there, all the settings are right and if you just click Finish
+it would create Factions.jar file inside the built.jar (folder which resides in the project)
+
+If you wanna go advanced, you can have build.jar folder symlink to the right folder you want the .jar to be exported into
+ie. go into shell and into the FactionsPlus folder then:
+    make sure built.jar folder doesn't exist (ie. rmdir built.jar)
+    mklink /d built.jar c:\craftbukkitserver\plugins\
+    and every time you export now, the FactionsPlus.jar will be auto placed in the plugins of your running test server
+    (this tested on Windows 7, on *nix would be similar, but on windows you likely need to have NTFS file system which you normally would anyway)
+
+If you do want to modify the settings and keep them but only for you, then you can, go Next and tick the
+"Save the description of this JAR in the workspace" but do not change the file name for it (because it's in .gitignore )
+and this way, next time you will only have to double click your personalized file "fpexport_personalized.jardesc" when
+you want to export, and everytime you change something inside it now it will be auto saved
+
+Should you want to modify the fpexport_release_template.jardesc file to reflect changes for all the devs, then
+run it once and set all the new settings and don't forget to enable the "Save the description of this JAR in the workspace"
+but again do not change the output jardesc filename(then do Finish), this will export it to "fpexport_personalized.jardesc"
+which you now have to edit it and make sure that:
+saveDescription="false" 
+inside the file(it's normally on true, and we don't want that - for obvious reasons)
+ and then rename it and overwrite to fpexport_release_template.jardesc
+and this is now detected and can be committed to the repository
+
 ================
 
 Caveats:
----
+---1
 Note: If you're getting these errors in bukkit:
 
 [SEVERE] Could not load 'plugins\FactionsPlus.jar' in folder 'plugins'
@@ -145,4 +223,31 @@ Fix:
 (we should have the project set to ccl 1.6 at the time of this writing, so you shouldn't have to worry about this)
 ---
 
+---2
+Do not use both Factions jars  which are v 1.6 and v1.7 or you won't spot fields/methods that actually don't exist in one
+of the versions like the field senderMustBeModerator of FCommand class which means when running inside bukkit with the 
+Factions version that didn't have the field, it will stack dump err on console
+btw, senderMustBeModerator doesn't exist (well it's renamed) in Factions 1.7.x
+java.lang.NoSuchFieldError: senderMustBeModerator
+
+to fix: just use the Factions project in Eclipse, without having any Factions .jar files added to FactionsPlus classpath
+you can switch between branches at will:  in Factions  1.6.x branch  and master (aka 1.7 branch)
+
 ================
+
+Note to devs:
+1. always keep .project file in the repository
+2. never add .settings folder(or files within) or the .classpath file to the repository
+This would ensure that devs working on this won't accidentally overwrite eclipse project stuff on commit and affect each 
+other 
+------
+To make sure we don't get errors due to Factions 1.6 vs 1.7
+when you're ready to make the FactionsPlus.jar , first switch between 1.6 and 1.7 (jars or branches of the Factions proj)
+to check if FactionsPlus doesn't give errors on compile
+ An example when this would happen, is when using senderMustBeModerator of FCommand and using Factions 1.6 jar or the 
+1.6.x branch of Factions project, the FactionsPlus will compile just fine, but when you switch to 1.7 it will error, that
+field doesn't exist in 1.7 (it's actually renamed).
+ So this can go unnoticed and only actually fail on bukkit if they are using the 1.7 version of Factions
+ 
+================
+

@@ -4,6 +4,7 @@ import java.io.*;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.*;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -189,4 +190,20 @@ public class Utilities {
 		}
 		return false;
 	}
+	
+	/**
+	 * checks if player has permission<br />
+	 * if he's OP then it auto has perm
+	 * @param p
+	 * @param perm
+	 * @return
+	 */
+	public static boolean hasPermissionOrIsOp(Player p, Permission perm) {
+		if (null != p) {
+			return p.isOp() || p.hasPermission( perm );
+		}
+		return false;
+	}
+	
+	
 }

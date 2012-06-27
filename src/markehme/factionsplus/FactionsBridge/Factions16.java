@@ -1,9 +1,11 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
+import java.io.ObjectInputStream.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.extras.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
@@ -24,7 +26,6 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
 	private TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>();
-		
 	
 	protected Factions16( ) {
 		super();
@@ -229,4 +230,6 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		}
 		throw null;//not reached!
 	}
+
+
 }

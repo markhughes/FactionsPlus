@@ -1,4 +1,4 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
 import org.bukkit.*;
 import org.bukkit.plugin.*;
