@@ -47,3 +47,11 @@ support chat modes)
 
 
 - fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseen due to using both Factions .jar in classpath instead of Factions project ;)
+
+- find a way to keep "#" comments inside the config when transferring them from defaults and old config
+  but at the same time detect and keep the values in the old config(currently does so) rather than just write over the defaults by direct file copy(currently this doesn't happen)
+  besides on save() it the comments are always lost (currently)
+  
+- investigate how to hold and retrieve a list of strings in yaml config
+
+

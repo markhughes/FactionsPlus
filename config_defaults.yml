@@ -67,10 +67,8 @@ economy:
 Teleports:
     #note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
     disallowTeleportingToEnemyLandViaHomeCommand: true
-    
     #reports on console only
     reportSuccessfulByCommandTeleportsIntoEnemyLand: true
-    
     disallowTeleportingToEnemyLandViaEnderPeals: false
     
 extras:
