@@ -24,13 +24,12 @@ import com.massivecraft.factions.*;
 public class TeleportsListener implements Listener {
 	
 	private static final Permission	permissionForHomeToEnemy	= new Permission( "factionsplus.allowTeleportingToEnemyLandViaHomeCommand", PermissionDefault.FALSE );
-	private static final String configForDisallowHomeToEnemy    = FactionsPlus.confStr_disallowTeleportingToEnemyLandViaHomeCommand;
-	private static final String	configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand	= FactionsPlus.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	private static final ChatColor constOneColor = ChatColor.DARK_RED;
 	private static Listener	preventTeleports	= new TeleportsListener();
 	
 	private static boolean	reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	private static boolean disallowTeleportingToEnemyLandViaHomeCommand;
+	private static boolean disallowTeleportingToEnemyLandViaEnderPeals;
 	//XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
 //	private static Essentials ess=null;
@@ -49,10 +48,13 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlus.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		reportSuccessfulByCommandTeleportsIntoEnemyLand=FactionsPlus.config.getBoolean( configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand );
-		disallowTeleportingToEnemyLandViaHomeCommand=FactionsPlus.config.getBoolean( configForDisallowHomeToEnemy );
+		reportSuccessfulByCommandTeleportsIntoEnemyLand=FactionsPlus.config.getBoolean( FactionsPlus.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand );
+		disallowTeleportingToEnemyLandViaHomeCommand=FactionsPlus.config.getBoolean( FactionsPlus.confStr_disallowTeleportingToEnemyLandViaHomeCommand );
+		disallowTeleportingToEnemyLandViaEnderPeals=FactionsPlus.config.getBoolean( FactionsPlus.confStr_disallowTeleportingToEnemyLandViaEnderPeals  );
+		//TODO: implement this disallowTeleportingToEnemyLandViaEnderPeals  in the next hour
 		
-		if ( ( !disallowTeleportingToEnemyLandViaHomeCommand ) && ( !reportSuccessfulByCommandTeleportsIntoEnemyLand ) ) {
+		if ( ( !disallowTeleportingToEnemyLandViaHomeCommand ) && ( !reportSuccessfulByCommandTeleportsIntoEnemyLand ) 
+		        && (!disallowTeleportingToEnemyLandViaEnderPeals)) {
 			//don't hook if neither of the two are set
 			return;
 		}

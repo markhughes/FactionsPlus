@@ -129,9 +129,10 @@ public class FactionsPlus extends JavaPlugin {
 	public static final String confStr_economyCostToToggleUpPeaceful=prefEconomy+"economyCostToToggleUpPeaceful";
 	public static final String confStr_economyCostToToggleDownPeaceful=prefEconomy+"economyCostToToggleDownPeaceful";
 	
-	public static final String prefHomesIntegration="homesintegration"+delim;
+	public static final String prefHomesIntegration="Teleports"+delim;
 	public static final String confStr_disallowTeleportingToEnemyLandViaHomeCommand= prefHomesIntegration+"disallowTeleportingToEnemyLandViaHomeCommand";
 	public static final String confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefHomesIntegration+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	public static final String confStr_disallowTeleportingToEnemyLandViaEnderPeals=prefHomesIntegration+"disallowTeleportingToEnemyLandViaEnderPeals";
 	 
 	public static final String prefExtras="extras"+delim;
 	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
