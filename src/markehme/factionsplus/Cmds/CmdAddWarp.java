@@ -186,13 +186,13 @@ public class CmdAddWarp extends FCommand {
 
 		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
 
-		String[] args;
+		String[] args2;
 
-		args = new String[3];
-		args[1] = sender.getName();
-		args[2] = warpname;
+		args2 = new String[3];
+		args2[1] = sender.getName();
+		args2[2] = warpname;
 
-		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", args);
+		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", args2);
 		// notify all the players in the faction 
 		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
 			fplayerlisting.msg(announcemsg);
