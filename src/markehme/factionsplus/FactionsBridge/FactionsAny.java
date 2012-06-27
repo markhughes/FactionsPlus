@@ -1,4 +1,4 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.economy.Economy;

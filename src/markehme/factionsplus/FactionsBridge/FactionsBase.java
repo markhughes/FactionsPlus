@@ -1,9 +1,10 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.extras.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;

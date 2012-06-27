@@ -3,6 +3,7 @@ package markehme.factionsplus.listeners;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.*;

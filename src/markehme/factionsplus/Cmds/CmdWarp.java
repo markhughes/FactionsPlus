@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.Bukkit;
