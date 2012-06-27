@@ -96,7 +96,7 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !FactionsPlus.config.getBoolean("economy_enable")) {
+		    if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
 				if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
 					return;
 				}

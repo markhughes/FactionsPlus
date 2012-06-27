@@ -69,11 +69,11 @@ public class CmdAnnounce extends FCommand {
 			}
 		}
 		
-		String[] args = new String[3];
-		args[1] = sender.getName();
-		args[2] = message;
+		String[] argsa = new String[3];
+		argsa[1] = sender.getName();
+		argsa[2] = message;
 		
-		String formatedMessage = FactionsPlusTemplates.Go("announcement_message", args);
+		String formatedMessage = FactionsPlusTemplates.Go("announcement_message", argsa);
 		
 		DataOutputStream announceWrite;
 		

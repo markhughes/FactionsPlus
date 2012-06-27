@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.Bukkit;
@@ -98,19 +99,19 @@ public class CmdWarp extends FCommand {
 			double y = loc.getY();
 			double z = loc.getZ();
 
-			for (Player p : me.getServer().getOnlinePlayers())
+			for (Player playa : me.getServer().getOnlinePlayers())
 			{
-				if (p == null || !p.isOnline() || p.isDead() || p == fme || p.getWorld() != w)
+				if (playa == null || !playa.isOnline() || playa.isDead() || playa == fme || playa.getWorld() != w)
 					continue;
 
-				FPlayer fp = FPlayers.i.get(p);
+				FPlayer fp = FPlayers.i.get(playa);
 				if ( ! FactionsAny.Relation.ENEMY.equals( 
 					Bridge.factions.getRelationBetween( fplayer, fp ) 
 					)) {
 					continue;//if not enemies, continue
 				}
 
-				Location l = p.getLocation();
+				Location l = playa.getLocation();
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
@@ -120,7 +121,7 @@ public class CmdWarp extends FCommand {
 				if (dx > max || dy > max || dz > max)
 					continue;
 
-				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance") + " blocks of you.");
+				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + max+ " blocks of you.");
 				return;
 			}
 		}
@@ -152,7 +153,7 @@ public class CmdWarp extends FCommand {
 					double z = Double.parseDouble(warp_data[3]);
 
 					float Y = Float.parseFloat(warp_data[4]); // yaw
-					float p = Float.parseFloat(warp_data[5]);
+					float playa = Float.parseFloat(warp_data[5]);
 
 					world = Bukkit.getServer().getWorld(warp_data[6]);
 
@@ -173,7 +174,7 @@ public class CmdWarp extends FCommand {
 
 					player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);
 
-					Location newTel = new Location(world, x, y, z, Y, p);
+					Location newTel = new Location(world, x, y, z, Y, playa);
 
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
@@ -187,7 +188,7 @@ public class CmdWarp extends FCommand {
 						SmokeUtil.spawnCloudRandom(smokeLocations, 3f);
 					}
 
-					player.teleport(new Location(world, x, y, z, Y, p));
+					player.teleport(new Location(world, x, y, z, Y, playa));
 
 //					in.close();
 

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.economy.Economy;
@@ -128,9 +129,10 @@ public class FactionsPlus extends JavaPlugin {
 	public static final String confStr_economyCostToToggleUpPeaceful=prefEconomy+"economyCostToToggleUpPeaceful";
 	public static final String confStr_economyCostToToggleDownPeaceful=prefEconomy+"economyCostToToggleDownPeaceful";
 	
-	public static final String prefHomesIntegration="homesintegration"+delim;
-	public static final String confStr_disallowTeleportingToEnemyLandViaHomeCommand= prefHomesIntegration+"disallowTeleportingToEnemyLandViaHomeCommand";
-	public static final String confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefHomesIntegration+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	public static final String prefTeleports="Teleports"+delim;
+	public static final String confStr_disallowTeleportingToEnemyLandViaHomeCommand= prefTeleports+"disallowTeleportingToEnemyLandViaHomeCommand";
+	public static final String confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefTeleports+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	public static final String confStr_disallowTeleportingToEnemyLandViaEnderPeals=prefTeleports+"disallowTeleportingToEnemyLandViaEnderPeals";
 	 
 	public static final String prefExtras="extras"+delim;
 	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
@@ -191,6 +193,10 @@ public class FactionsPlus extends JavaPlugin {
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
+		}
+		if (isLWCEnabled) {
+			LWCFunctions.disableModules();
+			isLWCEnabled=false;
 		}
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		info("Disabled.");

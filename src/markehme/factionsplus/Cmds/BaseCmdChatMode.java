@@ -1,8 +1,9 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.FactionsBridge.FactionsAny.*;
 import markehme.factionsplus.extras.*;
-import markehme.factionsplus.extras.FactionsAny.ChatMode;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
