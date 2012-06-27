@@ -213,5 +213,13 @@ Note to devs:
 2. never add .settings folder(or files within) or the .classpath file to the repository
 This would ensure that devs working on this won't accidentally overwrite eclipse project stuff on commit and affect each 
 other 
-
+------
+To make sure we don't get errors due to Factions 1.6 vs 1.7
+when you're ready to make the FactionsPlus.jar , first switch between 1.6 and 1.7 (jars or branches of the Factions proj)
+to check if FactionsPlus doesn't give errors on compile
+ An example when this would happen, is when using senderMustBeModerator of FCommand and using Factions 1.6 jar or the 
+1.6.x branch of Factions project, the FactionsPlus will compile just fine, but when you switch to 1.7 it will error, that
+field doesn't exist in 1.7 (it's actually renamed).
+ So this can go unnoticed and only actually fail on bukkit if they are using the 1.7 version of Factions
+ 
 ================
