@@ -120,7 +120,7 @@ public class CmdWarp extends FCommand {
 				if (dx > max || dy > max || dz > max)
 					continue;
 
-				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance") + " blocks of you.");
+				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + max+ " blocks of you.");
 				return;
 			}
 		}
