@@ -53,7 +53,7 @@ public class TeleportsListener implements Listener {
 		disallowTeleportingToEnemyLandViaEnderPeals=FactionsPlus.config.getBoolean( FactionsPlus.confStr_disallowTeleportingToEnemyLandViaEnderPeals  );
 		//TODO: implement this disallowTeleportingToEnemyLandViaEnderPeals  in the next hour
 		
-		if ( ( !disallowTeleportingToEnemyLandViaHomeCommand ) && ( !reportSuccessfulByCommandTeleportsIntoEnemyLand ) 
+		if ( (!isHomeTracking())
 		        && (!disallowTeleportingToEnemyLandViaEnderPeals)) {
 			//don't hook if neither of the two are set
 			return;
@@ -64,6 +64,10 @@ public class TeleportsListener implements Listener {
 //		haveEssentials=ESS_HAVE.NOT_INITED;
 		
 		Bukkit.getPluginManager().registerEvents( preventTeleports, plugin );
+	}
+	
+	private final static boolean isHomeTracking() {//private/final so it can be inlined by compiler, supposedly
+	    return disallowTeleportingToEnemyLandViaHomeCommand || reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	}
 	
 //	/**
@@ -103,6 +107,9 @@ public class TeleportsListener implements Listener {
 	
 	@EventHandler( priority = EventPriority.MONITOR )//MONITOR means it will be called last, after ie. HIGHEST
 	public void onCommand( PlayerCommandPreprocessEvent event ) {
+	    if (!isHomeTracking()) {
+	        return;
+	    }
 		// this hook will trigger on any command ie. only those chat messages preceeded by "/"
 		Player sender = event.getPlayer();
 		mapLastExecutedCommand.put( sender, event.getMessage() );
@@ -111,6 +118,9 @@ public class TeleportsListener implements Listener {
 	
 	@EventHandler( priority = EventPriority.MONITOR )
 	public void onPlayerLogout( PlayerQuitEvent event ) {
+	    if (!isHomeTracking()) {
+	        return;
+	    }
 		// this hook will trigger whenever a player quits/disconnects
 		// this will prevent the map from getting too big by no longer keeping track of dc-ed players' last executed cmd
 		mapLastExecutedCommand.remove( event.getPlayer() );
@@ -134,22 +144,24 @@ public class TeleportsListener implements Listener {
 	// but in this case we don't need a specific priority, tested with HIGHEST and it still worked with setCancelled()
 	@EventHandler( priority = EventPriority.MONITOR )//using this to be the last or as last to be called as possible just to allow other plugins to deny
 	public void onTeleport( PlayerTeleportEvent event ) {
-		Player player = event.getPlayer();
 		if ( event.isCancelled() ) {
 			// already cancelled, we don't care then, though some tricky plugin could cancel it in LOWEST and reenable it
 			// in HIGHEST, thus totally bypassing us here; this could be avoided if we were to use MONITOR prio but not entirely
 			// avoided
 			return;
 		}
+        Player player = event.getPlayer();
 		
-//		event.getPlayer().sendMessage( "tpdelay="+ getTeleportDelay( event.getPlayer()));
 		// FIXME: problem is if the player can execute another command before the teleport is issued such as if warmup delays
 		//	are enabled for teleports, it will completely bypass this, because /home won't be the last seen command
 		//	find another way to fix this: maybe deny all teleports(to enemy land) unless the last command is in the 
 		//  whitelist of allowed ones  
+        //this will be fixed soon
 		
 		TeleportCause cause = event.getCause();
-		if ( cause == PlayerTeleportEvent.TeleportCause.COMMAND ) {
+		switch (cause) {
+		case COMMAND:
+		    if (isHomeTracking()) {
 			// possibly could be the /home command
 			// now we check if the last command the player executed was /home
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
@@ -166,11 +178,7 @@ public class TeleportsListener implements Listener {
 					if ( isEnemyLandAt( player, targetLocation ) ) {
 						player.sendMessage( ChatColor.RED
 							+ "You are not allowed to teleport to your /home which is now in enemy territory" );
-						event.setCancelled( true );
-						// not just cancel it, make sure that the canceling isn't ignored
-						// worst case they'll teleport in the same spot where the command was issued from
-						Location from = event.getFrom();
-						event.setTo( from );
+						denyTeleport(event);
 					}
 				}
 			}
@@ -185,10 +193,34 @@ public class TeleportsListener implements Listener {
 						+ lastExecutedCommandByPlayer+constOneColor+"'." );
 				}
 			}
+		    }//homeTracking
+			
+			break;// cause COMMAND
+			
+		case ENDER_PEARL:
+			if (disallowTeleportingToEnemyLandViaEnderPeals) {//not adding a perm for this
+				Location targetLocation = event.getTo();
+				if ( isEnemyLandAt( player, targetLocation ) ) {
+					player.sendMessage( ChatColor.RED
+						+ "You are not allowed to ender pearl teleport inside enemy territory" );
+					denyTeleport(event);
+				}
+			}
+			break;
+		default:
+			//unhandled cause ? do nothing
 		}
 	}
 	
-	private boolean isEnemyLandAt(Player player, Location targetLocation) 
+	private final void denyTeleport(PlayerTeleportEvent ptEvent) {
+		ptEvent.setCancelled( true );
+		// not just cancel it, make sure that the canceling isn't ignored
+		// worst case they'll teleport in the same spot where the command was issued from
+		Location from = ptEvent.getFrom();
+		ptEvent.setTo( from );
+	}
+	
+	private final boolean isEnemyLandAt(Player player, Location targetLocation) 
 	{
 		Faction factionAtTarget = getFactionAt(targetLocation);//Board.getFactionAt( new FLocation( targetLocation ) );
 		return areEnemies(player, factionAtTarget);
