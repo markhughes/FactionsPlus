@@ -137,9 +137,9 @@ public class FactionsPlus extends JavaPlugin {
 	public static final String prefExtras="extras"+delim;
 	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
 	 
- 	public static final String prefExtrasLwc=prefExtras+"lwc"+delim;
-	public static final String confStr_removeLWCLocksOnClaim=prefExtrasLwc+"removeLWCLocksOnClaim";
-	public static final String confStr_blockCPublicAccessOnNonOwnFactionTerritory=prefExtrasLwc+"blockCPublicAccessOnNonOwnFactionTerritory";
+ 	public static final String prefExtrasLWC=prefExtras+"LWC"+delim;
+	public static final String confStr_removeLWCLocksOnClaim=prefExtrasLWC+"removeLWCLocksOnClaim";
+	public static final String confStr_blockCPublicAccessOnNonOwnFactionTerritory=prefExtrasLWC+"blockCPublicAccessOnNonOwnFactionTerritory";
 
 	public static final String prefExtrasMD=prefExtras+"disguise"+delim;
 	public static final String confStr_enableDisguiseIntegration=prefExtrasMD+"enableDisguiseIntegration";

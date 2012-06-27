@@ -29,7 +29,7 @@ public class LWCModule extends JavaModule {//to fix
 
     @Override
     public void load(LWC lwc1) {
-//        this.lwc = lwc1;
+//        this may not even be called from LWC, if I remember right (but this may change as LWC changes)
     }
 
 	@Override
