@@ -63,7 +63,7 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdDebug());
 		
 		//LWC Officer/Faction Owner clear chunk of non-member claims command
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_removeLWCLocksOnClaim)) {
+		if(LWCBase.isLWC()) {
 			addSC(new CmdClearLocks());
 		}
 		
