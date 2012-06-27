@@ -1,7 +1,8 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
 import java.util.*;
 
+import markehme.factionsplus.*;
 
 
 /**
@@ -137,12 +138,7 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 	@Override
 	public void putAll( Map<? extends LEFTSIDE, ? extends RIGHTSIDE> m ) {
 		// TODO Auto-generated method stub
-		throw ni();
-	}
-	
-	
-	private final static RuntimeException ni() {
-		throw new RuntimeException( "not implemented" );
+		throw Q.ni();
 	}
 	
 	
@@ -156,20 +152,20 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 	@Override
 	public Set<LEFTSIDE> keySet() {
 		// TODO Auto-generated method stub
-		throw ni();
+		throw Q.ni();
 	}
 	
 	
 	@Override
 	public Collection<RIGHTSIDE> values() {
 		// TODO Auto-generated method stub
-		throw ni();
+		throw Q.ni();
 	}
 	
 	
 	@Override
 	public Set<java.util.Map.Entry<LEFTSIDE, RIGHTSIDE>> entrySet() {
 		// TODO Auto-generated method stub
-		throw ni();
+		throw Q.ni();
 	}
 }

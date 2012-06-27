@@ -9,4 +9,5 @@
 .classpath
 /.settings
 .loadpath
-
+/built.jar
+fpexport_personalized.jardesc

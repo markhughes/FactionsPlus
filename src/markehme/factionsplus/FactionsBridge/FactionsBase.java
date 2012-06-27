@@ -1,9 +1,10 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.FactionsBridge;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.extras.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
@@ -17,7 +18,9 @@ public abstract class FactionsBase implements FactionsAny {
 	private Class											classRP			= null; // the class/interface RelationParticipator
 	private Method											mGetRelationTo	= null; // the method
 																					// getRelationTo(RelationParticipator rp)
-																					
+	private Field	fSenderMustBe_FactionAdminLeader;
+	
+											
 	// this will hold a mapping between our Factions.version-independent FactionsAny.Relation and the specific Factions-version
 	// Relation
 	// except it's mapped in reversed order
@@ -40,6 +43,10 @@ public abstract class FactionsBase implements FactionsAny {
 
 			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
 			
+			Class clsFCommand = Class.forName("com.massivecraft.factions.cmd.FCommand");
+			fSenderMustBe_FactionAdminLeader=clsFCommand.getField(Factions16.class.equals(this.getClass())?"senderMustBeAdmin": 
+				/*1.7*/"senderMustBeLeader");
+			
 			
 		} catch ( ClassNotFoundException e ) {
 			e.printStackTrace();
@@ -51,6 +58,9 @@ public abstract class FactionsBase implements FactionsAny {
 			e.printStackTrace();
 			failed = true;
 		} catch ( NoSuchMethodException e ) {
+			e.printStackTrace();
+			failed = true;
+		} catch ( NoSuchFieldException e ) {
 			e.printStackTrace();
 			failed = true;
 		} finally {
@@ -102,5 +112,28 @@ public abstract class FactionsBase implements FactionsAny {
 	@Override
 	public void addSubCommand( FCommand subCommand ) {
 		P.p.cmdBase.addSubCommand( subCommand );// practically all that we need to do for 1.7 to have the commands in help
+	}
+	
+
+	@SuppressWarnings( "boxing" )
+	@Override
+	public void setSenderMustBeFactionAdmin( FCommand fCommandInstance, boolean flagState ) {
+		boolean failed = false;
+		try {
+			fSenderMustBe_FactionAdminLeader.set( fCommandInstance, flagState );
+		} catch ( IllegalArgumentException e ) {
+			e.printStackTrace();
+			failed = true;
+		} catch ( IllegalAccessException e ) {
+			e.printStackTrace();
+			failed = true;
+		} catch ( ClassCastException e ) {
+			e.printStackTrace();
+			failed = true;
+		} finally {
+			if ( failed ) {
+				throw FactionsPlus.bailOut( "failed to set field " + fSenderMustBe_FactionAdminLeader );
+			}
+		}
 	}
 }
