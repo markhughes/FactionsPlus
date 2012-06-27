@@ -101,6 +101,10 @@ public class FactionsPlus extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		if (isLWCEnabled) {
+			LWCFunctions.disableModules();
+			isLWCEnabled=false;
+		}
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		info("Disabled.");
 	}

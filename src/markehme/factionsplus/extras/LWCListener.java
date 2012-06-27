@@ -25,7 +25,6 @@ import markehme.factionsplus.extras.LWCFunctions;
 public class LWCListener implements Listener {
 	
 	private final static String	msg	= "internal error clearing LWC locks on land claim, inform admin to check console.";
-	private static final Permission	permForAllowLWCLocksAnywhere	= new Permission( "allowLWCLocksAnywhere" );
 	
 	
 	@EventHandler(
@@ -50,25 +49,4 @@ public class LWCListener implements Listener {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled=true)
-	public void onLWCProtectionRegister(LWCProtectionRegisterEvent event){
-//		if(event.isCancelled()){
-//			return;
-//		}
-		
-		Player p = event.getPlayer();//it wouldn't be null
-		Block b = event.getBlock();
-		FPlayer fp = FPlayers.i.get(p);
-		FLocation floc = new FLocation(b.getLocation());
-		Faction owner = Board.getFactionAt(floc);
-
-		if (owner.isNone() || Utilities.hasPermissionOrIsOp( p, permForAllowLWCLocksAnywhere ) || owner.equals( fp.getFaction() )) {
-			//allow locks if it's in wilderness, or is op or has perm, or is in own faction land
-			return;//the 'if' is easier to read this way
-		}else {
-			event.setCancelled( true );
-			fp.sendMessage( ChatColor.RED + "You can lock only within your faction or unclaimed land!" );
-//		if(!LWCFunctions.checkInTerritory(p,b)) {
-		}
-	}
 }
