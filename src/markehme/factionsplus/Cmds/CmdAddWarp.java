@@ -186,7 +186,6 @@ public class CmdAddWarp extends FCommand {
 
 		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
 
-		@SuppressWarnings( "hiding" )
 		String[] args;
 
 		args = new String[3];
