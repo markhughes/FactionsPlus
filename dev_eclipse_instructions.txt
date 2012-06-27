@@ -6,13 +6,43 @@ File->Import,  Git->Projects From Git, Next, URI, Next
 fill in URI: with one of the following:
 git://github.com/MarkehMe/FactionsPlus.git
 https://github.com/MarkehMe/FactionsPlus.git
-(for read-only access!)
+(for read-only access! if you're a dev with write access, log into github before you get the url from here:
+ https://github.com/MarkehMe/FactionsPlus
+)
 Next, Next
 Choose a location in your eclipse workspace under a folder named "FactionsPlus"
 ie. Directory: C:\eclipse.workspace\FactionsPlus
 or wherever else you want to store the git part
+copy this path to clipboard ie. Ctlr+A then Ctrl+C
+click Next,
+now open explorer or Winkey+E
+select the address/location  or Alt+D
+paste the previously copied path ie. Ctrl+V
+press Enter to go into that folder, 
+you're now in the folder where you cloned the project
 
+now you have 2 options:
+1. run eclipsify.bat file which does 2. automatically for you
+OR
+2. copy the folder .settings.eclipse  to .settings
+   and the file .classpath.eclipse to .classpath
+   (this will not work within explorer, at least in win7 due to it needing
+    a name before the "." part)
+note: if you're dev with write access to the repo then don't rename instead of 
+copying because then you may accidentally commit these changes later: 
+the deletion of the folder+file . 
+ If you did 2. but renamed instead of copying then you'll need
+to do Team->Reset, Local->master, select Hard (...working directory updated)
+then click Reset button and answer Yes to lose local changes (assuming you 
+didn't edit files yourself yet - workdir would be already changed because of the
+rename you did)
+
+you may close explorer,
+then go back to the Cloning window in eclipse
+Select Import existing projects
+Next,
 Finish
+
 ======================================
 
 In order to be able to compile this without errors in Eclipse, here's what you need:
