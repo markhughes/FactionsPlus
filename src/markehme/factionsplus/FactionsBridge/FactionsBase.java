@@ -120,9 +120,7 @@ public abstract class FactionsBase implements FactionsAny {
 	public void setSenderMustBeFactionAdmin( FCommand fCommandInstance, boolean flagState ) {
 		boolean failed = false;
 		try {
-//			Boolean fieldInstance = (Boolean)fSenderMustBe_FactionAdminLeader.get( fCommandInstance );
 			fSenderMustBe_FactionAdminLeader.set( fCommandInstance, flagState );
-//			fieldInstance.
 		} catch ( IllegalArgumentException e ) {
 			e.printStackTrace();
 			failed = true;
