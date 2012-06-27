@@ -1,8 +1,6 @@
 package markehme.factionsplus.extras;
 
 import java.lang.reflect.*;
-import java.util.*;
-
 import markehme.factionsplus.*;
 
 import com.massivecraft.factions.*;

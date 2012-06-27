@@ -1,59 +1,81 @@
-disableUpdateCheck: false
-unDisguiseIfInOwnTerritory: false
-unDisguiseIfInEnemyTerritory: false
-leadersCanSetWarps: true
-officersCanSetWarps: true
-membersCanSetWarps: false
-warpSetting: 1
-maxWarps: 5
-mustBeInOwnTerritoryToCreate: true
-warpTeleportAllowedFromEnemyTerritory: true
-warpTeleportAllowedFromDifferentWorld: true
-warpTeleportAllowedEnemyDistance: 35
-warpTeleportIgnoreEnemiesIfInOwnTerritory: true
-smokeEffectOnWarp: true
-powerBoostIfPeaceful: 0
-leadersCanSetJails: true
-officersCanSetJails: true
-leadersCanSetRules: true
-officersCanSetRules: true
-maxRulesPerFaction: 12
-membersCanSetJails: false
-leadersCanJail: true
-officersCanJail: true
-leadersCanAnnounce: true
-officersCanAnnounce: true
-showLastAnnounceOnLogin: true
-showLastAnnounceOnLandEnter: true
-leadersCanFactionBan: true
-officersCanFactionBan: true
-leadersCanFactionUnban: true
-officersCanFactionUnban: true
-leaderCanNotBeBanned: true
-leadersCanToggleState: false
-officersCanToggleState: false
-membersCanToggleState: false
-extraPowerLossIfDeathByOther: 0.0
-extraPowerWhenKillPlayer: 0.0
-extraPowerLossIfDeathBySuicide: 0.0
-extraPowerLossIfDeathByPVP: 0.0
-extraPowerLossIfDeathByMob: 0.0
-extraPowerLossIfDeathByCactus: 0.0
-extraPowerLossIfDeathByTNT: 0.0
-extraPowerLossIfDeathByFire: 0.0
-extraPowerLossIfDeathByPotion: 0.0
-enablePermissionGroups: false
-economy_enable: false
-economy_costToWarp: 0
-economy_costToCreateWarp: 0
-economy_costToDeleteWarp: 0
-economy_costToAnnounce: 0
-economy_costToJail: 0
-economy_costToSetJail: 0
-economy_costToUnJail: 0
-economy_costToToggleUpPeaceful: 0
-economy_costToToggleDownPeaceful: 0
-useLWCIntegrationFix: false
-disallowTeleportingToEnemyLandViaHomeCommand: true
-reportSuccessfulByCommandTeleportsIntoEnemyLand: true
+#FactionsPlus Configuration File: for help with the configuration and detailed descriptions of the settings, please consult
+jails:
+    enableJails: true
+    leadersCanSetJails: true 
+    officersCanSetJails: true
+    membersCanSetJails: false
+    leadersCanJail: true
+    officersCanJail: true
+warps:
+    enableWarps: true
+    leadersCanSetWarps: true
+    officersCanSetWarps: true
+    membersCanSetWarps: false
+    mustBeInOwnTerritoryToCreate: true
+    maxWarps: 5
+    warpTeleportAllowedFromEnemyTerritory: true
+    warpTeleportAllowedFromDifferentWorld: true
+    warpTeleportAllowedEnemyDistance: 35
+    warpTeleportIgnoreEnemiesIfInOwnTerritory: true
+    smokeEffectOnWarp: true
+banning:
+    enableBans: true
+    leadersCanFactionBan: true
+    officersCanFactionBan: true
+    leadersCanFactionUnban: true
+    officersCanFactionUnban: true
+    leaderCanNotBeBanned: true
+rules:
+    enableRules: true
+    leadersCanSetRules: true
+    officersCanSetRules: true
+    maxRulesPerFaction: 12
+peaceful:
+    leadersCanToggleState: false
+    officersCanToggleState: false
+    membersCanToggleState: false
+    enablePeacefulBoosts: true
+    powerBoostIfPeaceful: 0
+powerboosts:
+    enablePowerBoosts: false
+    extraPowerWhenKillPlayer: 0.0
+    extraPowerLossIfDeathBySuicide: 0.0
+    extraPowerLossIfDeathByPVP: 0.0
+    extraPowerLossIfDeathByMob: 0.0
+    extraPowerLossIfDeathByCactus: 0.0
+    extraPowerLossIfDeathByTNT: 0.0
+    extraPowerLossIfDeathByFire: 0.0
+    extraPowerLossIfDeathByPotion: 0.0
+    extraPowerLossIfDeathByOther: 0.0
+announce:
+    enableAnnounce: true
+    leadersCanAnnounce: true
+    officersCanAnnounce: true
+    showLastAnnounceOnLogin: true
+    showLastAnnounceOnLandEnter: true
+economy:
+    enableEconomy: false
+    economycostToWarp: 0
+    economycostToCreateWarp: 0
+    economycostToDeleteWarp: 0
+    economycostToAnnounce: 0
+    economycostToJail: 0
+    economycostToSetJail: 0
+    economycostToUnJail: 0
+    economycostToToggleUpPeaceful: 0
+    economycostToToggleDownPeaceful: 0
+homesintegration:
+    #note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
+    disallowTeleportingToEnemyLandViaHomeCommand: true
+    reportSuccessfulByCommandTeleportsIntoEnemyLand: true
+extras:
+    lwc:
+        #If enabled, it is highly suggested that you change the default factions lwc integration to false.
+        useLWCIntegrationFix: false
+    disguise:
+        enableDisguiseIntegration: false
+        unDisguiseIfInOwnTerritory: false
+        unDisguiseIfInEnemyTerritory: false
+    disableUpdateCheck: false
+    
 DoNotChangeMe: 8

@@ -1,7 +1,8 @@
-package markehme.factionsplus;
+package markehme.factionsplus.listeners;
 
 import java.util.*;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.*;
@@ -22,8 +23,8 @@ import com.massivecraft.factions.*;
 public class TeleportsListener implements Listener {
 	
 	private static final Permission	permissionForHomeToEnemy	= new Permission( "factionsplus.allowTeleportingToEnemyLandViaHomeCommand" );
-	private static final String configForDisallowHomeToEnemy    = "disallowTeleportingToEnemyLandViaHomeCommand";
-	private static final String	configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand	= "reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	private static final String configForDisallowHomeToEnemy    = FactionsPlus.confStr_disallowTeleportingToEnemyLandViaHomeCommand;
+	private static final String	configFor_reportSuccessfulByCommandTeleportsIntoEnemyLand	= FactionsPlus.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	private static final ChatColor constOneColor = ChatColor.DARK_RED;
 	private static Listener	preventTeleports	= new TeleportsListener();
 	

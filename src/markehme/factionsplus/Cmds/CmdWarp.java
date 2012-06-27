@@ -14,7 +14,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Board;
-import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -71,7 +70,7 @@ public class CmdWarp extends FCommand {
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!FactionsPlus.config.getBoolean("warpTeleportAllowedFromEnemyTerritory") && fplayer.isInEnemyTerritory() ){
+		if(!FactionsPlus.config.getBoolean(FactionsPlus.confStr_warpTeleportAllowedFromEnemyTerritory) && fplayer.isInEnemyTerritory() ){
 			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
@@ -91,15 +90,15 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance") > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				FactionsPlus.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance) > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
 				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! FactionsPlus.config.getBoolean("warpTeleportIgnoreEnemiesIfInOwnTerritory")))){
+						|| ( fplayer.isInOwnTerritory() && ! FactionsPlus.config.getBoolean(FactionsPlus.confStr_warpTeleportIgnoreEnemiesIfInOwnTerritory)))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
 			double z = loc.getZ();
 
-			for (@SuppressWarnings( "hiding" ) Player p : me.getServer().getOnlinePlayers())
+			for (Player p : me.getServer().getOnlinePlayers())
 			{
 				if (p == null || !p.isOnline() || p.isDead() || p == fme || p.getWorld() != w)
 					continue;
@@ -115,7 +114,7 @@ public class CmdWarp extends FCommand {
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
-				double max = FactionsPlus.config.getInt("warpTeleportAllowedEnemyDistance");
+				double max = FactionsPlus.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance);
 
 				// box-shaped distance check
 				if (dx > max || dy > max || dz > max)
@@ -153,7 +152,6 @@ public class CmdWarp extends FCommand {
 					double z = Double.parseDouble(warp_data[3]);
 
 					float Y = Float.parseFloat(warp_data[4]); // yaw
-					@SuppressWarnings( "hiding" )
 					float p = Float.parseFloat(warp_data[5]);
 
 					world = Bukkit.getServer().getWorld(warp_data[6]);
@@ -167,8 +165,8 @@ public class CmdWarp extends FCommand {
 						}
 					}
 
-					if(FactionsPlus.config.getInt("economy_costToWarp") > 0) {
-						if (!payForCommand(FactionsPlus.config.getInt("economy_costToWarp"), "to teleport to this warp", "for teleporting to your faction home")) {
+					if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToWarp) > 0) {
+						if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToWarp), "to teleport to this warp", "for teleporting to your faction home")) {
 							return;
 						}
 					}
@@ -180,7 +178,7 @@ public class CmdWarp extends FCommand {
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					// Create a smoke effect
-					if (FactionsPlus.config.getBoolean("smokeEffectOnWarp")) {
+					if (FactionsPlus.config.getBoolean(FactionsPlus.confStr_smokeEffectOnWarp)) {
 						List<Location> smokeLocations = new ArrayList<Location>();
 						smokeLocations.add(player.getLocation());
 						smokeLocations.add(player.getLocation().add(0, 1, 0));

@@ -51,7 +51,6 @@ public class CmdRules extends FCommand {
 		// TODO: Economy cost to view rules 
 		// TODO: Make this function actually work
 		
-		@SuppressWarnings( "hiding" )
 		String[] args = new String[3];
 		args[1] = sender.getName();
 		args[2] = message;

@@ -1,19 +1,14 @@
 package markehme.factionsplus.extras;
 
-import java.util.*;
-
 import markehme.factionsplus.*;
 
-import org.apache.commons.lang.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.lwc.LWCPlugin;
 import com.griefcraft.model.*;
-import com.griefcraft.util.*;
 import com.massivecraft.factions.*;
 
 public class LWCFunctions {

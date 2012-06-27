@@ -2,15 +2,10 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
@@ -44,9 +39,9 @@ public class CmdUnban extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(FactionsPlus.config.getBoolean("leadersCanFactionUnban") && Utilities.isLeader(fme)){
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanFactionUnban) && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean("officersCanFactionUnban") && Utilities.isOfficer(fme)){
+		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanFactionUnban) && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		
@@ -54,10 +49,6 @@ public class CmdUnban extends FCommand {
 			fme.msg(ChatColor.RED + "Sorry, your ranking is not high enought to do that!");
 			return;
 		}
-		
-		Player playerUnbanThisPlayer = Bukkit.getServer().getPlayer(unbanningThisPlayer);
-		
-		FPlayer fPlayerUnbanThisPlayer = FPlayers.i.get(unbanningThisPlayer);
 		
 		File banFile = new File(FactionsPlus.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
 		

@@ -51,9 +51,9 @@ public class CmdAnnounce extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean("leadersCanAnnounce") && Utilities.isLeader(fplayer)) {
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanAnnounce) && Utilities.isLeader(fplayer)) {
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean("officersCanAnnounce") && Utilities.isOfficer(fplayer)) {
+		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanAnnounce) && Utilities.isOfficer(fplayer)) {
 			authallow = true;
 		}
 
@@ -62,14 +62,13 @@ public class CmdAnnounce extends FCommand {
 			return;
 		}
 		
-		if(FactionsPlus.config.getInt("economy_costToAnnounce") > 0) {
+		if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToAnnounce) > 0) {
 			// TODO: move to pay for command thingy 
-			if (!doFinanceCrap(FactionsPlus.config.getInt("economy_costToAnnounce"), "to make an announcement", "for making an announcement", fplayer)) {
+			if (!doFinanceCrap(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToAnnounce), "to make an announcement", "for making an announcement", fplayer)) {
 				return;
 			}
 		}
 		
-		@SuppressWarnings( "hiding" )
 		String[] args = new String[3];
 		args[1] = sender.getName();
 		args[2] = message;
@@ -103,7 +102,7 @@ public class CmdAnnounce extends FCommand {
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !FactionsPlus.config.getBoolean("economy_enable") || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
 		
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);
