@@ -2,9 +2,6 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.FactionsBridge.FactionsAny.*;
-import markehme.factionsplus.extras.*;
-
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
 import com.massivecraft.factions.struct.*;
@@ -55,7 +52,7 @@ public abstract class BaseCmdChatMode extends FCommand{
 		//a null here means, we're using 1.7 and setChatMode is not supported
 		if ( null!=from ) {
 			// fme.setChatMode(com.massivecraft.factions.struct.ChatMode.FACTION);
-			ChatMode modeNow = Bridge.factions.getChatMode(forWhatPlayer);
+			markehme.factionsplus.FactionsBridge.FactionsAny.ChatMode modeNow = Bridge.factions.getChatMode(forWhatPlayer);
 			
 			fme.msg( "Your chat mode "+
 					(modeNow.equals( from )?"is still on:"

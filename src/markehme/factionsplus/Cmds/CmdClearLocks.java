@@ -1,6 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
@@ -39,7 +38,7 @@ public class CmdClearLocks extends FCommand {
 			name.sendMessage(ChatColor.GOLD + "No unlockable protections were found in this chunk");
 			return;
 		}
-		name.sendMessage(ChatColor.GOLD + "Successfully removed " + clearedlocks + "protections from this chunk");
+		name.sendMessage(ChatColor.GOLD + "Successfully removed " + clearedlocks + " protections from this chunk");
 		
 	}
 
