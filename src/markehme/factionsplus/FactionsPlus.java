@@ -138,7 +138,7 @@ public class FactionsPlus extends JavaPlugin {
 	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
 	 
  	public static final String prefExtrasLwc=prefExtras+"lwc"+delim;
-	public static final String confStr_useLWCIntegrationFix=prefExtrasLwc+"useLWCIntegrationFix";
+	public static final String confStr_removeLWCLocksOnClaim=prefExtrasLwc+"removeLWCLocksOnClaim";
 	public static final String confStr_blockCPublicAccessOnNonOwnFactionTerritory=prefExtrasLwc+"blockCPublicAccessOnNonOwnFactionTerritory";
 
 	public static final String prefExtrasMD=prefExtras+"disguise"+delim;
@@ -157,14 +157,12 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isDisguiseCraftEnabled = false;
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
-	public static boolean isLWCEnabled = false;
 	
 	public final AnnounceListener announcelistener = new AnnounceListener();
 	public final BanListener banlistener = new BanListener();
 	public final CoreListener corelistener = new CoreListener();
 	public final DisguiseListener disguiselistener = new DisguiseListener();
 	public final JailListener jaillistener = new JailListener();
-	public final LWCListener lwclistener = new LWCListener();
 	public final PeacefulListener peacefullistener = new PeacefulListener();
 	public final PowerboostListener powerboostlistener = new PowerboostListener();
 	
@@ -195,10 +193,7 @@ public class FactionsPlus extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
-		if (isLWCEnabled) {
-			LWCFunctions.disableModules();
-			isLWCEnabled=false;
-		}
+		LWCFunctions.ensure_LWC_Disintegrate();
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		info("Disabled.");
 	}
@@ -305,27 +300,26 @@ public class FactionsPlus extends JavaPlugin {
         }
         
 
-        if ((Conf.lwcIntegration)&&(Conf.onCaptureResetLwcLocks)) {
-        	//if Faction plugin has setting to reset locks (which only resets for chests)
-        	//then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-        	if (!config.getBoolean(confStr_useLWCIntegrationFix)) {
-        		//TODO: maybe someone can modify this message so that it would make sense to the console reader
-        		info("Consider setting "+confStr_useLWCIntegrationFix+" to reset locks for more than just the chests");
-        		//this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
-        	}
-        }
-        if(config.getBoolean(confStr_useLWCIntegrationFix)) {
-            if(getServer().getPluginManager().isPluginEnabled("LWC")) {
-            	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
-            	//register after we integrate
-            	pm.registerEvents(this.lwclistener, this);
-            	info("Hooked into LWC!");
-            	isLWCEnabled = true;
-            }
-            else {
-            	info("No LWC Found but Integration Option Is Enabled!");
-            }
-        }
+        
+        LWCFunctions.try_integrateLWC();
+        
+		if ( LWCFunctions.isLWC() ) {
+			if ( ( Conf.lwcIntegration ) && ( Conf.onCaptureResetLwcLocks ) ) {
+				// if Faction plugin has setting to reset locks (which only resets for chests)
+				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
+				if ( !config.getBoolean( confStr_removeLWCLocksOnClaim ) ) {
+					// TODO: maybe someone can modify this message so that it would make sense to the console reader
+					info( "Consider setting " + confStr_removeLWCLocksOnClaim
+						+ " to reset locks for more than just the chests" );
+					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
+				}
+				
+			}
+		}
+	
+       
+        
+        
         if(config.getBoolean(confStr_enablePeacefulBoosts)) {
         	pm.registerEvents(this.peacefullistener, this);
         }
@@ -444,8 +438,13 @@ public class FactionsPlus extends JavaPlugin {
 	}
 	
 	public static void info(String logInfoMsg) {
-//		log.info( FP_TAG_IN_LOGS+logInfoMsg );
+//		log.info( FP_TAG_IN_LOGS+logInfoMsg );//log.info won't handle colors btw
 		tellConsole(ChatColor.GOLD+FP_TAG_IN_LOGS+ChatColor.RESET+logInfoMsg );//they are logged with [INFO] level
+	}
+	
+	public static void warn(String logInfoMsg) {
+//		log.warn( FP_TAG_IN_LOGS+logInfoMsg );
+		tellConsole(ChatColor.GOLD+FP_TAG_IN_LOGS+ChatColor.DARK_RED+"[WARNING]:"+ChatColor.RESET+logInfoMsg );//they are logged with [INFO] level
 	}
 	
 	public static void severe(String logInfoMsg) {

@@ -20,13 +20,16 @@ public class LWCModule extends JavaModule {//to fix
 //	implements Module { this won't yet work, this will cause no methods/events to be registered unless you use JavaModule instead
 	
 	private static final Permission	permForDontPreventLWCLocking	= new Permission( "factionsplus.dontPreventLWCLocking" );
+	private final boolean	blockCPublic;
 	
-	@SuppressWarnings("unused")
-	private LWC lwc;
+	public LWCModule(boolean _blockCPublic) {
+		//caching some config settings...
+		blockCPublic=_blockCPublic;
+	}
 
     @Override
     public void load(LWC lwc1) {
-        this.lwc = lwc1;
+//        this.lwc = lwc1;
     }
 
 	@Override
@@ -61,7 +64,7 @@ public class LWCModule extends JavaModule {//to fix
 
 	@Override
 	public void onProtectionInteract( LWCProtectionInteractEvent event ) {
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_blockCPublicAccessOnNonOwnFactionTerritory)) {
+		if(blockCPublic) {
 			FLocation floc = new FLocation(event.getProtection().getBlock().getLocation());
 			Player p = event.getPlayer();
 			Faction owner = Board.getFactionAt(floc);
@@ -81,7 +84,7 @@ public class LWCModule extends JavaModule {//to fix
 
 	@Override
 	public void onRegisterProtection( LWCProtectionRegisterEvent event ) {
-		//it cannot be already cancelled but oh well
+		//well actually other modules can already have this cancelled
 		if (event.isCancelled()) {
 			return;
 		}

@@ -1,34 +1,61 @@
 package markehme.factionsplus.extras;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.listeners.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.*;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.lwc.LWCPlugin;
 import com.griefcraft.model.*;
 import com.massivecraft.factions.*;
 
-public class LWCFunctions {
-	private static LWC lwc;
-	private static LWCModule lwcMod=new LWCModule();
+public class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
+	
+	private static LWCModule lwcMod=null;
  
-	public static void integrateLWC(LWCPlugin plugin) {
-		lwc = plugin.getLWC();
-//TODO: better way of keeping track of lwc for onDisable
-		lwc.getModuleLoader().registerModule( FactionsPlus.instance, lwcMod);
-	}
-	
-	public static void disableModules() {
-		if (null != lwc) {
-			lwc.getModuleLoader().removeModules(  FactionsPlus.instance );
+	public static void try_integrateLWC() {
+		//when to enable LWC integrated feats
+		boolean isLWCLocksClearOnClaim = FactionsPlus.config.getBoolean( FactionsPlus.confStr_removeLWCLocksOnClaim );
+		boolean isLWCBlockCPublic =
+			FactionsPlus.config.getBoolean( FactionsPlus.confStr_blockCPublicAccessOnNonOwnFactionTerritory );
+		
+		if ( !isLWC() ) {
+			
+			if ( isLWCBlockCPublic || isLWCLocksClearOnClaim ) {
+				FactionsPlus
+					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
+						+ " This means those settings will be ignored & have no effect" );
+			}
+			return;
 		}
+		
+		// there is LWC
+		if ( isLWCLocksClearOnClaim ) {
+			// register after we integrate
+			Bukkit.getPluginManager().registerEvents( new LWCListener(), FactionsPlus.instance );
+		}
+        
+		
+		//we always need this in order to prevent people from locking ie. chests in enemy faction
+		getLWC().getModuleLoader().registerModule( FactionsPlus.instance, lwcMod=new LWCModule(isLWCBlockCPublic));
+		
+		FactionsPlus.info("Hooked into LWC!");
+	}
+	
+	public static void ensure_LWC_Disintegrate() {
+		if (!isLWC()) {
+			return;
+		}
+		
+		getLWC().getModuleLoader().removeModules(  FactionsPlus.instance );
 	}
 	
 	
-	//TODO: maybe also prevent non-faction members from LWC locking stuff in our faction land
+	//done: maybe also prevent non-faction members from LWC locking stuff in our faction land
 	
 	//if this is true it will only detect&remove those in Material marked as TileEntity
 //	private final static boolean useFastWay=false; nvm don't wanna implement both ways
@@ -61,7 +88,7 @@ public class LWCFunctions {
 	 * @return number of protections removed,<br />
 	 *         0 or less means none were found/removed
 	 * @throws Exception
-	 *             if something failed (tipically this won't happen)
+	 *             if something failed (typically this won't happen)
 	 */
 	public static int clearLocks( FLocation facLocation, FPlayer fPlayer ) throws Exception {
 		World world = facLocation.getWorld();
@@ -96,7 +123,7 @@ public class LWCFunctions {
 						// if the chunk contents never get lost somehow then we don't need to cache(in a list) all protected
 						// blocks
 						// so we can thus remove the protection here while parsing every block of the chunk
-						Protection protectedBlock = lwc.findProtection( block );
+						Protection protectedBlock = getLWC().findProtection( block );
 						if ( null != protectedBlock ) {
 							// there is a lock for that block ie. it's a chest
 							FPlayer fpOwner = FPlayers.i.get( protectedBlock.getOwner() );
@@ -159,7 +186,7 @@ public class LWCFunctions {
 					}
 					if ( isProtectionTypeToRemove( type ) ) {
 
-						Protection protectedBlock = lwc.findProtection( block );
+						Protection protectedBlock = getLWC().findProtection( block );
 						if ( null != protectedBlock ) {
 							FPlayer fpOwner = FPlayers.i.get( protectedBlock.getOwner() );
 							if ( !fp.getFaction().getFPlayers().contains( fpOwner ) ) {
