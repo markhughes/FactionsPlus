@@ -196,3 +196,11 @@ to fix: just use the Factions project in Eclipse, without having any Factions .j
 you can switch between branches at will:  in Factions  1.6.x branch  and master (aka 1.7 branch)
 
 ================
+
+Note to devs:
+1. always keep .project file in the repository
+2. never add .settings folder(or files within) or the .classpath file to the repository
+This would ensure that devs working on this won't accidentally overwrite eclipse project stuff on commit and affect each 
+other 
+
+================
