@@ -26,7 +26,7 @@ public class CmdUnJail extends FCommand {
 	public void perform() {
 		String unJailingPlayer = this.argAsString(0);
 		
-		if((FactionsPlus.config.getBoolean("officersCanJail") && Utilities.isOfficer(fme))) {
+		if((FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanJail) && Utilities.isOfficer(fme))) {
 			if(FactionsPlus.permission.playerHas(fme.getPlayer(), "factionsplus.unjail")) {
 				if(FactionsPlusJail.removeFromJail(unJailingPlayer, fme.getFactionId())){
 					fme.sendMessage(unJailingPlayer + " has been removed from jail.");
@@ -37,7 +37,7 @@ public class CmdUnJail extends FCommand {
 			}
 		}
 		
-		if((FactionsPlus.config.getBoolean("leadersCanJail") && Utilities.isLeader(fme))) {
+		if((FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanJail) && Utilities.isLeader(fme))) {
 			if(FactionsPlus.permission.playerHas(fme.getPlayer(), "factionsplus.unjail")) {
 				if(FactionsPlusJail.removeFromJail(unJailingPlayer, fme.getFactionId())){
 					fme.sendMessage(unJailingPlayer + " has been removed from jail.");

@@ -4,9 +4,6 @@ import java.util.*;
 
 import markehme.factionsplus.*;
 
-import org.bukkit.map.*;
-
-
 
 /**
  * maps/links a tuple of two non-null instances<br>

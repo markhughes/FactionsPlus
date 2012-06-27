@@ -1,7 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-import java.lang.reflect.*;
-
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.extras.*;
 
@@ -58,19 +56,19 @@ public class CmdToggleState extends FCommand {
 			
 			boolean authallow = false;
 			
-			if(FactionsPlus.config.getBoolean("leadersCanToggleState")) {
+			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanToggleState)) {
 				if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
 					authallow = true;
 				}
 			}
 			
-			if(FactionsPlus.config.getBoolean("officersCanToggleState")) {
+			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanToggleState)) {
 				if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
 					authallow = true;
 				}
 			}
 
-			if(FactionsPlus.config.getBoolean("membersCanToggleState")) {
+			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanToggleState)) {
 				authallow = true;
 			}
 			
@@ -90,7 +88,7 @@ public class CmdToggleState extends FCommand {
 		
 		if(!factiont.isPeaceful()) {
 			//if faction wasn't already peaceful, then we set it
-			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleUpPeaceful"), "to set faction to peaceful", "for setting faction to peaceful")) {
+			if(payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToToggleUpPeaceful), "to set faction to peaceful", "for setting faction to peaceful")) {
 				
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
@@ -98,7 +96,7 @@ public class CmdToggleState extends FCommand {
 			}
 		} else {
 			//faction was peaceful, we now remove this flag
-			if(payForCommand(FactionsPlus.config.getInt("economy_costToToggleDownPeaceful"), "to remove the peaceful status", "for setting faction to unpeaceful")) {
+			if(payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToToggleDownPeaceful), "to remove the peaceful status", "for setting faction to unpeaceful")) {
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
 				sender.sendMessage("You have removed peaceful status from the Faction!");
 			}

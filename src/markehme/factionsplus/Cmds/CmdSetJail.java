@@ -29,7 +29,7 @@ public class CmdSetJail extends FCommand {
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !FactionsPlus.config.getBoolean("economy_enable") || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
 
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);

@@ -57,12 +57,12 @@ public class CmdAddWarp extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean("membersCanSetWarps")) {
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) { 
 			authallow = true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean("officersCanSetWarps")) {
+			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
 				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean("leadersCanSetWarps")) {
+			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
 				authallow = true;
 			}
 		}
@@ -73,20 +73,20 @@ public class CmdAddWarp extends FCommand {
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(FactionsPlus.config.getBoolean("mustBeInOwnTerritoryToCreate")) {
+			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_mustBeInOwnTerritoryToCreate)) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt("economy_costToCreateWarp") > 0 && !FactionsPlus.config.getBoolean("economy_enable")) {
-			if (!payForCommand(FactionsPlus.config.getInt("economy_costToCreateWarp"), "to create this warp", "for creating this warp")) {
+		if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp) > 0 && !FactionsPlus.config.getBoolean("economy_enable")) {
+			if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt("maxWarps") != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= FactionsPlus.config.getInt("maxWarps")) {
+		if(FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps) != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps)) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}

@@ -5,13 +5,13 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,14 +20,6 @@ import com.griefcraft.lwc.LWCPlugin;
 import com.massivecraft.factions.*;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-
-/*
-	- fixed onEntityDeath
-
-TODO: LIST OF STUFF TO DO
-- made maxWarps configuration option work
-
-*/
 
 public class FactionsPlus extends JavaPlugin {
 
@@ -59,8 +51,100 @@ public class FactionsPlus extends JavaPlugin {
 	public static File fileConfig = new File(folderBase , "config.yml");
 	private static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
 	//and it contains the defaults, so that they are no longer hardcoded in java code
-
-	private static final String	confStr_useLWCIntegrationFix	= "useLWCIntegrationFix";
+	
+	//Begin Config String Pointers
+	public static final String delim=".";
+	
+	public static final String prefJails="jails"+delim;
+	public static final String confStr_enableJails = prefJails+"enableJails";		
+	public static final String confStr_leadersCanSetJails = prefJails+"leadersCanSetJails";
+	public static final String confStr_officersCanSetJails = prefJails+"officersCanSetJails";
+	public static final String confStr_membersCanSetJails = prefJails+"membersCanSetJails";
+	public static final String confStr_leadersCanJail = prefJails+"leadersCanJail";
+	public static final String confStr_officersCanJail = prefJails+"officersCanJail";
+	
+	public static final String prefWarps="warps"+delim;
+	public static final String confStr_enableWarps = prefWarps+"enableWarps";
+	public static final String confStr_leadersCanSetWarps = prefWarps+"leadersCanSetWarps";
+	public static final String confStr_officersCanSetWarps = prefWarps+"officersCanSetWarps";
+	public static final String confStr_membersCanSetWarps = prefWarps+"membersCanSetWarps";
+	public static final String confStr_mustBeInOwnTerritoryToCreate  = prefWarps+"mustBeInOwnTerritoryToCreate";
+	public static final String confStr_maxWarps = prefWarps+"maxWarps";
+	public static final String confStr_warpTeleportAllowedFromEnemyTerritory = prefWarps+"warpTeleportAllowedFromEnemyTerritory";
+	public static final String confStr_warpTeleportAllowedFromDifferentWorld = prefWarps+"warpTeleportAllowedFromDifferentWorld";
+	public static final String confStr_warpTeleportAllowedEnemyDistance = prefWarps+"warpTeleportAllowedEnemyDistance";
+	public static final String confStr_warpTeleportIgnoreEnemiesIfInOwnTerritory = prefWarps+"warpTeleportIgnoreEnemiesIfInOwnTerritory";
+	public static final String confStr_smokeEffectOnWarp = prefWarps+"smokeEffectOnWarp";
+	 
+	public static final String prefBanning="banning"+delim;
+	public static final String confStr_enableBans=prefBanning+"enableBans";
+	public static final String confStr_leadersCanFactionBan=prefBanning+"leadersCanFactionBan";
+	public static final String confStr_officersCanFactionBan=prefBanning+"officersCanFactionBan";
+	public static final String confStr_leadersCanFactionUnban=prefBanning+"leadersCanFactionUnban";
+	public static final String confStr_officersCanFactionUnban=prefBanning+"officersCanFactionUnban";
+	public static final String confStr_leaderCanNotBeBanned=prefBanning+"leaderCanNotBeBanned";
+	
+	public static final String prefRules="rules"+delim;
+	public static final String confStr_enableRules=prefRules+"enableRules";
+	public static final String confStr_leadersCanSetRules=prefRules+"leadersCanSetRules";
+	public static final String confStr_officersCanSetRules=prefRules+"officersCanSetRules";
+	public static final String confStr_maxRulesPerFaction=prefRules+"maxRulesPerFaction";
+	 
+	public static final String prefPeaceful="peaceful"+delim;
+	public static final String confStr_leadersCanToggleState=prefPeaceful+"leadersCanToggleState";
+	public static final String confStr_officersCanToggleState=prefPeaceful+"officersCanToggleState";
+	public static final String confStr_membersCanToggleState=prefPeaceful+"membersCanToggleState";
+	public static final String confStr_enablePeacefulBoosts=prefPeaceful+"enablePeacefulBoosts";
+	public static final String confStr_powerBoostIfPeaceful=prefPeaceful+"powerBoostIfPeaceful";
+	
+	public static final String prefPowerboosts="powerboosts"+delim;
+	public static final String confStr_enablePowerBoosts=prefPowerboosts+"enablePowerBoosts";
+	public static final String confStr_extraPowerWhenKillPlayer=prefPowerboosts+"extraPowerWhenKillPlayer";
+	public static final String confStr_extraPowerLossIfDeathBySuicide=prefPowerboosts+"extraPowerLossIfDeathBySuicide";
+	public static final String confStr_extraPowerLossIfDeathByPVP=prefPowerboosts+"extraPowerLossIfDeathByPVP";
+	public static final String confStr_extraPowerLossIfDeathByMob=prefPowerboosts+"extraPowerLossIfDeathByMob";
+	public static final String confStr_extraPowerLossIfDeathByCactus=prefPowerboosts+"extraPowerLossIfDeathByCactus";
+	public static final String confStr_extraPowerLossIfDeathByTNT=prefPowerboosts+"extraPowerLossIfDeathByTNT";
+	public static final String confStr_extraPowerLossIfDeathByFire=prefPowerboosts+"extraPowerLossIfDeathByFire";
+	public static final String confStr_extraPowerLossIfDeathByPotion=prefPowerboosts+"extraPowerLossIfDeathByPotion";
+	public static final String confStr_extraPowerLossIfDeathByOther=prefPowerboosts+"extraPowerLossIfDeathByOther";
+	
+	public static final String prefAnnounce="announce"+delim;
+	public static final String confStr_enableAnnounce=prefAnnounce+"enableAnnounce";
+	public static final String confStr_leadersCanAnnounce=prefAnnounce+"leadersCanAnnounce";
+	public static final String confStr_officersCanAnnounce=prefAnnounce+"officersCanAnnounce";
+	public static final String confStr_showLastAnnounceOnLogin=prefAnnounce+"showLastAnnounceOnLogin";
+	public static final String confStr_showLastAnnounceOnLandEnter=prefAnnounce+"showLastAnnounceOnLandEnter";
+	
+	public static final String prefEconomy="economy"+delim;
+	public static final String confStr_enableEconomy=prefEconomy+"enableEconomy";
+	public static final String confStr_economyCostToWarp=prefEconomy+"economyCostToWarp";
+	public static final String confStr_economyCostToCreateWarp=prefEconomy+"economyCostToCreateWarp";
+	public static final String confStr_economyCostToDeleteWarp=prefEconomy+"economyCostToDeleteWarp";
+	public static final String confStr_economyCostToAnnounce=prefEconomy+"economyCostToAnnounce";
+	public static final String confStr_economyCostToJail=prefEconomy+"economyCostToJail";
+	public static final String confStr_economyCostToSetJail=prefEconomy+"economyCostToSetJail";
+	public static final String confStr_economyCostToUnJail=prefEconomy+"economyCostToUnJail";
+	public static final String confStr_economyCostToToggleUpPeaceful=prefEconomy+"economyCostToToggleUpPeaceful";
+	public static final String confStr_economyCostToToggleDownPeaceful=prefEconomy+"economyCostToToggleDownPeaceful";
+	
+	public static final String prefHomesIntegration="homesintegration"+delim;
+	public static final String confStr_disallowTeleportingToEnemyLandViaHomeCommand= prefHomesIntegration+"disallowTeleportingToEnemyLandViaHomeCommand";
+	public static final String confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefHomesIntegration+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	 
+	public static final String prefExtras="extras"+delim;
+	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
+	 
+ 	public static final String prefExtrasLwc=prefExtras+"lwc"+delim;
+	public static final String confStr_useLWCIntegrationFix=prefExtrasLwc+"useLWCIntegrationFix";
+	  
+	public static final String prefExtrasMD=prefExtras+"disguise"+delim;
+	public static final String confStr_enableDisguiseIntegration=prefExtrasMD+"enableDisguiseIntegration";
+	public static final String confStr_unDisguiseIfInOwnTerritory=prefExtrasMD+"unDisguiseIfInOwnTerritory";
+	public static final String confStr_unDisguiseIfInEnemyTerritory=prefExtrasMD+"unDisguiseIfInEnemyTerritory";
+	
+	public static final String confStr_DoNotChangeMe="DoNotChangeMe";
+	//End Config String Pointer
 
 	
 	public static FileConfiguration config;
@@ -72,11 +156,18 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isWorldGuardEnabled = false;
 	public static boolean isLWCEnabled = false;
 	
-	public final FactionsPlusListener FPListener = new FactionsPlusListener();
+	public final AnnounceListener announcelistener = new AnnounceListener();
+	public final BanListener banlistener = new BanListener();
+	public final CoreListener corelistener = new CoreListener();
+	public final DisguiseListener disguiselistener = new DisguiseListener();
+	public final JailListener jaillistener = new JailListener();
+	public final LWCListener lwclistener = new LWCListener();
+	public final PeacefulListener peacefullistener = new PeacefulListener();
+	public final PowerboostListener powerboostlistener = new PowerboostListener();
 	
-	public final DCListener DCListener = new DCListener();
-	public final MDListener MDListener = new MDListener();
-	public final LWCListener LWCListener = new LWCListener();
+	public final DCListener dclistener = new DCListener();
+	public final MDListener mdlistener = new MDListener();
+	
 
 	public static WorldEditPlugin worldEditPlugin = null;
 	public static WorldGuardPlugin worldGuardPlugin = null;
@@ -86,6 +177,7 @@ public class FactionsPlus extends JavaPlugin {
 	public static boolean isOnePointSix;
 	
 	private static Metrics metrics=null;
+
 	
 	public FactionsPlus() {//constructor
 		instance=this;
@@ -93,7 +185,6 @@ public class FactionsPlus extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		//hmm looks like events are deregistered anyway onDisable ie. by bailOut()
 		if (null != metrics) {
 			try {
 				metrics.disable();
@@ -117,7 +208,7 @@ public class FactionsPlus extends JavaPlugin {
 	    
 		PluginManager pm = this.getServer().getPluginManager();
 		
-		pm.registerEvents(this.FPListener, this);
+		pm.registerEvents(this.corelistener, this);
 		
 		FactionsPlusJail.server = getServer();
 		
@@ -164,59 +255,79 @@ public class FactionsPlus extends JavaPlugin {
         }
         
         
-        if(config.getBoolean("economy_enable")) {
+        if(config.getBoolean(confStr_enableEconomy)) {
         	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         	
         	if (economyProvider != null) {
             	economy = economyProvider.getProvider();
         	}
         }
-        
-        if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
-        	pm.registerEvents(this.DCListener, this);
-        	info("Hooked into DisguiseCraft!");
-        	isDisguiseCraftEnabled = true;
+        if(config.getBoolean(confStr_enableAnnounce)) {
+    		pm.registerEvents(this.announcelistener, this);
+        }
+        if(config.getBoolean(confStr_enableBans)) {
+        	pm.registerEvents(this.banlistener, this);
+        }
+        if(config.getBoolean(confStr_enableJails)) {
+        	pm.registerEvents(this.jaillistener, this);
+        }
+        if(config.getBoolean(confStr_enableDisguiseIntegration) && (config.getBoolean(confStr_unDisguiseIfInOwnTerritory) || config.getBoolean(confStr_unDisguiseIfInEnemyTerritory))) {
+        	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
+        		pm.registerEvents(this.dclistener, this);
+        		info("Hooked into DisguiseCraft!");
+        		isDisguiseCraftEnabled = true;
+        		pm.registerEvents(this.disguiselistener, this);
+        	}
+        	if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
+        		pm.registerEvents(this.mdlistener, this);
+        		info("Hooked into MobDisguise!");
+        		isMobDisguiseEnabled = true;
+        		pm.registerEvents(this.disguiselistener, this);
+        	}
+        	else {
+        		info("MobDisguise or DisguiseCraft enabled, but no plugin found!");
+        	}
+        }
+        if(1<2) {        //Temporary Always True Until a Config Option is Created 
+        	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
+        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+        		info("Hooked into WorldEdit!");
+        		isWorldEditEnabled = true;
+        	}
+            if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+            	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
+            	info("Hooked into WorldGuard!");
+            	isWorldGuardEnabled = true;
+            }
         }
         
-        if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
-        	pm.registerEvents(this.MDListener, this);
-        	info("Hooked into MobDisguise!");
-        	isMobDisguiseEnabled = true;
-        }
-        
-        if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
-        	worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-        	info("Hooked into WorldEdit!");
-        	isWorldEditEnabled = true;
-        }
-        
-        if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-        	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-        	info("Hooked into WorldGuard!");
-        	isWorldGuardEnabled = true;
-        }
-        
-        boolean useLWCIntegrationFix=config.getBoolean(confStr_useLWCIntegrationFix);
+
         if ((Conf.lwcIntegration)&&(Conf.onCaptureResetLwcLocks)) {
         	//if Faction plugin has setting to reset locks (which only resets for chests)
         	//then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-        	if (!useLWCIntegrationFix) {
+        	if (!config.getBoolean(confStr_useLWCIntegrationFix)) {
         		//TODO: maybe someone can modify this message so that it would make sense to the console reader
         		info("Consider setting "+confStr_useLWCIntegrationFix+" to reset locks for more than just the chests");
         		//this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
         	}
         }
-        if( useLWCIntegrationFix ) {
+        if(config.getBoolean(confStr_useLWCIntegrationFix)) {
             if(getServer().getPluginManager().isPluginEnabled("LWC")) {
             	LWCFunctions.integrateLWC((LWCPlugin)getServer().getPluginManager().getPlugin("LWC"));
             	//register after we integrate
-            	pm.registerEvents(this.LWCListener, this);
+            	pm.registerEvents(this.lwclistener, this);
             	info("Hooked into LWC!");
             	isLWCEnabled = true;
             }
             else {
             	info("No LWC Found but Integration Option Is Enabled!");
             }
+        }
+        if(config.getBoolean(confStr_enablePeacefulBoosts)) {
+        	pm.registerEvents(this.peacefullistener, this);
+        }
+        if(config.getBoolean(confStr_enablePowerBoosts)) {
+        	pm.registerEvents(this.powerboostlistener, this);
         }
 
         

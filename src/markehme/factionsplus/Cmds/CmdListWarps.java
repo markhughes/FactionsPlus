@@ -105,7 +105,7 @@ public class CmdListWarps extends FCommand  {
 	    } catch (Exception e) {
 	    	FactionsPlus.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 	    	
-	        sender.sendMessage(ChatColor.RED + "An internetal error occured (03)");
+	        sender.sendMessage(ChatColor.RED + "An internal error occured (03)");
 	        
 	        e.printStackTrace();
 	    }
