@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.*;
+import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
@@ -382,7 +383,10 @@ public class FactionsPlus extends JavaPlugin {
 				//even though this config exists, some defaults might be new so we still need to write the config out later with saveConfig();
 				YamlConfiguration realConfig = YamlConfiguration.loadConfiguration( fileConfig );
 				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
-					config.set( entry.getKey(), entry.getValue() );// overwrites existing defaults already in config
+					Object val = entry.getValue();
+					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
+						config.set( entry.getKey(),val );// overwrites existing defaults already in config
+					}
 				}
 			} catch ( Exception e ) {
 				e.printStackTrace();
