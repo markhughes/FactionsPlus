@@ -31,8 +31,9 @@ support chat modes)
     therefore, best workaround for this(can only be done by server owners) would be to stop essentials from having a
     warmup on teleport (ie. set to 0) and instead use the boosCooldown plugin for the warmups for commands;
     however, boosCooldown will still charge you money if the tp will be denied by us
-  -todo: actually detect if essentials tp warmup is >0 and suggest on console to disable it and use boosCooldown instead
+  -failedto: actually detect if essentials tp warmup is >0 and suggest on console to disable it and use boosCooldown instead
          to avoid bypassing /home checks to teleport into enemy land
+  -actually just deny any teleports done via Cause.COMMAND and only allow those whitelisted to succeed - seems like a good compromise ...
   
   
 - prevent non-faction members from LWC locking stuff in our faction land
@@ -44,7 +45,5 @@ support chat modes)
   -definitely warn if some unused options are found in the config, so that admin doesn't try to set those and expect effects
 
 
-- fix deny LWC locks to actually hook in, by creating LWC module (can't otherwise) currently doesn't hook in ie:
-  [SEVERE] Wrong method arguments used for event type registered
 
-- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseed due to using both Factions .jar in classpath instead of Factions project ;)
+- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseen due to using both Factions .jar in classpath instead of Factions project ;)
