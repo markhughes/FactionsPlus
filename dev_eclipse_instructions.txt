@@ -191,6 +191,14 @@ If you do want to modify the settings and keep them but only for you, then you c
 and this way, next time you will only have to double click your personalized file "fpexport_personalized.jardesc" when
 you want to export, and everytime you change something inside it now it will be auto saved
 
+Should you want to modify the fpexport_release_template.jardesc file to reflect changes for all the devs, then
+run it once and set all the new settings and don't forget to enable the "Save the description of this JAR in the workspace"
+but again do not change the output jardesc filename(then do Finish), this will export it to "fpexport_personalized.jardesc"
+which you now have to edit it and make sure that:
+saveDescription="false" 
+inside the file(it's normally on true, and we don't want that - for obvious reasons)
+ and then rename it and overwrite to fpexport_release_template.jardesc
+and this is now detected and can be committed to the repository
 
 ================
 
