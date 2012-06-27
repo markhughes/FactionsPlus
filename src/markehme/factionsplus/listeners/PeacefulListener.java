@@ -14,9 +14,10 @@ public class PeacefulListener implements Listener{
 		if(event.isCancelled()) {
 			return;
 		}
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_powerBoostIfPeaceful) > 0) {
+		int boostValue = FactionsPlus.config.getInt(FactionsPlus.confStr_powerBoostIfPeaceful) ;
+		if(boostValue> 0) {
 			if(event.getFaction().isPeaceful()) { // TODO: Prepare for 1.7.x and the removal of isPeaceful()
-				Utilities.addPower(event.getFPlayer(), FactionsPlus.config.getInt("confStr_powerBoostIfPeaceful"));
+				Utilities.addPower(event.getFPlayer(),boostValue);
 			}
 		}
 	}
