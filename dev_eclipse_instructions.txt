@@ -13,9 +13,9 @@ Next, Next
 Choose a location in your eclipse workspace under a folder named "FactionsPlus"
 ie. Directory: C:\eclipse.workspace\FactionsPlus
 or wherever else you want to store the git part
-copy this path to clipboard ie. Ctlr+A then Ctrl+C
-click Next,
-now open explorer or Winkey+E
+copy this path to clipboard ie. Ctrl+D Ctlr+A then Ctrl+C
+click Next, after the cloning is done (requires internet connection *doh* ) then
+open explorer or Winkey+E
 select the address/location  or Alt+D
 paste the previously copied path ie. Ctrl+V
 press Enter to go into that folder, 
@@ -37,18 +37,26 @@ then click Reset button and answer Yes to lose local changes (assuming you
 didn't edit files yourself yet - workdir would be already changed because of the
 rename you did)
 
-you may close explorer,
+you may close explorer, ie. Ctrl+W
 then go back to the Cloning window in eclipse
 Select Import existing projects
 Next,
 Finish
 
+You now have the project but it likely has a red "!" on it, because of missing required .jar files
+and the Factions project (which should be in your workspace), read below
 ======================================
 
 In order to be able to compile this without errors in Eclipse, here's what you need:
 
 ------
 A. jars needed (put them in the "lib" folder in the FactionsPlus project)
+note: if "lib" doesn't exist just create it:
+File->New->Folder
+select FactionsPlus
+type: lib
+in the Folder name:
+Finish
 
 1. bukkit.jar
     get one from here:
@@ -89,10 +97,11 @@ A. jars needed (put them in the "lib" folder in the FactionsPlus project)
    http://dev.bukkit.org/server-mods/lwc/files/
    LWC 4.2.0 tested
    
-8. At this point if you don't care about correctly following the sourcecode (ie. F3) you can get one of the Factions jar
-instead of the Factions project, so choose one (using both will fail with correct sourcecode following ie. you end up at 
-wrong lines in code upon F3 -ing in some Factions method)
-choose one:
+8. At this point if you don't care about correctly following the sourcecode (ie. F3) you can get one of the 
+Factions.jar files
+instead of the Factions project, so choose one variant to follow below(using both will fail with correct sourcecode following 
+ie. you end up at wrong lines in code upon F3 -ing in some Factions method)
+choose one: (B. recommended)
     A) Factions.jar
         get any of 1.6 or 1.7 versions:
         http://dev.bukkit.org/server-mods/factions/files/
@@ -113,6 +122,8 @@ choose one:
         
 Note: F3 key in Eclipse does: Open Declaration  (of the text that's under the cursor ie. a method name)
       
+After you put all the files in the lib folder don't forget to F5 aka refresh, in
+eclipse on the project or the lib folder, else eclipse won't see them.
 If you have all these, the FactionsPlus project should compile without errors.
 ======================================
 
