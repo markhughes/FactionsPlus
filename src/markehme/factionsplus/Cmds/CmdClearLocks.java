@@ -19,7 +19,6 @@ public class CmdClearLocks extends FCommand {
 		
 		senderMustBePlayer = true;
 		senderMustBeMember = false;
-		senderMustBeModerator = false;
 		senderMustBeAdmin = true;
 		
 		this.setHelpShort("Clears all LWC protections not owned by a faction member of the user's faction");
