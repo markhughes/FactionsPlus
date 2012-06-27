@@ -129,6 +129,7 @@ If you have all these, the FactionsPlus project should compile without errors.
 
 
 To actually export the .jar file  which would be named FactionsPlus.jar
+This is the manual(unrecommended) cumbersome method:
 ------
 Legend:
 [ ] means deselected
@@ -172,6 +173,24 @@ Next,
 leave empty at Main class:
 Finish
 --------------
+
+This is how to export the .jar the "right" way:
+double click the "fpexport_release_template.jardesc"  file from within Eclipse
+you shouldn't have to modify anything there, all the settings are right and if you just click Finish
+it would create Factions.jar file inside the built.jar (folder which resides in the project)
+
+If you wanna go advanced, you can have build.jar folder symlink to the right folder you want the .jar to be exported into
+ie. go into shell and into the FactionsPlus folder then:
+    make sure built.jar folder doesn't exist (ie. rmdir built.jar)
+    mklink /d built.jar c:\craftbukkitserver\plugins\
+    and every time you export now, the FactionsPlus.jar will be auto placed in the plugins of your running test server
+    (this tested on Windows 7, on *nix would be similar, but on windows you likely need to have NTFS file system which you normally would anyway)
+
+If you do want to modify the settings and keep them but only for you, then you can, go Next and tick the
+"Save the description of this JAR in the workspace" but do not change the file name for it (because it's in .gitignore )
+and this way, next time you will only have to double click your personalized file "fpexport_personalized.jardesc" when
+you want to export, and everytime you change something inside it now it will be auto saved
+
 
 ================
 
@@ -223,3 +242,4 @@ field doesn't exist in 1.7 (it's actually renamed).
  So this can go unnoticed and only actually fail on bukkit if they are using the 1.7 version of Factions
  
 ================
+
