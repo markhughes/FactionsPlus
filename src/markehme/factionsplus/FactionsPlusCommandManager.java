@@ -60,11 +60,12 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdFactionHome());
 		
 		P.p.cmdBase.cmdMoney.addSubCommand(new CmdMoneyTop());//FIXME: add this too on 1.6 help
-		
 		addSC(new CmdDebug());
 		
 		//LWC Officer/Faction Owner clear chunk of non-member claims command
-		addSC(new CmdClearLocks());
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_useLWCIntegrationFix)) {
+			addSC(new CmdClearLocks());
+		}
 		
 		
 		Bridge.factions.finalizeHelp(); 
