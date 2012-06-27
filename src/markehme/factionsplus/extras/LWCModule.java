@@ -21,6 +21,7 @@ public class LWCModule extends JavaModule {//to fix
 	
 	private static final Permission	permForDontPreventLWCLocking	= new Permission( "factionsplus.dontPreventLWCLocking" );
 	
+	@SuppressWarnings("unused")
 	private LWC lwc;
 
     @Override
@@ -60,7 +61,17 @@ public class LWCModule extends JavaModule {//to fix
 
 	@Override
 	public void onProtectionInteract( LWCProtectionInteractEvent event ) {
-		//do nothing
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_blockCPublicAccessOnNonOwnFactionTerritory)) {
+			FLocation floc = new FLocation(event.getProtection().getBlock().getLocation());
+			Player p = event.getPlayer();
+			Faction owner = Board.getFactionAt(floc);
+			FPlayer fp = FPlayers.i.get(p);
+			if(fp.getFaction() != owner) {
+				event.setResult(CANCEL);
+				return;
+			}
+		}
+
 	}
 
 	@Override
