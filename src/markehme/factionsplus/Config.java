@@ -9,6 +9,8 @@ import markehme.factionsplus.extras.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.*;
+import org.yaml.snakeyaml.*;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 
 
 public abstract class Config {//not named Conf so to avoid conflicts with com.massivecraft.factions.Conf
@@ -318,6 +320,27 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 	public final static void reloadConfig() {
+		1
+		YamlConfiguration c = new YamlConfiguration();//.loadFromString("");
+		String key1 = "Test";
+		String key2 = "test";
+		c.set( "test",Boolean.TRUE);
+		assert null == c.get(key1);
+		assert !c.contains( key1 );
+		assert null != c.get(key2);
+		assert c.contains( key2 );
+		c.set(key1,Boolean.FALSE);
+		assert null != c.get(key1);
+		assert c.contains( key1 );
+		assert null != c.get( key2 );
+		assert c.contains( key2 );
+		for (   Map.Entry<String,Object> element : c.getValues( true ).entrySet() ) {
+//			System.out.println(element);
+			FactionsPlus.info( element.getKey()+" + "+element.getValue() );
+		};
+		
+		FactionsPlus.bailOut( "");//FIXME: temporary all from above
+		
 		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
 		InputStream defConfigStream = FactionsPlus.instance.getResource( Config.fileConfigDefaults );// this is the one inside the .jar
 		if ( defConfigStream != null ) {
@@ -346,7 +369,10 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //								Config.config.get
 								if (!str_economyCostToAnnounce.equals(key)) {
 									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
+//									DumperOptions options = new DumperOptions();
+//									options.setDefaultFlowStyle( FlowStyle.BLOCK1 )
 									throw FactionsPlus.bailOut( "");
+
 								}
 							}
 						}else {
