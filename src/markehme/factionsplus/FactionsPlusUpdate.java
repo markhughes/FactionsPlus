@@ -14,7 +14,7 @@ public class FactionsPlusUpdate {
 			return;
 		}
 		
-		FactionsPlus.info("Checking for updates ... ");
+		FactionsPlusPlugin.info("Checking for updates ... ");
 		
 		Scanner scanner=null;
 		try {
@@ -24,7 +24,7 @@ public class FactionsPlusUpdate {
 			content = scanner.next();
 		} catch ( Exception ex ) {
 		    ex.printStackTrace();
-		    FactionsPlus.info("Failed to check for updates.");
+		    FactionsPlusPlugin.info("Failed to check for updates.");
 		    return;
 		}finally{
 			if (null != scanner) {
@@ -51,7 +51,7 @@ public class FactionsPlusUpdate {
 					FactionsPlus.log.warning("http://dev.bukkit.org/server-mods/factionsplus/");
 					FactionsPlus.log.warning("! -=====================================- !");
 				} else {
-					FactionsPlus.info("Up to date!");
+					FactionsPlusPlugin.info("Up to date!");
 				}
 			} else {
 				// Version lengths different, unable to advance compare
@@ -62,7 +62,7 @@ public class FactionsPlusUpdate {
 				FactionsPlus.log.warning("! -=====================================- !");
 			}
 		} else {
-			FactionsPlus.info("Up to date!");
+			FactionsPlusPlugin.info("Up to date!");
 		}
 	}
 }

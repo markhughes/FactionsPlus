@@ -236,10 +236,12 @@ you can switch between branches at will:  in Factions  1.6.x branch  and master 
 ================
 
 Note to devs:
+---====----
 1. always keep .project file in the repository
 2. never add .settings folder(or files within) or the .classpath file to the repository
 This would ensure that devs working on this won't accidentally overwrite eclipse project stuff on commit and affect each 
 other 
+
 ------
 To make sure we don't get errors due to Factions 1.6 vs 1.7
 when you're ready to make the FactionsPlus.jar , first switch between 1.6 and 1.7 (jars or branches of the Factions proj)
@@ -248,6 +250,39 @@ to check if FactionsPlus doesn't give errors on compile
 1.6.x branch of Factions project, the FactionsPlus will compile just fine, but when you switch to 1.7 it will error, that
 field doesn't exist in 1.7 (it's actually renamed).
  So this can go unnoticed and only actually fail on bukkit if they are using the 1.7 version of Factions
+
+------
+Always compile the project with java 6 not 7, because some bukkit users will run bukkit under jre6 and they'll fail to
+load our plugin if it was compiled under java 7 with 'major/minor version' errors.
+
+------
+Avoid using the new File(parent, child); constructor but instead use one of:
+1. new File(parentStr + File.separator + childString)
+or
+2. new File(parentFile + childFile);
+or
+3. just make sure parent is never empty if you still wanna use this: new File(parent, child);
+
+Reason: (the following could happen behind your back)
+ currentFolder=new File("");// S:\mcp62\eclipse\xcdds
+ File fileInCurrent_not = new File(currentFolder, "file");// S:\file
+ File fileInCurrent = new File("file");// S:\mcp62\eclipse\xcdds\file
+ System.out.println(currentFolder.getAbsolutePath());
+ System.out.println(fileInCurrent_not.getAbsolutePath());
+ System.out.println(fileInCurrent.getAbsolutePath());
  
+This will only happen when currentFolder.getPath() == "", if it's any non-empty string, it will work as expected,
+simply said:
+the new File(parent, child); [when parent.getPath().isEmpty() or parent.isEmpty() depending on parent type] 
+will always resolve to root folder instead of current folder
+when non-empty, should work as expected
+parent is basically the path btw
+Note: to accurately get currentFolder new File("."); is supposed to be used! which then does step 3.
+
+-----
+
+-----
+
+//end of: `Note to devs`
 ================
 

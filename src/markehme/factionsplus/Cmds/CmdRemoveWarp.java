@@ -73,8 +73,8 @@ public class CmdRemoveWarp extends FCommand {
 			boolean found = false;
 			
 			// Get out working files
-			File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
-			File currentWarpFileTMP = new File(FactionsPlus.folderWarps,  currentFaction.getId() + ".tmp");
+			File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
+			File currentWarpFileTMP = new File(Config.folderWarps,  currentFaction.getId() + ".tmp");
 			
 			// Scan through the warp file for the correct 
 			Scanner scanner = new Scanner(new FileReader(currentWarpFile));
@@ -129,7 +129,7 @@ public class CmdRemoveWarp extends FCommand {
 		    }
 		    
 		} catch (Exception e) {
-			FactionsPlus.info("Unexpected error " + e.getMessage());
+			FactionsPlusPlugin.info("Unexpected error " + e.getMessage());
 			e.printStackTrace();
 		    return;
 		}

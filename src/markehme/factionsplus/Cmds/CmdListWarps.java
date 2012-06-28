@@ -3,7 +3,7 @@ package markehme.factionsplus.Cmds;
 import java.io.*;
 import java.util.Scanner;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 
@@ -47,7 +47,7 @@ public class CmdListWarps extends FCommand  {
 			return;
 			
 		}
-		File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
+		File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
 		
 	    if (!currentWarpFile.exists()) {
 	    	sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
@@ -56,7 +56,7 @@ public class CmdListWarps extends FCommand  {
 	    
 	    FileInputStream fis=null;
 	    try {
-	    	fis = new FileInputStream(new File(FactionsPlus.folderWarps, currentFaction.getId()));
+	    	fis = new FileInputStream(new File(Config.folderWarps, currentFaction.getId()));
 	    	int b = fis.read();
 	    	
 	    	if (b == -1) {
@@ -103,7 +103,7 @@ public class CmdListWarps extends FCommand  {
 	        sender.sendMessage(buffer);
 	        scanner.close();
 	    } catch (Exception e) {
-	    	FactionsPlus.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
+	    	FactionsPlusPlugin.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 	    	
 	        sender.sendMessage(ChatColor.RED + "An internal error occured (03)");
 	        

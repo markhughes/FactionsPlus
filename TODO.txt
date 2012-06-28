@@ -55,4 +55,7 @@ support chat modes)
 - investigate how to hold and retrieve a list of strings in yaml config
 
 
-- stumped as to why blockCPublicAccessOnNonOwnFactionTerritory is not added from defaults into the existing file
+//fixed- stumped as to why blockCPublicAccessOnNonOwnFactionTerritory is not added from defaults into the existing file
+
+- update .settings.eclipse and .classpath etc.
+

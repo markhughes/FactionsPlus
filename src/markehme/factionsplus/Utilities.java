@@ -60,7 +60,7 @@ public class Utilities {
 
 	public static boolean isJailed(Player thePlayer) {
 		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
-		File jailDataFile = new File(FactionsPlus.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
+		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
@@ -130,7 +130,7 @@ public class Utilities {
 	}
 
 	public static int getCountOfWarps(Faction faction) {
-		File currentWarpFile = new File(FactionsPlus.folderWarps, faction.getId());
+		File currentWarpFile = new File(Config.folderWarps, faction.getId());
 
 		int c = 0;
 		if (currentWarpFile.exists()) {	

@@ -23,7 +23,7 @@ import com.massivecraft.factions.*;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
-public class FactionsPlus extends JavaPlugin {
+public class FactionsPlus extends FactionsPlusPlugin {
 
 	public static FactionsPlus instance;
 	
@@ -37,19 +37,7 @@ public class FactionsPlus extends JavaPlugin {
     public static Economy economy = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
-    //could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
-	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );//just never be "" cause that means root folder
-	public static final File	folderWarps	= new File( folderBase, "warps" );
-	public static final File	folderJails	= new File( folderBase, "jails" );
-	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
-	public static final File	folderFRules	= new File( folderBase, "frules" );
-	public static final File	folderFBans	= new File( folderBase, "fbans" );
-	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
-	
-    public static File templatesFile = new File(folderBase , "templates.yml");
-	public static FileConfiguration templates;
-
-	public static boolean isMobDisguiseEnabled = false;
+    public static boolean isMobDisguiseEnabled = false;
 	public static boolean isDisguiseCraftEnabled = false;
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
@@ -77,6 +65,7 @@ public class FactionsPlus extends JavaPlugin {
 
 	
 	public FactionsPlus() {//constructor
+		super();
 		instance=this;
 	}
 	
@@ -96,13 +85,13 @@ public class FactionsPlus extends JavaPlugin {
 		}
 		LWCFunctions.ensure_LWC_Disintegrate();
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
-		info("Disabled.");
+		FactionsPlusPlugin.info("Disabled.");
 	}
 	
 	
 	@Override
-	public void onEnable() {
-		Config.reload();
+	public void onEnable() { super.onEnable();//be first
+		Config.reload();//be as soon as possible
 	    
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -117,32 +106,32 @@ public class FactionsPlus extends JavaPlugin {
 		} else {
 			isOnePointSix = false;
 		}
-		info("Factions version " + FactionsVersion + " - " + isOnePointSix);
+		FactionsPlusPlugin.info("Factions version " + FactionsVersion + " - " + isOnePointSix);
 		
 		
 		try {
-			addDir(folderBase).addDir( folderWarps ).addDir( folderJails ).addDir( folderAnnouncements );
-			addDir(folderFRules).addDir( folderFBans );
+			addDir(Config.folderBase).addDir( Config.folderWarps ).addDir( Config.folderJails ).addDir( Config.folderAnnouncements );
+			addDir(Config.folderFRules).addDir( Config.folderFBans );
 			
-			if(!fileDisableInWarzone.exists()) {
-				fileDisableInWarzone.createNewFile();
-				info("Created file: "+fileDisableInWarzone);
+			if(!Config.fileDisableInWarzone.exists()) {
+				Config.fileDisableInWarzone.createNewFile();
+				FactionsPlusPlugin.info("Created file: "+Config.fileDisableInWarzone);
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw bailOut("something failed when ensuring the folders exist");
+			throw FactionsPlusPlugin.bailOut("something failed when ensuring the folders exist");
 		}
 		
 		Config.config = getConfig();//load config
 		
-		if (!templatesFile.exists()) {
+		if (!Config.templatesFile.exists()) {
 			
 			FactionsPlusTemplates.createTemplatesFile();
 		    
 		} 
 		
-		templates = YamlConfiguration.loadConfiguration(templatesFile);	
+		Config.templates = YamlConfiguration.loadConfiguration(Config.templatesFile);	
 		
 		FactionsPlusCommandManager.setup();
 		TeleportsListener.init(this);
@@ -172,29 +161,29 @@ public class FactionsPlus extends JavaPlugin {
         if(Config.config.getBoolean(Config.confStr_enableDisguiseIntegration) && (Config.config.getBoolean(Config.confStr_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(Config.confStr_unDisguiseIfInEnemyTerritory))) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
-        		info("Hooked into DisguiseCraft!");
+        		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
         		isDisguiseCraftEnabled = true;
         		pm.registerEvents(this.disguiselistener, this);
         	}
         	if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
         		pm.registerEvents(this.mdlistener, this);
-        		info("Hooked into MobDisguise!");
+        		FactionsPlusPlugin.info("Hooked into MobDisguise!");
         		isMobDisguiseEnabled = true;
         		pm.registerEvents(this.disguiselistener, this);
         	}
         	else {
-        		info("MobDisguise or DisguiseCraft enabled, but no plugin found!");
+        		FactionsPlusPlugin.info("MobDisguise or DisguiseCraft enabled, but no plugin found!");
         	}
         }
         if(1<2) {        //Temporary Always True Until a Config Option is Created 
         	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
         		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-        		info("Hooked into WorldEdit!");
+        		FactionsPlusPlugin.info("Hooked into WorldEdit!");
         		isWorldEditEnabled = true;
         	}
             if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
             	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-            	info("Hooked into WorldGuard!");
+            	FactionsPlusPlugin.info("Hooked into WorldGuard!");
             	isWorldGuardEnabled = true;
             }
         }
@@ -209,7 +198,7 @@ public class FactionsPlus extends JavaPlugin {
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
 				if ( !Config.config.getBoolean( Config.confStr_removeLWCLocksOnClaim ) ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					info( "Consider setting " + Config.confStr_removeLWCLocksOnClaim
+					FactionsPlusPlugin.info( "Consider setting " + Config.confStr_removeLWCLocksOnClaim
 						+ " to reset locks for more than just the chests" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
 				}
@@ -233,7 +222,7 @@ public class FactionsPlus extends JavaPlugin {
         
         FactionsPlusUpdate.checkUpdates();
         
-		info("Ready.");
+		FactionsPlusPlugin.info("Ready.");
 		
 		try {
 			if (null == metrics) {
@@ -246,7 +235,7 @@ public class FactionsPlus extends JavaPlugin {
 			}
 		    
 		} catch (IOException e) {
-		    info("Waah! Couldn't metrics-up! :'(");
+		    FactionsPlusPlugin.info("Waah! Couldn't metrics-up! :'(");
 		}
 		
 	}
@@ -257,7 +246,7 @@ public class FactionsPlus extends JavaPlugin {
 			reloadConfig();
 		}
 		if (null == Config.config) {
-			throw bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
+			throw FactionsPlusPlugin.bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
 		}
 		return Config.config;
 	}
@@ -269,13 +258,13 @@ public class FactionsPlus extends JavaPlugin {
 		if ( defConfigStream != null ) {
 			Config.config = YamlConfiguration.loadConfiguration( defConfigStream );
 		} else {
-			throw bailOut( "There is no '"+Config.fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
+			throw FactionsPlusPlugin.bailOut( "There is no '"+Config.fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
 				+ "which means that the plugin author forgot to include it" );
 		}
 		
 		if ( Config.fileConfig.exists() ) {
 			if (!Config.fileConfig.isFile()) {
-				throw bailOut( "While '"+Config.fileConfig.getAbsolutePath()+"' exists, it is not a file!");
+				throw FactionsPlusPlugin.bailOut( "While '"+Config.fileConfig.getAbsolutePath()+"' exists, it is not a file!");
 			}
 			// config file exists? we add the settings on top, overwriting the defaults
 			try {
@@ -289,10 +278,10 @@ public class FactionsPlus extends JavaPlugin {
 				}
 			} catch ( Exception e ) {
 				e.printStackTrace();
-				throw bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
+				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
 			}
 		}else {
-			info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
+			FactionsPlusPlugin.info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
 		}
 		
 		saveConfig();
@@ -304,7 +293,7 @@ public class FactionsPlus extends JavaPlugin {
 			getConfig().save( Config.fileConfig );
 		} catch ( IOException e ) {
 			e.printStackTrace();
-			throw bailOut("could not save config file: "+Config.fileConfig.getAbsolutePath());
+			throw FactionsPlusPlugin.bailOut("could not save config file: "+Config.fileConfig.getAbsolutePath());
 		}
 	}
 	
@@ -312,65 +301,12 @@ public class FactionsPlus extends JavaPlugin {
 	
 	private FactionsPlus addDir(File dir) {
 		if(!dir.exists()) {
-			info("Added directory: "+dir);
+			if (dir.getPath().isEmpty()) {
+				throw FactionsPlusPlugin.bailOut( "bad coding, this should usually not trigger here, but earlier" );
+			}
+			FactionsPlusPlugin.info("Added directory: "+dir);
 			dir.mkdirs();
 		}
 		return this;
-	}
-	
-	public static void info(String logInfoMsg) {
-//		log.info( FP_TAG_IN_LOGS+logInfoMsg );//log.info won't handle colors btw
-		tellConsole(ChatColor.GOLD+FP_TAG_IN_LOGS+ChatColor.RESET+logInfoMsg );//they are logged with [INFO] level
-	}
-	
-	public static void warn(String logInfoMsg) {
-//		log.warn( FP_TAG_IN_LOGS+logInfoMsg );
-		tellConsole(ChatColor.GOLD+FP_TAG_IN_LOGS+ChatColor.DARK_RED+"[WARNING]:"+ChatColor.RESET+logInfoMsg );//they are logged with [INFO] level
-	}
-	
-	public static void severe(String logInfoMsg) {
-		log.severe( FP_TAG_IN_LOGS+logInfoMsg );//allowed so that [SEVERE] appears
-		tellConsole(ChatColor.RED+FP_TAG_IN_LOGS+ChatColor.DARK_PURPLE+logInfoMsg);
-	}
-	
-	/**
-	 * allows the use of ChatColor in messages but they will be prefixed by [INFO]
-	 * @param msg
-	 */
-	public static void tellConsole(String msg) {
-		//nvm; find another way to display colored msgs in console without having [INFO] prefix
-		//there's no other way it's done via ColouredConsoleSender of craftbukkit
-		//there are only two ways: colors+[INFO] prefix, or no colors + whichever prefix
-		Bukkit.getConsoleSender().sendMessage( msg);//this will log with [INFO] level
-	}
-	
-	/**
-	 * calling this will not stop execution at the point where the call is made, but will mark the plugin as disabled<br>
-	 * ie. shown in red when /plugins  is issued
-	 * @param fpInstance
-	 */
-	public static void disableSelf(FactionsPlus fpInstance) {
-		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call onDisable()
-		//it won't deregister commands ie. /f fc  will still work
-	}
-	
-	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
-		disableSelf(fpInstance);
-		if (forceStop) {
-			throw new RuntimeException(FP_TAG_IN_LOGS+" execution stopped by disableSelf()");
-		}
-		return null;
-	}
-	
-	/**
-	 * allowed to be used as: throw bailOut(..); for obvious reasons that it will throw but also so that eclipse won't 
-	 * complain about NPEs because it doesn't see that it can "throw"
-	 * @param fpInstance
-	 * @param msg
-	 * @return is a dummy return so that it can be used like: throw bailOut(...);
-	 */
-	public static RuntimeException bailOut(String msg) {
-		severe(msg);
-		throw disableSelf(instance, true);
 	}
 }

@@ -1,6 +1,7 @@
 package markehme.factionsplus;
 
 import java.io.*;
+import java.lang.reflect.*;
 
 import markehme.factionsplus.extras.*;
 
@@ -10,10 +11,20 @@ import org.bukkit.plugin.*;
 
 public abstract class Config {
 
+	//could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
+	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );//just never be "" cause that means root folder
+	public static final File	folderWarps	= new File( folderBase, "warps" );
+	public static final File	folderJails	= new File("" );//folderBase, "jails" );
+	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
+	public static final File	folderFRules	= new File( folderBase, "frules" );
+	public static final File	folderFBans	= new File( folderBase, "fbans" );
+	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
+	public static File templatesFile = new File(folderBase , "templates.yml");
+	public static FileConfiguration templates;
 	
 	static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
 	//and it contains the defaults, so that they are no longer hardcoded in java code
-	public static File fileConfig = new File(FactionsPlus.folderBase , "config.yml");
+	public static File fileConfig = new File(Config.folderBase , "config.yml");
 	
 	public static FileConfiguration config;//not named Conf so to avoid conflicts with com.massivecraft.factions.Conf
 	
@@ -111,17 +122,64 @@ public abstract class Config {
 	 * @param plugin
 	 */
 	protected static void onLoad() {
-		if (Q.isInconsistencyFileBug()) {
-			FactionsPlus.bailOut( "Please do not have `user.dir` property set, it will mess up so many things" );
+		boolean failed = false;
+		try {
+			if ( Q.isInconsistencyFileBug() ) {
+				throw FactionsPlusPlugin
+					.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+						+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
+			}
+			
+			if ( hasFileFieldsTrap() ) {
+				throw FactionsPlusPlugin.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+					+ "in places that use files, tell plugin author to fix" );
+			}
+		} catch ( Throwable t ) {
+			failed = true;
+			Q.rethrow( t );
+		} finally {
+			if ( failed ) {
+				FactionsPlus.instance.setDisAllowPluginToEnable();
+			}
 		}
-
+		
 	}
-	
+
+	/**
+	 * make sure all the File fields in this class that are likely used somewhere else in constructors like new File(field, myfile);
+	 * are non-empty to avoid 'myfile' being in root of drive instead of just current folder as expected<br>
+	 * this would cause some evil inconsistencies if any of those fields would resolve to empty paths<br>
+	 */
+	private static boolean hasFileFieldsTrap() {
+		Class classToCheckFor_FileFields = Config.class;
+		Field[] allFields = classToCheckFor_FileFields.getFields();
+		for ( Field field : allFields ) {
+			if (File.class.equals( field.getType())) {
+				//got one File field to check
+				try {
+					File instance = (File)field.get( classToCheckFor_FileFields );
+					if (instance.getPath().isEmpty()) {
+						//oops, found one, to avoid traps where you expect new File( instance, yourfile); 
+						// to have 'yourfile' in root folder of that drive ie. '\yourfile' instead of what you might 
+						//expect "yourfile" to be just in current folder just like a new File(yourfile) would do
+						return true;
+					}
+				} catch ( IllegalArgumentException e ) {
+					Q.rethrow(e);
+				} catch ( IllegalAccessException e ) {
+					Q.rethrow(e);
+				}
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * called on plugin.onEnable() and every time you want the config to reload
 	 */
 	protected static void reload() {
 		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
 	}
+
 	
 }

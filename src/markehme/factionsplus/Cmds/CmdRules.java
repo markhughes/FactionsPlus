@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 
@@ -56,7 +56,7 @@ public class CmdRules extends FCommand {
 		argsa[2] = message;
 		
 		try {
-			File fRF = new File(FactionsPlus.folderFRules, fplayer.getFactionId());
+			File fRF = new File(Config.folderFRules, fplayer.getFactionId());
 			if(!fRF.exists()) {
 				fme.msg("No rules have been set for your Faction.");
 				return;

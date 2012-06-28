@@ -90,7 +90,7 @@ public class CmdAddWarp extends FCommand {
 			}
 		}
 
-		File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
+		File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
 
 		if (!currentWarpFile.exists()) {
 			try {

@@ -26,7 +26,7 @@ public class LWCFunctions extends LWCBase {//extends so we don't have to prefix 
 		if ( !isLWC() ) {
 			
 			if ( isLWCBlockCPublic || isLWCLocksClearOnClaim ) {
-				FactionsPlus
+				FactionsPlusPlugin
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
 						+ " This means those settings will be ignored & have no effect" );
 			}
@@ -43,7 +43,7 @@ public class LWCFunctions extends LWCBase {//extends so we don't have to prefix 
 		//we always need this in order to prevent people from locking ie. chests in enemy faction
 		getLWC().getModuleLoader().registerModule( FactionsPlus.instance, lwcMod=new LWCModule(isLWCBlockCPublic));
 		
-		FactionsPlus.info("Hooked into LWC!");
+		FactionsPlusPlugin.info("Hooked into LWC!");
 	}
 	
 	public static void ensure_LWC_Disintegrate() {

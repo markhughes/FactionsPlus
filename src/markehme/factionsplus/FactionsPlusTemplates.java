@@ -8,21 +8,21 @@ public class FactionsPlusTemplates {
 		String workingstring = "Invalid Template File for " + templateOption;
 		
 		if(templateOption == "announcement_message") {
-			workingstring = FactionsPlus.templates.getString("announcement_message");
+			workingstring = Config.templates.getString("announcement_message");
 
 		}
 		
 		if(templateOption == "warp_created") {
-			workingstring = FactionsPlus.templates.getString("warp_created");
+			workingstring = Config.templates.getString("warp_created");
 		}
 		
 		if(templateOption == "notify_warp_created") {
-			workingstring = FactionsPlus.templates.getString("notify_warp_created");
+			workingstring = Config.templates.getString("notify_warp_created");
 		}
 
 		
 		if(templateOption == "jailed_message") {
-			workingstring = FactionsPlus.templates.getString("jailed_message");
+			workingstring = Config.templates.getString("jailed_message");
 		}
 		workingstring = colorFormat(workingstring);
 		
@@ -80,32 +80,32 @@ public class FactionsPlusTemplates {
 	@SuppressWarnings("boxing")
 	public static void createTemplatesFile() {
 		try { 
-			if(FactionsPlus.templatesFile.exists()) {
-				FactionsPlus.templatesFile.delete();
+			if(Config.templatesFile.exists()) {
+				Config.templatesFile.delete();
 			}
 			
-			FactionsPlus.templatesFile.createNewFile();
+			Config.templatesFile.createNewFile();
 			
-			FactionsPlus.templates = YamlConfiguration.loadConfiguration(FactionsPlus.templatesFile);
+			Config.templates = YamlConfiguration.loadConfiguration(Config.templatesFile);
 			
 			// For announcements 
-			FactionsPlus.templates.set("announcement_message", "<red>!1 <white>announced: !2");
+			Config.templates.set("announcement_message", "<red>!1 <white>announced: !2");
 			
 			// For warps 
-			FactionsPlus.templates.set("warp_created", "<green>Warp <white>!1 <green>set for your Faction!");
-			FactionsPlus.templates.set("notify_warp_created", "!1 created a warp in your faction called !2");
+			Config.templates.set("warp_created", "<green>Warp <white>!1 <green>set for your Faction!");
+			Config.templates.set("notify_warp_created", "!1 created a warp in your faction called !2");
 			
 			// For jail
-			FactionsPlus.templates.set("jailed_message", "<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
+			Config.templates.set("jailed_message", "<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
 			
 			// Default value don't change
-			FactionsPlus.templates.set("doNotChangeMe", 3);
+			Config.templates.set("doNotChangeMe", 3);
 			
-			FactionsPlus.templates.save(FactionsPlus.templatesFile);
+			Config.templates.save(Config.templatesFile);
 			
 		} catch (Exception e) {
 	    	e.printStackTrace();
-	    	FactionsPlus.info("ERROR: Couldn't create templates file.");
+	    	FactionsPlusPlugin.info("ERROR: Couldn't create templates file.");
 	    	return; 
 	    }
 	}

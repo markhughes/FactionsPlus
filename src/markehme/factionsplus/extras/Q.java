@@ -23,4 +23,9 @@ public abstract class Q {
 		  return !theSpecifiedFolder.exists();
 		  //Note: the current folder cannot really be changed, well maybe via native (JNI?)
 	}
+
+
+	public final static RuntimeException rethrow( Throwable t ) {
+		throw new RethrownException(t);
+	}
 }

@@ -66,7 +66,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
+				throw FactionsPlusPlugin.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 	}
@@ -83,7 +83,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			// TODO: add all flags here, those from FactionsAny.FFlag
 				//or make a mapping between the methods and the flags, clearly. 
 			default:
-				throw FactionsPlus.bailOut( "plugin author forgot to define a case to handle this flag: "
+				throw FactionsPlusPlugin.bailOut( "plugin author forgot to define a case to handle this flag: "
 					+ whichFlag );
 				// or forgot to put a "break;"
 			}
@@ -99,7 +99,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to invoke " + mSetPeaceful );
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mSetPeaceful );
 			}
 		}
 	}
@@ -132,7 +132,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 				failed = true;
 			} finally {
 				if ( failed ) {
-					throw FactionsPlus.bailOut( "failed to invoke " + methodUpdateHelp );
+					throw FactionsPlusPlugin.bailOut( "failed to invoke " + methodUpdateHelp );
 				}
 			}
 		}
@@ -157,7 +157,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	@Override
 	public final void finalizeHelp() {
 		if ( null == instanceOfHelpPages ) {
-			throw FactionsPlus.bailOut( "this should not happen, bad call order" );
+			throw FactionsPlusPlugin.bailOut( "this should not happen, bad call order" );
 		} else {
 			instanceOfHelpPages.add( pageLines );
 			pageLines = null;
@@ -174,7 +174,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			Object factionsChatMode_Enum = mapChatMode.getLeftSide( chatMode );
 			if ( null == factionsChatMode_Enum ) {
 				failed = true;
-				throw FactionsPlus.bailOut( "would never be null if .init() above failed to properly map ...");
+				throw FactionsPlusPlugin.bailOut( "would never be null if .init() above failed to properly map ...");
 			} else {
 				ret=getChatMode( forWhatPlayer );
 				mSetChatMode.invoke( forWhatPlayer, factionsChatMode_Enum );
@@ -190,10 +190,10 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed=true;
 		}finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to invoke " + mSetChatMode );
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mSetChatMode );
 			}
 			if (null == ret) {
-				throw FactionsPlus.bailOut( "failure within the code logic");
+				throw FactionsPlusPlugin.bailOut( "failure within the code logic");
 			}
 		}
 		return ret;//even if there was actually no chatMode change when compared to the previous, true means it 
@@ -225,7 +225,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			failed=true;
 		}finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to invoke " + mGetChatMode );
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mGetChatMode );
 			}
 		}
 		throw null;//not reached!

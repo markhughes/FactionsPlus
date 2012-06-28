@@ -80,7 +80,7 @@ public class CmdAnnounce extends FCommand {
 		}
 		
 		try {
-			File fAF = new File(FactionsPlus.folderAnnouncements, fplayer.getFactionId());
+			File fAF = new File(Config.folderAnnouncements, fplayer.getFactionId());
 			if(!fAF.exists()) {
 				fAF.createNewFile();
 			}

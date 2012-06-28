@@ -59,7 +59,7 @@ public class CmdUnsetJail extends FCommand {
 			return;
 		}		
 		
-		File currentJailFile = new File(FactionsPlus.folderJails, "loc." + currentFaction.getId());
+		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
 		
 		currentJailFile.delete();
 		

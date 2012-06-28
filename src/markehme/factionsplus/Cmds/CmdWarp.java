@@ -66,7 +66,7 @@ public class CmdWarp extends FCommand {
 
 		Faction currentFaction = fplayer.getFaction();
 
-		File currentWarpFile = new File(FactionsPlus.folderWarps,  currentFaction.getId());
+		File currentWarpFile = new File(Config.folderWarps,  currentFaction.getId());
 
 		World world;
 

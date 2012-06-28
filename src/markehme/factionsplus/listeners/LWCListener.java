@@ -37,7 +37,7 @@ public class LWCListener implements Listener {
 			} catch ( Exception e ) {
 				event.setCancelled( true );// disallow claim
 				e.printStackTrace();
-				FactionsPlus.severe( msg );
+				FactionsPlusPlugin.severe( msg );
 				fPlayer.sendMessage( FactionsPlus.FP_TAG_IN_LOGS + msg );
 			}
 		}

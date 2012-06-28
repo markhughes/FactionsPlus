@@ -41,7 +41,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to hook into Factions 1.7.x" );
+				throw FactionsPlusPlugin.bailOut( "failed to hook into Factions 1.7.x" );
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			Object flag = mapFFlag.getLeftSide( whichFlag );
 			if (null == flag) {
 				failed=true;
-				throw FactionsPlus.bailOut( "failed to proplerly map in .init()" );
+				throw FactionsPlusPlugin.bailOut( "failed to proplerly map in .init()" );
 			}else {
 				// factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
 				mSetFlag.invoke( forFaction, flag, whatState );
@@ -70,7 +70,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to invoke " + mSetFlag );
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mSetFlag );
 			}
 		}
 	}

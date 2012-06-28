@@ -50,7 +50,7 @@ public class CmdUnban extends FCommand {
 			return;
 		}
 		
-		File banFile = new File(FactionsPlus.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
+		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
 		
 		if(banFile.exists()){
 			banFile.delete();

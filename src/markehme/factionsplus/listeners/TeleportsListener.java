@@ -45,7 +45,7 @@ public class TeleportsListener implements Listener {
 			return;
 		}
 		if (null == Config.config) {
-			throw FactionsPlus.bailOut( "bad call order while java coding, call this after config is loaded" );
+			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
 		reportSuccessfulByCommandTeleportsIntoEnemyLand=Config.config.getBoolean( Config.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand );
@@ -188,7 +188,7 @@ public class TeleportsListener implements Listener {
 				Location targetLocation = event.getTo();
 				Faction fac = getFactionAt( targetLocation );
 				if ( areEnemies( player, fac ) ) {
-					FactionsPlus.info( constOneColor + "Player '" + ChatColor.DARK_AQUA+player.getName()
+					FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA+player.getName()
 						+ constOneColor+"' teleported into enemy land faction '" + ChatColor.DARK_AQUA+fac.getTag() + constOneColor+"' using command: '"+ChatColor.AQUA
 						+ lastExecutedCommandByPlayer+constOneColor+"'." );
 				}

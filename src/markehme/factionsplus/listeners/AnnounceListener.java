@@ -24,7 +24,7 @@ public class AnnounceListener implements Listener{
 		FPlayer me = FPlayers.i.get(player);
 
 		if(Config.config.getBoolean(Config.confStr_showLastAnnounceOnLogin)) {
-			File fAF = new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+			File fAF = new File(Config.folderAnnouncements, me.getFactionId());
 			if(fAF.exists()) {
 				try {
 					event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
@@ -48,7 +48,7 @@ public class AnnounceListener implements Listener{
 
 			if (Board.getFactionAt(new FLocation(event.getFrom())) != Board.getFactionAt(new FLocation(event.getTo()))) {
 				if(factionHere.getId().equals(me.getFactionId())) {
-					File fAF=new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+					File fAF=new File(Config.folderAnnouncements, me.getFactionId());
 					if(fAF.exists()) {
 						try {
 							event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
