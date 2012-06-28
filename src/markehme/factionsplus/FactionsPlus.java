@@ -305,7 +305,7 @@ public class FactionsPlus extends JavaPlugin {
         LWCFunctions.try_integrateLWC();
         
 		if ( LWCFunctions.isLWC() ) {
-			if ( ( Conf.lwcIntegration ) && ( Conf.onCaptureResetLwcLocks ) ) {
+			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
 				if ( !config.getBoolean( confStr_removeLWCLocksOnClaim ) ) {
