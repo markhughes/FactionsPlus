@@ -1,4 +1,6 @@
-#FactionsPlus Configuration File: for help with the configuration and detailed descriptions of the settings, please consult
+# FactionsPlus Configuration File: for help with the configuration and detailed descriptions of the settings, please consult
+# we cannot freaking keep comments :/ well in all honesty we could keep this header somehow
+
 jails:
     enableJails: true
     leadersCanSetJails: true 
@@ -65,15 +67,15 @@ economy:
     economyCostToToggleUpPeaceful: 0
     economyCostToToggleDownPeaceful: 0
 Teleports:
-    #note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
+    # note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
     disallowTeleportingToEnemyLandViaHomeCommand: true
-    #reports on console only
+    # reports on console only
     reportSuccessfulByCommandTeleportsIntoEnemyLand: true
     disallowTeleportingToEnemyLandViaEnderPeals: false
     
 extras:
     lwc:
-        #If enabled, it is highly suggested that you change the default factions lwc integration to false.
+        # If enabled, it is highly suggested that you change the default factions lwc integration to false.
         removeLWCLocksOnClaim: false
         blockCPublicAccessOnNonOwnFactionTerritory: false
     disguise:
@@ -82,4 +84,9 @@ extras:
         unDisguiseIfInEnemyTerritory: false
     disableUpdateCheck: false
     
+# epic comment
+
 DoNotChangeMe: 8
+
+# another comment
+crap: 1

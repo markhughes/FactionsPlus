@@ -83,6 +83,17 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static final String[] oa_enableJails={
 		//hmm there were none for this
 	};
+	
+	@Option(
+			comment = "some comment here",
+			oldAliases = {
+			},
+			sub={}
+			)
+	public static boolean _prefixJails=true;
+	
+	public static boolean _leadersCanSetJails=true;
+	
 	public static final String str_leadersCanSetJails = prefixJails+"leadersCanSetJails";
 	public static final String str_officersCanSetJails = prefixJails+"officersCanSetJails";
 	public static final String str_membersCanSetJails = prefixJails+"membersCanSetJails";
@@ -316,12 +327,53 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		return Config.config;
 	}
 	
+	private final static void parse(Map<String, Object> destination, Map<String, Object> start) {
+		for ( Map.Entry<String, Object> entry : start.entrySet() ) {
+			Object val = entry.getValue();
+			if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
+				String key = entry.getKey();
+				destination.put(key,val);
+			}else {
+				parse(destination, ((MemorySection)val).getValues( true ));
+			}
+		}
+	}
+	
 	public final static void saveConfig() {
 		try {
+//			DumperOptions opt = new DumperOptions();
+//			opt.setDefaultFlowStyle( DumperOptions.FlowStyle.BLOCK );
+//			final Yaml yaml = new Yaml( opt );
+//			
+			Map<String, Object> root = new HashMap<String, Object>();
+			parse(root, config.getValues( true));
+//			for ( Map.Entry<String, Object> entry : config.getValues( true).entrySet() ) {
+//				Object val = entry.getValue();
+//				if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
+//					String key = entry.getKey();
+//					root.put(key,val);
+//				}else {
+//					MemorySection msVal=(MemorySection)val;
+//					msVal.getValues( true );
+//				}
+//			}
+//			
+//			FileOutputStream x = null;
+//			OutputStreamWriter y=null;
+//			try {
+//				x=new FileOutputStream( Config.fileConfig );
+//				y = new OutputStreamWriter( x, "UTF-8" );
+//				yaml.dump(root,y );
+//			} finally {
+//				if ( null != x ) {
+//					x.close();
+//				}
+//			}
+			
 			getConfig().save( Config.fileConfig );
-		} catch ( IOException e ) {
+		} catch ( Exception e ) {
 			e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut("could not save config file: "+Config.fileConfig.getAbsolutePath());
+			throw FactionsPlusPlugin.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
 		}
 	}
 	
@@ -355,45 +407,45 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				+ "which means that the plugin author forgot to include it" );
 		}
 		
-		if ( Config.fileConfig.exists() ) {
-			if (!Config.fileConfig.isFile()) {
-				throw FactionsPlusPlugin.bailOut( "While '"+Config.fileConfig.getAbsolutePath()+"' exists, it is not a file!");
-			}
-			// config file exists? we add the settings on top, overwriting the defaults
-			try {
-				//even though this config exists, some defaults might be new so we still need to write the config out later with saveConfig();
-				YamlConfiguration realConfig = YamlConfiguration.loadConfiguration( Config.fileConfig );
-				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
-					Object val = entry.getValue();
-					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
-//						FactionsPlus.info( entry.getKey()+ " ! "+val );
-						String key = entry.getKey();
-//						if (Config.config.contains( key)) {
-//							//we don't want to overwrite the key cause it may be different case, funnily enough this shouldn't matter but it freaking does
-//							if (str_economyCostToAnnounce.equalsIgnoreCase( key )) {
-////								Config.config.get
-//								if (!str_economyCostToAnnounce.equals(key)) {
-//									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
-////									DumperOptions options = new DumperOptions();
-////									options.setDefaultFlowStyle( FlowStyle.BLOCK1 )
-//									throw FactionsPlus.bailOut( "");
-//
-//								}
-//							}
-//						}else {
-							Config.config.set( key,val );// overwrites existing defaults already in config
-//						}
-//						FactionsPlus.info( ""+config.get(entry.getKey())+"/2/"+config.getInt( str_economyCostToAnnounce));
-//						FactionsPlus.info(str_economyCostToAnnounce+"//"+entry.getKey()+"//"+ config.get(str_economyCostToAnnounce));
-					}
-				}
-			} catch ( Exception e ) {
-				e.printStackTrace();
-				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
-			}
-		}else {
-			FactionsPlusPlugin.info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
-		}
+//		if ( Config.fileConfig.exists() ) {
+//			if (!Config.fileConfig.isFile()) {
+//				throw FactionsPlusPlugin.bailOut( "While '"+Config.fileConfig.getAbsolutePath()+"' exists, it is not a file!");
+//			}
+//			// config file exists? we add the settings on top, overwriting the defaults
+//			try {
+//				//even though this config exists, some defaults might be new so we still need to write the config out later with saveConfig();
+//				YamlConfiguration realConfig = YamlConfiguration.loadConfiguration( Config.fileConfig );
+//				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
+//					Object val = entry.getValue();
+//					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
+////						FactionsPlus.info( entry.getKey()+ " ! "+val );
+//						String key = entry.getKey();
+////						if (Config.config.contains( key)) {
+////							//we don't want to overwrite the key cause it may be different case, funnily enough this shouldn't matter but it freaking does
+////							if (str_economyCostToAnnounce.equalsIgnoreCase( key )) {
+//////								Config.config.get
+////								if (!str_economyCostToAnnounce.equals(key)) {
+////									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
+//////									DumperOptions options = new DumperOptions();
+//////									options.setDefaultFlowStyle( FlowStyle.BLOCK1 )
+////									throw FactionsPlus.bailOut( "");
+////
+////								}
+////							}
+////						}else {
+////							FIXME: temp Config.config.set( key,val );// overwrites existing defaults already in config
+////						}
+////						FactionsPlus.info( ""+config.get(entry.getKey())+"/2/"+config.getInt( str_economyCostToAnnounce));
+////						FactionsPlus.info(str_economyCostToAnnounce+"//"+entry.getKey()+"//"+ config.get(str_economyCostToAnnounce));
+//					}
+//				}
+//			} catch ( Exception e ) {
+//				e.printStackTrace();
+//				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
+//			}
+//		}else {
+//			FactionsPlusPlugin.info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
+//		}
 		
 		saveConfig();
 	}
