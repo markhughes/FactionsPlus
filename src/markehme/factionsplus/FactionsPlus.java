@@ -142,23 +142,23 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config.config.getBoolean(Config.confStr_enableEconomy)) {
+        if(Config.config.getBoolean(Config.str_enableEconomy)) {
         	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         	
         	if (economyProvider != null) {
             	economy = economyProvider.getProvider();
         	}
         }
-        if(Config.config.getBoolean(Config.confStr_enableAnnounce)) {
+        if(Config.config.getBoolean(Config.str_enableAnnounce)) {
     		pm.registerEvents(this.announcelistener, this);
         }
-        if(Config.config.getBoolean(Config.confStr_enableBans)) {
+        if(Config.config.getBoolean(Config.str_enableBans)) {
         	pm.registerEvents(this.banlistener, this);
         }
-        if(Config.config.getBoolean(Config.confStr_enableJails)) {
+        if(Config.config.getBoolean(Config.str_enableJails)) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(Config.config.getBoolean(Config.confStr_enableDisguiseIntegration) && (Config.config.getBoolean(Config.confStr_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(Config.confStr_unDisguiseIfInEnemyTerritory))) {
+        if(Config.config.getBoolean(Config.str_enableDisguiseIntegration) && (Config.config.getBoolean(Config.str_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(Config.str_unDisguiseIfInEnemyTerritory))) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
         		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
@@ -196,9 +196,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config.config.getBoolean( Config.confStr_removeLWCLocksOnClaim ) ) {
+				if ( !Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Consider setting " + Config.confStr_removeLWCLocksOnClaim
+					FactionsPlusPlugin.info( "Consider setting " + Config.str_removeLWCLocksOnClaim
 						+ " to reset locks for more than just the chests" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
 				}
@@ -209,10 +209,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
        
         
         
-        if(Config.config.getBoolean(Config.confStr_enablePeacefulBoosts)) {
+        if(Config.config.getBoolean(Config.str_enablePeacefulBoosts)) {
         	pm.registerEvents(this.peacefullistener, this);
         }
-        if(Config.config.getBoolean(Config.confStr_enablePowerBoosts)) {
+        if(Config.config.getBoolean(Config.str_enablePowerBoosts)) {
         	pm.registerEvents(this.powerboostlistener, this);
         }
 

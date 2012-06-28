@@ -37,20 +37,20 @@ public class CmdUnsetJail extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(Config.config.getBoolean(Config.confStr_leadersCanSetJails)) {
+		if(Config.config.getBoolean(Config.str_leadersCanSetJails)) {
 			if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
 				authallow = true;
 			}
 		}
 		
-		if(Config.config.getBoolean(Config.confStr_officersCanSetJails)) {
+		if(Config.config.getBoolean(Config.str_officersCanSetJails)) {
 			if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
 				authallow = true;
 			}
 		}
 
 		
-		if(Config.config.getBoolean(Config.confStr_membersCanSetJails)) {
+		if(Config.config.getBoolean(Config.str_membersCanSetJails)) {
 			authallow = true;
 		}
 		

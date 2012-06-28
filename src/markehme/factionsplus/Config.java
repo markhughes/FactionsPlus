@@ -30,88 +30,99 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static FileConfiguration config;
 	
 	
-	public static final String prefJails="jails"+Config.delim;
-	public static final String confStr_enableJails = prefJails+"enableJails";
-	public static final String confStr_leadersCanSetJails = prefJails+"leadersCanSetJails";
-	public static final String confStr_officersCanSetJails = prefJails+"officersCanSetJails";
-	public static final String confStr_membersCanSetJails = prefJails+"membersCanSetJails";
-	public static final String confStr_leadersCanJail = prefJails+"leadersCanJail";
-	public static final String confStr_officersCanJail = prefJails+"officersCanJail";
 	//Begin Config String Pointers
 	public static final String delim=".";
-	public static final String prefWarps="warps"+delim;
 
-	public static final String confStr_enableWarps = prefWarps+"enableWarps";
-	public static final String confStr_leadersCanSetWarps = prefWarps+"leadersCanSetWarps";
-	public static final String confStr_officersCanSetWarps = prefWarps+"officersCanSetWarps";
-	public static final String confStr_membersCanSetWarps = prefWarps+"membersCanSetWarps";
-	public static final String confStr_mustBeInOwnTerritoryToCreate  = prefWarps+"mustBeInOwnTerritoryToCreate";
-	public static final String confStr_maxWarps = prefWarps+"maxWarps";
-	public static final String confStr_warpTeleportAllowedFromEnemyTerritory = prefWarps+"warpTeleportAllowedFromEnemyTerritory";
-	public static final String confStr_warpTeleportAllowedFromDifferentWorld = prefWarps+"warpTeleportAllowedFromDifferentWorld";
-	public static final String confStr_warpTeleportAllowedEnemyDistance = prefWarps+"warpTeleportAllowedEnemyDistance";
-	public static final String confStr_warpTeleportIgnoreEnemiesIfInOwnTerritory = prefWarps+"warpTeleportIgnoreEnemiesIfInOwnTerritory";
-	public static final String confStr_smokeEffectOnWarp = prefWarps+"smokeEffectOnWarp";
-	public static final String prefBanning="banning"+delim;
-	public static final String confStr_enableBans=prefBanning+"enableBans";
-	public static final String confStr_leadersCanFactionBan=prefBanning+"leadersCanFactionBan";
-	public static final String confStr_officersCanFactionBan=prefBanning+"officersCanFactionBan";
-	public static final String confStr_leadersCanFactionUnban=prefBanning+"leadersCanFactionUnban";
-	public static final String confStr_officersCanFactionUnban=prefBanning+"officersCanFactionUnban";
-	public static final String confStr_leaderCanNotBeBanned=prefBanning+"leaderCanNotBeBanned";
-	public static final String prefRules="rules"+delim;
-	public static final String confStr_enableRules=prefRules+"enableRules";
-	public static final String confStr_leadersCanSetRules=prefRules+"leadersCanSetRules";
-	public static final String confStr_officersCanSetRules=prefRules+"officersCanSetRules";
-	public static final String confStr_maxRulesPerFaction=prefRules+"maxRulesPerFaction";
-	public static final String prefPeaceful="peaceful"+delim;
-	public static final String confStr_leadersCanToggleState=prefPeaceful+"leadersCanToggleState";
-	public static final String confStr_officersCanToggleState=prefPeaceful+"officersCanToggleState";
-	public static final String confStr_membersCanToggleState=prefPeaceful+"membersCanToggleState";
-	public static final String confStr_enablePeacefulBoosts=prefPeaceful+"enablePeacefulBoosts";
-	public static final String confStr_powerBoostIfPeaceful=prefPeaceful+"powerBoostIfPeaceful";
-	public static final String prefPowerboosts="powerboosts"+delim;
-	public static final String confStr_enablePowerBoosts=prefPowerboosts+"enablePowerBoosts";
-	public static final String confStr_extraPowerWhenKillPlayer=prefPowerboosts+"extraPowerWhenKillPlayer";
-	public static final String confStr_extraPowerLossIfDeathBySuicide=prefPowerboosts+"extraPowerLossIfDeathBySuicide";
-	public static final String confStr_extraPowerLossIfDeathByPVP=prefPowerboosts+"extraPowerLossIfDeathByPVP";
-	public static final String confStr_extraPowerLossIfDeathByMob=prefPowerboosts+"extraPowerLossIfDeathByMob";
-	public static final String confStr_extraPowerLossIfDeathByCactus=prefPowerboosts+"extraPowerLossIfDeathByCactus";
-	public static final String confStr_extraPowerLossIfDeathByTNT=prefPowerboosts+"extraPowerLossIfDeathByTNT";
-	public static final String confStr_extraPowerLossIfDeathByFire=prefPowerboosts+"extraPowerLossIfDeathByFire";
-	public static final String confStr_extraPowerLossIfDeathByPotion=prefPowerboosts+"extraPowerLossIfDeathByPotion";
-	public static final String confStr_extraPowerLossIfDeathByOther=prefPowerboosts+"extraPowerLossIfDeathByOther";
-	public static final String prefAnnounce="announce"+delim;
-	public static final String confStr_enableAnnounce=prefAnnounce+"enableAnnounce";
-	public static final String confStr_leadersCanAnnounce=prefAnnounce+"leadersCanAnnounce";
-	public static final String confStr_officersCanAnnounce=prefAnnounce+"officersCanAnnounce";
-	public static final String confStr_showLastAnnounceOnLogin=prefAnnounce+"showLastAnnounceOnLogin";
-	public static final String confStr_showLastAnnounceOnLandEnter=prefAnnounce+"showLastAnnounceOnLandEnter";
-	public static final String prefEconomy="economy"+delim;
-	public static final String confStr_enableEconomy=prefEconomy+"enableEconomy";
-	public static final String confStr_economyCostToWarp=prefEconomy+"economyCostToWarp";
-	public static final String confStr_economyCostToCreateWarp=prefEconomy+"economyCostToCreateWarp";
-	public static final String confStr_economyCostToDeleteWarp=prefEconomy+"economyCostToDeleteWarp";
-	public static final String confStr_economyCostToAnnounce=prefEconomy+"economyCostToAnnounce";
-	public static final String confStr_economyCostToJail=prefEconomy+"economyCostToJail";
-	public static final String confStr_economyCostToSetJail=prefEconomy+"economyCostToSetJail";
-	public static final String confStr_economyCostToUnJail=prefEconomy+"economyCostToUnJail";
-	public static final String confStr_economyCostToToggleUpPeaceful=prefEconomy+"economyCostToToggleUpPeaceful";
-	public static final String confStr_economyCostToToggleDownPeaceful=prefEconomy+"economyCostToToggleDownPeaceful";
-	public static final String prefTeleports="Teleports"+delim;
-	public static final String confStr_disallowTeleportingToEnemyLandViaHomeCommand= prefTeleports+"disallowTeleportingToEnemyLandViaHomeCommand";
-	public static final String confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefTeleports+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
-	public static final String confStr_disallowTeleportingToEnemyLandViaEnderPeals=prefTeleports+"disallowTeleportingToEnemyLandViaEnderPeals";
-	public static final String prefExtras="extras"+delim;
-	public static final String confStr_disableUpdateCheck=prefExtras+"disableUpdateCheck";
-	public static final String prefExtrasLWC=prefExtras+"LWC"+delim;
-	public static final String confStr_removeLWCLocksOnClaim=prefExtrasLWC+"removeLWCLocksOnClaim";
-	public static final String confStr_blockCPublicAccessOnNonOwnFactionTerritory=prefExtrasLWC+"blockCPublicAccessOnNonOwnFactionTerritory";
-	public static final String prefExtrasMD=prefExtras+"disguise"+delim;
-	public static final String confStr_enableDisguiseIntegration=prefExtrasMD+"enableDisguiseIntegration";
-	public static final String confStr_unDisguiseIfInOwnTerritory=prefExtrasMD+"unDisguiseIfInOwnTerritory";
-	public static final String confStr_unDisguiseIfInEnemyTerritory=prefExtrasMD+"unDisguiseIfInEnemyTerritory";
-	public static final String confStr_DoNotChangeMe="DoNotChangeMe";
+	public static final String prefixJails="jails"+Config.delim;
+	public static final String str_enableJails = prefixJails+"enableJails";
+	public static final String str_leadersCanSetJails = prefixJails+"leadersCanSetJails";
+	public static final String str_officersCanSetJails = prefixJails+"officersCanSetJails";
+	public static final String str_membersCanSetJails = prefixJails+"membersCanSetJails";
+	public static final String str_leadersCanJail = prefixJails+"leadersCanJail";
+	public static final String str_officersCanJail = prefixJails+"officersCanJail";
+
+	public static final String prefixWarps="warps"+delim;
+	public static final String str_enableWarps = prefixWarps+"enableWarps";
+	public static final String str_leadersCanSetWarps = prefixWarps+"leadersCanSetWarps";
+	public static final String str_officersCanSetWarps = prefixWarps+"officersCanSetWarps";
+	public static final String str_membersCanSetWarps = prefixWarps+"membersCanSetWarps";
+	public static final String str_mustBeInOwnTerritoryToCreate  = prefixWarps+"mustBeInOwnTerritoryToCreate";
+	public static final String str_maxWarps = prefixWarps+"maxWarps";
+	public static final String str_warpTeleportAllowedFromEnemyTerritory = prefixWarps+"warpTeleportAllowedFromEnemyTerritory";
+	public static final String str_warpTeleportAllowedFromDifferentWorld = prefixWarps+"warpTeleportAllowedFromDifferentWorld";
+	public static final String str_warpTeleportAllowedEnemyDistance = prefixWarps+"warpTeleportAllowedEnemyDistance";
+	public static final String str_warpTeleportIgnoreEnemiesIfInOwnTerritory = prefixWarps+"warpTeleportIgnoreEnemiesIfInOwnTerritory";
+	public static final String str_smokeEffectOnWarp = prefixWarps+"smokeEffectOnWarp";
+	
+	public static final String prefixBanning="banning"+delim;
+	public static final String str_enableBans=prefixBanning+"enableBans";
+	public static final String str_leadersCanFactionBan=prefixBanning+"leadersCanFactionBan";
+	public static final String str_officersCanFactionBan=prefixBanning+"officersCanFactionBan";
+	public static final String str_leadersCanFactionUnban=prefixBanning+"leadersCanFactionUnban";
+	public static final String str_officersCanFactionUnban=prefixBanning+"officersCanFactionUnban";
+	public static final String str_leaderCanNotBeBanned=prefixBanning+"leaderCanNotBeBanned";
+
+	public static final String prefixRules="rules"+delim;
+	public static final String str_enableRules=prefixRules+"enableRules";
+	public static final String str_leadersCanSetRules=prefixRules+"leadersCanSetRules";
+	public static final String str_officersCanSetRules=prefixRules+"officersCanSetRules";
+	public static final String str_maxRulesPerFaction=prefixRules+"maxRulesPerFaction";
+
+	public static final String prefixPeaceful="peaceful"+delim;
+	public static final String str_leadersCanToggleState=prefixPeaceful+"leadersCanToggleState";
+	public static final String str_officersCanToggleState=prefixPeaceful+"officersCanToggleState";
+	public static final String str_membersCanToggleState=prefixPeaceful+"membersCanToggleState";
+	public static final String str_enablePeacefulBoosts=prefixPeaceful+"enablePeacefulBoosts";
+	public static final String str_powerBoostIfPeaceful=prefixPeaceful+"powerBoostIfPeaceful";
+
+	public static final String prefixPowerboosts="powerboosts"+delim;
+	public static final String str_enablePowerBoosts=prefixPowerboosts+"enablePowerBoosts";
+	public static final String str_extraPowerWhenKillPlayer=prefixPowerboosts+"extraPowerWhenKillPlayer";
+	public static final String str_extraPowerLossIfDeathBySuicide=prefixPowerboosts+"extraPowerLossIfDeathBySuicide";
+	public static final String str_extraPowerLossIfDeathByPVP=prefixPowerboosts+"extraPowerLossIfDeathByPVP";
+	public static final String str_extraPowerLossIfDeathByMob=prefixPowerboosts+"extraPowerLossIfDeathByMob";
+	public static final String str_extraPowerLossIfDeathByCactus=prefixPowerboosts+"extraPowerLossIfDeathByCactus";
+	public static final String str_extraPowerLossIfDeathByTNT=prefixPowerboosts+"extraPowerLossIfDeathByTNT";
+	public static final String str_extraPowerLossIfDeathByFire=prefixPowerboosts+"extraPowerLossIfDeathByFire";
+	public static final String str_extraPowerLossIfDeathByPotion=prefixPowerboosts+"extraPowerLossIfDeathByPotion";
+	public static final String str_extraPowerLossIfDeathByOther=prefixPowerboosts+"extraPowerLossIfDeathByOther";
+
+	public static final String prefixAnnounce="announce"+delim;
+	public static final String str_enableAnnounce=prefixAnnounce+"enableAnnounce";
+	public static final String str_leadersCanAnnounce=prefixAnnounce+"leadersCanAnnounce";
+	public static final String str_officersCanAnnounce=prefixAnnounce+"officersCanAnnounce";
+	public static final String str_showLastAnnounceOnLogin=prefixAnnounce+"showLastAnnounceOnLogin";
+	public static final String str_showLastAnnounceOnLandEnter=prefixAnnounce+"showLastAnnounceOnLandEnter";
+
+	public static final String prefixEconomy="economy"+delim;
+	public static final String str_enableEconomy=prefixEconomy+"enableEconomy";
+	public static final String str_economyCostToWarp=prefixEconomy+"economyCostToWarp";
+	public static final String str_economyCostToCreateWarp=prefixEconomy+"economyCostToCreateWarp";
+	public static final String str_economyCostToDeleteWarp=prefixEconomy+"economyCostToDeleteWarp";
+	public static final String str_economyCostToAnnounce=prefixEconomy+"economyCostToAnnounce";
+	public static final String str_economyCostToJail=prefixEconomy+"economyCostToJail";
+	public static final String str_economyCostToSetJail=prefixEconomy+"economyCostToSetJail";
+	public static final String str_economyCostToUnJail=prefixEconomy+"economyCostToUnJail";
+	public static final String str_economyCostToToggleUpPeaceful=prefixEconomy+"economyCostToToggleUpPeaceful";
+	public static final String str_economyCostToToggleDownPeaceful=prefixEconomy+"economyCostToToggleDownPeaceful";
+
+	public static final String prefixTeleports="Teleports"+delim;
+	public static final String str_disallowTeleportingToEnemyLandViaHomeCommand= prefixTeleports+"disallowTeleportingToEnemyLandViaHomeCommand";
+	public static final String str_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefixTeleports+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
+	public static final String str_disallowTeleportingToEnemyLandViaEnderPeals=prefixTeleports+"disallowTeleportingToEnemyLandViaEnderPeals";
+
+	public static final String prefixExtras="extras"+delim;
+	public static final String str_disableUpdateCheck=prefixExtras+"disableUpdateCheck";
+	public static final String prefExtrasLWC=prefixExtras+"LWC"+delim;
+	public static final String str_removeLWCLocksOnClaim=prefExtrasLWC+"removeLWCLocksOnClaim";
+	public static final String str_blockCPublicAccessOnNonOwnFactionTerritory=prefExtrasLWC+"blockCPublicAccessOnNonOwnFactionTerritory";
+
+	public static final String prefixExtrasMD=prefixExtras+"disguise"+delim;
+	public static final String str_enableDisguiseIntegration=prefixExtrasMD+"enableDisguiseIntegration";
+	public static final String str_unDisguiseIfInOwnTerritory=prefixExtrasMD+"unDisguiseIfInOwnTerritory";
+	public static final String str_unDisguiseIfInEnemyTerritory=prefixExtrasMD+"unDisguiseIfInEnemyTerritory";
+	
+	public static final String str_DoNotChangeMe="DoNotChangeMe";
 	//End Config String Pointer
 	
 	

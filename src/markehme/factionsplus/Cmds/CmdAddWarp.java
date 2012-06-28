@@ -55,12 +55,12 @@ public class CmdAddWarp extends FCommand {
 
 		boolean authallow = false;
 
-		if(Config.config.getBoolean(Config.confStr_membersCanSetWarps)) {
+		if(Config.config.getBoolean(Config.str_membersCanSetWarps)) {
 			authallow = true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(Config.confStr_officersCanSetWarps)) {
+			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(Config.str_officersCanSetWarps)) {
 				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(Config.confStr_leadersCanSetWarps)) {
+			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(Config.str_leadersCanSetWarps)) {
 				authallow = true;
 			}
 		}
@@ -71,20 +71,20 @@ public class CmdAddWarp extends FCommand {
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(Config.config.getBoolean(Config.confStr_mustBeInOwnTerritoryToCreate)) {
+			if(Config.config.getBoolean(Config.str_mustBeInOwnTerritoryToCreate)) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
 		}
 
-		if(Config.config.getInt(Config.confStr_economyCostToCreateWarp) > 0 && !Config.config.getBoolean(Config.confStr_enableEconomy)) {
-			if (!payForCommand(Config.config.getInt(Config.confStr_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
+		if(Config.config.getInt(Config.str_economyCostToCreateWarp) > 0 && !Config.config.getBoolean(Config.str_enableEconomy)) {
+			if (!payForCommand(Config.config.getInt(Config.str_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
 
-		if(Config.config.getInt(Config.confStr_maxWarps) != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= Config.config.getInt(Config.confStr_maxWarps)) {
+		if(Config.config.getInt(Config.str_maxWarps) != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= Config.config.getInt(Config.str_maxWarps)) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}

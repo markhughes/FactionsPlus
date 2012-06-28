@@ -10,7 +10,7 @@ public class FactionsPlusUpdate {
 		URLConnection connection = null;
 		String v = FactionsPlus.version;
 		
-		if(Config.config.getBoolean(Config.confStr_disableUpdateCheck)) {
+		if(Config.config.getBoolean(Config.str_disableUpdateCheck)) {
 			return;
 		}
 		

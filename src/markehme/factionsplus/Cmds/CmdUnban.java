@@ -39,9 +39,9 @@ public class CmdUnban extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(Config.config.getBoolean(Config.confStr_leadersCanFactionUnban) && Utilities.isLeader(fme)){
+		if(Config.config.getBoolean(Config.str_leadersCanFactionUnban) && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(Config.config.getBoolean(Config.confStr_officersCanFactionUnban) && Utilities.isOfficer(fme)){
+		} else if(Config.config.getBoolean(Config.str_officersCanFactionUnban) && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		
