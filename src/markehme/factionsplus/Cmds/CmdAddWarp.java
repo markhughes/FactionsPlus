@@ -186,7 +186,7 @@ public class CmdAddWarp extends FCommand {
 
 		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
 
-		String[] argsa;
+		String[] argsa; 
 
 		argsa = new String[3];
 		argsa[1] = sender.getName();
