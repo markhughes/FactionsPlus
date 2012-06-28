@@ -171,7 +171,22 @@ public class FactionsPlus extends FactionsPlusPlugin {
         
 
 		if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
+			
 			LWCFunctions.hookLWC();// this must be inside an if, else NoClassDefFoundError if LWC is not on
+			
+			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
+				// if Faction plugin has setting to reset locks (which only resets for chests)
+				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
+				if ( !Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
+					// TODO: maybe someone can modify this message so that it would make sense to the console reader
+					FactionsPlusPlugin.info( "Consider setting `" + Config.str_removeLWCLocksOnClaim
+						+ "` to reset locks(on land claim) for more than just chests," +
+						" which is what Factions plugin already does right now" );
+					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
+				}
+				
+			}
+			
 		} else {//no LWC
 			if ( Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory )
 				|| Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) )
@@ -183,19 +198,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			return;
 		}
         
-		if ( LWCFunctions.isLWC() ) {
-			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
-				// if Faction plugin has setting to reset locks (which only resets for chests)
-				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
-					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Consider setting " + Config.str_removeLWCLocksOnClaim
-						+ " to reset locks for more than just the chests" );
-					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
-				}
-				
-			}
-		}
 	
        
         

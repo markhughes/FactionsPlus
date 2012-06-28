@@ -31,7 +31,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	//and it contains the defaults, so that they are no longer hardcoded in java code
 	private static File fileConfig = new File(Config.folderBase , "config.yml");
 	
-	public static FileConfiguration config;
+	public static YamlConfiguration config;
 	
 	
 	//Begin Config String Pointers
@@ -306,7 +306,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
-	public final static FileConfiguration getConfig() {
+	public final static YamlConfiguration getConfig() {
 		if (null == Config.config) {
 			reloadConfig();
 		}

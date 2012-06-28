@@ -55,15 +55,15 @@ announce:
     showLastAnnounceOnLandEnter: true
 economy:
     enableEconomy: false
-    economycostToWarp: 0
-    economycostToCreateWarp: 0
-    economycostToDeleteWarp: 0
-    economycostToAnnounce: 0
-    economycostToJail: 0
-    economycostToSetJail: 0
-    economycostToUnJail: 0
-    economycostToToggleUpPeaceful: 0
-    economycostToToggleDownPeaceful: 0
+    economyCostToWarp: 0
+    economyCostToCreateWarp: 0
+    economyCostToDeleteWarp: 0
+    economyCostToAnnounce: 0
+    economyCostToJail: 0
+    economyCostToSetJail: 0
+    economyCostToUnJail: 0
+    economyCostToToggleUpPeaceful: 0
+    economyCostToToggleDownPeaceful: 0
 Teleports:
     #note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
     disallowTeleportingToEnemyLandViaHomeCommand: true
