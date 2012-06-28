@@ -9,8 +9,6 @@ this is also to keep out the clutter within the TODO file
   only certain commands like /home  rather than what we currently use: PlayerCommandPreprocessEvent
   //checked: it's using the same Event but with a LOW priority so they are trapped before the MONITOR event
 
-//done - /f gc  is non-functional and /f fc
-
 //done- fix lwc to remove also wooden/iron/trapdoor when claiming land
 
 //done - using disallowTeleportingToEnemyLandViaHomeCommand will attempt to prevent /home to be used to teleport into enemy land
