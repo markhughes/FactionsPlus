@@ -52,12 +52,12 @@ public class CmdRemoveWarp extends FCommand {
 		
 		boolean authallow = false;
 
-		if(Config.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
+		if(Config.config.getBoolean(Config.confStr_membersCanSetWarps)) {
 			authallow = true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
+			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(Config.confStr_officersCanSetWarps)) {
 				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
+			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(Config.confStr_leadersCanSetWarps)) {
 				authallow = true;
 			}
 		}
@@ -95,8 +95,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(Config.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !Config.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
-				if (!payForCommand(Config.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
+		    if(Config.config.getInt(Config.confStr_economyCostToDeleteWarp) > 0 && !Config.config.getBoolean(Config.confStr_enableEconomy)) {
+				if (!payForCommand(Config.config.getInt(Config.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
 					return;
 				}
 			}

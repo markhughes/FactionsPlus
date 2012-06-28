@@ -48,9 +48,9 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlus.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		reportSuccessfulByCommandTeleportsIntoEnemyLand=Config.config.getBoolean( FactionsPlus.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand );
-		disallowTeleportingToEnemyLandViaHomeCommand=Config.config.getBoolean( FactionsPlus.confStr_disallowTeleportingToEnemyLandViaHomeCommand );
-		disallowTeleportingToEnemyLandViaEnderPeals=Config.config.getBoolean( FactionsPlus.confStr_disallowTeleportingToEnemyLandViaEnderPeals  );
+		reportSuccessfulByCommandTeleportsIntoEnemyLand=Config.config.getBoolean( Config.confStr_reportSuccessfulByCommandTeleportsIntoEnemyLand );
+		disallowTeleportingToEnemyLandViaHomeCommand=Config.config.getBoolean( Config.confStr_disallowTeleportingToEnemyLandViaHomeCommand );
+		disallowTeleportingToEnemyLandViaEnderPeals=Config.config.getBoolean( Config.confStr_disallowTeleportingToEnemyLandViaEnderPeals  );
 		//TODO: implement this disallowTeleportingToEnemyLandViaEnderPeals  in the next hour
 		
 		if ( (!isHomeTracking())
