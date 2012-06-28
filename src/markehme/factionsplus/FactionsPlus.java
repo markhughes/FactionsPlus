@@ -86,7 +86,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				e.printStackTrace();
 			}
 		}
-		LWCFunctions.ensure_LWC_Disintegrate();
+		if (LWCBase.isLWC()) {
+			LWCFunctions.unhookLWC();
+		}
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		FactionsPlusPlugin.info("Disabled.");
 	}
@@ -168,8 +170,18 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
 
-        
-        LWCFunctions.try_integrateLWC();
+		if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
+			LWCFunctions.hookLWC();// this must be inside an if, else NoClassDefFoundError if LWC is not on
+		} else {//no LWC
+			if ( Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory )
+				|| Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) )
+			{
+				FactionsPlusPlugin
+					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
+						+ " This means those settings will be ignored & have no effect" );
+			}
+			return;
+		}
         
 		if ( LWCFunctions.isLWC() ) {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {

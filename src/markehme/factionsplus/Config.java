@@ -326,25 +326,25 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 	public final static void reloadConfig() {
-		YamlConfiguration c = new YamlConfiguration();//.loadFromString("");
-		String key1 = "Test";
-		String key2 = "test";
-		c.set( "test",Boolean.TRUE);
-		assert null == c.get(key1);
-		assert !c.contains( key1 );
-		assert null != c.get(key2);
-		assert c.contains( key2 );
-		c.set(key1,Boolean.FALSE);
-		assert null != c.get(key1);
-		assert c.contains( key1 );
-		assert null != c.get( key2 );
-		assert c.contains( key2 );
-		for (   Map.Entry<String,Object> element : c.getValues( true ).entrySet() ) {
-//			System.out.println(element);
-			FactionsPlus.info( element.getKey()+" + "+element.getValue() );
-		}
-		
-		FactionsPlus.bailOut( "");//FIXME: temporary all from above
+//		YamlConfiguration c = new YamlConfiguration();//.loadFromString("");
+//		String key1 = "Test";
+//		String key2 = "test";
+//		c.set( "test",Boolean.TRUE);
+//		assert null == c.get(key1);
+//		assert !c.contains( key1 );
+//		assert null != c.get(key2);
+//		assert c.contains( key2 );
+//		c.set(key1,Boolean.FALSE);
+//		assert null != c.get(key1);
+//		assert c.contains( key1 );
+//		assert null != c.get( key2 );
+//		assert c.contains( key2 );
+//		for (   Map.Entry<String,Object> element : c.getValues( true ).entrySet() ) {
+////			System.out.println(element);
+//			FactionsPlus.info( element.getKey()+" + "+element.getValue() );
+//		}
+//		
+//		FactionsPlus.bailOut( "");//FIXME: temporary all from above
 		
 		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
 		InputStream defConfigStream = FactionsPlus.instance.getResource( Config.fileConfigDefaults );// this is the one inside the .jar
@@ -366,25 +366,25 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
 					Object val = entry.getValue();
 					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
-						FactionsPlus.info( entry.getKey()+ " ! "+val );
+//						FactionsPlus.info( entry.getKey()+ " ! "+val );
 						String key = entry.getKey();
-						if (Config.config.contains( key)) {
-							//we don't want to overwrite the key cause it may be different case, funnily enough this shouldn't matter but it freaking does
-							if (str_economyCostToAnnounce.equalsIgnoreCase( key )) {
-//								Config.config.get
-								if (!str_economyCostToAnnounce.equals(key)) {
-									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
-//									DumperOptions options = new DumperOptions();
-//									options.setDefaultFlowStyle( FlowStyle.BLOCK1 )
-									throw FactionsPlus.bailOut( "");
-
-								}
-							}
-						}else {
+//						if (Config.config.contains( key)) {
+//							//we don't want to overwrite the key cause it may be different case, funnily enough this shouldn't matter but it freaking does
+//							if (str_economyCostToAnnounce.equalsIgnoreCase( key )) {
+////								Config.config.get
+//								if (!str_economyCostToAnnounce.equals(key)) {
+//									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
+////									DumperOptions options = new DumperOptions();
+////									options.setDefaultFlowStyle( FlowStyle.BLOCK1 )
+//									throw FactionsPlus.bailOut( "");
+//
+//								}
+//							}
+//						}else {
 							Config.config.set( key,val );// overwrites existing defaults already in config
-						}
-						FactionsPlus.info( ""+config.get(entry.getKey())+"/2/"+config.getInt( str_economyCostToAnnounce));
-						FactionsPlus.info(str_economyCostToAnnounce+"//"+entry.getKey()+"//"+ config.get(str_economyCostToAnnounce));
+//						}
+//						FactionsPlus.info( ""+config.get(entry.getKey())+"/2/"+config.getInt( str_economyCostToAnnounce));
+//						FactionsPlus.info(str_economyCostToAnnounce+"//"+entry.getKey()+"//"+ config.get(str_economyCostToAnnounce));
 					}
 				}
 			} catch ( Exception e ) {

@@ -13,43 +13,32 @@ import com.griefcraft.lwc.LWCPlugin;
 import com.griefcraft.model.*;
 import com.massivecraft.factions.*;
 
-public class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
+/**
+ * call these methods only when LWC plugin is loaded in bukkit, else NoClassDefFoundError<br>
+ * to avoid that, call LWCBase.isLWC() first
+ */
+public abstract class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
 	
-	private static LWCModule lwcMod=null;
- 
-	public static void try_integrateLWC() {
-		//when to enable LWC integrated feats
-		boolean isLWCLocksClearOnClaim = Config.config.getBoolean( Config.str_removeLWCLocksOnClaim );
-		boolean isLWCBlockCPublic =
-			Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory );
+	/**
+	 * assumes LWC is loaded by bukkit already else NoClassDefFoundError when calling this
+	 */
+	public static void hookLWC() {
+		//beware here NoClassDefFoundError if LWC isn't loaded
 		
-		if ( !isLWC() ) {
-			
-			if ( isLWCBlockCPublic || isLWCLocksClearOnClaim ) {
-				FactionsPlusPlugin
-					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
-						+ " This means those settings will be ignored & have no effect" );
-			}
-			return;
-		}
-		
-		// there is LWC
-		if ( isLWCLocksClearOnClaim ) {
+		if ( Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
 			// register after we integrate
 			Bukkit.getPluginManager().registerEvents( new LWCListener(), FactionsPlus.instance );
 		}
-        
 		
 		//we always need this in order to prevent people from locking ie. chests in enemy faction
-		getLWC().getModuleLoader().registerModule( FactionsPlus.instance, lwcMod=new LWCModule(isLWCBlockCPublic));
+		getLWC().getModuleLoader().registerModule( FactionsPlus.instance,  
+			new LWCModule(Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory )));
 		
 		FactionsPlusPlugin.info("Hooked into LWC!");
 	}
 	
-	public static void ensure_LWC_Disintegrate() {
-		if (!isLWC()) {
-			return;
-		}
+	public static void unhookLWC() {
+		//beware here NoClassDefFoundError if LWC isn't loaded
 		
 		getLWC().getModuleLoader().removeModules(  FactionsPlus.instance );
 	}
