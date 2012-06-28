@@ -1,6 +1,11 @@
 package markehme.factionsplus;
 
+import java.io.*;
+
+import markehme.factionsplus.extras.*;
+
 import org.bukkit.*;
+import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.java.*;
 
 
@@ -21,6 +26,21 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 			throw bailOut( "Failed to load(scroll up 1 or more pages to see error)" +
 					" thus we won't allow bukkit to enable at this time" );
 		}
+	}
+	
+	@Override
+	public FileConfiguration getConfig() {
+		throw Q.ni();//just in case something accidentally calls this, for now
+	}
+	
+	@Override
+	public void saveConfig() {
+		throw Q.ni();//just in case something accidentally calls this, for now
+	}
+	
+	@Override
+	public void reloadConfig() {
+		throw Q.ni();//just in case something accidentally calls this, for now
 	}
 
 	/**

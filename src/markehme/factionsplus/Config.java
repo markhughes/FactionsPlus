@@ -2,9 +2,11 @@ package markehme.factionsplus;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 
 import markehme.factionsplus.extras.*;
 
+import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.*;
 
@@ -23,9 +25,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static File templatesFile = new File(folderBase , "templates.yml");
 	public static FileConfiguration templates;
 	
-	static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
+	private static final String	fileConfigDefaults	= "config_defaults.yml";//this file is located inside .jar in root dir
 	//and it contains the defaults, so that they are no longer hardcoded in java code
-	public static File fileConfig = new File(Config.folderBase , "config.yml");
+	private static File fileConfig = new File(Config.folderBase , "config.yml");
 	
 	public static FileConfiguration config;
 	
@@ -191,7 +193,105 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	 */
 	protected static void reload() {
 		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
+		Config.templates=null;
+		
+		Config.ensureFoldersExist();
+		
+		Config.config = getConfig();//load config
+		
+		
+		
+		Config.templates = YamlConfiguration.loadConfiguration(Config.templatesFile);
 	}
 
+	protected static void ensureFoldersExist() {
+		try {
+			addDir(Config.folderBase);
+			addDir( Config.folderWarps );
+			addDir( Config.folderJails );
+			addDir( Config.folderAnnouncements );
+			addDir(Config.folderFRules);
+			addDir( Config.folderFBans );
+			
+			if(!Config.fileDisableInWarzone.exists()) {
+				Config.fileDisableInWarzone.createNewFile();
+				FactionsPlusPlugin.info("Created file: "+Config.fileDisableInWarzone);
+			}
+			
+			if (!Config.templatesFile.exists()) {
+				
+				FactionsPlusTemplates.createTemplatesFile();
+				FactionsPlusPlugin.info("Created file: "+Config.templatesFile);
+			} 
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw FactionsPlusPlugin.bailOut("something failed when ensuring the folders exist");
+		}
+	}
+	
+	private static final void addDir(File dir) {
+		if(!dir.exists()) {
+			if (dir.getPath().isEmpty()) {
+				throw FactionsPlusPlugin.bailOut( "bad coding, this should usually not trigger here, but earlier" );
+			}
+			FactionsPlusPlugin.info("Added directory: "+dir);
+			dir.mkdirs();
+		}
+	}
+	
+	public final static FileConfiguration getConfig() {
+		if (null == Config.config) {
+			reloadConfig();
+		}
+		if (null == Config.config) {
+			throw FactionsPlusPlugin.bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
+		}
+		return Config.config;
+	}
+	
+	public final static void saveConfig() {
+		try {
+			getConfig().save( Config.fileConfig );
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			throw FactionsPlusPlugin.bailOut("could not save config file: "+Config.fileConfig.getAbsolutePath());
+		}
+	}
+	
+	public final static void reloadConfig() {
+		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
+		InputStream defConfigStream = FactionsPlus.instance.getResource( Config.fileConfigDefaults );// this is the one inside the .jar
+		if ( defConfigStream != null ) {
+			Config.config = YamlConfiguration.loadConfiguration( defConfigStream );
+		} else {
+			throw FactionsPlusPlugin.bailOut( "There is no '"+Config.fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
+				+ "which means that the plugin author forgot to include it" );
+		}
+		
+		if ( Config.fileConfig.exists() ) {
+			if (!Config.fileConfig.isFile()) {
+				throw FactionsPlusPlugin.bailOut( "While '"+Config.fileConfig.getAbsolutePath()+"' exists, it is not a file!");
+			}
+			// config file exists? we add the settings on top, overwriting the defaults
+			try {
+				//even though this config exists, some defaults might be new so we still need to write the config out later with saveConfig();
+				YamlConfiguration realConfig = YamlConfiguration.loadConfiguration( Config.fileConfig );
+				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
+					Object val = entry.getValue();
+					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
+						Config.config.set( entry.getKey(),val );// overwrites existing defaults already in config
+					}
+				}
+			} catch ( Exception e ) {
+				e.printStackTrace();
+				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
+			}
+		}else {
+			FactionsPlusPlugin.info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
+		}
+		
+		saveConfig();
+	}
 	
 }
