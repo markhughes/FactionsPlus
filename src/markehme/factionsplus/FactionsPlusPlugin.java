@@ -84,7 +84,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	}
 
 	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
-		disableSelf(fpInstance);
+		fpInstance.disableSelf();
 		if (forceStop) {
 			throw new RuntimeException(FactionsPlus.FP_TAG_IN_LOGS+" execution stopped by disableSelf() which means read the above colored message");
 		}
@@ -96,8 +96,8 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * ie. shown in red when /plugins  is issued
 	 * @param fpInstance
 	 */
-	public static void disableSelf(FactionsPlus fpInstance) {
-		Bukkit.getPluginManager().disablePlugin( fpInstance );//it will call onDisable()
+	public void disableSelf() {
+		Bukkit.getPluginManager().disablePlugin( this );//it will call onDisable()
 		//it won't deregister commands ie. /f fc  will still work
 	}
 	

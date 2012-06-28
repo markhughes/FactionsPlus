@@ -25,7 +25,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class FactionsPlus extends FactionsPlusPlugin {
 
-	public static FactionsPlus instance;
+	public static FactionsPlus instance;//should never be null, unless not yet loaded by bukkit
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	

@@ -33,10 +33,54 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	
 	
 	//Begin Config String Pointers
+	/* the format for these is:
+	 * str_NAME
+	 * oa_NAME
+	 * _NAME
+	 * where NAME is something like officersCanSetJails
+	 * and oa stands for obsolete aliases such as the old names that this config had, this is used to carry over the 
+	 *  old setting to the new setting just in case the new setting had a change in name or location(the prefixes like extras.lwc.) 
+	 * so example: 
+	 * str_disableSomeLocksOnClaim="extras.lwc.disableAllLocksOnClaim";
+	 * if the old version of the config has extras.lwc.disableAllLocksOnClaim: true
+	 * and the new version of the FactionsPlus has renamed this setting to lwc.disableNonFactionMembersLocksOnClaim
+	 * then the oa_disableSomeLocksOnClaim would now contain the {"extras.lwc.disableAllLocksOnClaim"} just to make sure 
+	 * the old value of "true" is preserved
+	 * when the old entry is removed and then the new one will look like lwc.disableNonFactionMembersLocksOnClaim: true  even though
+	 * the lwc.disableNonFactionMembersLocksOnClaim would have had a default value of false which means _disableSomeLocksOnClaim=false; here
+	 * another example:
+	 * str_officersCanSetJails="jails.officersCanSetJails";
+	 * oa_officersCanSetJails={ "officersCanSetJails" };
+	 * _officersCanSetJails=true;//the default value, which will be overwritten with the value found in the existing config(if any)
+	 * if the config doesn't have this key, then this default value will be added to the config 
+	 */
+	
+	/*
+	 * there are two types of defaults:
+	 * 1. those that are in this file aka hardcoded
+	 * 2. those in config_defaults.yml file which will be located inside the exported .jar
+	 * and there's the user's config.yml file which is the real user-modifiable config (3.)
+	 * 
+	 * the priority of the settings goes in this order: 3,2,1
+	 * ie. if the config has setting extras.lwc.disableAllLocksOnClaim set to anything, 
+	 *     then this will override the setting in 2. (if it even existed there) and in 1. which always existed as _disableSomeLocksOnClaim
+	 * 
+	 * maybe I'm explaining this badly :) let's try this way:
+	 *  X=1.X;
+	 *  if (2.X.exists()) X=2.X;
+	 *  if (3.X.exists()) X=3.X 
+	 *  
+	 *  and on config save, the setting X will now exist in 3.  (but not in 2. because we don't write in the config_default.yml inside the .jar)
+	 *  typically config save will happen if there are new settings (those that didn't exist in 3.)
+	 */
 	public static final String delim=".";
 
 	public static final String prefixJails="jails"+Config.delim;
 	public static final String str_enableJails = prefixJails+"enableJails";
+	public static boolean _enableJails=true;//default
+	public static final String[] oa_enableJails={
+		//hmm there were none for this
+	};
 	public static final String str_leadersCanSetJails = prefixJails+"leadersCanSetJails";
 	public static final String str_officersCanSetJails = prefixJails+"officersCanSetJails";
 	public static final String str_membersCanSetJails = prefixJails+"membersCanSetJails";
@@ -194,14 +238,28 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	protected static void reload() {
 		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates=null;
-		
-		Config.ensureFoldersExist();
-		
-		Config.config = getConfig();//load config
-		
-		
-		
-		Config.templates = YamlConfiguration.loadConfiguration(Config.templatesFile);
+		boolean failed = false;
+		try {
+			
+			Config.ensureFoldersExist();
+			
+			Config.config = getConfig();// load config
+			
+			
+			
+			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
+			
+//			_enableJails = ( (Boolean);
+			System.out.println(Config.config.getInt( str_economyCostToAnnounce) );
+		}catch(Throwable t){
+			Q.rethrow(t);
+		}
+		finally{
+			if (failed) {
+				FactionsPlus.instance.disableSelf();//must make sure we're disabled if something failed if not /plugins  would show us green
+				//but mostly, for consistency's sake and stuff we couldn't think of/anticipate now
+			}
+		}
 	}
 
 	protected static void ensureFoldersExist() {
@@ -280,7 +338,22 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
 					Object val = entry.getValue();
 					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
-						Config.config.set( entry.getKey(),val );// overwrites existing defaults already in config
+						FactionsPlus.info( entry.getKey()+ " ! "+val );
+						String key = entry.getKey();
+						if (Config.config.contains( key)) {
+							//we don't want to overwrite the key cause it may be different case, funnily enough this shouldn't matter but it freaking does
+							if (str_economyCostToAnnounce.equalsIgnoreCase( key )) {
+//								Config.config.get
+								if (!str_economyCostToAnnounce.equals(key)) {
+									System.out.println(key+"+"+str_economyCostToAnnounce+"+"+config.get(str_economyCostToAnnounce));
+									throw FactionsPlus.bailOut( "");
+								}
+							}
+						}else {
+							Config.config.set( key,val );// overwrites existing defaults already in config
+						}
+						FactionsPlus.info( ""+config.get(entry.getKey())+"/2/"+config.getInt( str_economyCostToAnnounce));
+						FactionsPlus.info(str_economyCostToAnnounce+"//"+entry.getKey()+"//"+ config.get(str_economyCostToAnnounce));
 					}
 				}
 			} catch ( Exception e ) {
