@@ -2,6 +2,7 @@
 # on checkout they are converted to the OS's native line endings.
 * text
 
+*.* text
 
 #This setting "binary" tells git that the files specified are not text at all, and it should not try to change them. The binary setting is an alias for -text -diff.
 *.jar binary
