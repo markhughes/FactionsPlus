@@ -5,7 +5,7 @@
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
     <manifest generateManifest="true" manifestLocation="/FactionsPlus/manifest what" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
-        <sealing sealJar="false">
+        <sealing sealJar="true">
             <packagesToSeal/>
             <packagesToUnSeal/>
         </sealing>
