@@ -44,11 +44,6 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 	
 	
-	//done: maybe also prevent non-faction members from LWC locking stuff in our faction land
-	
-	//if this is true it will only detect&remove those in Material marked as TileEntity
-//	private final static boolean useFastWay=false; nvm don't wanna implement both ways
-	
 	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST //is TileEntity
 		,Material.FURNACE //is TileEntity
