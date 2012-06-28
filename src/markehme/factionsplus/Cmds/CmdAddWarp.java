@@ -57,7 +57,7 @@ public class CmdAddWarp extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) { 
+		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
 			authallow = true;
 		} else {
 			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
@@ -169,12 +169,12 @@ public class CmdAddWarp extends FCommand {
 				dataAddition = ":nullvalue";
 			}
 
-			filewrite.write(warpname + ":" + 
-					loc.getX() + ":" + 
-					loc.getY() + ":" + 
-					loc.getZ() + ":" + 
-					loc.getYaw() + ":" + 
-					loc.getPitch() + ":" + 
+			filewrite.write(warpname + ":" +
+					loc.getX() + ":" +
+					loc.getY() + ":" +
+					loc.getZ() + ":" +
+					loc.getYaw() + ":" +
+					loc.getPitch() + ":" +
 					player.getWorld().getName() + dataAddition + "\n");
 
 			filewrite.close();
@@ -186,14 +186,14 @@ public class CmdAddWarp extends FCommand {
 
 		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
 
-		String[] args2;
+		String[] argsa;
 
-		args2 = new String[3];
-		args2[1] = sender.getName();
-		args2[2] = warpname;
+		argsa = new String[3];
+		argsa[1] = sender.getName();
+		argsa[2] = warpname;
 
-		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", args2);
-		// notify all the players in the faction 
+		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", argsa);
+		// notify all the players in the faction
 		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
 			fplayerlisting.msg(announcemsg);
 		}

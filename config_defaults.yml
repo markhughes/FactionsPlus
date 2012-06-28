@@ -74,7 +74,7 @@ Teleports:
 extras:
     lwc:
         #If enabled, it is highly suggested that you change the default factions lwc integration to false.
-        useLWCIntegrationFix: false
+        removeLWCLocksOnClaim: false
         blockCPublicAccessOnNonOwnFactionTerritory: false
     disguise:
         enableDisguiseIntegration: false

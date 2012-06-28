@@ -3,6 +3,7 @@ package markehme.factionsplus.FactionsBridge;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.extras.*;
 
 
 /**
