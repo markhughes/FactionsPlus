@@ -151,7 +151,6 @@ public class FactionsPlus extends JavaPlugin {
 	//End Config String Pointer
 
 	
-	public static FileConfiguration config;
 	public static FileConfiguration templates;
 
 	public static boolean isMobDisguiseEnabled = false;
@@ -202,7 +201,7 @@ public class FactionsPlus extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		config=null;//must be here to cause config to reload on every plugin(s) reload from console
+		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		ensureConfigFilesLocationSafety();
 	    
 		PluginManager pm = this.getServer().getPluginManager();
@@ -235,7 +234,7 @@ public class FactionsPlus extends JavaPlugin {
 			throw bailOut("something failed when ensuring the folders exist");
 		}
 		
-		config = getConfig();//load config
+		Config.config = getConfig();//load config
 		
 		if (!templatesFile.exists()) {
 			
@@ -254,23 +253,23 @@ public class FactionsPlus extends JavaPlugin {
         }
         
         
-        if(config.getBoolean(confStr_enableEconomy)) {
+        if(Config.config.getBoolean(confStr_enableEconomy)) {
         	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         	
         	if (economyProvider != null) {
             	economy = economyProvider.getProvider();
         	}
         }
-        if(config.getBoolean(confStr_enableAnnounce)) {
+        if(Config.config.getBoolean(confStr_enableAnnounce)) {
     		pm.registerEvents(this.announcelistener, this);
         }
-        if(config.getBoolean(confStr_enableBans)) {
+        if(Config.config.getBoolean(confStr_enableBans)) {
         	pm.registerEvents(this.banlistener, this);
         }
-        if(config.getBoolean(confStr_enableJails)) {
+        if(Config.config.getBoolean(confStr_enableJails)) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(config.getBoolean(confStr_enableDisguiseIntegration) && (config.getBoolean(confStr_unDisguiseIfInOwnTerritory) || config.getBoolean(confStr_unDisguiseIfInEnemyTerritory))) {
+        if(Config.config.getBoolean(confStr_enableDisguiseIntegration) && (Config.config.getBoolean(confStr_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(confStr_unDisguiseIfInEnemyTerritory))) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
         		info("Hooked into DisguiseCraft!");
@@ -308,7 +307,7 @@ public class FactionsPlus extends JavaPlugin {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !config.getBoolean( confStr_removeLWCLocksOnClaim ) ) {
+				if ( !Config.config.getBoolean( confStr_removeLWCLocksOnClaim ) ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
 					info( "Consider setting " + confStr_removeLWCLocksOnClaim
 						+ " to reset locks for more than just the chests" );
@@ -321,10 +320,10 @@ public class FactionsPlus extends JavaPlugin {
        
         
         
-        if(config.getBoolean(confStr_enablePeacefulBoosts)) {
+        if(Config.config.getBoolean(confStr_enablePeacefulBoosts)) {
         	pm.registerEvents(this.peacefullistener, this);
         }
-        if(config.getBoolean(confStr_enablePowerBoosts)) {
+        if(Config.config.getBoolean(confStr_enablePowerBoosts)) {
         	pm.registerEvents(this.powerboostlistener, this);
         }
 
@@ -354,13 +353,13 @@ public class FactionsPlus extends JavaPlugin {
 
 	@Override
 	public FileConfiguration getConfig() {
-		if (null == config) {
+		if (null == Config.config) {
 			reloadConfig();
 		}
-		if (null == config) {
+		if (null == Config.config) {
 			throw bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
 		}
-		return config;
+		return Config.config;
 	}
 	
 	@Override
@@ -368,7 +367,7 @@ public class FactionsPlus extends JavaPlugin {
 		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
 		InputStream defConfigStream = getResource( fileConfigDefaults );// this is the one inside the .jar
 		if ( defConfigStream != null ) {
-			config = YamlConfiguration.loadConfiguration( defConfigStream );
+			Config.config = YamlConfiguration.loadConfiguration( defConfigStream );
 		} else {
 			throw bailOut( "There is no '"+fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
 				+ "which means that the plugin author forgot to include it" );
@@ -385,7 +384,7 @@ public class FactionsPlus extends JavaPlugin {
 				for ( Map.Entry<String, Object> entry : realConfig.getValues( true ).entrySet() ) {
 					Object val = entry.getValue();
 					if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
-						config.set( entry.getKey(),val );// overwrites existing defaults already in config
+						Config.config.set( entry.getKey(),val );// overwrites existing defaults already in config
 					}
 				}
 			} catch ( Exception e ) {

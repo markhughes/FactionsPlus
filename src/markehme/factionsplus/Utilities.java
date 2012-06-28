@@ -86,7 +86,7 @@ public class Utilities {
 	}
 
 	public static boolean checkGroupPerm(World world, String group, String permission) {
-		if(FactionsPlus.config.getBoolean("enablePermissionGroups")) {
+		if(Config.config.getBoolean("enablePermissionGroups")) {
 			return(FactionsPlus.permission.groupHas(world, group, permission));
 		} else {
 			return true;

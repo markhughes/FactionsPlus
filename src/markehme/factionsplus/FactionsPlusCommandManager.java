@@ -25,7 +25,7 @@ public class FactionsPlusCommandManager {
 	
 	public static void setup() {
 		// Warp Commands 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableWarps)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_enableWarps)) {
 			addSC(new CmdAddWarp()); 
 			addSC(new CmdRemoveWarp());
 			addSC(new CmdWarp());
@@ -33,21 +33,21 @@ public class FactionsPlusCommandManager {
 		}
 		
 		// Jail Commands
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableJails)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_enableJails)) {
 			addSC(new CmdSetJail());
 			addSC(new CmdUnsetJail());
 			addSC(new CmdJail());
 			addSC(new CmdUnJail());
 		}
 		// General Commands
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableAnnounce)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_enableAnnounce)) {
 			addSC(new CmdAnnounce());
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableBans)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_enableBans)) {
 			addSC(new CmdBan());
 			addSC(new CmdUnban());
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanToggleState) || FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanToggleState) || FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanToggleState)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_officersCanToggleState) || Config.config.getBoolean(FactionsPlus.confStr_membersCanToggleState) || Config.config.getBoolean(FactionsPlus.confStr_leadersCanToggleState)) {
 			addSC(new CmdToggleState());
 		}
 		addSC(new CmdFC());

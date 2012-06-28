@@ -3,8 +3,8 @@ package markehme.factionsplus.Cmds;
 import java.io.File;
 
 import org.bukkit.ChatColor;
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+
+import markehme.factionsplus.*;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
@@ -39,9 +39,9 @@ public class CmdUnban extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanFactionUnban) && Utilities.isLeader(fme)){
+		if(Config.config.getBoolean(FactionsPlus.confStr_leadersCanFactionUnban) && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanFactionUnban) && Utilities.isOfficer(fme)){
+		} else if(Config.config.getBoolean(FactionsPlus.confStr_officersCanFactionUnban) && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		

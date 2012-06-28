@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
@@ -71,7 +71,7 @@ public class CmdWarp extends FCommand {
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!FactionsPlus.config.getBoolean(FactionsPlus.confStr_warpTeleportAllowedFromEnemyTerritory) && fplayer.isInEnemyTerritory() ){
+		if(!Config.config.getBoolean(FactionsPlus.confStr_warpTeleportAllowedFromEnemyTerritory) && fplayer.isInEnemyTerritory() ){
 			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
@@ -91,9 +91,9 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				FactionsPlus.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance) > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				Config.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance) > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
 				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! FactionsPlus.config.getBoolean(FactionsPlus.confStr_warpTeleportIgnoreEnemiesIfInOwnTerritory)))){
+						|| ( fplayer.isInOwnTerritory() && ! Config.config.getBoolean(FactionsPlus.confStr_warpTeleportIgnoreEnemiesIfInOwnTerritory)))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
@@ -115,7 +115,7 @@ public class CmdWarp extends FCommand {
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
-				double max = FactionsPlus.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance);
+				double max = Config.config.getInt(FactionsPlus.confStr_warpTeleportAllowedEnemyDistance);
 
 				// box-shaped distance check
 				if (dx > max || dy > max || dz > max)
@@ -166,8 +166,8 @@ public class CmdWarp extends FCommand {
 						}
 					}
 
-					if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToWarp) > 0) {
-						if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToWarp), "to teleport to this warp", "for teleporting to your faction home")) {
+					if(Config.config.getInt(FactionsPlus.confStr_economyCostToWarp) > 0) {
+						if (!payForCommand(Config.config.getInt(FactionsPlus.confStr_economyCostToWarp), "to teleport to this warp", "for teleporting to your faction home")) {
 							return;
 						}
 					}
@@ -179,7 +179,7 @@ public class CmdWarp extends FCommand {
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					// Create a smoke effect
-					if (FactionsPlus.config.getBoolean(FactionsPlus.confStr_smokeEffectOnWarp)) {
+					if (Config.config.getBoolean(FactionsPlus.confStr_smokeEffectOnWarp)) {
 						List<Location> smokeLocations = new ArrayList<Location>();
 						smokeLocations.add(player.getLocation());
 						smokeLocations.add(player.getLocation().add(0, 1, 0));

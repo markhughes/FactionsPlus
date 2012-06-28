@@ -1,6 +1,6 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
 
@@ -16,7 +16,7 @@ public class MDListener implements Listener  {
 	public void onDisguiseEvent(DisguiseEvent e) {
 		FPlayer fplayer = FPlayers.i.get(e.getPlayer());
 		
-        	if(FactionsPlus.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
+        	if(Config.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
         		if(fplayer.isInEnemyTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());
@@ -25,7 +25,7 @@ public class MDListener implements Listener  {
         		}
         	}
         		
-        	if(FactionsPlus.config.getBoolean("unDisguiseIfInOwnTerritory")) {
+        	if(Config.config.getBoolean("unDisguiseIfInOwnTerritory")) {
         		if(fplayer.isInOwnTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());

@@ -6,9 +6,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusTemplates;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 
@@ -51,9 +49,9 @@ public class CmdAnnounce extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanAnnounce) && Utilities.isLeader(fplayer)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_leadersCanAnnounce) && Utilities.isLeader(fplayer)) {
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanAnnounce) && Utilities.isOfficer(fplayer)) {
+		} else if(Config.config.getBoolean(FactionsPlus.confStr_officersCanAnnounce) && Utilities.isOfficer(fplayer)) {
 			authallow = true;
 		}
 
@@ -62,9 +60,9 @@ public class CmdAnnounce extends FCommand {
 			return;
 		}
 		
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToAnnounce) > 0) {
+		if(Config.config.getInt(FactionsPlus.confStr_economyCostToAnnounce) > 0) {
 			// TODO: move to pay for command thingy 
-			if (!doFinanceCrap(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToAnnounce), "to make an announcement", "for making an announcement", fplayer)) {
+			if (!doFinanceCrap(Config.config.getInt(FactionsPlus.confStr_economyCostToAnnounce), "to make an announcement", "for making an announcement", fplayer)) {
 				return;
 			}
 		}
@@ -102,7 +100,7 @@ public class CmdAnnounce extends FCommand {
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !Config.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
 		
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);

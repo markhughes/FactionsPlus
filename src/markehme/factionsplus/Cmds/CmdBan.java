@@ -2,8 +2,7 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,9 +45,9 @@ public class CmdBan extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanFactionBan) && Utilities.isLeader(fme)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_leadersCanFactionBan) && Utilities.isLeader(fme)) {
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanFactionBan) && Utilities.isOfficer(fme)) {
+		} else if(Config.config.getBoolean(FactionsPlus.confStr_officersCanFactionBan) && Utilities.isOfficer(fme)) {
 			authallow = true;
 		}
 

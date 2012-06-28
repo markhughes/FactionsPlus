@@ -1,8 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.*;
 
 import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FPlayer;
@@ -29,7 +28,7 @@ public class CmdSetJail extends FCommand {
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !Config.config.getBoolean(FactionsPlus.confStr_enableEconomy) || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
 
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);

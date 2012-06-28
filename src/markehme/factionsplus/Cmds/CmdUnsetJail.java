@@ -2,7 +2,7 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 
@@ -37,20 +37,20 @@ public class CmdUnsetJail extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetJails)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_leadersCanSetJails)) {
 			if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
 				authallow = true;
 			}
 		}
 		
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetJails)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_officersCanSetJails)) {
 			if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
 				authallow = true;
 			}
 		}
 
 		
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetJails)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_membersCanSetJails)) {
 			authallow = true;
 		}
 		

@@ -8,8 +8,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 
@@ -53,12 +52,12 @@ public class CmdRemoveWarp extends FCommand {
 		
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
 			authallow = true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
+			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
 				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
+			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
 				authallow = true;
 			}
 		}
@@ -96,8 +95,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
-				if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
+		    if(Config.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !Config.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
+				if (!payForCommand(Config.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
 					return;
 				}
 			}

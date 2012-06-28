@@ -3,9 +3,7 @@ package markehme.factionsplus.Cmds;
 
 import java.io.*;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusTemplates;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -57,12 +55,12 @@ public class CmdAddWarp extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
 			authallow = true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
+			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
 				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
+			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
 				authallow = true;
 			}
 		}
@@ -73,20 +71,20 @@ public class CmdAddWarp extends FCommand {
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_mustBeInOwnTerritoryToCreate)) {
+			if(Config.config.getBoolean(FactionsPlus.confStr_mustBeInOwnTerritoryToCreate)) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp) > 0 && !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
-			if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
+		if(Config.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp) > 0 && !Config.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
+			if (!payForCommand(Config.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps) != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps)) {
+		if(Config.config.getInt(FactionsPlus.confStr_maxWarps) != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= Config.config.getInt(FactionsPlus.confStr_maxWarps)) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}

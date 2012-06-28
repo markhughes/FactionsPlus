@@ -1,7 +1,6 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,7 +13,7 @@ public class PeacefulListener implements Listener{
 		if(event.isCancelled()) {
 			return;
 		}
-		int boostValue = FactionsPlus.config.getInt(FactionsPlus.confStr_powerBoostIfPeaceful) ;
+		int boostValue = Config.config.getInt(FactionsPlus.confStr_powerBoostIfPeaceful) ;
 		if(boostValue> 0) {
 			if(event.getFaction().isPeaceful()) { // TODO: Prepare for 1.7.x and the removal of isPeaceful()
 				Utilities.addPower(event.getFPlayer(),boostValue);

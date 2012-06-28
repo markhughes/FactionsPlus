@@ -2,8 +2,7 @@ package markehme.factionsplus.listeners;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,7 @@ public class AnnounceListener implements Listener{
 		Player player = event.getPlayer();
 		FPlayer me = FPlayers.i.get(player);
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLogin)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLogin)) {
 			File fAF = new File(FactionsPlus.folderAnnouncements, me.getFactionId());
 			if(fAF.exists()) {
 				try {
@@ -40,7 +39,7 @@ public class AnnounceListener implements Listener{
 		if(event.isCancelled()) {
 			return;
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLandEnter)) {
+		if(Config.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLandEnter)) {
 			if (event.getFrom().equals(event.getTo())) return;
 
 			Player player = event.getPlayer();

@@ -19,9 +19,9 @@ public class LWCFunctions extends LWCBase {//extends so we don't have to prefix 
  
 	public static void try_integrateLWC() {
 		//when to enable LWC integrated feats
-		boolean isLWCLocksClearOnClaim = FactionsPlus.config.getBoolean( FactionsPlus.confStr_removeLWCLocksOnClaim );
+		boolean isLWCLocksClearOnClaim = Config.config.getBoolean( FactionsPlus.confStr_removeLWCLocksOnClaim );
 		boolean isLWCBlockCPublic =
-			FactionsPlus.config.getBoolean( FactionsPlus.confStr_blockCPublicAccessOnNonOwnFactionTerritory );
+			Config.config.getBoolean( FactionsPlus.confStr_blockCPublicAccessOnNonOwnFactionTerritory );
 		
 		if ( !isLWC() ) {
 			
