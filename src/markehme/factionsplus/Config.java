@@ -252,7 +252,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
 			
 //			_enableJails = ( (Boolean);
-			System.out.println(Config.config.getInt( str_economyCostToAnnounce) );
+//			System.out.println(Config.config.getInt( str_economyCostToAnnounce) );
 		}catch(Throwable t){
 			Q.rethrow(t);
 		}

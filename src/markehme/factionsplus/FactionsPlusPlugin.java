@@ -1,12 +1,15 @@
 package markehme.factionsplus;
 
 import java.io.*;
+import java.util.logging.*;
 
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.java.*;
+
+import com.avaje.ebean.*;
 
 
 public abstract class FactionsPlusPlugin extends JavaPlugin {
@@ -53,7 +56,11 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * @return is a dummy return so that it can be used like: throw bailOut(...);
 	 */
 	public static RuntimeException bailOut(String msg) {
-		severe(msg);
+		throw bailOut(null, msg);
+	}
+	
+	public static RuntimeException bailOut(Throwable cause, String msg) {
+		severe(cause, msg);
 		throw disableSelf(FactionsPlus.instance, true);
 	}
 
@@ -71,7 +78,22 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		FactionsPlus.log.severe( FactionsPlus.FP_TAG_IN_LOGS+logInfoMsg );//allowed so that [SEVERE] appears
 		tellConsole(ChatColor.RED+FactionsPlus.FP_TAG_IN_LOGS+ChatColor.DARK_PURPLE+logInfoMsg);
 	}
-
+	
+	
+	/**
+	 * @param cause if null => ignored
+	 * @param logInfoMsg
+	 */
+	public static void severe( Throwable cause, String logInfoMsg ) {
+		String msg = FactionsPlus.FP_TAG_IN_LOGS + logInfoMsg;
+		if ( null == cause ) {
+			FactionsPlus.log.severe( msg );// allowed so that [SEVERE] appears
+		} else {
+			FactionsPlus.log.log( Level.SEVERE, msg, cause );// allowed so that [SEVERE] appears
+		}
+		tellConsole( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS + ChatColor.DARK_PURPLE + logInfoMsg );
+	}
+	
 	/**
 	 * allows the use of ChatColor in messages but they will be prefixed by [INFO]
 	 * @param msg
@@ -86,6 +108,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	public static RuntimeException disableSelf(FactionsPlus fpInstance, boolean forceStop) {
 		fpInstance.disableSelf();
 		if (forceStop) {
+//			FactionsPlus.log.log( Level.INFO, )
 			throw new RuntimeException(FactionsPlus.FP_TAG_IN_LOGS+" execution stopped by disableSelf() which means read the above colored message");
 		}
 		return null;
@@ -102,5 +125,6 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		//it won't deregister commands ie. /f fc  will still work apparently, likely cause Factions plugin won't be disabled and it is
 		//it that handles those commands that we potentially already registered to it (assuming this was called after)
 	}
+
 	
 }
