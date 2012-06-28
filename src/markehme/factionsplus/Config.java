@@ -2,6 +2,7 @@ package markehme.factionsplus;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.nio.*;
 import java.util.*;
 
 import markehme.factionsplus.extras.*;
@@ -327,26 +328,55 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		return Config.config;
 	}
 	
-	private final static void parse(Map<String, Object> destination, Map<String, Object> start) {
+	
+	private final static String spaces=new String(new char[256]).replace('\0', ' ');
+	private final static int spacesPerLevel=2;
+	private final static void parseWrite(int level, Map<String, Object> start) throws IOException {
 		for ( Map.Entry<String, Object> entry : start.entrySet() ) {
 			Object val = entry.getValue();
-			if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
-				String key = entry.getKey();
-				destination.put(key,val);
+			String key = entry.getKey();
+			if (level>0){
+				bw.write( spaces, 0, spacesPerLevel*level );
+			}
+			bw.write(key);
+			bw.write(":");
+			if ( !( val instanceof MemorySection ) ) {
+				bw.write(" "+val);
+				bw.newLine();
 			}else {
-				parse(destination, ((MemorySection)val).getValues( true ));
+				bw.newLine();
+				parseWrite(level+1,((MemorySection)val).getValues( false ));
 			}
 		}
 	}
 	
+	private static BufferedWriter bw;
+	
 	public final static void saveConfig() {
 		try {
-//			DumperOptions opt = new DumperOptions();
-//			opt.setDefaultFlowStyle( DumperOptions.FlowStyle.BLOCK );
-//			final Yaml yaml = new Yaml( opt );
+			
 //			
 			Map<String, Object> root = new HashMap<String, Object>();
-			parse(root, config.getValues( true));
+			
+			FileOutputStream fos=null;
+			OutputStreamWriter osw=null;
+			bw=null;
+			try {
+				fos = new FileOutputStream( Config.fileConfig );
+				osw = new OutputStreamWriter( fos, "UTF-8" );
+				bw = new BufferedWriter( osw );
+				parseWrite( 0, config.getValues( false ) );
+			} finally {
+				if ( null != bw ) {
+					bw.close();
+				}
+				if ( null != osw ) {
+					osw.close();
+				}
+				if ( null != fos ) {
+					fos.close();
+				}
+			}
 //			for ( Map.Entry<String, Object> entry : config.getValues( true).entrySet() ) {
 //				Object val = entry.getValue();
 //				if ( !( val instanceof MemorySection ) ) {//ignore sections, parse only "var: value"  tuples else it won't carry over
@@ -358,6 +388,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //				}
 //			}
 //			
+//			DumperOptions opt = new DumperOptions();
+//			opt.setDefaultFlowStyle( DumperOptions.FlowStyle.BLOCK );
+//			final Yaml yaml = new Yaml( opt );
 //			FileOutputStream x = null;
 //			OutputStreamWriter y=null;
 //			try {
@@ -370,8 +403,8 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //				}
 //			}
 			
-			getConfig().save( Config.fileConfig );
-		} catch ( Exception e ) {
+//			getConfig().save( Config.fileConfig );
+		} catch ( IOException e ) {
 			e.printStackTrace();
 			throw FactionsPlusPlugin.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
 		}
