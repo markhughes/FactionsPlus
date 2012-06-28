@@ -97,8 +97,10 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * @param fpInstance
 	 */
 	public void disableSelf() {
-		Bukkit.getPluginManager().disablePlugin( this );//it will call onDisable()
-		//it won't deregister commands ie. /f fc  will still work
+		setEnabled( false );//it will call onDisable() if it was enabled
+//		Bukkit.getPluginManager().disablePlugin( this );
+		//it won't deregister commands ie. /f fc  will still work apparently, likely cause Factions plugin won't be disabled and it is
+		//it that handles those commands that we potentially already registered to it (assuming this was called after)
 	}
 	
 }

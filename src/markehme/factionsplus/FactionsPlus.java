@@ -66,6 +66,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	public FactionsPlus() {//constructor
 		super();
+		if (null != instance) {
+			throw bailOut("this was not expected, getting new-ed again");
+		}
 		instance=this;
 	}
 	

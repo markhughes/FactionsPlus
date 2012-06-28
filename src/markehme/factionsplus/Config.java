@@ -265,6 +265,12 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 
 	protected static void ensureFoldersExist() {
+		File dataF = FactionsPlus.instance.getDataFolder();
+		if (!dataF.equals(  folderBase)) {
+			throw FactionsPlusPlugin.bailOut("Base folder and dataFolder differ, this may not be intended and it may just be a possible bug in the code;" +
+					"folderBase="+folderBase+" dataFolder="+dataF);
+		}
+		
 		try {
 			addDir(Config.folderBase);
 			addDir( Config.folderWarps );
@@ -320,7 +326,6 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 	public final static void reloadConfig() {
-		1
 		YamlConfiguration c = new YamlConfiguration();//.loadFromString("");
 		String key1 = "Test";
 		String key2 = "test";
@@ -337,7 +342,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		for (   Map.Entry<String,Object> element : c.getValues( true ).entrySet() ) {
 //			System.out.println(element);
 			FactionsPlus.info( element.getKey()+" + "+element.getValue() );
-		};
+		}
 		
 		FactionsPlus.bailOut( "");//FIXME: temporary all from above
 		
