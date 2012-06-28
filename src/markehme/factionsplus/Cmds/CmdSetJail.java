@@ -2,6 +2,7 @@ package markehme.factionsplus.Cmds;
 
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FPlayer;

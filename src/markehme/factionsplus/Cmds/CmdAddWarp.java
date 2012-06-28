@@ -4,6 +4,7 @@ package markehme.factionsplus.Cmds;
 import java.io.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

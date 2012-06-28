@@ -4,6 +4,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
+import markehme.factionsplus.config.*;
+
 public class FactionsPlusUpdate {
 	static public void checkUpdates() {
 		String content = null;

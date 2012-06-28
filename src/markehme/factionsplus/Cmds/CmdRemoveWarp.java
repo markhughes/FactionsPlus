@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 

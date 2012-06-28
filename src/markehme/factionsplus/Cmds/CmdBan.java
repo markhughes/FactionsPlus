@@ -3,6 +3,7 @@ package markehme.factionsplus.Cmds;
 import java.io.File;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

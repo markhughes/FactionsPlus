@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 

@@ -2,6 +2,7 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.ChatColor;

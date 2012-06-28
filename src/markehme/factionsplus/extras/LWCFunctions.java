@@ -1,6 +1,7 @@
 package markehme.factionsplus.extras;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.listeners.*;
 
 import org.bukkit.*;

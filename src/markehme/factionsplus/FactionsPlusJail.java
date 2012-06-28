@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,10 +1,11 @@
-package markehme.factionsplus;
+package markehme.factionsplus.config;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.*;
 import java.util.*;
 
+import markehme.factionsplus.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.configuration.*;
@@ -80,20 +81,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 
 	public static final String prefixJails="jails"+Config.delim;
 	public static final String str_enableJails = prefixJails+"enableJails";
-	public static boolean _enableJails=true;//default
-	public static final String[] oa_enableJails={
-		//hmm there were none for this
-	};
 	
-	@Option(
-			comment = "some comment here",
-			oldAliases = {
-			},
-			sub={}
-			)
-	public static boolean _prefixJails=true;
-	
-	public static boolean _leadersCanSetJails=true;
+	@ConfigOption
+	public static final JailsSection jails=new JailsSection();
 	
 	public static final String str_leadersCanSetJails = prefixJails+"leadersCanSetJails";
 	public static final String str_officersCanSetJails = prefixJails+"officersCanSetJails";
@@ -154,6 +144,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static final String str_showLastAnnounceOnLogin=prefixAnnounce+"showLastAnnounceOnLogin";
 	public static final String str_showLastAnnounceOnLandEnter=prefixAnnounce+"showLastAnnounceOnLandEnter";
 
+	
+	public static final EconomySection economy=new EconomySection();
+	
 	public static final String prefixEconomy="economy"+delim;
 	public static final String str_enableEconomy=prefixEconomy+"enableEconomy";
 	public static final String str_economyCostToWarp=prefixEconomy+"economyCostToWarp";
@@ -166,6 +159,8 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static final String str_economyCostToToggleUpPeaceful=prefixEconomy+"economyCostToToggleUpPeaceful";
 	public static final String str_economyCostToToggleDownPeaceful=prefixEconomy+"economyCostToToggleDownPeaceful";
 
+	@ConfigSection({"some comment here, if any", "second line of comment"})
+	public static final TeleportsSection teleports=new TeleportsSection();
 	public static final String prefixTeleports="Teleports"+delim;
 	public static final String str_disallowTeleportingToEnemyLandViaHomeCommand= prefixTeleports+"disallowTeleportingToEnemyLandViaHomeCommand";
 	public static final String str_reportSuccessfulByCommandTeleportsIntoEnemyLand=prefixTeleports+"reportSuccessfulByCommandTeleportsIntoEnemyLand";
@@ -193,7 +188,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	 * call this in plugin.onLoad (the thing that happens before onEnable() )
 	 * @param plugin
 	 */
-	protected static void onLoad() {
+	public final static void onLoad() {
 		boolean failed = false;
 		try {
 			if ( Q.isInconsistencyFileBug() ) {
@@ -249,7 +244,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	/**
 	 * called on plugin.onEnable() and every time you want the config to reload
 	 */
-	protected static void reload() {
+	public final static void reload() {
 		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates=null;
 		boolean failed = false;

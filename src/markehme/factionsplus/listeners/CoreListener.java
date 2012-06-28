@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 
 import org.bukkit.entity.Player;

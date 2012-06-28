@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 

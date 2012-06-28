@@ -2,6 +2,8 @@ package markehme.factionsplus;
 
 import java.io.*;
 
+import markehme.factionsplus.config.*;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.*;
