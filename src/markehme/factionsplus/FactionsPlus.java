@@ -37,8 +37,8 @@ public class FactionsPlus extends JavaPlugin {
     public static Economy economy = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
-    //FIXME: use getDataFolder() and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
-	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );
+    //could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
+	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );//just never be "" cause that means root folder
 	public static final File	folderWarps	= new File( folderBase, "warps" );
 	public static final File	folderJails	= new File( folderBase, "jails" );
 	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
@@ -46,9 +46,6 @@ public class FactionsPlus extends JavaPlugin {
 	public static final File	folderFBans	= new File( folderBase, "fbans" );
 	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
 	
-	private static final File currentFolder_OnClassInit=Utilities.getCurrentFolder();
-	private static       File currentFolder_OnEnable=null;
-
     public static File templatesFile = new File(folderBase , "templates.yml");
 	public static FileConfiguration templates;
 
@@ -84,6 +81,11 @@ public class FactionsPlus extends JavaPlugin {
 	}
 	
 	@Override
+	public void onLoad() {
+		Config.onLoad();
+	}
+	
+	@Override
 	public void onDisable() {
 		if (null != metrics) {
 			try {
@@ -100,8 +102,7 @@ public class FactionsPlus extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
-		ensureConfigFilesLocationSafety();
+		Config.reload();
 	    
 		PluginManager pm = this.getServer().getPluginManager();
 		
@@ -307,29 +308,7 @@ public class FactionsPlus extends JavaPlugin {
 		}
 	}
 	
-	/**
-	 * to be called only in onEnable();
-	 */
-	private void ensureConfigFilesLocationSafety() throws RuntimeException {
-		// the following paranoid check is to make sure the configs don't get corrupted (so to speak) if the current folder
-		// miraculously changed(ie. a different folder is now the current folder) by the time onEnable was called
-		currentFolder_OnEnable = Utilities.getCurrentFolder();
-		if ( ( null == currentFolder_OnEnable ) || ( null == currentFolder_OnClassInit )
-			|| ( !currentFolder_OnEnable.equals( currentFolder_OnClassInit ) ) )
-		{
-			severe( "Bukkit(or something) changed current folder between the time the class was inited & "
-				+ "the time onEnable() was issued.\nThis will mess up some thing as this was not expected, therefore we stop here" );
-//			this.getServer().getPluginManager().disablePlugin( this );
-			disableSelf(this);
-			throw new RuntimeException( "currentFolder_OnClassInit=`" + currentFolder_OnClassInit
-				+ "` differs from currentFolder_OnEnable=`" + currentFolder_OnEnable + "`" );
-			// this typically means that any new File(path) calls in the above class fields have a different current folder than
-			// any of the new File() calls after onEnable() was issued, which further means FactionPlus configs may be
-			// read/written to a different location
-			// but the thing is, this is expected/assumed from bukkit that the current folder between class init and
-			// onEnable() would not be changed
-		}
-	}
+	
 	
 	private FactionsPlus addDir(File dir) {
 		if(!dir.exists()) {

@@ -38,13 +38,21 @@ public class Utilities {
 
 
 	public static void writeToFile(String fileN, String T) {
+		BufferedWriter bw =null;
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fileN), true));
+			bw = new BufferedWriter(new FileWriter(new File(fileN), true));
 			bw.write(T);
 			bw.newLine();
-			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (null != bw) {
+				try {
+					bw.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -173,7 +181,7 @@ public class Utilities {
 	// ---------------- other simple utils
 	
 	public static File getCurrentFolder() {
-		return new File("");
+		return new File(".");
 	}
 	
 	/**

@@ -2,7 +2,10 @@ package markehme.factionsplus;
 
 import java.io.*;
 
+import markehme.factionsplus.extras.*;
+
 import org.bukkit.configuration.file.*;
+import org.bukkit.plugin.*;
 
 
 public abstract class Config {
@@ -98,5 +101,27 @@ public abstract class Config {
 	public static final String confStr_unDisguiseIfInEnemyTerritory=prefExtrasMD+"unDisguiseIfInEnemyTerritory";
 	public static final String confStr_DoNotChangeMe="DoNotChangeMe";
 	//End Config String Pointer
+	
+	
+	private static File currentFolder_OnPluginClassInit;
+	private static       File currentFolder_OnEnable=null;
+
+	/**
+	 * call this in plugin.onLoad (the thing that happens before onEnable() )
+	 * @param plugin
+	 */
+	protected static void onLoad() {
+		if (Q.isInconsistencyFileBug()) {
+			FactionsPlus.bailOut( "Please do not have `user.dir` property set, it will mess up so many things" );
+		}
+
+	}
+	
+	/**
+	 * called on plugin.onEnable() and every time you want the config to reload
+	 */
+	protected static void reload() {
+		Config.config=null;//must be here to cause config to reload on every plugin(s) reload from console
+	}
 	
 }
