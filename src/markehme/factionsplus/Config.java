@@ -9,16 +9,17 @@ import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.*;
 
 
-public abstract class Config {
+public abstract class Config {//not named Conf so to avoid conflicts with com.massivecraft.factions.Conf
 
 	//could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using getDataFolder()
 	public static final File	folderBase= new File( "plugins" + File.separator + "FactionsPlus" );//just never be "" cause that means root folder
 	public static final File	folderWarps	= new File( folderBase, "warps" );
-	public static final File	folderJails	= new File("" );//folderBase, "jails" );
+	public static final File	folderJails	= new File(folderBase, "jails" );
 	public static final File	folderAnnouncements	= new File( folderBase, "announcements" );
 	public static final File	folderFRules	= new File( folderBase, "frules" );
 	public static final File	folderFBans	= new File( folderBase, "fbans" );
 	public static final File	fileDisableInWarzone = new File( folderBase, "disabled_in_warzone.txt");
+	
 	public static File templatesFile = new File(folderBase , "templates.yml");
 	public static FileConfiguration templates;
 	
@@ -26,7 +27,7 @@ public abstract class Config {
 	//and it contains the defaults, so that they are no longer hardcoded in java code
 	public static File fileConfig = new File(Config.folderBase , "config.yml");
 	
-	public static FileConfiguration config;//not named Conf so to avoid conflicts with com.massivecraft.factions.Conf
+	public static FileConfiguration config;
 	
 	
 	public static final String prefJails="jails"+Config.delim;
