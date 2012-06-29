@@ -2,15 +2,20 @@ package markehme.factionsplus.config;
 
 
 public class EconomySection implements Section {
-	private static final String prefixEconomy="economy"+Config.delim;
+//	private static final String prefixEconomy="economy"+Config.delim;
+//	private static final String ectw="economyCostToWarp";
 	
+	//I was thinking to keep them as non-composed strings for easier to see, but more error prone, however it may just be worth it
 	
-	private static final String ectw="economyCostToWarp";
 	@ConfigOption(oldAliases={
-		prefixEconomy+"economycostToWarp"
-		,prefixEconomy+ectw
-		,ectw})
-	public static double costToWarp=0;
+		"economy.economyCostToWarp"//newest
+		,"economy.economycostToWarp"//newer
+		,"economyCostToWarp"//very old one
+//		prefixEconomy+ectw//newest
+//		,prefixEconomy+"economycostToWarp"//newer
+//		,ectw//very old one
+		})
+	public static double costToWarp=0;//current one (the field name)
 	
 	
 	

@@ -6,6 +6,7 @@ import java.nio.*;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.configuration.*;
@@ -538,7 +539,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 //	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
 	
 	
-	private final static void parseWrite2( int level, WYSection root ) throws IOException {
+	private final static void appendSection( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
 		
@@ -573,7 +574,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYSection cs = (WYSection)currentItem;
 						bw.write( ( cs ).getId() + WannabeYaml.IDVALUE_SEPARATOR );
 						bw.newLine();
-						parseWrite2( level + 1, cs );// recurse
+						appendSection( level + 1, cs );// recurse
 					} else {
 						// throw null;//FIXME: throw right one
 						throw FactionsPlus.bailOut( "impossible, coding bug detected" );
@@ -666,7 +667,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
-				parseWrite2( 0, virtualRoot );
+				appendSection( 0, virtualRoot );
 			} catch ( IOException e ) {
 				Q.rethrow( e );
 			} finally {
@@ -737,6 +738,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
 			// remove old
 			// but only if new values are not already set
+			
+			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
+			
 			parseCheckForValids( 0, virtualRoot );
 		} catch ( IOException e ) {
 			e.printStackTrace();
