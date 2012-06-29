@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.bukkit.configuration.file.*;
+import org.yaml.snakeyaml.*;
+
 import markehme.factionsplus.extras.*;
 
 
@@ -14,24 +17,36 @@ public abstract class WannabeYaml {
 	private static final char	commentChar	= '#';
 	private static final char	idEnder		= ':';
 	private static final int	UNSET_INDEX	= -1;
+	public static final int	maxLevels	= 128;
+	public static final int spacesPerLevel=2;
+	public static final int	maxLevelSpaces	= maxLevels*spacesPerLevel;
 	
 	private enum ExpectingType {
 		ID_START, IDENTIFIER, VALUESTART_OR_EOL,
 	}
 	
 	
-	public final static void read( File fromFile, LinkedList<WYItem> destinationLList) throws IOException {
+	/**
+	 * @param fromFile
+	 * @param destinationLList
+	 * @return root
+	 * @throws IOException
+	 */
+	public final static WYItem read( File fromFile) throws IOException {
+		assert Q.nn(fromFile);
 		if ( ( !fromFile.exists() ) || ( fromFile.isDirectory() ) ) {
 			throw new FileNotFoundException();
 		}
-		assert Q.nn(destinationLList);
+		
+		WYSection root=new WYSection("root",null,null);
 		
 		FileInputStream fis = null;
 		BufferedReader br = null;
 		try {
 			fis = new FileInputStream( fromFile );
 			br = new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
-			int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
+//			int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
+			int currentLevel=0;//up to maxLevels
 			String line;
 			int lineNumber = 0;
 			
@@ -52,6 +67,9 @@ public abstract class WannabeYaml {
 					case ID_START:
 						assert Q.assumedTrue( idStartPos == UNSET_INDEX );
 						if ( c == space ) {
+							if (pos >= maxLevelSpaces) {
+								throw new RuntimeException("you've reached beyond max allowed nesting");
+							}
 							// skip all spaces until you meet non-space
 							continue;
 						} else {
@@ -66,12 +84,21 @@ public abstract class WannabeYaml {
 								// non-comment then it's identifier aka id
 								// first make sure the level is right (aka number of spaces before the id)
 								// should allow 1 space above the current level
-								if ( pos - 1 > currentLevelspaces ) {
+								if (pos-(spacesPerLevel*1) > (currentLevel*spacesPerLevel )) {  
+									//ie. "  some"
+									//    "     else" //notice it's 1 char is beyond the allowed +2 chars displacement spacesPerLevel == 2
+//								if ( pos - 1 > currentLevelspaces ) {
 									throw new RuntimeException( "you put too many spaces at line " + lineNumber
 										+ " at position " + pos + " in file " + fromFile.getAbsolutePath() + '\n'
 										+ line );
 								}// else it can be exact level or less, that's normal
-								currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
+								if (pos % spacesPerLevel != 0) {
+									throw new RuntimeException("incorrect number of spaces at line "+ lineNumber
+										+ " at position " + pos + " in file " + fromFile.getAbsolutePath() + '\n'
+										+ line );
+								}
+								//currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
+								currentLevel=pos / spacesPerLevel;//due to above if, this would be integer 
 								expecting = ExpectingType.IDENTIFIER;
 								idStartPos = pos;
 							}
@@ -127,7 +154,7 @@ public abstract class WannabeYaml {
 					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 					// this means, this is a section
 					destinationLList.addLast( new WYSection( "!3!" + line.substring( idStartPos, idEndPos ) + "!4!" ) );
-					currentLevelspaces++;
+					currentLevel++;
 					continue nextLine;
 				default:
 					throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + pos + '\n'

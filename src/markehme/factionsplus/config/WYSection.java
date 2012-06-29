@@ -4,12 +4,13 @@ import markehme.factionsplus.extras.*;
 
 
 
-public class WYSection implements WYItem {
+public class WYSection extends WYItem {
 	
 	private String	identifier;
 	
 	
-	public WYSection( String id ) {
+	public WYSection( String id , WYItem parent, WYItem next) {
+		super(parent,next);
 		identifier = id;
 		assert Q.nn( identifier );
 	}

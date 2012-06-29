@@ -324,14 +324,14 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 	
-	private final static String spaces=new String(new char[256]).replace('\0', ' ');
-	private final static int spacesPerLevel=2;
+	private final static String bucketOfSpaces=new String(new char[WannabeYaml.maxLevelSpaces]).replace('\0', ' ');
+	
 	private final static void parseWrite(int level, Map<String, Object> start) throws IOException {
 		for ( Map.Entry<String, Object> entry : start.entrySet() ) {
 			Object val = entry.getValue();
 			String key = entry.getKey();
 			if (level>0){
-				bw.write( spaces, 0, spacesPerLevel*level );
+				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel*level );
 			}
 			bw.write(key);
 			bw.write(":");
@@ -345,35 +345,39 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
-	
-	private final static void save() {
-		FileInputStream fis=null;
-		BufferedReader br =null;
-		try {
-			fis= new FileInputStream( Config.fileConfig );
-			br= new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
-			
-		} catch ( FileNotFoundException e ) {
-//			e.printStackTrace();
-			Q.rethrow(e);
-		}finally{
-			if (null != br) {
-				try {
-					br.close();
-				} catch ( IOException e ) {
-					e.printStackTrace();
+
+	private final static void parseWrite2(int level, LinkedList<WYItem> llist) throws IOException {
+		for ( WYItem wyItem : llist ) {
+			Class<? extends WYItem> cls = wyItem.getClass();
+			if (WYComment.class == cls) {
+				bw.write( ((WYComment)wyItem).getCommentLine() );
+			}else {
+				if (WYIdentifier.class == cls) {
+					
+				}else {
+					if (WYSection.class == cls) {
+						level++;
+						parseWrite2(level+1,)
+					}
 				}
-				}
-			if (null != fis) {
-			 try {
-				fis.close();
-			} catch ( IOException e ) {
-				e.printStackTrace();
 			}
+			Object val = entry.getValue();
+			String key = entry.getKey();
+			if (level>0){
+				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel*level );
+			}
+			bw.write(key);
+			bw.write(":");
+			if ( !( val instanceof MemorySection ) ) {
+				bw.write(" "+val);
+				bw.newLine();
+			}else {
+				bw.newLine();
+				parseWrite(level+1,((MemorySection)val).getValues( false ));
 			}
 		}
-		
 	}
+	
 	
 	private static BufferedWriter bw;
 	
@@ -389,7 +393,8 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				fos = new FileOutputStream( Config.fileConfig );
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
-				parseWrite( 0, config.getValues( false ) );
+//				parseWrite( 0, config.getValues( false ) );
+				parseWrite2( 0, llist);
 			} catch ( IOException e ) {
 				Q.rethrow(e);
 			} finally {
