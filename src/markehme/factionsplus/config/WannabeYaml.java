@@ -206,8 +206,8 @@ public abstract class WannabeYaml {
 						// ok get identifier
 						// parse until ":" or non alphanumeric char
 						if ( ( ( c >= 'a' ) && ( c <= 'z' ) ) || ( ( c >= 'A' ) && ( c <= 'Z' ) )
-							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) )
-						{
+							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) || c == Config.DOT)
+						{//allows ie. extras.lwc.disableSomething as an identifier !
 							// ok valid id char
 							// we don't actually do anything //FIXME: fix 'if'
 						} else {

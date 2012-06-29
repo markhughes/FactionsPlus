@@ -1,6 +1,7 @@
 package markehme.factionsplus.config;
 
 import java.io.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.*;
 import java.util.*;
@@ -116,7 +117,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * inside the .jar)
 	 * typically config save will happen if there are new settings (those that didn't exist in 3.)
 	 */
-	public static final String				DOT													= ".";															// never
+	public static final char				DOT													= '.';															// never
 																																								// change
 																																								// this,
 																																								// it's
@@ -372,13 +373,21 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			if ( hasFileFieldsTrap() ) {
 				throw FactionsPlusPlugin
-				.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+					.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
 						+ "in places that use files, tell plugin author to fix" );
 			}
 			
-			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new option names
-			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
-			 
+			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new option
+			// names
+			// TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
+			// map.key: dotted format config.yml settings(only key: value ones)
+			// map.value: Field.class instance of the
+			
+			// Field f;
+			parsify( Config.class, "" );
+			throw null;
+			// Annotation[] ar = f.getDeclaredAnnotations();
+			// Class.class.getDeclaredAnnotations();
 		} catch ( Throwable t ) {
 			failed = true;
 			Q.rethrow( t );
@@ -390,6 +399,34 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		
 		
+	}
+	
+	
+	private static void parsify( Class<?> rootClass, String dottedParentSection ) {
+		Field[] allFields = rootClass.getDeclaredFields();
+		// DeclaredAnnotations();
+		for ( int i = 0; i < allFields.length; i++ ) {
+			// System.out.println( "F: "+allFields[i] );
+			Annotation[] currentFieldAnnotations = allFields[i].getDeclaredAnnotations();
+			for ( int j = 0; j < currentFieldAnnotations.length; j++ ) {
+				// System.out.println("A: "+ currentFieldAnnotations[j] );
+				Class<? extends Annotation> annotationType = currentFieldAnnotations[j].annotationType();
+				String fName = allFields[i].getName();
+				
+				if ( ConfigSection.class.equals( annotationType ) ) {
+					// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
+					Class<?> typeOfField = allFields[i].getType();// get( rootClass );
+					parsify( typeOfField, ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT
+						+ fName ) );
+				} else {
+					if ( ConfigOption.class.equals( annotationType ) ) {
+						FactionsPlus.info( ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT
+							+ fName ) );
+						// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
+					}// else we don't care
+				}
+			}
+		}
 	}
 	
 	
