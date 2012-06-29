@@ -545,7 +545,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		while ( null != currentItem ) {
 			
 			Class<? extends WYItem> cls = currentItem.getClass();
-			 System.out.println(currentItem);
+//			 System.out.println(currentItem+"!");
 			
 			if ( currentItem instanceof WYRawLine) {
 				bw.write( ( (WYRawLine)currentItem ).getFullLine() );
