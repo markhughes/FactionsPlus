@@ -116,10 +116,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * inside the .jar)
 	 * typically config save will happen if there are new settings (those that didn't exist in 3.)
 	 */
-	public static final String				delim												= ".";
+	public static final String				DOT												= ".";//never change this, it's yaml compatible
 	
 	public static final String				prefixJails											= "jails"
-																									+ Config.delim;
+																									+ Config.DOT;
 	public static final String				str_enableJails										= prefixJails
 																									+ "enableJails";
 	
@@ -140,7 +140,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final String				str_officersCanJail									= prefixJails
 																									+ "officersCanJail";
 	
-	public static final String				prefixWarps											= "warps" + delim;
+	public static final String				prefixWarps											= "warps" + DOT;
 	public static final String				str_enableWarps										= prefixWarps
 																									+ "enableWarps";
 	public static final String				str_leadersCanSetWarps								=
@@ -173,7 +173,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixWarps
 																										+ "smokeEffectOnWarp";
 	
-	public static final String				prefixBanning										= "banning" + delim;
+	public static final String				prefixBanning										= "banning" + DOT;
 	public static final String				str_enableBans										= prefixBanning
 																									+ "enableBans";
 	public static final String				str_leadersCanFactionBan							=
@@ -192,7 +192,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixBanning
 																										+ "leaderCanNotBeBanned";
 	
-	public static final String				prefixRules											= "rules" + delim;
+	public static final String				prefixRules											= "rules" + DOT;
 	public static final String				str_enableRules										= prefixRules
 																									+ "enableRules";
 	public static final String				str_leadersCanSetRules								=
@@ -205,7 +205,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixRules
 																										+ "maxRulesPerFaction";
 	
-	public static final String				prefixPeaceful										= "peaceful" + delim;
+	public static final String				prefixPeaceful										= "peaceful" + DOT;
 	public static final String				str_leadersCanToggleState							=
 																									prefixPeaceful
 																										+ "leadersCanToggleState";
@@ -222,7 +222,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixPeaceful
 																										+ "powerBoostIfPeaceful";
 	
-	public static final String				prefixPowerboosts									= "powerboosts" + delim;
+	public static final String				prefixPowerboosts									= "powerboosts" + DOT;
 	public static final String				str_enablePowerBoosts								=
 																									prefixPowerboosts
 																										+ "enablePowerBoosts";
@@ -254,7 +254,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixPowerboosts
 																										+ "extraPowerLossIfDeathByOther";
 	
-	public static final String				prefixAnnounce										= "announce" + delim;
+	public static final String				prefixAnnounce										= "announce" + DOT;
 	public static final String				str_enableAnnounce									= prefixAnnounce
 																									+ "enableAnnounce";
 	public static final String				str_leadersCanAnnounce								=
@@ -273,7 +273,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	@ConfigSection
 	public static final EconomySection		economy												= new EconomySection();
 	
-	public static final String				prefixEconomy										= "economy" + delim;
+	public static final String				prefixEconomy										= "economy" + DOT;
 	public static final String				str_enableEconomy									= prefixEconomy
 																									+ "enableEconomy";
 	public static final String				str_economyCostToWarp								=
@@ -309,7 +309,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	} )
 	public static final TeleportsSection	teleports											=
 																									new TeleportsSection();
-	public static final String				prefixTeleports										= "Teleports" + delim;
+	public static final String				prefixTeleports										= "Teleports" + DOT;
 	public static final String				str_disallowTeleportingToEnemyLandViaHomeCommand	=
 																									prefixTeleports
 																										+ "disallowTeleportingToEnemyLandViaHomeCommand";
@@ -320,12 +320,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																									prefixTeleports
 																										+ "disallowTeleportingToEnemyLandViaEnderPeals";
 	
-	public static final String				prefixExtras										= "extras" + delim;
+	public static final String				prefixExtras										= "extras" + DOT;
 	public static final String				str_disableUpdateCheck								=
 																									prefixExtras
 																										+ "disableUpdateCheck";
 	public static final String				prefExtrasLWC										= prefixExtras + "LWC"
-																									+ delim;
+																									+ DOT;
 	public static final String				str_removeLWCLocksOnClaim							=
 																									prefExtrasLWC
 																										+ "removeLWCLocksOnClaim";
@@ -335,7 +335,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public static final String				prefixExtrasMD										= prefixExtras
 																									+ "disguise"
-																									+ delim;
+																									+ DOT;
 	public static final String				str_enableDisguiseIntegration						=
 																									prefixExtrasMD
 																										+ "enableDisguiseIntegration";
@@ -739,7 +739,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// remove old
 			// but only if new values are not already set
 			
-			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
+//			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
 			
 			parseCheckForValids( 0, virtualRoot );
 		} catch ( IOException e ) {

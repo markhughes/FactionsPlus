@@ -27,7 +27,7 @@ public abstract class WY_IDBased extends WYItem {
 		String df="";
 		WYSection p = getParent();
 		if ((null != p)&& (!p.equals( upToAndExcluding ))) {
-			df=p.getInAbsoluteDottedForm(upToAndExcluding)+Config.delim;
+			df=p.getInAbsoluteDottedForm(upToAndExcluding)+Config.DOT;
 		}
 		return df+this.getId();
 	}
