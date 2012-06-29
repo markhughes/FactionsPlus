@@ -116,10 +116,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * inside the .jar)
 	 * typically config save will happen if there are new settings (those that didn't exist in 3.)
 	 */
-	public static final String				DOT												= ".";//never change this, it's yaml compatible
-	
-	public static final String				prefixJails											= "jails"
-																									+ Config.DOT;
+	public static final String				DOT													= ".";															// never
+																																								// change
+																																								// this,
+																																								// it's
+																																								// yaml
+																																								// compatible
+																																								
+	public static final String				prefixJails											= "jails" + Config.DOT;
 	public static final String				str_enableJails										= prefixJails
 																									+ "enableJails";
 	
@@ -334,8 +338,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																										+ "blockCPublicAccessOnNonOwnFactionTerritory";
 	
 	public static final String				prefixExtrasMD										= prefixExtras
-																									+ "disguise"
-																									+ DOT;
+																									+ "disguise" + DOT;
 	public static final String				str_enableDisguiseIntegration						=
 																									prefixExtrasMD
 																										+ "enableDisguiseIntegration";
@@ -370,9 +373,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			if ( hasFileFieldsTrap() ) {
 				throw FactionsPlusPlugin
-					.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+				.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
 						+ "in places that use files, tell plugin author to fix" );
 			}
+			
+			// first make sure the (hard)coded options are valid
+			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
+			 
 		} catch ( Throwable t ) {
 			failed = true;
 			Q.rethrow( t );
@@ -381,6 +388,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				FactionsPlus.instance.setDisAllowPluginToEnable();
 			}
 		}
+		
+		
 		
 	}
 	
@@ -536,7 +545,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-//	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
+	
+	// private static final LinkedList<WYItem> llist = new LinkedList<WYItem>();
 	
 	
 	private final static void appendSection( int level, WYSection root ) throws IOException {
@@ -546,13 +556,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		while ( null != currentItem ) {
 			
 			Class<? extends WYItem> cls = currentItem.getClass();
-//			 System.out.println(currentItem+"!");
+			// System.out.println(currentItem+"!");
 			
 			if ( level > 0 ) {
 				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
 			}
 			
-			if ( currentItem instanceof WYRawButLeveledLine) {
+			if ( currentItem instanceof WYRawButLeveledLine ) {
 				bw.write( ( (WYRawButLeveledLine)currentItem ).getLTrimmedLine() );
 				bw.newLine();
 			} else {
@@ -597,45 +607,45 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			if ( WYIdentifier.class == cls ) {
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
 				System.out.println( wid.getInAbsoluteDottedForm( virtualRoot ) );
-//				Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
-//				if ( null == rtcid ) {
-//					// there isn't a runtime option for the encountered id(=config option name)
-//					// therefore we check if it's an old alias
-//					Object newId = getNewIdForTheOldAlias( wid );// if any
-//					if ( null != newId ) {
-//						// not old alias either
-//						// thus it's an invalid config option encountered
-//						String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config line/pos
-//																						// for it
-//						// first make sure it won't be written on next config save, by removing it from chain
-//						// wid.removeSelf();
-//						throw new RuntimeException( failMsg );//it won't be written to config if we abort
-//					}
-//					
-//					// we then found an old alias for this id, since we're here
-//					if ( newId.encounteredAliasesCount() < 1 ) {
-//						// update the newID's value with the old alias' value
-//						newId.setValue( wid.getValue() );
-//						newId.addEncounteredOldAlias( wid );
-//					} else {
-//						// we already encountered an alias for this id
-//						// how would we know which is the right value
-//						// for now we consider the last encountered alias as the overriding value
-//						newId.setValue( wid.getValue() );
-//						newId.addEncounteredOldAlias( wid );
-//						FactionsPlus
-//							.warn( " Config option " + newId.getInAbsoluteDottedForm()
-//								+ " was overwritten by old alias found for it "
-//								+ wid.getInAbsoluteDottedForm( virtualRoot ) );
-//					}
-//				} else {
-//					if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
-//					
-//					} else {
-//						rtcid.linkTo( wid );
-//						rtcid.setValue( wid.getValue() );
-//					}
-//				}
+				// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
+				// if ( null == rtcid ) {
+				// // there isn't a runtime option for the encountered id(=config option name)
+				// // therefore we check if it's an old alias
+				// Object newId = getNewIdForTheOldAlias( wid );// if any
+				// if ( null != newId ) {
+				// // not old alias either
+				// // thus it's an invalid config option encountered
+				// String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config line/pos
+				// // for it
+				// // first make sure it won't be written on next config save, by removing it from chain
+				// // wid.removeSelf();
+				// throw new RuntimeException( failMsg );//it won't be written to config if we abort
+				// }
+				//
+				// // we then found an old alias for this id, since we're here
+				// if ( newId.encounteredAliasesCount() < 1 ) {
+				// // update the newID's value with the old alias' value
+				// newId.setValue( wid.getValue() );
+				// newId.addEncounteredOldAlias( wid );
+				// } else {
+				// // we already encountered an alias for this id
+				// // how would we know which is the right value
+				// // for now we consider the last encountered alias as the overriding value
+				// newId.setValue( wid.getValue() );
+				// newId.addEncounteredOldAlias( wid );
+				// FactionsPlus
+				// .warn( " Config option " + newId.getInAbsoluteDottedForm()
+				// + " was overwritten by old alias found for it "
+				// + wid.getInAbsoluteDottedForm( virtualRoot ) );
+				// }
+				// } else {
+				// if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
+				//
+				// } else {
+				// rtcid.linkTo( wid );
+				// rtcid.setValue( wid.getValue() );
+				// }
+				// }
 				
 				
 			} else {
@@ -644,7 +654,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseCheckForValids( level + 1, cs );// recurse
 				} else {
-					assert (currentItem instanceof WYRawButLeveledLine );
+					assert ( currentItem instanceof WYRawButLeveledLine );
 					// ignore raw lines like comments or empty lines
 				}
 			}
@@ -731,21 +741,38 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	public final static void reloadConfig() {
-		try {
-			virtualRoot = WannabeYaml.read( fileConfig );
+		
+		if ( Config.fileConfig.exists() ) {
+			if ( !Config.fileConfig.isFile() ) {
+				throw FactionsPlusPlugin.bailOut( "While '" + Config.fileConfig.getAbsolutePath()
+					+ "' exists, it is not a file!" );
+			}
 			
-			// now check to see if we have any old config options or invalid ones in the config
-			// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
-			// remove old
-			// but only if new values are not already set
+			// config file exists
+			try {
+				
+				// now read the existing config
+				virtualRoot = WannabeYaml.read( fileConfig );
+				
+				
+				
+				// now check to see if we have any old config options or invalid ones in the config
+				// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
+				// remove old
+				// but only if new values are not already set
+				
+				parseCheckForValids( 0, virtualRoot );
+				
+				
+			} catch ( IOException e ) {
+				e.printStackTrace();
+				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"
+					+ Config.fileConfig.getAbsolutePath() + "'" );
+			}
 			
-//			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
-			
-			parseCheckForValids( 0, virtualRoot );
-		} catch ( IOException e ) {
-			e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"
-				+ Config.fileConfig.getAbsolutePath() + "'" );
+		} else {
+			// FIXME: what to do when config doesn't exit
+			FactionsPlus.bailOut( "inexistent config" );
 		}
 		
 		

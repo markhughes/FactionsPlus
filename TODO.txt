@@ -63,3 +63,4 @@ support chat modes)
   were removed - hmm maybe at the exact same time when removing those, can detect if parent is empty and kill it, and then when
   config save happens, they are already gone
   
+- add option to disable ender pearls teleporting in safe/warzones too
