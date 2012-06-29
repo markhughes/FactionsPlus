@@ -157,7 +157,7 @@ public abstract class WannabeYaml {
 							
 							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
 								+ currentLevel + " nowLevel=" + ( (double)pos0based / (double)spacesPerLevel ) + " "
-								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel ) );
+								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel )+'\n'+line );
 							if ( ( pos0based ) % spacesPerLevel != 0 ) {
 								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
 									+ " at position " + ( pos0based + 1 ) + '\n' + line );
@@ -165,7 +165,8 @@ public abstract class WannabeYaml {
 							
 							int theNewEncounteredLevelNow = ( pos0based / spacesPerLevel ); // this will be integer by now
 							// if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
-							if ( theNewEncounteredLevelNow > currentLevel ) {
+							//we could be at same level, lower or higher by 1
+							if ( theNewEncounteredLevelNow > currentLevel+1 ) {
 								// "  some"
 								// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement spacesPerLevel
 								// == 2
@@ -175,11 +176,13 @@ public abstract class WannabeYaml {
 									+ ( currentLevel * spacesPerLevel ) + " or " + ( currentLevel + 1 )
 									* spacesPerLevel + " spaces\n" + line );
 							} else {// else it can be exact level or less, that's normal
-								if ( currentLevel < theNewEncounteredLevelNow ) {
+								if ( theNewEncounteredLevelNow < currentLevel ) {
 //									currentLevel = theNewEncounteredLevelNow;
 									// must relinquish control to previous caller, ie. this section ended
 									return theNewEncounteredLevelNow;// just in case we just went from ie. 10 spaces back to 2 or 0
 								}
+								//else i can be same or next level
+								assert (currentLevel == theNewEncounteredLevelNow) || (currentLevel+1 == theNewEncounteredLevelNow);
 							}
 							
 							//same level identifier ? then fallthru
@@ -243,7 +246,7 @@ public abstract class WannabeYaml {
 				// this means, this is a section
 				WYSection tmpSection =
 					new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!", parentSection, null );
-				
+//				Q.nn(null);
 				int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
 				if ( END_OF_FILE == actualLevelNow ) {// TODO: merge these 2 ifs in one, allowed now for clarity
 					break nextLine;
