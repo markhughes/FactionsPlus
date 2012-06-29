@@ -9,15 +9,15 @@ public class WYIdentifier implements WYItem {
 	private String value;
 	
 	
-	public WYIdentifier( String identifier ) {
+	public WYIdentifier( String identifier, String strValue ) {
 		id=identifier;
-		Q.nn( id );
-	}
-
-
-	public void setValue(String strValue ) {
+		assert Q.nn( id );
 		value=strValue;
-		Q.nn( value);
+		assert Q.nn( value);
 	}
+
+
+//	public void setValue(String strValue ) {
+//	}
 	
 }

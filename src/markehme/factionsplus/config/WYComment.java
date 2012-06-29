@@ -9,7 +9,7 @@ public class WYComment implements WYItem {
 	
 	public WYComment( String _line ) {
 		line=_line;
-		Q.nn( line );
+		assert Q.nn( line );
 	}
 	
 }

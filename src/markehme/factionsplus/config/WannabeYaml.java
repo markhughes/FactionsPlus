@@ -15,47 +15,44 @@ public abstract class WannabeYaml {
 	private static final char	idEnder		= ':';
 	private static final int	UNSET_INDEX	= -1;
 	
-	// private static final char[] validIdentifierRange = { };
-	// private static boolean sortedVIR=false;
-	
 	private enum ExpectingType {
-		LINE_START, IDENTIFIER, VALUE_START,
-		//VALUE_CONTENTS,
+		ID_START, IDENTIFIER, VALUESTART_OR_EOL,
 	}
 	
 	
-	public final static void read( File fromFile, Class destinationClass ) throws IOException {
+	public final static void read( File fromFile, LinkedList<WYItem> destinationLList) throws IOException {
 		if ( ( !fromFile.exists() ) || ( fromFile.isDirectory() ) ) {
 			throw new FileNotFoundException();
 		}
-		LinkedList llist = new LinkedList<WYItem>();
-		// if (!sortedVIR) {
-		// Arrays.sort( validIdentifierRange );
-		// sortedVIR=true;
-		// }
-		BufferedReader in = null;
+		assert Q.nn(destinationLList);
+		
+		FileInputStream fis = null;
+		BufferedReader br = null;
 		try {
-			in = new BufferedReader( new FileReader( fromFile ) );
+			fis = new FileInputStream( fromFile );
+			br = new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
 			int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
 			String line;
 			int lineNumber = 0;
 			
-			while ( null != ( line = in.readLine() ) ) {
+			nextLine:
+			while ( null != ( line = br.readLine() ) ) {
 				lineNumber++;
-				ExpectingType expecting = ExpectingType.LINE_START;
+				ExpectingType expecting = ExpectingType.ID_START;
 				char c;
 				int pos = 0;
 				int idStartPos = UNSET_INDEX;
-				int valueStartPos=UNSET_INDEX;
-				WYIdentifier currentIdentifier = null;
+				int idEndPos = UNSET_INDEX;
+				int valueStartPos = UNSET_INDEX;
 				
-				linescan:
+				inLineScan:
 				while ( pos++ < line.length() ) {// 0 first time
 					c = line.charAt( pos );
 					switch ( expecting ) {
-					case LINE_START:
-						assert Q.assumedTrue(idStartPos == UNSET_INDEX);
+					case ID_START:
+						assert Q.assumedTrue( idStartPos == UNSET_INDEX );
 						if ( c == space ) {
+							// skip all spaces until you meet non-space
 							continue;
 						} else {
 							// non space encountered
@@ -63,20 +60,20 @@ public abstract class WannabeYaml {
 							if ( c == commentChar ) {
 								// the level of the comment is irrelevant, we don't check number of spaces before comments
 								// add line as comment
-								llist.addLast( new WYComment( line ) );
-								break linescan;// auto updating to line start expect
+								destinationLList.addLast( new WYComment( line ) );
+								continue nextLine;// continue scanning
 							} else {
 								// non-comment then it's identifier aka id
 								// first make sure the level is right (aka number of spaces before the id)
 								// should allow 1 space above the current level
-								if ( pos-1 > currentLevelspaces ) {
+								if ( pos - 1 > currentLevelspaces ) {
 									throw new RuntimeException( "you put too many spaces at line " + lineNumber
-										+ " at position " + pos + " in file " + fromFile.getAbsolutePath()+'\n'+line );
+										+ " at position " + pos + " in file " + fromFile.getAbsolutePath() + '\n'
+										+ line );
 								}// else it can be exact level or less, that's normal
-								
+								currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
 								expecting = ExpectingType.IDENTIFIER;
 								idStartPos = pos;
-								// continue linescan;
 							}
 						}
 						//$FALL-THROUGH$
@@ -87,57 +84,81 @@ public abstract class WannabeYaml {
 							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) )
 						{
 							// ok valid id char
-							//we don't actually do anything //FIXME: fix 'if' 
+							// we don't actually do anything //FIXME: fix 'if'
 						} else {
 							// expecting ":" not space and not eol
 							if ( c == idEnder ) {
-								currentIdentifier=new WYIdentifier(line.substring( idStartPos, pos ));
-								idStartPos=UNSET_INDEX;
-								expecting=ExpectingType.VALUE_START;
-								continue linescan;
+								idEndPos = pos;
+								// idStartPos=UNSET_INDEX;
+								expecting = ExpectingType.VALUESTART_OR_EOL;
+								continue inLineScan;// also skip this char
 							} else {
 								// TODO: replace with specific exception
 								throw new RuntimeException( "unexpected char, should be `" + idEnder + "` instead of `"
-									+ c + "` at line " + lineNumber + " pos " + pos+'\n'+line );
+									+ c + "` at line " + lineNumber + " pos " + pos + '\n' + line );
 							}
 						}
 						break;
-					case VALUE_START:
-						assert Q.assumedTrue(idStartPos == UNSET_INDEX);
-						if (c != space) {
-//							valueStartPos=pos;
-//							expecting=ExpectingType.VALUE_CONTENTS;
-							assert Q.nn( currentIdentifier );
-							currentIdentifier.setValue(line.substring( pos ).trim());
-							continue linescan;
-						}//else it's space, we eat all spaces between "id:" and "value" or even if "value" doesn't exist here
+					case VALUESTART_OR_EOL:
+						assert Q.assumedTrue( idStartPos == UNSET_INDEX );
+						if ( c != space ) {
+							// by now we know it's an identifier of key=value and not a Section
+							// valueStartPos=pos;
+							// expecting=ExpectingType.VALUE_CONTENTS;
+							destinationLList.addLast( new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!",
+								line.substring( pos ).trim() ) );
+							
+							// assert Q.nn( currentIdentifier );
+							// currentIdentifier.setValue();
+							continue nextLine;
+						}// else it's space, we eat all spaces between "id:" and "value" or even if "value" doesn't exist here
 						break;
-//					case VALUE_CONTENTS:
-//						assert Q.assumedTrue(valueStartPos != UNSET_INDEX);
-//						
-//						break;
+					// case VALUE_CONTENTS:
+					// assert Q.assumedTrue(valueStartPos != UNSET_INDEX);
+					//
+					// break;
 					default:
 						throw new RuntimeException( "invalid expecting type " + expecting );
 					}
-				}//one line done
+				}// one line done
 				
-				switch (expecting) {
-				case VALUE_START:
-					
-					break;
+				switch ( expecting ) {
+				case VALUESTART_OR_EOL:
+					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
+					// this means, this is a section
+					destinationLList.addLast( new WYSection( "!3!" + line.substring( idStartPos, idEndPos ) + "!4!" ) );
+					currentLevelspaces++;
+					continue nextLine;
 				default:
-					throw null;
+					throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + pos + '\n'
+						+ line );
 				}
-			}//all lines done
+			}// all lines done
 			
+		} catch ( FileNotFoundException e ) {
+			Q.rethrow( e );
 		} finally {
-			if ( null != in ) {
+			if ( null != br ) {
 				try {
-					in.close();
+					br.close();
 				} catch ( IOException e ) {
 					e.printStackTrace();
 				}
 			}
-		}
-	}
+			if ( null != fis ) {
+				try {
+					fis.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if ( null != br ) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+		}//try/finally
+	}//end method
 }

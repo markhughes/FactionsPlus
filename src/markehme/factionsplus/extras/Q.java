@@ -1,9 +1,13 @@
 package markehme.factionsplus.extras;
 
 import java.io.*;
+import java.nio.charset.*;
 
 
 public abstract class Q {
+
+	public static final Charset	UTF8	= Charset.forName("UTF-8");
+
 
 	public final static RuntimeException ni() {
 		throw new RuntimeException( "not implemented" );

@@ -345,12 +345,41 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
+	
+	private final static void save() {
+		FileInputStream fis=null;
+		BufferedReader br =null;
+		try {
+			fis= new FileInputStream( Config.fileConfig );
+			br= new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
+			
+		} catch ( FileNotFoundException e ) {
+//			e.printStackTrace();
+			Q.rethrow(e);
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+				}
+			if (null != fis) {
+			 try {
+				fis.close();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+			}
+		}
+		
+	}
+	
 	private static BufferedWriter bw;
 	
 	public final static void saveConfig() {
 		try {
 			
-//			
 			Map<String, Object> root = new HashMap<String, Object>();
 			
 			FileOutputStream fos=null;
@@ -358,18 +387,32 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			bw=null;
 			try {
 				fos = new FileOutputStream( Config.fileConfig );
-				osw = new OutputStreamWriter( fos, "UTF-8" );
+				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				parseWrite( 0, config.getValues( false ) );
+			} catch ( IOException e ) {
+				Q.rethrow(e);
 			} finally {
 				if ( null != bw ) {
-					bw.close();
+					try {
+						bw.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
 				}
 				if ( null != osw ) {
-					osw.close();
+					try {
+						osw.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
 				}
 				if ( null != fos ) {
-					fos.close();
+					try {
+						fos.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
 				}
 			}
 //			for ( Map.Entry<String, Object> entry : config.getValues( true).entrySet() ) {
@@ -399,41 +442,30 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //			}
 			
 //			getConfig().save( Config.fileConfig );
-		} catch ( IOException e ) {
+		} catch ( RethrownException e ) {
 			e.printStackTrace();
 			throw FactionsPlusPlugin.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
 		}
 	}
 	
+	private final static LinkedList<WYItem> llist =new LinkedList<WYItem>();
 	public final static void reloadConfig() {
-//		YamlConfiguration c = new YamlConfiguration();//.loadFromString("");
-//		String key1 = "Test";
-//		String key2 = "test";
-//		c.set( "test",Boolean.TRUE);
-//		assert null == c.get(key1);
-//		assert !c.contains( key1 );
-//		assert null != c.get(key2);
-//		assert c.contains( key2 );
-//		c.set(key1,Boolean.FALSE);
-//		assert null != c.get(key1);
-//		assert c.contains( key1 );
-//		assert null != c.get( key2 );
-//		assert c.contains( key2 );
-//		for (   Map.Entry<String,Object> element : c.getValues( true ).entrySet() ) {
-////			System.out.println(element);
-//			FactionsPlus.info( element.getKey()+" + "+element.getValue() );
-//		}
-//		
-//		FactionsPlus.bailOut( "");//FIXME: temporary all from above
+		try {
+			WannabeYaml.read(fileConfig, llist);
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
+		}
+		saveConfig();
 		
 		// always get defaults, we never know how many settings (from the defaults) are missing in the existing config file
-		InputStream defConfigStream = FactionsPlus.instance.getResource( Config.fileConfigDefaults );// this is the one inside the .jar
-		if ( defConfigStream != null ) {
-			Config.config = YamlConfiguration.loadConfiguration( defConfigStream );
-		} else {
-			throw FactionsPlusPlugin.bailOut( "There is no '"+Config.fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
-				+ "which means that the plugin author forgot to include it" );
-		}
+//		InputStream defConfigStream = FactionsPlus.instance.getResource( Config.fileConfigDefaults );// this is the one inside the .jar
+//		if ( defConfigStream != null ) {
+//			Config.config = YamlConfiguration.loadConfiguration( defConfigStream );
+//		} else {
+//			throw FactionsPlusPlugin.bailOut( "There is no '"+Config.fileConfigDefaults+"'(supposed to contain the defaults) inside the .jar\n"
+//				+ "which means that the plugin author forgot to include it" );
+//		}
 		
 //		if ( Config.fileConfig.exists() ) {
 //			if (!Config.fileConfig.isFile()) {
@@ -474,8 +506,8 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //		}else {
 //			FactionsPlusPlugin.info(Config.fileConfig+" did not previously exist, creating a new config using defaults from the .jar");
 //		}
-		
-		saveConfig();
+//		
+//		saveConfig();
 	}
 	
 }
