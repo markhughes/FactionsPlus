@@ -22,6 +22,6 @@ public class WYIdentifier extends WY_IDBased {
 
 	@Override
 	public String toString() {
-		return getId()+": "+getValue();
+		return super.toString()+" "+getValue();
 	}
 }

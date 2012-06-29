@@ -326,6 +326,12 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	
 	private final static String bucketOfSpaces=new String(new char[WannabeYaml.maxLevelSpaces]).replace('\0', ' ');
 	
+	/**
+	 * this works for yaml's .getValues(deep)
+	 * @param level
+	 * @param start
+	 * @throws IOException
+	 */
 	private final static void parseWrite(int level, Map<String, Object> start) throws IOException {
 		for ( Map.Entry<String, Object> entry : start.entrySet() ) {
 			Object val = entry.getValue();
@@ -334,7 +340,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel*level );
 			}
 			bw.write(key);
-			bw.write(":");
+			bw.write(WannabeYaml.IDVALUE_SEPARATOR);
 			if ( !( val instanceof MemorySection ) ) {
 				bw.write(" "+val);
 				bw.newLine();
@@ -350,15 +356,13 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	private final static void parseWrite2( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
-//		assert null == root.getPrev();
-//		assert null == root.getParent();
 
 		while ( null != currentItem ) {
 		
 			Class<? extends WYItem> cls = currentItem.getClass();
 
 			if ( WYComment.class == cls ) {
-				System.out.println(currentItem);
+//				System.out.println(currentItem);
 				bw.write( ( (WYComment)currentItem ).getFullLine() );
 				bw.newLine();
 			} else {
@@ -372,15 +376,15 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				}
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
-					System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
+//					System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
 					bw.write( wid.getId() );
-					bw.write( ":" );
+					bw.write( WannabeYaml.IDVALUE_SEPARATOR );
 					bw.write( WannabeYaml.space + wid.getValue() );
 					bw.newLine();
 				} else {
 					if ( WYSection.class == cls ) {
 						WYSection cs = (WYSection)currentItem;
-						bw.write( ( cs ).getSectionName()+":" );
+						bw.write( ( cs ).getId()+WannabeYaml.IDVALUE_SEPARATOR );
 						bw.newLine();
 						parseWrite2( level + 1, cs);// recurse
 					}else {
@@ -389,6 +393,36 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 					}
 				}
 			}
+			currentItem=currentItem.getNext();
+		}
+	}
+	
+	private final static void parseCheckForValids( int level, WYSection root ) throws IOException {
+		assert Q.nn( root );
+		WYItem currentItem = root.getFirst();
+
+		while ( null != currentItem ) {
+		
+			Class<? extends WYItem> cls = currentItem.getClass();
+
+			if ( WYIdentifier.class == cls ) {
+				WYIdentifier wid = ( (WYIdentifier)currentItem );
+				System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
+				bw.write( wid.getId() );
+				bw.write( WannabeYaml.IDVALUE_SEPARATOR );
+				bw.write( WannabeYaml.space + wid.getValue() );
+				bw.newLine();
+			} else {
+				if ( WYSection.class == cls ) {
+					WYSection cs = (WYSection)currentItem;
+					bw.write( ( cs ).getId()+WannabeYaml.IDVALUE_SEPARATOR );
+					bw.newLine();
+					parseWrite2( level + 1, cs);// recurse
+				}else {
+					assert WYComment.class.equals(cls);
+				}
+			}
+			
 			currentItem=currentItem.getNext();
 		}
 	}

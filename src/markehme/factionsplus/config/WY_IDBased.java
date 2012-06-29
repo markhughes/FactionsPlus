@@ -27,13 +27,13 @@ public abstract class WY_IDBased extends WYItem {
 		String df="";
 		WYSection p = getParent();
 		if ((null != p)&& (!p.equals( upToAndExcluding ))) {
-			df=p.getInAbsoluteDottedForm(upToAndExcluding)+".";
+			df=p.getInAbsoluteDottedForm(upToAndExcluding)+Config.delim;
 		}
 		return df+this.getId();
 	}
 	
 	@Override
 	public String toString() {
-		return getId()+":";
+		return getId()+WannabeYaml.IDVALUE_SEPARATOR;
 	}
 }

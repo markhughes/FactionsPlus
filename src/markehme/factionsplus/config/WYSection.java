@@ -16,15 +16,10 @@ public class WYSection extends WY_IDBased {
 //		System.out.println("Section "+this+" parent="+parent+" prev="+prev);
 	}
 	
-	public String getSectionName(){
-		return getId();
-	}
+//	public String getSectionName(){
+//		return getId();
+//	}
 	
-	@Override
-	public String toString() {
-		return getSectionName()+":";
-	}
-
 	public WYItem getFirst() {
 		return firstChild;
 	}

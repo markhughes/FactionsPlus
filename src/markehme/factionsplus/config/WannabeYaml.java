@@ -16,7 +16,7 @@ public abstract class WannabeYaml {
 	
 	public static final char	space			= ' ';
 	private static final char	commentChar		= '#';
-	private static final char	idEnder			= ':';
+	public static final char	IDVALUE_SEPARATOR			= ':';
 	private static final int	UNSET_INDEX		= -1;
 	private static final int	END_OF_FILE		= -1;
 	public static final int		maxLevels		= 128;
@@ -116,8 +116,6 @@ public abstract class WannabeYaml {
 			int valueStartPos = UNSET_INDEX;
 			
 			
-			// FIXME: allow empty lines to be like comments (maybe later)
-			
 			// this will auto skip empty (no spaces) lines
 			inLineScan:
 			while ( pos0based++ < line.length() - 1 ) {// 0 first time
@@ -211,14 +209,14 @@ public abstract class WannabeYaml {
 						// we don't actually do anything //FIXME: fix 'if'
 					} else {
 						// expecting ":" not space and not eol
-						if ( c == idEnder ) {
+						if ( c == IDVALUE_SEPARATOR ) {
 							idEndPos = pos0based;
 							// idStartPos=UNSET_INDEX;
 							expecting = ExpectingType.VALUESTART_OR_EOL;
 							continue inLineScan;// also skip this char
 						} else {
 							// TODO: replace with specific exception
-							throw new RuntimeException( "unexpected char, should be `" + idEnder + "` instead of `" + c
+							throw new RuntimeException( "unexpected char, should be `" + IDVALUE_SEPARATOR + "` instead of `" + c
 								+ "` at line " + lineNumber + " pos " + ( pos0based + 1 ) + '\n' + line );
 						}
 					}
@@ -289,7 +287,11 @@ public abstract class WannabeYaml {
 				// "    some: false"
 				// _____^ <- there
 				// and we cannot skip this line
-				
+			case ID_START:
+				// FIXME: allow empty lines to be like comments (maybe later)
+				//if we're here, we bumped into an empty line
+				//we currently just ignore it, so it will not be added upon writing the config backs
+				continue nextLine;
 			default:
 				throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + ( pos0based + 1 )
 					+ '\n' + line );
