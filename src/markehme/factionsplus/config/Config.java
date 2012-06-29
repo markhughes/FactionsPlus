@@ -387,11 +387,11 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			OutputStreamWriter osw=null;
 			bw=null;
 			try {
-				fos = new FileOutputStream( Config.fileConfig );
+				fos = new FileOutputStream( new File(Config.fileConfig.getPath(),"config2.yml") );
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 //				parseWrite( 0, config.getValues( false ) );
-				parseWrite2( 0, root);
+				parseWrite2( 0, virtualRoot );
 			} catch ( IOException e ) {
 				Q.rethrow(e);
 			} finally {
@@ -450,10 +450,10 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
-	private final static LinkedList<WYItem> llist =new LinkedList<WYItem>();
+	private static WYItem virtualRoot;
 	public final static void reloadConfig() {
 		try {
-			WannabeYaml.read(fileConfig, llist);
+			virtualRoot=WannabeYaml.read(fileConfig);
 		} catch ( IOException e ) {
 			e.printStackTrace();
 			throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
