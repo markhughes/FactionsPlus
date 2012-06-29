@@ -7,11 +7,19 @@ public abstract class WYItem {
 	private WYItem next;
 	private WYItem parent;
 	
+	/**
+	 * this is the next aka appended item
+	 * @param _parent
+	 * @param _prev
+	 */
 	public WYItem(WYItem _parent, WYItem _prev) {
 		//constructor
 		prev=_prev;//can be null
 		parent=_parent;//can be null
 		next=null;
+		if (null != prev) {
+			prev.setNext( this );
+		}
 	}
 	
 	public void setNext(WYItem nxt) {
@@ -29,4 +37,8 @@ public abstract class WYItem {
 	public WYItem getParent() {
 		return parent;
 	}
+	
+//	public void addToChain(WYItem newItem, WYItem parent, WYItem prev, WYItem next) {
+//		
+//	}
 }

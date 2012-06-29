@@ -13,7 +13,7 @@ import markehme.factionsplus.extras.*;
 
 public abstract class WannabeYaml {
 	
-	private static final char	space		= ' ';
+	public  static final char	space		= ' ';
 	private static final char	commentChar	= '#';
 	private static final char	idEnder		= ':';
 	private static final int	UNSET_INDEX	= -1;
@@ -49,6 +49,8 @@ public abstract class WannabeYaml {
 			int currentLevel=0;//up to maxLevels
 			String line;
 			int lineNumber = 0;
+			WYItem currentParentSection=root;
+			WYItem previousWYItem=null;
 			
 			nextLine:
 			while ( null != ( line = br.readLine() ) ) {
@@ -78,7 +80,8 @@ public abstract class WannabeYaml {
 							if ( c == commentChar ) {
 								// the level of the comment is irrelevant, we don't check number of spaces before comments
 								// add line as comment
-								destinationLList.addLast( new WYComment( line ) );
+//								previousWYItem.setNext(
+								previousWYItem=new WYComment( line , currentParentSection, previousWYItem);
 								continue nextLine;// continue scanning
 							} else {
 								// non-comment then it's identifier aka id
@@ -132,8 +135,8 @@ public abstract class WannabeYaml {
 							// by now we know it's an identifier of key=value and not a Section
 							// valueStartPos=pos;
 							// expecting=ExpectingType.VALUE_CONTENTS;
-							destinationLList.addLast( new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!",
-								line.substring( pos ).trim() ) );
+							previousWYItem=new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!",
+								line.substring( pos ).trim() , currentParentSection, previousWYItem );
 							
 							// assert Q.nn( currentIdentifier );
 							// currentIdentifier.setValue();
@@ -153,7 +156,8 @@ public abstract class WannabeYaml {
 				case VALUESTART_OR_EOL:
 					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 					// this means, this is a section
-					destinationLList.addLast( new WYSection( "!3!" + line.substring( idStartPos, idEndPos ) + "!4!" ) );
+					previousWYItem=new WYSection( "!3!" + line.substring( idStartPos, idEndPos ) + "!4!",
+							currentParentSection, previousWYItem);
 					currentLevel++;
 					continue nextLine;
 				default:
@@ -187,5 +191,6 @@ public abstract class WannabeYaml {
 				}
 			}
 		}//try/finally
+		return root;
 	}//end method
 }

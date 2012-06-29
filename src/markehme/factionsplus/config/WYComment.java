@@ -5,12 +5,16 @@ import markehme.factionsplus.extras.*;
 
 public class WYComment extends WYItem {
 	
-	private String line;
+	private String fullLine;
 	
-	public WYComment( String _line , WYItem parent, WYItem next) {
-		super(parent,next);
-		line=_line;
-		assert Q.nn( line );
+	public WYComment( String _entireLine , WYItem parent, WYItem prev) {
+		super(parent,prev);
+		fullLine=_entireLine;
+		assert Q.nn( fullLine );
+	}
+
+	public String getFullLine() {
+		return fullLine;
 	}
 	
 	

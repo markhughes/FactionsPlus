@@ -346,35 +346,34 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 
-	private final static void parseWrite2(int level, LinkedList<WYItem> llist) throws IOException {
-		for ( WYItem wyItem : llist ) {
-			Class<? extends WYItem> cls = wyItem.getClass();
-			if (WYComment.class == cls) {
-				bw.write( ((WYComment)wyItem).getCommentLine() );
-			}else {
-				if (WYIdentifier.class == cls) {
-					
-				}else {
-					if (WYSection.class == cls) {
+	private final static void parseWrite2( int level, WYItem root ) throws IOException {
+		assert Q.nn( root );
+		WYItem currentItem = root;
+		while ( null != currentItem.getNext() ) {
+			Class<? extends WYItem> cls = currentItem.getClass();
+			if ( WYComment.class == cls ) {
+				bw.write( ( (WYComment)currentItem ).getFullLine() );
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					if ( level > 0 ) {
+						bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
+					}
+					WYIdentifier wid = ( (WYIdentifier)currentItem );
+					bw.write( wid.getId() );
+					bw.write( ":" );
+					bw.write( WannabeYaml.space + wid.getValue() );
+					bw.newLine();
+				} else {
+					if ( WYSection.class == cls ) {
+						bw.write( ( (WYSection)currentItem ).getSectionName() );
+						bw.newLine();
 						level++;
-						parseWrite2(level+1,)
+						parseWrite2( level + 1, currentItem );// recurse
 					}
 				}
 			}
-			Object val = entry.getValue();
-			String key = entry.getKey();
-			if (level>0){
-				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel*level );
-			}
-			bw.write(key);
-			bw.write(":");
-			if ( !( val instanceof MemorySection ) ) {
-				bw.write(" "+val);
-				bw.newLine();
-			}else {
-				bw.newLine();
-				parseWrite(level+1,((MemorySection)val).getValues( false ));
-			}
+			
+			
 		}
 	}
 	
@@ -384,8 +383,6 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public final static void saveConfig() {
 		try {
 			
-			Map<String, Object> root = new HashMap<String, Object>();
-			
 			FileOutputStream fos=null;
 			OutputStreamWriter osw=null;
 			bw=null;
@@ -394,7 +391,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 //				parseWrite( 0, config.getValues( false ) );
-				parseWrite2( 0, llist);
+				parseWrite2( 0, root);
 			} catch ( IOException e ) {
 				Q.rethrow(e);
 			} finally {
