@@ -385,7 +385,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			// Field f;
 			parsify( Config.class, "" );
-			throw null;
+//			throw null;
 			// Annotation[] ar = f.getDeclaredAnnotations();
 			// Class.class.getDeclaredAnnotations();
 		} catch ( Throwable t ) {

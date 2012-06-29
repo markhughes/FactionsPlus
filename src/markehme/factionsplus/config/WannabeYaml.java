@@ -172,7 +172,8 @@ public abstract class WannabeYaml {
 								int theNewEncounteredLevelNow = ( pos0based / spacesPerLevel ); // this will be integer by now
 								// if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
 								// we could be at same level, lower or higher by 1
-								if ( theNewEncounteredLevelNow > currentLevel + 1 ) {
+								if ( theNewEncounteredLevelNow > currentLevel  ) {
+									if (theNewEncounteredLevelNow > currentLevel + 1){
 									// "  some"
 									// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement
 									// spacesPerLevel
@@ -182,6 +183,13 @@ public abstract class WannabeYaml {
 										+ " at position " + ( pos0based + 1 ) + " expected "
 										+ ( currentLevel * spacesPerLevel ) + " or " + ( currentLevel + 1 )
 										* spacesPerLevel + " spaces\n" + line );
+									}else {
+										//it's allowed to nest only if prev was a Section
+										if ((null == previousWYItem)||( ! previousWYItem.getClass().equals( WYSection.class ))) {
+											throw new RuntimeException("you can only nest inside sections, at line "+lineNumber+
+												" at position " + ( pos0based + 1 ) + '\n'+line);
+										}
+									}
 								} else {// else it can be exact level or less, that's normal
 									if ( theNewEncounteredLevelNow < currentLevel ) {
 										// currentLevel = theNewEncounteredLevelNow;
@@ -206,7 +214,8 @@ public abstract class WannabeYaml {
 						// ok get identifier
 						// parse until ":" or non alphanumeric char
 						if ( ( ( c >= 'a' ) && ( c <= 'z' ) ) || ( ( c >= 'A' ) && ( c <= 'Z' ) )
-							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) || c == Config.DOT)
+							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) //TODO: allow this later || c == Config.DOT
+							)
 						{//allows ie. extras.lwc.disableSomething as an identifier !
 							// ok valid id char
 							// we don't actually do anything //FIXME: fix 'if'
