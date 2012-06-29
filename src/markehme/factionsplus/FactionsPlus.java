@@ -60,7 +60,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	public static String version;
 	public static String FactionsVersion;
-	public static boolean isOnePointSix;
 	
 	private static Metrics metrics=null;
 
@@ -111,12 +110,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		Bridge.init();
 		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
-		if(FactionsVersion.startsWith("1.6")) {
-			isOnePointSix = true;
-		} else {
-			isOnePointSix = false;
-		}
-		FactionsPlusPlugin.info("Factions version " + FactionsVersion + " - " + isOnePointSix);
+		FactionsPlusPlugin.info("Factions version " + FactionsVersion );
 		
 		
 		FactionsPlusCommandManager.setup();
