@@ -79,10 +79,11 @@ public abstract class WannabeYaml {
 		throw null;// not reached
 	}
 	
-	private static int				lineNumber;
-	private static int				idStartPos;
-	private static ExpectingType	expecting;
-	private static final LinkedList<WYItem> llist=new LinkedList<WYItem>();
+	private static int						lineNumber;
+	private static int						idStartPos;
+	private static ExpectingType			expecting;
+	private static String line;
+	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
 	
 	
 	/**
@@ -97,17 +98,20 @@ public abstract class WannabeYaml {
 		WYItem previousWYItem ) throws IOException
 	{
 		
-		String line;
 		// WYItem currentParentSection=root;
 		
 		
 		nextLine:
 		while ( null != ( line = br.readLine() ) ) {
 			lineNumber++;
-			expecting = ExpectingType.ID_START;
 			char c;
 			int pos0based = -1;// must be -1
 			idStartPos = UNSET_INDEX;
+			expecting = ExpectingType.ID_START;
+			
+			expectID:
+			do {
+			
 			int idEndPos = UNSET_INDEX;
 			int valueStartPos = UNSET_INDEX;
 			
@@ -155,11 +159,12 @@ public abstract class WannabeYaml {
 							expecting = ExpectingType.IDENTIFIER;// this is what we found starting now, and expecting it next
 							idStartPos = pos0based;// marking the position of the start of the identifier
 							// ie. "  identifier: value" (in file)
-							//the above will be passed to prev caller, when section ends
+							// the above will be passed to prev caller, when section ends
 							
 							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
 								+ currentLevel + " nowLevel=" + ( (double)pos0based / (double)spacesPerLevel ) + " "
-								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel )+'\n'+line );
+								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel )
+								+ '\n' + line );
 							if ( ( pos0based ) % spacesPerLevel != 0 ) {
 								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
 									+ " at position " + ( pos0based + 1 ) + '\n' + line );
@@ -167,8 +172,8 @@ public abstract class WannabeYaml {
 							
 							int theNewEncounteredLevelNow = ( pos0based / spacesPerLevel ); // this will be integer by now
 							// if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
-							//we could be at same level, lower or higher by 1
-							if ( theNewEncounteredLevelNow > currentLevel+1 ) {
+							// we could be at same level, lower or higher by 1
+							if ( theNewEncounteredLevelNow > currentLevel + 1 ) {
 								// "  some"
 								// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement spacesPerLevel
 								// == 2
@@ -179,15 +184,19 @@ public abstract class WannabeYaml {
 									* spacesPerLevel + " spaces\n" + line );
 							} else {// else it can be exact level or less, that's normal
 								if ( theNewEncounteredLevelNow < currentLevel ) {
-//									currentLevel = theNewEncounteredLevelNow;
+									// currentLevel = theNewEncounteredLevelNow;
 									// must relinquish control to previous caller, ie. this section ended
-									return theNewEncounteredLevelNow;// just in case we just went from ie. 10 spaces back to 2 or 0
+									return theNewEncounteredLevelNow;// just in case we just went from ie. 10 spaces back to 2
+																		// or 0
+									
+									// you go back to the section caller
 								}
-								//else i can be same or next level
-								assert (currentLevel == theNewEncounteredLevelNow) || (currentLevel+1 == theNewEncounteredLevelNow);
+								// else i can be same or next level
+								assert ( currentLevel == theNewEncounteredLevelNow )
+									|| ( currentLevel + 1 == theNewEncounteredLevelNow );
 							}
 							
-							//same level identifier ? then fallthru
+							// same level identifier ? then fallthru
 							
 						}
 					}
@@ -223,8 +232,8 @@ public abstract class WannabeYaml {
 						// valueStartPos=pos;
 						// expecting=ExpectingType.VALUE_CONTENTS;
 						previousWYItem =
-							new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!", "!3!"
-								+ line.substring( pos0based ).trim() + "!4!", parentSection, previousWYItem );
+							new WYIdentifier( line.substring( idStartPos, idEndPos ), line.substring( pos0based )
+								.trim(), parentSection, previousWYItem );
 						llist.addLast( previousWYItem );
 						// assert Q.nn( currentIdentifier );
 						// currentIdentifier.setValue();
@@ -246,11 +255,12 @@ public abstract class WannabeYaml {
 				assert Q.assumedTrue( idEndPos != UNSET_INDEX );
 				// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 				// this means, this is a section
-				WYSection tmpSection =
-					new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!", parentSection, null );
-//				Q.nn(null);
+				WYSection tmpSection = new WYSection( line.substring( idStartPos, idEndPos ), parentSection, null );
+				// Q.nn(null);
 				llist.addLast( tmpSection );
 				int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
+				
+				
 				if ( END_OF_FILE == actualLevelNow ) {// TODO: merge these 2 ifs in one, allowed now for clarity
 					break nextLine;
 				} else {
@@ -264,18 +274,28 @@ public abstract class WannabeYaml {
 				}
 				// if you're here, the level then decreased, or end of file
 				// but if level decreased you don't want to link next WYItem to the prev one
-				previousWYItem = tmpSection;// this section is the prev item at this level
-				// but you will link next item to the section here (not to the last encountered item within that section)
 				
+				// but you will link next item to the section here (not to the last encountered item within that section)
+				previousWYItem = tmpSection;// this section is the prev item at this level
+				expecting = ExpectingType.IDENTIFIER;
 				// the prev for the next item in the same level is this section, after we're done with it
 				// but we don't yet know what level we're one since the prev section finished
 				
 				// currentLevel++;
-				continue nextLine;
+				pos0based=idStartPos;//currentLevel*spacesPerLevel;//aka to the first non-space char from ie. "  here:"
+				continue expectID;// inLineScan;
+				// we're at:
+				// "      whateverhigher: true"
+				// "    some: false"
+				// _____^ <- there
+				// and we cannot skip this line
+				
 			default:
 				throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + ( pos0based + 1 )
 					+ '\n' + line );
 			}
+//			throw null;
+			}while(true) ;//evil goto hack, FIXME: try avoiding this, obviously
 		}// all lines done aka EOF
 		
 		return END_OF_FILE;// end of file (aka end of all lines)

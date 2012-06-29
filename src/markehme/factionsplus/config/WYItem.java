@@ -25,7 +25,6 @@ public abstract class WYItem {
 		if (null != parent) {
 			parent.append(this);
 		}
-//		System.out.println(this+" "+parent+" "+prev);
 	}
 	
 	public void setNext(WYItem nxt) {
@@ -42,6 +41,10 @@ public abstract class WYItem {
 	
 	public WYSection getParent() {
 		return parent;
+	}
+
+	public void setPrev( WYItem _prev ) {
+		prev=_prev;
 	}
 
 //	public void addToChain(WYItem newItem, WYItem parent, WYItem prev, WYItem next) {

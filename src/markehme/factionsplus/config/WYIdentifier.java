@@ -16,6 +16,7 @@ public class WYIdentifier extends WYItem {
 		assert Q.nn( id );
 		value = strValue;
 		assert Q.nn( value );
+		System.out.println("ID "+this+" parent="+parent+" prev="+prev);
 	}
 	
 	

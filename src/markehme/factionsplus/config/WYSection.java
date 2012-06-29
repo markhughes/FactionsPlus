@@ -7,15 +7,16 @@ import markehme.factionsplus.extras.*;
 public class WYSection extends WYItem {
 	
 	private String	identifier;
-	private WYItem first,last;
+	private WYItem firstChild,lastChild;
 
 	
 	public WYSection( String id , WYSection parent, WYItem prev) {
 		super(parent, prev);
 		identifier = id;
 		assert Q.nn( identifier );
-		first=null;
-		last=null;
+		firstChild=null;
+		lastChild=null;
+		System.out.println("Section "+this+" parent="+parent+" prev="+prev);
 	}
 	
 	public String getSectionName(){
@@ -27,18 +28,17 @@ public class WYSection extends WYItem {
 		return getSectionName()+":";
 	}
 
-//	public void setChild( WYItem wyItem ) {
-//		child=wyItem;//can be null
-//	}
 	public WYItem getFirst() {
-		return first;
+		return firstChild;
 	}
 
-	public void append( WYItem child ) {
-		if (last != null) {
-			last.setNext( child );
+	void append( WYItem child ) {
+		if (lastChild != null) {
+			lastChild.setNext( child );
+			child.setPrev(lastChild);
+			lastChild=child;
 		}else {
-			first=last=child;
+			firstChild=lastChild=child;
 		}
 	}
 }

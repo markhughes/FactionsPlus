@@ -349,7 +349,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	private final static void parseWrite2( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
-		assert null == root.getPrev();
+//		assert null == root.getPrev();
 //		assert null == root.getParent();
 
 		while ( null != currentItem ) {
@@ -360,10 +360,10 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			if ( WYComment.class == cls ) {
 				bw.write( ( (WYComment)currentItem ).getFullLine() );
 			} else {
+				if ( level > 0 ) {
+					bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
+				}
 				if ( WYIdentifier.class == cls ) {
-					if ( level > 0 ) {
-						bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
-					}
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					bw.write( wid.getId() );
 					bw.write( ":" );
@@ -372,14 +372,13 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 				} else {
 					if ( WYSection.class == cls ) {
 						WYSection cs = (WYSection)currentItem;
-						bw.write( ( cs ).getSectionName() );
+						bw.write( ( cs ).getSectionName()+":" );
 						bw.newLine();
 						parseWrite2( level + 1, cs);// recurse
 					}
 				}
 			}
 			currentItem=currentItem.getNext();
-			
 		}
 	}
 	
