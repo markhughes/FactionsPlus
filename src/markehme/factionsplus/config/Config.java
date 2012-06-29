@@ -360,7 +360,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	/**
 	 * call this in plugin.onLoad (the thing that happens before onEnable() )
 	 * 
-	 * @param plugin
 	 */
 	public final static void onLoad() {
 		boolean failed = false;
@@ -377,7 +376,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						+ "in places that use files, tell plugin author to fix" );
 			}
 			
-			// first make sure the (hard)coded options are valid
+			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new option names
 			TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
 			 
 		} catch ( Throwable t ) {
