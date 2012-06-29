@@ -7,6 +7,7 @@ import java.util.regex.*;
 import org.bukkit.configuration.file.*;
 import org.yaml.snakeyaml.*;
 
+import markehme.factionsplus.*;
 import markehme.factionsplus.extras.*;
 
 
@@ -57,23 +58,27 @@ public abstract class WannabeYaml {
 				lineNumber++;
 				ExpectingType expecting = ExpectingType.ID_START;
 				char c;
-				int pos = 0;
+				int pos0based = -1;//must be -1
 				int idStartPos = UNSET_INDEX;
 				int idEndPos = UNSET_INDEX;
 				int valueStartPos = UNSET_INDEX;
 				
 				inLineScan:
-				while ( pos++ < line.length() ) {// 0 first time
-					c = line.charAt( pos );
+				while ( pos0based++ < line.length()-1 ) {// 0 first time
+					
+					c = line.charAt( pos0based );
 					switch ( expecting ) {
 					case ID_START:
 						assert Q.assumedTrue( idStartPos == UNSET_INDEX );
+						assert Q.assumedTrue( idEndPos == UNSET_INDEX );
+						assert Q.assumedTrue( valueStartPos == UNSET_INDEX );
+						
 						if ( c == space ) {
-							if (pos >= maxLevelSpaces) {
+							if (pos0based > maxLevelSpaces) {
 								throw new RuntimeException("you've reached beyond max allowed nesting");
 							}
 							// skip all spaces until you meet non-space
-							continue;
+							continue inLineScan;
 						} else {
 							// non space encountered
 							// is it comment?
@@ -87,23 +92,25 @@ public abstract class WannabeYaml {
 								// non-comment then it's identifier aka id
 								// first make sure the level is right (aka number of spaces before the id)
 								// should allow 1 space above the current level
-								if (pos-(spacesPerLevel*1) > (currentLevel*spacesPerLevel )) {  
+								currentLevel=(pos0based) / spacesPerLevel;
+								System.out.println("line="+lineNumber+" pos="+pos0based+" curlevel="+currentLevel+" "+(pos0based+1-(spacesPerLevel*1))+">"+(currentLevel*spacesPerLevel ));
+								
+								if (pos0based+1-(spacesPerLevel*1) > (currentLevel*spacesPerLevel )) {  
 									//ie. "  some"
 									//    "     else" //notice it's 1 char is beyond the allowed +2 chars displacement spacesPerLevel == 2
 //								if ( pos - 1 > currentLevelspaces ) {
 									throw new RuntimeException( "you put too many spaces at line " + lineNumber
-										+ " at position " + pos + " in file " + fromFile.getAbsolutePath() + '\n'
+										+ " at position " + (pos0based+1) + " in file " + fromFile.getAbsolutePath() + '\n'
 										+ line );
 								}// else it can be exact level or less, that's normal
-								if (pos % spacesPerLevel != 0) {
+								if ((pos0based) % spacesPerLevel != 0) {
 									throw new RuntimeException("incorrect number of spaces at line "+ lineNumber
-										+ " at position " + pos + " in file " + fromFile.getAbsolutePath() + '\n'
+										+ " at position " + (pos0based+1) + " in file " + fromFile.getAbsolutePath() + '\n'
 										+ line );
 								}
 								//currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
-								currentLevel=pos / spacesPerLevel;//due to above if, this would be integer 
 								expecting = ExpectingType.IDENTIFIER;
-								idStartPos = pos;
+								idStartPos = pos0based;
 							}
 						}
 						//$FALL-THROUGH$
@@ -118,25 +125,27 @@ public abstract class WannabeYaml {
 						} else {
 							// expecting ":" not space and not eol
 							if ( c == idEnder ) {
-								idEndPos = pos;
+								idEndPos = pos0based;
 								// idStartPos=UNSET_INDEX;
 								expecting = ExpectingType.VALUESTART_OR_EOL;
 								continue inLineScan;// also skip this char
 							} else {
 								// TODO: replace with specific exception
 								throw new RuntimeException( "unexpected char, should be `" + idEnder + "` instead of `"
-									+ c + "` at line " + lineNumber + " pos " + pos + '\n' + line );
+									+ c + "` at line " + lineNumber + " pos " + (pos0based+1) + '\n' + line );
 							}
 						}
 						break;
 					case VALUESTART_OR_EOL:
-						assert Q.assumedTrue( idStartPos == UNSET_INDEX );
+						assert Q.assumedTrue( idStartPos != UNSET_INDEX );
+						assert Q.assumedTrue( idEndPos != UNSET_INDEX );
+						assert Q.nn( currentParentSection );
 						if ( c != space ) {
 							// by now we know it's an identifier of key=value and not a Section
 							// valueStartPos=pos;
 							// expecting=ExpectingType.VALUE_CONTENTS;
 							previousWYItem=new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!",
-								line.substring( pos ).trim() , currentParentSection, previousWYItem );
+								line.substring( pos0based ).trim() , currentParentSection, previousWYItem );
 							
 							// assert Q.nn( currentIdentifier );
 							// currentIdentifier.setValue();
@@ -161,7 +170,7 @@ public abstract class WannabeYaml {
 					currentLevel++;
 					continue nextLine;
 				default:
-					throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + pos + '\n'
+					throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + (pos0based+1) + '\n'
 						+ line );
 				}
 			}// all lines done
