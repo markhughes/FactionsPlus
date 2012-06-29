@@ -22,7 +22,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// getDataFolder()
 	public static final File				folderBase											= new File( "plugins"
 																									+ File.separator
-																									+ "FactionsPlus" );											// just
+																									+ "FactionsPlus" );										// just
 																																								// never
 																																								// be
 																																								// ""
@@ -535,7 +535,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
+//	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
 	
 	
 	private final static void parseWrite2( int level, WYSection root ) throws IOException {
@@ -545,10 +545,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		while ( null != currentItem ) {
 			
 			Class<? extends WYItem> cls = currentItem.getClass();
+			 System.out.println(currentItem);
 			
-			if ( WYComment.class == cls ) {
-				// System.out.println(currentItem);
-				bw.write( ( (WYComment)currentItem ).getFullLine() );
+			if ( currentItem instanceof WYRawLine) {
+				bw.write( ( (WYRawLine)currentItem ).getFullLine() );
 				bw.newLine();
 			} else {
 				
@@ -586,64 +586,67 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private final static void parseCheckForValids( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
-
-		while ( null != currentItem ) {
 		
+		while ( null != currentItem ) {
+			
 			Class<? extends WYItem> cls = currentItem.getClass();
-
+			
 			if ( WYIdentifier.class == cls ) {
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
-				System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
-				Object rtcid = getRuntimeConfigIdFor(wid);//pinpoint an annotated field in {@Link Config.class}
-				if (null == rtcid) {
-					//there isn't a runtime option for the encountered id(=config option name)
-					//therefore we check if it's an old alias
-					Object newId = getNewIdForTheOldAlias(wid);//if any
-					if (null != newId) {
-						//not old alias either
-						//thus it's an invalid config option encountered
-						String failMsg = "invalid config option encountered: "+wid;//TODO: also show the in config line/pos for it
-						//first make sure it won't be written on next config save, by removing it from chain
-						wid.removeSelf();
-						throw new RuntimeException(failMsg);
-					}
-					
-					//we then found an old alias for this id, since we're here
-					if (newId.encounteredAliasesCount() < 1) {
-						//update the newID's value with the old alias' value
-						newId.setValue(wid.getValue());
-						newId.addEncounteredOldAlias(wid);
-					}else{
-						//we already encountered an alias for this id
-						//how would we know which is the right value
-						//for now we consider the last encountered alias as the overriding value
-						newId.setValue(wid.getValue());
-						newId.addEncounteredOldAlias(wid);
-						FactionsPlus.warn(" Config option "+ newId.getInAbsoluteDottedForm()+
-							" was overwritten by old alias found for it "+wid.getInAbsoluteDottedForm( virtualRoot ));
-					}
-				}else {
-					if (rtcid.wasAlreadyLinked()) {//was linked to new id, meaning it was already set
-						
-					}else {
-						rtcid.linkTo(wid);
-						rtcid.setValue(wid.getValue());					
-					}
-				}
+				System.out.println( wid.getInAbsoluteDottedForm( virtualRoot ) );
+//				Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
+//				if ( null == rtcid ) {
+//					// there isn't a runtime option for the encountered id(=config option name)
+//					// therefore we check if it's an old alias
+//					Object newId = getNewIdForTheOldAlias( wid );// if any
+//					if ( null != newId ) {
+//						// not old alias either
+//						// thus it's an invalid config option encountered
+//						String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config line/pos
+//																						// for it
+//						// first make sure it won't be written on next config save, by removing it from chain
+//						// wid.removeSelf();
+//						throw new RuntimeException( failMsg );//it won't be written to config if we abort
+//					}
+//					
+//					// we then found an old alias for this id, since we're here
+//					if ( newId.encounteredAliasesCount() < 1 ) {
+//						// update the newID's value with the old alias' value
+//						newId.setValue( wid.getValue() );
+//						newId.addEncounteredOldAlias( wid );
+//					} else {
+//						// we already encountered an alias for this id
+//						// how would we know which is the right value
+//						// for now we consider the last encountered alias as the overriding value
+//						newId.setValue( wid.getValue() );
+//						newId.addEncounteredOldAlias( wid );
+//						FactionsPlus
+//							.warn( " Config option " + newId.getInAbsoluteDottedForm()
+//								+ " was overwritten by old alias found for it "
+//								+ wid.getInAbsoluteDottedForm( virtualRoot ) );
+//					}
+//				} else {
+//					if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
+//					
+//					} else {
+//						rtcid.linkTo( wid );
+//						rtcid.setValue( wid.getValue() );
+//					}
+//				}
 				
 				
 			} else {
 				if ( WYSection.class == cls ) {
 					WYSection cs = (WYSection)currentItem;
 					
-					parseWrite2( level + 1, cs);// recurse
-				}else {
-					assert WYComment.class.equals(cls);
-					//ignore comments
+					parseCheckForValids( level + 1, cs );// recurse
+				} else {
+					assert (WYComment.class.equals( cls )) || (WYRawLine.class.equals( cls ));
+					// ignore comments
 				}
 			}
 			
-			currentItem=currentItem.getNext();
+			currentItem = currentItem.getNext();
 		}
 	}
 	
@@ -726,7 +729,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public final static void reloadConfig() {
 		try {
-			virtualRoot = WannabeYaml.read( fileConfig, llist );
+			virtualRoot = WannabeYaml.read( fileConfig );
 			
 			// now check to see if we have any old config options or invalid ones in the config
 			// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
