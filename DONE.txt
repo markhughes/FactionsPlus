@@ -26,5 +26,5 @@ this is also to keep out the clutter within the TODO file
 //done - - fix deny LWC locks to actually hook in, by creating LWC module (can't otherwise) currently doesn't hook in ie:
         [SEVERE] Wrong method arguments used for event type registered
         
-        
+//done - makes sure you cannot use the same alias for 2 different config options (they are defined inside the java code)
         

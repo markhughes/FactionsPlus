@@ -11,6 +11,7 @@ public class EconomySection {
 		"economy.economyCostToWarp"//newest
 		,"economy.economycostToWarp"//newer
 		,"economyCostToWarp"//very old one
+//		,"jails.enabled" for tests, deleteme, me who? me the comment
 //		prefixEconomy+ectw//newest
 //		,prefixEconomy+"economycostToWarp"//newer
 //		,ectw//very old one

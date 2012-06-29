@@ -383,6 +383,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// option
 			// names
 			ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
+			
 			// map.key: dotted format config.yml settings(only key: value ones)
 			// map.value: Field.class instance of the
 			
@@ -403,8 +404,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 	}
 	
-	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	=
-																								new HashMap<String, Field>();
+	/**
+	 * all new option names and their old aliases in the same set<br>
+	 * used to quickly point to the right Field.class<br>
+	 */
+	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	= new HashMap<String, Field>();
 	
 	
 	private static void ensureConfigClassIsConsistent_AndUpdateMapping( Class rootClass ) {
@@ -435,28 +439,28 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						Class<?> typeOfField = field.getType();// get( rootClass );
 						parsify( typeOfField, dotted );// recurse
 					} else {
-//						FactionsPlus.info( dotted );
+						// FactionsPlus.info( dotted );
 						ConfigOption co = (ConfigOption)fieldAnnotation;
 						String currentDotted = dotted;
 						String[] aliasesArray = co.oldAliases();
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
-						while (true) {
+						while ( true ) {
 							FactionsPlus.info( currentDotted + "/" + field );
-							Field existing = dottedClassOptions_To_Fields.put( currentDotted, field );
-							if ( ( null != existing ) && ( existing.equals( field ) ) ) {
-								throw new RuntimeException( "bad code: your config option `" + currentDotted
-									+ "` in field `" + field + "`\n" + "was already defined in filed `" + existing
-									+ "`" );
+							Field existingField = dottedClassOptions_To_Fields.put( currentDotted, field );
+							if ( ( null != existingField ) ) {
+								throw new RuntimeException( "bad coding: your config option `" + currentDotted
+									+ "` in field `" + field + "`\n" + "was already defined in field `" + existingField
+									+ "`\nBasically you cannot have the same oldalias for two different config options" );
 							}
 							// next
-							if (++current >= aliasesCount) {
+							if ( ++current >= aliasesCount ) {
 								break;
 							}
 							currentDotted = aliasesArray[current];
-						}//while
-						// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
+						}// while
+							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 					}// else we don't care
 				}
 			}
