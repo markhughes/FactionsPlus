@@ -64,3 +64,6 @@ support chat modes)
   config save happens, they are already gone
   
 - add option to disable ender pearls teleporting in safe/warzones too
+
+- investigate why it sometimes says onDisable that LWCBase NoClassDefFoundError
+
