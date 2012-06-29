@@ -28,4 +28,22 @@ public abstract class Q {
 	public final static RuntimeException rethrow( Throwable t ) {
 		throw new RethrownException(t);
 	}
+	
+	
+	public final static boolean nn( Object nonNullObject ) {
+		if ( null == nonNullObject ) {
+			throw new RuntimeException( "the expected non-null object was null" );
+		} else {
+			return true;
+		}
+	}
+	
+	
+	public final static boolean assumedTrue( boolean expectedTrueExpression ) {
+		if ( !expectedTrueExpression ) {
+			throw new RuntimeException( "the expected true expression was false" );
+		} else {
+			return true;
+		}
+	}
 }
