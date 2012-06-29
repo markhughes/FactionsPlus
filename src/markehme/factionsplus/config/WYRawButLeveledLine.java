@@ -3,7 +3,7 @@ package markehme.factionsplus.config;
 import markehme.factionsplus.extras.*;
 
 
-public class WYLRawButLeveledLine extends WYItem {
+public class WYRawButLeveledLine extends WYItem {
 	private String fullLine;
 	
 	/**
@@ -18,7 +18,7 @@ public class WYLRawButLeveledLine extends WYItem {
 	 * @param parent
 	 * @param prev
 	 */
-	public WYLRawButLeveledLine( String alreadyLeveledLine , WYSection parent, WYItem prev) {
+	public WYRawButLeveledLine( String alreadyLeveledLine , WYSection parent, WYItem prev) {
 		super(parent,prev);
 		fullLine=alreadyLeveledLine;
 		assert Q.nn( fullLine );

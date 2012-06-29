@@ -551,8 +551,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
 			}
 			
-			if ( currentItem instanceof WYLRawButLeveledLine) {
-				bw.write( ( (WYLRawButLeveledLine)currentItem ).getLTrimmedLine() );
+			if ( currentItem instanceof WYRawButLeveledLine) {
+				bw.write( ( (WYRawButLeveledLine)currentItem ).getLTrimmedLine() );
 				bw.newLine();
 			} else {
 				
@@ -643,7 +643,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseCheckForValids( level + 1, cs );// recurse
 				} else {
-					assert (currentItem instanceof WYLRawButLeveledLine );
+					assert (currentItem instanceof WYRawButLeveledLine );
 					// ignore raw lines like comments or empty lines
 				}
 			}
