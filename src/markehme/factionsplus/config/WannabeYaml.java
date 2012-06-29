@@ -42,7 +42,8 @@ public abstract class WannabeYaml {
 			// int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
 			int currentLevel = 0;// up to maxLevels
 			lineNumber = 0;
-			parseSection( root, br, currentLevel );
+			WYItem previousWYItem = null;
+			WYItem lastWYItem = parseSection( root, br, currentLevel, previousWYItem );
 			return root;
 		} catch ( FileNotFoundException e ) {
 			Q.rethrow( e );
@@ -73,22 +74,25 @@ public abstract class WannabeYaml {
 		throw null;// not reached
 	}
 	
-	private static int lineNumber;
+	private static int	lineNumber;
+	
 	
 	/**
 	 * @param currentLevel
+	 * @param previousWYItem
 	 * @param fromFile
 	 * @param destinationLList
+	 * @return
 	 * @return root
 	 * @throws IOException
 	 */
-	private final static WYItem parseSection( WYItem parentSection, BufferedReader br, int currentLevel )
-		throws IOException
+	private final static WYItem parseSection( WYItem parentSection, BufferedReader br, int currentLevel,
+		WYItem previousWYItem ) throws IOException
 	{
 		
 		String line;
 		// WYItem currentParentSection=root;
-		WYItem previousWYItem = null;
+		
 		
 		nextLine:
 		while ( null != ( line = br.readLine() ) ) {
@@ -101,7 +105,9 @@ public abstract class WannabeYaml {
 			int valueStartPos = UNSET_INDEX;
 			
 			
-			// FiXME: allow empty lines to be like comments
+			// FIXME: allow empty lines to be like comments (maybe later)
+			
+			// this will auto skip empty (no spaces) lines
 			inLineScan:
 			while ( pos0based++ < line.length() - 1 ) {// 0 first time
 			
@@ -117,6 +123,7 @@ public abstract class WannabeYaml {
 							throw new RuntimeException( "you've reached beyond max allowed nesting" );
 						}
 						// skip all spaces until you meet non-space
+						// also skips lines having only spaces
 						continue inLineScan;
 					} else {
 						// non space encountered
@@ -124,30 +131,43 @@ public abstract class WannabeYaml {
 						if ( c == commentChar ) {
 							// the level of the comment is irrelevant, we don't check number of spaces before comments
 							// add line as comment
-							// previousWYItem.setNext(
+							// previousWYItem.setNext
+							
+							// FIXME: if comment is at same level => store with previous, else don't
 							previousWYItem = new WYComment( line, parentSection, previousWYItem );
 							continue nextLine;// continue scanning
 						} else {
 							// non-comment then it's identifier aka id
 							// first make sure the level is right (aka number of spaces before the id)
 							// should allow 1 space above the current level
-//							currentLevel = ( pos0based ) / spacesPerLevel;
-							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
-								+ currentLevel + " " + ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">"
-								+ ( currentLevel * spacesPerLevel ) );
+							// now we know the level we're on
+							// currentLevel = ( pos0based ) / spacesPerLevel;
 							
-							if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
-								// ie. "  some"
+							//Level means number of horizontal spaces from start of line until beginning of identifier
+							
+							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
+								+ currentLevel + " nowLevel="+((double)pos0based / (double)spacesPerLevel)+" " + ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">"
+								+ ( currentLevel * spacesPerLevel ) );
+							if ( ( pos0based ) % spacesPerLevel != 0 ) {
+								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
+									+ " at position " + ( pos0based + 1 ) + '\n' + line );
+							}
+							
+							int theNewEncounteredLevelNow = ( pos0based / spacesPerLevel ); // this will be integer by now
+							// if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
+							if ( theNewEncounteredLevelNow > currentLevel ) {
+								// "  some"
 								// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement spacesPerLevel
 								// == 2
 								// if ( pos - 1 > currentLevelspaces ) {
 								throw new RuntimeException( "you put too many spaces at line " + lineNumber
 									+ " at position " + ( pos0based + 1 ) + '\n' + line );
-							}// else it can be exact level or less, that's normal
-							if ( ( pos0based ) % spacesPerLevel != 0 ) {
-								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
-									+ " at position " + ( pos0based + 1 ) + '\n' + line );
+							} else {// else it can be exact level or less, that's normal
+								if ( currentLevel < theNewEncounteredLevelNow ) {
+									currentLevel = theNewEncounteredLevelNow;
+								}
 							}
+							
 							// currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
 							expecting = ExpectingType.IDENTIFIER;
 							idStartPos = pos0based;
@@ -204,10 +224,17 @@ public abstract class WannabeYaml {
 			
 			switch ( expecting ) {
 			case VALUESTART_OR_EOL:
+				assert Q.assumedTrue( idStartPos != UNSET_INDEX );
+				assert Q.assumedTrue( idEndPos != UNSET_INDEX );
 				// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 				// this means, this is a section
-				previousWYItem=parseSection( new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!", parentSection,
-					null ), br, currentLevel + 1 );
+				WYSection tmpSection =
+					new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!", parentSection, null );
+				
+				previousWYItem = parseSection( tmpSection, br, currentLevel + 1, null );
+				// the prev for the next item in the same level is this section, after we're done with it
+				// but we don't yet know what level we're one since the prev section finished
+				
 				// currentLevel++;
 				continue nextLine;
 			default:
@@ -216,7 +243,6 @@ public abstract class WannabeYaml {
 			}
 		}// all lines done
 		
-		
-		return parentSection;
+		return previousWYItem;// return last seen item
 	}// end method
 }
