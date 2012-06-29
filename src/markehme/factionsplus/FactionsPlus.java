@@ -75,7 +75,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	@Override
 	public void onLoad() {
-		Config.onLoad();
+		/*
+		 * don't use things like Bukkit.getConsoleSender() they will NPE here<br>
+		 * XXX: best to avoid using onLoad()!! due to bukkit stuff not being inited
+		 */
 	}
 	
 	@Override
@@ -97,6 +100,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	@Override
 	public void onEnable() { super.onEnable();//be first
+		Config.init();
 		Config.reload();//be as soon as possible
 	    
 		PluginManager pm = this.getServer().getPluginManager();

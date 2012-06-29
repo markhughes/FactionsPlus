@@ -10,11 +10,14 @@ import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
+import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.*;
 import org.yaml.snakeyaml.*;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+
+import com.avaje.ebean.enhance.agent.*;
 
 
 
@@ -359,10 +362,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
-	 * call this in plugin.onLoad (the thing that happens before onEnable() )
-	 * 
+	 * call this in plugin.onLoad (the thing that happens before onEnable() )<br>
 	 */
-	public final static void onLoad() {
+	public final static void init() {
 		boolean failed = false;
 		try {
 			if ( Q.isInconsistencyFileBug() ) {
@@ -377,15 +379,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						+ "in places that use files, tell plugin author to fix" );
 			}
 			
-			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new option
+			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new
+			// option
 			// names
-			// TwoWayMapOfNonNulls<String, > hashMap=ensureConfigClassIsConsistent_AndReturnAllIDsAsNewMap(Config.class);
+			ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
 			// map.key: dotted format config.yml settings(only key: value ones)
 			// map.value: Field.class instance of the
 			
 			// Field f;
-			parsify( Config.class, "" );
-//			throw null;
+			
+			// throw null;
 			// Annotation[] ar = f.getDeclaredAnnotations();
 			// Class.class.getDeclaredAnnotations();
 		} catch ( Throwable t ) {
@@ -398,30 +401,58 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 		
 		
-		
+	}
+	
+	private static final TwoWayMapOfNonNulls<String, Field>	dottedClassOptions_To_Fields	=
+																								new TwoWayMapOfNonNulls<String, Field>();
+	
+	
+	private static void ensureConfigClassIsConsistent_AndUpdateMapping( Class rootClass ) {
+		dottedClassOptions_To_Fields.clear();
+		parsify( rootClass, "" );
 	}
 	
 	
 	private static void parsify( Class<?> rootClass, String dottedParentSection ) {
 		Field[] allFields = rootClass.getDeclaredFields();
 		// DeclaredAnnotations();
-		for ( int i = 0; i < allFields.length; i++ ) {
+		for ( int why = 0; why < allFields.length; why++ ) {
 			// System.out.println( "F: "+allFields[i] );
-			Annotation[] currentFieldAnnotations = allFields[i].getDeclaredAnnotations();
-			for ( int j = 0; j < currentFieldAnnotations.length; j++ ) {
+			Field field = allFields[why];
+			Annotation[] currentFieldAnnotations = field.getDeclaredAnnotations();
+			for ( int jay = 0; jay < currentFieldAnnotations.length; jay++ ) {
 				// System.out.println("A: "+ currentFieldAnnotations[j] );
-				Class<? extends Annotation> annotationType = currentFieldAnnotations[j].annotationType();
-				String fName = allFields[i].getName();
-				
-				if ( ConfigSection.class.equals( annotationType ) ) {
-					// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
-					Class<?> typeOfField = allFields[i].getType();// get( rootClass );
-					parsify( typeOfField, ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT
-						+ fName ) );
-				} else {
-					if ( ConfigOption.class.equals( annotationType ) ) {
-						FactionsPlus.info( ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT
-							+ fName ) );
+				Annotation fieldAnnotation = currentFieldAnnotations[jay];
+				Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
+				if ( ( ConfigSection.class.equals( annotationType ) ) || ( ConfigOption.class.equals( annotationType ) ) )
+				{
+					
+					String fName = field.getName();
+					String dotted = ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT + fName );
+					
+					if ( ConfigSection.class == annotationType ) {
+						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
+						Class<?> typeOfField = field.getType();// get( rootClass );
+						parsify( typeOfField, dotted );// recurse
+					} else {
+						FactionsPlus.info( dotted );
+						ConfigOption co = (ConfigOption)fieldAnnotation;
+						String currentDotted = dotted;
+						String[] aliasesArray = co.oldAliases();
+						int aliasesCount = aliasesArray.length;
+						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
+											// ordered)
+						do {
+							FactionsPlus.info( currentDotted + "/" + field );
+							Field existing = dottedClassOptions_To_Fields.put( currentDotted, field );
+							if ( ( null != existing ) && ( existing.equals( field ) ) ) {
+								throw new RuntimeException( "bad code: your config option `" + currentDotted
+									+ "` in field `" + field + "`\n" + "was already defined in filed `" + existing
+									+ "`" );
+							}
+							// next
+							currentDotted = aliasesArray[++current];
+						} while ( current < aliasesCount );
 						// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 					}// else we don't care
 				}
@@ -465,6 +496,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * called on plugin.onEnable() and every time you want the config to reload
 	 */
 	public final static void reload() {
+		
 		Config.config = null;// must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates = null;
 		boolean failed = false;
@@ -642,7 +674,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			if ( WYIdentifier.class == cls ) {
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
-				System.out.println( wid.getInAbsoluteDottedForm( virtualRoot ) );
+				// System.out.println( wid.getInAbsoluteDottedForm( virtualRoot ) );
 				// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
 				// if ( null == rtcid ) {
 				// // there isn't a runtime option for the encountered id(=config option name)
