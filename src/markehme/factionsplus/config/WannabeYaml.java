@@ -161,10 +161,10 @@ public abstract class WannabeYaml {
 							// ie. "  identifier: value" (in file)
 							// the above will be passed to prev caller, when section ends
 							
-							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
-								+ currentLevel + " nowLevel=" + ( (double)pos0based / (double)spacesPerLevel ) + " "
-								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel )
-								+ '\n' + line );
+//							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
+//								+ currentLevel + " nowLevel=" + ( (double)pos0based / (double)spacesPerLevel ) + " "
+//								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel )
+//								+ '\n' + line );
 							if ( ( pos0based ) % spacesPerLevel != 0 ) {
 								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
 									+ " at position " + ( pos0based + 1 ) + '\n' + line );

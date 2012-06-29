@@ -11,7 +11,7 @@ public class WYComment extends WYItem {
 		super(parent,prev);
 		fullLine=_entireLine;
 		assert Q.nn( fullLine );
-		System.out.println("Comment "+this+" parent="+parent+" prev="+prev);
+//		System.out.println("Comment "+this+" parent="+parent+" prev="+prev);
 	}
 
 	public String getFullLine() {

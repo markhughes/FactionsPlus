@@ -354,18 +354,24 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 //		assert null == root.getParent();
 
 		while ( null != currentItem ) {
-			System.out.println(currentItem);
-			
+		
 			Class<? extends WYItem> cls = currentItem.getClass();
-			
+
 			if ( WYComment.class == cls ) {
+				System.out.println(currentItem);
 				bw.write( ( (WYComment)currentItem ).getFullLine() );
 			} else {
+				
+				if (!(currentItem instanceof WY_IDBased)) {
+					throw FactionsPlus.bailOut("impossible, coding bug detected");
+				}
+				
 				if ( level > 0 ) {
 					bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
 				}
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
+					System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
 					bw.write( wid.getId() );
 					bw.write( ":" );
 					bw.write( WannabeYaml.space + wid.getValue() );
@@ -376,6 +382,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 						bw.write( ( cs ).getSectionName()+":" );
 						bw.newLine();
 						parseWrite2( level + 1, cs);// recurse
+					}else {
+//						throw null;//FIXME: throw right one
+						throw FactionsPlus.bailOut("impossible, coding bug detected");
 					}
 				}
 			}

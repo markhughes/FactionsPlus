@@ -4,23 +4,20 @@ import markehme.factionsplus.extras.*;
 
 
 
-public class WYSection extends WYItem {
+public class WYSection extends WY_IDBased {
 	
-	private String	identifier;
 	private WYItem firstChild,lastChild;
 
 	
 	public WYSection( String id , WYSection parent, WYItem prev) {
-		super(parent, prev);
-		identifier = id;
-		assert Q.nn( identifier );
+		super(id, parent, prev);
 		firstChild=null;
 		lastChild=null;
-		System.out.println("Section "+this+" parent="+parent+" prev="+prev);
+//		System.out.println("Section "+this+" parent="+parent+" prev="+prev);
 	}
 	
 	public String getSectionName(){
-		return identifier;
+		return getId();
 	}
 	
 	@Override
@@ -41,4 +38,5 @@ public class WYSection extends WYItem {
 			firstChild=lastChild=child;
 		}
 	}
+
 }
