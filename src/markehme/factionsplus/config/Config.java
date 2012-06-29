@@ -346,14 +346,17 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 
-	private final static void parseWrite2( int level, WYItem root ) throws IOException {
+	private final static void parseWrite2( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
-		WYItem currentItem = root;
+		WYItem currentItem = root.getFirst();
 		assert null == root.getPrev();
-		assert null == root.getParent();
-		
-		while ( null != currentItem.getNext() ) {
+//		assert null == root.getParent();
+
+		while ( null != currentItem ) {
+			System.out.println(currentItem);
+			
 			Class<? extends WYItem> cls = currentItem.getClass();
+			
 			if ( WYComment.class == cls ) {
 				bw.write( ( (WYComment)currentItem ).getFullLine() );
 			} else {
@@ -368,13 +371,14 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 					bw.newLine();
 				} else {
 					if ( WYSection.class == cls ) {
-						bw.write( ( (WYSection)currentItem ).getSectionName() );
+						WYSection cs = (WYSection)currentItem;
+						bw.write( ( cs ).getSectionName() );
 						bw.newLine();
-						parseWrite2( level + 1, currentItem );// recurse
+						parseWrite2( level + 1, cs);// recurse
 					}
 				}
 			}
-			
+			currentItem=currentItem.getNext();
 			
 		}
 	}
@@ -452,7 +456,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
-	private static WYItem virtualRoot=null;
+	private static WYSection virtualRoot=null;
 	public final static void reloadConfig() {
 		try {
 			virtualRoot=WannabeYaml.read(fileConfig);

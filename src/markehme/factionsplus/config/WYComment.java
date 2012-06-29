@@ -7,7 +7,7 @@ public class WYComment extends WYItem {
 	
 	private String fullLine;
 	
-	public WYComment( String _entireLine , WYItem parent, WYItem prev) {
+	public WYComment( String _entireLine , WYSection parent, WYItem prev) {
 		super(parent,prev);
 		fullLine=_entireLine;
 		assert Q.nn( fullLine );

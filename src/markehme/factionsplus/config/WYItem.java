@@ -5,14 +5,15 @@ public abstract class WYItem {
 
 	private WYItem prev;
 	private WYItem next;
-	private WYItem parent;
+	private WYSection parent;
+	
 	
 	/**
 	 * this is the next aka appended item
 	 * @param _parent
 	 * @param _prev
 	 */
-	public WYItem(WYItem _parent, WYItem _prev) {
+	public WYItem(WYSection _parent, WYItem _prev) {
 		//constructor
 		prev=_prev;//can be null
 		parent=_parent;//can be null
@@ -21,7 +22,10 @@ public abstract class WYItem {
 			assert null == prev.getNext();
 			prev.setNext( this );
 		}
-		System.out.println(this+" "+parent+" "+prev);
+		if (null != parent) {
+			parent.append(this);
+		}
+//		System.out.println(this+" "+parent+" "+prev);
 	}
 	
 	public void setNext(WYItem nxt) {
@@ -36,10 +40,10 @@ public abstract class WYItem {
 		return prev;
 	}
 	
-	public WYItem getParent() {
+	public WYSection getParent() {
 		return parent;
 	}
-	
+
 //	public void addToChain(WYItem newItem, WYItem parent, WYItem prev, WYItem next) {
 //		
 //	}

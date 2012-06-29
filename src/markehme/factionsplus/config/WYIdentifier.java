@@ -10,7 +10,7 @@ public class WYIdentifier extends WYItem {
 	private String	value;
 	
 	
-	public WYIdentifier( String identifier, String strValue, WYItem parent, WYItem prev ) {
+	public WYIdentifier( String identifier, String strValue, WYSection parent, WYItem prev ) {
 		super( parent, prev );
 		id = identifier;
 		assert Q.nn( id );
