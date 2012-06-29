@@ -94,7 +94,7 @@ public abstract class WannabeYaml {
 	 * @throws IOException
 	 */
 	private final static int parseSection( WYSection parentSection, BufferedReader br, int currentLevel,
-		WYItem previousWYItem) throws IOException
+		WYItem previousWYItem ) throws IOException
 	{
 		
 		// WYItem currentParentSection=root;
@@ -143,7 +143,7 @@ public abstract class WannabeYaml {
 								
 								// FIXME: if comment is at same level => store with previous, else don't
 								previousWYItem = new WYComment( line, parentSection, previousWYItem );
-//								destination.addLast( previousWYItem );
+								// destination.addLast( previousWYItem );
 								continue nextLine;// continue scanning
 							} else {
 								// non-comment then it's identifier aka id
@@ -235,7 +235,7 @@ public abstract class WannabeYaml {
 							previousWYItem =
 								new WYIdentifier( line.substring( idStartPos, idEndPos ), line.substring( pos0based )
 									.trim(), parentSection, previousWYItem );
-//							destination.addLast( previousWYItem );
+							// destination.addLast( previousWYItem );
 							// assert Q.nn( currentIdentifier );
 							// currentIdentifier.setValue();
 							continue nextLine;
@@ -248,9 +248,9 @@ public abstract class WannabeYaml {
 					default:
 						throw new RuntimeException( "invalid expecting type " + expecting );
 					}
-				}//'while' one line done
+				}// 'while' one line done
 				
-				//outside of the inline 'while'
+				// outside of the inline 'while'
 				switch ( expecting ) {
 				case VALUESTART_OR_EOL:
 					assert Q.assumedTrue( idStartPos != UNSET_INDEX );
@@ -259,7 +259,7 @@ public abstract class WannabeYaml {
 					// this means, this is a section
 					WYSection tmpSection = new WYSection( line.substring( idStartPos, idEndPos ), parentSection, null );
 					// Q.nn(null);
-//					destination.addLast( tmpSection );
+					// destination.addLast( tmpSection );
 					int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
 					
 					
@@ -293,10 +293,16 @@ public abstract class WannabeYaml {
 					// _____^ <- there
 					// and we cannot skip this line
 				case ID_START:
-					// done: allow empty lines with 0 or more spaces(limited to {@Link maxLevelSpaces} to be like comments (maybe later)
+					// done: allow empty lines with 0 or more spaces(limited to {@Link maxLevelSpaces} to be like comments
+					// (maybe later)
 					// if we're here, we bumped into an empty line
 					// we currently just ignore it, so it will not be added upon writing the config backs
-					previousWYItem=new WYRawLine(line, parentSection, previousWYItem);
+					if ( pos0based > 0 ) {
+						// line filled with spaces
+						previousWYItem = new WYRawLine( line, parentSection, previousWYItem );
+					} else {
+						previousWYItem = new WYEmptyLine( parentSection, previousWYItem );
+					}
 					continue nextLine;
 				default:
 					throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos"

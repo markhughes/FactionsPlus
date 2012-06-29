@@ -641,8 +641,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseCheckForValids( level + 1, cs );// recurse
 				} else {
-					assert (WYComment.class.equals( cls )) || (WYRawLine.class.equals( cls ));
-					// ignore comments
+					assert (currentItem instanceof WYRawLine );
+					// ignore raw lines like comments or empty lines
 				}
 			}
 			
