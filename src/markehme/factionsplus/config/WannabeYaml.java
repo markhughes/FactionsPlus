@@ -28,7 +28,7 @@ public abstract class WannabeYaml {
 	}
 	
 	
-	public final static WYSection read( File fromFile ) throws IOException {
+	public final static WYSection read( File fromFile, LinkedList<WYItem> destination ) throws IOException {
 		assert Q.nn( fromFile );
 		if ( ( !fromFile.exists() ) || ( fromFile.isDirectory() ) ) {
 			throw new FileNotFoundException();
@@ -45,8 +45,8 @@ public abstract class WannabeYaml {
 				int currentLevel = 0;// up to maxLevels
 				lineNumber = 0;
 				WYItem previousWYItem = null;
-				llist.clear();
-				int eof = parseSection( root, br, currentLevel, previousWYItem );
+				destination.clear();
+				int eof = parseSection( root, br, currentLevel, previousWYItem ,destination);
 				assert END_OF_FILE == eof;
 			}
 			return root;
@@ -83,19 +83,19 @@ public abstract class WannabeYaml {
 	private static int						idStartPos;
 	private static ExpectingType			expecting;
 	private static String line;
-	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
 	
 	
 	/**
 	 * @param currentLevel
 	 * @param previousWYItem
+	 * @param destination 
 	 * @param fromFile
 	 * @param destinationLList
 	 * @return new level (which decreased), or it's just end of file aka -1
 	 * @throws IOException
 	 */
 	private final static int parseSection( WYSection parentSection, BufferedReader br, int currentLevel,
-		WYItem previousWYItem ) throws IOException
+		WYItem previousWYItem, LinkedList<WYItem> destination ) throws IOException
 	{
 		
 		// WYItem currentParentSection=root;
@@ -146,7 +146,7 @@ public abstract class WannabeYaml {
 							
 							// FIXME: if comment is at same level => store with previous, else don't
 							previousWYItem = new WYComment( line, parentSection, previousWYItem );
-							llist.addLast( previousWYItem );
+							destination.addLast( previousWYItem );
 							continue nextLine;// continue scanning
 						} else {
 							// non-comment then it's identifier aka id
@@ -234,7 +234,7 @@ public abstract class WannabeYaml {
 						previousWYItem =
 							new WYIdentifier( line.substring( idStartPos, idEndPos ), line.substring( pos0based )
 								.trim(), parentSection, previousWYItem );
-						llist.addLast( previousWYItem );
+						destination.addLast( previousWYItem );
 						// assert Q.nn( currentIdentifier );
 						// currentIdentifier.setValue();
 						continue nextLine;
@@ -257,8 +257,8 @@ public abstract class WannabeYaml {
 				// this means, this is a section
 				WYSection tmpSection = new WYSection( line.substring( idStartPos, idEndPos ), parentSection, null );
 				// Q.nn(null);
-				llist.addLast( tmpSection );
-				int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
+				destination.addLast( tmpSection );
+				int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null,destination );
 				
 				
 				if ( END_OF_FILE == actualLevelNow ) {// TODO: merge these 2 ifs in one, allowed now for clarity

@@ -345,6 +345,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
+	private static final LinkedList<WYItem>	llist	= new LinkedList<WYItem>();
 
 	private final static void parseWrite2( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
@@ -458,7 +459,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	private static WYSection virtualRoot=null;
 	public final static void reloadConfig() {
 		try {
-			virtualRoot=WannabeYaml.read(fileConfig);
+			virtualRoot=WannabeYaml.read(fileConfig,llist);
 		} catch ( IOException e ) {
 			e.printStackTrace();
 			throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"+Config.fileConfig.getAbsolutePath()+"'");
