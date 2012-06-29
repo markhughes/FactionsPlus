@@ -82,7 +82,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static final String prefixJails="jails"+Config.delim;
 	public static final String str_enableJails = prefixJails+"enableJails";
 	
-	@ConfigOption
+	@ConfigSection
 	public static final JailsSection jails=new JailsSection();
 	
 	public static final String str_leadersCanSetJails = prefixJails+"leadersCanSetJails";
@@ -144,7 +144,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	public static final String str_showLastAnnounceOnLogin=prefixAnnounce+"showLastAnnounceOnLogin";
 	public static final String str_showLastAnnounceOnLandEnter=prefixAnnounce+"showLastAnnounceOnLandEnter";
 
-	
+	@ConfigSection
 	public static final EconomySection economy=new EconomySection();
 	
 	public static final String prefixEconomy="economy"+delim;
@@ -360,6 +360,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			if ( WYComment.class == cls ) {
 				System.out.println(currentItem);
 				bw.write( ( (WYComment)currentItem ).getFullLine() );
+				bw.newLine();
 			} else {
 				
 				if (!(currentItem instanceof WY_IDBased)) {

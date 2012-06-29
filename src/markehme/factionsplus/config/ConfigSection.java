@@ -14,5 +14,6 @@ public @interface ConfigSection {
 	 * named value() so you can use @ConfigSection({"comments here","next line"})
 	 */
 	String[] value() default "";
-
+	
+	//this won't need old aliases
 }
