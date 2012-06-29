@@ -547,8 +547,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			Class<? extends WYItem> cls = currentItem.getClass();
 //			 System.out.println(currentItem+"!");
 			
-			if ( currentItem instanceof WYRawLine) {
-				bw.write( ( (WYRawLine)currentItem ).getFullLine() );
+			if ( level > 0 ) {
+				bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
+			}
+			
+			if ( currentItem instanceof WYLRawButLeveledLine) {
+				bw.write( ( (WYLRawButLeveledLine)currentItem ).getLTrimmedLine() );
 				bw.newLine();
 			} else {
 				
@@ -556,9 +560,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					throw FactionsPlus.bailOut( "impossible, coding bug detected" );
 				}
 				
-				if ( level > 0 ) {
-					bw.write( bucketOfSpaces, 0, WannabeYaml.spacesPerLevel * level );
-				}
+				
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					// System.out.println(wid.getInAbsoluteDottedForm(virtualRoot));
@@ -641,7 +643,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseCheckForValids( level + 1, cs );// recurse
 				} else {
-					assert (currentItem instanceof WYRawLine );
+					assert (currentItem instanceof WYLRawButLeveledLine );
 					// ignore raw lines like comments or empty lines
 				}
 			}

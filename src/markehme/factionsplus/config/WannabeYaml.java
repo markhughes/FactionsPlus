@@ -140,9 +140,10 @@ public abstract class WannabeYaml {
 								// the level of the comment is irrelevant, we don't check number of spaces before comments
 								// add line as comment
 								// previousWYItem.setNext
-								
+//								7 check spaces for comment to decide...
 								// FIXME: if comment is at same level => store with previous, else don't
-								previousWYItem = new WYComment( line, parentSection, previousWYItem );
+								previousWYItem = new WYComment( line.substring( pos0based )/*this idents the comment to right level on next write*/
+									, parentSection, previousWYItem );
 								// destination.addLast( previousWYItem );
 								continue nextLine;// continue scanning
 							} else {
@@ -297,11 +298,25 @@ public abstract class WannabeYaml {
 					// (maybe later)
 					// if we're here, we bumped into an empty line
 					// we currently just ignore it, so it will not be added upon writing the config backs
+					
+					//END OF LINE before anything was found, this should NOT CHANGE CURRENT LEVEL
+					//we should see how many spaces it has, if any, and see if to link it with previous or not
+					//if it has more spaces, you don't link it with previous one, unless next one is lower level
+//					1
 					if ( pos0based > 0 ) {
 						// line filled with spaces
-						previousWYItem = new WYRawLine( line, parentSection, previousWYItem );
+						//XXX: IF the line is less than the level, it is auto leveled up !!! because it is stored as empty string
+						//and the config writing auto levels everything written...
+						//and since we don't store the entire line, for good reasons...
+						
+//						System.out.println(currentLevel*spacesPerLevel + " ! " +pos0based+" !"+
+//						line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ))+"!"+line+"!");
+						previousWYItem = new WYWhitespacedLine( line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ) ), 
+							parentSection, previousWYItem );
+						//this can become empty line too, after the level is removed from leading spaces
 					} else {
 						previousWYItem = new WYEmptyLine( parentSection, previousWYItem );
+						//empty lines will be autoleveled to the current level on write(the write of config which happens elsewhere tho, so technically it can be non-leveled if wanted)
 					}
 					continue nextLine;
 				default:

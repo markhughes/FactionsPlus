@@ -59,3 +59,7 @@ support chat modes)
 
 - update .settings.eclipse and .classpath etc.
 
+- make sure empty sections from existing config are removed, ie. mainly after their children which were obsolete/old aliases 
+  were removed - hmm maybe at the exact same time when removing those, can detect if parent is empty and kill it, and then when
+  config save happens, they are already gone
+  

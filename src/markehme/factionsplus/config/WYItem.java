@@ -1,6 +1,15 @@
 package markehme.factionsplus.config;
 
 
+/**
+ * all data (of a line) that are stored in these (subclasses of this) are to be stored without their leading spaces for their current level<br>
+ * "  some"<br>
+ * "    some2"<br>
+ * if level was 2, we have:<br>
+ * "some"<br>
+ * "  some2"<br>
+ * stored;<br>
+ */
 public abstract class WYItem {
 
 	private WYItem prev;
