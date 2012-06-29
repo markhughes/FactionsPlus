@@ -84,9 +84,5 @@ extras:
         unDisguiseIfInEnemyTerritory: false
     disableUpdateCheck: false
     
-# epic comment
-
 DoNotChangeMe: 8
 
-# another comment
-crap: 1

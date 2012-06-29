@@ -17,5 +17,8 @@ public class WYComment extends WYItem {
 		return fullLine;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return getFullLine();
+	}
 }

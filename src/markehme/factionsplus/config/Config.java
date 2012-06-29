@@ -314,10 +314,10 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	}
 	
 	public final static YamlConfiguration getConfig() {
-		if (null == Config.config) {
+		if (null == virtualRoot) {
 			reloadConfig();
 		}
-		if (null == Config.config) {
+		if (null == virtualRoot) {
 			throw FactionsPlusPlugin.bailOut("reloading config failed somehow and this should not be reached");//bugged reloadConfig() if reached
 		}
 		return Config.config;
@@ -349,6 +349,9 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 	private final static void parseWrite2( int level, WYItem root ) throws IOException {
 		assert Q.nn( root );
 		WYItem currentItem = root;
+		assert null == root.getPrev();
+		assert null == root.getParent();
+		
 		while ( null != currentItem.getNext() ) {
 			Class<? extends WYItem> cls = currentItem.getClass();
 			if ( WYComment.class == cls ) {
@@ -367,7 +370,6 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 					if ( WYSection.class == cls ) {
 						bw.write( ( (WYSection)currentItem ).getSectionName() );
 						bw.newLine();
-						level++;
 						parseWrite2( level + 1, currentItem );// recurse
 					}
 				}
@@ -387,7 +389,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 			OutputStreamWriter osw=null;
 			bw=null;
 			try {
-				fos = new FileOutputStream( new File(Config.fileConfig.getPath(),"config2.yml") );
+				fos = new FileOutputStream( new File(Config.fileConfig.getParent(),"config2.yml") );
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 //				parseWrite( 0, config.getValues( false ) );
@@ -450,7 +452,7 @@ public abstract class Config {//not named Conf so to avoid conflicts with com.ma
 		}
 	}
 	
-	private static WYItem virtualRoot;
+	private static WYItem virtualRoot=null;
 	public final static void reloadConfig() {
 		try {
 			virtualRoot=WannabeYaml.read(fileConfig);

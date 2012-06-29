@@ -28,5 +28,9 @@ public class WYIdentifier extends WYItem {
 	}
 	// public void setValue(String strValue ) {
 	// }
-	
+
+	@Override
+	public String toString() {
+		return getId()+": "+getValue();
+	}
 }

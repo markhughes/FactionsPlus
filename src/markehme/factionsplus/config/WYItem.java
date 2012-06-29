@@ -18,8 +18,10 @@ public abstract class WYItem {
 		parent=_parent;//can be null
 		next=null;
 		if (null != prev) {
+			assert null == prev.getNext();
 			prev.setNext( this );
 		}
+		System.out.println(this+" "+parent+" "+prev);
 	}
 	
 	public void setNext(WYItem nxt) {

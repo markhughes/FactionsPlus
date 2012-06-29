@@ -19,4 +19,8 @@ public class WYSection extends WYItem {
 		return identifier;
 	}
 	
+	@Override
+	public String toString() {
+		return getSectionName()+":";
+	}
 }

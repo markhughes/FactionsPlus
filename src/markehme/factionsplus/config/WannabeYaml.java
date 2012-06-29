@@ -63,6 +63,8 @@ public abstract class WannabeYaml {
 				int idEndPos = UNSET_INDEX;
 				int valueStartPos = UNSET_INDEX;
 				
+				
+				//FiXME: allow empty lines to be like comments
 				inLineScan:
 				while ( pos0based++ < line.length()-1 ) {// 0 first time
 					
@@ -145,7 +147,7 @@ public abstract class WannabeYaml {
 							// valueStartPos=pos;
 							// expecting=ExpectingType.VALUE_CONTENTS;
 							previousWYItem=new WYIdentifier( "!1!" + line.substring( idStartPos, idEndPos ) + "!2!",
-								line.substring( pos0based ).trim() , currentParentSection, previousWYItem );
+								"!3!"+line.substring( pos0based ).trim()+"!4!" , currentParentSection, previousWYItem );
 							
 							// assert Q.nn( currentIdentifier );
 							// currentIdentifier.setValue();
@@ -165,8 +167,10 @@ public abstract class WannabeYaml {
 				case VALUESTART_OR_EOL:
 					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 					// this means, this is a section
-					previousWYItem=new WYSection( "!3!" + line.substring( idStartPos, idEndPos ) + "!4!",
-							currentParentSection, previousWYItem);
+					currentParentSection=new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!",
+							currentParentSection, null);
+					previousWYItem=null;
+					
 					currentLevel++;
 					continue nextLine;
 				default:
