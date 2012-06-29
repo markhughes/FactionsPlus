@@ -18,6 +18,7 @@ public abstract class WannabeYaml {
 	private static final char	commentChar		= '#';
 	private static final char	idEnder			= ':';
 	private static final int	UNSET_INDEX		= -1;
+	private static final int	END_OF_FILE		= -1;
 	public static final int		maxLevels		= 128;
 	public static final int		spacesPerLevel	= 2;
 	public static final int		maxLevelSpaces	= maxLevels * spacesPerLevel;
@@ -40,10 +41,13 @@ public abstract class WannabeYaml {
 			br = new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
 			WYSection root = new WYSection( "root", null, null );
 			// int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
-			int currentLevel = 0;// up to maxLevels
-			lineNumber = 0;
-			WYItem previousWYItem = null;
-			WYItem lastWYItem = parseSection( root, br, currentLevel, previousWYItem );
+			synchronized ( WannabeYaml.class ) {
+				int currentLevel = 0;// up to maxLevels
+				lineNumber = 0;
+				WYItem previousWYItem = null;
+				int eof = parseSection( root, br, currentLevel, previousWYItem );
+				assert END_OF_FILE == eof;
+			}
 			return root;
 		} catch ( FileNotFoundException e ) {
 			Q.rethrow( e );
@@ -74,7 +78,9 @@ public abstract class WannabeYaml {
 		throw null;// not reached
 	}
 	
-	private static int	lineNumber;
+	private static int				lineNumber;
+	private static int				idStartPos;
+	private static ExpectingType	expecting;
 	
 	
 	/**
@@ -83,10 +89,10 @@ public abstract class WannabeYaml {
 	 * @param fromFile
 	 * @param destinationLList
 	 * @return
-	 * @return root
+	 * @return new level (which decreased), or it's just end of file aka -1
 	 * @throws IOException
 	 */
-	private final static WYItem parseSection( WYItem parentSection, BufferedReader br, int currentLevel,
+	private final static int parseSection( WYItem parentSection, BufferedReader br, int currentLevel,
 		WYItem previousWYItem ) throws IOException
 	{
 		
@@ -97,10 +103,10 @@ public abstract class WannabeYaml {
 		nextLine:
 		while ( null != ( line = br.readLine() ) ) {
 			lineNumber++;
-			ExpectingType expecting = ExpectingType.ID_START;
+			expecting = ExpectingType.ID_START;
 			char c;
 			int pos0based = -1;// must be -1
-			int idStartPos = UNSET_INDEX;
+			idStartPos = UNSET_INDEX;
 			int idEndPos = UNSET_INDEX;
 			int valueStartPos = UNSET_INDEX;
 			
@@ -143,11 +149,15 @@ public abstract class WannabeYaml {
 							// now we know the level we're on
 							// currentLevel = ( pos0based ) / spacesPerLevel;
 							
-							//Level means number of horizontal spaces from start of line until beginning of identifier
+							// Level means number of horizontal spaces from start of line until beginning of identifier
+							expecting = ExpectingType.IDENTIFIER;// this is what we found starting now, and expecting it next
+							idStartPos = pos0based;// marking the position of the start of the identifier
+							// ie. "  identifier: value" (in file)
+							//the above will be passed to prev caller, when section ends
 							
 							System.out.println( "line=" + lineNumber + " pos=" + pos0based + " curlevel="
-								+ currentLevel + " nowLevel="+((double)pos0based / (double)spacesPerLevel)+" " + ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">"
-								+ ( currentLevel * spacesPerLevel ) );
+								+ currentLevel + " nowLevel=" + ( (double)pos0based / (double)spacesPerLevel ) + " "
+								+ ( pos0based + 1 - ( spacesPerLevel * 1 ) ) + ">" + ( currentLevel * spacesPerLevel ) );
 							if ( ( pos0based ) % spacesPerLevel != 0 ) {
 								throw new RuntimeException( "incorrect number of spaces at line " + lineNumber
 									+ " at position " + ( pos0based + 1 ) + '\n' + line );
@@ -161,16 +171,19 @@ public abstract class WannabeYaml {
 								// == 2
 								// if ( pos - 1 > currentLevelspaces ) {
 								throw new RuntimeException( "you put too many spaces at line " + lineNumber
-									+ " at position " + ( pos0based + 1 ) + '\n' + line );
+									+ " at position " + ( pos0based + 1 ) + " expected "
+									+ ( currentLevel * spacesPerLevel ) + " or " + ( currentLevel + 1 )
+									* spacesPerLevel + " spaces\n" + line );
 							} else {// else it can be exact level or less, that's normal
 								if ( currentLevel < theNewEncounteredLevelNow ) {
-									currentLevel = theNewEncounteredLevelNow;
+//									currentLevel = theNewEncounteredLevelNow;
+									// must relinquish control to previous caller, ie. this section ended
+									return theNewEncounteredLevelNow;// just in case we just went from ie. 10 spaces back to 2 or 0
 								}
 							}
 							
-							// currentLevelspaces = pos;// just in case we just went from ie. 10 spaces back to 2 or 0
-							expecting = ExpectingType.IDENTIFIER;
-							idStartPos = pos0based;
+							//same level identifier ? then fallthru
+							
 						}
 					}
 					//$FALL-THROUGH$
@@ -231,7 +244,23 @@ public abstract class WannabeYaml {
 				WYSection tmpSection =
 					new WYSection( "!5!" + line.substring( idStartPos, idEndPos ) + "!6!", parentSection, null );
 				
-				previousWYItem = parseSection( tmpSection, br, currentLevel + 1, null );
+				int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
+				if ( END_OF_FILE == actualLevelNow ) {// TODO: merge these 2 ifs in one, allowed now for clarity
+					break nextLine;
+				} else {
+					if ( actualLevelNow < currentLevel ) {
+						// i'm further below my currentLevel
+						// means that I should fall back exit method to allow previous levels to carry on
+						return actualLevelNow;
+					}
+					assert actualLevelNow == currentLevel;// can't really return anything higher, cause that would be considered
+															// in the same section that we exited from
+				}
+				// if you're here, the level then decreased, or end of file
+				// but if level decreased you don't want to link next WYItem to the prev one
+				previousWYItem = tmpSection;// this section is the prev item at this level
+				// but you will link next item to the section here (not to the last encountered item within that section)
+				
 				// the prev for the next item in the same level is this section, after we're done with it
 				// but we don't yet know what level we're one since the prev section finished
 				
@@ -241,8 +270,8 @@ public abstract class WannabeYaml {
 				throw new RuntimeException( "unexpected end of line at line " + lineNumber + " pos" + ( pos0based + 1 )
 					+ '\n' + line );
 			}
-		}// all lines done
+		}// all lines done aka EOF
 		
-		return previousWYItem;// return last seen item
+		return END_OF_FILE;// end of file (aka end of all lines)
 	}// end method
 }
