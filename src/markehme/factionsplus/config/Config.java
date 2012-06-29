@@ -403,8 +403,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 	}
 	
-	private static final TwoWayMapOfNonNulls<String, Field>	dottedClassOptions_To_Fields	=
-																								new TwoWayMapOfNonNulls<String, Field>();
+	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	=
+																								new HashMap<String, Field>();
 	
 	
 	private static void ensureConfigClassIsConsistent_AndUpdateMapping( Class rootClass ) {
@@ -435,14 +435,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						Class<?> typeOfField = field.getType();// get( rootClass );
 						parsify( typeOfField, dotted );// recurse
 					} else {
-						FactionsPlus.info( dotted );
+//						FactionsPlus.info( dotted );
 						ConfigOption co = (ConfigOption)fieldAnnotation;
 						String currentDotted = dotted;
 						String[] aliasesArray = co.oldAliases();
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
-						do {
+						while (true) {
 							FactionsPlus.info( currentDotted + "/" + field );
 							Field existing = dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existing ) && ( existing.equals( field ) ) ) {
@@ -451,8 +451,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 									+ "`" );
 							}
 							// next
-							currentDotted = aliasesArray[++current];
-						} while ( current < aliasesCount );
+							if (++current >= aliasesCount) {
+								break;
+							}
+							currentDotted = aliasesArray[current];
+						}//while
 						// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 					}// else we don't care
 				}

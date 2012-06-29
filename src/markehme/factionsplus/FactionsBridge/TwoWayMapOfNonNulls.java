@@ -13,8 +13,10 @@ import markehme.factionsplus.extras.*;
  * 
  * @param <LEFTSIDE>
  *            cannot be null
+ *            must be unique when compared to other elements on this side
  * @param <RIGHTSIDE>
  *            cannot be null
+ *            must be unique when compared to other elements on this side
  */
 public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, RIGHTSIDE> {// beware of some paranoid
 																							// programming below hehe, for fun:)
