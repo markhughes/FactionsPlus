@@ -58,19 +58,19 @@ public class CmdToggleState extends FCommand {
 			
 			boolean authallow = false;
 			
-			if(Config.config.getBoolean(Config.str_leadersCanToggleState)) {
+			if(Config.peaceful.leadersCanToggleState) {
 				if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
 					authallow = true;
 				}
 			}
 			
-			if(Config.config.getBoolean(Config.str_officersCanToggleState)) {
+			if(Config.peaceful.officersCanToggleState) {
 				if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
 					authallow = true;
 				}
 			}
 
-			if(Config.config.getBoolean(Config.str_membersCanToggleState)) {
+			if(Config.peaceful.membersCanToggleState) {
 				authallow = true;
 			}
 			

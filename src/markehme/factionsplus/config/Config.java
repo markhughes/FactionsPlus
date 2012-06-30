@@ -127,95 +127,38 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	/**
 	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields and to their
 	 * child @ConfigSection 's fields and so on; FIXME: I should be able to fix this so that I can add oldaliases for @ConfigSection too and have
-	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense; 
+	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense;
+	 *
+	 * you may change order of these fields (or section's fields) but this won't have any effect if config.yml already existed, only if new one is about to be created<br> 
 	 */
 	@ConfigSection
-	public static final JailsSection		jails												= new JailsSection();
+	public static final Section_Jails		jails												= new Section_Jails();
 	
 	
 	@ConfigSection
-	public static final WarpsSection warps=new WarpsSection();
+	public static final Section_Warps warps=new Section_Warps();
 	
 	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
 	// oldaliases for section
 	@ConfigSection
-	public static final BanningSection				banning												= new BanningSection();
+	public static final Section_Banning				banning												= new Section_Banning();
 	
 	
 	@ConfigSection
-	public static final RulesSection				rules												= new RulesSection();
-	
-	public static final String				str_maxRulesPerFaction								=
-																									prefixRules
-																										+ "maxRulesPerFaction";
-	
-	public static final String				prefixPeaceful										= "peaceful" + DOT;
-	public static final String				str_leadersCanToggleState							=
-																									prefixPeaceful
-																										+ "leadersCanToggleState";
-	public static final String				str_officersCanToggleState							=
-																									prefixPeaceful
-																										+ "officersCanToggleState";
-	public static final String				str_membersCanToggleState							=
-																									prefixPeaceful
-																										+ "membersCanToggleState";
-	public static final String				str_enablePeacefulBoosts							=
-																									prefixPeaceful
-																										+ "enablePeacefulBoosts";
-	public static final String				str_powerBoostIfPeaceful							=
-																									prefixPeaceful
-																										+ "powerBoostIfPeaceful";
-	
-	public static final String				prefixPowerboosts									= "powerboosts" + DOT;
-	public static final String				str_enablePowerBoosts								=
-																									prefixPowerboosts
-																										+ "enablePowerBoosts";
-	public static final String				str_extraPowerWhenKillPlayer						=
-																									prefixPowerboosts
-																										+ "extraPowerWhenKillPlayer";
-	public static final String				str_extraPowerLossIfDeathBySuicide					=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathBySuicide";
-	public static final String				str_extraPowerLossIfDeathByPVP						=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByPVP";
-	public static final String				str_extraPowerLossIfDeathByMob						=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByMob";
-	public static final String				str_extraPowerLossIfDeathByCactus					=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByCactus";
-	public static final String				str_extraPowerLossIfDeathByTNT						=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByTNT";
-	public static final String				str_extraPowerLossIfDeathByFire						=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByFire";
-	public static final String				str_extraPowerLossIfDeathByPotion					=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByPotion";
-	public static final String				str_extraPowerLossIfDeathByOther					=
-																									prefixPowerboosts
-																										+ "extraPowerLossIfDeathByOther";
-	
-	public static final String				prefixAnnounce										= "announce" + DOT;
-	public static final String				str_enableAnnounce									= prefixAnnounce
-																									+ "enableAnnounce";
-	public static final String				str_leadersCanAnnounce								=
-																									prefixAnnounce
-																										+ "leadersCanAnnounce";
-	public static final String				str_officersCanAnnounce								=
-																									prefixAnnounce
-																										+ "officersCanAnnounce";
-	public static final String				str_showLastAnnounceOnLogin							=
-																									prefixAnnounce
-																										+ "showLastAnnounceOnLogin";
-	public static final String				str_showLastAnnounceOnLandEnter						=
-																									prefixAnnounce
-																										+ "showLastAnnounceOnLandEnter";
+	public static final Section_Rules				rules												= new Section_Rules();
 	
 	@ConfigSection
-	public static final EconomySection		economy												= new EconomySection();
+	public static final Section_Peaceful peaceful=new Section_Peaceful();
+	
+	@ConfigSection
+	public static final Section_PowerBoosts powerboosts=new Section_PowerBoosts();
+	
+	@ConfigSection
+	public static final Section_Announce announce=new Section_Announce();
+	
+	
+	@ConfigSection
+	public static final Section_Economy		economy												= new Section_Economy();
 	
 	public static final String				prefixEconomy										= "economy" + DOT;
 	public static final String				str_enableEconomy									= prefixEconomy
@@ -408,6 +351,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								break;
 							}
 							currentDotted = aliasesArray[current];
+							//detect extra spaces(by mistake?) around the current old alias
+							if (!currentDotted.trim().equals( currentDotted )) {
+								throw new RuntimeException( "bad coding: your config option `" + currentDotted
+									+ "` in field `" + field + "`\n" + "should not contain any extra whitespaces around it!" );
+							}
 						}// while
 							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 					}// else we don't care

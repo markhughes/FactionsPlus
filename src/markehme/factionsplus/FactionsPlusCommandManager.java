@@ -41,14 +41,14 @@ public class FactionsPlusCommandManager {
 			addSC(new CmdUnJail());
 		}
 		// General Commands
-		if(Config.config.getBoolean(Config.str_enableAnnounce)) {
+		if(Config.announce.enabled) {
 			addSC(new CmdAnnounce());
 		}
-		if(Config.config.getBoolean(Config.str_enableBans)) {
+		if(Config.banning.enabled) {
 			addSC(new CmdBan());
 			addSC(new CmdUnban());
 		}
-		if(Config.config.getBoolean(Config.str_officersCanToggleState) || Config.config.getBoolean(Config.str_membersCanToggleState) || Config.config.getBoolean(Config.str_leadersCanToggleState)) {
+		if(Config.peaceful.officersCanToggleState || Config.peaceful.membersCanToggleState || Config.peaceful.leadersCanToggleState) {
 			addSC(new CmdToggleState());
 		}
 		addSC(new CmdFC());

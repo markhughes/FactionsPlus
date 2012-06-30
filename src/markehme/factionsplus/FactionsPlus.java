@@ -121,7 +121,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
             	economy = economyProvider.getProvider();
         	}
         }
-        if(Config.config.getBoolean(Config.str_enableAnnounce)) {
+        if(Config.announce.enabled){
     		pm.registerEvents(this.announcelistener, this);
         }
         if(Config.banning.enabled) {
@@ -193,10 +193,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
        
         
         
-        if(Config.config.getBoolean(Config.str_enablePeacefulBoosts)) {
+        if(Config.peaceful.enablePeacefulBoosts) {
         	pm.registerEvents(this.peacefullistener, this);
         }
-        if(Config.config.getBoolean(Config.str_enablePowerBoosts)) {
+        if(Config.powerboosts.enabled) {
         	pm.registerEvents(this.powerboostlistener, this);
         }
 

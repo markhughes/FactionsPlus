@@ -5,7 +5,7 @@ import com.massivecraft.factions.*;
 import markehme.factionsplus.*;
 
 
-public class WarpsSection{
+public class Section_Warps{
 	
 	@ConfigOption(oldAliases={
 		"warps.enableWarps"

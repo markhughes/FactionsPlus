@@ -50,9 +50,9 @@ public class CmdAnnounce extends FCommand {
 
 		boolean authallow = false;
 
-		if(Config.config.getBoolean(Config.str_leadersCanAnnounce) && Utilities.isLeader(fplayer)) {
+		if(Config.announce.leadersCanAnnounce && Utilities.isLeader(fplayer)) {
 			authallow = true;
-		} else if(Config.config.getBoolean(Config.str_officersCanAnnounce) && Utilities.isOfficer(fplayer)) {
+		} else if(Config.announce.officersCanAnnounce && Utilities.isOfficer(fplayer)) {
 			authallow = true;
 		}
 

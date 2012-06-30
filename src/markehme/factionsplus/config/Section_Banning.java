@@ -1,7 +1,7 @@
 package markehme.factionsplus.config;
 
 
-public class BanningSection {
+public class Section_Banning {
 	
 	@ConfigOption(oldAliases={
 		"leaderCanNotBeBanned"
@@ -24,7 +24,7 @@ public class BanningSection {
 	
 	
 	@ConfigOption(oldAliases={
-		"leadersCanFactionBan"
+		"officersCanFactionBan"
 	})
 	public boolean officersCanFactionBan=true;
 	

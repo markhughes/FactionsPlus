@@ -1,7 +1,7 @@
 package markehme.factionsplus.config;
 
 
-public class RulesSection {
+public class Section_Rules {
 	
 	@ConfigOption(oldAliases={
 		"warps.enableRules"
@@ -22,5 +22,8 @@ public class RulesSection {
 	public boolean officersCanSetRules=true;
 	
 	
-	
+	@ConfigOption(oldAliases={
+		"maxRulesPerFaction"
+		})
+	public int maxRulesPerFaction=12;
 }

@@ -1,7 +1,7 @@
 package markehme.factionsplus.config;
 
 
-public class EconomySection {
+public class Section_Economy {
 //	private static final String prefixEconomy="economy"+Config.delim;
 //	private static final String ectw="economyCostToWarp";
 	

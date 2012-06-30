@@ -1,7 +1,7 @@
 package markehme.factionsplus.config;
 
 
-public class JailsSection {
+public class Section_Jails {
 	
 	@ConfigOption(oldAliases={
 		"jails.enableJails"
