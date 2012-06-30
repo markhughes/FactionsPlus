@@ -25,16 +25,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 
 	// could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using
 	// getDataFolder()
-	public static final File				folderBase				= new File( "plugins" + File.separator
-																		+ "FactionsPlus" );								// just
-																															// never
-																															// be
-																															// ""
-																															// cause
-																															// that
-																															// means
-																															// root
-																															// folder
+	// just // never // be // "" // cause // that // means // root // folder
+	public static final File				folderBase				= new File( "plugins" + File.separator + "FactionsPlus" );
 	public static final File				folderWarps				= new File( folderBase, "warps" );
 	public static final File				folderJails				= new File( folderBase, "jails" );
 	public static final File				folderAnnouncements		= new File( folderBase, "announcements" );
@@ -45,79 +37,24 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static File						templatesFile			= new File( folderBase, "templates.yml" );
 	public static FileConfiguration			templates;
 	
-	private static final String				fileConfigDefaults		= "config_defaults.yml";								// this
-																															// file
-																															// is
-																															// located
-																															// inside
-																															// .jar
-																															// in
-																															// root
-																															// dir
+	// this // file // is // located // inside // .jar // in // root // dir
+	private static final String				fileConfigDefaults		= "config_defaults.yml";
 	// and it contains the defaults, so that they are no longer hardcoded in java code
 	private static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
 	public static YamlConfiguration			config;
 	
-	
-	// Begin Config String Pointers
-	/*
-	 * the format for these is:
-	 * str_NAME
-	 * oa_NAME
-	 * _NAME
-	 * where NAME is something like officersCanSetJails
-	 * and oa stands for obsolete aliases such as the old names that this config had, this is used to carry over the
-	 * old setting to the new setting just in case the new setting had a change in name or location(the prefixes like
-	 * extras.lwc.)
-	 * so example:
-	 * str_disableSomeLocksOnClaim="extras.lwc.disableAllLocksOnClaim";
-	 * if the old version of the config has extras.lwc.disableAllLocksOnClaim: true
-	 * and the new version of the FactionsPlus has renamed this setting to lwc.disableNonFactionMembersLocksOnClaim
-	 * then the oa_disableSomeLocksOnClaim would now contain the {"extras.lwc.disableAllLocksOnClaim"} just to make sure
-	 * the old value of "true" is preserved
-	 * when the old entry is removed and then the new one will look like lwc.disableNonFactionMembersLocksOnClaim: true even
-	 * though
-	 * the lwc.disableNonFactionMembersLocksOnClaim would have had a default value of false which means
-	 * _disableSomeLocksOnClaim=false; here
-	 * another example:
-	 * str_officersCanSetJails="jails.officersCanSetJails";
-	 * oa_officersCanSetJails={ "officersCanSetJails" };
-	 * _officersCanSetJails=true;//the default value, which will be overwritten with the value found in the existing config(if
-	 * any)
-	 * if the config doesn't have this key, then this default value will be added to the config
-	 */
-	
-	/*
-	 * there are two types of defaults:
-	 * 1. those that are in this file aka hardcoded
-	 * 2. those in config_defaults.yml file which will be located inside the exported .jar
-	 * and there's the user's config.yml file which is the real user-modifiable config (3.)
-	 * 
-	 * the priority of the settings goes in this order: 3,2,1
-	 * ie. if the config has setting extras.lwc.disableAllLocksOnClaim set to anything,
-	 * then this will override the setting in 2. (if it even existed there) and in 1. which always existed as
-	 * _disableSomeLocksOnClaim
-	 * 
-	 * maybe I'm explaining this badly :) let's try this way:
-	 * X=1.X;
-	 * if (2.X.exists()) X=2.X;
-	 * if (3.X.exists()) X=3.X
-	 * 
-	 * and on config save, the setting X will now exist in 3. (but not in 2. because we don't write in the config_default.yml
-	 * inside the .jar)
-	 * typically config save will happen if there are new settings (those that didn't exist in 3.)
-	 */
-	
 	// never change this, it's yaml compatible:
 	public static final char				DOT						= '.';
 	
+	// Begin Config Pointers
+	
 	/**
 	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields
-	 * and to their
+	 * (children) and to their
 	 * child @ConfigSection 's fields and so on; cantfix: I should be able to fix this so that I can add oldaliases for @ConfigSection
-	 * too and have
-	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense;
+	 * too and have them considered but they would only apply to the real fields and not to those fields's oldaliases, makes
+	 * sense;
 	 * cantdothis because I cannot decide which parent's oldAlias would apply to this child's alias when computing the dotted
 	 * format of the child
 	 * 
@@ -131,7 +68,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	@ConfigSection
 	public static final Section_Warps		warps					= new Section_Warps();
 	
-	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
+	// cantfix: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
 	// oldaliases for section
 	@ConfigSection
 	public static final Section_Banning		banning					= new Section_Banning();
@@ -170,8 +107,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
 	public static final int					doNotChangeMe			= 11;
 	
-	//the root class that contains the @ConfigSection and @ConfigOptions to scan for
-	private static final Class	configClass	= Config.class;
+	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
+	private static final Class				configClass				= Config.class;
 	// End Config
 	
 	
@@ -186,9 +123,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		boolean failed = false;
 		// try {
 		if ( Q.isInconsistencyFileBug() ) {
-			throw FactionsPlusPlugin
-				.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
-					+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
+			throw FactionsPlusPlugin.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+				+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
 		}
 		
 		if ( hasFileFieldsTrap() ) {
@@ -222,9 +158,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 	}
 	
+	
+	public static final String getDottedFormat(Field f) {
+		//TODO:
+		throw Q.ni();
+	}
+	
 	/**
 	 * all new option names and their old aliases in the same set<br>
 	 * used to quickly point to the right Field.class<br>
+	 * using twoway map because, we need to use this map when retrieving the dotted format on a Field<br>
 	 */
 	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	= new HashMap<String, Field>();
 	
@@ -249,8 +192,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// System.out.println("A: "+ currentFieldAnnotations[j] );
 				Annotation fieldAnnotation = currentFieldAnnotations[jay];
 				Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
-				if ( ( ConfigSection.class.equals( annotationType ) ) || ( ConfigOption.class.equals( annotationType ) ) )
-				{
+				if ( ( ConfigSection.class.equals( annotationType ) ) || ( ConfigOption.class.equals( annotationType ) ) ) {
 					
 					String fName = field.getName();
 					String dotted = ( null == dottedParentSection ? fName : dottedParentSection + Config.DOT + fName );
@@ -270,9 +212,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
 							// field
 							throw new RuntimeException( "bad coding: your @" + annotationType.getSimpleName()
-								+ " config option has a "
-								+ ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" ) + " field `" + field
-								+ "` ; this is not allowed for subsections(only for toplevel sections in "
+								+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
+								+ " field `" + field + "` ; this is not allowed for subsections(only for toplevel sections in "
 								+ configClass.getSimpleName() + "), please correct in the source code!" );
 						}
 						parsify( typeOfField, dotted );// recurse
@@ -286,9 +227,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// package
 						if ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) ) {
 							throw new RuntimeException( "bad coding: your @" + ConfigOption.class.getSimpleName()
-								+ " config option has a "
-								+ ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" ) + " field `" + field
-								+ "` ; this is not allowed, please correct in the source code!" );
+								+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
+								+ " field `" + field + "` ; this is not allowed, please correct in the source code!" );
 						}
 						
 						ConfigOption co = (ConfigOption)fieldAnnotation;
@@ -301,8 +241,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// FactionsPlus.info( currentDotted + "/" + field );
 							Field existingField = dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {
-								throw new RuntimeException( "bad coding: your config option `" + currentDotted
-									+ "` in field `" + field + "`\n" + "was already defined in field `" + existingField
+								throw new RuntimeException( "bad coding: your config option `" + currentDotted + "` in field `"
+									+ field + "`\n" + "was already defined in field `" + existingField
 									+ "`\nBasically you cannot have the same oldalias for two different config options" );
 							}
 							// System.out.println(currentDotted);
@@ -312,14 +252,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							}
 							currentDotted = aliasesArray[current];
 							if ( currentDotted.isEmpty() ) {
-								throw new RuntimeException( "bad coding: one of the oldAliases in field `" + field
-									+ "`\n" + "should not be empty!!" );
+								throw new RuntimeException( "bad coding: one of the oldAliases in field `" + field + "`\n"
+									+ "should not be empty!!" );
 							}
 							// detect extra spaces(by mistake?) around the current old alias
 							if ( !currentDotted.trim().equals( currentDotted ) ) {
-								throw new RuntimeException( "bad coding: the old alias `" + currentDotted
-									+ "` in field `" + field + "`\n"
-									+ "should not contain any extra whitespaces around it!" );
+								throw new RuntimeException( "bad coding: the old alias `" + currentDotted + "` in field `"
+									+ field + "`\n" + "should not contain any extra whitespaces around it!" );
 							}
 						}// while
 							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
@@ -452,8 +391,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private final static String	bucketOfSpaces	= new String( new char[WannabeYaml.maxLevelSpaces] )
-													.replace( '\0', ' ' );
+	private final static String	bucketOfSpaces	= new String( new char[WannabeYaml.maxLevelSpaces] ).replace( '\0', ' ' );
 	
 	
 	/**
@@ -853,8 +791,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				
 			} catch ( IOException e ) {
 				e.printStackTrace();
-				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '"
-					+ Config.fileConfig.getAbsolutePath() + "'" );
+				throw FactionsPlusPlugin.bailOut( "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
+					+ "'" );
 			}
 			
 		} else {

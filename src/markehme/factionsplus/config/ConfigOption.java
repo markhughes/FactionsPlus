@@ -14,7 +14,8 @@ import java.lang.annotation.*;
 	ElementType.FIELD
 } )
 public @interface ConfigOption {
-	
+	//the ID that would be used in the config file
+//	String realID();
 	/**
 	 * comment to be added above of this config option, inside the config file
 	 */
