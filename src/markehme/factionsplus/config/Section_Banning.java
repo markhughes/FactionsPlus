@@ -4,17 +4,16 @@ package markehme.factionsplus.config;
 public class Section_Banning {
 	
 	@ConfigOption(oldAliases={
-		"leaderCanNotBeBanned"
-	})
-	public boolean leaderCanNotBeBanned=true;
-	
-	
-	
-	@ConfigOption(oldAliases={
 		"banning.enableBans"
 		,"enableBans"
 	})
 	public boolean enabled=true;
+	
+	
+	@ConfigOption(oldAliases={
+		"leaderCanNotBeBanned"
+	})
+	public boolean leaderCanNotBeBanned=true;
 	
 	
 	@ConfigOption(oldAliases={

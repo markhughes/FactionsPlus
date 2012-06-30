@@ -88,9 +88,9 @@ public class CmdToggleState extends FCommand {
 		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 		
 		
-		if(!factiont.isPeaceful()) {
+		if(!factiont.isPeaceful()) {//FIXME: is economy enabled ?!
 			//if faction wasn't already peaceful, then we set it
-			if(payForCommand(Config.config.getInt(Config.str_economyCostToToggleUpPeaceful), "to set faction to peaceful", "for setting faction to peaceful")) {
+			if(payForCommand(Config.economy.costToToggleUpPeaceful, "to set faction to peaceful", "for setting faction to peaceful")) {
 				
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
@@ -98,7 +98,7 @@ public class CmdToggleState extends FCommand {
 			}
 		} else {
 			//faction was peaceful, we now remove this flag
-			if(payForCommand(Config.config.getInt(Config.str_economyCostToToggleDownPeaceful), "to remove the peaceful status", "for setting faction to unpeaceful")) {
+			if(payForCommand(Config.economy.costToToggleDownPeaceful, "to remove the peaceful status", "for setting faction to unpeaceful")) {
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
 				sender.sendMessage("You have removed peaceful status from the Faction!");
 			}

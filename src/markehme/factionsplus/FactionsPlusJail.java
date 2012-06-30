@@ -247,9 +247,8 @@ public class FactionsPlusJail {
 		}
 		
 		if(FactionsPlus.economy != null) {
-			int setCost = Config.config.getInt(Config.str_economyCostToSetJail);
-			if(setCost > 0) {
-				if(!CmdSetJail.doFinanceCrap(setCost, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
+			if(Config.economy.costToSetJail > 0.0d) {//TODO: fill those empty strings
+				if(!CmdSetJail.doFinanceCrap(Config.economy.costToSetJail, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
 					return false;
 				}
 			}

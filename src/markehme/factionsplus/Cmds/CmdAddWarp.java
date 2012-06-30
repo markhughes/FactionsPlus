@@ -67,8 +67,8 @@ public class CmdAddWarp extends FCommand {
 			}
 		}
 
-		if(Config.config.getInt(Config.str_economyCostToCreateWarp) > 0 && !Config.config.getBoolean(Config.str_enableEconomy)) {
-			if (!payForCommand(Config.config.getInt(Config.str_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
+		if(Config.economy.costToCreateWarp > 0.0d && !Config.economy.enabled) {
+			if (!payForCommand(Config.economy.costToCreateWarp, "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}

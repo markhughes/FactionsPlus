@@ -124,7 +124,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config.config.getBoolean(Config.str_enableEconomy)) {
+        if(Config.economy.enabled) {
         	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         	
         	if (economyProvider != null) {

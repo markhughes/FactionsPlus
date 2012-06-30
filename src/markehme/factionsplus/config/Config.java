@@ -125,87 +125,53 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final char				DOT													= '.';
 	
 	/**
-	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields and to their
-	 * child @ConfigSection 's fields and so on; FIXME: I should be able to fix this so that I can add oldaliases for @ConfigSection too and have
+	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields
+	 * and to their
+	 * child @ConfigSection 's fields and so on; FIXME: I should be able to fix this so that I can add oldaliases for @ConfigSection
+	 * too and have
 	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense;
-	 *
-	 * you may change order of these fields (or section's fields) but this won't have any effect if config.yml already existed, only if new one is about to be created<br> 
+	 * 
+	 * you may change order of these fields (or section's fields) but this won't have any effect if config.yml already existed,
+	 * only if new one is about to be created<br>
 	 */
 	@ConfigSection
 	public static final Section_Jails		jails												= new Section_Jails();
 	
 	
 	@ConfigSection
-	public static final Section_Warps warps=new Section_Warps();
+	public static final Section_Warps		warps												= new Section_Warps();
 	
 	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
 	// oldaliases for section
 	@ConfigSection
-	public static final Section_Banning				banning												= new Section_Banning();
+	public static final Section_Banning		banning												= new Section_Banning();
 	
 	
 	@ConfigSection
-	public static final Section_Rules				rules												= new Section_Rules();
+	public static final Section_Rules		rules												= new Section_Rules();
 	
 	@ConfigSection
-	public static final Section_Peaceful peaceful=new Section_Peaceful();
+	public static final Section_Peaceful	peaceful											=
+																									new Section_Peaceful();
 	
 	@ConfigSection
-	public static final Section_PowerBoosts powerboosts=new Section_PowerBoosts();
+	public static final Section_PowerBoosts	powerboosts											=
+																									new Section_PowerBoosts();
 	
 	@ConfigSection
-	public static final Section_Announce announce=new Section_Announce();
+	public static final Section_Announce	announce											=
+																									new Section_Announce();
 	
 	
 	@ConfigSection
 	public static final Section_Economy		economy												= new Section_Economy();
 	
-	public static final String				prefixEconomy										= "economy" + DOT;
-	public static final String				str_enableEconomy									= prefixEconomy
-																									+ "enableEconomy";
-	public static final String				str_economyCostToWarp								=
-																									prefixEconomy
-																										+ "economyCostToWarp";
-	public static final String				str_economyCostToCreateWarp							=
-																									prefixEconomy
-																										+ "economyCostToCreateWarp";
-	public static final String				str_economyCostToDeleteWarp							=
-																									prefixEconomy
-																										+ "economyCostToDeleteWarp";
-	public static final String				str_economyCostToAnnounce							=
-																									prefixEconomy
-																										+ "economyCostToAnnounce";
-	public static final String				str_economyCostToJail								=
-																									prefixEconomy
-																										+ "economyCostToJail";
-	public static final String				str_economyCostToSetJail							=
-																									prefixEconomy
-																										+ "economyCostToSetJail";
-	public static final String				str_economyCostToUnJail								=
-																									prefixEconomy
-																										+ "economyCostToUnJail";
-	public static final String				str_economyCostToToggleUpPeaceful					=
-																									prefixEconomy
-																										+ "economyCostToToggleUpPeaceful";
-	public static final String				str_economyCostToToggleDownPeaceful					=
-																									prefixEconomy
-																										+ "economyCostToToggleDownPeaceful";
 	
 	@ConfigSection( {
 		"some comment here, if any", "second line of comment"
 	} )
 	public static final TeleportsSection	teleports											=
 																									new TeleportsSection();
-	public static final String				prefixTeleports										= "Teleports" + DOT;
-	public static final String				str_disallowTeleportingToEnemyLandViaHomeCommand	=
-																									prefixTeleports
-																										+ "disallowTeleportingToEnemyLandViaHomeCommand";
-	public static final String				str_reportSuccessfulByCommandTeleportsIntoEnemyLand	=
-																									prefixTeleports
-																										+ "reportSuccessfulByCommandTeleportsIntoEnemyLand";
-	public static final String				str_disallowTeleportingToEnemyLandViaEnderPeals		=
-																									prefixTeleports
-																										+ "disallowTeleportingToEnemyLandViaEnderPeals";
 	
 	public static final String				prefixExtras										= "extras" + DOT;
 	public static final String				str_disableUpdateCheck								=
@@ -320,16 +286,20 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 						Class<?> typeOfField = field.getType();// get( rootClass );
 						parsify( typeOfField, dotted );// recurse
-					} else {//it's @ConfigOption
+					} else {// it's @ConfigOption
 					
-						//XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie. Jails.enabled instead of Config.jails.enabled
-						//the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is enabled is private
-						//but protected is allowed, assuming you know what you're doing and you're using that only in the same package
+						// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
+						// Jails.enabled instead of Config.jails.enabled
+						// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is
+						// enabled is private
+						// but protected is allowed, assuming you know what you're doing and you're using that only in the same
+						// package
 						int fieldModifiers = field.getModifiers();
-						if (Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )) {
-							throw new RuntimeException("bad coding: your @"+ConfigOption.class.getSimpleName()+" config option has a "+
-							(Modifier.isStatic( fieldModifiers )?"static":"private")+" field `"
-							+field+"` ; this is not allowed, please correct in the source code!");
+						if ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) ) {
+							throw new RuntimeException( "bad coding: your @" + ConfigOption.class.getSimpleName()
+								+ " config option has a "
+								+ ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" ) + " field `" + field
+								+ "` ; this is not allowed, please correct in the source code!" );
 						}
 						
 						ConfigOption co = (ConfigOption)fieldAnnotation;
@@ -351,10 +321,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								break;
 							}
 							currentDotted = aliasesArray[current];
-							//detect extra spaces(by mistake?) around the current old alias
-							if (!currentDotted.trim().equals( currentDotted )) {
-								throw new RuntimeException( "bad coding: your config option `" + currentDotted
-									+ "` in field `" + field + "`\n" + "should not contain any extra whitespaces around it!" );
+							if ( currentDotted.isEmpty() ) {
+								throw new RuntimeException( "bad coding: one of the oldAliases in field `" + field
+									+ "`\n" + "should not be empty!!" );
+							}
+							// detect extra spaces(by mistake?) around the current old alias
+							if ( !currentDotted.trim().equals( currentDotted ) ) {
+								throw new RuntimeException( "bad coding: the old alias `" + currentDotted
+									+ "` in field `" + field + "`\n"
+									+ "should not contain any extra whitespaces around it!" );
 							}
 						}// while
 							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
@@ -574,8 +549,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																										new HashMap<Field, LinkedList<WYIdentifier>>();
 	private static final String										commentPrefixForDUPs			= "DUPLICATE #";
 	private static final String										commentPrefixForINVALIDs		= "INVALID #";
-	private static final ChatColor	colorOnDuplicate	= ChatColor.YELLOW;
-	private static final ChatColor	colorOnINVALID	= ChatColor.YELLOW ;
+	private static final ChatColor									colorOnDuplicate				= ChatColor.YELLOW;
+	private static final ChatColor									colorOnINVALID					= ChatColor.YELLOW;
 	
 	
 	private final static void parseCheckForValids( WYSection root ) {
@@ -611,13 +586,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						FactionsPlus.warn( "Invalid config option was auto commented at line "
 						// // + fileConfig
 						// + " at line "
-							+ colorOnINVALID+ currentItem.getLineNumber() + '\n'// +ChatColor.RESET
+							+ colorOnINVALID + currentItem.getLineNumber() + '\n'// +ChatColor.RESET
 							// +
 							// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 							// + "This is how the line looks now(without leading spaces):\n"
-							+ colorOnINVALID+ currentItem.toString() );
+							+ colorOnINVALID + currentItem.toString() );
 					} else {
-//						System.out.println( "!!!" + dotted );
+						// System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
 						// or throw
 						// or move extras into file?
@@ -677,11 +652,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 										+ fileConfig
 										+ " at line "
 										+ colorOnDuplicate
-										+ currentItem.getLineNumber()+ChatColor.RESET
+										+ currentItem.getLineNumber()
+										+ ChatColor.RESET
 										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-//										+ "This is how the line looks now(without leading spaces):\n"
-										+colorOnDuplicate
-										+ currentItem.toString() );
+										// + "This is how the line looks now(without leading spaces):\n"
+										+ colorOnDuplicate + currentItem.toString() );
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
 								// stop? do

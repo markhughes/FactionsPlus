@@ -32,6 +32,8 @@ public @interface ConfigOption {
 	 * "extras:<br>
 	 * __lwc:<br>
 	 * ____disableSomething: true" (where _ is space)<br>
+	 * <br>
+	 * all aliases are case sensitive!<br>
 	 */
 	String[] oldAliases() default {};
 	

@@ -28,9 +28,6 @@ public class TeleportsListener implements Listener {
 	private static final ChatColor constOneColor = ChatColor.DARK_RED;
 	private static Listener	preventTeleports	= new TeleportsListener();
 	
-	private static boolean	reportSuccessfulByCommandTeleportsIntoEnemyLand;
-	private static boolean disallowTeleportingToEnemyLandViaHomeCommand;
-	private static boolean disallowTeleportingToEnemyLandViaEnderPeals;
 	//XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
 //	private static Essentials ess=null;
@@ -49,13 +46,10 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		reportSuccessfulByCommandTeleportsIntoEnemyLand=Config.config.getBoolean( Config.str_reportSuccessfulByCommandTeleportsIntoEnemyLand );
-		disallowTeleportingToEnemyLandViaHomeCommand=Config.config.getBoolean( Config.str_disallowTeleportingToEnemyLandViaHomeCommand );
-		disallowTeleportingToEnemyLandViaEnderPeals=Config.config.getBoolean( Config.str_disallowTeleportingToEnemyLandViaEnderPeals  );
-		//TODO: implement this disallowTeleportingToEnemyLandViaEnderPeals  in the next hour
+		//TODO: implement disallow teleports via ender pearls into safe/warzone too
 		
 		if ( (!isHomeTracking())
-		        && (!disallowTeleportingToEnemyLandViaEnderPeals)) {
+		        && (!Config.teleports.disallowTeleportingToEnemyLandViaEnderPeals)) {
 			//don't hook if neither of the two are set
 			return;
 		}
@@ -68,7 +62,7 @@ public class TeleportsListener implements Listener {
 	}
 	
 	private final static boolean isHomeTracking() {//private/final so it can be inlined by compiler, supposedly
-	    return disallowTeleportingToEnemyLandViaHomeCommand || reportSuccessfulByCommandTeleportsIntoEnemyLand;
+	    return Config.teleports.disallowTeleportingToEnemyLandViaHomeCommand || Config.teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	}
 	
 //	/**
@@ -168,7 +162,7 @@ public class TeleportsListener implements Listener {
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
 			//this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 			//( null != lastExecutedCommandByPlayer ) &&  (
-			if ((disallowTeleportingToEnemyLandViaHomeCommand)&&(!Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ))) {
+			if ((Config.teleports.disallowTeleportingToEnemyLandViaHomeCommand)&&(!Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ))) {
 				//disallowed and no permission to bypass ? then check
 				if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
 					//TODO: think about having a list of commands here which when used to teleport into X territory 
@@ -184,7 +178,7 @@ public class TeleportsListener implements Listener {
 				}
 			}
 			
-			if (( reportSuccessfulByCommandTeleportsIntoEnemyLand )&&(!event.isCancelled())) {
+			if (( Config.teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand )&&(!event.isCancelled())) {
 				//yeah report even if player had bypass permission but only if it will be a successful teleport
 				Location targetLocation = event.getTo();
 				Faction fac = getFactionAt( targetLocation );
@@ -199,7 +193,7 @@ public class TeleportsListener implements Listener {
 			break;// cause COMMAND
 			
 		case ENDER_PEARL:
-			if (disallowTeleportingToEnemyLandViaEnderPeals) {//not adding a perm for this
+			if (Config.teleports.disallowTeleportingToEnemyLandViaEnderPeals) {//not adding a perm for this
 				Location targetLocation = event.getTo();
 				if ( isEnemyLandAt( player, targetLocation ) ) {
 					player.sendMessage( ChatColor.RED

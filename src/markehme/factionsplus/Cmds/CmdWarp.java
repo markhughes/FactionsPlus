@@ -167,8 +167,8 @@ public class CmdWarp extends FCommand {
 						}
 					}
 
-					if(Config.config.getInt(Config.str_economyCostToWarp) > 0) {
-						if (!payForCommand(Config.config.getInt(Config.str_economyCostToWarp), "to teleport to this warp", "for teleporting to your faction home")) {
+					if(Config.economy.costToWarp > 0.0d) {
+						if (!payForCommand(Config.economy.costToWarp, "to teleport to this warp", "for teleporting to your faction home")) {
 							return;
 						}
 					}
