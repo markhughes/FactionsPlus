@@ -180,9 +180,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final String				str_smokeEffectOnWarp								=
 																									prefixWarps
 																										+ "smokeEffectOnWarp";
-	//TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing oldaliases for section
+	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
+	// oldaliases for section
 	@ConfigSection
-	public static final Banning banning=new Banning();
+	public static final Banning				banning												= new Banning();
 	public static final String				prefixBanning										= "banning" + DOT;
 	public static final String				str_enableBans										= prefixBanning
 																									+ "enableBans";
@@ -699,7 +700,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					// TODO: invalid config option encountered in config.yml
 					
 				} else {
-					System.out.println("!!!"+ dotted );
+					System.out.println( "!!!" + dotted );
 					// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides? or throw
 					// or move extras into file?
 					
@@ -717,37 +718,52 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
 						assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
 						assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
+						
+						
+						existingWYIdList.addLast( wid );// add all config options one by one in the order of occurrence in
+														// config.yml
+						
+						assert existingWYIdList.contains( wid );
+						
+					} else {
+						// check only if the list wasn't empty, if we're here it wasn't, thus it may alreay have at least 1 element which we
+						//must check against and see if wid isn't already existing there (as different instance though)
+						// does id already exist, ie. duplicate encountered in .yml ?
+						int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of them
+																	// inside
+																	// the list
+						if ( index >= 0 ) {// exists already ?
+							WYSection widsParent = wid.getParent();
+							currentItem = widsParent.replaceAndTransformInto_WYComment( wid );
+							// wid.replaceAndTransformSelfInto_WYComment();
+							// so we still have a getNext() to go to, after wid is basically destroyed(at
+							// least its getNext will be null after this)
+							// let's not forget to remove this from list, TODO: also check if it is in any other lists
+							// existingWYIdList.remove( index );// a MUST
+//							assert existingWYIdList.contains( wid );
+//							System.out.println(existingWYIdList.get( index ));
+							// existingWYIdList.add( index, currentItem );
+							// assert !existingWYIdList.contains( wid );
+							// assert existingWYIdList.contains( currentItem);
+							
+							// this means, it will compare id without considering values (as per WYIdentifier's .equals()
+							FactionsPlus
+								.warn( "Duplicate config option encountered in "
+									+ fileConfig
+									+ " at line "
+									+ currentItem.getLineNumber()
+									+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+									+ "This is how the line looks now(without leading spaces):\n"
+									+ currentItem.toString() );
+							// TODO: what to do when same config is encountered twice, does it override the prev one? do we
+							// stop? do
+							// we move it to some file for reviewal? or do we comment it out?
+						}
 					}
 					assert null != existingWYIdList;// obviously
 					
-					// does id already exist, ie. duplicate encountered in .yml ?
-					int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of them inside
-																// the list
-					if ( index >= 0 ) {// exists already ?
-						WYSection widsParent = wid.getParent();
-						currentItem = widsParent.replaceAndTransformInto_WYComment(wid);
-//						wid.replaceAndTransformSelfInto_WYComment();
-						// so we still have a getNext() to go to, after wid is basically destroyed(at
-													// least its getNext will be null after this)
-						// let's not forget to remove this from list, TODO: also check if it is in any other lists
-						existingWYIdList.remove( index );// a MUST
-						assert !existingWYIdList.contains( wid );
-						
-						// this means, it will compare id without considering values (as per WYIdentifier's .equals()
-						FactionsPlus
-							.warn( "Duplicate config option encountered in "
-								+ fileConfig
-								+ " at line "
-								+ currentItem.getLineNumber()
-								+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-								+ "This is how the line looks now(without leading spaces):\n" + currentItem.toString() );
-						// TODO: what to do when same config is encountered twice, does it override the prev one? do we stop? do
-						// we move it to some file for reviewal? or do we comment it out?
-					} else {
-						existingWYIdList.addLast( wid );// add all config options one by one in the order of occurrence in
-														// config.yml
-					}
-				}
+					
+				}// end of else found
 				
 				// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
 				// if ( null == rtcid ) {
