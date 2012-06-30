@@ -1,5 +1,7 @@
 package markehme.factionsplus.config;
 
+import javax.management.*;
+
 import markehme.factionsplus.extras.*;
 
 
@@ -22,8 +24,12 @@ public final class DualPack<FIRST, SECOND> {
 	
 	@Override
 	public boolean equals( Object obj ) {
-		if ((null == obj)||(!(obj instanceof DualPack) )) {
+		if (null == obj) {
 			return false;
+		}
+		if (!(obj instanceof DualPack) ) {
+			throw new RuntimeException("bad call, you tried to compare "+DualPack.class+" against "+obj.getClass()
+				+"\nOR you mixed different objects together in a HashMap<Object,>/HashSet<Object>");
 		}
 		return firstObject.equals( ((DualPack)obj).firstObject);
 	}

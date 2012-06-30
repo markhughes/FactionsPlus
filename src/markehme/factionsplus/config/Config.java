@@ -638,7 +638,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much overhead, hashmap ftw!
 							
 							
-							int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of
+							int index = existingWYIdList.indexOf( dotted );// seeks 'wid' in list by doing .equals() on each of
 																		// them
 																		// inside
 																		// the list
