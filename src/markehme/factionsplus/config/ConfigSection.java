@@ -5,6 +5,7 @@ import java.lang.annotation.*;
 
 /**
  * use this only on fields that are of type {@link Section}
+ * the fields on which we apply this annotation can be static<br>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target( {ElementType.FIELD} )

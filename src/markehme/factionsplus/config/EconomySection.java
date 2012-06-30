@@ -16,7 +16,7 @@ public class EconomySection {
 //		,prefixEconomy+"economycostToWarp"//newer
 //		,ectw//very old one
 		})
-	public static double costToWarp=0;//current one (the field name)
+	public double costToWarp=0;//current one (the field name)
 	
 	
 	

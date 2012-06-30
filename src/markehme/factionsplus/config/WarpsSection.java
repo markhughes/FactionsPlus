@@ -11,79 +11,79 @@ public class WarpsSection{
 		"warps.enableWarps"
 		,"enableWarps"
 		})
-	public static boolean enabled=true;
+	public boolean enabled=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.leadersCanSetWarps"
-		,"leadersCanSetWarps"
+//		"warps.leadersCanSetWarps"
+		"leadersCanSetWarps"
 		})
-	public static boolean leadersCanSetWarps=true;
+	public boolean leadersCanSetWarps=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.officersCanSetWarps"
-		,"officersCanSetWarps"
+//		"warps.officersCanSetWarps"
+		"officersCanSetWarps"
 		})
-	public static boolean officersCanSetWarps=true;
+	public boolean officersCanSetWarps=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.membersCanSetWarps"
-		,"membersCanSetWarps"
+//		"warps.membersCanSetWarps"
+		"membersCanSetWarps"
 		})
-	public static boolean membersCanSetWarps=false;
+	public boolean membersCanSetWarps=false;
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.mustBeInOwnTerritoryToCreate"
-		,"mustBeInOwnTerritoryToCreate"
+//		"warps.mustBeInOwnTerritoryToCreate"
+		"mustBeInOwnTerritoryToCreate"
 	})
-	public static boolean mustBeInOwnTerritoryToCreate=true;
-	
-	
-	
-	@ConfigOption(oldAliases={
-		"warps.maxWarps"
-		,"maxWarps"
-	})
-	public static int maxWarps=5;
-	
-	
-	@ConfigOption(oldAliases={
-		"warps.warpTeleportAllowedFromEnemyTerritory"
-		,"warpTeleportAllowedFromEnemyTerritory"
-	})
-	public static boolean warpTeleportAllowedFromEnemyTerritory=true;
-	
-	
-	@ConfigOption(oldAliases={
-		"warps.warpTeleportAllowedFromDifferentWorld"
-		,"warpTeleportAllowedFromDifferentWorld"
-	})
-	public static boolean warpTeleportAllowedFromDifferentWorld=true;
-	
-	
-	@ConfigOption(oldAliases={
-		"warps.warpTeleportAllowedEnemyDistance"
-		,"warpTeleportAllowedEnemyDistance"
-	})
-	public static int warpTeleportAllowedEnemyDistance=35;
+	public boolean mustBeInOwnTerritoryToCreate=true;
 	
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.warpTeleportIgnoreEnemiesIfInOwnTerritory"
-		,"warpTeleportIgnoreEnemiesIfInOwnTerritory"
+//		"warps.maxWarps"
+		"maxWarps"
 	})
-	public static boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=true;
+	public int maxWarps=5;
 	
 	
 	@ConfigOption(oldAliases={
-		"warps.smokeEffectOnWarp"
-		,"smokeEffectOnWarp"
+//		"warps.warpTeleportAllowedFromEnemyTerritory"
+		"warpTeleportAllowedFromEnemyTerritory"
 	})
-	public static boolean smokeEffectOnWarp=true;
+	public boolean warpTeleportAllowedFromEnemyTerritory=true;
+	
+	
+	@ConfigOption(oldAliases={
+//		"warps.warpTeleportAllowedFromDifferentWorld"
+		"warpTeleportAllowedFromDifferentWorld"
+	})
+	public boolean warpTeleportAllowedFromDifferentWorld=true;
+	
+	
+	@ConfigOption(oldAliases={
+//		"warps.warpTeleportAllowedEnemyDistance"
+		"warpTeleportAllowedEnemyDistance"
+	})
+	public int warpTeleportAllowedEnemyDistance=35;
+	
+	
+	
+	@ConfigOption(oldAliases={
+//		"warps.warpTeleportIgnoreEnemiesIfInOwnTerritory"
+		"warpTeleportIgnoreEnemiesIfInOwnTerritory"
+	})
+	public boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=true;
+	
+	
+	@ConfigOption(oldAliases={
+//		"warps.smokeEffectOnWarp"
+		"smokeEffectOnWarp"
+	})
+	public boolean smokeEffectOnWarp=true;
 	
 	
 	

@@ -3,18 +3,24 @@ package markehme.factionsplus.config;
 import java.lang.annotation.*;
 
 
-/**
- * use this for fields of any type except {@link Section}
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target( {ElementType.FIELD} )
-public @interface ConfigOption {
 
+/**
+ * use this for fields of any type except {@link Section} the fields on which we apply this annotation CANNOT BE STATIC (well in
+ * all honestly it's possible but we want to enforce Config.jails.enable instead of Jails.enable (which, the latter, may be
+ * forced by Eclipse or you'd get a warning on first one as to use the latter - if fields are static like that)<br>
+ */
+@Retention( RetentionPolicy.RUNTIME )
+@Target( {
+	ElementType.FIELD
+} )
+public @interface ConfigOption {
+	
 	/**
 	 * comment to be added above of this config option, inside the config file
 	 */
 	String[] comment() default "";
-
+	
+	
 	/**
 	 * will attempt to import values of the old alias if it's found, and the new name/alias doesn't exist already<br>
 	 * add these in order: topmost(first) ones will override the ones below(/last)<br>
@@ -25,7 +31,7 @@ public @interface ConfigOption {
 	 * they should be in DOTTED format: "extras.lwc.disableSomething" for<br>
 	 * "extras:<br>
 	 * __lwc:<br>
-	 * ____disableSomething: true"  (where _ is space)<br>
+	 * ____disableSomething: true" (where _ is space)<br>
 	 */
 	String[] oldAliases() default {};
 	

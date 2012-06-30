@@ -1,7 +1,7 @@
 package markehme.factionsplus.config;
 
 
-public class Jails {
+public class JailsSection {
 	
 	@ConfigOption(oldAliases={
 		"jails.enableJails"
@@ -11,36 +11,39 @@ public class Jails {
 	
 	
 	@ConfigOption(oldAliases={
-		"jails.leadersCanSetJails"
-		,"leadersCanSetJails"
+//		"jails.leadersCanSetJails"
+		"leadersCanSetJails"
 		})
-	public static boolean leadersCanSetJails=true;
+	public boolean leadersCanSetJails=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"jails.officersCanSetJails"
-		,"officersCanSetJails"
+//		"jails.officersCanSetJails"
+		"officersCanSetJails"
 		})
 	public boolean officersCanSetJails=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"jails.membersCanSetJails"
-		,"membersCanSetJails"
+//		"jails.membersCanSetJails"
+		"membersCanSetJails"
 		})
 	public boolean membersCanSetJails=false;
 	
 	
 	@ConfigOption(oldAliases={
-		"jails.leadersCanJail"
-		,"leadersCanJail"
+//		"jails.leadersCanJail"
+		"leadersCanJail"
 		})
 	public boolean leadersCanJail=true;
 	
 	
 	@ConfigOption(oldAliases={
-		"jails.officersCanJail"
-		,"officersCanJail"
+//		"jails.officersCanJail"
+		"officersCanJail"
 		})
 	public boolean officersCanJail=true;
+	
+	
+	
 }

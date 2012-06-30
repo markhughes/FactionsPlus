@@ -124,9 +124,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// never change this, it's yaml compatible:
 	public static final char				DOT													= '.';
 	
-	
+	/**
+	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields and to their
+	 * child @ConfigSection 's fields and so on; FIXME: I should be able to fix this so that I can add oldaliases for @ConfigSection too and have
+	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense; 
+	 */
 	@ConfigSection
-	public static final Jails		jails												= new Jails();
+	public static final JailsSection		jails												= new JailsSection();
 	
 	
 	@ConfigSection
@@ -136,6 +140,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// oldaliases for section
 	@ConfigSection
 	public static final Banning				banning												= new Banning();
+	
+	
 	public static final String				prefixBanning										= "banning" + DOT;
 	public static final String				str_enableBans										= prefixBanning
 																									+ "enableBans";
@@ -337,7 +343,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// option
 		// names
 		
-		ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
+		sanitize_AndUpdateClassMapping( Config.class );
 		
 		// map.key: dotted format config.yml settings(only key: value ones)
 		// map.value: Field.class instance of the
@@ -366,7 +372,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	= new HashMap<String, Field>();
 	
 	
-	private static void ensureConfigClassIsConsistent_AndUpdateMapping( Class rootClass ) {
+	private static void sanitize_AndUpdateClassMapping( Class rootClass ) {
 		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
@@ -403,8 +409,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						//but protected is allowed, assuming you know what you're doing and you're using that only in the same package
 						int fieldModifiers = field.getModifiers();
 						if (Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )) {
-							throw new RuntimeException("bad coding: your @"+ConfigOption.class.getSimpleName()+" config option has a static or private field `"
-							+field+"` ; this is not allowed, remove static and/or make it public or protected");
+							throw new RuntimeException("bad coding: your @"+ConfigOption.class.getSimpleName()+" config option has a "+
+							(Modifier.isStatic( fieldModifiers )?"static":"private")+" field `"
+							+field+"` ; this is not allowed, please correct in the source code!");
 						}
 						
 						ConfigOption co = (ConfigOption)fieldAnnotation;
