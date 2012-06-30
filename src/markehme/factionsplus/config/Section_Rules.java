@@ -4,7 +4,7 @@ package markehme.factionsplus.config;
 public class Section_Rules {
 	
 	@ConfigOption(oldAliases={
-		"wrules.enableRules"
+		"rules.enableRules"
 		,"enableRules"
 		})
 	public boolean enabled=true;

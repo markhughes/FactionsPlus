@@ -15,6 +15,12 @@ public final class DualPack<FIRST, SECOND> {
 	private final FIRST firstObject;
 	private final SECOND secondObject;
 	
+//	public DualPack(FIRST first) {
+//		Q.nn( first );
+//		firstObject=first;
+//		secondObject=null;
+//	}
+		
 	public DualPack(FIRST first,SECOND second){
 		Q.nn( first );
 		Q.nn( second );

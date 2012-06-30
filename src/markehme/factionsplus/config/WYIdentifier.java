@@ -9,6 +9,8 @@ import markehme.factionsplus.extras.*;
  */
 public class WYIdentifier extends WY_IDBased {
 	
+	public static final WYIdentifier	NULL	= new WYIdentifier(-1,WYIdentifier.class.getName(),"NULL");
+	
 	private String	value;
 	
 	

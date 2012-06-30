@@ -556,6 +556,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static final ChatColor	colorLineNumOnDuplicate	= ChatColor.RED;
 	
 	
+	/**
+	 * @param root
+	 */
 	private final static void parseCheckForValids( WYSection root ) {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
@@ -638,10 +641,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much overhead, hashmap ftw!
 							
 							
-							int index = existingWYIdList.indexOf( dotted );// seeks 'wid' in list by doing .equals() on each of
-																		// them
-																		// inside
-																		// the list
+							int index = existingWYIdList.indexOf( new DualPack(dotted, WYIdentifier.NULL) );
+							// seeks dotted format 'wid' in list by doing .equals() on each of
+																		// them // inside // the list
 							if ( index >= 0 ) {// exists already ?
 								WYSection widsParent = wid.getParent();
 								//TODO: also check if it is in any other lists, it probably isn't at this time.
