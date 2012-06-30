@@ -284,6 +284,20 @@ do not use/override onLoad() but instead do all in onEnable(), has the same effe
 some bukkit calls NPE due to not yet being initialized ie. Bukkit.getConsoleSender()
 -----
 
+BEWARE of the evil char CONCAT
+        char a='a';
+        char b='b';
+        String failConcat   =      a+b+"cdef"; // "195cdef"
+        String correctConcat= "" + a+b+"cdef"; // "abcdef"
+        
+-----
+
+-----
+
+-----
+-----
+
+
 //end of: `Note to devs`
 ================
 

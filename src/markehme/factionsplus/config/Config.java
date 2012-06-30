@@ -724,8 +724,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of them inside
 																// the list
 					if ( index >= 0 ) {// exists already ?
-						WYComment widAsComment = wid.replaceAndTransformSelfInto_WYComment();
-						currentItem = widAsComment;// so we still have a getNext() to go to, after wid is basically destroyed(at
+						WYSection widsParent = wid.getParent();
+						currentItem = widsParent.replaceAndTransformInto_WYComment(wid);
+//						wid.replaceAndTransformSelfInto_WYComment();
+						// so we still have a getNext() to go to, after wid is basically destroyed(at
 													// least its getNext will be null after this)
 						// let's not forget to remove this from list, TODO: also check if it is in any other lists
 						existingWYIdList.remove( index );// a MUST
@@ -736,9 +738,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							.warn( "Duplicate config option encountered in "
 								+ fileConfig
 								+ " at line "
-								+ widAsComment.getLineNumber()
+								+ currentItem.getLineNumber()
 								+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-								+ "This is how the line looks now(without leading spaced):\n" + widAsComment.toString() );
+								+ "This is how the line looks now(without leading spaces):\n" + currentItem.toString() );
 						// TODO: what to do when same config is encountered twice, does it override the prev one? do we stop? do
 						// we move it to some file for reviewal? or do we comment it out?
 					} else {

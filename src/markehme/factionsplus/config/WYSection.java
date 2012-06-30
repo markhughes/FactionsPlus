@@ -48,4 +48,48 @@ public class WYSection extends WY_IDBased {
 		return lastChild;
 	}
 
+	public WYComment replaceAndTransformInto_WYComment( WYIdentifier wid ) {
+		assert wid.getParent() == this:"bad parameter passed";
+		
+		WYComment asComment =
+				new WYComment( wid.getLineNumber(), ""+WannabeYaml.commentChar + WannabeYaml.space + wid.getId()
+					+ WannabeYaml.IDVALUE_SEPARATOR + WannabeYaml.space + wid.getValue());
+		//stating the obvious:
+		assert asComment.getNext() == null;
+		assert asComment.getPrev() == null;
+		assert asComment.getParent() == null;
+		
+		//making comment part of this parent
+		WYItem oldPrev = wid.getPrev();
+		if (null != oldPrev) {//need to set its next
+			asComment.setPrev( oldPrev );
+			assert oldPrev.getNext() == wid:"bug somewhere else";
+			oldPrev.setNext( asComment );
+		}
+		
+		WYItem oldNext=wid.getNext();
+		if (null != oldNext) {
+			asComment.setNext( oldNext);
+			assert oldNext.getPrev() == wid:"bug somewhere else";
+			oldNext.setPrev( asComment );
+		}
+		
+		asComment.setParent( this );
+		//done
+		
+		//orphaning wid:
+		// attempt to destroy or mark this id so that we can catch if we're still using it in other outside lists
+		wid.setParent(null);
+		wid.setPrev( null );
+		wid.setNext(null);
+		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" );
+		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" );
+		//we leave only setLine()
+		// that's a mark that tells you, when you ever see it, that you're not supposed to be using this, if you do, you'll know
+		// you probably missed removing it from some list/hashmap after you called this method we're in
+		
+		return asComment;
+	}
+	
+
 }
