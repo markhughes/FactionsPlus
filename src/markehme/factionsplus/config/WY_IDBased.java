@@ -27,7 +27,7 @@ public abstract class WY_IDBased extends WYItem {
 	
 	
 	public String getInAbsoluteDottedForm() {
-		return getInAbsoluteDottedForm( null );
+		return getID_InAbsoluteDottedForm( null );
 	}
 	
 	
@@ -36,11 +36,11 @@ public abstract class WY_IDBased extends WYItem {
 	 *            can be null
 	 * @return ie. extras.lwc.disableSomething
 	 */
-	public String getInAbsoluteDottedForm( WYSection upToAndExcluding ) {
+	public String getID_InAbsoluteDottedForm( WYSection upToAndExcluding ) {
 		String df = "";
 		WYSection p = getParent();
 		if ( ( null != p ) && ( !p.equals( upToAndExcluding ) ) ) {
-			df = p.getInAbsoluteDottedForm( upToAndExcluding ) + Config.DOT;
+			df = p.getID_InAbsoluteDottedForm( upToAndExcluding ) + Config.DOT;
 		}
 		return df + this.getId();
 	}

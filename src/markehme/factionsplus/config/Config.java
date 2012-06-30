@@ -576,7 +576,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			} else {
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
-					String dotted = wid.getInAbsoluteDottedForm( virtualRoot );
+					String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
 					System.out.println(dotted);
 					Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
 					if ( null == foundAsField ) {
@@ -592,7 +592,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 							// + "This is how the line looks now(without leading spaces):\n"
 							+ colorOnINVALID + currentItem.toString() );
-					} else {1
+					} else {
 						// System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
 						// or throw
@@ -629,6 +629,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// element which we
 							// must check against and see if wid isn't already existing there (as different instance though)
 							// does id already exist, ie. duplicate encountered in .yml ?
+							
+							//FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
+							//so either store hashmap or make sure equals compares dotted forms
+							//hashmap will be faster, a hashmap of dotted -> wid
+							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot)
 							int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of
 																		// them
 																		// inside
