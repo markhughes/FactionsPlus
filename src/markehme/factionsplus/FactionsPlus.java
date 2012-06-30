@@ -140,7 +140,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         if(Config.jails.enabled) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(Config.config.getBoolean(Config.str_enableDisguiseIntegration) && (Config.config.getBoolean(Config.str_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(Config.str_unDisguiseIfInEnemyTerritory))) {
+        if(Config.extras.disguise.enableDisguiseIntegration && (Config.extras.disguise.unDisguiseIfInOwnTerritory || Config.extras.disguise.unDisguiseIfInEnemyTerritory)) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
         		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
@@ -178,7 +178,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
+				if ( !Config.extras.lwc.removeLWCLocksOnClaim ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
 					FactionsPlusPlugin.info( "Consider setting `" + Config.str_removeLWCLocksOnClaim
 						+ "` to reset locks(on land claim) for more than just chests," +
@@ -189,8 +189,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 		} else {//no LWC
-			if ( Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory )
-				|| Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) )
+			if ( Config.extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory 
+				|| Config.extras.lwc.removeLWCLocksOnClaim ) 
 			{
 				FactionsPlusPlugin
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"

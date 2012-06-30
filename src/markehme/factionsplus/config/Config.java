@@ -25,49 +25,37 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 
 	// could use Plugin.getDataFolder() (tho no need) and move these to onEnable() or onLoad() else will likely NPE if using
 	// getDataFolder()
-	public static final File				folderBase											= new File( "plugins"
-																									+ File.separator
-																									+ "FactionsPlus" );										// just
-																																								// never
-																																								// be
-																																								// ""
-																																								// cause
-																																								// that
-																																								// means
-																																								// root
-																																								// folder
-	public static final File				folderWarps											= new File( folderBase,
-																									"warps" );
-	public static final File				folderJails											= new File( folderBase,
-																									"jails" );
-	public static final File				folderAnnouncements									= new File( folderBase,
-																									"announcements" );
-	public static final File				folderFRules										= new File( folderBase,
-																									"frules" );
-	public static final File				folderFBans											= new File( folderBase,
-																									"fbans" );
-	public static final File				fileDisableInWarzone								=
-																									new File(
-																										folderBase,
-																										"disabled_in_warzone.txt" );
+	public static final File				folderBase				= new File( "plugins" + File.separator
+																		+ "FactionsPlus" );								// just
+																															// never
+																															// be
+																															// ""
+																															// cause
+																															// that
+																															// means
+																															// root
+																															// folder
+	public static final File				folderWarps				= new File( folderBase, "warps" );
+	public static final File				folderJails				= new File( folderBase, "jails" );
+	public static final File				folderAnnouncements		= new File( folderBase, "announcements" );
+	public static final File				folderFRules			= new File( folderBase, "frules" );
+	public static final File				folderFBans				= new File( folderBase, "fbans" );
+	public static final File				fileDisableInWarzone	= new File( folderBase, "disabled_in_warzone.txt" );
 	
-	public static File						templatesFile										= new File( folderBase,
-																									"templates.yml" );
+	public static File						templatesFile			= new File( folderBase, "templates.yml" );
 	public static FileConfiguration			templates;
 	
-	private static final String				fileConfigDefaults									= "config_defaults.yml";										// this
-																																								// file
-																																								// is
-																																								// located
-																																								// inside
-																																								// .jar
-																																								// in
-																																								// root
-																																								// dir
+	private static final String				fileConfigDefaults		= "config_defaults.yml";								// this
+																															// file
+																															// is
+																															// located
+																															// inside
+																															// .jar
+																															// in
+																															// root
+																															// dir
 	// and it contains the defaults, so that they are no longer hardcoded in java code
-	private static File						fileConfig											= new File(
-																									Config.folderBase,
-																									"config.yml" );
+	private static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
 	public static YamlConfiguration			config;
 	
@@ -122,88 +110,73 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 */
 	
 	// never change this, it's yaml compatible:
-	public static final char				DOT													= '.';
+	public static final char				DOT						= '.';
 	
 	/**
 	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields
 	 * and to their
-	 * child @ConfigSection 's fields and so on; FIXME: I should be able to fix this so that I can add oldaliases for @ConfigSection
+	 * child @ConfigSection 's fields and so on; cantfix: I should be able to fix this so that I can add oldaliases for @ConfigSection
 	 * too and have
 	 * them considered but they would only apply to the real fields and not to those fields's oldaliases, makes sense;
+	 * cantdothis because I cannot decide which parent's oldAlias would apply to this child's alias when computing the dotted
+	 * format of the child
 	 * 
 	 * you may change order of these fields (or section's fields) but this won't have any effect if config.yml already existed,
 	 * only if new one is about to be created<br>
 	 */
 	@ConfigSection
-	public static final Section_Jails		jails												= new Section_Jails();
+	public static final Section_Jails		jails					= new Section_Jails();
 	
 	
 	@ConfigSection
-	public static final Section_Warps		warps												= new Section_Warps();
+	public static final Section_Warps		warps					= new Section_Warps();
 	
 	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
 	// oldaliases for section
 	@ConfigSection
-	public static final Section_Banning		banning												= new Section_Banning();
+	public static final Section_Banning		banning					= new Section_Banning();
 	
 	
 	@ConfigSection
-	public static final Section_Rules		rules												= new Section_Rules();
+	public static final Section_Rules		rules					= new Section_Rules();
 	
 	@ConfigSection
-	public static final Section_Peaceful	peaceful											=
-																									new Section_Peaceful();
+	public static final Section_Peaceful	peaceful				= new Section_Peaceful();
 	
 	@ConfigSection
-	public static final Section_PowerBoosts	powerboosts											=
-																									new Section_PowerBoosts();
+	public static final Section_PowerBoosts	powerboosts				= new Section_PowerBoosts();
 	
 	@ConfigSection
-	public static final Section_Announce	announce											=
-																									new Section_Announce();
+	public static final Section_Announce	announce				= new Section_Announce();
 	
 	
 	@ConfigSection
-	public static final Section_Economy		economy												= new Section_Economy();
+	public static final Section_Economy		economy					= new Section_Economy();
 	
 	
 	@ConfigSection( {
 		"some comment here, if any", "second line of comment"
 	} )
-	public static final TeleportsSection	teleports											=
-																									new TeleportsSection();
+	public static final TeleportsSection	teleports				= new TeleportsSection();
 	
-	public static final String				prefixExtras										= "extras" + DOT;
-	public static final String				str_disableUpdateCheck								=
-																									prefixExtras
-																										+ "disableUpdateCheck";
-	public static final String				prefExtrasLWC										= prefixExtras + "LWC"
-																									+ DOT;
-	public static final String				str_removeLWCLocksOnClaim							=
-																									prefExtrasLWC
-																										+ "removeLWCLocksOnClaim";
-	public static final String				str_blockCPublicAccessOnNonOwnFactionTerritory		=
-																									prefExtrasLWC
-																										+ "blockCPublicAccessOnNonOwnFactionTerritory";
+	@ConfigSection
+	public final static Section_Extras		extras					= new Section_Extras();
 	
-	public static final String				prefixExtrasMD										= prefixExtras
-																									+ "disguise" + DOT;
-	public static final String				str_enableDisguiseIntegration						=
-																									prefixExtrasMD
-																										+ "enableDisguiseIntegration";
-	public static final String				str_unDisguiseIfInOwnTerritory						=
-																									prefixExtrasMD
-																										+ "unDisguiseIfInOwnTerritory";
-	public static final String				str_unDisguiseIfInEnemyTerritory					=
-																									prefixExtrasMD
-																										+ "unDisguiseIfInEnemyTerritory";
+	@ConfigOption(
+			oldAliases = {
+				"DoNotChangeMe"
+			} )
+	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
+	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
+	public static final int					doNotChangeMe			= 11;
 	
-	public static final String				str_DoNotChangeMe									= "DoNotChangeMe";
-	// End Config String Pointer
+	//the root class that contains the @ConfigSection and @ConfigOptions to scan for
+	private static final Class	configClass	= Config.class;
+	// End Config
 	
 	
 	private static File						currentFolder_OnPluginClassInit;
-	private static File						currentFolder_OnEnable								= null;
+	private static File						currentFolder_OnEnable	= null;
 	
 	
 	/**
@@ -227,7 +200,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// option
 		// names
 		
-		sanitize_AndUpdateClassMapping( Config.class );
+		sanitize_AndUpdateClassMapping( configClass );
 		
 		// map.key: dotted format config.yml settings(only key: value ones)
 		// map.value: Field.class instance of the
@@ -261,7 +234,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
 		dottedClassOptions_To_Fields.clear();
-		parsify( rootClass, "" );
+		parsify( rootClass, null );
 	}
 	
 	
@@ -280,11 +253,28 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				{
 					
 					String fName = field.getName();
-					String dotted = ( dottedParentSection.isEmpty() ? fName : dottedParentSection + Config.DOT + fName );
+					String dotted = ( null == dottedParentSection ? fName : dottedParentSection + Config.DOT + fName );
+					
+					int fieldModifiers = field.getModifiers();
 					
 					if ( ConfigSection.class == annotationType ) {
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 						Class<?> typeOfField = field.getType();// get( rootClass );
+						if ( ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) )
+							&& ( null != dottedParentSection ) )
+						{
+							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+							// Config.extras
+							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+							// SubSection_LWC to access lwc's fields
+							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+							// field
+							throw new RuntimeException( "bad coding: your @" + annotationType.getSimpleName()
+								+ " config option has a "
+								+ ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" ) + " field `" + field
+								+ "` ; this is not allowed for subsections(only for toplevel sections in "
+								+ configClass.getSimpleName() + "), please correct in the source code!" );
+						}
 						parsify( typeOfField, dotted );// recurse
 					} else {// it's @ConfigOption
 					
@@ -294,7 +284,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// enabled is private
 						// but protected is allowed, assuming you know what you're doing and you're using that only in the same
 						// package
-						int fieldModifiers = field.getModifiers();
 						if ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) ) {
 							throw new RuntimeException( "bad coding: your @" + ConfigOption.class.getSimpleName()
 								+ " config option has a "
@@ -309,14 +298,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
 						while ( true ) {
-//							FactionsPlus.info( currentDotted + "/" + field );
+							// FactionsPlus.info( currentDotted + "/" + field );
 							Field existingField = dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {
 								throw new RuntimeException( "bad coding: your config option `" + currentDotted
 									+ "` in field `" + field + "`\n" + "was already defined in field `" + existingField
 									+ "`\nBasically you cannot have the same oldalias for two different config options" );
 							}
-//							System.out.println(currentDotted);
+							// System.out.println(currentDotted);
 							// next
 							if ( ++current >= aliasesCount ) {
 								break;
@@ -544,16 +533,22 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	/**
-	 * a mapping between the Field config option and an ordered list of dottedform of and WYIdentifiers encountered in config.yml<br>
+	 * a mapping between the Field config option and an ordered list of dottedform of and WYIdentifiers encountered in
+	 * config.yml<br>
 	 * dotted form ie. extras.lwc.someid
 	 */
 	private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
-																										new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
-	private static final String										commentPrefixForDUPs			= "DUPLICATE #";
-	private static final String										commentPrefixForINVALIDs		= "INVALID #";
-	private static final ChatColor									colorOnDuplicate				= ChatColor.YELLOW;
-	private static final ChatColor									colorOnINVALID					= ChatColor.YELLOW;
-	private static final ChatColor	colorLineNumOnDuplicate	= ChatColor.RED;
+																																new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
+	private static final String																commentPrefixForDUPs			=
+																																"DUPLICATE #";
+	private static final String																commentPrefixForINVALIDs		=
+																																"INVALID #";
+	private static final ChatColor															colorOnDuplicate				=
+																																ChatColor.YELLOW;
+	private static final ChatColor															colorOnINVALID					=
+																																ChatColor.YELLOW;
+	private static final ChatColor															colorLineNumOnDuplicate			=
+																																ChatColor.RED;
 	
 	
 	/**
@@ -582,16 +577,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
-					System.out.println(dotted);
+					System.out.println( dotted );
 					Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
 					if ( null == foundAsField ) {
 						// done: invalid config option encountered in config.yml transforms into comment
 						// WYSection widsParent = wid.getParent();
 						// assert null ! it just wouldn't ever be null, else bad coding else where heh
 						currentItem = wid.getParent().replaceAndTransformInto_WYComment( wid, commentPrefixForINVALIDs );
-						FactionsPlus.warn( "Invalid config option\n"+colorOnINVALID+dotted+ChatColor.RESET+" was auto commented at line "
-						// // + fileConfig
-						// + " at line "
+						FactionsPlus.warn( "Invalid config option\n" + colorOnINVALID + dotted + ChatColor.RESET
+							+ " was auto commented at line "
+							// // + fileConfig
+							// + " at line "
 							+ colorOnINVALID + currentItem.getLineNumber() + '\n'// +ChatColor.RESET
 							// +
 							// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
@@ -611,10 +607,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// .yml file
 						// well actually no, the above is false premising in the current context
 						
-						TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
+						TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList =
+							mapField_to_ListOfWYIdentifier.get( foundAsField );
 						if ( null == existingWYIdList ) {
 							// first time creating the list for this Field 'found'
-							//which also means there should be no duplicate checks in this {} block
+							// which also means there should be no duplicate checks in this {} block
 							existingWYIdList = new TypedLinkedList<DualPack<String, WYIdentifier>>();
 							TypedLinkedList<DualPack<String, WYIdentifier>> impossible =
 								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
@@ -622,11 +619,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
 							
 							
-							existingWYIdList.addLast( new DualPack(dotted, wid) );// add all config options one by one in the order of occurrence
-															// in
-															// config.yml
+							existingWYIdList.addLast( new DualPack( dotted, wid ) );// add all config options one by one in the
+																					// order of occurrence
+							// in
+							// config.yml
 							
-							assert existingWYIdList.contains( new DualPack(dotted, wid ));
+							assert existingWYIdList.contains( new DualPack( dotted, wid ) );
 							
 						} else {
 							// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
@@ -635,23 +633,24 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// must check against and see if wid isn't already existing there (as different instance though)
 							// does id already exist, ie. duplicate encountered in .yml ?
 							
-							//FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
-							//so either store hashmap or make sure equals compares dotted forms
-							//hashmap will be faster, a hashmap of dotted -> wid
-							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much overhead, hashmap ftw!
+							// FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
+							// so either store hashmap or make sure equals compares dotted forms
+							// hashmap will be faster, a hashmap of dotted -> wid
+							// or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much overhead,
+							// hashmap ftw!
 							
 							
-							int index = existingWYIdList.indexOf( new DualPack(dotted, WYIdentifier.NULL) );
+							int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
 							// seeks dotted format 'wid' in list by doing .equals() on each of
-																		// them // inside // the list
+							// them // inside // the list
 							if ( index >= 0 ) {// exists already ?
 								WYSection widsParent = wid.getParent();
-								//TODO: also check if it is in any other lists, it probably isn't at this time.
+								// TODO: also check if it is in any other lists, it probably isn't at this time.
 								currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
 								// wid.replaceAndTransformSelfInto_WYComment();
 								// so we still have a getNext() to go to, after wid is basically destroyed(at
 								// least its getNext will be null after this)
-								// let's not forget to remove this from list, 
+								// let's not forget to remove this from list,
 								// existingWYIdList.remove( index );// a MUST
 								// assert existingWYIdList.contains( wid );
 								// System.out.println(existingWYIdList.get( index ));
@@ -662,8 +661,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								// this means, it will compare id without considering values (as per WYIdentifier's
 								// .equals()
 								
-								//if we're here this will work:
-								int activeLine=existingWYIdList.get( index ).getSecond().getLineNumber();
+								// if we're here this will work:
+								int activeLine = existingWYIdList.get( index ).getSecond().getLineNumber();
 								FactionsPlus
 									.warn( "Duplicate config option encountered in "
 										+ fileConfig
@@ -673,10 +672,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 										+ ChatColor.RESET
 										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 										// + "This is how the line looks now(without leading spaces):\n"
-										+ colorOnDuplicate + currentItem.toString() +"\n"+ChatColor.RESET
-										+"the option at line "
-										+ChatColor.AQUA+activeLine
-										+ChatColor.RESET+" overriddes this duplicate");
+										+ colorOnDuplicate + currentItem.toString() + "\n" + ChatColor.RESET
+										+ "the option at line " + ChatColor.AQUA + activeLine + ChatColor.RESET
+										+ " overriddes this duplicate" );
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
 								// stop? do
@@ -847,8 +845,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// but only if new values are not already set
 				mapField_to_ListOfWYIdentifier.clear();
 				parseCheckForValids( virtualRoot );
-
-				//TODO: when done:
+				
+				// TODO: when done:
 				mapField_to_ListOfWYIdentifier.clear();
 				
 				

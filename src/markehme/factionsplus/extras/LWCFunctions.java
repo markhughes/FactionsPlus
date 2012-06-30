@@ -26,14 +26,14 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	public static void hookLWC() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		
-		if ( Config.config.getBoolean( Config.str_removeLWCLocksOnClaim ) ) {
+		if ( Config.extras.lwc.removeLWCLocksOnClaim  ) {
 			// register after we integrate
 			Bukkit.getPluginManager().registerEvents( new LWCListener(), FactionsPlus.instance );
 		}
 		
 		//we always need this in order to prevent people from locking ie. chests in enemy faction
 		getLWC().getModuleLoader().registerModule( FactionsPlus.instance,  
-			new LWCModule(Config.config.getBoolean( Config.str_blockCPublicAccessOnNonOwnFactionTerritory )));
+			new LWCModule(Config.extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory ));
 		
 		FactionsPlusPlugin.info("Hooked into LWC!");
 	}
