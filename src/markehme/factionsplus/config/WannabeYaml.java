@@ -39,13 +39,12 @@ public abstract class WannabeYaml {
 		try {
 			fis = new FileInputStream( fromFile );
 			br = new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
-			WYSection root = new WYSection(-1, "root", null, null );
+			WYSection root = new WYSection( -1, "root" );
 			// int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
 			synchronized ( WannabeYaml.class ) {
 				int currentLevel = 0;// up to maxLevels
 				lineNumber = 0;
-				WYItem previousWYItem = null;
-				int eof = parseSection( root, br, currentLevel, previousWYItem );
+				int eof = parseSection( root, br, currentLevel );
 				assert END_OF_FILE == eof;
 			}
 			return root;
@@ -86,15 +85,14 @@ public abstract class WannabeYaml {
 	
 	/**
 	 * @param currentLevel
-	 * @param previousWYItem
 	 * @param destination
 	 * @param fromFile
 	 * @param destinationLList
 	 * @return new level (which decreased), or it's just end of file aka -1
 	 * @throws IOException
 	 */
-	private final static int parseSection( WYSection parentSection, BufferedReader br, int currentLevel,
-		WYItem previousWYItem ) throws IOException
+	private final static int parseSection( WYSection parentSection, BufferedReader br, int currentLevel
+		 ) throws IOException
 	{
 		
 		// WYItem currentParentSection=root;
@@ -140,10 +138,12 @@ public abstract class WannabeYaml {
 								// the level of the comment is irrelevant, we don't check number of spaces before comments
 								// add line as comment
 								// previousWYItem.setNext
-//								7 check spaces for comment to decide...
+								// 7 check spaces for comment to decide...
 								// FIXME: if comment is at same level => store with previous, else don't
-								previousWYItem = new WYComment(lineNumber, line.substring( pos0based )/*this idents the comment to right level on next write*/
-									, parentSection, previousWYItem );
+//								previousWYItem = ;
+								// );//, parentSection, previousWYItem );
+								parentSection.append( new WYComment( lineNumber, line.substring( pos0based ) ) );/* this idents the comment to right level on next write */
+								// );
 								// destination.addLast( previousWYItem );
 								continue nextLine;// continue scanning
 							} else {
@@ -172,22 +172,25 @@ public abstract class WannabeYaml {
 								int theNewEncounteredLevelNow = ( pos0based / spacesPerLevel ); // this will be integer by now
 								// if ( pos0based + 1 - ( spacesPerLevel * 1 ) > ( currentLevel * spacesPerLevel ) ) {
 								// we could be at same level, lower or higher by 1
-								if ( theNewEncounteredLevelNow > currentLevel  ) {
-									if (theNewEncounteredLevelNow > currentLevel + 1){
-									// "  some"
-									// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement
-									// spacesPerLevel
-									// == 2
-									// if ( pos - 1 > currentLevelspaces ) {
-									throw new RuntimeException( "you put too many spaces at line " + lineNumber
-										+ " at position " + ( pos0based + 1 ) + " expected "
-										+ ( currentLevel * spacesPerLevel ) + " or " + ( currentLevel + 1 )
-										* spacesPerLevel + " spaces\n" + line );
-									}else {
-										//it's allowed to nest only if prev was a Section
-										if ((null == previousWYItem)||( ! previousWYItem.getClass().equals( WYSection.class ))) {
-											throw new RuntimeException("you can only nest inside sections, at line "+lineNumber+
-												" at position " + ( pos0based + 1 ) + '\n'+line);
+								if ( theNewEncounteredLevelNow > currentLevel ) {
+									if ( theNewEncounteredLevelNow > currentLevel + 1 ) {
+										// "  some"
+										// "     else" //notice it's 1 char is beyond the allowed +2 chars displacement
+										// spacesPerLevel
+										// == 2
+										// if ( pos - 1 > currentLevelspaces ) {
+										throw new RuntimeException( "you put too many spaces at line " + lineNumber
+											+ " at position " + ( pos0based + 1 ) + " expected "
+											+ ( currentLevel * spacesPerLevel ) + " or " + ( currentLevel + 1 )
+											* spacesPerLevel + " spaces\n" + line );
+									} else {
+										// it's allowed to nest only if prev was a Section
+//										if ( ( null == previousWYItem )
+//											|| ( !previousWYItem.getClass().equals( WYSection.class ) ) )
+										if ((!parentSection.isEmpty())&&(parentSection.getLast().getClass().equals(WYSection.class)) )
+										{
+											throw new RuntimeException( "you can only nest inside sections, at line "
+												+ lineNumber + " at position " + ( pos0based + 1 ) + '\n' + line );
 										}
 									}
 								} else {// else it can be exact level or less, that's normal
@@ -214,9 +217,9 @@ public abstract class WannabeYaml {
 						// ok get identifier
 						// parse until ":" or non alphanumeric char
 						if ( ( ( c >= 'a' ) && ( c <= 'z' ) ) || ( ( c >= 'A' ) && ( c <= 'Z' ) )
-							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) //TODO: allow this later || c == Config.DOT
-							)
-						{//allows ie. extras.lwc.disableSomething as an identifier !
+							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) // TODO: allow this later || c == Config.DOT
+						)
+						{// allows ie. extras.lwc.disableSomething as an identifier !
 							// ok valid id char
 							// we don't actually do anything //FIXME: fix 'if'
 						} else {
@@ -242,9 +245,10 @@ public abstract class WannabeYaml {
 							// by now we know it's an identifier of key=value and not a Section
 							// valueStartPos=pos;
 							// expecting=ExpectingType.VALUE_CONTENTS;
-							previousWYItem =
-								new WYIdentifier( lineNumber, line.substring( idStartPos, idEndPos ), line.substring( pos0based )
-									.trim(), parentSection, previousWYItem );
+//							previousWYItem =
+							parentSection.append( 
+								new WYIdentifier( lineNumber, line.substring( idStartPos, idEndPos ), line.substring(
+									pos0based ).trim()));// parentSection, previousWYItem );
 							// destination.addLast( previousWYItem );
 							// assert Q.nn( currentIdentifier );
 							// currentIdentifier.setValue();
@@ -267,10 +271,12 @@ public abstract class WannabeYaml {
 					assert Q.assumedTrue( idEndPos != UNSET_INDEX );
 					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 					// this means, this is a section
-					WYSection tmpSection = new WYSection(lineNumber,  line.substring( idStartPos, idEndPos ), parentSection, null );
+					WYSection tmpSection =
+						new WYSection( lineNumber, line.substring( idStartPos, idEndPos ));
+					parentSection.append( tmpSection );
 					// Q.nn(null);
 					// destination.addLast( tmpSection );
-					int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
+					int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1 );
 					
 					
 					if ( END_OF_FILE == actualLevelNow ) {// TODO: merge these 2 ifs in one, allowed now for clarity
@@ -289,7 +295,7 @@ public abstract class WannabeYaml {
 					// but if level decreased you don't want to link next WYItem to the prev one
 					
 					// but you will link next item to the section here (not to the last encountered item within that section)
-					previousWYItem = tmpSection;// this section is the prev item at this level
+//					previousWYItem = tmpSection;// this section is the prev item at this level
 					expecting = ExpectingType.IDENTIFIER;
 					// the prev for the next item in the same level is this section, after we're done with it
 					// but we don't yet know what level we're one since the prev section finished
@@ -308,24 +314,29 @@ public abstract class WannabeYaml {
 					// if we're here, we bumped into an empty line
 					// we currently just ignore it, so it will not be added upon writing the config backs
 					
-					//END OF LINE before anything was found, this should NOT CHANGE CURRENT LEVEL
-					//we should see how many spaces it has, if any, and see if to link it with previous or not
-					//if it has more spaces, you don't link it with previous one, unless next one is lower level
-//					1
+					// END OF LINE before anything was found, this should NOT CHANGE CURRENT LEVEL
+					// we should see how many spaces it has, if any, and see if to link it with previous or not
+					// if it has more spaces, you don't link it with previous one, unless next one is lower level
+					// 1
 					if ( pos0based > 0 ) {
 						// line filled with spaces
-						//XXX: IF the line is less than the level, it is auto leveled up !!! because it is stored as empty string
-						//and the config writing auto levels everything written...
-						//and since we don't store the entire line, for good reasons...
+						// XXX: IF the line is less than the level, it is auto leveled up !!! because it is stored as empty
+						// string
+						// and the config writing auto levels everything written...
+						// and since we don't store the entire line, for good reasons...
 						
-//						System.out.println(currentLevel*spacesPerLevel + " ! " +pos0based+" !"+
-//						line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ))+"!"+line+"!");
-						previousWYItem = new WYWhitespacedLine( lineNumber, line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ) ), 
-							parentSection, previousWYItem );
-						//this can become empty line too, after the level is removed from leading spaces
+						// System.out.println(currentLevel*spacesPerLevel + " ! " +pos0based+" !"+
+						// line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ))+"!"+line+"!");
+						// previousWYItem = );
+						parentSection.append( new WYWhitespacedLine( lineNumber, line.substring( Math.min( currentLevel
+							* spacesPerLevel, pos0based ) ) ) );
+						// ,parentSection, previousWYItem );
+						// this can become empty line too, after the level is removed from leading spaces
 					} else {
-						previousWYItem = new WYEmptyLine( lineNumber, parentSection, previousWYItem );
-						//empty lines will be autoleveled to the current level on write(the write of config which happens elsewhere tho, so technically it can be non-leveled if wanted)
+//						previousWYItem = ;//, parentSection, previousWYItem );
+						parentSection.append( new WYEmptyLine( lineNumber) );
+						// empty lines will be autoleveled to the current level on write(the write of config which happens
+						// elsewhere tho, so technically it can be non-leveled if wanted)
 					}
 					continue nextLine;
 				default:

@@ -9,8 +9,8 @@ public abstract class WY_IDBased extends WYItem {
 	private String	id;
 	
 	
-	public WY_IDBased( int lineNumber, String identifier, WYSection _parent, WYItem _prev ) {
-		super( lineNumber, _parent, _prev );
+	public WY_IDBased( int lineNumber, String identifier){//, WYSection _parent, WYItem _prev ) {
+		super( lineNumber);//, _parent, _prev );
 		id = identifier;
 		assert Q.nn( id );
 	}

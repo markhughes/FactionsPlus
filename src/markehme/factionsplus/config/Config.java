@@ -180,7 +180,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final String				str_smokeEffectOnWarp								=
 																									prefixWarps
 																										+ "smokeEffectOnWarp";
-	
+	//TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing oldaliases for section
+	@ConfigSection
+	public static final Banning banning=new Banning();
 	public static final String				prefixBanning										= "banning" + DOT;
 	public static final String				str_enableBans										= prefixBanning
 																									+ "enableBans";
@@ -692,12 +694,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
 				String dotted = wid.getInAbsoluteDottedForm( virtualRoot );
 				
-				System.out.println( dotted );
 				Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
 				if ( null == foundAsField ) {
 					// TODO: invalid config option encountered in config.yml
 					
 				} else {
+					System.out.println("!!!"+ dotted );
 					// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides? or throw
 					// or move extras into file?
 					

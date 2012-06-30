@@ -18,8 +18,8 @@ public class WYRawButLeveledLine extends WYItem {
 	 * @param parent
 	 * @param prev
 	 */
-	public WYRawButLeveledLine(int lineNumber, String alreadyLeveledLine , WYSection parent, WYItem prev) {
-		super(lineNumber,parent,prev);
+	public WYRawButLeveledLine(int lineNumber, String alreadyLeveledLine){// , WYSection parent, WYItem prev) {
+		super(lineNumber);//,parent,prev);
 		fullLine=alreadyLeveledLine;
 		assert Q.nn( fullLine );
 	}

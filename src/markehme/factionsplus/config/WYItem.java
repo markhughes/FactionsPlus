@@ -19,24 +19,22 @@ public abstract class WYItem {
 	
 	
 	/**
-	 * this is the next aka appended item
+	 * just a lonely WYItem, not part of any parents
 	 * @param lineNumber keep the line number for later reference, ie. when later detecting duplicates so that we can inform of the exact line number of the dup
-	 * @param _parent
-	 * @param _prev
 	 */
-	public WYItem(int lineNumber, WYSection _parent, WYItem _prev) {
+	public WYItem(int lineNumber){//, WYSection _parent, WYItem _prev) {
 		//constructor
 		lineNum=lineNumber;
-		prev=_prev;//can be null
-		parent=_parent;//can be null
+		prev=null;
+		parent=null;
 		next=null;
-		if (null != prev) {
-			assert null == prev.getNext();
-			prev.setNext( this );
-		}
-		if (null != parent) {
-			parent.append(this);
-		}
+//		if (null != prev) {
+////			assert null == prev.getNext();well not always, in case of transform..() being called
+//			prev.setNext( this );
+//		}
+//		if (null != parent) {
+//			parent.append(this);
+//		}
 	}
 	
 	public int getLineNumber(){

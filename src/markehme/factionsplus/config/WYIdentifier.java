@@ -12,8 +12,8 @@ public class WYIdentifier extends WY_IDBased {
 	private String	value;
 	
 	
-	public WYIdentifier( int lineNumber, String identifier, String strValue, WYSection parent, WYItem prev ) {
-		super( lineNumber, identifier, parent, prev );
+	public WYIdentifier( int lineNumber, String identifier, String strValue){//, WYSection parent, WYItem prev ) {
+		super( lineNumber, identifier);//, parent, prev );
 		value = strValue;
 		assert Q.nn( value );
 		// System.out.println("ID "+this+" parent="+parent+" prev="+prev);
@@ -70,15 +70,15 @@ public class WYIdentifier extends WY_IDBased {
 			
 			oldNext.setPrev( asComment );
 			
-			assert oldNext.getPrev() == this;
 		}// else `this` had no next
 		
-		// must still update comment's prev, if `this` had any
+		// must still update comment's prev, if `this` had any, NO, actually this is done by constructor
 		if ( null != oldPrev ) {
-			assert null == asComment.getPrev();// yeah should've been null by default, due to constructor call for WYComment
-			asComment.setPrev( oldPrev );
+//			assert null == asComment.getPrev();// yeah should've been null by default, due to constructor call for WYComment
+//			asComment.setPrev( oldPrev );
+			assert asComment.getPrev() == oldPrev;
 			// just making sure of assumptions
-			assert oldPrev.getNext() == this;// already done by constructor
+			assert oldPrev.getNext() == asComment;// already done by constructor
 		}// else `this` has no prev
 		
 		assert asComment.getParent() == oldParent;

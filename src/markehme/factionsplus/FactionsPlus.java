@@ -226,7 +226,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		//put your code above, let this be last:
 	}catch (Throwable t) {
-		t.printStackTrace();
+		t.printStackTrace();//FIXME: this makes each line have [SEVERE] which is unlike what happens when you just allow it to throw
 		if (isEnabled()) {
 			disableSelf();
 		}

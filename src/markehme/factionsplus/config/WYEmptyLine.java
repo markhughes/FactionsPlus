@@ -6,8 +6,8 @@ package markehme.factionsplus.config;
  */
 public class WYEmptyLine extends WYWhitespacedLine {
 
-	public WYEmptyLine(int lineNumber, WYSection parent, WYItem prev ) {
-		super( lineNumber,"", parent, prev );
+	public WYEmptyLine(int lineNumber){//, WYSection parent, WYItem prev ) {
+		super( lineNumber,"");//, parent, prev );
 	}
 	
 }
