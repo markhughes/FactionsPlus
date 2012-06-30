@@ -164,19 +164,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		throw Q.ni();
 	}
 	
-	/**
-	 * all new option names and their old aliases in the same set<br>
-	 * used to quickly point to the right Field.class<br>
-	 * using twoway map because, we need to use this map when retrieving the dotted format on a Field<br>
-	 */
-	private static final HashMap<String, Field>	dottedClassOptions_To_Fields	= new HashMap<String, Field>();
+	
 	
 	
 	private static void sanitize_AndUpdateClassMapping( Class rootClass ) {
 		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
-		dottedClassOptions_To_Fields.clear();
+		ConfigOptionName.dottedClassOptions_To_Fields.clear();
 		parsify( rootClass, null );
 	}
 	
@@ -197,40 +192,35 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					String fName = field.getName();
 					String dotted = ( null == dottedParentSection ? fName : dottedParentSection + Config.DOT + fName );
 					
+
+					// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
+					// Jails.enabled instead of Config.jails.enabled
+					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is
+					// enabled is private
+					// but protected is allowed, assuming you know what you're doing and you're using that only in the same
+					// package
 					int fieldModifiers = field.getModifiers();
+					Class<?> typeOfField = field.getType();// get( rootClass );
+					if ( ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) )
+						&& ( null != dottedParentSection ) )
+					{
+						// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+						// Config.extras
+						// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+						// SubSection_LWC to access lwc's fields
+						// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+						// field
+						throw new RuntimeException( "bad coding: your @" + annotationType.getSimpleName()
+							+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
+							+ " field `" + field + "` ; this is not allowed for subsections(only for toplevel sections in "
+							+ configClass.getSimpleName() + "), please correct in the source code!" );
+					}
 					
 					if ( ConfigSection.class == annotationType ) {
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
-						Class<?> typeOfField = field.getType();// get( rootClass );
-						if ( ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) )
-							&& ( null != dottedParentSection ) )
-						{
-							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-							// Config.extras
-							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-							// SubSection_LWC to access lwc's fields
-							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-							// field
-							throw new RuntimeException( "bad coding: your @" + annotationType.getSimpleName()
-								+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
-								+ " field `" + field + "` ; this is not allowed for subsections(only for toplevel sections in "
-								+ configClass.getSimpleName() + "), please correct in the source code!" );
-						}
 						parsify( typeOfField, dotted );// recurse
 					} else {// it's @ConfigOption
 					
-						// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
-						// Jails.enabled instead of Config.jails.enabled
-						// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is
-						// enabled is private
-						// but protected is allowed, assuming you know what you're doing and you're using that only in the same
-						// package
-						if ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) ) {
-							throw new RuntimeException( "bad coding: your @" + ConfigOption.class.getSimpleName()
-								+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
-								+ " field `" + field + "` ; this is not allowed, please correct in the source code!" );
-						}
-						
 						ConfigOption co = (ConfigOption)fieldAnnotation;
 						String currentDotted = dotted;
 						String[] aliasesArray = co.oldAliases();
@@ -239,7 +229,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 											// ordered)
 						while ( true ) {
 							// FactionsPlus.info( currentDotted + "/" + field );
-							Field existingField = dottedClassOptions_To_Fields.put( currentDotted, field );
+							Field existingField = ConfigOptionName.dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {
 								throw new RuntimeException( "bad coding: your config option `" + currentDotted + "` in field `"
 									+ field + "`\n" + "was already defined in field `" + existingField
@@ -516,7 +506,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
 					System.out.println( dotted );
-					Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
+					Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
 					if ( null == foundAsField ) {
 						// done: invalid config option encountered in config.yml transforms into comment
 						// WYSection widsParent = wid.getParent();

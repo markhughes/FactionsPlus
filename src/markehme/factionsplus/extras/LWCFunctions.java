@@ -26,7 +26,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	public static void hookLWC() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		
-		if ( Config.extras.lwc.removeLWCLocksOnClaim  ) {
+		if ( Config.extras.lwc.removeLWCLocksOnClaim._  ) {
 			// register after we integrate
 			Bukkit.getPluginManager().registerEvents( new LWCListener(), FactionsPlus.instance );
 		}

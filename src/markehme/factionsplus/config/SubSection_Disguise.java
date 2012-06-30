@@ -15,7 +15,7 @@ public class SubSection_Disguise {
 	
 	
 	@ConfigOption(oldAliases={
-		"unDisguiseIfInOwnTerritory"
+		"unDisguiseIfInEnemyTerritory"
 	})
 	public boolean unDisguiseIfInEnemyTerritory=false;
 	

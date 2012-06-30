@@ -78,3 +78,5 @@ support chat modes)
     
 - try find (from others) config.yml from 0.4.6 and test if successfuly imports (should be, but could have missed 1-2 options)
 
+- check and clean the unused imports
+
