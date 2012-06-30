@@ -29,14 +29,19 @@ public class WYSection extends WY_IDBased {
 	}
 
 	void append( WYItem child ) {
-		1
-		if (lastChild != null) {
+		if (lastChild != null) {//means first is also non-null
+			assert lastChild.getNext() == null;
 			lastChild.setNext( child );
 			child.setPrev(lastChild);
 			lastChild=child;
 		}else {
+			//was previously empty
 			firstChild=lastChild=child;
+			assert null == child.getPrev();
+			assert null == child.getNext();
 		}
+		
+		child.setParent(this);
 	}
 
 	public WYItem getLast() {

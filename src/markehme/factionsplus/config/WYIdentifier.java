@@ -60,10 +60,8 @@ public class WYIdentifier extends WY_IDBased {
 		
 		WYComment asComment =
 			new WYComment( getLineNumber(), WannabeYaml.commentChar + WannabeYaml.space + getId()
-				+ WannabeYaml.IDVALUE_SEPARATOR + WannabeYaml.space + getValue(), getParent(), getPrev() );// this's parent&prev
-																											// will be updated
-																											// by this
-																											// constructor call
+				+ WannabeYaml.IDVALUE_SEPARATOR + WannabeYaml.space + getValue());
+1
 		if ( null != oldNext ) {// had a next, must update its prev
 			WYItem nextsPrev = oldNext.getPrev();
 			assert nextsPrev == this;

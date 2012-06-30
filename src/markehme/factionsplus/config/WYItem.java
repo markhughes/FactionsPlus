@@ -37,6 +37,10 @@ public abstract class WYItem {
 //		}
 	}
 	
+	protected void setParent(WYSection _par) {
+		parent=_par;
+	}
+	
 	public int getLineNumber(){
 		return lineNum;
 	}
