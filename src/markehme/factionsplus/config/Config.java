@@ -688,9 +688,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private final static void parseCheckForValids( WYSection root ) {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
-		WYSection parent = root;
+//		WYSection parent = root;
 		// int level=0;
-		while ( null != parent ) {
+//		while ( null != parent ) {
 			
 			while ( null != currentItem ) {
 				
@@ -701,9 +701,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
 					// options and thus
 					// are indirectly checked when config options(aka ids) are checked
-					// parseCheckForValids( level + 1, cs );// recurse
-					parent = cs;
-					currentItem = parent.getFirst();
+					 parseCheckForValids( cs );// recurse
+//					parent = cs;
+//					currentItem = cs.getFirst();
 				} else {
 					if ( WYIdentifier.class == cls ) {
 						WYIdentifier wid = ( (WYIdentifier)currentItem );
@@ -844,11 +844,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						
 						
 						
-						currentItem = currentItem.getNext();
+						
 					} else {// non id
 						assert ( currentItem instanceof WYRawButLeveledLine );
 						// ignore raw lines like comments or empty lines, for now
-						currentItem = currentItem.getNext();
+//						currentItem = currentItem.getNext();
 					}
 				}// else
 				
@@ -856,9 +856,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// WYSection par = currentItem.getParent();
 				// if (null != par);
 				// }
+				currentItem = currentItem.getNext();
 			}// inner while
-			parent = parent.getParent();
-		}// outer while
+			// parent = parent.getParent();
+		// }// outer while
 	}
 	
 	private static BufferedWriter	bw;

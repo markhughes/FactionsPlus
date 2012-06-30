@@ -72,6 +72,13 @@ public class WYSection extends WY_IDBased {
 		assert asComment.getParent() == null;
 		
 		// making comment part of this parent
+		//let's not forget head/tail !!
+		if (wid == firstChild) {
+			firstChild=asComment;
+		}
+		if (wid == lastChild) {
+			lastChild=asComment;
+		}
 		WYItem oldPrev = wid.getPrev();
 		if ( null != oldPrev ) {// need to set its next
 			asComment.setPrev( oldPrev );

@@ -69,3 +69,6 @@ support chat modes)
 
 - clean unused static hashmaps after they're used for config computing, on reload
 
+- disallow enabling plugin if X config options are detected as invalid, where X would be configurable ie. 5
+  - also add same thing for DUPlicates
+
