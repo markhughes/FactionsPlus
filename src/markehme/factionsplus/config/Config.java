@@ -382,6 +382,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new
 			// option
 			// names
+			
 			ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
 			
 			// map.key: dotted format config.yml settings(only key: value ones)
@@ -412,6 +413,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	private static void ensureConfigClassIsConsistent_AndUpdateMapping( Class rootClass ) {
+		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
+		// onEnable
+		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
 		dottedClassOptions_To_Fields.clear();
 		parsify( rootClass, "" );
 	}
@@ -670,6 +674,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
+	private static final HashMap<Field, LinkedList<WYIdentifier>>mapField_to_ListOfWYIdentifier=new HashMap<Field, LinkedList<WYIdentifier>>();
 	
 	private final static void parseCheckForValids( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
@@ -681,7 +686,33 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			if ( WYIdentifier.class == cls ) {
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
-				// System.out.println( wid.getInAbsoluteDottedForm( virtualRoot ) );
+				String dotted = wid.getInAbsoluteDottedForm( virtualRoot );
+				
+				System.out.println(dotted );
+				Field found=dottedClassOptions_To_Fields.get( dotted );
+				if (null == found ) {
+					//TODO: invalid config option encountered in config.yml
+					
+				}else {
+					//TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides? or throw or move extras into file?
+					
+					//TODO: we can let the HashMap check if one already exists even though they will != but they will .equals() if we define that
+//					so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate options in .yml file
+					//well actually no, the above is false premising in the current context
+					
+					LinkedList<WYIdentifier> existingWYIdList = mapField_to_ListOfWYIdentifier.get( found );
+					if (null == existingWYIdList) {
+						//first time creating the list for this Field 'found'
+						existingWYIdList=new LinkedList<WYIdentifier>();
+						List<WYIdentifier> impossible = mapField_to_ListOfWYIdentifier.put( found, existingWYIdList );
+						assert null == impossible:"this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
+						
+					}
+					assert null != existingWYIdList;//obviously
+					
+					existingWYIdList.addLast( e );
+				}
+				
 				// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
 				// if ( null == rtcid ) {
 				// // there isn't a runtime option for the encountered id(=config option name)
@@ -835,7 +866,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
 				// remove old
 				// but only if new values are not already set
-				
+				mapField_to_ListOfWYIdentifier.clear();
 				parseCheckForValids( 0, virtualRoot );
 				
 				
