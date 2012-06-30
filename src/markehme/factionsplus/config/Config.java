@@ -547,8 +547,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * a mapping between the Field config option and an ordered list of dottedform of and WYIdentifiers encountered in config.yml<br>
 	 * dotted form ie. extras.lwc.someid
 	 */
-	private static final HashMap<Field, LinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
-																										new HashMap<Field, LinkedList<DualPack<String, WYIdentifier>>>();
+	private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
+																										new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
 	private static final String										commentPrefixForDUPs			= "DUPLICATE #";
 	private static final String										commentPrefixForINVALIDs		= "INVALID #";
 	private static final ChatColor									colorOnDuplicate				= ChatColor.YELLOW;
@@ -608,12 +608,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// .yml file
 						// well actually no, the above is false premising in the current context
 						
-						LinkedList<DualPack<String, WYIdentifier>> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
+						TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
 						if ( null == existingWYIdList ) {
 							// first time creating the list for this Field 'found'
 							//which also means there should be no duplicate checks in this {} block
-							existingWYIdList = new LinkedList<DualPack<String, WYIdentifier>>();
-							LinkedList<DualPack<String, WYIdentifier>> impossible =
+							existingWYIdList = new TypedLinkedList<DualPack<String, WYIdentifier>>();
+							TypedLinkedList<DualPack<String, WYIdentifier>> impossible =
 								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
 							assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
 							assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
