@@ -2,4 +2,4 @@ This is the thanks file, if you add major changes that greatly influence the plu
 
 andrew2060: LWC Locks Reset Fixing
 unv_annihilator: Huge fast rapid bug fixes on most things! Unban command coding.
-basicsensei: Bridge between 1.6 and 1.7; paranoid checks all over the place;
+basicsensei: Bridge between 1.6 and 1.7
