@@ -280,7 +280,8 @@ parent is basically the path btw
 Note: to accurately get currentFolder new File("."); is supposed to be used! which then does step 3.
 
 -----
-
+do not use/override onLoad() but instead do all in onEnable(), has the same effect but without the possibility of having
+some bukkit calls NPE due to not yet being initialized ie. Bukkit.getConsoleSender()
 -----
 
 //end of: `Note to devs`

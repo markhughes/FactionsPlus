@@ -15,15 +15,18 @@ public abstract class WYItem {
 	private WYItem prev;
 	private WYItem next;
 	private WYSection parent;
+	private int	lineNum;
 	
 	
 	/**
 	 * this is the next aka appended item
+	 * @param lineNumber keep the line number for later reference, ie. when later detecting duplicates so that we can inform of the exact line number of the dup
 	 * @param _parent
 	 * @param _prev
 	 */
-	public WYItem(WYSection _parent, WYItem _prev) {
+	public WYItem(int lineNumber, WYSection _parent, WYItem _prev) {
 		//constructor
+		lineNum=lineNumber;
 		prev=_prev;//can be null
 		parent=_parent;//can be null
 		next=null;
@@ -34,6 +37,10 @@ public abstract class WYItem {
 		if (null != parent) {
 			parent.append(this);
 		}
+	}
+	
+	public int getLineNumber(){
+		return lineNum;
 	}
 	
 	public void setNext(WYItem nxt) {

@@ -73,14 +73,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	}
 	
 	@Override
-	public void onLoad() {
-		/*
-		 * don't use things like Bukkit.getConsoleSender() they will NPE here<br>
-		 * XXX: best to avoid using onLoad()!! due to bukkit stuff not being inited
-		 */
-	}
-	
-	@Override
 	public void onDisable() {
 		if (null != metrics) {
 			try {
@@ -98,7 +90,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	
 	@Override
-	public void onEnable() { super.onEnable();//be first
+	public void onEnable() { try { super.onEnable();//be first
 		Config.init();
 		Config.reload();//be as soon as possible
 	    
@@ -230,7 +222,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		    FactionsPlusPlugin.info("Waah! Couldn't metrics-up! :'(");
 		}
 		
+		
+		
+		//put your code above, let this be last:
+	}catch (Throwable t) {
+		t.printStackTrace();
+		if (isEnabled()) {
+			disableSelf();
+		}
 	}
+	}//onEnable
 	
 	
 }

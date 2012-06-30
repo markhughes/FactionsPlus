@@ -9,8 +9,8 @@ public class WYSection extends WY_IDBased {
 	private WYItem firstChild,lastChild;
 
 	
-	public WYSection( String id , WYSection parent, WYItem prev) {
-		super(id, parent, prev);
+	public WYSection(int lineNumber, String id , WYSection parent, WYItem prev) {
+		super(lineNumber,id, parent, prev);
 		firstChild=null;
 		lastChild=null;
 //		System.out.println("Section "+this+" parent="+parent+" prev="+prev);

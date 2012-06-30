@@ -15,7 +15,7 @@ import markehme.factionsplus.extras.*;
 public abstract class WannabeYaml {
 	
 	public static final char	space				= ' ';
-	private static final char	commentChar			= '#';
+	protected static final char	commentChar			= '#';
 	public static final char	IDVALUE_SEPARATOR	= ':';
 	private static final int	UNSET_INDEX			= -1;
 	private static final int	END_OF_FILE			= -1;
@@ -39,7 +39,7 @@ public abstract class WannabeYaml {
 		try {
 			fis = new FileInputStream( fromFile );
 			br = new BufferedReader( new InputStreamReader( fis, Q.UTF8 ) );
-			WYSection root = new WYSection( "root", null, null );
+			WYSection root = new WYSection(-1, "root", null, null );
 			// int currentLevelspaces = 0; // meaning expecting 0 spaces at first, can't have 1 or more
 			synchronized ( WannabeYaml.class ) {
 				int currentLevel = 0;// up to maxLevels
@@ -142,7 +142,7 @@ public abstract class WannabeYaml {
 								// previousWYItem.setNext
 //								7 check spaces for comment to decide...
 								// FIXME: if comment is at same level => store with previous, else don't
-								previousWYItem = new WYComment( line.substring( pos0based )/*this idents the comment to right level on next write*/
+								previousWYItem = new WYComment(lineNumber, line.substring( pos0based )/*this idents the comment to right level on next write*/
 									, parentSection, previousWYItem );
 								// destination.addLast( previousWYItem );
 								continue nextLine;// continue scanning
@@ -243,7 +243,7 @@ public abstract class WannabeYaml {
 							// valueStartPos=pos;
 							// expecting=ExpectingType.VALUE_CONTENTS;
 							previousWYItem =
-								new WYIdentifier( line.substring( idStartPos, idEndPos ), line.substring( pos0based )
+								new WYIdentifier( lineNumber, line.substring( idStartPos, idEndPos ), line.substring( pos0based )
 									.trim(), parentSection, previousWYItem );
 							// destination.addLast( previousWYItem );
 							// assert Q.nn( currentIdentifier );
@@ -267,7 +267,7 @@ public abstract class WannabeYaml {
 					assert Q.assumedTrue( idEndPos != UNSET_INDEX );
 					// if we're here, then the identifier has no value (or there are spaces after it which were ignored)
 					// this means, this is a section
-					WYSection tmpSection = new WYSection( line.substring( idStartPos, idEndPos ), parentSection, null );
+					WYSection tmpSection = new WYSection(lineNumber,  line.substring( idStartPos, idEndPos ), parentSection, null );
 					// Q.nn(null);
 					// destination.addLast( tmpSection );
 					int actualLevelNow = parseSection( tmpSection, br, currentLevel + 1, null );
@@ -320,11 +320,11 @@ public abstract class WannabeYaml {
 						
 //						System.out.println(currentLevel*spacesPerLevel + " ! " +pos0based+" !"+
 //						line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ))+"!"+line+"!");
-						previousWYItem = new WYWhitespacedLine( line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ) ), 
+						previousWYItem = new WYWhitespacedLine( lineNumber, line.substring( Math.min( currentLevel*spacesPerLevel, pos0based ) ), 
 							parentSection, previousWYItem );
 						//this can become empty line too, after the level is removed from leading spaces
 					} else {
-						previousWYItem = new WYEmptyLine( parentSection, previousWYItem );
+						previousWYItem = new WYEmptyLine( lineNumber, parentSection, previousWYItem );
 						//empty lines will be autoleveled to the current level on write(the write of config which happens elsewhere tho, so technically it can be non-leveled if wanted)
 					}
 					continue nextLine;

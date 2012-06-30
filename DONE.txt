@@ -27,4 +27,6 @@ this is also to keep out the clutter within the TODO file
         [SEVERE] Wrong method arguments used for event type registered
         
 //done - makes sure you cannot use the same alias for 2 different config options (they are defined inside the java code)
-        
+       
+//fixed by graceful disable on thrown exceptions- investigate why it sometimes says onDisable that LWCBase NoClassDefFoundError
+ 

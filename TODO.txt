@@ -65,8 +65,6 @@ support chat modes)
   
 - add option to disable ender pearls teleporting in safe/warzones too
 
-- investigate why it sometimes says onDisable that LWCBase NoClassDefFoundError
-
 - recheck all code comments and remove obsolete ones, also rename some methods and/or comment them, ie. parsify()
 
 - clean unused static hashmaps after they're used for config computing, on reload

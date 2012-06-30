@@ -362,45 +362,44 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
-	 * call this in plugin.onLoad (the thing that happens before onEnable() )<br>
+	 * call this one time onEnable() never on onLoad() due to its evilness;)<br>
 	 */
 	public final static void init() {
 		boolean failed = false;
-		try {
-			if ( Q.isInconsistencyFileBug() ) {
-				throw FactionsPlusPlugin
-					.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
-						+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
-			}
-			
-			if ( hasFileFieldsTrap() ) {
-				throw FactionsPlusPlugin
-					.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
-						+ "in places that use files, tell plugin author to fix" );
-			}
-			
-			// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new
-			// option
-			// names
-			
-			ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
-			
-			// map.key: dotted format config.yml settings(only key: value ones)
-			// map.value: Field.class instance of the
-			
-			// Field f;
-			
-			// throw null;
-			// Annotation[] ar = f.getDeclaredAnnotations();
-			// Class.class.getDeclaredAnnotations();
-		} catch ( Throwable t ) {
-			failed = true;
-			Q.rethrow( t );
-		} finally {
-			if ( failed ) {
-				FactionsPlus.instance.setDisAllowPluginToEnable();
-			}
+		// try {
+		if ( Q.isInconsistencyFileBug() ) {
+			throw FactionsPlusPlugin
+				.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+					+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
 		}
+		
+		if ( hasFileFieldsTrap() ) {
+			throw FactionsPlusPlugin.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+				+ "in places that use files, tell plugin author to fix" );
+		}
+		
+		// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new
+		// option
+		// names
+		
+		ensureConfigClassIsConsistent_AndUpdateMapping( Config.class );
+		
+		// map.key: dotted format config.yml settings(only key: value ones)
+		// map.value: Field.class instance of the
+		
+		// Field f;
+		
+		// throw null;
+		// Annotation[] ar = f.getDeclaredAnnotations();
+		// Class.class.getDeclaredAnnotations();
+		// } catch ( Throwable t ) {
+		// failed = true;
+		// Q.rethrow( t );
+		// } finally {
+		// if ( failed ) {
+		// FactionsPlus.instance.setDisAllowPluginToEnable();//FIXME: this has no effect now
+		// }
+		// }
 		
 		
 	}
@@ -642,7 +641,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			}
 			
 			if ( currentItem instanceof WYRawButLeveledLine ) {
-				bw.write( ( (WYRawButLeveledLine)currentItem ).getLTrimmedLine() );
+				bw.write( ( (WYRawButLeveledLine)currentItem ).getRawButLeveledLine() );
 				bw.newLine();
 			} else {
 				
@@ -674,7 +673,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-	private static final HashMap<Field, LinkedList<WYIdentifier>>mapField_to_ListOfWYIdentifier=new HashMap<Field, LinkedList<WYIdentifier>>();
+	/**
+	 * a mapping between the Field config option and an ordered list of WYIdentifiers encountered in config.yml<br>
+	 */
+	private static final HashMap<Field, LinkedList<WYIdentifier>>	mapField_to_ListOfWYIdentifier	=
+																										new HashMap<Field, LinkedList<WYIdentifier>>();
+	
 	
 	private final static void parseCheckForValids( int level, WYSection root ) throws IOException {
 		assert Q.nn( root );
@@ -688,29 +692,57 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				WYIdentifier wid = ( (WYIdentifier)currentItem );
 				String dotted = wid.getInAbsoluteDottedForm( virtualRoot );
 				
-				System.out.println(dotted );
-				Field found=dottedClassOptions_To_Fields.get( dotted );
-				if (null == found ) {
-					//TODO: invalid config option encountered in config.yml
+				System.out.println( dotted );
+				Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
+				if ( null == foundAsField ) {
+					// TODO: invalid config option encountered in config.yml
 					
-				}else {
-					//TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides? or throw or move extras into file?
+				} else {
+					// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides? or throw
+					// or move extras into file?
 					
-					//TODO: we can let the HashMap check if one already exists even though they will != but they will .equals() if we define that
-//					so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate options in .yml file
-					//well actually no, the above is false premising in the current context
+					// TODO: we can let the HashMap check if one already exists even though they will != but they will .equals()
+					// if we define that
+					// so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate options in
+					// .yml file
+					// well actually no, the above is false premising in the current context
 					
-					LinkedList<WYIdentifier> existingWYIdList = mapField_to_ListOfWYIdentifier.get( found );
-					if (null == existingWYIdList) {
-						//first time creating the list for this Field 'found'
-						existingWYIdList=new LinkedList<WYIdentifier>();
-						List<WYIdentifier> impossible = mapField_to_ListOfWYIdentifier.put( found, existingWYIdList );
-						assert null == impossible:"this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
-						
+					LinkedList<WYIdentifier> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
+					if ( null == existingWYIdList ) {
+						// first time creating the list for this Field 'found'
+						existingWYIdList = new LinkedList<WYIdentifier>();
+						List<WYIdentifier> impossible =
+							mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
+						assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
+						assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
 					}
-					assert null != existingWYIdList;//obviously
+					assert null != existingWYIdList;// obviously
 					
-					existingWYIdList.addLast( e );
+					// does id already exist, ie. duplicate encountered in .yml ?
+					int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of them inside
+																// the list
+					if ( index >= 0 ) {// exists already ?
+						WYComment widAsComment = wid.replaceAndTransformSelfInto_WYComment();
+						currentItem = widAsComment;// so we still have a getNext() to go to, after wid is basically destroyed(at
+													// least its getNext will be null after this)
+						// let's not forget to remove this from list, TODO: also check if it is in any other lists
+						existingWYIdList.remove( index );// a MUST
+						assert !existingWYIdList.contains( wid );
+						
+						// this means, it will compare id without considering values (as per WYIdentifier's .equals()
+						FactionsPlus
+							.warn( "Duplicate config option encountered in "
+								+ fileConfig
+								+ " at line "
+								+ widAsComment.getLineNumber()
+								+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+								+ "This is how the line looks now(without leading spaced):\n" + widAsComment.toString() );
+						// TODO: what to do when same config is encountered twice, does it override the prev one? do we stop? do
+						// we move it to some file for reviewal? or do we comment it out?
+					} else {
+						existingWYIdList.addLast( wid );// add all config options one by one in the order of occurrence in
+														// config.yml
+					}
 				}
 				
 				// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
@@ -757,11 +789,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			} else {
 				if ( WYSection.class == cls ) {
 					WYSection cs = (WYSection)currentItem;
-					
+					// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
+					// options and thus
+					// are indirectly checked when config options(aka ids) are checked
 					parseCheckForValids( level + 1, cs );// recurse
 				} else {
 					assert ( currentItem instanceof WYRawButLeveledLine );
-					// ignore raw lines like comments or empty lines
+					// ignore raw lines like comments or empty lines, for now
 				}
 			}
 			
