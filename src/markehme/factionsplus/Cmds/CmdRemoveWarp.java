@@ -51,20 +51,9 @@ public class CmdRemoveWarp extends FCommand {
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		
-		boolean authallow = false;
-
-		if(Config.config.getBoolean(Config.str_membersCanSetWarps)) {
-			authallow = true;
-		} else {
-			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(Config.str_officersCanSetWarps)) {
-				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(Config.str_leadersCanSetWarps)) {
-				authallow = true;
-			}
-		}
-
-		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+		
+		if(!Config.warps.canSetOrRemoveWarps(fplayer)) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to remove warps!");
 			return;
 		}
 		

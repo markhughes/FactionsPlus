@@ -72,7 +72,7 @@ public class CmdWarp extends FCommand {
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!Config.config.getBoolean(Config.str_warpTeleportAllowedFromEnemyTerritory) && fplayer.isInEnemyTerritory() ){
+		if(!Config.warps.warpTeleportAllowedFromEnemyTerritory && fplayer.isInEnemyTerritory() ){
 			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
@@ -92,9 +92,9 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				Config.config.getInt(Config.str_warpTeleportAllowedEnemyDistance) > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				Config.warps.warpTeleportAllowedEnemyDistance > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
 				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! Config.config.getBoolean(Config.str_warpTeleportIgnoreEnemiesIfInOwnTerritory)))){
+						|| ( fplayer.isInOwnTerritory() && ! Config.warps.warpTeleportIgnoreEnemiesIfInOwnTerritory))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
@@ -116,7 +116,7 @@ public class CmdWarp extends FCommand {
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
-				double max = Config.config.getInt(Config.str_warpTeleportAllowedEnemyDistance);
+				double max = Config.warps.warpTeleportAllowedEnemyDistance;
 
 				// box-shaped distance check
 				if (dx > max || dy > max || dz > max)
@@ -180,7 +180,7 @@ public class CmdWarp extends FCommand {
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					// Create a smoke effect
-					if (Config.config.getBoolean(Config.str_smokeEffectOnWarp)) {
+					if (Config.warps.smokeEffectOnWarp) {
 						List<Location> smokeLocations = new ArrayList<Location>();
 						smokeLocations.add(player.getLocation());
 						smokeLocations.add(player.getLocation().add(0, 1, 0));

@@ -72,3 +72,8 @@ support chat modes)
 - disallow enabling plugin if X config options are detected as invalid, where X would be configurable ie. 5
   - also add same thing for DUPlicates
 
+- remove config_defaults.yml (and config.yml) that's located inside .jar (/project root) they are not needed anymore
+    BUT FIRST do check if defaults are the same with the coded ones
+    
+- try find (from others) config.yml from 0.4.6 and test if successfuly imports (should be, but could have missed 1-2 options)
+

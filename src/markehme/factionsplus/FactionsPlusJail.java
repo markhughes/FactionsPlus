@@ -219,20 +219,20 @@ public class FactionsPlusJail {
 		
 		boolean authallow = false;
 		
-		if(Config.config.getBoolean(Config.str_leadersCanSetJails)) {
+		if(Config.jails.leadersCanSetJails) {
 			if(fplayer.getRole().toString().contains("admin") || fplayer.getRole().toString().contains("LEADER")) { // 1.6.x
 				authallow = true;
 			}
 		}
 		
-		if(Config.config.getBoolean(Config.str_officersCanSetJails)) {
+		if(Config.jails.officersCanSetJails) {
 			if(fplayer.getRole().toString().contains("mod") || fplayer.getRole().toString().contains("OFFICER")) {
 				authallow = true;
 			}
 		}
 
 		
-		if(Config.config.getBoolean(Config.str_membersCanSetJails)) {
+		if(Config.jails.membersCanSetJails) {
 			authallow = true;
 		}
 		

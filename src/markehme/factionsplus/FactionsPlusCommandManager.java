@@ -26,7 +26,7 @@ public class FactionsPlusCommandManager {
 	
 	public static void setup() {
 		// Warp Commands 
-		if(Config.config.getBoolean(Config.str_enableWarps)) {
+		if(Config.warps.enabled) {
 			addSC(new CmdAddWarp()); 
 			addSC(new CmdRemoveWarp());
 			addSC(new CmdWarp());
@@ -34,7 +34,7 @@ public class FactionsPlusCommandManager {
 		}
 		
 		// Jail Commands
-		if(Config.config.getBoolean(Config.str_enableJails)) {
+		if(Config.jails.enabled) {
 			addSC(new CmdSetJail());
 			addSC(new CmdUnsetJail());
 			addSC(new CmdJail());

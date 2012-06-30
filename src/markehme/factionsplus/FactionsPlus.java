@@ -127,7 +127,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         if(Config.config.getBoolean(Config.str_enableBans)) {
         	pm.registerEvents(this.banlistener, this);
         }
-        if(Config.config.getBoolean(Config.str_enableJails)) {
+        if(Config.jails.enabled) {
         	pm.registerEvents(this.jaillistener, this);
         }
         if(Config.config.getBoolean(Config.str_enableDisguiseIntegration) && (Config.config.getBoolean(Config.str_unDisguiseIfInOwnTerritory) || Config.config.getBoolean(Config.str_unDisguiseIfInEnemyTerritory))) {

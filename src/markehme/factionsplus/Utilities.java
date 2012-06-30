@@ -80,7 +80,7 @@ public class Utilities {
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(FPlayer fplayer) {
-		String role = fplayer.getRole().toString().toLowerCase().trim();
+		String role = fplayer.getRole().toString().toLowerCase().trim();//TODO: bridge getRole
 		if(role.contains("officer") || role.contains("moderator")) {
 			return true;
 		}

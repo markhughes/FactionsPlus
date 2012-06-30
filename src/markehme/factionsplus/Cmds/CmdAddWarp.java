@@ -54,25 +54,14 @@ public class CmdAddWarp extends FCommand {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = myFaction;
 
-		boolean authallow = false;
 
-		if(Config.config.getBoolean(Config.str_membersCanSetWarps)) {
-			authallow = true;
-		} else {
-			if(Utilities.isOfficer(fplayer) && Config.config.getBoolean(Config.str_officersCanSetWarps)) {
-				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && Config.config.getBoolean(Config.str_leadersCanSetWarps)) {
-				authallow = true;
-			}
-		}
-
-		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+		if(!Config.warps.canSetOrRemoveWarps(fplayer)) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to create warps!");
 			return;
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(Config.config.getBoolean(Config.str_mustBeInOwnTerritoryToCreate)) {
+			if(Config.warps.mustBeInOwnTerritoryToCreate) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
@@ -84,8 +73,8 @@ public class CmdAddWarp extends FCommand {
 			}
 		}
 
-		if(Config.config.getInt(Config.str_maxWarps) != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= Config.config.getInt(Config.str_maxWarps)) {
+		if(Config.warps.maxWarps != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= Config.warps.maxWarps) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}
