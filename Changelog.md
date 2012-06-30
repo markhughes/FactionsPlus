@@ -10,7 +10,7 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 ### config.yml features
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
-  a warning showing on console
+  a warning showing on console, the commented options are preceded by "# DUPLICATE #"
 
 # FactionsPlus version 0.4.6
 * nothing specified here

@@ -681,6 +681,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 */
 	private static final HashMap<Field, LinkedList<WYIdentifier>>	mapField_to_ListOfWYIdentifier	=
 																										new HashMap<Field, LinkedList<WYIdentifier>>();
+	private static final String	commentPrefixForDUPs	= "DUPLICATE #";
 	
 	
 	private final static void parseCheckForValids( int level, WYSection root ) throws IOException {
@@ -734,7 +735,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																	// the list
 						if ( index >= 0 ) {// exists already ?
 							WYSection widsParent = wid.getParent();
-							currentItem = widsParent.replaceAndTransformInto_WYComment( wid );
+							currentItem = widsParent.replaceAndTransformInto_WYComment( wid , commentPrefixForDUPs);
 							// wid.replaceAndTransformSelfInto_WYComment();
 							// so we still have a getNext() to go to, after wid is basically destroyed(at
 							// least its getNext will be null after this)
