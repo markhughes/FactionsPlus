@@ -316,6 +316,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 									+ "` in field `" + field + "`\n" + "was already defined in field `" + existingField
 									+ "`\nBasically you cannot have the same oldalias for two different config options" );
 							}
+//							System.out.println(currentDotted);
 							// next
 							if ( ++current >= aliasesCount ) {
 								break;
@@ -585,7 +586,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// WYSection widsParent = wid.getParent();
 						// assert null ! it just wouldn't ever be null, else bad coding else where heh
 						currentItem = wid.getParent().replaceAndTransformInto_WYComment( wid, commentPrefixForINVALIDs );
-						FactionsPlus.warn( "Invalid config option was auto commented at line "
+						FactionsPlus.warn( "Invalid config option\n"+colorOnINVALID+dotted+ChatColor.RESET+" was auto commented at line "
 						// // + fileConfig
 						// + " at line "
 							+ colorOnINVALID + currentItem.getLineNumber() + '\n'// +ChatColor.RESET
