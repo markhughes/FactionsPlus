@@ -543,10 +543,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	/**
-	 * a mapping between the Field config option and an ordered list of WYIdentifiers encountered in config.yml<br>
+	 * a mapping between the Field config option and an ordered list of dottedform of and WYIdentifiers encountered in config.yml<br>
+	 * dotted form ie. extras.lwc.someid
 	 */
-	private static final HashMap<Field, LinkedList<WYIdentifier>>	mapField_to_ListOfWYIdentifier	=
-																										new HashMap<Field, LinkedList<WYIdentifier>>();
+	private static final HashMap<Field, LinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
+																										new HashMap<Field, LinkedList<DualPack<String, WYIdentifier>>>();
 	private static final String										commentPrefixForDUPs			= "DUPLICATE #";
 	private static final String										commentPrefixForINVALIDs		= "INVALID #";
 	private static final ChatColor									colorOnDuplicate				= ChatColor.YELLOW;
@@ -606,22 +607,22 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// .yml file
 						// well actually no, the above is false premising in the current context
 						
-						LinkedList<WYIdentifier> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
+						LinkedList<DualPack<String, WYIdentifier>> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
 						if ( null == existingWYIdList ) {
 							// first time creating the list for this Field 'found'
 							//which also means there should be no duplicate checks in this {} block
-							existingWYIdList = new LinkedList<WYIdentifier>();
-							List<WYIdentifier> impossible =
+							existingWYIdList = new LinkedList<DualPack<String, WYIdentifier>>();
+							LinkedList<DualPack<String, WYIdentifier>> impossible =
 								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
 							assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
 							assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
 							
 							
-							existingWYIdList.addLast( wid );// add all config options one by one in the order of occurrence
+							existingWYIdList.addLast( new DualPack(dotted, wid) );// add all config options one by one in the order of occurrence
 															// in
 															// config.yml
 							
-							assert existingWYIdList.contains( wid );
+							assert existingWYIdList.contains( new DualPack(dotted, wid ));
 							
 						} else {
 							// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
@@ -633,7 +634,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							//FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
 							//so either store hashmap or make sure equals compares dotted forms
 							//hashmap will be faster, a hashmap of dotted -> wid
-							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot)
+							//or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much overhead, hashmap ftw!
+							
+							
 							int index = existingWYIdList.indexOf( wid );// seeks 'wid' in list by doing .equals() on each of
 																		// them
 																		// inside
@@ -655,6 +658,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								
 								// this means, it will compare id without considering values (as per WYIdentifier's
 								// .equals()
+								
+								//if we're here this will work:
+								int activeLine=existingWYIdList.get( index ).getSecond().getLineNumber();
 								FactionsPlus
 									.warn( "Duplicate config option encountered in "
 										+ fileConfig
@@ -666,7 +672,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 										// + "This is how the line looks now(without leading spaces):\n"
 										+ colorOnDuplicate + currentItem.toString() +"\n"+ChatColor.RESET
 										+"the option at line "
-										+ChatColor.AQUA+existingWYIdList.get( index ).getLineNumber()
+										+ChatColor.AQUA+activeLine
 										+ChatColor.RESET+" overriddes this duplicate");
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
@@ -838,6 +844,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// but only if new values are not already set
 				mapField_to_ListOfWYIdentifier.clear();
 				parseCheckForValids( virtualRoot );
+
+				//TODO: when done:
+				mapField_to_ListOfWYIdentifier.clear();
+				
 				
 				
 			} catch ( IOException e ) {

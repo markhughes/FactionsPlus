@@ -7,6 +7,7 @@ public class Section_Economy {
 	@ConfigOption(oldAliases={
 		"economy.enableEconomy"
 		,"enableEconomy"
+		,"economy_enable"
 	})
 	public boolean enabled=false;
 	
