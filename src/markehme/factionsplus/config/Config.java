@@ -551,6 +551,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static final String										commentPrefixForINVALIDs		= "INVALID #";
 	private static final ChatColor									colorOnDuplicate				= ChatColor.YELLOW;
 	private static final ChatColor									colorOnINVALID					= ChatColor.YELLOW;
+	private static final ChatColor	colorLineNumOnDuplicate	= ChatColor.RED;
 	
 	
 	private final static void parseCheckForValids( WYSection root ) {
@@ -576,10 +577,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					String dotted = wid.getInAbsoluteDottedForm( virtualRoot );
-					
+					System.out.println(dotted);
 					Field foundAsField = dottedClassOptions_To_Fields.get( dotted );
 					if ( null == foundAsField ) {
-						// TODO: invalid config option encountered in config.yml
+						// done: invalid config option encountered in config.yml transforms into comment
 						// WYSection widsParent = wid.getParent();
 						// assert null ! it just wouldn't ever be null, else bad coding else where heh
 						currentItem = wid.getParent().replaceAndTransformInto_WYComment( wid, commentPrefixForINVALIDs );
@@ -591,13 +592,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 							// + "This is how the line looks now(without leading spaces):\n"
 							+ colorOnINVALID + currentItem.toString() );
-					} else {
+					} else {1
 						// System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
 						// or throw
 						// or move extras into file?
 						
-						// TODO: we can let the HashMap check if one already exists even though they will != but they will
+						// : we can let the HashMap check if one already exists even though they will != but they will
 						// .equals()
 						// if we define that
 						// so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate
@@ -608,6 +609,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						LinkedList<WYIdentifier> existingWYIdList = mapField_to_ListOfWYIdentifier.get( foundAsField );
 						if ( null == existingWYIdList ) {
 							// first time creating the list for this Field 'found'
+							//which also means there should be no duplicate checks in this {} block
 							existingWYIdList = new LinkedList<WYIdentifier>();
 							List<WYIdentifier> impossible =
 								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
@@ -622,7 +624,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							assert existingWYIdList.contains( wid );
 							
 						} else {
-							// check only if the list wasn't empty, if we're here it wasn't, thus it may alreay have at
+							// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
 							// least 1
 							// element which we
 							// must check against and see if wid isn't already existing there (as different instance though)
@@ -633,11 +635,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																		// the list
 							if ( index >= 0 ) {// exists already ?
 								WYSection widsParent = wid.getParent();
+								//TODO: also check if it is in any other lists, it probably isn't at this time.
 								currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
 								// wid.replaceAndTransformSelfInto_WYComment();
 								// so we still have a getNext() to go to, after wid is basically destroyed(at
 								// least its getNext will be null after this)
-								// let's not forget to remove this from list, TODO: also check if it is in any other lists
+								// let's not forget to remove this from list, 
 								// existingWYIdList.remove( index );// a MUST
 								// assert existingWYIdList.contains( wid );
 								// System.out.println(existingWYIdList.get( index ));
@@ -651,12 +654,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 									.warn( "Duplicate config option encountered in "
 										+ fileConfig
 										+ " at line "
-										+ colorOnDuplicate
+										+ colorLineNumOnDuplicate
 										+ currentItem.getLineNumber()
 										+ ChatColor.RESET
 										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 										// + "This is how the line looks now(without leading spaces):\n"
-										+ colorOnDuplicate + currentItem.toString() );
+										+ colorOnDuplicate + currentItem.toString() +"\n"+ChatColor.RESET
+										+"the option at line "
+										+ChatColor.AQUA+existingWYIdList.get( index ).getLineNumber()
+										+ChatColor.RESET+" overriddes this duplicate");
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
 								// stop? do
