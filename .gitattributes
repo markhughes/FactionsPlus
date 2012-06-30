@@ -8,7 +8,7 @@
 #hit Ok, this setting should now remain in effect unless you delete the local FactionsPlus repository and close again from remote
 
 
-#This setting tells git to always normalize all files. When committed they are stored with LF, 
+#This setting tells git to always normalize all files(in all subdirs and current dir). When committed they are stored with LF, 
 # on checkout they are converted to the OS's native line endings.
 * text
 
