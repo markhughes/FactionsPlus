@@ -5,17 +5,17 @@ public class TeleportsSection {
 	
 	@ConfigOption(oldAliases={
 		"Teleports.disallowTeleportingToEnemyLandViaHomeCommand"//newest
-		,"teleports.disallowTeleportingToEnemyLandViaHomeCommand"//newer even
+//		,"teleports.disallowTeleportingToEnemyLandViaHomeCommand"//newer even
 		,"homesintegration.disallowTeleportingToEnemyLandViaHomeCommand"//newer
 		,"disallowTeleportingToEnemyLandViaHomeCommand"//very old one
-		,""//for tests
+//		,""//for tests
 		})
 	public boolean disallowTeleportingToEnemyLandViaHomeCommand=true;
 	
 	
 	@ConfigOption(oldAliases={
 		"Teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newest
-		,"teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newer even
+//		,"teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newer even
 		,"homesintegration.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newer
 		,"reportSuccessfulByCommandTeleportsIntoEnemyLand"//very old one
 		})
@@ -24,7 +24,7 @@ public class TeleportsSection {
 	
 	@ConfigOption(oldAliases={
 		"Teleports.disallowTeleportingToEnemyLandViaEnderPeals"//newest
-		,"teleports.disallowTeleportingToEnemyLandViaEnderPeals"//old
+//		,"teleports.disallowTeleportingToEnemyLandViaEnderPeals"//old
 		})
 	public boolean disallowTeleportingToEnemyLandViaEnderPeals=true;
 	

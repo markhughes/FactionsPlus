@@ -309,7 +309,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
 						while ( true ) {
-							FactionsPlus.info( currentDotted + "/" + field );
+//							FactionsPlus.info( currentDotted + "/" + field );
 							Field existingField = dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {
 								throw new RuntimeException( "bad coding: your config option `" + currentDotted
