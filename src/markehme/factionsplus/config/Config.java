@@ -574,6 +574,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																										new HashMap<Field, LinkedList<WYIdentifier>>();
 	private static final String										commentPrefixForDUPs			= "DUPLICATE #";
 	private static final String										commentPrefixForINVALIDs		= "INVALID #";
+	private static final ChatColor	colorOnDuplicate	= ChatColor.YELLOW;
+	private static final ChatColor	colorOnINVALID	= ChatColor.YELLOW ;
 	
 	
 	private final static void parseCheckForValids( WYSection root ) {
@@ -609,11 +611,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						FactionsPlus.warn( "Invalid config option was auto commented at line "
 						// // + fileConfig
 						// + " at line "
-							+ ChatColor.YELLOW + currentItem.getLineNumber() + '\n'// +ChatColor.RESET
+							+ colorOnINVALID+ currentItem.getLineNumber() + '\n'// +ChatColor.RESET
 							// +
 							// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 							// + "This is how the line looks now(without leading spaces):\n"
-							+ ChatColor.YELLOW + currentItem.toString() );
+							+ colorOnINVALID+ currentItem.toString() );
 					} else {
 //						System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
@@ -674,10 +676,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 									.warn( "Duplicate config option encountered in "
 										+ fileConfig
 										+ " at line "
-										+ ChatColor.GRAY
-										+ currentItem.getLineNumber()
+										+ colorOnDuplicate
+										+ currentItem.getLineNumber()+ChatColor.RESET
 										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-										+ "This is how the line looks now(without leading spaces):\n" + ChatColor.GRAY
+//										+ "This is how the line looks now(without leading spaces):\n"
+										+colorOnDuplicate
 										+ currentItem.toString() );
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
