@@ -74,6 +74,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	@Override
 	public void onDisable() {
+		try {
 		if (null != metrics) {
 			try {
 				metrics.disable();
@@ -81,11 +82,20 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				e.printStackTrace();
 			}
 		}
+		
+		//TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE 
+		//since we deinited some of our parts
+		
 		if (LWCBase.isLWC()) {
 			LWCFunctions.unhookLWC();
 		}
+		
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
-		FactionsPlusPlugin.info("Disabled.");
+		FactionsPlusPlugin.info("Disabled successfuly.");
+		}catch(Throwable t) {
+			FactionsPlusPlugin.info("unable to successfully disable"); 
+			FactionsPlus.severe(t);
+		}
 	}
 	
 	
@@ -226,8 +236,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		//put your code above, let this be last:
 	}catch (Throwable t) {
-		FactionsPlus.severe( t,( t.getMessage() == null ? t.getClass().getSimpleName():t.getMessage() ) );
-//		t.printStackTrace();//FIXME: this makes each line have [SEVERE] which is unlike what happens when you just allow it to throw
+		FactionsPlus.severe( t);
+//		t.printStackTrace();//fixed: this makes each line have [SEVERE] which is unlike what happens when you just allow it to throw
 		if (isEnabled()) {
 			disableSelf();
 		}

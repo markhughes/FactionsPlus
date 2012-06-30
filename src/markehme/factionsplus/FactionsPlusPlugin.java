@@ -83,7 +83,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
 	public static RuntimeException bailOut( Throwable cause, String msg ) {
 		severe( cause, msg );
-		throw disableSelf( FactionsPlus.instance, true );
+		throw new BailingOutException(msg, cause);//disableSelf( FactionsPlus.instance, true );
 	}
 	
 	
@@ -106,6 +106,9 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		tellConsole( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS + ChatColor.DARK_PURPLE + logInfoMsg );
 	}
 	
+	public static void severe( Throwable cause) {
+		severe(cause,null);
+	}
 	
 	/**
 	 * @param cause
@@ -113,6 +116,9 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * @param logInfoMsg
 	 */
 	public static void severe( Throwable cause, String logInfoMsg ) {
+		if (null == logInfoMsg) {
+			logInfoMsg=cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
+		}
 		String msg = FactionsPlus.FP_TAG_IN_LOGS + logInfoMsg;
 		if ( null == cause ) {
 			FactionsPlus.log.severe( msg );// allowed so that [SEVERE] appears
@@ -136,22 +142,21 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	}
 	
 	
-	public static RuntimeException disableSelf( FactionsPlus fpInstance, boolean forceStop ) {
-		fpInstance.disableSelf();
-		if ( forceStop ) {
-			// FactionsPlus.log.log( Level.INFO, )
-			throw new RuntimeException( FactionsPlus.FP_TAG_IN_LOGS
-				+ " execution stopped by disableSelf() which means read the above colored message" );
-		}
-		return null;
-	}
+//	public static RuntimeException disableSelf( FactionsPlus fpInstance, boolean forceStop ) {
+//		fpInstance.disableSelf();
+//		if ( forceStop ) {
+//			// FactionsPlus.log.log( Level.INFO, )
+//			throw new RuntimeException( FactionsPlus.FP_TAG_IN_LOGS
+//				+ " execution stopped by disableSelf() which means read the above colored message" );
+//		}
+//		return null;
+//	}
 	
 	
 	/**
 	 * calling this will not stop execution at the point where the call is made, but will mark the plugin as disabled<br>
 	 * ie. shown in red when /plugins is issued
 	 * 
-	 * @param fpInstance
 	 */
 	public void disableSelf() {
 		setEnabled( false );// it will call onDisable() if it was enabled
