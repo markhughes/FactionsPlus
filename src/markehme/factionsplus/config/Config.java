@@ -139,37 +139,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// TODO: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
 	// oldaliases for section
 	@ConfigSection
-	public static final Banning				banning												= new Banning();
+	public static final BanningSection				banning												= new BanningSection();
 	
 	
-	public static final String				prefixBanning										= "banning" + DOT;
-	public static final String				str_enableBans										= prefixBanning
-																									+ "enableBans";
-	public static final String				str_leadersCanFactionBan							=
-																									prefixBanning
-																										+ "leadersCanFactionBan";
-	public static final String				str_officersCanFactionBan							=
-																									prefixBanning
-																										+ "officersCanFactionBan";
-	public static final String				str_leadersCanFactionUnban							=
-																									prefixBanning
-																										+ "leadersCanFactionUnban";
-	public static final String				str_officersCanFactionUnban							=
-																									prefixBanning
-																										+ "officersCanFactionUnban";
-	public static final String				str_leaderCanNotBeBanned							=
-																									prefixBanning
-																										+ "leaderCanNotBeBanned";
+	@ConfigSection
+	public static final RulesSection				rules												= new RulesSection();
 	
-	public static final String				prefixRules											= "rules" + DOT;
-	public static final String				str_enableRules										= prefixRules
-																									+ "enableRules";
-	public static final String				str_leadersCanSetRules								=
-																									prefixRules
-																										+ "leadersCanSetRules";
-	public static final String				str_officersCanSetRules								=
-																									prefixRules
-																										+ "officersCanSetRules";
 	public static final String				str_maxRulesPerFaction								=
 																									prefixRules
 																										+ "maxRulesPerFaction";
@@ -692,7 +667,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// + "This is how the line looks now(without leading spaces):\n"
 							+ ChatColor.YELLOW + currentItem.toString() );
 					} else {
-						System.out.println( "!!!" + dotted );
+//						System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
 						// or throw
 						// or move extras into file?

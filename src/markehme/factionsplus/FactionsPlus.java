@@ -124,7 +124,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         if(Config.config.getBoolean(Config.str_enableAnnounce)) {
     		pm.registerEvents(this.announcelistener, this);
         }
-        if(Config.config.getBoolean(Config.str_enableBans)) {
+        if(Config.banning.enabled) {
         	pm.registerEvents(this.banlistener, this);
         }
         if(Config.jails.enabled) {
