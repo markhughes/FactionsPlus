@@ -6,8 +6,35 @@ import java.util.Scanner;
 
 import markehme.factionsplus.config.*;
 
-public class FactionsPlusUpdate {
+public class FactionsPlusUpdate implements Runnable {
+	private static FactionsPlusUpdate once=null;
+	private static Thread updateThread=null;
+	
 	static public void checkUpdates() {
+		if (null == once) {
+			once=new FactionsPlusUpdate();
+			assert null == updateThread;
+			updateThread= new Thread(once);
+			updateThread.setDaemon( false );
+		}else {
+			updateThread.stop();
+		}
+		updateThread.start();
+	}
+	
+	public static void ensureNotRunning() {
+		if ((null != updateThread)&&(updateThread.isAlive())) {
+			updateThread.interrupt();
+			if (!updateThread.isInterrupted()) {
+				FactionsPlus.warn( "Killing update thread!" );
+				updateThread.stop();
+			}
+			assert !updateThread.isAlive();
+		}
+	}
+
+	@Override
+	public void run() {
 		String content = null;
 		URLConnection connection = null;
 		String v = FactionsPlus.version;

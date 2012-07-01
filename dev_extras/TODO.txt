@@ -83,4 +83,5 @@ support chat modes)
 - check all current occurrences of config options so that they are not used without the "._" ie. used the instance instead of the
   value
   
-  
+- updateCheck into own thread so it's non-blocking main onEnable(), could maybe use invokeLater
+

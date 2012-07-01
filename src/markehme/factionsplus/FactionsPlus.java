@@ -90,6 +90,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			LWCFunctions.unhookLWC();
 		}
 		
+		FactionsPlusUpdate.ensureNotRunning();
+		
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		FactionsPlusPlugin.info("Disabled successfuly.");
 		}catch(Throwable t) {
