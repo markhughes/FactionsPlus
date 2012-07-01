@@ -955,7 +955,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				TypedLinkedList<DualPack<String, WYIdentifier>> value = configOption_Field.getValue();
 				for ( DualPack<String, WYIdentifier> aliasesEncountered : value ) {
 					if (aliasesEncountered.equals( realAlias )) {
-						
+						1
 					}
 				}
 			}
