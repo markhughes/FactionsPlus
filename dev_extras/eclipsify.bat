@@ -1,4 +1,6 @@
 @echo off
+echo this needs to be updated, due to folders changed, no effect now
+exit
 rem since windows won't allow you to rename a file from ie. ".classpath.something" to 
 rem ".classpath" because it would ask for a name (.classpath being the extension)
 rem this small script will do the copying with new names of the right eclipse files
