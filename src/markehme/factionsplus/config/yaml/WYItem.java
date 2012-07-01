@@ -59,7 +59,7 @@ public abstract class WYItem<METADATA_TYPE> {
 	 *            an user defined object (can be null) which is a class or subclass of METADATA_TYPE passed to {@link WYItem}
 	 * @return old metadata (can be null)
 	 */
-	public METADATA_TYPE setNewMetadata( METADATA_TYPE metadata ) {
+	public METADATA_TYPE setMetadata( METADATA_TYPE metadata ) {
 		METADATA_TYPE oldMetadata = pointerToMetadata;
 		pointerToMetadata = metadata;
 		return oldMetadata;

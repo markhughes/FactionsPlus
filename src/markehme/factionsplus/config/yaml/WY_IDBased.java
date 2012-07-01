@@ -28,24 +28,26 @@ public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	}
 	
 	
-	public String getInAbsoluteDottedForm() {
-		return getID_InAbsoluteDottedForm( null );
-	}
-	
-	
-	/**
-	 * @param upToAndExcluding
-	 *            can be null
-	 * @return ie. extras.lwc.disableSomething
-	 */
-	public String getID_InAbsoluteDottedForm( WYSection upToAndExcluding ) {
-		String df = "";
-		WYSection p = getParent();
-		if ( ( null != p ) && ( !p.equals( upToAndExcluding ) ) ) {
-			df = p.getID_InAbsoluteDottedForm( upToAndExcluding ) + Config.DOT;
-		}
-		return df + this.getId();
-	}
+//	@Deprecated
+//	public String getInAbsoluteDottedForm() {
+//		return getID_InAbsoluteDottedForm( null );
+//	}
+//	
+//	
+//	/**
+//	 * @param upToAndExcluding
+//	 *            can be null
+//	 * @return ie. extras.lwc.disableSomething
+//	 */
+//	@Deprecated
+//	public String getID_InAbsoluteDottedForm( WYSection upToAndExcluding ) {
+//		String df = "";
+//		WYSection p = getParent();
+//		if ( ( null != p ) && ( !p.equals( upToAndExcluding ) ) ) {
+//			df = p.getID_InAbsoluteDottedForm( upToAndExcluding ) + Config.DOT;
+//		}
+//		return df + this.getId();
+//	}
 	
 	
 	@Override

@@ -8,6 +8,7 @@ import markehme.factionsplus.util.*;
 public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	
 	private WYItem	firstChild, lastChild;
+	private int	tmp_currentLine;
 	
 	
 	public WYSection( int lineNumber, String id ) {// , WYSection parent, WYItem prev) {
@@ -120,25 +121,35 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	 * @param whatThePreviousLineNumber
 	 *            the number of the first line, ie. should be 0 if you want the first line to be 1
 	 */
-	public void recalculateLineNumbers( WYSection root, int whatThePreviousLineNumber ) {
+	private void private_unsynchronized_recalculateLineNumbers( WYSection root ) {
 		assert Q.nn( root );
 		WYItem currentItem = root.getFirst();
-		int currentLine=whatThePreviousLineNumber;//pointing to previous line, atm
 		
 		while ( null != currentItem ) {
 			
-			currentLine++;//next line
+			tmp_currentLine++;//next line
 
-			currentItem.setLineNumber(currentLine);
+			currentItem.setLineNumber(tmp_currentLine);
 			
 
 			if ( WYSection.class == currentItem.getClass() ) {
 				WYSection cs = (WYSection)currentItem;
-				recalculateLineNumbers( cs, currentLine );// recurse
+				private_unsynchronized_recalculateLineNumbers( cs );// recurse
 			}
 			
 			currentItem = currentItem.getNext();
 		}
+	}
+	
+	public void recalculateLineNumbers( WYSection root, int whatThePreviousLineNumber ) {
+		synchronized (this) {
+			tmp_currentLine=whatThePreviousLineNumber;
+			
+		}
+	}
+	public void recalculateLineNumbers() {
+		
+		recalculateLineNumbers( this, 0 );
 	}
 	
 }

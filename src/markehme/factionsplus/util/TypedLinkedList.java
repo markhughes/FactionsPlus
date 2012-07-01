@@ -6,7 +6,7 @@ import markehme.factionsplus.config.*;
 
 
 
-public final class TypedLinkedList<TYPE> implements Iterable<TYPE> {
+public class TypedLinkedList<TYPE> implements Iterable<TYPE> {
 	
 	private LinkedList<TYPE>	ll	= new LinkedList<TYPE>();
 	

@@ -17,7 +17,9 @@ public final class SubSection_LWC {
 	}, realAlias_inNonDottedFormat = "removeAllLocksOnClaim" )
 	public  final _boolean removeAllLocksOnClaim=new _boolean(false);
 	
-	@Option(
+	@Option(oldAliases_alwaysDotted={
+		"extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory"
+	},
 			realAlias_inNonDottedFormat = "blockCPublicAccessOnNonOwnFactionTerritory" )
 	public  final _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
 }

@@ -180,9 +180,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config._extras.protection._lwc.removeAllLocksOnClaim._ ) {
+				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Consider setting `" + Config._extras.protection._lwc.removeAllLocksOnClaim._dottedName_asString
+					FactionsPlusPlugin.info( "Consider setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
 						+ "` to reset locks(on land claim) for more than just chests," +
 						" which is what Factions plugin already does right now" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
@@ -191,8 +191,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 		} else {//no LWC
-			if ( Config._extras.protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
-				|| Config._extras.protection._lwc.removeAllLocksOnClaim._ ) 
+			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
+				|| Config._extras._protection._lwc.removeAllLocksOnClaim._ ) 
 			{
 				FactionsPlusPlugin
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"

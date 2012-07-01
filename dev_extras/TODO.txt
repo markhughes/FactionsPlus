@@ -87,6 +87,6 @@ support chat modes)
 
 //done: recalculateLineNumbers - WYSection method to recalculate all line numbers based on current subtree
 
-- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
+//done first part- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
   this and apply those after we've inserted the new/missing lines, and after having called the WYSection.recalcLines()
   

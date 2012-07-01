@@ -126,7 +126,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;
 	// End Config
-	private static final String				SECTION_PREFIX			= "_";
+	
 	
 	
 	private static File						currentFolder_OnPluginClassInit;
@@ -154,7 +154,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// option
 		// names
 		
-		sanitize_AndUpdateClassMapping( configClass );
+		Typeo.sanitize_AndUpdateClassMapping( configClass );
 		
 		// map.key: dotted format config.yml settings(only key: value ones)
 		// map.value: Field.class instance of the
@@ -182,171 +182,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// throw Q.ni();
 	// }
 	
-	
-	
-	private static void sanitize_AndUpdateClassMapping( Class rootClass ) {
-		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
-		// onEnable
-		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
-		synchronized ( ConfigOptionName.dottedClassOptions_To_Fields ) {
-			ConfigOptionName.dottedClassOptions_To_Fields.clear();
-			parsify( rootClass, null, rootClass );
-		}
-	}
-	
-	
-	/**
-	 * this works only on the config options present in java code, none from config.yml here<br>
-	 * must be inside a synchronized ( ConfigOptionName.dottedClassOptions_To_Fields ) block<br>
-	 * @param rootClass
-	 * @param dottedParentSection
-	 * @param parentInstance
-	 */
-	private static void parsify( Class<?> rootClass, String dottedParentSection, Object parentInstance ) {
-		Field[] allFields = rootClass.getDeclaredFields();
-		// DeclaredAnnotations();
-		for ( int why = 0; why < allFields.length; why++ ) {
-			// System.out.println( "F: "+allFields[i] );
-			Field field = allFields[why];
-			Annotation[] currentFieldAnnotations = field.getDeclaredAnnotations();
-			for ( int jay = 0; jay < currentFieldAnnotations.length; jay++ ) {
-				// System.out.println("A: "+ currentFieldAnnotations[j] );
-				Annotation fieldAnnotation = currentFieldAnnotations[jay];
-				Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
-				if ( ( Section.class.equals( annotationType ) ) || ( Option.class.equals( annotationType ) ) ) {
-					
-					
-					// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
-					// Section_Jails.enabled instead of Config.jails.enabled
-					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled if
-					// enabled is private
-					// but protected is allowed, assuming you know what you're doing and you're using that only in the same
-					// package
-					int fieldModifiers = field.getModifiers();
-					Class<?> typeOfField = field.getType();// get( rootClass );
-					
-					
-					Object fieldInstance;
-					try {
-						fieldInstance = field.get( parentInstance );
-					} catch ( Exception e ) {
-						e.printStackTrace();
-						throw FactionsPlus.bailOut( "bad coding: the field `" + field + "` doesn't have an instance, "
-							+ "did you forget to add `= new ...();`" );
-						// this means that you couldn't use Config.thisfield.itschildfield because thisfield would be null and
-						// NPE
-						// ie. Config.extras.lwc would NPE if `extras` doesn't have an instance, make sure
-						// that extras is new-ed like: Classhere extras=new Classhere(); in Config
-					}
-					
-					boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
-					
-					
-					// must be non-private , but yes Final!
-					boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
-					
-					// allowed like this for some clarity:
-					if ( isTopLevelSection ) {
-						// it's toplevel section, should NOT BE private, should BE FINAL and STATIC
-						badMods |= !Modifier.isStatic( fieldModifiers );
-					} else {
-						badMods |= Modifier.isStatic( fieldModifiers );
-						// subsection should, NOT be static, NOT be private, but BE FINAL
-					}
-					
-					if ( badMods ) {
-						// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-						// Config.extras
-						// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-						// SubSection_LWC to access lwc's fields
-						// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-						// field
-						throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-							+ " field must be final+non-private+" + ( isTopLevelSection ? " static" : "non-static" )
-							+ " but instead it is: `" + field + "`" );
-					}
-					
-					if ( Section.class == annotationType ) {
-						
-						String realAlias = ( (Section)fieldAnnotation ).realAlias_neverDotted();
-						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
-						String dotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
-						
-						if ( !field.getName().startsWith( SECTION_PREFIX ) ) {
-							throw FactionsPlus.bailOut( "bad coding: by convention any @" + annotationType.getSimpleName()
-								+ " aka sections should have their field name start with `" + SECTION_PREFIX
-								+ "`. Please correct in source code." );
-						}
-						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
-						parsify( typeOfField, dotted, fieldInstance );// recurse
-						
-					} else {// it's @ConfigOption
-					
-						// if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
-						// || !Modifier.isFinal( fieldModifiers ) )
-						// // && ( null != dottedParentSection ) )
-						// {
-						// // means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-						// // Config.extras
-						// // but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-						// // SubSection_LWC to access lwc's fields
-						// // do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-						// // field
-						// throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-						// + " config option field must be public final static, but instead it is: `" + field + "`" );
-						// }
-						
-						// we already know it has an instance ie. it's new-ed
-						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
-							throw FactionsPlus.bailOut( "bad coding: the type of field `" + field + "` is not a subclass of `"
-								+ ConfigOptionName.class + "`" );
-						}
-						
-						
-						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
-						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
-						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
-						
-						
-						// must update the dotted form in the instance, because we know it now
-						( (ConfigOptionName)fieldInstance )._dottedName_asString = currentDotted;
-						
-						Option co = (Option)fieldAnnotation;
-						String[] aliasesArray = co.oldAliases_alwaysDotted();
-						int aliasesCount = aliasesArray.length;
-						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
-											// ordered)
-						while ( true ) {
-							// this will merge realAlias with oldAliases in the same destination HashMap
-							// FactionsPlus.info( currentDotted + "/" + field );
-							Field existingField = ConfigOptionName.dottedClassOptions_To_Fields.put( currentDotted, field );
-							if ( ( null != existingField ) ) {
-								FactionsPlus.bailOut( "bad coding: your config option `" + currentDotted + "` in field `"
-									+ field + "`\n" + "was already defined in field `" + existingField
-									+ "`\nBasically you cannot have the same oldalias for two different config options" );
-							}
-							// System.out.println(currentDotted);
-							// next
-							if ( ++current >= aliasesCount ) {
-								break;
-							}
-							currentDotted = aliasesArray[current];
-							if ( currentDotted.isEmpty() ) {
-								FactionsPlus.bailOut( "bad coding: one of the oldAliases in field `" + field + "`\n"
-									+ "should not be empty!!" );
-							}
-							// detect extra spaces(by mistake?) around the current old alias
-							if ( !currentDotted.trim().equals( currentDotted ) ) {
-								FactionsPlus.bailOut( "bad coding: the old alias `" + currentDotted + "` in field `" + field
-									+ "`\n" + "should not contain any extra whitespaces around it!" );
-							}
-						}// while
-							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
-					}// else we don't care
-				}
-			}
-		}
-	}
 	
 	
 	/**
@@ -551,226 +386,203 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 */
 	private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
 																																new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
-	private static final String																commentPrefixForDUPs			=
-																																"DUPLICATE #";
-	private static final String																commentPrefixForINVALIDs		=
-																																"INVALID #";
-	private static final String																commentPrefixForOVERRIDDENones	=
-																																"OVERRIDDEN by %s at line %d #";
 	
-	private static final ChatColor															colorOnDuplicate				=
-																																ChatColor.YELLOW;
-	private static final ChatColor															colorOnINVALID					=
-																																ChatColor.YELLOW;
-	private static final ChatColor															colorLineNumOnDuplicate			=
-																																ChatColor.RED;
 	
 	
 	/**
 	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
+	 * 
 	 * @param root
 	 */
-	private final static void parseCheckForValids( WYSection root ) {
+	private final static void parseCheckForValids( WYSection root, String dottedParentSection ) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		// WYSection parent = root;
+		// int level=0;
+		// while ( null != parent ) {
+		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
 		
-			assert Q.nn( root );
-			WYItem currentItem = root.getFirst();
-			// WYSection parent = root;
-			// int level=0;
-			// while ( null != parent ) {
+		while ( null != currentItem ) {
 			
-			while ( null != currentItem ) {
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
+				// options and thus
+				// are indirectly checked when config options(aka ids) are checked
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
 				
-				Class<? extends WYItem> cls = currentItem.getClass();
-				
-				if ( WYSection.class == cls ) {
-					WYSection cs = (WYSection)currentItem;
-					// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
-					// options and thus
-					// are indirectly checked when config options(aka ids) are checked
-					parseCheckForValids( cs );// recurse
-					// parent = cs;
-					// currentItem = cs.getFirst();
-				} else {
-					if ( WYIdentifier.class == cls ) {
-						WYIdentifier wid = ( (WYIdentifier)currentItem );
-						String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
-						// System.out.println( dotted );
-						Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
-						if ( null == foundAsField ) {
-							// done: invalid config option encountered in config.yml transforms into comment
-							// WYSection widsParent = wid.getParent();
-							// assert null ! it just wouldn't ever be null, else bad coding else where heh
-							currentItem = wid.getParent().replaceAndTransformInto_WYComment( wid, commentPrefixForINVALIDs );
-							FactionsPlus.warn( "Invalid config option\n" + colorOnINVALID + dotted + ChatColor.RESET
-								+ " was auto commented at line "
-								// // + fileConfig
-								// + " at line "
-								+ colorOnINVALID + currentItem.getLineNumber() + '\n'// +ChatColor.RESET
-								// +
-								// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-								// + "This is how the line looks now(without leading spaces):\n"
-								+ colorOnINVALID + currentItem.toString() );
+				parseCheckForValids( cs, dotted );// recurse
+				// parent = cs;
+				// currentItem = cs.getFirst();
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					// String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
+					// System.out.println( dotted );
+					Field foundAsField = Typeo.getField_correspondingTo_DottedFormat( dotted );
+					if ( null == foundAsField ) {
+						// done: invalid config option encountered in config.yml transforms into comment
+						// WYSection widsParent = wid.getParent();
+						// assert null ! it just wouldn't ever be null, else bad coding else where heh
+						COMetadata oldmd = wid.setMetadata( new CO_Invalid( wid, dotted ) );
+						assert null == oldmd : "should not already have metadata, else we failed somewhere else";
+					} else {
+						// System.out.println( "!!!" + dotted );
+						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
+						// or throw
+						// or move extras into file?
+						
+						// : we can let the HashMap check if one already exists even though they will != but they will
+						// .equals()
+						// if we define that
+						// so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate
+						// options in
+						// .yml file
+						// well actually no, the above is false premising in the current context
+						
+						TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList =
+							mapField_to_ListOfWYIdentifier.get( foundAsField );
+						if ( null == existingWYIdList ) {
+							// first time creating the list for this Field 'found'
+							// which also means there should be no duplicate checks in this {} block
+							existingWYIdList = new TypedLinkedList<DualPack<String, WYIdentifier>>();
+							TypedLinkedList<DualPack<String, WYIdentifier>> impossible =
+								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
+							assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
+							assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
+							
+							
+							existingWYIdList.addLast( new DualPack( dotted, wid ) );// add all config options one by one in
+																					// the
+																					// order of occurrence
+							// in
+							// config.yml
+							
+							assert existingWYIdList.contains( new DualPack( dotted, wid ) );
+							
 						} else {
-							// System.out.println( "!!!" + dotted );
-							// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
-							// or throw
-							// or move extras into file?
+							// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
+							// least 1
+							// element which we
+							// must check against and see if wid isn't already existing there (as different instance though)
+							// does id already exist, ie. duplicate encountered in .yml ?
 							
-							// : we can let the HashMap check if one already exists even though they will != but they will
-							// .equals()
-							// if we define that
-							// so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate
-							// options in
-							// .yml file
-							// well actually no, the above is false premising in the current context
+							// FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
+							// so either store hashmap or make sure equals compares dotted forms
+							// hashmap will be faster, a hashmap of dotted -> wid
+							// or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much
+							// overhead,
+							// hashmap ftw!
 							
-							TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList =
-								mapField_to_ListOfWYIdentifier.get( foundAsField );
-							if ( null == existingWYIdList ) {
-								// first time creating the list for this Field 'found'
-								// which also means there should be no duplicate checks in this {} block
-								existingWYIdList = new TypedLinkedList<DualPack<String, WYIdentifier>>();
-								TypedLinkedList<DualPack<String, WYIdentifier>> impossible =
-									mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
-								assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
-								assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
+							
+							int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
+							// seeks dotted format 'wid' in list by doing .equals() on each of
+							// them // inside // the list
+							if ( index >= 0 ) {// exists already ?
+								WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
+								int activeLine = activeCfgOption.getLineNumber();
+								
+								COMetadata oldmd = wid.setMetadata( new CO_Duplicate( wid, dotted, activeCfgOption ) );
+								assert null == oldmd : "should not already have metadata, else we failed somewhere else";
+								
+								// WYSection widsParent = wid.getParent();
+								// TODO: also check if it is in any other lists, it probably isn't at this time.
+								// currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
+								// wid.replaceAndTransformSelfInto_WYComment();
+								// so we still have a getNext() to go to, after wid is basically destroyed(at
+								// least its getNext will be null after this)
+								// let's not forget to remove this from list,
+								// existingWYIdList.remove( index );// a MUST
+								// assert existingWYIdList.contains( wid );
+								// System.out.println(existingWYIdList.get( index ));
+								// existingWYIdList.add( index, currentItem );
+								// assert !existingWYIdList.contains( wid );
+								// assert existingWYIdList.contains( currentItem);
+								
+								// this means, it will compare id without considering values (as per WYIdentifier's
+								// .equals()
+								
+								// if we're here this will work:
 								
 								
-								existingWYIdList.addLast( new DualPack( dotted, wid ) );// add all config options one by one in
-																						// the
-																						// order of occurrence
-								// in
-								// config.yml
-								
-								assert existingWYIdList.contains( new DualPack( dotted, wid ) );
-								
+								// TODO: what to do when same config is encountered twice, does it override the prev one? do
+								// we
+								// stop? do
+								// we move it to some file for reviewal? or do we comment it out?
 							} else {
-								// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
-								// least 1
-								// element which we
-								// must check against and see if wid isn't already existing there (as different instance though)
-								// does id already exist, ie. duplicate encountered in .yml ?
-								
-								// FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
-								// so either store hashmap or make sure equals compares dotted forms
-								// hashmap will be faster, a hashmap of dotted -> wid
-								// or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much
-								// overhead,
-								// hashmap ftw!
-								
-								
-								int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
-								// seeks dotted format 'wid' in list by doing .equals() on each of
-								// them // inside // the list
-								if ( index >= 0 ) {// exists already ?
-									WYSection widsParent = wid.getParent();
-									// TODO: also check if it is in any other lists, it probably isn't at this time.
-									currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
-									// wid.replaceAndTransformSelfInto_WYComment();
-									// so we still have a getNext() to go to, after wid is basically destroyed(at
-									// least its getNext will be null after this)
-									// let's not forget to remove this from list,
-									// existingWYIdList.remove( index );// a MUST
-									// assert existingWYIdList.contains( wid );
-									// System.out.println(existingWYIdList.get( index ));
-									// existingWYIdList.add( index, currentItem );
-									// assert !existingWYIdList.contains( wid );
-									// assert existingWYIdList.contains( currentItem);
-									
-									// this means, it will compare id without considering values (as per WYIdentifier's
-									// .equals()
-									
-									// if we're here this will work:
-									WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
-									
-									int activeLine = activeCfgOption.getLineNumber();
-									FactionsPlus
-										.warn( "Duplicate config option encountered in "
-											+ fileConfig
-											+ " at line "
-											+ colorLineNumOnDuplicate
-											+ currentItem.getLineNumber()
-											+ ChatColor.RESET
-											+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-											// + "This is how the line looks now(without leading spaces):\n"
-											+ colorOnDuplicate + currentItem.toString() + "\n" + ChatColor.RESET
-											+ "the option at line " + ChatColor.AQUA + activeLine + ChatColor.RESET
-											+ " overriddes this duplicate with value " + ChatColor.AQUA
-											+ activeCfgOption.getValue() );
-									// TODO: what to do when same config is encountered twice, does it override the prev one? do
-									// we
-									// stop? do
-									// we move it to some file for reviewal? or do we comment it out?
-								} else {
-									// doesn't exit, we add it to list
-									existingWYIdList.addLast( new DualPack( dotted, wid ) );
-								}
+								// doesn't exit, we add it to list
+								existingWYIdList.addLast( new DualPack( dotted, wid ) );
 							}
-							assert null != existingWYIdList;// obviously
-							
-							
-						}// end of else found
-						
-						// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
-						// if ( null == rtcid ) {
-						// // there isn't a runtime option for the encountered id(=config option name)
-						// // therefore we check if it's an old alias
-						// Object newId = getNewIdForTheOldAlias( wid );// if any
-						// if ( null != newId ) {
-						// // not old alias either
-						// // thus it's an invalid config option encountered
-						// String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config
-						// line/pos
-						// // for it
-						// // first make sure it won't be written on next config save, by removing it from chain
-						// // wid.removeSelf();
-						// throw new RuntimeException( failMsg );//it won't be written to config if we abort
-						// }
-						//
-						// // we then found an old alias for this id, since we're here
-						// if ( newId.encounteredAliasesCount() < 1 ) {
-						// // update the newID's value with the old alias' value
-						// newId.setValue( wid.getValue() );
-						// newId.addEncounteredOldAlias( wid );
-						// } else {
-						// // we already encountered an alias for this id
-						// // how would we know which is the right value
-						// // for now we consider the last encountered alias as the overriding value
-						// newId.setValue( wid.getValue() );
-						// newId.addEncounteredOldAlias( wid );
-						// FactionsPlus
-						// .warn( " Config option " + newId.getInAbsoluteDottedForm()
-						// + " was overwritten by old alias found for it "
-						// + wid.getInAbsoluteDottedForm( virtualRoot ) );
-						// }
-						// } else {
-						// if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
-						//
-						// } else {
-						// rtcid.linkTo( wid );
-						// rtcid.setValue( wid.getValue() );
-						// }
-						// }
+						}
+						assert null != existingWYIdList;// obviously
 						
 						
-						
-					} else {// non id
-						assert ( currentItem instanceof WYRawButLeveledLine );
-						// ignore raw lines like comments or empty lines, for now
-						// currentItem = currentItem.getNext();
-					}
-				}// else
-				
-				// if (null == currentItem) {
-				// WYSection par = currentItem.getParent();
-				// if (null != par);
-				// }
-				currentItem = currentItem.getNext();
-			}// inner while
-				// parent = parent.getParent();
-			// }// outer while
+					}// end of else found
+					
+					// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
+					// if ( null == rtcid ) {
+					// // there isn't a runtime option for the encountered id(=config option name)
+					// // therefore we check if it's an old alias
+					// Object newId = getNewIdForTheOldAlias( wid );// if any
+					// if ( null != newId ) {
+					// // not old alias either
+					// // thus it's an invalid config option encountered
+					// String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config
+					// line/pos
+					// // for it
+					// // first make sure it won't be written on next config save, by removing it from chain
+					// // wid.removeSelf();
+					// throw new RuntimeException( failMsg );//it won't be written to config if we abort
+					// }
+					//
+					// // we then found an old alias for this id, since we're here
+					// if ( newId.encounteredAliasesCount() < 1 ) {
+					// // update the newID's value with the old alias' value
+					// newId.setValue( wid.getValue() );
+					// newId.addEncounteredOldAlias( wid );
+					// } else {
+					// // we already encountered an alias for this id
+					// // how would we know which is the right value
+					// // for now we consider the last encountered alias as the overriding value
+					// newId.setValue( wid.getValue() );
+					// newId.addEncounteredOldAlias( wid );
+					// FactionsPlus
+					// .warn( " Config option " + newId.getInAbsoluteDottedForm()
+					// + " was overwritten by old alias found for it "
+					// + wid.getInAbsoluteDottedForm( virtualRoot ) );
+					// }
+					// } else {
+					// if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
+					//
+					// } else {
+					// rtcid.linkTo( wid );
+					// rtcid.setValue( wid.getValue() );
+					// }
+					// }
+					
+					
+					
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+					// currentItem = currentItem.getNext();
+				}
+			}// else
 			
-		//}// sync
+			// if (null == currentItem) {
+			// WYSection par = currentItem.getParent();
+			// if (null != par);
+			// }
+			currentItem = currentItem.getNext();
+		}// inner while
+			// parent = parent.getParent();
+		// }// outer while
+		
+		// }// sync
 	}
 	
 	private static BufferedWriter	bw;
@@ -874,7 +686,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// but only if new values are not already set
 				synchronized ( mapField_to_ListOfWYIdentifier ) {
 					mapField_to_ListOfWYIdentifier.clear();
-					parseCheckForValids( virtualRoot );
+					parseCheckForValids( virtualRoot, null );
 					
 					
 					sortOverrides();// from mapField_to_ListOfWYIdentifier
@@ -899,6 +711,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			throw FactionsPlus.bailOut( "inexistent config" );
 		}
 		
+		applyChanges();
 		
 		saveConfig();
 		
@@ -959,14 +772,60 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
+	private static void applyChanges() {
+		virtualRoot.recalculateLineNumbers();
+		parseAndApplyChanges( virtualRoot );// ,null);//like setting lines as comments due to duplicates/invalid/overridden
+	}
+	
+	
+	private static void parseAndApplyChanges( WYSection root ) {// , String dottedParentSection) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		// boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		while ( null != currentItem ) {
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				// String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
+				parseAndApplyChanges( cs );// , dotted );// recurse
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					// String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					COMetadata meta = wid.getMetadata();
+					if (null != meta) {
+						//ok this one has meta, ie. it's one of duplicate/invalid/overridden
+						currentItem=meta.apply();
+					}
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+					// currentItem = currentItem.getNext();
+				}
+			}// else
+			
+			// if (null == currentItem) {
+			// WYSection par = currentItem.getParent();
+			// if (null != par);
+			// }
+			currentItem = currentItem.getNext();
+		}// while
+	}
+	
+	
 	private static void sortOverrides() {
 		synchronized ( mapField_to_ListOfWYIdentifier ) {
 			DualPack dualsearch = new DualPack( "", WYIdentifier.NULL );
 			// parse all found config options in .yml , only those found! and sort the list for their overrides
 			// which means, we'll now know what option overrides which one if more than 1 was found in .yml for a specific
 			// config field
-			//realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
-			//the top oldAliases override the bottom ones when looking at the @Option annotation
+			// realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
+			// the top oldAliases override the bottom ones when looking at the @Option annotation
 			
 			Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
 				mapField_to_ListOfWYIdentifier.entrySet();
@@ -1019,14 +878,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				assert null != first;// must have at least the realAlias in that list;
 				while ( iter.hasNext() ) {
 					DualPack<String, WYIdentifier> overridenOne = iter.next();
-					WYIdentifier wid = overridenOne.getSecond();
-					wid.getParent().replaceAndTransformInto_WYComment( wid,
-						String.format( commentPrefixForOVERRIDDENones, first.getFirst(), first.getSecond().getLineNumber() ) );
-					FactionsPlus.warn( "Config option " + ChatColor.AQUA + first.getFirst() + ChatColor.RESET + " at line "
-						+ ChatColor.AQUA + first.getSecond().getLineNumber() + ChatColor.RESET
-						+ " overrides the old alias for it `" + ChatColor.DARK_AQUA + overridenOne.getFirst() + ChatColor.RESET
-						+ "` which is at line " + ChatColor.DARK_AQUA + wid.getLineNumber() + ChatColor.RESET
-						+ " which was also transformed into comment to show it's ignored." );
+					WYIdentifier<COMetadata> wid = overridenOne.getSecond();
+					wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
 				}
 				
 				// TODO: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
@@ -1055,97 +908,97 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static void coalesceOverrides( WYSection root ) {
-		synchronized ( mapField_to_ListOfWYIdentifier ) {
-			assert !mapField_to_ListOfWYIdentifier.isEmpty();
-			
-			assert Q.nn( root );
-			WYItem currentItem = root.getFirst();
-			// WYSection parent = root;
-			// int level=0;
-			// while ( null != parent ) {
-			
-			while ( null != currentItem ) {
-				
-				Class<? extends WYItem> cls = currentItem.getClass();
-				
-				if ( WYSection.class == cls ) {
-					WYSection cs = (WYSection)currentItem;
-					// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
-					// options and thus
-					// are indirectly checked when config options(aka ids) are checked
-					coalesceOverrides( cs );// recurse
-					// parent = cs;
-					// currentItem = cs.getFirst();
-				} else {
-					if ( WYIdentifier.class == cls ) {
-						WYIdentifier wid = ( (WYIdentifier)currentItem );
-						String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
-						// System.out.println( dotted );
-						
-						// parse each of the encountered key:value in config, and
-						// check if it's overridden by one before it or by the realAlias, then comment it out if so
-						Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
-						if ( null == foundAsField ) {
-							throw FactionsPlus
-								.bailOut( "this should not happen at this time, cause previous code took care of it?" );
-						} else {
-							TypedLinkedList<DualPack<String, WYIdentifier>> list =
-								mapField_to_ListOfWYIdentifier.get( foundAsField );
-							FactionsPlus.warn( ChatColor.YELLOW + dotted + " " + list.size() );
-							// // TODO: make sure here the order in which we check is the ordered that we encountered them in
-							// file
-							// Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
-							// list.entrySet();
-							// for ( DualPack<String, WYIdentifier> configOption_Field : list )
-							// {
-							// Field field = configOption_Field.getKey();
-							// Option fieldAnno = field.getAnnotation( Option.class );
-							// assert null != fieldAnno;
-							// String realAlias_undotted = fieldAnno.realAlias_inNonDottedFormat();
-							// // realAliasDotted=field.get
-							// 1
-							// FactionsPlus.warn( realAlias_undotted );// +" / "+realAliasDotted);
-							// TypedLinkedList<DualPack<String, WYIdentifier>> value = configOption_Field.getValue();
-							// assert value.size() == 1;
-							for ( DualPack<String, WYIdentifier> aliasesEncountered : list ) {
-								String dottedFormOfField = aliasesEncountered.getFirst();
-								// TODO: must find better way
-								int dotEndsAt = dottedFormOfField.lastIndexOf( Config.DOT ) + 1;
-								assert dotEndsAt < dottedFormOfField.length();
-								String undottedField =
-									dotEndsAt >= 0 ? dottedFormOfField.substring( dotEndsAt ) : dottedFormOfField;
-								
-								WYIdentifier realOrOldAliasAndValue = aliasesEncountered.getSecond();// if real=>undotted;
-																										// else it's dotted
-								
-								FactionsPlus.info( ChatColor.YELLOW + undottedField + ": " + ChatColor.RED
-									+ realOrOldAliasAndValue );
-								// if ( aliasesEncountered.getFirst().equals( realAlias_undotted ) ) {
-								// //
-								// }
-							}// for
-							System.out.println( "." );
-							
-							// }
-						}// else
-					} else {// non id
-						assert ( currentItem instanceof WYRawButLeveledLine );
-						// ignore raw lines like comments or empty lines, for now
-						// currentItem = currentItem.getNext();
-					}
-				}// else
-				
-				// if (null == currentItem) {
-				// WYSection par = currentItem.getParent();
-				// if (null != par);
-				// }
-				currentItem = currentItem.getNext();
-			}// inner while
-				// parent = parent.getParent();
-			// }// outer while
-		}// sync
-	}
+	// private static void coalesceOverrides( WYSection root ) {
+	// synchronized ( mapField_to_ListOfWYIdentifier ) {
+	// assert !mapField_to_ListOfWYIdentifier.isEmpty();
+	//
+	// assert Q.nn( root );
+	// WYItem currentItem = root.getFirst();
+	// // WYSection parent = root;
+	// // int level=0;
+	// // while ( null != parent ) {
+	//
+	// while ( null != currentItem ) {
+	//
+	// Class<? extends WYItem> cls = currentItem.getClass();
+	//
+	// if ( WYSection.class == cls ) {
+	// WYSection cs = (WYSection)currentItem;
+	// // sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
+	// // options and thus
+	// // are indirectly checked when config options(aka ids) are checked
+	// coalesceOverrides( cs );// recurse
+	// // parent = cs;
+	// // currentItem = cs.getFirst();
+	// } else {
+	// if ( WYIdentifier.class == cls ) {
+	// WYIdentifier wid = ( (WYIdentifier)currentItem );
+	// String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
+	// // System.out.println( dotted );
+	//
+	// // parse each of the encountered key:value in config, and
+	// // check if it's overridden by one before it or by the realAlias, then comment it out if so
+	// Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
+	// if ( null == foundAsField ) {
+	// throw FactionsPlus
+	// .bailOut( "this should not happen at this time, cause previous code took care of it?" );
+	// } else {
+	// TypedLinkedList<DualPack<String, WYIdentifier>> list =
+	// mapField_to_ListOfWYIdentifier.get( foundAsField );
+	// FactionsPlus.warn( ChatColor.YELLOW + dotted + " " + list.size() );
+	// // // TODO: make sure here the order in which we check is the ordered that we encountered them in
+	// // file
+	// // Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
+	// // list.entrySet();
+	// // for ( DualPack<String, WYIdentifier> configOption_Field : list )
+	// // {
+	// // Field field = configOption_Field.getKey();
+	// // Option fieldAnno = field.getAnnotation( Option.class );
+	// // assert null != fieldAnno;
+	// // String realAlias_undotted = fieldAnno.realAlias_inNonDottedFormat();
+	// // // realAliasDotted=field.get
+	// // 1
+	// // FactionsPlus.warn( realAlias_undotted );// +" / "+realAliasDotted);
+	// // TypedLinkedList<DualPack<String, WYIdentifier>> value = configOption_Field.getValue();
+	// // assert value.size() == 1;
+	// for ( DualPack<String, WYIdentifier> aliasesEncountered : list ) {
+	// String dottedFormOfField = aliasesEncountered.getFirst();
+	// // TODO: must find better way
+	// int dotEndsAt = dottedFormOfField.lastIndexOf( Config.DOT ) + 1;
+	// assert dotEndsAt < dottedFormOfField.length();
+	// String undottedField =
+	// dotEndsAt >= 0 ? dottedFormOfField.substring( dotEndsAt ) : dottedFormOfField;
+	//
+	// WYIdentifier realOrOldAliasAndValue = aliasesEncountered.getSecond();// if real=>undotted;
+	// // else it's dotted
+	//
+	// FactionsPlus.info( ChatColor.YELLOW + undottedField + ": " + ChatColor.RED
+	// + realOrOldAliasAndValue );
+	// // if ( aliasesEncountered.getFirst().equals( realAlias_undotted ) ) {
+	// // //
+	// // }
+	// }// for
+	// System.out.println( "." );
+	//
+	// // }
+	// }// else
+	// } else {// non id
+	// assert ( currentItem instanceof WYRawButLeveledLine );
+	// // ignore raw lines like comments or empty lines, for now
+	// // currentItem = currentItem.getNext();
+	// }
+	// }// else
+	//
+	// // if (null == currentItem) {
+	// // WYSection par = currentItem.getParent();
+	// // if (null != par);
+	// // }
+	// currentItem = currentItem.getNext();
+	// }// inner while
+	// // parent = parent.getParent();
+	// // }// outer while
+	// }// sync
+	// }
 	
 	
 	public static boolean isInited() {
