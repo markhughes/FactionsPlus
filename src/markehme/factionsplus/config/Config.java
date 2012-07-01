@@ -870,9 +870,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					sortOverrides();// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
-//					coalesceOverrides( virtualRoot );
+					// coalesceOverrides( virtualRoot );
 					
-//					addMissingFieldsToConfig( virtualRoot );
+					// addMissingFieldsToConfig( virtualRoot );
 					// TODO: when done:
 					mapField_to_ListOfWYIdentifier.clear();
 					
@@ -1015,6 +1015,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						+ "` which is at line " + ChatColor.DARK_AQUA + wid.getLineNumber() + ChatColor.RESET
 						+ " which was also transformed into comment to show it's ignored." );
 				}
+				
+				// TODO: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
+				// mark the overridden/invalid/duplicates as such but not yet modify them, and only at the end, after we've also
+				// inserted missing option, then and only then modify the lines(by transforming into comments) since by this
+				// time now we'll have the line numbers correctly
+				
 				// for ( DualPack<String, WYIdentifier> overridingOrder : listInOverridingOrder ) {
 				// overridingOrder.getFirst();
 				// }

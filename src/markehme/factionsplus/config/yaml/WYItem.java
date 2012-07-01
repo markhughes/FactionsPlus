@@ -21,7 +21,7 @@ public abstract class WYItem {
 	
 	// FIXME: must store lines relative to how many items are inserted, based on whoever we consider top parent but everytime
 	// we'd insert a new item all lines after it must be recomputed which may not be what we want ... i see
-	
+	//maybe allow a method to be called to recompute all lines, once, and not on every init
 	
 	
 	/**
