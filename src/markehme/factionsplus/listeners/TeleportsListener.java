@@ -49,7 +49,7 @@ public class TeleportsListener implements Listener {
 		//TODO: implement disallow teleports via ender pearls into safe/warzone too
 		
 		if ( (!isHomeTracking())
-		        && (!Config.teleports.disallowTeleportingToEnemyLandViaEnderPeals)) {
+		        && (!Config._teleports.disallowTeleportingToEnemyLandViaEnderPeals)) {
 			//don't hook if neither of the two are set
 			return;
 		}
@@ -62,7 +62,7 @@ public class TeleportsListener implements Listener {
 	}
 	
 	private final static boolean isHomeTracking() {//private/final so it can be inlined by compiler, supposedly
-	    return Config.teleports.disallowTeleportingToEnemyLandViaHomeCommand || Config.teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand;
+	    return Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand || Config._teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand;
 	}
 	
 //	/**
@@ -162,7 +162,7 @@ public class TeleportsListener implements Listener {
 			String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
 			//this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 			//( null != lastExecutedCommandByPlayer ) &&  (
-			if ((Config.teleports.disallowTeleportingToEnemyLandViaHomeCommand)&&(!Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ))) {
+			if ((Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand)&&(!Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ))) {
 				//disallowed and no permission to bypass ? then check
 				if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
 					//TODO: think about having a list of commands here which when used to teleport into X territory 
@@ -178,7 +178,7 @@ public class TeleportsListener implements Listener {
 				}
 			}
 			
-			if (( Config.teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand )&&(!event.isCancelled())) {
+			if (( Config._teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand )&&(!event.isCancelled())) {
 				//yeah report even if player had bypass permission but only if it will be a successful teleport
 				Location targetLocation = event.getTo();
 				Faction fac = getFactionAt( targetLocation );
@@ -193,7 +193,7 @@ public class TeleportsListener implements Listener {
 			break;// cause COMMAND
 			
 		case ENDER_PEARL:
-			if (Config.teleports.disallowTeleportingToEnemyLandViaEnderPeals) {//not adding a perm for this
+			if (Config._teleports.disallowTeleportingToEnemyLandViaEnderPeals) {//not adding a perm for this
 				Location targetLocation = event.getTo();
 				if ( isEnemyLandAt( player, targetLocation ) ) {
 					player.sendMessage( ChatColor.RED

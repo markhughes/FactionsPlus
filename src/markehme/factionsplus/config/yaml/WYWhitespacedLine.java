@@ -1,4 +1,4 @@
-package markehme.factionsplus.config;
+package markehme.factionsplus.config.yaml;
 
 
 public class WYWhitespacedLine extends WYRawButLeveledLine {

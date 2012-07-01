@@ -1,4 +1,4 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.util;
 
 import java.io.*;
 import java.nio.charset.*;

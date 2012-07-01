@@ -12,7 +12,7 @@ public class FactionsPlusUpdate {
 		URLConnection connection = null;
 		String v = FactionsPlus.version;
 		
-		if(Config.extras.disableUpdateCheck) {
+		if(Config._extras.disableUpdateCheck) {
 			return;
 		}
 		

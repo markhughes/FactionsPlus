@@ -52,7 +52,7 @@ public class CmdRemoveWarp extends FCommand {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		
 		
-		if(!Config.warps.canSetOrRemoveWarps(fplayer)) {
+		if(!Config._warps.canSetOrRemoveWarps(fplayer)) {
 			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to remove warps!");
 			return;
 		}
@@ -85,8 +85,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(Config.economy.costToDeleteWarp > 0.0d && !Config.economy.enabled) {
-				if (!payForCommand(Config.economy.costToDeleteWarp, "to remove this warp", "for removing the warp")) {
+		    if(Config._economy.costToDeleteWarp > 0.0d && !Config._economy.enabled) {
+				if (!payForCommand(Config._economy.costToDeleteWarp, "to remove this warp", "for removing the warp")) {
 					return;
 				}
 			}

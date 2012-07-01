@@ -1,99 +1,100 @@
-package markehme.factionsplus.config;
+package markehme.factionsplus.config.sections;
 
 import com.massivecraft.factions.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 
 public class Section_Warps{
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 		"warps.enableWarps"
 		,"enableWarps"
-		})
+		}, realAlias_inNonDottedFormat = "enabled" )
 	public boolean enabled=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.leadersCanSetWarps"
 		"leadersCanSetWarps"
-		})
+		}, realAlias_inNonDottedFormat = "leadersCanSetWarps" )
 	public boolean leadersCanSetWarps=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.officersCanSetWarps"
 		"officersCanSetWarps"
-		})
+		}, realAlias_inNonDottedFormat = "officersCanSetWarps" )
 	public boolean officersCanSetWarps=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.membersCanSetWarps"
 		"membersCanSetWarps"
-		})
+		}, realAlias_inNonDottedFormat = "membersCanSetWarps" )
 	public boolean membersCanSetWarps=false;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.mustBeInOwnTerritoryToCreate"
 		"mustBeInOwnTerritoryToCreate"
-	})
+	}, realAlias_inNonDottedFormat = "mustBeInOwnTerritoryToCreate" )
 	public boolean mustBeInOwnTerritoryToCreate=true;
 	
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.maxWarps"
 		"maxWarps"
-	})
+	}, realAlias_inNonDottedFormat = "maxWarps" )
 	public int maxWarps=5;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromEnemyTerritory"
 		"warpTeleportAllowedFromEnemyTerritory"
-	})
+	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromEnemyTerritory" )
 	public boolean warpTeleportAllowedFromEnemyTerritory=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromDifferentWorld"
 		"warpTeleportAllowedFromDifferentWorld"
-	})
+	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromDifferentWorld" )
 	public boolean warpTeleportAllowedFromDifferentWorld=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedEnemyDistance"
 		"warpTeleportAllowedEnemyDistance"
-	})
+	}, realAlias_inNonDottedFormat = "warpTeleportAllowedEnemyDistance" )
 	public int warpTeleportAllowedEnemyDistance=35;
 	
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportIgnoreEnemiesIfInOwnTerritory"
 		"warpTeleportIgnoreEnemiesIfInOwnTerritory"
-	})
+	}, realAlias_inNonDottedFormat = "warpTeleportIgnoreEnemiesIfInOwnTerritory" )
 	public boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=true;
 	
 	
-	@ConfigOption(oldAliases={
+	@Option(oldAliases_alwaysDotted={
 //		"warps.smokeEffectOnWarp"
 		"smokeEffectOnWarp"
-	})
+	}, realAlias_inNonDottedFormat = "smokeEffectOnWarp" )
 	public boolean smokeEffectOnWarp=true;
 	
 	
 	
 	public boolean canSetOrRemoveWarps(FPlayer fplayer) {
-		if(Config.warps.membersCanSetWarps) {
+		if(Config._warps.membersCanSetWarps) {
 			return true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && Config.warps.officersCanSetWarps) {
+			if(Utilities.isOfficer(fplayer) && Config._warps.officersCanSetWarps) {
 				return true;
-			} else if(Utilities.isLeader(fplayer) && Config.warps.leadersCanSetWarps) {
+			} else if(Utilities.isLeader(fplayer) && Config._warps.leadersCanSetWarps) {
 				return true;
 			}
 		}

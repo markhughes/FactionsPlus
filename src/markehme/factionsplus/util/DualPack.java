@@ -1,8 +1,9 @@
-package markehme.factionsplus.config;
+package markehme.factionsplus.util;
 
 import javax.management.*;
 
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 
 /**

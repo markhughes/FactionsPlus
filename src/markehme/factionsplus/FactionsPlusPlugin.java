@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.logging.*;
 
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 import org.bukkit.*;
 import org.bukkit.configuration.file.*;

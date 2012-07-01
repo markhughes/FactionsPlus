@@ -8,7 +8,10 @@ import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.config.sections.*;
+import markehme.factionsplus.config.yaml.*;
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 import org.bukkit.*;
 import org.bukkit.configuration.*;
@@ -50,62 +53,74 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// Begin Config Pointers
 	
 	/**
-	 * Caveats: do not rename any fields that have @ConfigSection annotation, without adding oldaliases to each of their fields
+	 * Caveats: YOU CAN rename all the fields, it won't affect config.yml because it uses the name inside the annotation above
+	 * it
+	 * if you rename the realAlias inside the annotation then you'll have to be adding oldaliases to each of their fields
 	 * (children) and to their
-	 * child @ConfigSection 's fields and so on; cantfix: I should be able to fix this so that I can add oldaliases for @ConfigSection
-	 * too and have them considered but they would only apply to the real fields and not to those fields's oldaliases, makes
-	 * sense;
-	 * cantdothis because I cannot decide which parent's oldAlias would apply to this child's alias when computing the dotted
-	 * format of the child
+	 * child @ConfigSection 's fields and so on;
+	 * cantfix: adding old aliases for (sub)sections should not be doable, because I cannot decide which parent's oldAlias would
+	 * apply to the child's alias when computing the dotted format of the child
 	 * 
 	 * you may change order of these fields (or section's fields) but this won't have any effect if config.yml already existed,
 	 * only if new one is about to be created<br>
+	 * <br>
+	 * fields could be named _something so that when you type Config._ and code completion with Ctrl+Space you can see only the
+	 * relevant fields<br>
 	 */
-	@ConfigSection
-	public static final Section_Jails		jails					= new Section_Jails();
+	@Section(
+			realAlias_neverDotted = "jails" )
+	public static final Section_Jails		_jails					= new Section_Jails();
 	
 	
-	@ConfigSection
-	public static final Section_Warps		warps					= new Section_Warps();
+	@Section(
+			realAlias_neverDotted = "warps" )
+	public static final Section_Warps		_warps					= new Section_Warps();
 	
-	// cantfix: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by allowing
+	// cantfix: if you rename the section, you've to add oldaliases for each leaf found in the tree of it, avoid this by
+	// allowing
 	// oldaliases for section
-	@ConfigSection
-	public static final Section_Banning		banning					= new Section_Banning();
+	@Section(
+			realAlias_neverDotted = "banning" )
+	public static final Section_Banning		_banning				= new Section_Banning();
 	
 	
-	@ConfigSection
-	public static final Section_Rules		rules					= new Section_Rules();
+	@Section(
+			realAlias_neverDotted = "rules" )
+	public static final Section_Rules		_rules					= new Section_Rules();
 	
-	@ConfigSection
-	public static final Section_Peaceful	peaceful				= new Section_Peaceful();
+	@Section(
+			realAlias_neverDotted = "peaceful" )
+	public static final Section_Peaceful	_peaceful				= new Section_Peaceful();
 	
-	@ConfigSection
-	public static final Section_PowerBoosts	powerboosts				= new Section_PowerBoosts();
+	@Section(
+			realAlias_neverDotted = "powerboosts" )
+	public static final Section_PowerBoosts	_powerboosts			= new Section_PowerBoosts();
 	
-	@ConfigSection
-	public static final Section_Announce	announce				= new Section_Announce();
-	
-	
-	@ConfigSection
-	public static final Section_Economy		economy					= new Section_Economy();
+	@Section(
+			realAlias_neverDotted = "announce" )
+	public static final Section_Announce	_announce				= new Section_Announce();
 	
 	
-	@ConfigSection( {
+	@Section(
+			realAlias_neverDotted = "economy" )
+	public static final Section_Economy		_economy				= new Section_Economy();
+	
+	
+	@Section(
+			comments = {
 		"some comment here, if any", "second line of comment"
-	} )
-	public static final TeleportsSection	teleports				= new TeleportsSection();
+			}, realAlias_neverDotted = "Teleports" )
+	public static final Section_Teleports	_teleports				= new Section_Teleports();
 	
-	@ConfigSection
-	public final static Section_Extras		extras					= new Section_Extras();
+	@Section(
+			realAlias_neverDotted = "extras" )
+	public final static Section_Extras		_extras					= new Section_Extras();
 	
-	@ConfigOption(
-			oldAliases = {
-				"DoNotChangeMe"
-			} )
+	@Option(
+			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final int					doNotChangeMe			= 11;
+	public static final int					_doNotChangeMe			= 11;
 	
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;
@@ -159,11 +174,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	public static final String getDottedFormat(Field f) {
-		//TODO:
-		throw Q.ni();
-	}
-	
+//	public static final String getDottedFormat( Field f ) {
+//		// TODO:
+//		throw Q.ni();
+//	}
 	
 	
 	
@@ -187,12 +201,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// System.out.println("A: "+ currentFieldAnnotations[j] );
 				Annotation fieldAnnotation = currentFieldAnnotations[jay];
 				Class<? extends Annotation> annotationType = fieldAnnotation.annotationType();
-				if ( ( ConfigSection.class.equals( annotationType ) ) || ( ConfigOption.class.equals( annotationType ) ) ) {
+				if ( ( Section.class.equals( annotationType ) ) || ( Option.class.equals( annotationType ) ) ) {
 					
-					String fName = field.getName();
-					String dotted = ( null == dottedParentSection ? fName : dottedParentSection + Config.DOT + fName );
 					
-
 					// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
 					// Jails.enabled instead of Config.jails.enabled
 					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is
@@ -216,18 +227,22 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							+ configClass.getSimpleName() + "), please correct in the source code!" );
 					}
 					
-					if ( ConfigSection.class == annotationType ) {
+					if ( Section.class == annotationType ) {
+						String realAlias = ((Section)fieldAnnotation).realAlias_neverDotted();
+						String dotted = ( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 						parsify( typeOfField, dotted );// recurse
 					} else {// it's @ConfigOption
-					
-						ConfigOption co = (ConfigOption)fieldAnnotation;
-						String currentDotted = dotted;
-						String[] aliasesArray = co.oldAliases();
+						String realAlias = ((Option)fieldAnnotation).realAlias_inNonDottedFormat();
+						String currentDotted = ( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						
+						Option co = (Option)fieldAnnotation;
+						String[] aliasesArray = co.oldAliases_alwaysDotted();
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
 						while ( true ) {
+							//this will merge realAlias with oldAliases in the same destination HashMap
 							// FactionsPlus.info( currentDotted + "/" + field );
 							Field existingField = ConfigOptionName.dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {

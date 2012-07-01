@@ -1,4 +1,4 @@
-package markehme.factionsplus.extras;
+package markehme.factionsplus.util;
 
 
 public class RethrownException extends RuntimeException {

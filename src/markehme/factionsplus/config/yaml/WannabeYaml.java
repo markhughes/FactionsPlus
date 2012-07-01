@@ -1,4 +1,4 @@
-package markehme.factionsplus.config;
+package markehme.factionsplus.config.yaml;
 
 import java.io.*;
 import java.util.*;
@@ -9,6 +9,7 @@ import org.yaml.snakeyaml.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 
 

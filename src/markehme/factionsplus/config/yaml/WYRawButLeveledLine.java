@@ -1,6 +1,7 @@
-package markehme.factionsplus.config;
+package markehme.factionsplus.config.yaml;
 
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 
 public class WYRawButLeveledLine extends WYItem {

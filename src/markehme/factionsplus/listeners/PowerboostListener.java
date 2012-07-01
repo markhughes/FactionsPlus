@@ -20,54 +20,54 @@ public class PowerboostListener implements Listener{
 			if (p.getKiller() == null) {
 				if ((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE 
 						|| causeOfDeath == DamageCause.ENTITY_EXPLOSION) &&
-						(Config.powerboosts.extraPowerLossIfDeathByMob > 0.0D)) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByMob);
+						(Config._powerboosts.extraPowerLossIfDeathByMob > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByMob);
 					return;
 				}
 				if ((causeOfDeath == DamageCause.CONTACT) && 
-						(Config.powerboosts.extraPowerLossIfDeathByCactus) > 0.0D) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByCactus);
+						(Config._powerboosts.extraPowerLossIfDeathByCactus) > 0.0D) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByCactus);
 					return;
 				}
 
 				if ((causeOfDeath == DamageCause.BLOCK_EXPLOSION) && 
-						(Config.powerboosts.extraPowerLossIfDeathByTNT > 0.0D)) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByTNT);
+						(Config._powerboosts.extraPowerLossIfDeathByTNT > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByTNT);
 					return;
 				}
 
 				if (((causeOfDeath == DamageCause.FIRE) || (causeOfDeath == DamageCause.FIRE_TICK)) && 
-						(Config.powerboosts.extraPowerLossIfDeathByFire > 0.0D)) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByFire);
+						(Config._powerboosts.extraPowerLossIfDeathByFire > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByFire);
 					return;
 				}
 
 				if ((causeOfDeath == DamageCause.MAGIC) && 
-						(Config.powerboosts.extraPowerLossIfDeathByPotion > 0.0D)) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByPotion);
+						(Config._powerboosts.extraPowerLossIfDeathByPotion > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByPotion);
 					return;
 				}
 				
 				if ((causeOfDeath == DamageCause.SUICIDE)
-						&& ( Config.powerboosts.extraPowerLossIfDeathBySuicide > 0.0D ) )
+						&& ( Config._powerboosts.extraPowerLossIfDeathBySuicide > 0.0D ) )
 				{
-					Utilities.removePower( p, Config.powerboosts.extraPowerLossIfDeathBySuicide  );
+					Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathBySuicide  );
 					return;
 				}
 				
-				if(Config.powerboosts.extraPowerLossIfDeathByOther > 0) {
-					Utilities.removePower(p, Config.powerboosts.extraPowerLossIfDeathByOther);
+				if(Config._powerboosts.extraPowerLossIfDeathByOther > 0) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther);
 					return;
 				}
 			} else {//non-null killer
 				if ( ( causeOfDeath == DamageCause.ENTITY_ATTACK ) || ( causeOfDeath == DamageCause.PROJECTILE ) ) {
-					if ( Config.powerboosts.extraPowerLossIfDeathByPVP > 0.0D ) {
-						Utilities.removePower( p, Config.powerboosts.extraPowerLossIfDeathByPVP );
+					if ( Config._powerboosts.extraPowerLossIfDeathByPVP > 0.0D ) {
+						Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByPVP );
 					}
 					
-					if ( Config.powerboosts.extraPowerWhenKillPlayer > 0.0D ) {
+					if ( Config._powerboosts.extraPowerWhenKillPlayer > 0.0D ) {
 						Player k = p.getKiller();
-						Utilities.addPower( k, Config.powerboosts.extraPowerWhenKillPlayer) ;
+						Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillPlayer) ;
 					}
 					return;
 				}

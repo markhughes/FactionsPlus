@@ -40,9 +40,9 @@ public class CmdUnban extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(Config.banning.leadersCanFactionUnban && Utilities.isLeader(fme)){
+		if(Config._banning.leadersCanFactionUnban && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(Config.banning.officersCanFactionUnban && Utilities.isOfficer(fme)){
+		} else if(Config._banning.officersCanFactionUnban && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		

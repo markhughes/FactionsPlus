@@ -26,7 +26,7 @@ public class FactionsPlusCommandManager {
 	
 	public static void setup() {
 		// Warp Commands 
-		if(Config.warps.enabled) {
+		if(Config._warps.enabled) {
 			addSC(new CmdAddWarp()); 
 			addSC(new CmdRemoveWarp());
 			addSC(new CmdWarp());
@@ -34,21 +34,21 @@ public class FactionsPlusCommandManager {
 		}
 		
 		// Jail Commands
-		if(Config.jails.enabled) {
+		if(Config._jails.enabled) {
 			addSC(new CmdSetJail());
 			addSC(new CmdUnsetJail());
 			addSC(new CmdJail());
 			addSC(new CmdUnJail());
 		}
 		// General Commands
-		if(Config.announce.enabled) {
+		if(Config._announce.enabled) {
 			addSC(new CmdAnnounce());
 		}
-		if(Config.banning.enabled) {
+		if(Config._banning.enabled) {
 			addSC(new CmdBan());
 			addSC(new CmdUnban());
 		}
-		if(Config.peaceful.officersCanToggleState || Config.peaceful.membersCanToggleState || Config.peaceful.leadersCanToggleState) {
+		if(Config._peaceful.officersCanToggleState || Config._peaceful.membersCanToggleState || Config._peaceful.leadersCanToggleState) {
 			addSC(new CmdToggleState());
 		}
 		addSC(new CmdFC());
