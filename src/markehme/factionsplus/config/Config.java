@@ -546,6 +546,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 																																"DUPLICATE #";
 	private static final String																commentPrefixForINVALIDs		=
 																																"INVALID #";
+	private static final String																commentPrefixForOVERRIDDENones	=
+																																"OVERRIDDEN by %s at line %d #";
+	
 	private static final ChatColor															colorOnDuplicate				=
 																																ChatColor.YELLOW;
 	private static final ChatColor															colorOnINVALID					=
@@ -867,9 +870,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					sortOverrides();// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
-					coalesceOverrides( virtualRoot );
+//					coalesceOverrides( virtualRoot );
 					
-					addMissingFieldsToConfig( virtualRoot );
+//					addMissingFieldsToConfig( virtualRoot );
 					// TODO: when done:
 					mapField_to_ListOfWYIdentifier.clear();
 					
@@ -998,8 +1001,23 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// list.clear();//no use keeping the memory
 				fieldToList.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of overrides
 				
-				
-				
+				Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
+				DualPack<String, WYIdentifier> first = iter.next();
+				assert null != first;// must have at least the realAlias in that list;
+				while ( iter.hasNext() ) {
+					DualPack<String, WYIdentifier> overridenOne = iter.next();
+					WYIdentifier wid = overridenOne.getSecond();
+					wid.getParent().replaceAndTransformInto_WYComment( wid,
+						String.format( commentPrefixForOVERRIDDENones, first.getFirst(), first.getSecond().getLineNumber() ) );
+					FactionsPlus.warn( "Config option " + ChatColor.AQUA + first.getFirst() + ChatColor.RESET + " at line "
+						+ ChatColor.AQUA + first.getSecond().getLineNumber() + ChatColor.RESET
+						+ " overrides the old alias for it `" + ChatColor.DARK_AQUA + overridenOne.getFirst() + ChatColor.RESET
+						+ "` which is at line " + ChatColor.DARK_AQUA + wid.getLineNumber() + ChatColor.RESET
+						+ " which was also transformed into comment to show it's ignored." );
+				}
+				// for ( DualPack<String, WYIdentifier> overridingOrder : listInOverridingOrder ) {
+				// overridingOrder.getFirst();
+				// }
 				// for ( DualPack<String, WYIdentifier> dualPack : list ) {
 				// String dotted = dualPack.getFirst();
 				// Field fieldForDotted = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
