@@ -6,41 +6,41 @@ import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
 
-public class Section_Warps{
+public final class Section_Warps{
 	
 	@Option(oldAliases_alwaysDotted={
 		"warps.enableWarps"
 		,"enableWarps"
 		}, realAlias_inNonDottedFormat = "enabled" )
-	public _boolean enabled=new _boolean(true);
+	public static final _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.leadersCanSetWarps"
 		"leadersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "leadersCanSetWarps" )
-	public _boolean leadersCanSetWarps=new _boolean(true);
+	public static final _boolean leadersCanSetWarps=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.officersCanSetWarps"
 		"officersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "officersCanSetWarps" )
-	public _boolean officersCanSetWarps=new _boolean(true);
+	public static final _boolean officersCanSetWarps=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.membersCanSetWarps"
 		"membersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "membersCanSetWarps" )
-	public _boolean membersCanSetWarps=new _boolean(false);
+	public static final _boolean membersCanSetWarps=new _boolean(false);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.mustBeInOwnTerritoryToCreate"
 		"mustBeInOwnTerritoryToCreate"
 	}, realAlias_inNonDottedFormat = "mustBeInOwnTerritoryToCreate" )
-	public _boolean mustBeInOwnTerritoryToCreate=new _boolean(true);
+	public static final _boolean mustBeInOwnTerritoryToCreate=new _boolean(true);
 	
 	
 	
@@ -48,28 +48,28 @@ public class Section_Warps{
 //		"warps.maxWarps"
 		"maxWarps"
 	}, realAlias_inNonDottedFormat = "maxWarps" )
-	public _int maxWarps=new _int(5);
+	public static final _int maxWarps=new _int(5);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromEnemyTerritory"
 		"warpTeleportAllowedFromEnemyTerritory"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromEnemyTerritory" )
-	public _boolean warpTeleportAllowedFromEnemyTerritory=new _boolean(true);
+	public static final _boolean warpTeleportAllowedFromEnemyTerritory=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromDifferentWorld"
 		"warpTeleportAllowedFromDifferentWorld"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromDifferentWorld" )
-	public _boolean warpTeleportAllowedFromDifferentWorld=new _boolean(true);
+	public static final _boolean warpTeleportAllowedFromDifferentWorld=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedEnemyDistance"
 		"warpTeleportAllowedEnemyDistance"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedEnemyDistance" )
-	public _int warpTeleportAllowedEnemyDistance=new _int(35);
+	public static final _int warpTeleportAllowedEnemyDistance=new _int(35);
 	
 	
 	
@@ -77,18 +77,18 @@ public class Section_Warps{
 //		"warps.warpTeleportIgnoreEnemiesIfInOwnTerritory"
 		"warpTeleportIgnoreEnemiesIfInOwnTerritory"
 	}, realAlias_inNonDottedFormat = "warpTeleportIgnoreEnemiesIfInOwnTerritory" )
-	public _boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=new _boolean(true);
+	public static final _boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.smokeEffectOnWarp"
 		"smokeEffectOnWarp"
 	}, realAlias_inNonDottedFormat = "smokeEffectOnWarp" )
-	public _boolean smokeEffectOnWarp=new _boolean(true);
+	public static final _boolean smokeEffectOnWarp=new _boolean(true);
 	
 	
 	
-	public boolean canSetOrRemoveWarps(FPlayer fplayer) {
+	public static final boolean canSetOrRemoveWarps(FPlayer fplayer) {
 		if(Config._warps.membersCanSetWarps._) {
 			return true;
 		} else {

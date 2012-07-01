@@ -3,7 +3,7 @@ package markehme.factionsplus.config.sections;
 import markehme.factionsplus.config.*;
 
 
-public class Section_Teleports {
+public final class Section_Teleports {
 	
 	@Option(oldAliases_alwaysDotted={
 //		"Teleports.disallowTeleportingToEnemyLandViaHomeCommand"//newest
@@ -12,7 +12,7 @@ public class Section_Teleports {
 		,"disallowTeleportingToEnemyLandViaHomeCommand"//very old one
 //		,""//for tests
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToEnemyLandViaHomeCommand" )
-	public _boolean disallowTeleportingToEnemyLandViaHomeCommand=new _boolean(true);
+	public static final _boolean disallowTeleportingToEnemyLandViaHomeCommand=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -21,23 +21,23 @@ public class Section_Teleports {
 		,"homesintegration.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newer
 		,"reportSuccessfulByCommandTeleportsIntoEnemyLand"//very old one
 		}, realAlias_inNonDottedFormat = "reportSuccessfulByCommandTeleportsIntoEnemyLand" )
-	public _boolean reportSuccessfulByCommandTeleportsIntoEnemyLand=new _boolean(true);
+	public static final _boolean reportSuccessfulByCommandTeleportsIntoEnemyLand=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"teleports.disallowTeleportingToEnemyLandViaEnderPeals"//old
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToEnemyLandViaEnderPeals" )
-	public _boolean disallowTeleportingToEnemyLandViaEnderPeals=new _boolean(true);
+	public static final _boolean disallowTeleportingToEnemyLandViaEnderPeals=new _boolean(true);
 	
 	
 	//TODO: disallowTeleportingToWarZoneViaEnderPeals
 	@Option(oldAliases_alwaysDotted={
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToWarZoneViaEnderPeals" )
-	public _boolean disallowTeleportingToWarZoneViaEnderPeals=new _boolean(true);
+	public static final _boolean disallowTeleportingToWarZoneViaEnderPeals=new _boolean(true);
 	
 	
 	//TODO: disallowTeleportingToSafeZoneViaEnderPeals
 	@Option(realAlias_inNonDottedFormat = "disallowTeleportingToSafeZoneViaEnderPeals" )
-	public _boolean disallowTeleportingToSafeZoneViaEnderPeals=new _boolean(true);
+	public static final _boolean disallowTeleportingToSafeZoneViaEnderPeals=new _boolean(true);
 
 }

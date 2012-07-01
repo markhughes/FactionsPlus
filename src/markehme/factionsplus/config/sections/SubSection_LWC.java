@@ -3,9 +3,9 @@ package markehme.factionsplus.config.sections;
 import markehme.factionsplus.config.*;
 
 
-public class SubSection_LWC {
+public final class SubSection_LWC {
 	
-//	public static final String	str_removeLWCLocksOnClaim	= "removeLWCLocksOnClaim";
+//	public static final static final String	str_removeLWCLocksOnClaim	= "removeLWCLocksOnClaim";
 
 	@Option(oldAliases_alwaysDotted={
 		"removeLWCLocksOnClaim" //the first one in this line is the latest ID for this option, and will be used when saving the config.yml
@@ -14,10 +14,10 @@ public class SubSection_LWC {
 //		,"removeLWCLocksOnClaim"
 		,"useLWCIntegrationFix"
 	}, realAlias_inNonDottedFormat = "removeLWCLocksOnClaim" )
-//	public boolean removeLWCLocksOnClaim=false;
-	public _boolean removeLWCLocksOnClaim=new _boolean(false);
+//	public static final boolean removeLWCLocksOnClaim=false;
+	public static final _boolean removeLWCLocksOnClaim=new _boolean(false);
 	
 	@Option(
 			realAlias_inNonDottedFormat = "blockCPublicAccessOnNonOwnFactionTerritory" )
-	public _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
+	public static final _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
 }

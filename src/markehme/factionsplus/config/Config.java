@@ -120,7 +120,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int					_doNotChangeMe			= new _int(11);
+	public static final _int				_doNotChangeMe			= new _int( 11 );
 	
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;
@@ -212,20 +212,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					// package
 					int fieldModifiers = field.getModifiers();
 					Class<?> typeOfField = field.getType();// get( rootClass );
-					if ( ( Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers ) )
-						&& ( null != dottedParentSection ) )
-					{
-						// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-						// Config.extras
-						// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-						// SubSection_LWC to access lwc's fields
-						// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-						// field
-						throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-							+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
-							+ " field `" + field + "` ; this is not allowed for subsections(only for toplevel sections in "
-							+ configClass.getSimpleName() + "), please correct in the source code!" );
-					}
+					
 					
 					Object fieldInstance;
 					try {
@@ -242,6 +229,32 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					
 					if ( Section.class == annotationType ) {
+						// must be non-private , but yes Final!
+						boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
+						
+						// allowed like this for some clarity:
+						if ( ( null != dottedParentSection )/* aka is subsection */) {
+							badMods |= Modifier.isStatic( fieldModifiers );
+							// subsection should, NOT be static, NOT be private, but BE FINAL
+						} else {
+							// it's toplevel section, should NOT BE private, should BE FINAL and STATIC
+							badMods |= !Modifier.isStatic( fieldModifiers );
+						}
+						
+						if ( badMods ) {
+							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+							// Config.extras
+							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+							// SubSection_LWC to access lwc's fields
+							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+							// field
+							throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
+								+ " config option field must be final+non-private+"
+								+ ( null != dottedParentSection ? "non-static" : "static" ) + " but instead it is: `" + field
+								+ "`" );
+						}
+						
+						
 						String realAlias = ( (Section)fieldAnnotation ).realAlias_neverDotted();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
 						String dotted =
@@ -251,12 +264,27 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						parsify( typeOfField, dotted, fieldInstance );// recurse
 						
 					} else {// it's @ConfigOption
+					
+						if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
+							|| !Modifier.isFinal( fieldModifiers ) )
+						// && ( null != dottedParentSection ) )
+						{
+							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+							// Config.extras
+							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+							// SubSection_LWC to access lwc's fields
+							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+							// field
+							throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
+								+ " config option field must be public final static, but instead it is: `" + field + "`" );
+						}
 						
+						// we already know it has an instance ie. it's new-ed
 						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
 							throw FactionsPlus.bailOut( "bad coding: the type of field `" + field + "` is not a subclass of `"
 								+ ConfigOptionName.class + "`" );
 						}
-
+						
 						
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
@@ -264,8 +292,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						
 						
-						//must update the dotted form in the instance, because we know it now
-						((ConfigOptionName)fieldInstance)._dottedName_asString=currentDotted;
+						// must update the dotted form in the instance, because we know it now
+						( (ConfigOptionName)fieldInstance )._dottedName_asString = currentDotted;
 						
 						Option co = (Option)fieldAnnotation;
 						String[] aliasesArray = co.oldAliases_alwaysDotted();
@@ -293,8 +321,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							}
 							// detect extra spaces(by mistake?) around the current old alias
 							if ( !currentDotted.trim().equals( currentDotted ) ) {
-								FactionsPlus.bailOut( "bad coding: the old alias `" + currentDotted + "` in field `"
-									+ field + "`\n" + "should not contain any extra whitespaces around it!" );
+								FactionsPlus.bailOut( "bad coding: the old alias `" + currentDotted + "` in field `" + field
+									+ "`\n" + "should not contain any extra whitespaces around it!" );
 							}
 						}// while
 							// FactionsPlus.info( "Option: " + allFields[i] + "//" + currentFieldAnnotations[j] );
