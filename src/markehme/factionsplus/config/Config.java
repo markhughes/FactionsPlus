@@ -45,8 +45,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// and it contains the defaults, so that they are no longer hardcoded in java code
 	private static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
-	public static YamlConfiguration			config;
-	
 	// never change this, it's yaml compatible:
 	public static final char				DOT						= '.';
 	
@@ -125,10 +123,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;
 	// End Config
+	private static final String	SECTION_PREFIX	= "_";
 	
 	
 	private static File						currentFolder_OnPluginClassInit;
 	private static File						currentFolder_OnEnable	= null;
+	private static boolean	inited=false;
 	
 	
 	/**
@@ -227,57 +227,64 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// that extras is new-ed like: Classhere extras=new Classhere(); in Config
 					}
 					
+					boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+					
+					
+					// must be non-private , but yes Final!
+					boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
+					 
+					// allowed like this for some clarity:
+					if ( isTopLevelSection) {
+						// it's toplevel section, should NOT BE private, should BE FINAL and STATIC
+						badMods |= !Modifier.isStatic( fieldModifiers );
+					} else {
+						badMods |= Modifier.isStatic( fieldModifiers );
+						// subsection should, NOT be static, NOT be private, but BE FINAL
+					}
+					
+					if ( badMods ) {
+						// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+						// Config.extras
+						// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+						// SubSection_LWC to access lwc's fields
+						// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+						// field
+						throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
+							+ " field must be final+non-private+"
+							+ ( isTopLevelSection ? " static" : "non-static" ) + " but instead it is: `" + field
+							+ "`" );
+					}
 					
 					if ( Section.class == annotationType ) {
-						// must be non-private , but yes Final!
-						boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
-						
-						// allowed like this for some clarity:
-						if ( ( null != dottedParentSection )/* aka is subsection */) {
-							badMods |= Modifier.isStatic( fieldModifiers );
-							// subsection should, NOT be static, NOT be private, but BE FINAL
-						} else {
-							// it's toplevel section, should NOT BE private, should BE FINAL and STATIC
-							badMods |= !Modifier.isStatic( fieldModifiers );
-						}
-						
-						if ( badMods ) {
-							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-							// Config.extras
-							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-							// SubSection_LWC to access lwc's fields
-							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-							// field
-							throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-								+ " config option field must be final+non-private+"
-								+ ( null != dottedParentSection ? "non-static" : "static" ) + " but instead it is: `" + field
-								+ "`" );
-						}
-						
 						
 						String realAlias = ( (Section)fieldAnnotation ).realAlias_neverDotted();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
 						String dotted =
-							( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+							( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						
+						if (!field.getName().startsWith( SECTION_PREFIX )) {
+							throw FactionsPlus.bailOut( "bad coding: by convention any @" + annotationType.getSimpleName()
+								+" aka sections should have their field name start with `"+SECTION_PREFIX+
+								"`. Please correct in source code." );
+						}
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 						parsify( typeOfField, dotted, fieldInstance );// recurse
 						
 					} else {// it's @ConfigOption
 					
-						if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
-							|| !Modifier.isFinal( fieldModifiers ) )
-						// && ( null != dottedParentSection ) )
-						{
-							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-							// Config.extras
-							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-							// SubSection_LWC to access lwc's fields
-							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-							// field
-							throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-								+ " config option field must be public final static, but instead it is: `" + field + "`" );
-						}
+//						if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
+//							|| !Modifier.isFinal( fieldModifiers ) )
+//						// && ( null != dottedParentSection ) )
+//						{
+//							// means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
+//							// Config.extras
+//							// but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
+//							// SubSection_LWC to access lwc's fields
+//							// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
+//							// field
+//							throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
+//								+ " config option field must be public final static, but instead it is: `" + field + "`" );
+//						}
 						
 						// we already know it has an instance ie. it's new-ed
 						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
@@ -289,7 +296,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
 						String currentDotted =
-							( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+							( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						
 						
 						// must update the dotted form in the instance, because we know it now
@@ -369,15 +376,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 */
 	public final static void reload() {
 		
-		Config.config = null;// must be here to cause config to reload on every plugin(s) reload from console
+		Config.setNotInited();// must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates = null;
 		boolean failed = false;
 		try {
 			
 			Config.ensureFoldersExist();
 			
-			Config.config = getConfig();// load config
-			
+			reloadConfig();
 			
 			
 			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
@@ -396,6 +402,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
+	private static void setNotInited() {
+		inited=false;
+	}
+
+
 	protected static void ensureFoldersExist() {
 		File dataF = FactionsPlus.instance.getDataFolder();
 		if ( !dataF.equals( folderBase ) ) {
@@ -441,18 +452,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	public final static YamlConfiguration getConfig() {
-		if ( null == virtualRoot ) {
-			reloadConfig();
-		}
-		if ( null == virtualRoot ) {
-			throw FactionsPlusPlugin.bailOut( "reloading config failed somehow and this should not be reached" );// bugged
-																													// reloadConfig()
-																													// if
-																													// reached
-		}
-		return Config.config;
-	}
 	
 	
 	private final static String	bucketOfSpaces	= new String( new char[WannabeYaml.maxLevelSpaces] ).replace( '\0', ' ' );
@@ -664,7 +663,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								// .equals()
 								
 								// if we're here this will work:
-								int activeLine = existingWYIdList.get( index ).getSecond().getLineNumber();
+								WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
+								
+								int activeLine = activeCfgOption.getLineNumber();
 								FactionsPlus
 									.warn( "Duplicate config option encountered in "
 										+ fileConfig
@@ -676,7 +677,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 										// + "This is how the line looks now(without leading spaces):\n"
 										+ colorOnDuplicate + currentItem.toString() + "\n" + ChatColor.RESET
 										+ "the option at line " + ChatColor.AQUA + activeLine + ChatColor.RESET
-										+ " overriddes this duplicate" );
+										+ " overriddes this duplicate with value "+ChatColor.AQUA+activeCfgOption.getValue() );
 								// TODO: what to do when same config is encountered twice, does it override the prev one? do
 								// we
 								// stop? do
@@ -825,7 +826,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static WYSection	virtualRoot	= null;
 	
 	
-	public final static void reloadConfig() {
+	private final static void reloadConfig() {
 		
 		if ( Config.fileConfig.exists() ) {
 			if ( !Config.fileConfig.isFile() ) {
@@ -921,6 +922,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// }
 		//
 		// saveConfig();
+	}
+
+
+	public static boolean isInited() {
+		return inited;
 	}
 	
 }

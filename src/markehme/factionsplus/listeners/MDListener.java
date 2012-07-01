@@ -17,7 +17,7 @@ public class MDListener implements Listener  {
 	public void onDisguiseEvent(DisguiseEvent e) {
 		FPlayer fplayer = FPlayers.i.get(e.getPlayer());
 		
-        	if(Config.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
+        	if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
         		if(fplayer.isInEnemyTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());
@@ -26,7 +26,7 @@ public class MDListener implements Listener  {
         		}
         	}
         		
-        	if(Config.config.getBoolean("unDisguiseIfInOwnTerritory")) {
+        	if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
         		if(fplayer.isInOwnTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());

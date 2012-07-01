@@ -9,14 +9,14 @@ public final class Section_Extras {
 	@Option(oldAliases_alwaysDotted={
 		"disableUpdateCheck"
 	}, realAlias_inNonDottedFormat = "disableUpdateCheck" )
-	public static final _boolean disableUpdateCheck=new _boolean(false);
+	public  final _boolean disableUpdateCheck=new _boolean(false);
 	
 	@Section(
 			realAlias_neverDotted = "lwc" )
-	public final SubSection_LWC lwc=new SubSection_LWC();
+	public final SubSection_LWC _lwc=new SubSection_LWC();
 	
 	@Section(
 			realAlias_neverDotted = "disguise" )
-	public final SubSection_Disguise disguise=new SubSection_Disguise();  
+	public final SubSection_Disguise _disguise=new SubSection_Disguise();  
 	
 }

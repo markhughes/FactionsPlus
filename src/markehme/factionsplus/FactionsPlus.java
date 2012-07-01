@@ -140,7 +140,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         if(Config._jails.enabled._) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(Config._extras.disguise.enableDisguiseIntegration._ && (Config._extras.disguise.unDisguiseIfInOwnTerritory._ || Config._extras.disguise.unDisguiseIfInEnemyTerritory._)) {
+        if(Config._extras._disguise.enableDisguiseIntegration._ && (Config._extras._disguise.unDisguiseIfInOwnTerritory._ || Config._extras._disguise.unDisguiseIfInEnemyTerritory._)) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
         		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
@@ -178,9 +178,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config._extras.lwc.removeLWCLocksOnClaim._ ) {
+				if ( !Config._extras._lwc.removeLWCLocksOnClaim._ ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Consider setting `" + Config._extras.lwc.removeLWCLocksOnClaim._dottedName_asString
+					FactionsPlusPlugin.info( "Consider setting `" + Config._extras._lwc.removeLWCLocksOnClaim._dottedName_asString
 						+ "` to reset locks(on land claim) for more than just chests," +
 						" which is what Factions plugin already does right now" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
@@ -189,8 +189,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 		} else {//no LWC
-			if ( Config._extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
-				|| Config._extras.lwc.removeLWCLocksOnClaim._ ) 
+			if ( Config._extras._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
+				|| Config._extras._lwc.removeLWCLocksOnClaim._ ) 
 			{
 				FactionsPlusPlugin
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"

@@ -11,7 +11,7 @@ public final class Section_Economy {
 		,"enableEconomy"
 		,"economy_enable"
 	}, realAlias_inNonDottedFormat = "enabled" )
-	public static final _boolean enabled=new _boolean(false);
+	public  final _boolean enabled=new _boolean(false);
 	
 	
 	
@@ -20,7 +20,7 @@ public final class Section_Economy {
 		,"economy.economycostToWarp"//newer
 		,"economy_costToWarp"//very old one
 		}, realAlias_inNonDottedFormat = "costToWarp" )
-	public static final _double costToWarp=new _double( 0.0d );//current one (the field name)
+	public  final _double costToWarp=new _double( 0.0d );//current one (the field name)
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -28,7 +28,7 @@ public final class Section_Economy {
 		,"economy.economycostToCreateWarp"//newer
 		,"economy_costToCreateWarp"//very old one
 		}, realAlias_inNonDottedFormat = "costToCreateWarp" )
-	public static final _double costToCreateWarp=new _double( 0.0d );
+	public  final _double costToCreateWarp=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -36,7 +36,7 @@ public final class Section_Economy {
 		,"economy.economycostToDeleteWarp"//newer
 		,"economy_costToDeleteWarp"//very old one
 		}, realAlias_inNonDottedFormat = "costToDeleteWarp" )
-	public static final _double costToDeleteWarp=new _double( 0.0d );
+	public  final _double costToDeleteWarp=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -44,7 +44,7 @@ public final class Section_Economy {
 		,"economy.economycostToAnnounce"//newer
 		,"economy_costToAnnounce"//very old one
 		}, realAlias_inNonDottedFormat = "costToAnnounce" )
-	public static final _double costToAnnounce=new _double( 0.0d );
+	public  final _double costToAnnounce=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -52,7 +52,7 @@ public final class Section_Economy {
 		,"economy.economycostToJail"//newer
 		,"economy_costToJail"//very old one
 		}, realAlias_inNonDottedFormat = "costToJail" )
-	public static final _double costToJail=new _double( 0.0d );
+	public  final _double costToJail=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -60,7 +60,7 @@ public final class Section_Economy {
 		,"economy.economycostToSetJail"//newer
 		,"economy_costToSetJail"//very old one
 		}, realAlias_inNonDottedFormat = "costToSetJail" )
-	public static final _double costToSetJail=new _double( 0.0d );
+	public  final _double costToSetJail=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -68,7 +68,7 @@ public final class Section_Economy {
 		,"economy.economycostToUnJail"//newer
 		,"economy_costToUnJail"//very old one
 		}, realAlias_inNonDottedFormat = "costToUnJail" )
-	public static final _double costToUnJail=new _double( 0.0d );
+	public  final _double costToUnJail=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -76,7 +76,7 @@ public final class Section_Economy {
 		,"economy.economycostToToggleUpPeaceful"//newer
 		,"economy_costToToggleUpPeaceful"//very old one
 		}, realAlias_inNonDottedFormat = "costToToggleUpPeaceful" )
-	public static final _double costToToggleUpPeaceful=new _double( 0.0d );
+	public  final _double costToToggleUpPeaceful=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -84,5 +84,5 @@ public final class Section_Economy {
 		,"economy.economycostToToggleDownPeaceful"//newer
 		,"economy_costToToggleDownPeaceful"//very old one
 		}, realAlias_inNonDottedFormat = "costToToggleDownPeaceful" )
-	public static final _double costToToggleDownPeaceful=new _double( 0.0d );
+	public  final _double costToToggleDownPeaceful=new _double( 0.0d );
 }

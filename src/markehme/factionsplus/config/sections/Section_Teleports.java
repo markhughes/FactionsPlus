@@ -12,7 +12,7 @@ public final class Section_Teleports {
 		,"disallowTeleportingToEnemyLandViaHomeCommand"//very old one
 //		,""//for tests
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToEnemyLandViaHomeCommand" )
-	public static final _boolean disallowTeleportingToEnemyLandViaHomeCommand=new _boolean(true);
+	public  final _boolean disallowTeleportingToEnemyLandViaHomeCommand=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
@@ -21,23 +21,23 @@ public final class Section_Teleports {
 		,"homesintegration.reportSuccessfulByCommandTeleportsIntoEnemyLand"//newer
 		,"reportSuccessfulByCommandTeleportsIntoEnemyLand"//very old one
 		}, realAlias_inNonDottedFormat = "reportSuccessfulByCommandTeleportsIntoEnemyLand" )
-	public static final _boolean reportSuccessfulByCommandTeleportsIntoEnemyLand=new _boolean(true);
+	public  final _boolean reportSuccessfulByCommandTeleportsIntoEnemyLand=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"teleports.disallowTeleportingToEnemyLandViaEnderPeals"//old
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToEnemyLandViaEnderPeals" )
-	public static final _boolean disallowTeleportingToEnemyLandViaEnderPeals=new _boolean(true);
+	public  final _boolean disallowTeleportingToEnemyLandViaEnderPeals=new _boolean(true);
 	
 	
 	//TODO: disallowTeleportingToWarZoneViaEnderPeals
 	@Option(oldAliases_alwaysDotted={
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToWarZoneViaEnderPeals" )
-	public static final _boolean disallowTeleportingToWarZoneViaEnderPeals=new _boolean(true);
+	public  final _boolean disallowTeleportingToWarZoneViaEnderPeals=new _boolean(true);
 	
 	
 	//TODO: disallowTeleportingToSafeZoneViaEnderPeals
 	@Option(realAlias_inNonDottedFormat = "disallowTeleportingToSafeZoneViaEnderPeals" )
-	public static final _boolean disallowTeleportingToSafeZoneViaEnderPeals=new _boolean(true);
+	public  final _boolean disallowTeleportingToSafeZoneViaEnderPeals=new _boolean(true);
 
 }

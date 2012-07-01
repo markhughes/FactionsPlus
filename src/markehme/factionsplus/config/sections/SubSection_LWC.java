@@ -14,10 +14,9 @@ public final class SubSection_LWC {
 //		,"removeLWCLocksOnClaim"
 		,"useLWCIntegrationFix"
 	}, realAlias_inNonDottedFormat = "removeLWCLocksOnClaim" )
-//	public static final boolean removeLWCLocksOnClaim=false;
-	public static final _boolean removeLWCLocksOnClaim=new _boolean(false);
+	public  final _boolean removeLWCLocksOnClaim=new _boolean(false);
 	
 	@Option(
 			realAlias_inNonDottedFormat = "blockCPublicAccessOnNonOwnFactionTerritory" )
-	public static final _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
+	public  final _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
 }

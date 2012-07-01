@@ -16,14 +16,14 @@ public class DCListener implements Listener  {
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerDisguise(PlayerDisguiseEvent e) {
     	FPlayer fplayer = FPlayers.i.get(e.getPlayer());
-    		if(Config.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
+    		if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
     			if(fplayer.isInEnemyTerritory()) {
     				e.getPlayer().sendMessage("You have been un-disguised due to being on enemy territory!");
     				e.setCancelled(true);
     			}
     		}
     		
-    		if(Config.config.getBoolean("unDisguiseIfInOwnTerritory")) {
+    		if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
     			if(fplayer.isInOwnTerritory()) {
        				e.getPlayer().sendMessage("You have been un-disguised due to being on your own territory!");
     				e.setCancelled(true);

@@ -95,13 +95,13 @@ public class Utilities {
 		return false;
 	}
 
-	public static boolean checkGroupPerm(World world, String group, String permission) {
-		if(Config.config.getBoolean("enablePermissionGroups")) {
-			return(FactionsPlus.permission.groupHas(world, group, permission));
-		} else {
-			return true;
-		}
-	}
+//	public static boolean checkGroupPerm(World world, String group, String permission) {
+//		if(Config.config.getBoolean("enablePermissionGroups")) {
+//			return(FactionsPlus.permission.groupHas(world, group, permission));
+//		} else {
+//			return true;
+//		}
+//	}
 
 	public static void addPower(Player player, double amount) {
 		FPlayer fplayer = FPlayers.i.get(player);
