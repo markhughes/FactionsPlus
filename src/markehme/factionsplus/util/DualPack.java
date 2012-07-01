@@ -49,4 +49,8 @@ public final class DualPack<FIRST, SECOND> {
 	public SECOND getSecond() {
 		return secondObject;
 	}
+
+	public FIRST getFirst() {
+		return firstObject;
+	}
 }

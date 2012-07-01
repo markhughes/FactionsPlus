@@ -28,4 +28,8 @@ public final class TypedLinkedList<TYPE> implements Iterable<TYPE>{
 	public Iterator<TYPE> iterator() {
 		return ll.iterator();
 	}
+	
+	public int size() {
+		return ll.size();
+	}
 }
