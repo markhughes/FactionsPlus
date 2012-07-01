@@ -5,7 +5,7 @@ import markehme.factionsplus.util.*;
 
 
 
-public class WYSection extends WY_IDBased {
+public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	
 	private WYItem	firstChild, lastChild;
 	

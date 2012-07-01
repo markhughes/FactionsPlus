@@ -310,7 +310,7 @@ public abstract class WannabeYaml {
 					// _____^ <- there
 					// and we cannot skip this line
 				case ID_START:
-					// done: allow empty lines with 0 or more spaces(limited to {@Link maxLevelSpaces} to be like comments
+					// done: allow empty lines with 0 or more spaces(limited to {@link maxLevelSpaces} to be like comments
 					// (maybe later)
 					// if we're here, we bumped into an empty line
 					// we currently just ignore it, so it will not be added upon writing the config backs

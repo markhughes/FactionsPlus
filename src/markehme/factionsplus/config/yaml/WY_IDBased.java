@@ -6,7 +6,7 @@ import markehme.factionsplus.util.*;
 
 
 
-public abstract class WY_IDBased extends WYItem {
+public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	
 	private String	id;
 	

@@ -4,7 +4,7 @@ import markehme.factionsplus.extras.*;
 import markehme.factionsplus.util.*;
 
 
-public class WYRawButLeveledLine extends WYItem {
+public class WYRawButLeveledLine<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	private String fullLine;
 	
 	/**
