@@ -12,31 +12,31 @@ public class Section_Announce {
 		"announce.enableAnnounce"
 		,"enableAnnounce"
 	}, realAlias_inNonDottedFormat = "enabled"  )
-	public boolean	enabled	= true;
+	public _boolean	enabled	= new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanAnnounce"//+(char)9 was for tests
 		}, realAlias_inNonDottedFormat = "leadersCanAnnounce" )
-	public boolean leadersCanAnnounce=true;
+	public _boolean leadersCanAnnounce=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanAnnounce"
 		}, realAlias_inNonDottedFormat = "officersCanAnnounce" )
-	public boolean officersCanAnnounce=true;
+	public _boolean officersCanAnnounce=new _boolean(true);
 	
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"showLastAnnounceOnLogin"
 		}, realAlias_inNonDottedFormat = "showLastAnnounceOnLogin" )
-	public boolean showLastAnnounceOnLogin=true;
+	public _boolean showLastAnnounceOnLogin=new _boolean(true);
 	
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"showLastAnnounceOnLandEnter"
 		}, realAlias_inNonDottedFormat = "showLastAnnounceOnLandEnter" )
-	public boolean showLastAnnounceOnLandEnter=true;
+	public _boolean showLastAnnounceOnLandEnter=new _boolean(true);
 }

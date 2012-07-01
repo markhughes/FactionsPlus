@@ -80,3 +80,7 @@ support chat modes)
 
 - check and clean the unused imports
 
+- check all current occurrences of config options so that they are not used without the "._" ie. used the instance instead of the
+  value
+  
+  

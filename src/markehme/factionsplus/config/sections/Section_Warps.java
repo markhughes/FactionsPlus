@@ -12,35 +12,35 @@ public class Section_Warps{
 		"warps.enableWarps"
 		,"enableWarps"
 		}, realAlias_inNonDottedFormat = "enabled" )
-	public boolean enabled=true;
+	public _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.leadersCanSetWarps"
 		"leadersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "leadersCanSetWarps" )
-	public boolean leadersCanSetWarps=true;
+	public _boolean leadersCanSetWarps=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.officersCanSetWarps"
 		"officersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "officersCanSetWarps" )
-	public boolean officersCanSetWarps=true;
+	public _boolean officersCanSetWarps=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.membersCanSetWarps"
 		"membersCanSetWarps"
 		}, realAlias_inNonDottedFormat = "membersCanSetWarps" )
-	public boolean membersCanSetWarps=false;
+	public _boolean membersCanSetWarps=new _boolean(false);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.mustBeInOwnTerritoryToCreate"
 		"mustBeInOwnTerritoryToCreate"
 	}, realAlias_inNonDottedFormat = "mustBeInOwnTerritoryToCreate" )
-	public boolean mustBeInOwnTerritoryToCreate=true;
+	public _boolean mustBeInOwnTerritoryToCreate=new _boolean(true);
 	
 	
 	
@@ -48,28 +48,28 @@ public class Section_Warps{
 //		"warps.maxWarps"
 		"maxWarps"
 	}, realAlias_inNonDottedFormat = "maxWarps" )
-	public int maxWarps=5;
+	public _int maxWarps=new _int(5);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromEnemyTerritory"
 		"warpTeleportAllowedFromEnemyTerritory"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromEnemyTerritory" )
-	public boolean warpTeleportAllowedFromEnemyTerritory=true;
+	public _boolean warpTeleportAllowedFromEnemyTerritory=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedFromDifferentWorld"
 		"warpTeleportAllowedFromDifferentWorld"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedFromDifferentWorld" )
-	public boolean warpTeleportAllowedFromDifferentWorld=true;
+	public _boolean warpTeleportAllowedFromDifferentWorld=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.warpTeleportAllowedEnemyDistance"
 		"warpTeleportAllowedEnemyDistance"
 	}, realAlias_inNonDottedFormat = "warpTeleportAllowedEnemyDistance" )
-	public int warpTeleportAllowedEnemyDistance=35;
+	public _int warpTeleportAllowedEnemyDistance=new _int(35);
 	
 	
 	
@@ -77,24 +77,24 @@ public class Section_Warps{
 //		"warps.warpTeleportIgnoreEnemiesIfInOwnTerritory"
 		"warpTeleportIgnoreEnemiesIfInOwnTerritory"
 	}, realAlias_inNonDottedFormat = "warpTeleportIgnoreEnemiesIfInOwnTerritory" )
-	public boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=true;
+	public _boolean warpTeleportIgnoreEnemiesIfInOwnTerritory=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.smokeEffectOnWarp"
 		"smokeEffectOnWarp"
 	}, realAlias_inNonDottedFormat = "smokeEffectOnWarp" )
-	public boolean smokeEffectOnWarp=true;
+	public _boolean smokeEffectOnWarp=new _boolean(true);
 	
 	
 	
 	public boolean canSetOrRemoveWarps(FPlayer fplayer) {
-		if(Config._warps.membersCanSetWarps) {
+		if(Config._warps.membersCanSetWarps._) {
 			return true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && Config._warps.officersCanSetWarps) {
+			if(Utilities.isOfficer(fplayer) && Config._warps.officersCanSetWarps._) {
 				return true;
-			} else if(Utilities.isLeader(fplayer) && Config._warps.leadersCanSetWarps) {
+			} else if(Utilities.isLeader(fplayer) && Config._warps.leadersCanSetWarps._) {
 				return true;
 			}
 		}

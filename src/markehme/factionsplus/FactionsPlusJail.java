@@ -219,20 +219,20 @@ public class FactionsPlusJail {
 		
 		boolean authallow = false;
 		
-		if(Config._jails.leadersCanSetJails) {
+		if(Config._jails.leadersCanSetJails._) {
 			if(fplayer.getRole().toString().contains("admin") || fplayer.getRole().toString().contains("LEADER")) { // 1.6.x
 				authallow = true;
 			}
 		}
 		
-		if(Config._jails.officersCanSetJails) {
+		if(Config._jails.officersCanSetJails._) {
 			if(fplayer.getRole().toString().contains("mod") || fplayer.getRole().toString().contains("OFFICER")) {
 				authallow = true;
 			}
 		}
 
 		
-		if(Config._jails.membersCanSetJails) {
+		if(Config._jails.membersCanSetJails._) {
 			authallow = true;
 		}
 		
@@ -247,8 +247,8 @@ public class FactionsPlusJail {
 		}
 		
 		if(FactionsPlus.economy != null) {
-			if(Config._economy.costToSetJail > 0.0d) {//TODO: fill those empty strings
-				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
+			if(Config._economy.costToSetJail._ > 0.0d) {//TODO: fill those empty strings
+				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
 					return false;
 				}
 			}

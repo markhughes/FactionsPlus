@@ -24,7 +24,7 @@ public class AnnounceListener implements Listener{
 		Player player = event.getPlayer();
 		FPlayer me = FPlayers.i.get(player);
 
-		if(Config._announce.showLastAnnounceOnLogin) {
+		if(Config._announce.showLastAnnounceOnLogin._) {
 			File fAF = new File(Config.folderAnnouncements, me.getFactionId());
 			if(fAF.exists()) {
 				try {
@@ -40,7 +40,7 @@ public class AnnounceListener implements Listener{
 		if(event.isCancelled()) {
 			return;
 		}
-		if(Config._announce.showLastAnnounceOnLandEnter) {
+		if(Config._announce.showLastAnnounceOnLandEnter._) {
 			if (event.getFrom().equals(event.getTo())) return;
 
 			Player player = event.getPlayer();

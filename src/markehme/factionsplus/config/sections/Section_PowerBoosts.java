@@ -9,61 +9,61 @@ public class Section_PowerBoosts {
 		"powerboosts.enablePowerBoosts"
 		,"enablePowerBoosts"
 		}, realAlias_inNonDottedFormat = "enabled" )
-	public boolean enabled=true;
+	public _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerWhenKillPlayer"
 		}, realAlias_inNonDottedFormat = "extraPowerWhenKillPlayer" )
-	public double extraPowerWhenKillPlayer=0.0d; // wow it's double in Factions, how odd, I'd think it'd be int
+	public _double extraPowerWhenKillPlayer=new _double( 0.0d ); // wow it's _double in Factions, how odd, I'd think it'd be int
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathBySuicide"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathBySuicide" )
-	public double extraPowerLossIfDeathBySuicide=0.0d;
+	public _double extraPowerLossIfDeathBySuicide=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByPVP"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByPVP" )
-	public double extraPowerLossIfDeathByPVP=0.0d;
+	public _double extraPowerLossIfDeathByPVP=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByMob"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByMob" )
-	public double extraPowerLossIfDeathByMob=0.0d;
+	public _double extraPowerLossIfDeathByMob=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByCactus"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByCactus" )
-	public double extraPowerLossIfDeathByCactus=0.0d;
+	public _double extraPowerLossIfDeathByCactus=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByTNT"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByTNT" )
-	public double extraPowerLossIfDeathByTNT=0.0d;
+	public _double extraPowerLossIfDeathByTNT=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByFire"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByFire" )
-	public double extraPowerLossIfDeathByFire=0.0d;
+	public _double extraPowerLossIfDeathByFire=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByPotion"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByPotion" )
-	public double extraPowerLossIfDeathByPotion=0.0d;
+	public _double extraPowerLossIfDeathByPotion=new _double( 0.0d );
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathByOther"
 		}, realAlias_inNonDottedFormat = "extraPowerLossIfDeathByOther" )
-	public double extraPowerLossIfDeathByOther=0.0d;
+	public _double extraPowerLossIfDeathByOther=new _double( 0.0d );
 	
 	
 	

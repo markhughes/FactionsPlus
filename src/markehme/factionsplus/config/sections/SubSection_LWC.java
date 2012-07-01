@@ -19,5 +19,5 @@ public class SubSection_LWC {
 	
 	@Option(
 			realAlias_inNonDottedFormat = "blockCPublicAccessOnNonOwnFactionTerritory" )
-	public boolean blockCPublicAccessOnNonOwnFactionTerritory=false;
+	public _boolean blockCPublicAccessOnNonOwnFactionTerritory=new _boolean(false);
 }

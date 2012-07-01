@@ -85,8 +85,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(Config._economy.costToDeleteWarp > 0.0d && !Config._economy.enabled) {
-				if (!payForCommand(Config._economy.costToDeleteWarp, "to remove this warp", "for removing the warp")) {
+		    if(Config._economy.costToDeleteWarp._ > 0.0d && !Config._economy.enabled._) {
+				if (!payForCommand(Config._economy.costToDeleteWarp._, "to remove this warp", "for removing the warp")) {
 					return;
 				}
 			}

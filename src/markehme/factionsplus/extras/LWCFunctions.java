@@ -33,7 +33,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 		
 		//we always need this in order to prevent people from locking ie. chests in enemy faction
 		getLWC().getModuleLoader().registerModule( FactionsPlus.instance,  
-			new LWCModule(Config._extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory ));
+			new LWCModule(Config._extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory._ ));
 		
 		FactionsPlusPlugin.info("Hooked into LWC!");
 	}

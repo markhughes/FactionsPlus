@@ -9,23 +9,23 @@ public class Section_Rules {
 		"rules.enableRules"
 		,"enableRules"
 		}, realAlias_inNonDottedFormat = "enabled" )
-	public boolean enabled=true;
+	public _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanSetRules"
 		}, realAlias_inNonDottedFormat = "leadersCanSetRules" )
-	public boolean leadersCanSetRules=true;
+	public _boolean leadersCanSetRules=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanSetRules"
 		}, realAlias_inNonDottedFormat = "officersCanSetRules" )
-	public boolean officersCanSetRules=true;
+	public _boolean officersCanSetRules=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"maxRulesPerFaction"
 		}, realAlias_inNonDottedFormat = "maxRulesPerFaction" )
-	public int maxRulesPerFaction=12;
+	public _int maxRulesPerFaction=new _int(12);
 }

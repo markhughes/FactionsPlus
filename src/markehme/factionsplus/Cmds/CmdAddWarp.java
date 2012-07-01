@@ -61,20 +61,20 @@ public class CmdAddWarp extends FCommand {
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(Config._warps.mustBeInOwnTerritoryToCreate) {
+			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
 		}
 
-		if(Config._economy.costToCreateWarp > 0.0d && !Config._economy.enabled) {
-			if (!payForCommand(Config._economy.costToCreateWarp, "to create this warp", "for creating this warp")) {
+		if(Config._economy.costToCreateWarp._ > 0.0d && !Config._economy.enabled._) {
+			if (!payForCommand(Config._economy.costToCreateWarp._, "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
 
-		if(Config._warps.maxWarps != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps) {
+		if(Config._warps.maxWarps._ != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}

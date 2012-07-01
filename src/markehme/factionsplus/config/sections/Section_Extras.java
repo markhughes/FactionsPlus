@@ -9,7 +9,7 @@ public class Section_Extras {
 	@Option(oldAliases_alwaysDotted={
 		"disableUpdateCheck"
 	}, realAlias_inNonDottedFormat = "disableUpdateCheck" )
-	public boolean disableUpdateCheck=false;
+	public _boolean disableUpdateCheck=new _boolean(false);
 	
 	@Section(
 			realAlias_neverDotted = "lwc" )

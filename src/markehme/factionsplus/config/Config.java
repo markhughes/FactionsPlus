@@ -120,7 +120,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final int					_doNotChangeMe			= 11;
+	public static final _int					_doNotChangeMe			= new _int(11);
 	
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;
@@ -174,10 +174,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-//	public static final String getDottedFormat( Field f ) {
-//		// TODO:
-//		throw Q.ni();
-//	}
+	// public static final String getDottedFormat( Field f ) {
+	// // TODO:
+	// throw Q.ni();
+	// }
 	
 	
 	
@@ -186,11 +186,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
 		ConfigOptionName.dottedClassOptions_To_Fields.clear();
-		parsify( rootClass, null );
+		parsify( rootClass, null, rootClass );
 	}
 	
 	
-	private static void parsify( Class<?> rootClass, String dottedParentSection ) {
+	private static void parsify( Class<?> rootClass, String dottedParentSection, Object parentInstance ) {
 		Field[] allFields = rootClass.getDeclaredFields();
 		// DeclaredAnnotations();
 		for ( int why = 0; why < allFields.length; why++ ) {
@@ -205,8 +205,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					
 					// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
-					// Jails.enabled instead of Config.jails.enabled
-					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled is
+					// Section_Jails.enabled instead of Config.jails.enabled
+					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled if
 					// enabled is private
 					// but protected is allowed, assuming you know what you're doing and you're using that only in the same
 					// package
@@ -221,20 +221,51 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// SubSection_LWC to access lwc's fields
 						// do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
 						// field
-						throw new RuntimeException( "bad coding: your @" + annotationType.getSimpleName()
+						throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
 							+ " config option has a " + ( Modifier.isStatic( fieldModifiers ) ? "static" : "private" )
 							+ " field `" + field + "` ; this is not allowed for subsections(only for toplevel sections in "
 							+ configClass.getSimpleName() + "), please correct in the source code!" );
 					}
 					
+					Object fieldInstance;
+					try {
+						fieldInstance = field.get( parentInstance );
+					} catch ( Exception e ) {
+						e.printStackTrace();
+						throw FactionsPlus.bailOut( "bad coding: the field `" + field + "` doesn't have an instance, "
+							+ "did you forget to add `= new ...();`" );
+						// this means that you couldn't use Config.thisfield.itschildfield because thisfield would be null and
+						// NPE
+						// ie. Config.extras.lwc would NPE if `extras` doesn't have an instance, make sure
+						// that extras is new-ed like: Classhere extras=new Classhere(); in Config
+					}
+					
+					
 					if ( Section.class == annotationType ) {
-						String realAlias = ((Section)fieldAnnotation).realAlias_neverDotted();
-						String dotted = ( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						String realAlias = ( (Section)fieldAnnotation ).realAlias_neverDotted();
+						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
+						String dotted =
+							( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
-						parsify( typeOfField, dotted );// recurse
+						parsify( typeOfField, dotted, fieldInstance );// recurse
+						
 					} else {// it's @ConfigOption
-						String realAlias = ((Option)fieldAnnotation).realAlias_inNonDottedFormat();
-						String currentDotted = ( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						
+						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
+							throw FactionsPlus.bailOut( "bad coding: the type of field `" + field + "` is not a subclass of `"
+								+ ConfigOptionName.class + "`" );
+						}
+
+						
+						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
+						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
+						String currentDotted =
+							( null == dottedParentSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						
+						
+						//must update the dotted form in the instance, because we know it now
+						((ConfigOptionName)fieldInstance)._dottedName_asString=currentDotted;
 						
 						Option co = (Option)fieldAnnotation;
 						String[] aliasesArray = co.oldAliases_alwaysDotted();
@@ -242,11 +273,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
 						while ( true ) {
-							//this will merge realAlias with oldAliases in the same destination HashMap
+							// this will merge realAlias with oldAliases in the same destination HashMap
 							// FactionsPlus.info( currentDotted + "/" + field );
 							Field existingField = ConfigOptionName.dottedClassOptions_To_Fields.put( currentDotted, field );
 							if ( ( null != existingField ) ) {
-								throw new RuntimeException( "bad coding: your config option `" + currentDotted + "` in field `"
+								FactionsPlus.bailOut( "bad coding: your config option `" + currentDotted + "` in field `"
 									+ field + "`\n" + "was already defined in field `" + existingField
 									+ "`\nBasically you cannot have the same oldalias for two different config options" );
 							}
@@ -257,12 +288,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							}
 							currentDotted = aliasesArray[current];
 							if ( currentDotted.isEmpty() ) {
-								throw new RuntimeException( "bad coding: one of the oldAliases in field `" + field + "`\n"
+								FactionsPlus.bailOut( "bad coding: one of the oldAliases in field `" + field + "`\n"
 									+ "should not be empty!!" );
 							}
 							// detect extra spaces(by mistake?) around the current old alias
 							if ( !currentDotted.trim().equals( currentDotted ) ) {
-								throw new RuntimeException( "bad coding: the old alias `" + currentDotted + "` in field `"
+								FactionsPlus.bailOut( "bad coding: the old alias `" + currentDotted + "` in field `"
 									+ field + "`\n" + "should not contain any extra whitespaces around it!" );
 							}
 						}// while
@@ -520,7 +551,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier wid = ( (WYIdentifier)currentItem );
 					String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
-					System.out.println( dotted );
+					// System.out.println( dotted );
 					Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
 					if ( null == foundAsField ) {
 						// done: invalid config option encountered in config.yml transforms into comment

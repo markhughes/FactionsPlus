@@ -72,7 +72,7 @@ public class CmdWarp extends FCommand {
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!Config._warps.warpTeleportAllowedFromEnemyTerritory && fplayer.isInEnemyTerritory() ){
+		if(!Config._warps.warpTeleportAllowedFromEnemyTerritory._ && fplayer.isInEnemyTerritory() ){
 			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
@@ -92,9 +92,9 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				Config._warps.warpTeleportAllowedEnemyDistance > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
 				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory))){
+						|| ( fplayer.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory._))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
@@ -116,7 +116,7 @@ public class CmdWarp extends FCommand {
 				double dx = Math.abs(x - l.getX());
 				double dy = Math.abs(y - l.getY());
 				double dz = Math.abs(z - l.getZ());
-				double max = Config._warps.warpTeleportAllowedEnemyDistance;
+				double max = Config._warps.warpTeleportAllowedEnemyDistance._;
 
 				// box-shaped distance check
 				if (dx > max || dy > max || dz > max)
@@ -167,8 +167,8 @@ public class CmdWarp extends FCommand {
 						}
 					}
 
-					if(Config._economy.costToWarp > 0.0d) {
-						if (!payForCommand(Config._economy.costToWarp, "to teleport to this warp", "for teleporting to your faction home")) {
+					if(Config._economy.costToWarp._ > 0.0d) {
+						if (!payForCommand(Config._economy.costToWarp._, "to teleport to this warp", "for teleporting to your faction home")) {
 							return;
 						}
 					}
@@ -180,7 +180,7 @@ public class CmdWarp extends FCommand {
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					// Create a smoke effect
-					if (Config._warps.smokeEffectOnWarp) {
+					if (Config._warps.smokeEffectOnWarp._) {
 						List<Location> smokeLocations = new ArrayList<Location>();
 						smokeLocations.add(player.getLocation());
 						smokeLocations.add(player.getLocation().add(0, 1, 0));

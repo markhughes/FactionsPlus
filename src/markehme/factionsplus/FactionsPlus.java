@@ -124,23 +124,23 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config._economy.enabled) {
+        if(Config._economy.enabled._) {
         	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         	
         	if (economyProvider != null) {
             	economy = economyProvider.getProvider();
         	}
         }
-        if(Config._announce.enabled){
+        if(Config._announce.enabled._){
     		pm.registerEvents(this.announcelistener, this);
         }
-        if(Config._banning.enabled) {
+        if(Config._banning.enabled._) {
         	pm.registerEvents(this.banlistener, this);
         }
-        if(Config._jails.enabled) {
+        if(Config._jails.enabled._) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(Config._extras.disguise.enableDisguiseIntegration && (Config._extras.disguise.unDisguiseIfInOwnTerritory || Config._extras.disguise.unDisguiseIfInEnemyTerritory)) {
+        if(Config._extras.disguise.enableDisguiseIntegration._ && (Config._extras.disguise.unDisguiseIfInOwnTerritory._ || Config._extras.disguise.unDisguiseIfInEnemyTerritory._)) {
         	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
         		pm.registerEvents(this.dclistener, this);
         		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
@@ -189,7 +189,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 		} else {//no LWC
-			if ( Config._extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory 
+			if ( Config._extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
 				|| Config._extras.lwc.removeLWCLocksOnClaim._ ) 
 			{
 				FactionsPlusPlugin
@@ -203,10 +203,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
        
         
         
-        if(Config._peaceful.enablePeacefulBoosts) {
+        if(Config._peaceful.enablePeacefulBoosts._) {
         	pm.registerEvents(this.peacefullistener, this);
         }
-        if(Config._powerboosts.enabled) {
+        if(Config._powerboosts.enabled._) {
         	pm.registerEvents(this.powerboostlistener, this);
         }
 

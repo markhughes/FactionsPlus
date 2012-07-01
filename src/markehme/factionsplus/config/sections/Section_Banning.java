@@ -9,35 +9,35 @@ public class Section_Banning {
 		"banning.enableBans"
 		,"enableBans"
 	}, realAlias_inNonDottedFormat = "enabled" )
-	public boolean enabled=true;
+	public _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leaderCanNotBeBanned"
 	}, realAlias_inNonDottedFormat = "leaderCanNotBeBanned" )
-	public boolean leaderCanNotBeBanned=true;
+	public _boolean leaderCanNotBeBanned=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanFactionBan"
 	}, realAlias_inNonDottedFormat = "leadersCanFactionBan" )
-	public boolean leadersCanFactionBan=true;
+	public _boolean leadersCanFactionBan=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanFactionBan"
 	}, realAlias_inNonDottedFormat = "officersCanFactionBan" )
-	public boolean officersCanFactionBan=true;
+	public _boolean officersCanFactionBan=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanFactionUnban"
 	}, realAlias_inNonDottedFormat = "leadersCanFactionUnban" )
-	public boolean leadersCanFactionUnban=true;
+	public _boolean leadersCanFactionUnban=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanFactionUnban"
 	}, realAlias_inNonDottedFormat = "officersCanFactionUnban" )
-	public boolean officersCanFactionUnban=true;
+	public _boolean officersCanFactionUnban=new _boolean(true);
 }

@@ -9,38 +9,38 @@ public class Section_Jails {
 		"jails.enableJails"
 		,"enableJails"
 		}, realAlias_inNonDottedFormat = "enabled" )
-	public boolean enabled=true;
+	public _boolean enabled=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 //		"jails.leadersCanSetJails"
 		"leadersCanSetJails"
 		}, realAlias_inNonDottedFormat = "leadersCanSetJails" )
-	public boolean leadersCanSetJails=true;
+	public _boolean leadersCanSetJails=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanSetJails"
 		}, realAlias_inNonDottedFormat = "officersCanSetJails" )
-	public boolean officersCanSetJails=true;
+	public _boolean officersCanSetJails=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"membersCanSetJails"
 		}, realAlias_inNonDottedFormat = "membersCanSetJails" )
-	public boolean membersCanSetJails=false;
+	public _boolean membersCanSetJails=new _boolean(false);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanJail"
 		}, realAlias_inNonDottedFormat = "leadersCanJail" )
-	public boolean leadersCanJail=true;
+	public _boolean leadersCanJail=new _boolean(true);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"officersCanJail"
 		}, realAlias_inNonDottedFormat = "officersCanJail" )
-	public boolean officersCanJail=true;
+	public _boolean officersCanJail=new _boolean(true);
 	
 	
 	

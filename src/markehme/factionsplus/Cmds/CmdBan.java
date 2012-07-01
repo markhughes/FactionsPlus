@@ -46,9 +46,9 @@ public class CmdBan extends FCommand {
 
 		boolean authallow = false;
 
-		if(Config._banning.leadersCanFactionBan && Utilities.isLeader(fme)) {
+		if(Config._banning.leadersCanFactionBan._ && Utilities.isLeader(fme)) {
 			authallow = true;
-		} else if(Config._banning.officersCanFactionBan && Utilities.isOfficer(fme)) {
+		} else if(Config._banning.officersCanFactionBan._ && Utilities.isOfficer(fme)) {
 			authallow = true;
 		}
 

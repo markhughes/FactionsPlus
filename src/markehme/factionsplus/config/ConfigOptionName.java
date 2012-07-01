@@ -3,7 +3,7 @@ package markehme.factionsplus.config;
 import java.lang.reflect.*;
 import java.util.*;
 
-public abstract class ConfigOptionName {
+public abstract class ConfigOptionName {//must be abstract, we can't have it instanced, use subclasses instead!
 	/**
 	 * all new option names and their old aliases in the same set<br>
 	 * used to quickly point to the right Field.class<br>

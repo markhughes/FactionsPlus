@@ -8,19 +8,19 @@ public class SubSection_Disguise {
 	
 	@Option(
 			realAlias_inNonDottedFormat = "enableDisguiseIntegration" )
-	public boolean enableDisguiseIntegration=false;
+	public _boolean enableDisguiseIntegration=new _boolean(false);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"unDisguiseIfInOwnTerritory"
 	}, realAlias_inNonDottedFormat = "unDisguiseIfInOwnTerritory" )
-	public boolean unDisguiseIfInOwnTerritory=false;
+	public _boolean unDisguiseIfInOwnTerritory=new _boolean(false);
 	
 	
 	@Option(oldAliases_alwaysDotted={
 		"unDisguiseIfInEnemyTerritory"
 	}, realAlias_inNonDottedFormat = "unDisguiseIfInEnemyTerritory" )
-	public boolean unDisguiseIfInEnemyTerritory=false;
+	public _boolean unDisguiseIfInEnemyTerritory=new _boolean(false);
 	
 	
 	

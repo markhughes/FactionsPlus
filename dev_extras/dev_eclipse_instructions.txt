@@ -291,7 +291,8 @@ BEWARE of the evil char CONCAT
         String correctConcat= "" + a+b+"cdef"; // "abcdef"
         
 -----
-
+always use -ea  java parameter when testing, both when compiling the classes in eclipse and when running the server
+maybe only the latter is necessary, to test just do an "assert false;" line somewhere at onEnable()
 -----
 
 -----
