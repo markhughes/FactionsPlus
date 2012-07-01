@@ -11,9 +11,8 @@ public final class Section_Extras {
 	}, realAlias_inNonDottedFormat = "disableUpdateCheck" )
 	public  final _boolean disableUpdateCheck=new _boolean(false);
 	
-	@Section(
-			realAlias_neverDotted = "lwc" )
-	public final SubSection_LWC _lwc=new SubSection_LWC();
+	@Section(realAlias_neverDotted="Protection")
+	public final SubSection_Protection protection=new SubSection_Protection();
 	
 	@Section(
 			realAlias_neverDotted = "disguise" )

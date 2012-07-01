@@ -1,6 +1,7 @@
 package markehme.factionsplus.config.yaml;
 
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 
 
@@ -72,12 +73,12 @@ public class WYSection extends WY_IDBased {
 		assert asComment.getParent() == null;
 		
 		// making comment part of this parent
-		//let's not forget head/tail !!
-		if (wid == firstChild) {
-			firstChild=asComment;
+		// let's not forget head/tail !!
+		if ( wid == firstChild ) {
+			firstChild = asComment;
 		}
-		if (wid == lastChild) {
-			lastChild=asComment;
+		if ( wid == lastChild ) {
+			lastChild = asComment;
 		}
 		WYItem oldPrev = wid.getPrev();
 		if ( null != oldPrev ) {// need to set its next
@@ -101,8 +102,8 @@ public class WYSection extends WY_IDBased {
 		wid.setParent( null );
 		wid.setPrev( null );
 		wid.setNext( null );
-		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###"+wid.getId()+"###" );
-		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###"+wid.getValue()+"###" );
+		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getId() + "###" );
+		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getValue() + "###" );
 		// we leave only setLine()
 		// that's a mark that tells you, when you ever see it, that you're not supposed to be using this, if you do, you'll know
 		// you probably missed removing it from some list/hashmap after you called this method we're in
@@ -110,5 +111,34 @@ public class WYSection extends WY_IDBased {
 		return asComment;
 	}
 	
+	
+	/**
+	 * @param root
+	 *            the root section which to parse, only lines inside it will be counted with first item from it being first line
+	 *            and last item in it being last line<br>
+	 *            each item (aka subclass of WYItem is considered to be 1 line)
+	 * @param whatThePreviousLineNumber
+	 *            the number of the first line, ie. should be 0 if you want the first line to be 1
+	 */
+	public void recalculateLineNumbers( WYSection root, int whatThePreviousLineNumber ) {
+		assert Q.nn( root );
+		WYItem currentItem = root.getFirst();
+		int currentLine=whatThePreviousLineNumber;//pointing to previous line, atm
+		
+		while ( null != currentItem ) {
+			
+			currentLine++;//next line
+
+			currentItem.setLineNumber(currentLine);
+			
+
+			if ( WYSection.class == currentItem.getClass() ) {
+				WYSection cs = (WYSection)currentItem;
+				recalculateLineNumbers( cs, currentLine );// recurse
+			}
+			
+			currentItem = currentItem.getNext();
+		}
+	}
 	
 }

@@ -188,11 +188,20 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
-		ConfigOptionName.dottedClassOptions_To_Fields.clear();
-		parsify( rootClass, null, rootClass );
+		synchronized ( ConfigOptionName.dottedClassOptions_To_Fields ) {
+			ConfigOptionName.dottedClassOptions_To_Fields.clear();
+			parsify( rootClass, null, rootClass );
+		}
 	}
 	
 	
+	/**
+	 * this works only on the config options present in java code, none from config.yml here<br>
+	 * must be inside a synchronized ( ConfigOptionName.dottedClassOptions_To_Fields ) block<br>
+	 * @param rootClass
+	 * @param dottedParentSection
+	 * @param parentInstance
+	 */
 	private static void parsify( Class<?> rootClass, String dottedParentSection, Object parentInstance ) {
 		Field[] allFields = rootClass.getDeclaredFields();
 		// DeclaredAnnotations();
@@ -558,10 +567,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
+	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
 	 * @param root
 	 */
 	private final static void parseCheckForValids( WYSection root ) {
-		synchronized ( mapField_to_ListOfWYIdentifier ) {
+		
 			assert Q.nn( root );
 			WYItem currentItem = root.getFirst();
 			// WYSection parent = root;
@@ -760,7 +770,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// parent = parent.getParent();
 			// }// outer while
 			
-		}// sync
+		//}// sync
 	}
 	
 	private static BufferedWriter	bw;
@@ -955,6 +965,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// parse all found config options in .yml , only those found! and sort the list for their overrides
 			// which means, we'll now know what option overrides which one if more than 1 was found in .yml for a specific
 			// config field
+			//realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
+			//the top oldAliases override the bottom ones when looking at the @Option annotation
+			
 			Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
 				mapField_to_ListOfWYIdentifier.entrySet();
 			for ( Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>> fieldToList : iterable ) {

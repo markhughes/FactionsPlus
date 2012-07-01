@@ -80,6 +80,11 @@ public abstract class WYItem {
 	public void setPrev( WYItem _prev ) {
 		prev = _prev;
 	}
+
+
+	public void setLineNumber( int newLineNumber ) {
+		lineNum=newLineNumber;
+	}
 	
 	// public void addToChain(WYItem newItem, WYItem parent, WYItem prev, WYItem next) {
 	//
