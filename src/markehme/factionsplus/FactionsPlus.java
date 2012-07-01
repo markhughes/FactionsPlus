@@ -216,7 +216,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         
         version = getDescription().getVersion();
         
-        FactionsPlusUpdate.checkUpdates();
+        FactionsPlusUpdate.checkUpdates(this);
         
 		FactionsPlusPlugin.info("Ready.");
 		
