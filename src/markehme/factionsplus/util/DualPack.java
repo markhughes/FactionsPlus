@@ -13,7 +13,7 @@ import markehme.factionsplus.util.*;
  * @param <SECOND>
  */
 public final class DualPack<FIRST, SECOND> {
-	private final FIRST firstObject;
+	private FIRST firstObject;
 	private final SECOND secondObject;
 	
 //	public DualPack(FIRST first) {
@@ -52,5 +52,9 @@ public final class DualPack<FIRST, SECOND> {
 
 	public FIRST getFirst() {
 		return firstObject;
+	}
+	
+	public void reuse(FIRST newVal) {
+		firstObject=newVal;
 	}
 }

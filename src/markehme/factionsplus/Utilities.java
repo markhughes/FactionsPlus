@@ -202,6 +202,21 @@ public class Utilities {
 	}
 	
 	/**
+	 * uses .equals()
+	 * @param objRef
+	 * @param array
+	 * @return
+	 */
+	public static int getIndexOfObjectInArray( Object objRef, Object[] array ) {
+		for ( int i = 0; i < array.length; i++ ) {
+			if (objRef.equals(array[i])) { //not .equals(), we just want to know if that reference is in the array
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
 	 * checks if player has permission<br />
 	 * if he's OP then it auto has perm
 	 * @param p

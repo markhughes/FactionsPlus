@@ -863,9 +863,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					mapField_to_ListOfWYIdentifier.clear();
 					parseCheckForValids( virtualRoot );
 					
+					
+					sortOverrides();// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
 					coalesceOverrides( virtualRoot );
+					
+					addMissingFieldsToConfig( virtualRoot );
 					// TODO: when done:
 					mapField_to_ListOfWYIdentifier.clear();
 					
@@ -942,6 +946,78 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
+	private static void sortOverrides() {
+		synchronized ( mapField_to_ListOfWYIdentifier ) {
+			DualPack dualsearch = new DualPack( "", WYIdentifier.NULL );
+			// parse all found config options in .yml , only those found! and sort the list for their overrides
+			// which means, we'll now know what option overrides which one if more than 1 was found in .yml for a specific
+			// config field
+			Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
+				mapField_to_ListOfWYIdentifier.entrySet();
+			for ( Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>> fieldToList : iterable ) {
+				Field field = fieldToList.getKey();
+				Option anno = field.getAnnotation( Option.class );
+				String[] orderOfAliases = anno.oldAliases_alwaysDotted();
+				String realAlias = anno.realAlias_inNonDottedFormat();
+				
+				TypedLinkedList<DualPack<String, WYIdentifier>> list = fieldToList.getValue();
+				assert null != list;
+				assert list.size() > 0;
+				
+				TypedLinkedList<DualPack<String, WYIdentifier>> listInOverridingOrder =
+					new TypedLinkedList<DualPack<String, WYIdentifier>>();
+				
+				
+				for ( int i = 0; i < orderOfAliases.length; i++ ) {
+					dualsearch.reuse( orderOfAliases[i] );
+					
+					DualPack<String, WYIdentifier> existing = list.getOriginal( dualsearch );
+					if ( null != existing ) {
+						listInOverridingOrder.addLast( existing );
+						boolean was = list.remove( existing );
+						assert was;
+					} else {
+						// we just didn't encounter this oldAlias which was defined in the annotation
+						// so we skip to next
+					}
+				}
+				// did we however also find the realAlias, if so put it at top of list
+				// if (real) we can't, we don't know it's dotted format yet, we assume that whatever 1 element is left, if any
+				// is the realAlias, cannot be anything else
+				
+				assert list.size() <= 1;
+				
+				if ( list.size() > 0 ) {
+					// still one left, must be the realAlias
+					DualPack<String, WYIdentifier> real = list.getFirst();
+					DualPack<String, WYIdentifier> removed = list.removeFirst();
+					assert real == removed;
+					listInOverridingOrder.addFirst( real );
+				}
+				assert list.size() == 0;
+				// list.clear();//no use keeping the memory
+				fieldToList.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of overrides
+				
+				
+				
+				// for ( DualPack<String, WYIdentifier> dualPack : list ) {
+				// String dotted = dualPack.getFirst();
+				// Field fieldForDotted = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
+				// if (field.equals( fieldForDotted )) {
+				// //this 'dotted' is our realAlias but in dotted form
+				// //which means it would override all config options for this field, regardless of their order in the file
+				//
+				// }else{
+				// assert null == fieldForDotted;
+				// }
+				// // dualPack.getSecond();
+				// int index = Utilities.getIndexOfObjectInArray( dotted, orderOfAliases );
+				// }
+			}
+		}
+	}
+	
+	
 	private static void coalesceOverrides( WYSection root ) {
 		synchronized ( mapField_to_ListOfWYIdentifier ) {
 			assert !mapField_to_ListOfWYIdentifier.isEmpty();
@@ -970,50 +1046,52 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
 						// System.out.println( dotted );
 						
-						//parse each of the encountered key:value in config, and 
-						//check if it's overridden by one before it or by the realAlias, then comment it out if so
+						// parse each of the encountered key:value in config, and
+						// check if it's overridden by one before it or by the realAlias, then comment it out if so
 						Field foundAsField = ConfigOptionName.dottedClassOptions_To_Fields.get( dotted );
 						if ( null == foundAsField ) {
 							throw FactionsPlus
 								.bailOut( "this should not happen at this time, cause previous code took care of it?" );
 						} else {
-							TypedLinkedList<DualPack<String, WYIdentifier>> list = mapField_to_ListOfWYIdentifier.get( foundAsField );
-							FactionsPlus.warn( ChatColor.YELLOW + dotted+" "+list.size() );
-//							// TODO: make sure here the order in which we check is the ordered that we encountered them in file
-//							Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
-//								list.entrySet();
-//							for ( DualPack<String, WYIdentifier> configOption_Field : list )
-//							{
-//								Field field = configOption_Field.getKey();
-//								Option fieldAnno = field.getAnnotation( Option.class );
-//								assert null != fieldAnno;
-//								String realAlias_undotted = fieldAnno.realAlias_inNonDottedFormat();
-//								// realAliasDotted=field.get
-//								1
-//								FactionsPlus.warn( realAlias_undotted );// +" / "+realAliasDotted);
-//								TypedLinkedList<DualPack<String, WYIdentifier>> value = configOption_Field.getValue();
-								// assert value.size() == 1;
-								for ( DualPack<String, WYIdentifier> aliasesEncountered : list ) {
-									String dottedFormOfField = aliasesEncountered.getFirst();
-									// TODO: must find better way
-									int dotEndsAt = dottedFormOfField.lastIndexOf( Config.DOT ) + 1;
-									assert dotEndsAt < dottedFormOfField.length();
-									String undottedField =
-										dotEndsAt >= 0 ? dottedFormOfField.substring( dotEndsAt ) : dottedFormOfField;
-									
-									WYIdentifier realOrOldAliasAndValue = aliasesEncountered.getSecond();// if real=>undotted;
-																											// else it's dotted
-									
-									FactionsPlus.info( ChatColor.YELLOW + undottedField + ": " + ChatColor.RED
-										+ realOrOldAliasAndValue );
-//									if ( aliasesEncountered.getFirst().equals( realAlias_undotted ) ) {
-//										//
-//									}
-								}// for
-								System.out.println( "." );
+							TypedLinkedList<DualPack<String, WYIdentifier>> list =
+								mapField_to_ListOfWYIdentifier.get( foundAsField );
+							FactionsPlus.warn( ChatColor.YELLOW + dotted + " " + list.size() );
+							// // TODO: make sure here the order in which we check is the ordered that we encountered them in
+							// file
+							// Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
+							// list.entrySet();
+							// for ( DualPack<String, WYIdentifier> configOption_Field : list )
+							// {
+							// Field field = configOption_Field.getKey();
+							// Option fieldAnno = field.getAnnotation( Option.class );
+							// assert null != fieldAnno;
+							// String realAlias_undotted = fieldAnno.realAlias_inNonDottedFormat();
+							// // realAliasDotted=field.get
+							// 1
+							// FactionsPlus.warn( realAlias_undotted );// +" / "+realAliasDotted);
+							// TypedLinkedList<DualPack<String, WYIdentifier>> value = configOption_Field.getValue();
+							// assert value.size() == 1;
+							for ( DualPack<String, WYIdentifier> aliasesEncountered : list ) {
+								String dottedFormOfField = aliasesEncountered.getFirst();
+								// TODO: must find better way
+								int dotEndsAt = dottedFormOfField.lastIndexOf( Config.DOT ) + 1;
+								assert dotEndsAt < dottedFormOfField.length();
+								String undottedField =
+									dotEndsAt >= 0 ? dottedFormOfField.substring( dotEndsAt ) : dottedFormOfField;
 								
-//							}
-						}//else
+								WYIdentifier realOrOldAliasAndValue = aliasesEncountered.getSecond();// if real=>undotted;
+																										// else it's dotted
+								
+								FactionsPlus.info( ChatColor.YELLOW + undottedField + ": " + ChatColor.RED
+									+ realOrOldAliasAndValue );
+								// if ( aliasesEncountered.getFirst().equals( realAlias_undotted ) ) {
+								// //
+								// }
+							}// for
+							System.out.println( "." );
+							
+							// }
+						}// else
 					} else {// non id
 						assert ( currentItem instanceof WYRawButLeveledLine );
 						// ignore raw lines like comments or empty lines, for now
