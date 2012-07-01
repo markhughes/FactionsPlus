@@ -376,7 +376,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 */
 	public final static void reload() {
 		
-		Config.setNotInited();// must be here to cause config to reload on every plugin(s) reload from console
+		Config.setInited(false);// must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates = null;
 		boolean failed = false;
 		try {
@@ -390,6 +390,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			// _enableJails = ( (Boolean);
 			// System.out.println(Config.config.getInt( str_economyCostToAnnounce) );
+			
+			//last:
+			Config.setInited(true);
 		} catch ( Throwable t ) {
 			Q.rethrow( t );
 		} finally {
@@ -402,8 +405,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static void setNotInited() {
-		inited=false;
+	private static void setInited(boolean nowState) {
+		inited=nowState;
 	}
 
 
@@ -754,6 +757,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public final static void saveConfig() {
 		try {
+			//FIXME: actually meld the class options/values into the WYIdentifiers here in the represented yml file
+			//before you write virtualRoot
 			
 			FileOutputStream fos = null;
 			OutputStreamWriter osw = null;
@@ -861,8 +866,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			}
 			
 		} else {
-			// FIXME: what to do when config doesn't exit
-			FactionsPlus.bailOut( "inexistent config" );
+			// FIXME: what to do when config doesn't exit, probably just saveConfig() or fill up virtualRoot 
+			throw FactionsPlus.bailOut( "inexistent config" );
 		}
 		
 		
