@@ -10,4 +10,10 @@ public class _boolean extends ConfigOptionName {
 	public _boolean(boolean defaultValue) {
 		_=defaultValue;
 	}
+	
+	@Override
+	public void setValue( String value ) {
+		_=Boolean.parseBoolean( value);
+	}
+	
 }

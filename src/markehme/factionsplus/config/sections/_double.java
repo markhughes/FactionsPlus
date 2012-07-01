@@ -10,4 +10,9 @@ public class _double extends ConfigOptionName {
 	public _double(double defaultValue) {
 		_=defaultValue;
 	}
+	
+	@Override
+	public void setValue( String value ) {
+		_=Double.parseDouble( value );
+	}
 }

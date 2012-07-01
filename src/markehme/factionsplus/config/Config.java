@@ -384,14 +384,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * config.yml<br>
 	 * dotted form ie. extras.lwc.someid
 	 */
-	private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>	mapField_to_ListOfWYIdentifier	=
-																																new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
+	// private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>> mapField_to_ListOfWYIdentifier =
+	// new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
 	
+	private static final HashMap<Field, HashMap<WYIdentifier, String>>	mapField_to_WYIdDotted	=
+																									new HashMap<Field, HashMap<WYIdentifier, String>>();
 	
 	
 	/**
 	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
-	 * this parses the entire representation of the config.yml and marks duplicates and invalid configs<br> 
+	 * this parses the entire representation of the config.yml and marks duplicates and invalid configs<br>
+	 * 
 	 * @param root
 	 */
 	private final static void parseOneTime_and_CheckForValids( WYSection root, String dottedParentSection ) {
@@ -431,6 +434,21 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						COMetadata oldmd = wid.setMetadata( new CO_Invalid( wid, dotted ) );
 						assert null == oldmd : "should not already have metadata, else we failed somewhere else";
 					} else {
+						// keep track of this dotted+wid in a set for this field ie. field-> {dotted->wid}
+						WYIdentifier<COMetadata> prevWID = mapFieldToID.shyAddWIDToSet( dotted, wid, foundAsField );
+						if ( null != prevWID ) {// not added because there was this prev which already existed
+							// existed? then we found a duplicate between all of those that we parsed from .yml
+							// ie. same id occurred twice in the .yml
+							// Typeo.getDottedRealAliasOfField( foundAsField );
+							int activeLine = prevWID.getLineNumber();
+							
+							COMetadata oldmd = wid.setMetadata( new CO_Duplicate( wid, dotted, prevWID ) );
+							assert null == oldmd : "should not already have metadata, else we failed somewhere else";
+						} else {
+							// this wid was new so we associate it with the field, the field was already associated with it
+							// above
+							wid.setMetadata( new CO_FieldPointer( foundAsField, wid ) );
+						}
 						// System.out.println( "!!!" + dotted );
 						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
 						// or throw
@@ -444,81 +462,83 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// .yml file
 						// well actually no, the above is false premising in the current context
 						
-						TypedLinkedList<DualPack<String, WYIdentifier>> existingWYIdList =
-							mapField_to_ListOfWYIdentifier.get( foundAsField );
-						if ( null == existingWYIdList ) {
-							// first time creating the list for this Field 'found'
-							// which also means there should be no duplicate checks in this {} block
-							existingWYIdList = new TypedLinkedList<DualPack<String, WYIdentifier>>();
-							TypedLinkedList<DualPack<String, WYIdentifier>> impossible =
-								mapField_to_ListOfWYIdentifier.put( foundAsField, existingWYIdList );
-							assert null == impossible : "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
-							assert existingWYIdList == mapField_to_ListOfWYIdentifier.get( foundAsField );
-							
-							
-							existingWYIdList.addLast( new DualPack( dotted, wid ) );// add all config options one by one in
-																					// the
-																					// order of occurrence
-							// in
-							// config.yml
-							
-							assert existingWYIdList.contains( new DualPack( dotted, wid ) );
-							
-						} else {
-							// check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
-							// least 1
-							// element which we
-							// must check against and see if wid isn't already existing there (as different instance though)
-							// does id already exist, ie. duplicate encountered in .yml ?
-							
-							// FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
-							// so either store hashmap or make sure equals compares dotted forms
-							// hashmap will be faster, a hashmap of dotted -> wid
-							// or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much
-							// overhead,
-							// hashmap ftw!
-							
-							
-							int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
-							// seeks dotted format 'wid' in list by doing .equals() on each of
-							// them // inside // the list
-							if ( index >= 0 ) {// exists already ?
-								WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
-								int activeLine = activeCfgOption.getLineNumber();
-								
-								COMetadata oldmd = wid.setMetadata( new CO_Duplicate( wid, dotted, activeCfgOption ) );
-								assert null == oldmd : "should not already have metadata, else we failed somewhere else";
-								
-								// WYSection widsParent = wid.getParent();
-								// TODO: also check if it is in any other lists, it probably isn't at this time.
-								// currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
-								// wid.replaceAndTransformSelfInto_WYComment();
-								// so we still have a getNext() to go to, after wid is basically destroyed(at
-								// least its getNext will be null after this)
-								// let's not forget to remove this from list,
-								// existingWYIdList.remove( index );// a MUST
-								// assert existingWYIdList.contains( wid );
-								// System.out.println(existingWYIdList.get( index ));
-								// existingWYIdList.add( index, currentItem );
-								// assert !existingWYIdList.contains( wid );
-								// assert existingWYIdList.contains( currentItem);
-								
-								// this means, it will compare id without considering values (as per WYIdentifier's
-								// .equals()
-								
-								// if we're here this will work:
-								
-								
-								// TODO: what to do when same config is encountered twice, does it override the prev one? do
-								// we
-								// stop? do
-								// we move it to some file for reviewal? or do we comment it out?
-							} else {
-								// doesn't exit, we add it to list
-								existingWYIdList.addLast( new DualPack( dotted, wid ) );
-							}
-						}
-						assert null != existingWYIdList;// obviously
+						// HashMap<WYIdentifier, String> existingWYIdList =
+						// mapField_to_WYIdDotted.get( foundAsField );
+						// if ( null == existingWYIdList ) {
+						// // first time creating the list for this Field 'found'
+						// // which also means there should be no duplicate checks in this {} block
+						// existingWYIdList = new HashMap<WYIdentifier, String>();
+						// HashMap<WYIdentifier, String> impossible =
+						// mapField_to_WYIdDotted.put( foundAsField, existingWYIdList );
+						// assert null == impossible :
+						// "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
+						// assert existingWYIdList == mapField_to_WYIdDotted.get( foundAsField );
+						//
+						//
+						// existingWYIdList.put(wid, dotted);
+						// // new DualPack( dotted, wid ) );// add all config options one by one in
+						// // the
+						// // order of occurrence
+						// // in
+						// // config.yml
+						//
+						// assert existingWYIdList.contains( new DualPack( dotted, wid ) );
+						//
+						// } else {
+						// // check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
+						// // least 1
+						// // element which we
+						// // must check against and see if wid isn't already existing there (as different instance though)
+						// // does id already exist, ie. duplicate encountered in .yml ?
+						//
+						// // FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
+						// // so either store hashmap or make sure equals compares dotted forms
+						// // hashmap will be faster, a hashmap of dotted -> wid
+						// // or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much
+						// // overhead,
+						// // hashmap ftw!
+						//
+						//
+						// int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
+						// // seeks dotted format 'wid' in list by doing .equals() on each of
+						// // them // inside // the list
+						// if ( index >= 0 ) {// exists already ?
+						// WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
+						// int activeLine = activeCfgOption.getLineNumber();
+						//
+						// COMetadata oldmd = wid.setMetadata( new CO_Duplicate( wid, dotted, activeCfgOption ) );
+						// assert null == oldmd : "should not already have metadata, else we failed somewhere else";
+						//
+						// // WYSection widsParent = wid.getParent();
+						// // TODO: also check if it is in any other lists, it probably isn't at this time.
+						// // currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
+						// // wid.replaceAndTransformSelfInto_WYComment();
+						// // so we still have a getNext() to go to, after wid is basically destroyed(at
+						// // least its getNext will be null after this)
+						// // let's not forget to remove this from list,
+						// // existingWYIdList.remove( index );// a MUST
+						// // assert existingWYIdList.contains( wid );
+						// // System.out.println(existingWYIdList.get( index ));
+						// // existingWYIdList.add( index, currentItem );
+						// // assert !existingWYIdList.contains( wid );
+						// // assert existingWYIdList.contains( currentItem);
+						//
+						// // this means, it will compare id without considering values (as per WYIdentifier's
+						// // .equals()
+						//
+						// // if we're here this will work:
+						//
+						//
+						// // TODO: what to do when same config is encountered twice, does it override the prev one? do
+						// // we
+						// // stop? do
+						// // we move it to some file for reviewal? or do we comment it out?
+						// } else {
+						// // doesn't exit, we add it to list
+						// existingWYIdList.addLast( new DualPack( dotted, wid ) );
+						// }
+						// }
+						// assert null != existingWYIdList;// obviously
 						
 						
 					}// end of else found
@@ -661,7 +681,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-	private static WYSection	virtualRoot	= null;
+	private static WYSection	virtualRoot		= null;
+	
+	// one to many
+	private static final HM1	mapFieldToID	= new HM1();
 	
 	
 	private final static void reloadConfig() {
@@ -684,8 +707,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
 				// remove old
 				// but only if new values are not already set
-				synchronized ( mapField_to_ListOfWYIdentifier ) {
-					mapField_to_ListOfWYIdentifier.clear();
+				synchronized ( Typeo.lock1 ) {
+					mapFieldToID.clear();
+					
 					parseOneTime_and_CheckForValids( virtualRoot, null );
 					
 					
@@ -696,7 +720,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					// addMissingFieldsToConfig( virtualRoot );
 					// TODO: when done:
-					mapField_to_ListOfWYIdentifier.clear();
+					mapFieldToID.clear();//free up memory for gc
 					
 				}// sync
 				
@@ -799,10 +823,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
 					// String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
 					COMetadata meta = wid.getMetadata();
-					if (null != meta) {
-						//ok this one has meta, ie. it's one of duplicate/invalid/overridden
+					if ( null != meta ) {
+						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
 						meta.apply();
-						//if you need the applied/new item, the nextItem.getPrev() would be it
+						// if you need the applied/new item, the nextItem.getPrev() would be it
 					}
 				} else {// non id
 					assert ( currentItem instanceof WYRawButLeveledLine );
@@ -821,72 +845,142 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	private static void parseSecondTime_and_sortOverrides() {
-		synchronized ( mapField_to_ListOfWYIdentifier ) {
-			DualPack dualsearch = new DualPack( "", WYIdentifier.NULL );
+		synchronized ( mapFieldToID ) {
 			// parse all found config options in .yml , only those found! and sort the list for their overrides
 			// which means, we'll now know what option overrides which one if more than 1 was found in .yml for a specific
 			// config field
 			// realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
 			// the top oldAliases override the bottom ones when looking at the @Option annotation
 			
-			Set<Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>> iterable =
-				mapField_to_ListOfWYIdentifier.entrySet();
-			for ( Entry<Field, TypedLinkedList<DualPack<String, WYIdentifier>>> fieldToList : iterable ) {
-				Field field = fieldToList.getKey();
-				Option anno = field.getAnnotation( Option.class );
-				String[] orderOfAliases = anno.oldAliases_alwaysDotted();
-				String realAlias = anno.realAlias_inNonDottedFormat();
-				
-				TypedLinkedList<DualPack<String, WYIdentifier>> list = fieldToList.getValue();
-				assert null != list;
-				assert list.size() > 0;
-				
-				TypedLinkedList<DualPack<String, WYIdentifier>> listInOverridingOrder =
-					new TypedLinkedList<DualPack<String, WYIdentifier>>();
+			
+			for ( Field field : Typeo.orderedListOfFields ) {
+				SetOfIDs aSet = mapFieldToID.get( field );
+				if (null == aSet) {
+					// this config option was not yet defined in .yml so it means we have to add it
+					//TODO: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+					FactionsPlus.severe( "adding new option "+field );
+					continue;
+				}
+				//else, the option was defined, so
+				//multiple names for it may have been found in the config, and we need to decide which one overrides which other one
+				//where noting that the realAlias always overrides the oldAliases if both are found
 				
 				
-				for ( int i = 0; i < orderOfAliases.length; i++ ) {
-					dualsearch.reuse( orderOfAliases[i] );
-					
-					DualPack<String, WYIdentifier> existing = list.getOriginal( dualsearch );
-					if ( null != existing ) {
-						listInOverridingOrder.addLast( existing );
-						boolean was = list.remove( existing );
-						assert was;
-					} else {
-						// we just didn't encounter this oldAlias which was defined in the annotation
-						// so we skip to next
+				// Option anno = field.getAnnotation( Option.class );
+				String[] orderOfAliases = Typeo.getListOfOldAliases( field );
+				String realAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
+				assert null != orderOfAliases;// due to the way annotation works
+				
+				// find who is the overrider:
+				// sortedListOfOverride=new TypedLinkedList<>();
+				
+				// assume from start it's realAlias, the overrider
+				String dottedOverrider = null;
+				
+				WYIdentifier<COMetadata> overriderWID = aSet.get( realAlias );
+				if ( null == overriderWID ) {
+					// the realAlias is not the overriding one, so we parse oldAliases to find the topmost found one to be as
+					// our supreme overrider which means all others found are marked as overriden
+					for ( int i = 0; i < orderOfAliases.length; i++ ) {
+						overriderWID = aSet.get( orderOfAliases[i] );
+						if ( null != overriderWID ) {
+							dottedOverrider = orderOfAliases[i];
+							// assert dottedOverrider.equals());
+							break;// for, because the first one we find, overrides all the below ones
+						}
+					}
+					assert ( null != overriderWID ):"if the real alias wasn't in list, then at least "
+					+"one oldalias that is not .equals to realAlias would've been found and set";
+				} else {
+					// the real alias overrides any of the old aliases
+					dottedOverrider = realAlias;
+				}
+				// so we have our overrider
+				// now we have to parse the aSet and mark all that are not overriderWID as overridden by overriderWID
+				
+				assert ( null != overriderWID );
+				assert ( null != dottedOverrider );
+				//there is always 1 overrider
+				
+				for ( Entry<String, WYIdentifier<COMetadata>> entry : aSet.entrySet() ) {
+					WYIdentifier<COMetadata> wid = entry.getValue();
+					if ( overriderWID != wid ) {
+						// mark as overridden
+						
+						String widDotted = entry.getKey();
+						COMetadata previousMD = wid.setMetadata( new CO_Overridden( wid, widDotted, overriderWID, dottedOverrider ) );
+						if (null != previousMD) {
+							//it's possible, it has to have been associated with the field, if it has a prev metadata
+							assert (CO_FieldPointer.class.isAssignableFrom( previousMD.getClass())):"this should be the only way"+
+									"that the wid we got here had a previously associated metadata with it, aka it has to have the"
+							+"pointer to the Field";
+							CO_FieldPointer fp=(CO_FieldPointer)previousMD;
+							Field pfield = fp.getField();
+							assert null != pfield;
+							assert pfield.equals(field):"should've been the same field, else code logic failed";
+						}
+						
 					}
 				}
-				// did we however also find the realAlias, if so put it at top of list
-				// if (real) we can't, we don't know it's dotted format yet, we assume that whatever 1 element is left, if any
-				// is the realAlias, cannot be anything else
 				
-				assert list.size() <= 1;
 				
-				if ( list.size() > 0 ) {
-					// still one left, must be the realAlias
-					DualPack<String, WYIdentifier> real = list.getFirst();
-					DualPack<String, WYIdentifier> removed = list.removeFirst();
-					assert real == removed;
-//					assert real.getFirst().equals( realAlias ):real.getFirst()+" "+realAlias;yeah it's dotted vs non-dotted here, fail
-					listInOverridingOrder.addFirst( real );
-				}
-				assert list.size() == 0;
-				// list.clear();//no use keeping the memory
-				fieldToList.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of overrides
+				// if (null !=)
+				// if (null != wid) {
 				
-				Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
-				DualPack<String, WYIdentifier> first = iter.next();
-				assert null != first;// must have at least the realAlias in that list;
-//				assert realAlias.equals(first);
-				
-				while ( iter.hasNext() ) {
-					DualPack<String, WYIdentifier> overridenOne = iter.next();
-					WYIdentifier<COMetadata> wid = overridenOne.getSecond();
-					wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
-				}
-				
+				// }
+				// if (aSet.containsValue( value ))
+				// if (realAlias.)
+				//
+//				SetOfIDs aSet = fieldToSet.getValue();
+//				assert null != aSet;
+//				assert aSet.size() > 0;
+//				
+//				TypedLinkedList<DualPack<String, WYIdentifier>> listInOverridingOrder =
+//					new TypedLinkedList<DualPack<String, WYIdentifier>>();
+//				
+//				
+//				for ( int i = 0; i < orderOfAliases.length; i++ ) {
+//					
+//					WYIdentifier<COMetadata> existing = aSet.get( orderOfAliases[i] );
+//					if ( null != existing ) {
+//						listInOverridingOrder.addLast( existing );
+//						boolean was = aSet.remove( existing );
+//						assert was;
+//					} else {
+//						// we just didn't encounter this oldAlias which was defined in the annotation
+//						// so we skip to next
+//					}
+//				}
+//				// did we however also find the realAlias, if so put it at top of list
+//				// if (real) we can't, we don't know it's dotted format yet, we assume that whatever 1 element is left, if any
+//				// is the realAlias, cannot be anything else
+//				
+//				assert aSet.size() <= 1;
+//				
+//				if ( aSet.size() > 0 ) {
+//					// still one left, must be the realAlias
+//					DualPack<String, WYIdentifier> real = aSet.getFirst();
+//					DualPack<String, WYIdentifier> removed = aSet.removeFirst();
+//					assert real == removed;
+//					// assert real.getFirst().equals( realAlias ):real.getFirst()+" "+realAlias;yeah it's dotted vs non-dotted
+//					// here, fail
+//					listInOverridingOrder.addFirst( real );
+//				}
+//				assert aSet.size() == 0;
+//				// list.clear();//no use keeping the memory
+//				fieldToSet.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of overrides
+//				
+//				Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
+//				DualPack<String, WYIdentifier> first = iter.next();
+//				assert null != first;// must have at least the realAlias in that list;
+//				// assert realAlias.equals(first);
+//				
+//				while ( iter.hasNext() ) {
+//					DualPack<String, WYIdentifier> overridenOne = iter.next();
+//					WYIdentifier<COMetadata> wid = overridenOne.getSecond();
+//					wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
+//				}
+//				
 				// done: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
 				// mark the overridden/invalid/duplicates as such but not yet modify them, and only at the end, after we've also
 				// inserted missing option, then and only then modify the lines(by transforming into comments) since by this

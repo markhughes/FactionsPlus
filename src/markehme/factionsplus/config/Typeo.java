@@ -3,8 +3,10 @@ package markehme.factionsplus.config;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.Map.Entry;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.yaml.*;
 import markehme.factionsplus.util.*;
 
 
@@ -25,17 +27,41 @@ public abstract class Typeo {
 	// this field would be updated by some method to be the fully dotted format of the config option ie.
 	// "extras.lwc.disableSomething"
 	// not just "disableSomething", you dig?
+	// many to one
 	private static final HashMap<String, Field>		dottedAllAliases_to_Fields	= new HashMap<String, Field>();
 	
 	// this is the order in which the config options will be written in the config.yml
-	private static final TypedLinkedList<Field>		orderedListOfFields			= new TypedLinkedList<Field>();
+	protected static final TypedLinkedList<Field>	orderedListOfFields			= new TypedLinkedList<Field>();
 	
-	// basically cached the reflection here:
+	// basically cached the reflection here: //one to many
 	private static final HashMap<Field, String[]>	fieldToOldAliasesArray		= new HashMap<Field, String[]>();
 	
-	// field to dotted form of alias
-	private static final HashMap<Field, String>		fieldToRealAlias			= new HashMap<Field, String>();
+	// field to dotted form of alias//one to one
+	private static final HashMap<Field, String>		fieldToDottedRealAlias		= new HashMap<Field, String>();
 	
+	// field to-> instance of the parent class it is in
+	private static final HashMap<Field, Object>		fieldToInstanceOfIt			= new HashMap<Field, Object>();
+	
+	
+	public static final Object						lock1						= new Object();
+	
+	
+	
+	protected static final void setFieldValue( Field field, String value ) throws IllegalArgumentException,
+		IllegalAccessException
+	{
+		assert !fieldToInstanceOfIt.isEmpty() : "should not call this prior to having the map initialized";
+		
+		// the instance of the class where the field resides
+		Object parentInstance = fieldToInstanceOfIt.get( field );
+		assert null != parentInstance : "should've been set";
+		//actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
+//		field.set( parentInstance, value );
+		
+		ConfigOptionName basic=(ConfigOptionName)field.get( parentInstance );
+//		System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
+		basic.setValue(value);
+	}
 	
 	
 	protected static final Field getField_correspondingTo_DottedFormat( String thisDottedFormat ) {
@@ -46,6 +72,7 @@ public abstract class Typeo {
 	
 	protected static final String[] getListOfOldAliases( Field forField ) {
 		assert Q.nn( forField );
+		assert !fieldToOldAliasesArray.isEmpty();
 		String[] oldAliases = fieldToOldAliasesArray.get( forField );
 		assert Q.nn( oldAliases );// cannot be null due to "default {}" inside the {@link @Option} annotation
 		return oldAliases;
@@ -54,7 +81,8 @@ public abstract class Typeo {
 	
 	protected static final String getDottedRealAliasOfField( Field field ) {
 		assert Q.nn( field );
-		String realAlias = fieldToRealAlias.get( field );
+		assert !fieldToDottedRealAlias.isEmpty();
+		String realAlias = fieldToDottedRealAlias.get( field );
 		assert isValidAliasFormat( realAlias );
 		return realAlias;
 	}
@@ -87,7 +115,8 @@ public abstract class Typeo {
 		assert isValidAliasFormat( realAliasDotted );
 		assert null != field;
 		Field existingField = dottedAllAliases_to_Fields.put( realAliasDotted, field );
-//		assert ( ( null != existingField ) == orderedListOfFields.contains( field ) ):existingField+" "+orderedListOfFields.contains( field ) ;
+		// assert ( ( null != existingField ) == orderedListOfFields.contains( field )
+		// ):existingField+" "+orderedListOfFields.contains( field ) ;
 		
 		return existingField;
 	}
@@ -97,13 +126,16 @@ public abstract class Typeo {
 		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
-		synchronized ( Typeo.class ) {
+		synchronized ( Typeo.lock1 ) {
 			orderedListOfFields.clear();
 			dottedAllAliases_to_Fields.clear();
+			fieldToDottedRealAlias.clear();
+			fieldToOldAliasesArray.clear();
+			fieldToInstanceOfIt.clear();
 			parsify( rootClass, null, rootClass );
-//			for ( Field iterable_element : orderedListOfFields ) {
-//				FactionsPlus.info( ""+iterable_element.getName());
-//			}
+			// for ( Field iterable_element : orderedListOfFields ) {
+			// FactionsPlus.info( ""+iterable_element.getName());
+			// }
 		}
 	}
 	
@@ -223,12 +255,16 @@ public abstract class Typeo {
 						
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
-						assert Typeo.isValidAliasFormat( realAlias ):realAlias;
+						assert Typeo.isValidAliasFormat( realAlias ) : realAlias;
 						
 						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						
 						
-						assert !orderedListOfFields.contains( field ):"must not already exist, else coding logic fail";
+						fieldToInstanceOfIt.put( field, parentInstance );
+						// making sure we have dotted form of field
+						fieldToDottedRealAlias.put( field, currentDotted );
+						
+						assert !orderedListOfFields.contains( field ) : "must not already exist, else coding logic fail";
 						orderedListOfFields.addLast( field );// keeping track of order in which we'll place them in config.yml
 						
 						
@@ -237,6 +273,9 @@ public abstract class Typeo {
 						
 						Option co = (Option)fieldAnnotation;
 						String[] aliasesArray = co.oldAliases_alwaysDotted();
+						assert null != aliasesArray : "impossible, due to how annotation default works for arrays";
+						fieldToOldAliasesArray.put( field, aliasesArray );
+						
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)

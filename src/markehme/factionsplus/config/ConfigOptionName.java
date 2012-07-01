@@ -22,4 +22,16 @@ public abstract class ConfigOptionName {// must be abstract, we can't have it in
 		throw new RuntimeException( "possible wrong usage detected, if you were trying to refer to a config option "
 			+ "then append ._ for example: if (!extras.lwc.disableSomething._) {...}" );
 	}
+
+
+
+
+	/**
+	 * set the value from a string
+	 * @param value
+	 */
+	public void setValue( String value ) {
+		//subclasses should override this without calling it via super.
+		throw Q.ni();
+	}
 }
