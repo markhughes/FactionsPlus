@@ -103,8 +103,9 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 		wid.setParent( null );
 		wid.setPrev( null );
 		wid.setNext( null );
-		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getId() + "###" );
-		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getValue() + "###" );
+		//XXX: best to not destroy it, else we might have to cache it
+//		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getId() + "###" );
+//		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getValue() + "###" );
 		// we leave only setLine()
 		// that's a mark that tells you, when you ever see it, that you're not supposed to be using this, if you do, you'll know
 		// you probably missed removing it from some list/hashmap after you called this method we're in

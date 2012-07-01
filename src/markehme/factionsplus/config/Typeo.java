@@ -10,39 +10,39 @@ import markehme.factionsplus.util.*;
 
 
 public abstract class Typeo {
+	
 	/**
 	 * we enforce fields that are @Section to have this prefix, so that we can easily use Config._extras for example and when at
 	 * Config._ it would code-completion-show only the sections
 	 */
-	private static final String				SECTION_PREFIX			= "_";
+	private static final String						SECTION_PREFIX				= "_";
 	
 	
 	/**
-	 * all new option names and their old aliases in the same set<br>
+	 * all new option names(realAlias) and their old aliases in the same set<br>
 	 * used to quickly point to the right Field.class<br>
 	 */
+	// this field would be updated by some method to be the fully dotted format of the config option ie.
+	// "extras.lwc.disableSomething"
+	// not just "disableSomething", you dig?
 	private static final HashMap<String, Field>		dottedAllAliases_to_Fields	= new HashMap<String, Field>();
 	
 	// this is the order in which the config options will be written in the config.yml
-	private static final TypedLinkedList<Field>		orderedListOfFields				= new TypedLinkedList<Field>();
+	private static final TypedLinkedList<Field>		orderedListOfFields			= new TypedLinkedList<Field>();
 	
 	// basically cached the reflection here:
-	private static final HashMap<Field, String[]>	fieldToOldAliasesArray				= new HashMap<Field, String[]>();
+	private static final HashMap<Field, String[]>	fieldToOldAliasesArray		= new HashMap<Field, String[]>();
 	
 	// field to dotted form of alias
-	private static final HashMap<Field, String>		fieldToRealAlias				= new HashMap<Field, String>();
+	private static final HashMap<Field, String>		fieldToRealAlias			= new HashMap<Field, String>();
 	
 	
-	// protected static final TypedLinkedList<TYPE>
 	
-	// this field would be updated by some outside method to be the fully dotted format of the config option ie.
-	// "extras.lwc.disableSomething"
-	// not just "disableSomething", you dig?
-	
-	protected static final Field getField_correspondingTo_DottedFormat(String thisDottedFormat) {
+	protected static final Field getField_correspondingTo_DottedFormat( String thisDottedFormat ) {
 		assert isValidAliasFormat( thisDottedFormat );
-		return dottedAllAliases_to_Fields.get( thisDottedFormat);
+		return dottedAllAliases_to_Fields.get( thisDottedFormat );
 	}
+	
 	
 	protected static final String[] getListOfOldAliases( Field forField ) {
 		assert Q.nn( forField );
@@ -87,11 +87,12 @@ public abstract class Typeo {
 		assert isValidAliasFormat( realAliasDotted );
 		assert null != field;
 		Field existingField = dottedAllAliases_to_Fields.put( realAliasDotted, field );
+//		assert ( ( null != existingField ) == orderedListOfFields.contains( field ) ):existingField+" "+orderedListOfFields.contains( field ) ;
 		
 		return existingField;
 	}
 	
-
+	
 	protected static void sanitize_AndUpdateClassMapping( Class rootClass ) {
 		// since we don't change the annotations on the config options inside the classes on runtime, this will only be called
 		// onEnable
@@ -114,7 +115,7 @@ public abstract class Typeo {
 	private static void parsify( Class<?> rootClass, String dottedParentSection, Object parentInstance ) {
 		Field[] allFields = rootClass.getDeclaredFields();
 		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
-
+		
 		for ( int why = 0; why < allFields.length; why++ ) {
 			// System.out.println( "F: "+allFields[i] );
 			Field field = allFields[why];
@@ -151,7 +152,6 @@ public abstract class Typeo {
 					
 					
 					
-					
 					// must be non-private , but yes Final!
 					boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
 					
@@ -185,7 +185,7 @@ public abstract class Typeo {
 						if ( !field.getName().startsWith( SECTION_PREFIX ) ) {
 							throw FactionsPlus.bailOut( "bad coding: by convention any @" + annotationType.getSimpleName()
 								+ " aka sections should have their field name start with `" + SECTION_PREFIX
-								+ "`. Please correct in source code this field: `"+field+"`" );
+								+ "`. Please correct in source code this field: `" + field + "`" );
 						}
 						// FactionsPlus.info( "Section: " + allFields[i] + "//" + currentFieldAnnotations[j] );
 						parsify( typeOfField, dotted, fieldInstance );// recurse
@@ -215,7 +215,13 @@ public abstract class Typeo {
 						
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
 						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
+						assert Typeo.isValidAliasFormat( realAlias ):realAlias;
+						
 						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						
+						
+						assert !orderedListOfFields.contains( field ):"must not already exist, else coding logic fail";
+						orderedListOfFields.addLast( field );// keeping track of order in which we'll place them in config.yml
 						
 						
 						// must update the dotted form in the instance, because we know it now

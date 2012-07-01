@@ -391,10 +391,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	/**
 	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
-	 * 
+	 * this parses the entire representation of the config.yml and marks duplicates and invalid configs<br> 
 	 * @param root
 	 */
-	private final static void parseCheckForValids( WYSection root, String dottedParentSection ) {
+	private final static void parseOneTime_and_CheckForValids( WYSection root, String dottedParentSection ) {
 		assert Q.nn( root );
 		WYItem<COMetadata> currentItem = root.getFirst();
 		// WYSection parent = root;
@@ -414,7 +414,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// are indirectly checked when config options(aka ids) are checked
 				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
 				
-				parseCheckForValids( cs, dotted );// recurse
+				parseOneTime_and_CheckForValids( cs, dotted );// recurse
 				// parent = cs;
 				// currentItem = cs.getFirst();
 			} else {
@@ -686,10 +686,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// but only if new values are not already set
 				synchronized ( mapField_to_ListOfWYIdentifier ) {
 					mapField_to_ListOfWYIdentifier.clear();
-					parseCheckForValids( virtualRoot, null );
+					parseOneTime_and_CheckForValids( virtualRoot, null );
 					
 					
-					sortOverrides();// from mapField_to_ListOfWYIdentifier
+					parseSecondTime_and_sortOverrides();// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
 					// coalesceOverrides( virtualRoot );
@@ -818,7 +818,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static void sortOverrides() {
+	private static void parseSecondTime_and_sortOverrides() {
 		synchronized ( mapField_to_ListOfWYIdentifier ) {
 			DualPack dualsearch = new DualPack( "", WYIdentifier.NULL );
 			// parse all found config options in .yml , only those found! and sort the list for their overrides
@@ -867,6 +867,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					DualPack<String, WYIdentifier> real = list.getFirst();
 					DualPack<String, WYIdentifier> removed = list.removeFirst();
 					assert real == removed;
+//					assert real.getFirst().equals( realAlias ):real.getFirst()+" "+realAlias;yeah it's dotted vs non-dotted here, fail
 					listInOverridingOrder.addFirst( real );
 				}
 				assert list.size() == 0;
@@ -876,13 +877,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
 				DualPack<String, WYIdentifier> first = iter.next();
 				assert null != first;// must have at least the realAlias in that list;
+//				assert realAlias.equals(first);
+				
 				while ( iter.hasNext() ) {
 					DualPack<String, WYIdentifier> overridenOne = iter.next();
 					WYIdentifier<COMetadata> wid = overridenOne.getSecond();
 					wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
 				}
 				
-				// TODO: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
+				// done: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
 				// mark the overridden/invalid/duplicates as such but not yet modify them, and only at the end, after we've also
 				// inserted missing option, then and only then modify the lines(by transforming into comments) since by this
 				// time now we'll have the line numbers correctly
