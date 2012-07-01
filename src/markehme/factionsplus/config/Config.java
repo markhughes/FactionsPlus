@@ -121,7 +121,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int				_doNotChangeMe			= new _int( 11 );
+	public static final _int				doNotChangeMe			= new _int( 11 );
 	
 	// the root class that contains the @ConfigSection and @ConfigOptions to scan for
 	private static final Class				configClass				= Config.class;

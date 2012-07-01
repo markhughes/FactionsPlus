@@ -98,8 +98,12 @@ public abstract class Typeo {
 		// onEnable
 		// just in case 'reload' was executed and a new FactionsPlus.jar was loaded (do not use Plugin.onLoad() it's evil)
 		synchronized ( Typeo.class ) {
+			orderedListOfFields.clear();
 			dottedAllAliases_to_Fields.clear();
 			parsify( rootClass, null, rootClass );
+//			for ( Field iterable_element : orderedListOfFields ) {
+//				FactionsPlus.info( ""+iterable_element.getName());
+//			}
 		}
 	}
 	
@@ -191,7 +195,11 @@ public abstract class Typeo {
 						parsify( typeOfField, dotted, fieldInstance );// recurse
 						
 					} else {// it's @ConfigOption
-					
+						if ( field.getName().startsWith( SECTION_PREFIX ) ) {
+							throw FactionsPlus.bailOut( "bad coding: by convention any @" + annotationType.getSimpleName()
+								+ " aka non-sections should not have their field name start with `" + SECTION_PREFIX
+								+ "`. Please correct in source code this field: `" + field + "`" );
+						}
 						// if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
 						// || !Modifier.isFinal( fieldModifiers ) )
 						// // && ( null != dottedParentSection ) )
