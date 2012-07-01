@@ -1,5 +1,7 @@
 @echo off
 echo this needs to be updated, due to folders changed, no effect now
+echo TODO: remove .project too and have this file generate it, or rather copy it from this folder into ..\
+echo all this due to the constrain that root folder is desired to be clean(er)
 exit
 rem since windows won't allow you to rename a file from ie. ".classpath.something" to 
 rem ".classpath" because it would ask for a name (.classpath being the extension)

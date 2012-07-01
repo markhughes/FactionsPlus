@@ -5,7 +5,7 @@ import java.util.*;
 import markehme.factionsplus.config.*;
 
 
-public final class TypedLinkedList<TYPE> {
+public final class TypedLinkedList<TYPE> implements Iterable<TYPE>{
 	private LinkedList<TYPE> ll=new LinkedList<TYPE>();
 	
 	public int indexOf(TYPE obj){
@@ -22,5 +22,10 @@ public final class TypedLinkedList<TYPE> {
 
 	public TYPE get( int index ) {
 		return ll.get( index );
+	}
+
+	@Override
+	public Iterator<TYPE> iterator() {
+		return ll.iterator();
 	}
 }
