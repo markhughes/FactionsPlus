@@ -14,21 +14,22 @@ public class CO_Invalid extends COMetadata {
 	
 	
 	private final WYIdentifier<COMetadata>	appliesToWID;
-	private final String thePassedDottedFormatForThisWID;
+	private final String					thePassedDottedFormatForThisWID;
 	
 	
 	public CO_Invalid( WYIdentifier<COMetadata> wid, String dotted ) {
 		assert null != wid;
 		assert Typeo.isValidAliasFormat( dotted );
 		appliesToWID = wid;
-		thePassedDottedFormatForThisWID=dotted;
+		thePassedDottedFormatForThisWID = dotted;
 	}
 	
 	
 	
 	@Override
-	protected WYItem<COMetadata> override_apply() {
-		WYComment<COMetadata> newItem = appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForINVALIDs );
+	protected void override_apply() {
+		// WYComment<COMetadata> newItem =
+		appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForINVALIDs );
 		FactionsPlus.warn( "Invalid config option\n" + colorOnINVALID + thePassedDottedFormatForThisWID + ChatColor.RESET
 			+ " was auto commented at line "
 			// // + fileConfig
@@ -38,6 +39,6 @@ public class CO_Invalid extends COMetadata {
 			// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
 			// + "This is how the line looks now(without leading spaces):\n"
 			+ colorOnINVALID + appliesToWID.toString() );
-		return newItem;
+		// return newItem;
 	}
 }

@@ -14,18 +14,18 @@ public abstract class COMetadata {
 	/**
 	 * don't call this directly! it's meant only to be overridden by subclasses !
 	 */
-	protected abstract WYItem<COMetadata> override_apply();
+	protected abstract void override_apply();
 	
 	
 	/**
 	 * @return the changed item
 	 */
-	public final WYItem<COMetadata> apply() {
+	public final void apply() {
 		if ( applied ) {
 			throw new RuntimeException( "already applied before!" );
 		} else {
 			try {
-				return override_apply();
+				override_apply();
 			} finally {
 				applied = true;
 			}

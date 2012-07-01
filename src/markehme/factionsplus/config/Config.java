@@ -784,6 +784,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
 		
 		while ( null != currentItem ) {
+			WYItem nextItem = currentItem.getNext();
 			
 			Class<? extends WYItem> cls = currentItem.getClass();
 			
@@ -800,7 +801,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					COMetadata meta = wid.getMetadata();
 					if (null != meta) {
 						//ok this one has meta, ie. it's one of duplicate/invalid/overridden
-						currentItem=meta.apply();
+						meta.apply();
+						//if you need the applied/new item, the nextItem.getPrev() would be it
 					}
 				} else {// non id
 					assert ( currentItem instanceof WYRawButLeveledLine );
@@ -813,7 +815,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// WYSection par = currentItem.getParent();
 			// if (null != par);
 			// }
-			currentItem = currentItem.getNext();
+			currentItem = nextItem;
 		}// while
 	}
 	

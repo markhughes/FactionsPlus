@@ -40,8 +40,9 @@ public class CO_Duplicate extends COMetadata {
 	
 	
 	@Override
-	protected WYItem<COMetadata> override_apply() {
-		WYItem<COMetadata> newItem=appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForDUPs );
+	protected void override_apply() {
+		// WYItem<COMetadata> newItem=
+		appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForDUPs );
 		
 		FactionsPlus.warn( "Duplicate config option encountered at line " + colorLineNumOnDuplicate
 			+ appliesToWID.getLineNumber()
@@ -52,7 +53,7 @@ public class CO_Duplicate extends COMetadata {
 			+ theActiveFirstWID.getLineNumber() + ChatColor.RESET + " overriddes this duplicate with value " + ChatColor.AQUA
 			+ theActiveFirstWID.getValue() );
 		
-		return newItem;
+		// return newItem;
 	}
 	
 }
