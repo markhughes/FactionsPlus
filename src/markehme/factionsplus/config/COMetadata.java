@@ -21,7 +21,6 @@ public abstract class COMetadata {
 	
 	
 	/**
-	 * @return the changed item
 	 */
 	public final void apply() {
 		if ( applied ) {

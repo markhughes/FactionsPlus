@@ -230,5 +230,17 @@ public class Utilities {
 		return false;
 	}
 	
+	public static boolean isWarZone(Faction faction)
+	{
+		return faction.getId().equals("-2");
+	}
 	
+	/**
+	 * aka non-safezone and non-warzone and not wilderness
+	 * @param faction
+	 * @return true is so
+	 */
+	public static boolean isNormalFaction(Faction faction) {
+		return !isWarZone( faction ) && !faction.isSafeZone() && !faction.isNone();
+	}
 }

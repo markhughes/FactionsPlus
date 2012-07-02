@@ -3,7 +3,7 @@ package markehme.factionsplus.config.sections;
 import markehme.factionsplus.config.*;
 
 
-public class _boolean extends ConfigOptionName {
+public class _boolean extends _Base {
 	public boolean _;
 	
 	
