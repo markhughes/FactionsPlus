@@ -41,3 +41,28 @@ this is also to keep out the clutter within the TODO file
 //done- check all current occurrences of config options so that they are not used without the "._" ie. used the instance instead of the
   value
   
+//nevermind- investigate how to hold and retrieve a list of strings in yaml config
+
+
+//fixed- stumped as to why blockCPublicAccessOnNonOwnFactionTerritory is not added from defaults into the existing file
+
+//done- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseen due to using both Factions .jar in classpath instead of Factions project ;)
+
+//done- find a way to keep "#" comments inside the config when transferring them from defaults and old config
+  but at the same time detect and keep the values in the old config(currently does so) rather than just write over the defaults by direct file copy(currently this doesn't happen)
+  besides on save() it the comments are always lost (currently)
+
+//sorta done(they are commented out)
+  - make sure that obsolete/renamed config options in the cfg file are not carried over indefinitely
+  either warn or auto remove those that have renamed while carrying the old value to the newly renamed one or
+  simply only keep the config options that have valid names that are actually used in the current FP version
+  (note: this doesn't currently apply for we have no such old/obsolete config options)
+  -definitely warn if some unused options are found in the config, so that admin doesn't try to set those and expect effects
+
+//done- prevent non-faction members from LWC locking stuff in our faction land
+  
+//can't remember but it's solved- newest version tosses a 'Strange argument. Use the command like this: /f' whenever using any commands. Figure it has something to do with some changes
+    made by basicsensei. I'll look into it tomorrow if it isn't fixed.
+    //I can't see anything wrong because I cannot reproduce - basicsensei.
+  
+  
