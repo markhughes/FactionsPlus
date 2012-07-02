@@ -55,8 +55,10 @@ public class CmdToggleState extends FCommand {
 		}else {//here if either has that perm or is Op
 			authallow|=sender.isOp();
 		}
-		
-		if (factionToggling != null) {
+
+		factiont = fme.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
+
+		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getTag())) ) {
 			if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.others")) {
 				sender.sendMessage(ChatColor.RED + "No permission!");
 				return;
@@ -74,8 +76,6 @@ public class CmdToggleState extends FCommand {
 					return;
 				}
 			}
-		} else {
-			factiont = fme.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
 		}
 		
 		authallow|=
@@ -100,7 +100,7 @@ public class CmdToggleState extends FCommand {
 			//if faction wasn't already peaceful, then we set it
 			if ( (!Config._economy.enabled._)
 					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
-						"for setting faction `"+factiont.getTag()+"`to peaceful")) ) {
+						"for setting faction `"+factiont.getTag()+"` to peaceful")) ) {
 				
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
@@ -110,9 +110,9 @@ public class CmdToggleState extends FCommand {
 			//faction was peaceful, we now remove this flag
 			if ( (!Config._economy.enabled._) 
 					|| (payForCommand(Config._economy.costToToggleDownPeaceful._, "to remove the peaceful status", 
-						"for setting faction to unpeaceful")) ) {
+						"for removing the peaceful flag from faction `"+factiont.getTag()+"`")) ) {
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
-				sender.sendMessage("You have removed peaceful status from the Faction!");
+				sender.sendMessage("You have removed peaceful status from faction `"+factiont.getTag()+"` !");
 			}
 		}
 		

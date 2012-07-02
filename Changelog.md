@@ -35,6 +35,8 @@ in other words, locks owned by people in your faction(including you) won't be re
    only if you are (Op or)admin/officer/member in your faction if those were set in the config
   Prevent changing the state of WarZone or SafeZone, unless you are Op
   Even as Op, you are still charged the money.
+  /f toggle yourfactiontag  is equivalent with /f toggle
+  Now tells you the faction tag which was affected by the change
   
 
 ### config.yml features
