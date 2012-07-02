@@ -180,7 +180,7 @@ public class FactionsPlusJail {
 			    }
 			    
 			    Faction f = Factions.i.get(fjplayer.getName());
-			    File jailingFile = new File(Config.folderJails, "jaildata." + fjplayer.getFactionId() + "." + fjplayer.getName());
+			    File jailingFile = new File(Config.folderJails, "jaildata." + fplayer.getFactionId() + "." + fjplayer.getName());
 			    
 			    if(!jailingFile.exists()){
 			    	FileWriter filewrite = new FileWriter(jailingFile, true);
