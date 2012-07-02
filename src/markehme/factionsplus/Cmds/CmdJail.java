@@ -35,11 +35,11 @@ public class CmdJail extends FCommand {
 			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
 					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
 					|| (Utilities.isOp( fme ))) {
-				if ( FactionsPlusJail.sendToJail( playerToJail,  fme.getPlayer(), -1 ) ) {
-					fme.sendMessage( playerToJail + " has been removed from jail." );
-				} else {
-					fme.sendMessage( playerToJail + " is not jailed." );
-				}
+				FactionsPlusJail.sendToJail( playerToJail,  fme.getPlayer(), -1 );
+//					fme.sendMessage( playerToJail + " has been jailed." );
+//				} else {
+//					fme.sendMessage( playerToJail + " is not jailed." );
+//				}
 				return;
 			}
 		}
