@@ -12,7 +12,6 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <file path="/FactionsPlus/THANKS.txt"/>
-        <file path="/FactionsPlus/config_defaults.yml"/>
         <javaElement handleIdentifier="=FactionsPlus/src"/>
         <file path="/FactionsPlus/plugin.yml"/>
     </selectedElements>

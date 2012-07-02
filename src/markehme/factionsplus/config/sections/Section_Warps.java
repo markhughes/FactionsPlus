@@ -92,9 +92,9 @@ public final class Section_Warps{
 		if(Config._warps.membersCanSetWarps._) {
 			return true;
 		} else {
-			if(Utilities.isOfficer(fplayer) && Config._warps.officersCanSetWarps._) {
+			if(Config._warps.officersCanSetWarps._ && Utilities.isOfficer(fplayer) ) {
 				return true;
-			} else if(Utilities.isLeader(fplayer) && Config._warps.leadersCanSetWarps._) {
+			} else if(Config._warps.leadersCanSetWarps._ && Utilities.isLeader(fplayer) ) {
 				return true;
 			}
 		}
