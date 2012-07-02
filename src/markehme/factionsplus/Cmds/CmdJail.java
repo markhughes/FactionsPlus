@@ -27,12 +27,13 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
+//		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
 		
-		if(!fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId())) {
-			fme.msg("You can only jail players in your Faction.");
-			return;
-		}
+		//XXX: this check is done inside the bellow call instead
+//		if(!fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId())) {
+//			fme.msg("You can only jail players in your Faction.");
+//			return;
+//		}
 		
 		FactionsPlusJail.sendToJail(playerToJail, fme.getPlayer(), -1);
 		

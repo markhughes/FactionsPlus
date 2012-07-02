@@ -2,6 +2,7 @@ package markehme.factionsplus;
 
 import java.io.*;
 
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.World;
@@ -80,19 +81,11 @@ public class Utilities {
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(FPlayer fplayer) {
-		String role = fplayer.getRole().toString().toLowerCase().trim();//TODO: bridge getRole
-		if(role.contains("officer") || role.contains("moderator")) {
-			return true;
-		}
-		return false;
+		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.OFFICER );
 	}
 
 	public static boolean isLeader(FPlayer fplayer) {
-		String role = fplayer.getRole().toString().toLowerCase().trim();
-		if(role.contains("leader") || role.contains("admin")) {
-			return true;
-		}
-		return false;
+		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.LEADER );
 	}
 
 //	public static boolean checkGroupPerm(World world, String group, String permission) {

@@ -26,6 +26,8 @@ public abstract class FactionsBase implements FactionsAny {
 	// except it's mapped in reversed order
 	private Map<Object, FactionsAny.Relation>	mapRelation		= new HashMap<Object, FactionsAny.Relation>();
 	
+	private Method	mGetRole=null;
+	
 	
 	protected FactionsBase( ) {
 		boolean failed = false;
@@ -36,7 +38,10 @@ public abstract class FactionsBase implements FactionsAny {
 			mGetRelationTo = RelationUtil.class.getMethod( 
 				( Factions16.class.equals( this.getClass() ) ? /*1.6*/"getRelationTo" : /*1.7*/"getRelationOfThatToMe"), 
 				classRP,classRP );
+			//F3 easy {@link com.massivecraft.factions.iface.RelationParticipator )} hmm nvm it works on String too
 			
+			mGetRole=FPlayer.class.getMethod( "getRole");
+			// {@link com.massivecraft.factions.FPlayer }
 			
 			String sourceEnum="com.massivecraft.factions.struct."
 					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
@@ -86,6 +91,7 @@ public abstract class FactionsBase implements FactionsAny {
 			}
 			
 			Object isReturn = mGetRelationTo.invoke(RelationUtil.class/*or null cause it's static class*/, one, two );
+			assert null != isReturn:"what trickery is this?!";
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
 				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
@@ -108,6 +114,38 @@ public abstract class FactionsBase implements FactionsAny {
 		return ret;// actually reached
 	}
 	
+	@Override
+	public Relation getRole( RelationParticipator one ) {
+		boolean failed = false;
+		FactionsAny.Relation ret = null;
+		try {
+			if ( null == one ) {
+				failed = true;
+				return null;// not gonna happen really
+			}
+			
+			Object isReturn = mGetRole.invoke( one );
+			ret = mapRelation.get( isReturn );
+			if ( null == ret ) {
+				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
+						"assuming the mapping was done right" );
+			}
+		} catch ( IllegalAccessException e ) {
+			e.printStackTrace();
+			failed = true;
+		} catch ( IllegalArgumentException e ) {
+			e.printStackTrace();
+			failed = true;
+		} catch ( InvocationTargetException e ) {
+			e.printStackTrace();
+			failed = true;
+		} finally {
+			if ( ( failed ) || ( null == ret ) ) {
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mGetRelationTo );
+			}
+		}
+		return ret;// actually reached
+	}
 	
 	@Override
 	public void addSubCommand( FCommand subCommand ) {

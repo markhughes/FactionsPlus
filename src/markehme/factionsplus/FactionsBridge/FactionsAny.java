@@ -69,6 +69,12 @@ public interface FactionsAny {
 	public FactionsAny.Relation getRelationBetween( RelationParticipator one, RelationParticipator two );
 	
 	
+	/**
+	 * @param one
+	 * @return can never return null
+	 */
+	public FactionsAny.Relation getRole( RelationParticipator one);
+	
 	public void addSubCommand( FCommand subCommand );
 	
 	
