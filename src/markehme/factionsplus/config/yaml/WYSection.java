@@ -145,7 +145,7 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	public void recalculateLineNumbers( WYSection root, int whatThePreviousLineNumber ) {
 		synchronized (this) {
 			tmp_currentLine=whatThePreviousLineNumber;
-			
+			private_unsynchronized_recalculateLineNumbers(this);
 		}
 	}
 	public void recalculateLineNumbers() {
