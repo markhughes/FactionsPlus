@@ -34,8 +34,8 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * New Configuration setup
 
-* obsolete config options are automatically upgraded/transformed into the newly named ones.
-  You are also notified on console about this.
+* obsolete config options are automatically upgraded/transformed into the newly named ones. 
+  This implies that the old value is kept. You are also notified on console about this.
 
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
