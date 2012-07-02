@@ -10,11 +10,13 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
   
 * minimized overhead & memory-consumption when accessing the user defined config options at runtime
 
-* LWC Locks Reset Fixing (useLWCIntegrationFix)
+* LWC Locks Reset Fixing extras.Protection.LWC.`removeAllLocksOnClaim`
+this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
+in other words, locks owned by people in your faction(including you) won't be removed
 
 * /f unban
 
-* Bridge between 1.6 and 1.7
+* Bridge between 1.6 and 1.7, you only need one FactionsPlus.jar regardless of what Factions.jar you're using
 
 * warpTeleportAllowedEnemyDistance
 
@@ -32,10 +34,19 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * New Configuration setup
 
+* obsolete config options are automatically upgraded/transformed into the newly named ones. 
+  This implies that the old value is kept. You are also notified on console about this.
+
+* invalid config options are automatically commented out.  You are also notified on console about this. 
+
+* using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
+  so that you know that they are ignored. You are also notified on console about this.
+
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
-
-
+  You are also notified on console about this.
+  
+* comments "#" are kept on each save, you may delete them (any line starting with a "#" )
 
 # FactionsPlus version 0.4.6
 * nothing specified here
