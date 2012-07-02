@@ -905,7 +905,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// //TODO: get the first WY Line encountered in .yml and prepend this before it (pleonasm?)
 						//
 						// }
-						FactionsPlus.info( "Adding new config option\n`" +ChatColor.GREEN+ dottedRealAlias + ChatColor.RESET+"`" );
+						FactionsPlus.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
 						continue;
 						// }else {
 						// pointerToLastFoundField=field;
@@ -928,7 +928,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					WYIdentifier<COMetadata> overriderWID = aSet.get( dottedRealAlias );
 					if ( null == overriderWID ) {
 						//so there were some options but none was the real Alias!
-						FactionsPlus.info( dottedRealAlias);
+//						FactionsPlus.info( dottedRealAlias);
 //						for ( Entry<String, WYIdentifier<COMetadata>> string : aSet.entrySet() ) {
 //							System.out.println("!"+string.getKey()+" "+string.getValue().getID_InAbsoluteDottedForm(virtualRoot));
 //						}
@@ -994,7 +994,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
 						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias );
-						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, overriderWID, dottedRealAlias ) );
+						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
 //						if ( null != previousMD ) {

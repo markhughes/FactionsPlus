@@ -42,7 +42,7 @@ public class TeleportsListener implements Listener {
 		if ( !plugin.isEnabled() ) {
 			return;
 		}
-		if (Config.isInited()) {
+		if (!Config.isInited()) {
 			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
