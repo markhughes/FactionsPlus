@@ -37,3 +37,7 @@ this is also to keep out the clutter within the TODO file
 
 //done first part- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
   this and apply those after we've inserted the new/missing lines, and after having called the WYSection.recalcLines()
+
+//done- check all current occurrences of config options so that they are not used without the "._" ie. used the instance instead of the
+  value
+  
