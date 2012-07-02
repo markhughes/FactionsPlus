@@ -46,7 +46,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 * using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
   so that you know that they are ignored. You are also notified on console about this.
 
-* comments "#" are kept on each save
+* comments "#" are kept on each save, you may delete them (any line starting with a "#" )
 
 # FactionsPlus version 0.4.6
 * nothing specified here
