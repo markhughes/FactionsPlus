@@ -36,7 +36,7 @@ public class JailListener implements Listener{
 			player.sendMessage("You're currently in Jail!");
 		}
 	}
-	@EventHandler(priority=EventPriority.MONITOR)
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 		if (Utilities.isJailed(player)) {
