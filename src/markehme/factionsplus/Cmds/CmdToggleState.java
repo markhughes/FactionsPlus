@@ -68,6 +68,11 @@ public class CmdToggleState extends FCommand {
 			if (null == factiont) {
 				sender.sendMessage(ChatColor.RED + "The faction `"+factionToggling+"` doesn't exist!");
 				return;
+			}else {
+				if ( (!sender.isOp()) && (factiont.isSafeZone() || Utilities.isWarZone( factiont )) ) {
+					sender.sendMessage( ChatColor.RED +"You may not change the state of WarZone and SafeZone !" );
+					return;
+				}
 			}
 		} else {
 			factiont = fme.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
@@ -95,11 +100,11 @@ public class CmdToggleState extends FCommand {
 			//if faction wasn't already peaceful, then we set it
 			if ( (!Config._economy.enabled._)
 					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
-						"for setting faction to peaceful")) ) {
+						"for setting faction `"+factiont.getTag()+"`to peaceful")) ) {
 				
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
-				sender.sendMessage("You have toggled the Faction to Peaceful!");
+				sender.sendMessage("You have toggled the faction `"+factiont.getTag()+"` to Peaceful!");
 			}
 		} else {
 			//faction was peaceful, we now remove this flag

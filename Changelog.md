@@ -33,6 +33,8 @@ in other words, locks owned by people in your faction(including you) won't be re
   and to not cause internal error if inexistent faction tag was specified 
   if you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
    only if you are (Op or)admin/officer/member in your faction if those were set in the config
+  Prevent changing the state of WarZone or SafeZone, unless you are Op
+  Even as Op, you are still charged the money.
   
 
 ### config.yml features
