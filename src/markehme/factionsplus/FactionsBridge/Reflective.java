@@ -56,9 +56,6 @@ public abstract class Reflective {
 	 *            if the sourceEnum is not found in the map, then it will try to find the field with the same name as
 	 *            destinationEnum<br>
 	 *            if null or empty map, it won't be used, meaning source field name must match the destination name, else throw
-	 * @param skipNotFoundSourceEnums
-	 *            if true, only those enums that are found in destination(or map) will be mapped<br>
-	 *            else, if false, all source enums will be mappes and throw if fail<br>
 	 */
 	public static <K extends Object, V extends Object> void mapEnumsToSome( Map<K, V> destinationMap, Class<?> sourceEnumClass,
 		Class<V> destinationEnum, Map<String, V> mapOfRenameSourceNameToDestEnum )
@@ -148,8 +145,8 @@ public abstract class Reflective {
 					
 					K factionsFieldInstance = (K)eachSourceField.get( sourceEnumClass );
 					destinationMap.put( factionsFieldInstance, ourFieldInstance );
-					FactionsPlus.warn( destinationMap+" mapped for enum `" + sourceEnumClass + "` `" + sourceFieldName + "` to `"
-						+ ourFieldInstance + "` in destEnum=`" + destinationEnum + "`" );
+//					FactionsPlus.warn( destinationMap+" mapped for enum `" + sourceEnumClass + "` `" + sourceFieldName + "` to `"
+//						+ ourFieldInstance + "` in destEnum=`" + destinationEnum + "`" );
 				}
 			} catch ( Throwable t){
 				failed=true;
