@@ -23,7 +23,7 @@ public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	}
 	
 	
-	protected void setId( String string ) {
+	public void setId( String string ) {
 		id = string;
 	}
 	

@@ -49,7 +49,7 @@ public class WYIdentifier<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	}
 	
 	
-	protected void setValue( String string ) {
+	public void setValue( String string ) {
 		value = string;
 	}
 	

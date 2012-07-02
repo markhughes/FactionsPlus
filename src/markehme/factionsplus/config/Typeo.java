@@ -290,6 +290,7 @@ public abstract class Typeo {
 						
 						fieldToInstanceOfIt.put( field, parentInstance );
 						// making sure we have dotted form of field
+//						FactionsPlus.warn( "\n"+currentDotted);
 						fieldToDottedRealAlias.put( field, currentDotted );
 						
 						assert !orderedListOfFields.contains( field ) : "must not already exist, else coding logic fail";
