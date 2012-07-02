@@ -46,7 +46,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// this // file // is // located // inside // .jar // in // root // dir
 //	private static final String				fileConfigDefaults		= "config_defaults.yml";
 	// and it contains the defaults, so that they are no longer hardcoded in java code
-	private static File						fileConfig				= new File( Config.folderBase, "config3.yml" );
+	private static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
 	// never change this, it's yaml compatible:
 	public static final char				DOT						= '.';
@@ -620,7 +620,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			OutputStreamWriter osw = null;
 			bw = null;
 			try {
-				fos = new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
+				//for tests:new File( Config.fileConfig.getParent(), "config2.yml" ) );
+				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
@@ -697,7 +698,20 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				throw FactionsPlusPlugin.bailOut( "While '" + Config.fileConfig.getAbsolutePath()
 					+ "' exists, it is not a file!" );
 			}
+		}else {
+			//FIXME: evil hack, creating empty file and allowing the following code(which is meant just for when file is not empty) to actually fill it up
+			// x: what to do when config doesn't exit, probably just saveConfig() or fill up virtualRoot
+			// will have to fill the root with the fields and their comments
 			
+//			throw FactionsPlus.bailOut( "inexistent config" );
+			try {
+				Config.fileConfig.createNewFile();
+			} catch ( IOException e ) {
+				FactionsPlus.bailOut(e, "Cannot create config file "+Config.fileConfig.getAbsolutePath() );
+			}
+			
+//			virtualRoot=createWYRootFromFields();
+		}
 			// config file exists
 			try {
 				
@@ -722,7 +736,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					// coalesceOverrides( virtualRoot );
 					
 					// addMissingFieldsToConfig( virtualRoot );
-					// TODO: when done:
+					// cleanram: when done:
 					mapFieldToID.clear();// free up memory for gc
 					
 				}// sync
@@ -733,12 +747,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					+ "'" );
 			}
 			
-		} else {
-			// FIXME: what to do when config doesn't exit, probably just saveConfig() or fill up virtualRoot
-			// will have to fill the root with the fields and their comments
-			virtualRoot=createWYRootFromFields();
-			throw FactionsPlus.bailOut( "inexistent config" );
-		}
+		
 		
 		applyChanges();
 		
@@ -802,6 +811,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	private static WYSection createWYRootFromFields() {
+		Q.ni();
 		return virtualRoot;
 		//
 	}

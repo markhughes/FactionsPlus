@@ -90,3 +90,8 @@ support chat modes)
 //done first part- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
   this and apply those after we've inserted the new/missing lines, and after having called the WYSection.recalcLines()
   
+- set textual comments for each option, in java code on annotation
+- actually try to write those comments above the fields IF they are not already set (ignoring empty/whitespace lines 
+  in between)
+  
+  

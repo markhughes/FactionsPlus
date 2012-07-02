@@ -38,4 +38,12 @@ public class HM1 extends HashMap<Field, SetOfIDs>{
 		}//else it just existed
 		return prev;
 	}
+	
+	@Override
+	public void clear() {
+		for ( java.util.Map.Entry<Field, SetOfIDs> iterable_element : this.entrySet() ) {
+			iterable_element.getValue().clear();
+		}
+		super.clear();
+	}
 }
