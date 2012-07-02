@@ -30,7 +30,7 @@ public abstract class Typeo {
 	// many to one
 	private static final HashMap<String, Field>		dottedAllAliases_to_Fields	= new HashMap<String, Field>();
 	
-	// this is the order in which the config options will be written in the config.yml
+	// TODO: this is the order in which the config options will be written in the config.yml
 	protected static final TypedLinkedList<Field>	orderedListOfFields			= new TypedLinkedList<Field>();
 	
 	// basically cached the reflection here: //one to many
@@ -47,20 +47,48 @@ public abstract class Typeo {
 	
 	
 	
-	protected static final void setFieldValue( Field field, String value ) throws IllegalArgumentException,
-		IllegalAccessException
+	protected static final void setFieldValue( Field field, String value ) 
 	{
 		assert !fieldToInstanceOfIt.isEmpty() : "should not call this prior to having the map initialized";
 		
 		// the instance of the class where the field resides
 		Object parentInstance = fieldToInstanceOfIt.get( field );
 		assert null != parentInstance : "should've been set";
-		//actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
-//		field.set( parentInstance, value );
+		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
+		// field.set( parentInstance, value );
 		
-		ConfigOptionName basic=(ConfigOptionName)field.get( parentInstance );
-//		System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
-		basic.setValue(value);
+		ConfigOptionName basic=null;
+		try {
+			basic = (ConfigOptionName)field.get( parentInstance );
+		} catch ( IllegalArgumentException e ) {
+			throw Q.rethrow(e);
+		} catch ( IllegalAccessException e ) {
+			throw Q.rethrow(e);
+		}
+		// System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
+		basic.setValue( value );
+	}
+	
+	
+	protected static final String getFieldValue( Field field )  {
+		assert !fieldToInstanceOfIt.isEmpty() : "should not call this prior to having the map initialized";
+		
+		// the instance of the class where the field resides
+		Object parentInstance = fieldToInstanceOfIt.get( field );
+		assert null != parentInstance : "should've been set";
+		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
+		// field.set( parentInstance, value );
+		
+		ConfigOptionName basic=null;
+		try {
+			basic = (ConfigOptionName)field.get( parentInstance );
+		} catch ( IllegalArgumentException e ) {
+			throw Q.rethrow(e);
+		} catch ( IllegalAccessException e ) {
+			throw Q.rethrow(e);
+		}
+		// System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
+		return basic.getValue();
 	}
 	
 	

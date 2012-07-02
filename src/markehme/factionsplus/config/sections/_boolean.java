@@ -15,5 +15,10 @@ public class _boolean extends ConfigOptionName {
 	public void setValue( String value ) {
 		_=Boolean.parseBoolean( value);
 	}
+
+	@Override
+	public String getValue() {
+		return Boolean.toString( _ );
+	}
 	
 }

@@ -30,8 +30,9 @@ public abstract class ConfigOptionName {// must be abstract, we can't have it in
 	 * set the value from a string
 	 * @param value
 	 */
-	public void setValue( String value ) {
-		//subclasses should override this without calling it via super.
-		throw Q.ni();
-	}
+	public abstract void setValue( String value );
+
+
+
+	public abstract String getValue();
 }

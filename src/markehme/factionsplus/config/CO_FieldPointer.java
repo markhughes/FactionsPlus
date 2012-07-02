@@ -19,18 +19,7 @@ public class CO_FieldPointer extends COMetadata {
 
 	@Override
 	protected void override_apply() {
-		Exception error=null;
-		try {
 			Typeo.setFieldValue(field,wid.getValue());
-		} catch ( IllegalArgumentException e ) {
-			error=e;
-		} catch ( IllegalAccessException e ) {
-			error=e;
-		}finally{
-			if (null != error) {
-				throw new RuntimeException("This should not happen",error);
-			}
-		}
 	}
 	
 	Field getField(){

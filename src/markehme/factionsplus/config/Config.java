@@ -379,6 +379,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
+	
 	/**
 	 * a mapping between the Field config option and an ordered list of dottedform of and WYIdentifiers encountered in
 	 * config.yml<br>
@@ -387,8 +388,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// private static final HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>> mapField_to_ListOfWYIdentifier =
 	// new HashMap<Field, TypedLinkedList<DualPack<String, WYIdentifier>>>();
 	
-	private static final HashMap<Field, HashMap<WYIdentifier, String>>	mapField_to_WYIdDotted	=
-																									new HashMap<Field, HashMap<WYIdentifier, String>>();
+	// private static final HashMap<Field, HashMap<WYIdentifier, String>> mapField_to_WYIdDotted =
+	// new HashMap<Field, HashMap<WYIdentifier, String>>();
 	
 	
 	/**
@@ -713,14 +714,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					parseOneTime_and_CheckForValids( virtualRoot, null );
 					
 					
-					parseSecondTime_and_sortOverrides();// from mapField_to_ListOfWYIdentifier
+					parseSecondTime_and_sortOverrides( virtualRoot );// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
 					// coalesceOverrides( virtualRoot );
 					
 					// addMissingFieldsToConfig( virtualRoot );
 					// TODO: when done:
-					mapFieldToID.clear();//free up memory for gc
+					mapFieldToID.clear();// free up memory for gc
 					
 				}// sync
 				
@@ -798,7 +799,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	private static void applyChanges() {
 		virtualRoot.recalculateLineNumbers();
-		parseAndApplyChanges( virtualRoot );// ,null);//like setting lines as comments due to duplicates/invalid/overridden
+		parseAndApplyChanges( virtualRoot );
+		// that will set lines as comments due to duplicates/invalid/overridden
+		// and most importantly will apply the values from the config into the Fields
 	}
 	
 	
@@ -844,32 +847,65 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static void parseSecondTime_and_sortOverrides() {
+	private static void parseSecondTime_and_sortOverrides( WYSection vroot ) {
 		synchronized ( mapFieldToID ) {
 			// parse all found config options in .yml , only those found! and sort the list for their overrides
 			// which means, we'll now know what option overrides which one if more than 1 was found in .yml for a specific
 			// config field
 			// realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
 			// the top oldAliases override the bottom ones when looking at the @Option annotation
-			
-			
-			for ( Field field : Typeo.orderedListOfFields ) {
-				SetOfIDs aSet = mapFieldToID.get( field );
-				if (null == aSet) {
-					// this config option was not yet defined in .yml so it means we have to add it
-					//TODO: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-					FactionsPlus.severe( "adding new option "+field );
-					continue;
-				}
-				//else, the option was defined, so
-				//multiple names for it may have been found in the config, and we need to decide which one overrides which other one
-				//where noting that the realAlias always overrides the oldAliases if both are found
-				
-				
+			Field field = null;
+			// SetOfIDs pointerToLastFoundSet=null;//the last field which had a WYIdentifier connection to .yml
+			// Field pointerToLastFoundField=null;
+			// String pointerToLastDottedRealAliasOfFoundField=null;
+			WYIdentifier<COMetadata> lastGoodOverriderWID = null;
+			for ( Iterator iterator = Typeo.orderedListOfFields.iterator(); iterator.hasNext(); ) {
+				field = (Field)iterator.next();
 				// Option anno = field.getAnnotation( Option.class );
 				String[] orderOfAliases = Typeo.getListOfOldAliases( field );
-				String realAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
+				String dottedRealAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
 				assert null != orderOfAliases;// due to the way annotation works
+				
+				//
+				// }
+				// for ( : ) {
+				SetOfIDs aSet = mapFieldToID.get( field );
+				if ( null == aSet ) {
+					// this config option was not yet defined in .yml so it means we have to add it
+					// previousField
+					
+					putFieldValueInTheRightWYPlace( vroot, field, dottedRealAlias );
+					
+					// if (null != lastGoodOverriderWID) {
+					// //we're good, we can put the new stuff after this one
+					// //so append
+					// //or before the next WID ?
+					// //so get the WY line after this found field actually
+					// // Typeo.getField_correspondingTo_DottedFormat( pointerToLastDottedRealAliasOfFoundField );
+					// // pointerToLastFoundSet.get( pointerToLastDottedRealAliasOfFoundField );
+					// // pointerToLastFoundSet.get( );
+					// // assert pointerToLastFoundSet.size()==1;
+					// // pointerToLastFoundSet.
+					// lastGoodOverriderWID=lastGoodOverriderWID.getNext();
+					// }else{
+					// //first field in our java code was not found at all in the .yml
+					// //so we can just add it at the beginning of whatever we have from .yml
+					// //TODO: get the first WY Line encountered in .yml and prepend this before it (pleonasm?)
+					//
+					// }
+					FactionsPlus.info( "Adding new config option `" + Typeo.getDottedRealAliasOfField( field ) + "`" );
+					continue;
+					// }else {
+					// pointerToLastFoundField=field;
+					// pointerToLastFoundSet=aSet;
+					// pointerToLastDottedRealAliasOfFoundField=dottedRealAlias;
+				}
+				// else, the option was defined, so
+				// multiple names for it may have been found in the config, and we need to decide which one overrides which
+				// other one
+				// where noting that the realAlias always overrides the oldAliases if both are found
+				
+				
 				
 				// find who is the overrider:
 				// sortedListOfOverride=new TypedLinkedList<>();
@@ -877,7 +913,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// assume from start it's realAlias, the overrider
 				String dottedOverrider = null;
 				
-				WYIdentifier<COMetadata> overriderWID = aSet.get( realAlias );
+				WYIdentifier<COMetadata> overriderWID = aSet.get( dottedRealAlias );
 				if ( null == overriderWID ) {
 					// the realAlias is not the overriding one, so we parse oldAliases to find the topmost found one to be as
 					// our supreme overrider which means all others found are marked as overriden
@@ -889,40 +925,48 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							break;// for, because the first one we find, overrides all the below ones
 						}
 					}
-					assert ( null != overriderWID ):"if the real alias wasn't in list, then at least "
-					+"one oldalias that is not .equals to realAlias would've been found and set";
+					assert ( null != overriderWID ) : "if the real alias wasn't in list, then at least "
+						+ "one oldalias that is not .equals to realAlias would've been found and set";
 				} else {
 					// the real alias overrides any of the old aliases
-					dottedOverrider = realAlias;
+					dottedOverrider = dottedRealAlias;
 				}
 				// so we have our overrider
 				// now we have to parse the aSet and mark all that are not overriderWID as overridden by overriderWID
 				
 				assert ( null != overriderWID );
 				assert ( null != dottedOverrider );
-				//there is always 1 overrider
+				// there is always 1 overrider
+				lastGoodOverriderWID = overriderWID;
 				
-				for ( Entry<String, WYIdentifier<COMetadata>> entry : aSet.entrySet() ) {
+				Set<Entry<String, WYIdentifier<COMetadata>>> iter = aSet.entrySet();
+				for ( Entry<String, WYIdentifier<COMetadata>> entry : iter ) {
 					WYIdentifier<COMetadata> wid = entry.getValue();
 					if ( overriderWID != wid ) {
 						// mark as overridden
 						
 						String widDotted = entry.getKey();
-						COMetadata previousMD = wid.setMetadata( new CO_Overridden( wid, widDotted, overriderWID, dottedOverrider ) );
-						if (null != previousMD) {
-							//it's possible, it has to have been associated with the field, if it has a prev metadata
-							assert (CO_FieldPointer.class.isAssignableFrom( previousMD.getClass())):"this should be the only way"+
-									"that the wid we got here had a previously associated metadata with it, aka it has to have the"
-							+"pointer to the Field";
-							CO_FieldPointer fp=(CO_FieldPointer)previousMD;
+						COMetadata previousMD =
+							wid.setMetadata( new CO_Overridden( wid, widDotted, overriderWID, dottedOverrider ) );
+						if ( null != previousMD ) {
+							// it's possible, it has to have been associated with the field, if it has a prev metadata
+							assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
+								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
+								+ "pointer to the Field";
+							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
 							Field pfield = fp.getField();
 							assert null != pfield;
-							assert pfield.equals(field):"should've been the same field, else code logic failed";
+							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
+							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
+							// assert contained;
 						}
 						
 					}
 				}
-				
+				assert !aSet.isEmpty();
+				aSet.clear();// cleaning some ram
+				aSet.put( dottedOverrider, overriderWID );
+				assert aSet.size() == 1;
 				
 				// if (null !=)
 				// if (null != wid) {
@@ -931,56 +975,58 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// if (aSet.containsValue( value ))
 				// if (realAlias.)
 				//
-//				SetOfIDs aSet = fieldToSet.getValue();
-//				assert null != aSet;
-//				assert aSet.size() > 0;
-//				
-//				TypedLinkedList<DualPack<String, WYIdentifier>> listInOverridingOrder =
-//					new TypedLinkedList<DualPack<String, WYIdentifier>>();
-//				
-//				
-//				for ( int i = 0; i < orderOfAliases.length; i++ ) {
-//					
-//					WYIdentifier<COMetadata> existing = aSet.get( orderOfAliases[i] );
-//					if ( null != existing ) {
-//						listInOverridingOrder.addLast( existing );
-//						boolean was = aSet.remove( existing );
-//						assert was;
-//					} else {
-//						// we just didn't encounter this oldAlias which was defined in the annotation
-//						// so we skip to next
-//					}
-//				}
-//				// did we however also find the realAlias, if so put it at top of list
-//				// if (real) we can't, we don't know it's dotted format yet, we assume that whatever 1 element is left, if any
-//				// is the realAlias, cannot be anything else
-//				
-//				assert aSet.size() <= 1;
-//				
-//				if ( aSet.size() > 0 ) {
-//					// still one left, must be the realAlias
-//					DualPack<String, WYIdentifier> real = aSet.getFirst();
-//					DualPack<String, WYIdentifier> removed = aSet.removeFirst();
-//					assert real == removed;
-//					// assert real.getFirst().equals( realAlias ):real.getFirst()+" "+realAlias;yeah it's dotted vs non-dotted
-//					// here, fail
-//					listInOverridingOrder.addFirst( real );
-//				}
-//				assert aSet.size() == 0;
-//				// list.clear();//no use keeping the memory
-//				fieldToSet.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of overrides
-//				
-//				Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
-//				DualPack<String, WYIdentifier> first = iter.next();
-//				assert null != first;// must have at least the realAlias in that list;
-//				// assert realAlias.equals(first);
-//				
-//				while ( iter.hasNext() ) {
-//					DualPack<String, WYIdentifier> overridenOne = iter.next();
-//					WYIdentifier<COMetadata> wid = overridenOne.getSecond();
-//					wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
-//				}
-//				
+				// SetOfIDs aSet = fieldToSet.getValue();
+				// assert null != aSet;
+				// assert aSet.size() > 0;
+				//
+				// TypedLinkedList<DualPack<String, WYIdentifier>> listInOverridingOrder =
+				// new TypedLinkedList<DualPack<String, WYIdentifier>>();
+				//
+				//
+				// for ( int i = 0; i < orderOfAliases.length; i++ ) {
+				//
+				// WYIdentifier<COMetadata> existing = aSet.get( orderOfAliases[i] );
+				// if ( null != existing ) {
+				// listInOverridingOrder.addLast( existing );
+				// boolean was = aSet.remove( existing );
+				// assert was;
+				// } else {
+				// // we just didn't encounter this oldAlias which was defined in the annotation
+				// // so we skip to next
+				// }
+				// }
+				// // did we however also find the realAlias, if so put it at top of list
+				// // if (real) we can't, we don't know it's dotted format yet, we assume that whatever 1 element is left, if
+				// any
+				// // is the realAlias, cannot be anything else
+				//
+				// assert aSet.size() <= 1;
+				//
+				// if ( aSet.size() > 0 ) {
+				// // still one left, must be the realAlias
+				// DualPack<String, WYIdentifier> real = aSet.getFirst();
+				// DualPack<String, WYIdentifier> removed = aSet.removeFirst();
+				// assert real == removed;
+				// // assert real.getFirst().equals( realAlias ):real.getFirst()+" "+realAlias;yeah it's dotted vs non-dotted
+				// // here, fail
+				// listInOverridingOrder.addFirst( real );
+				// }
+				// assert aSet.size() == 0;
+				// // list.clear();//no use keeping the memory
+				// fieldToSet.setValue( listInOverridingOrder );// store the list of encountered old aliases in order of
+				// overrides
+				//
+				// Iterator<DualPack<String, WYIdentifier>> iter = listInOverridingOrder.iterator();
+				// DualPack<String, WYIdentifier> first = iter.next();
+				// assert null != first;// must have at least the realAlias in that list;
+				// // assert realAlias.equals(first);
+				//
+				// while ( iter.hasNext() ) {
+				// DualPack<String, WYIdentifier> overridenOne = iter.next();
+				// WYIdentifier<COMetadata> wid = overridenOne.getSecond();
+				// wid.setMetadata( new CO_Overridden( wid, overridenOne.getFirst(), first.getSecond(), first.getFirst() ) );
+				// }
+				//
 				// done: in order to be able to keep accurate line numbers when reported or mixed in the comments we have to
 				// mark the overridden/invalid/duplicates as such but not yet modify them, and only at the end, after we've also
 				// inserted missing option, then and only then modify the lines(by transforming into comments) since by this
@@ -1098,6 +1144,80 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// // }// outer while
 	// }// sync
 	// }
+	
+	
+	private static void putFieldValueInTheRightWYPlace( WYSection vroot, Field field, String dottedRealAlias ) {
+		assert Q.nn(vroot);
+		assert Q.nn( field );
+		assert Typeo.isValidAliasFormat( dottedRealAlias );
+//		String[] array = dottedRealAlias.split( "\\." );
+		WYSection foundParentSection = parseCreateAndReturnParentSectionFor( vroot, field, dottedRealAlias );
+		assert null != foundParentSection:"impossible, it should've created and returned a parent even if it didn't exist";
+		int index = dottedRealAlias.lastIndexOf( Config.DOT );
+		if (index >=0) {//well not really 0
+			dottedRealAlias=dottedRealAlias.substring( 1+index);
+		}
+		assert Typeo.isValidAliasFormat( dottedRealAlias ):dottedRealAlias;
+		WYIdentifier leaf=new WYIdentifier<COMetadata>( 0, dottedRealAlias, Typeo.getFieldValue( field ));
+//		leaf.setMetadata( metadata )
+		//XXX: new(unencountered) config options (in config.yml) are added as last in the subsection where `id: value` is
+		foundParentSection.append( leaf);
+	}
+	
+	
+	/**
+	 * attempts to create all parents for the passed ID
+	 * @param root
+	 * @param field
+	 * @param dottedID ie. extras.lwc.disableSomething
+	 * @return
+	 */
+	private static WYSection parseCreateAndReturnParentSectionFor( WYSection root, Field field, String dottedID ) {
+		assert Q.nn( root );
+		
+		
+		WYItem<COMetadata> currentItem = root.getFirst();
+		
+		int index = dottedID.indexOf( Config.DOT );
+		if (index < 0) {
+			//we're just at the id
+			return root;
+		}
+		//else not yet reached
+		String findCurrent = dottedID.substring( 0, index );
+		
+		while ( null != currentItem ) {
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				if ( findCurrent.equals( cs.getId() ) ) {
+						return parseCreateAndReturnParentSectionFor( cs, field, findCurrent);// recurse
+				}
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					if ( findCurrent.equals( wid.getId() ) ) {
+						throw new RuntimeException("bad parameters for this method, because you searched for parent aka section, and we found it as an id");
+//						return root;
+					}
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+					// currentItem = currentItem.getNext();
+				}
+			}// else
+			
+			currentItem = currentItem.getNext();
+		}// inner while
+		
+		//if not found
+			//make parent section, without completing the line number (which will be recalculated later anyway)
+			WYSection<COMetadata> parent = new WYSection<COMetadata>( 0, findCurrent );
+				return parseCreateAndReturnParentSectionFor(parent, field, findCurrent);
+	}
 	
 	
 	public static boolean isInited() {

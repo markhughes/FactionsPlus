@@ -15,4 +15,9 @@ public class _double extends ConfigOptionName {
 	public void setValue( String value ) {
 		_=Double.parseDouble( value );
 	}
+
+	@Override
+	public String getValue() {
+		return Double.toString(_);
+	}
 }

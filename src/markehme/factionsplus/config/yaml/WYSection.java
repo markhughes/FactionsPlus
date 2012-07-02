@@ -33,7 +33,7 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	}
 	
 	
-	void append( WYItem child ) {
+	public void append( WYItem child ) {
 		if ( lastChild != null ) {// means first is also non-null
 			assert lastChild.getNext() == null;
 			lastChild.setNext( child );

@@ -18,4 +18,10 @@ public class _int extends ConfigOptionName {
 	public void setValue( String value ) {
 		_ = Integer.parseInt( value );
 	}
+
+
+	@Override
+	public String getValue() {
+		return Integer.toString( _ );
+	}
 }
