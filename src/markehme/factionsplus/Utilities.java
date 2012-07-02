@@ -4,8 +4,9 @@ import java.io.*;
 
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
+import markehme.factionsplus.util.*;
 
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.*;
 
@@ -242,5 +243,53 @@ public class Utilities {
 	 */
 	public static boolean isNormalFaction(Faction faction) {
 		return !isWarZone( faction ) && !faction.isSafeZone() && !faction.isNone();
+	}
+	
+	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*
+	public static boolean isJustLookingAround(Location from, Location to) {
+		assert Q.nn( from );
+		assert Q.nn( to );
+
+	        if (from.getWorld() != to.getWorld() && (!from.getWorld().equals(to.getWorld()))) {
+	            return false;
+	        }
+//	        System.out.println(getIntegerPartMultipzliedBy(from.getX(), 10)+" vs "+from.getX());
+	        if (getIntegerPartMultipzliedBy(from.getX(), margin) != getIntegerPartMultipzliedBy(to.getX(), margin)) {
+	            return false;
+	        }
+	        if (getIntegerPartMultipzliedBy(from.getY(), margin) != getIntegerPartMultipzliedBy(to.getY(), margin)) {
+	            return false;
+	        }
+	        if (getIntegerPartMultipzliedBy(from.getZ(), margin) != getIntegerPartMultipzliedBy(to.getZ(), margin)) {
+	            return false;
+	        }
+	        return true;
+	}
+	
+	public static final int getIntegerPartMultipzliedBy(double d, int multipliedByThis) {
+		assert multipliedByThis>0;
+		String asString = Double.toString( d*multipliedByThis );
+		int dotAt = asString.indexOf( Config.DOT );
+		if (dotAt<0) {//assumed it's fully integer
+			dotAt=asString.length(); 
+		}
+//		multipliedByThis=Math.min( Math.getExponent( multipliedByThis )+dotAt, dotAt);
+		return Integer.parseInt( asString.substring( 0, dotAt) );
+	}
+	
+	/**
+	 * just like: from=to; except the pitch/yal is not reset; ie. keep the pitch/yaw of "from"
+	 * @param from
+	 * @param to
+	 * @return from  (unneeded but hey)
+	 */
+	public static final Location setLocationExceptEye(Location from, Location to) {
+		assert Q.nn( from );
+		assert Q.nn(to);
+		from.setWorld( to.getWorld() );
+		from.setX( to.getX() );
+		from.setY( to.getY() );
+		from.setZ( to.getZ() );
+		return from;
 	}
 }

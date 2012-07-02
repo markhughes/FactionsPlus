@@ -40,6 +40,10 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * fixed NPE when joined while being previously in faction jail
 
+* fixed spazzing out while in faction jail and tried to move once, you may now look around
+
+* disallowed teleporting out while in faction jail either via command like /home or via ender peals etc.
+
 ### config.yml features
 
 * New Configuration setup
