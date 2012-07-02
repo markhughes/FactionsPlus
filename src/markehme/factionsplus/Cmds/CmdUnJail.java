@@ -1,6 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
 import com.massivecraft.factions.cmd.FCommand;
@@ -30,8 +31,9 @@ public class CmdUnJail extends FCommand {
 		String unJailingPlayer = this.argAsString( 0 );
 		
 		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			boolean isOfficer = Config._jails.officersCanJail._ && Utilities.isOfficer( fme );
-			if ( isOfficer || ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )) {
+			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
+					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
+					|| (Utilities.isOp( fme ))) {
 				if ( FactionsPlusJail.removeFromJail( unJailingPlayer, fme.getFactionId() ) ) {
 					fme.sendMessage( unJailingPlayer + " has been removed from jail." );
 				} else {
@@ -41,6 +43,6 @@ public class CmdUnJail extends FCommand {
 			}
 		}
 		
-		fme.sendMessage( "No permission!" );
+		fme.sendMessage( "As a "+Bridge.factions.getRole( fme )+" you have No permission to unjail!" );
 	}
 }

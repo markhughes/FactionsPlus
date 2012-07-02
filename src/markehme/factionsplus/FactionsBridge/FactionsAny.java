@@ -8,6 +8,7 @@ import com.massivecraft.factions.iface.*;
 
 public interface FactionsAny {
 	
+	
 	public static enum FFlag {
 		PEACEFUL,
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where

@@ -26,7 +26,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			
 			mSetFlag = Faction.class.getMethod( "setFlag", classFFlag, boolean.class );
 			
-			Reflective.mapEnums( mapFFlag, "com.massivecraft.factions.struct.FFlag", FactionsAny.FFlag.class);
+			Reflective.mapEnums( mapFFlag, "com.massivecraft.factions.struct.FFlag", FactionsAny.FFlag.class, null, false);
 			
 		} catch ( NoSuchMethodException e ) {// avoided multi catch so we can compile this with jdk6 too
 			e.printStackTrace();

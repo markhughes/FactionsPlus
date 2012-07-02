@@ -27,6 +27,7 @@ public abstract class FactionsBase implements FactionsAny {
 	private Map<Object, FactionsAny.Relation>	mapRelation		= new HashMap<Object, FactionsAny.Relation>();
 	
 	private Method	mGetRole=null;
+	private Map<String, FactionsAny.Relation>	renameSourceRoles=new HashMap<String, FactionsAny.Relation>();
 	
 	
 	protected FactionsBase( ) {
@@ -47,6 +48,17 @@ public abstract class FactionsBase implements FactionsAny {
 					+ ( Factions16.class.equals( this.getClass() ) ? /*1.6*/"Relation" : /*1.7*/"Rel" );
 
 			Reflective.mapEnums( mapRelation, sourceEnum, FactionsAny.Relation.class);
+			
+			//1.6 Role names
+			renameSourceRoles.put( "ADMIN", FactionsAny.Relation.LEADER);
+			renameSourceRoles.put( "MODERATOR", FactionsAny.Relation.OFFICER);
+			renameSourceRoles.put( "NORMAL", FactionsAny.Relation.MEMBER);
+			//1.7 Rel names are same as those in mapRelation above which we don't add, cause mapEnums will do it auto
+			
+			String enumRole = (Factions16.class.equals(this.getClass())?
+				/*1.6*/"com.massivecraft.factions.struct.Role": /*1.7*/"com.massivecraft.factions.struct.Rel");
+			Reflective.mapEnums( mapRelation, enumRole, FactionsAny.Relation.class, renameSourceRoles,true/*skip source fields that don't exist in destination*/);
+			renameSourceRoles.clear();
 			
 			Class clsFCommand = Class.forName("com.massivecraft.factions.cmd.FCommand");
 			fSenderMustBe_FactionAdminLeader=clsFCommand.getField(Factions16.class.equals(this.getClass())?"senderMustBeAdmin": 
@@ -95,7 +107,7 @@ public abstract class FactionsBase implements FactionsAny {
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
 				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
-						"assuming the mapping was done right" );
+						"assuming the mapping was done right, which probably means you forgot to add Role to mapping" );
 			}
 		} catch ( IllegalAccessException e ) {
 			e.printStackTrace();
@@ -125,11 +137,10 @@ public abstract class FactionsBase implements FactionsAny {
 			}
 			
 			Object isReturn = mGetRole.invoke( one );
-			System.out.println(isReturn);
 			ret = mapRelation.get( isReturn );
+//			FactionsPlus.warn("+"+ret+" "+FactionsAny.Relation.OFFICER.equals( ret )+" "+FactionsAny.Relation.LEADER.equals( ret ));
 			if ( null == ret ) {
-				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
-						"assuming the mapping was done right and the method call returned the right result" );
+				FactionsPlusPlugin.severe( "there was no mapping for `"+isReturn+"` => bridging failed" );
 			}
 		} catch ( IllegalAccessException e ) {
 			error = e;

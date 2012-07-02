@@ -226,6 +226,10 @@ public class Utilities {
 		return false;
 	}
 	
+	public static boolean isOp(FPlayer fplayer) {
+		return fplayer.getPlayer().isOp();
+	}
+	
 	public static boolean isWarZone(Faction faction)
 	{
 		return faction.getId().equals("-2");
