@@ -32,6 +32,8 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * New Configuration setup
 
+* obsolete config options are automatically upgraded/transformed into the newly named ones
+
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
 
@@ -39,8 +41,6 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
   so that you know that they are ignored
-  
-* obsolete config options are automatically upgraded/transformed into the newly names ones
 
 * comments "#" are kept on each save  
 
