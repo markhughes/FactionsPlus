@@ -44,7 +44,7 @@ public class CmdToggleState extends FCommand {
 		String factionToggling = this.argAsString(0);
 		Faction factiont;
 		boolean authallow=false;
-		//FIXME: groupmanager bug, once you set the  "factionsplus.togglestate.others" permission for Default group, reload then
+		//nvm seems fixed in Essentials-2.9.2 : groupmanager bug, once you set the  "factionsplus.togglestate.others" permission for Default group, reload then
 		//you remove and reload, it's still seen as set/active
 		
 //		System.out.println(""+Utilities.hasPermissionOrIsOp( (Player)sender, new org.bukkit.permissions.Permission("factionsplus.togglestate.others"))

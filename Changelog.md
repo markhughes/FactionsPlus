@@ -53,10 +53,7 @@ in other words, locks owned by people in your faction(including you) won't be re
   
 * comments "#" are kept on each save, you may delete them (any line starting with a "#" )
 
-### Known bugs:
-* if you're using groupmanager once you gave a permission like `factionsplus.togglestate.others` to your default group
-if you comment it out (remove)it and then `reload` the permission is still seen as active (even if you stop and 
-restart bukkit). Not sure if this is Vault+Groupmanager and the way we use Vault's permissions or something else.
+
 
 # FactionsPlus version 0.4.6
 * nothing specified here
