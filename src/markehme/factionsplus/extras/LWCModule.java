@@ -69,7 +69,7 @@ public class LWCModule extends JavaModule {//to fix
 			Player p = event.getPlayer();
 			Faction owner = Board.getFactionAt(floc);
 			FPlayer fp = FPlayers.i.get(p);
-			if(fp.getFaction() != owner) {
+			if(fp.getFaction() != owner && !owner.isNone()) {
 				event.setResult(CANCEL);
 				return;
 			}
