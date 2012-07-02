@@ -71,8 +71,8 @@ public class CmdToggleState extends FCommand {
 				sender.sendMessage(ChatColor.RED + "The faction `"+factionToggling+"` doesn't exist!");
 				return;
 			}else {
-				if ( (!sender.isOp()) && (factiont.isSafeZone() || Utilities.isWarZone( factiont )) ) {
-					sender.sendMessage( ChatColor.RED +"You may not change the state of WarZone and SafeZone !" );
+				if ( (!sender.isOp()) && (!Utilities.isNormalFaction(factiont )) ) {
+					sender.sendMessage( ChatColor.RED +"You may not change the state of WarZone/SafeZone/Wilderness" );
 					return;
 				}
 			}
