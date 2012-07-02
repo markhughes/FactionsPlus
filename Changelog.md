@@ -28,7 +28,7 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * General bugfixes, including a bunch of npes, and other annoyances 
 
-* Fixed /f gc /f cf
+
 
 # FactionsPlus version 0.4.6
 * nothing specified here
