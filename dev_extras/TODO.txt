@@ -76,7 +76,7 @@ support chat modes)
 - remove config_defaults.yml (and config.yml) that's located inside .jar (/project root) they are not needed anymore
     BUT FIRST do check if defaults are the same with the coded ones
     
-- try find (from others) config.yml from 0.4.6 and test if successfuly imports (should be, but could have missed 1-2 options)
+- try find (from others) config.yml from 0.4.6 and test if successfully imports (should be, but could have missed 1-2 options)
 
 - check and clean the unused imports
 
@@ -85,13 +85,8 @@ support chat modes)
   
 - updateCheck into own thread so it's non-blocking main onEnable(), could maybe use invokeLater
 
-//done: recalculateLineNumbers - WYSection method to recalculate all line numbers based on current subtree
-
-//done first part- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
-  this and apply those after we've inserted the new/missing lines, and after having called the WYSection.recalcLines()
-  
 - set textual comments for each option, in java code on annotation
 - actually try to write those comments above the fields IF they are not already set (ignoring empty/whitespace lines 
   in between)
   
-  
+- check unused config options: costToJail leaderCanNotBeBanned costToUnJail ,anything from "rules", warpTeleportAllowedFromDifferentWorld : _boolean
