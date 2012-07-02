@@ -7,7 +7,10 @@ import markehme.factionsplus.util.*;
 
 
 
-public abstract class ConfigOptionName {// must be abstract, we can't have it instanced, use subclasses instead!
+/**
+ * old name: ConfigOptionName
+ */
+public abstract class _Base {// must be abstract, we can't have it instanced, use subclasses instead!
 	/**
 	 * returns the dotted format of this config option's name<br>
 	 * ie. "extras.lwc.disableSomething" not just "disableSomething"
@@ -39,4 +42,10 @@ public abstract class ConfigOptionName {// must be abstract, we can't have it in
 
 
 	public abstract String getValue();
+
+	@Override
+	public int hashCode() {
+		throw new RuntimeException("do not use this, it's here to trap by mistake if you're trying to add these to a HashMap/HashSet" +
+				"because then the .equals() comparison between then is not what you may want");
+	}
 }

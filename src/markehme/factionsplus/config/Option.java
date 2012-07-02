@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 
 
 /**
- * - use this for fields of any type but they should probably be of a subclass of {@link ConfigOptionName}<br>
+ * - use this for fields of any type but they should probably be of a subclass of {@link _Base}<br>
  * - the fields on which we apply this annotation CANNOT BE STATIC (well in
  * all honestly it's possible but we want to enforce Config.jails.enable instead of Section_Jails.enable (which, the latter, may
  * be forced by Eclipse or you'd get a warning on first one as to use the latter - if fields are static like that)<br>

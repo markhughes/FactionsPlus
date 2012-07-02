@@ -240,7 +240,7 @@ public class TeleportsListener implements Listener {
 				break;
 			}
 			
-			if ((Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._)&&(isWarZone(factionAtTarget))){
+			if ((Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._)&&(Utilities.isWarZone(factionAtTarget))){
 				player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside WarZone" );
 				denyTeleport( event );
 				break;
@@ -251,11 +251,6 @@ public class TeleportsListener implements Listener {
 		default:
 			// unhandled cause ? do nothing
 		}
-	}
-	
-	public static boolean isWarZone(Faction faction)
-	{
-		return faction.getId().equals("-2");
 	}
 	
 	private final void denyTeleport( PlayerTeleportEvent ptEvent ) {

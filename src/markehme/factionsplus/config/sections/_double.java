@@ -3,7 +3,7 @@ package markehme.factionsplus.config.sections;
 import markehme.factionsplus.config.*;
 
 
-public class _double extends ConfigOptionName {
+public class _double extends _Base {
 	public double _;
 	
 	
