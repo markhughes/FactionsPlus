@@ -10,17 +10,11 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
   
 * minimized overhead & memory-consumption when accessing the user defined config options at runtime
 
-### config.yml features
-* all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
-  a warning showing on console, the commented options are preceded by "# DUPLICATE #"
-
 * LWC Locks Reset Fixing (useLWCIntegrationFix)
 
 * /f unban
 
 * Bridge between 1.6 and 1.7
-
-* New Configuration setup
 
 * warpTeleportAllowedEnemyDistance
 
@@ -32,6 +26,15 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
   and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
   they prevent teleporting via ender pearls if they land into SafeZone/WarZone
   the used pearl is wasted and a message will show.
+
+
+### config.yml features
+
+* New Configuration setup
+
+* all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
+  a warning showing on console, the commented options are preceded by "# DUPLICATE #"
+
 
 
 # FactionsPlus version 0.4.6
