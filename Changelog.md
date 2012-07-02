@@ -32,17 +32,19 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * New Configuration setup
 
-* obsolete config options are automatically upgraded/transformed into the newly named ones
+* obsolete config options are automatically upgraded/transformed into the newly named ones.
+  You are also notified on console about this.
 
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
+  You are also notified on console about this.
 
-* invalid config options are automatically commented out 
+* invalid config options are automatically commented out.  You are also notified on console about this. 
 
 * using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
-  so that you know that they are ignored
+  so that you know that they are ignored. You are also notified on console about this.
 
-* comments "#" are kept on each save  
+* comments "#" are kept on each save
 
 # FactionsPlus version 0.4.6
 * nothing specified here
