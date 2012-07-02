@@ -37,15 +37,15 @@ in other words, locks owned by people in your faction(including you) won't be re
 * obsolete config options are automatically upgraded/transformed into the newly named ones. 
   This implies that the old value is kept. You are also notified on console about this.
 
-* all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
-  a warning showing on console, the commented options are preceded by "# DUPLICATE #"
-  You are also notified on console about this.
-
 * invalid config options are automatically commented out.  You are also notified on console about this. 
 
 * using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
   so that you know that they are ignored. You are also notified on console about this.
 
+* all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
+  a warning showing on console, the commented options are preceded by "# DUPLICATE #"
+  You are also notified on console about this.
+  
 * comments "#" are kept on each save, you may delete them (any line starting with a "#" )
 
 # FactionsPlus version 0.4.6
