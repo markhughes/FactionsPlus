@@ -10,7 +10,9 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
   
 * minimized overhead & memory-consumption when accessing the user defined config options at runtime
 
-* LWC Locks Reset Fixing (useLWCIntegrationFix)
+* LWC Locks Reset Fixing extras.Protection.LWC.`removeAllLocksOnClaim`
+this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
+in other words, locks owned by people in your faction(including you) won't be removed
 
 * /f unban
 
