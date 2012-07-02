@@ -47,7 +47,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			fHelpPages = clas.getField( "helpPages" );
 			
 			Class classChatMode=Class.forName("com.massivecraft.factions.struct.ChatMode");
-			Reflective.mapEnums( mapChatMode, classChatMode, FactionsAny.ChatMode.class);
+			Reflective.mapEnumsToSome( mapChatMode, classChatMode, FactionsAny.ChatMode.class,null);
 			
 			Class classFPlayer= Class.forName( "com.massivecraft.factions.FPlayer" );
 			mSetChatMode=classFPlayer.getMethod("setChatMode", classChatMode);

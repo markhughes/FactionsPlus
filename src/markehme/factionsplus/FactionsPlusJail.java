@@ -36,7 +36,8 @@ public class FactionsPlusJail {
 	}
 	
 	public static Location getJailLocation(Player player) {
-		Faction CWFaction = Factions.i.get(player.getName());
+		FPlayer fplayer = FPlayers.i.get( player );
+		Faction CWFaction = Factions.i.get(fplayer.getFactionId());
 		World world;
 		
 		File currentJailFile = new File(Config.folderJails, "loc." + CWFaction.getId());
@@ -146,17 +147,23 @@ public class FactionsPlusJail {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
-		
-		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
-		
 		World world;
 		Player jplayer = server.getPlayer(jailingplayer);
-		FPlayer fjplayer = FPlayers.i.get(jailingplayer);
 		
-		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {
+		
+		if (!FPlayers.i.exists( jailingplayer )) {
+			fplayer.msg("Cannot jail inexisting player '"+jailingplayer+"'");
+			return false;
+		}
+		
+		FPlayer fjplayer = FPlayers.i.get(jailingplayer);
+//		fplayer.msg(jailingplayer+" "+fjplayer.getFactionId()+" "+fplayer.getFactionId());
+		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {//they are numbers in String
 			fplayer.msg("You can only Jail players that are in your Faction!");
 			return false;
 		}
+		
+		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
 		
 		if(currentJailFile.exists()) {
 			Scanner scanner=null;

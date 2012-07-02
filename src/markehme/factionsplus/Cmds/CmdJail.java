@@ -1,6 +1,8 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.config.*;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -27,14 +29,22 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
+//		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
 		
-		if(!fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId())) {
-			fme.msg("You can only jail players in your Faction.");
-			return;
+		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
+			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
+					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
+					|| (Utilities.isOp( fme ))) {
+				FactionsPlusJail.sendToJail( playerToJail,  fme.getPlayer(), -1 );
+//					fme.sendMessage( playerToJail + " has been jailed." );
+//				} else {
+//					fme.sendMessage( playerToJail + " is not jailed." );
+//				}
+				return;
+			}
 		}
 		
-		FactionsPlusJail.sendToJail(playerToJail, fme.getPlayer(), -1);
+		fme.sendMessage( "As a "+Bridge.factions.getRole( fme )+" you have No permission to jail!" );
 		
 	}
 }
