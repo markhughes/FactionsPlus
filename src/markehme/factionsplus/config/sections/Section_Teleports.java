@@ -30,13 +30,11 @@ public final class Section_Teleports {
 	public  final _boolean disallowTeleportingToEnemyLandViaEnderPeals=new _boolean(true);
 	
 	
-	//TODO: disallowTeleportingToWarZoneViaEnderPeals
 	@Option(oldAliases_alwaysDotted={
 		}, realAlias_inNonDottedFormat = "disallowTeleportingToWarZoneViaEnderPeals" )
 	public  final _boolean disallowTeleportingToWarZoneViaEnderPeals=new _boolean(true);
 	
 	
-	//TODO: disallowTeleportingToSafeZoneViaEnderPeals
 	@Option(realAlias_inNonDottedFormat = "disallowTeleportingToSafeZoneViaEnderPeals" )
 	public  final _boolean disallowTeleportingToSafeZoneViaEnderPeals=new _boolean(true);
 

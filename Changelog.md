@@ -28,6 +28,10 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * General bugfixes, including a bunch of npes, and other annoyances 
 
+* new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
+  and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
+  they prevent teleporting via ender pearls if they land into SafeZone/WarZone
+  the used pearl is wasted and a message will show.
 
 
 # FactionsPlus version 0.4.6
