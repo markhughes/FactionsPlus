@@ -35,7 +35,14 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 * all subsequent (detected as)duplicate config options are automatically ignored and transformed into comments with
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
 
+* invalid config options are automatically commented out 
 
+* using obsolete/old config options combined with the new ones will auto comment the old ones with "# OVERRIDDEN..."
+  so that you know that they are ignored
+  
+* obsolete config options are automatically upgraded/transformed into the newly names ones
+
+* comments "#" are kept on each save  
 
 # FactionsPlus version 0.4.6
 * nothing specified here
