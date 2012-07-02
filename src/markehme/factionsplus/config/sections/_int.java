@@ -4,7 +4,7 @@ import markehme.factionsplus.config.*;
 
 
 
-public class _int extends ConfigOptionName {
+public class _int extends _Base {
 	
 	public int	_;
 	

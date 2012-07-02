@@ -57,9 +57,9 @@ public abstract class Typeo {
 		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
 		// field.set( parentInstance, value );
 		
-		ConfigOptionName basic=null;
+		_Base basic=null;
 		try {
-			basic = (ConfigOptionName)field.get( parentInstance );
+			basic = (_Base)field.get( parentInstance );
 		} catch ( IllegalArgumentException e ) {
 			throw Q.rethrow(e);
 		} catch ( IllegalAccessException e ) {
@@ -79,9 +79,9 @@ public abstract class Typeo {
 		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
 		// field.set( parentInstance, value );
 		
-		ConfigOptionName basic=null;
+		_Base basic=null;
 		try {
-			basic = (ConfigOptionName)field.get( parentInstance );
+			basic = (_Base)field.get( parentInstance );
 		} catch ( IllegalArgumentException e ) {
 			throw Q.rethrow(e);
 		} catch ( IllegalAccessException e ) {
@@ -257,9 +257,9 @@ public abstract class Typeo {
 						}
 						
 						// we already know it has an instance ie. it's new-ed
-						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
+						if ( !_Base.class.isAssignableFrom( typeOfField ) ) {
 							throw FactionsPlus.bailOut( "bad coding: the type of field `" + field + "` is not a subclass of `"
-								+ ConfigOptionName.class + "`" );
+								+ _Base.class + "`" );
 						}
 						
 						
@@ -280,7 +280,7 @@ public abstract class Typeo {
 						
 						
 						// must update the dotted form in the instance, because we know it now
-						( (ConfigOptionName)fieldInstance )._dottedName_asString = currentDotted;
+						( (_Base)fieldInstance )._dottedName_asString = currentDotted;
 						
 						Option co = (Option)fieldAnnotation;
 						String[] aliasesArray = co.oldAliases_alwaysDotted();
