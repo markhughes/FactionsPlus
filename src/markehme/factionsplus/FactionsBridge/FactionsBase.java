@@ -65,7 +65,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to hook into Factions 1.6.x" );
+				throw FactionsPlusPlugin.bailOut( "failed to hook into Factions 1.6.x" );
 			}
 		}
 		
@@ -88,7 +88,7 @@ public abstract class FactionsBase implements FactionsAny {
 			Object isReturn = mGetRelationTo.invoke(RelationUtil.class/*or null cause it's static class*/, one, two );
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
-				FactionsPlus.severe( "impossible to be null here, because it would've errored on .init()," +
+				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
 						"assuming the mapping was done right" );
 			}
 		} catch ( IllegalAccessException e ) {
@@ -102,7 +102,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( ( failed ) || ( null == ret ) ) {
-				throw FactionsPlus.bailOut( "failed to invoke " + mGetRelationTo );
+				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mGetRelationTo );
 			}
 		}
 		return ret;// actually reached
@@ -132,7 +132,7 @@ public abstract class FactionsBase implements FactionsAny {
 			failed = true;
 		} finally {
 			if ( failed ) {
-				throw FactionsPlus.bailOut( "failed to set field " + fSenderMustBe_FactionAdminLeader );
+				throw FactionsPlusPlugin.bailOut( "failed to set field " + fSenderMustBe_FactionAdminLeader );
 			}
 		}
 	}

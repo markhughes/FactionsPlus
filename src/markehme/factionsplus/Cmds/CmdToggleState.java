@@ -1,7 +1,8 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 
 import org.bukkit.ChatColor;
@@ -57,19 +58,19 @@ public class CmdToggleState extends FCommand {
 			
 			boolean authallow = false;
 			
-			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanToggleState)) {
+			if(Config._peaceful.leadersCanToggleState._) {
 				if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
 					authallow = true;
 				}
 			}
 			
-			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanToggleState)) {
+			if(Config._peaceful.officersCanToggleState._) {
 				if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
 					authallow = true;
 				}
 			}
 
-			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanToggleState)) {
+			if(Config._peaceful.membersCanToggleState._) {
 				authallow = true;
 			}
 			
@@ -87,9 +88,9 @@ public class CmdToggleState extends FCommand {
 		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 		
 		
-		if(!factiont.isPeaceful()) {
+		if(!factiont.isPeaceful()) {//FIXME: is economy enabled ?!
 			//if faction wasn't already peaceful, then we set it
-			if(payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToToggleUpPeaceful), "to set faction to peaceful", "for setting faction to peaceful")) {
+			if(payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", "for setting faction to peaceful")) {
 				
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				
@@ -97,7 +98,7 @@ public class CmdToggleState extends FCommand {
 			}
 		} else {
 			//faction was peaceful, we now remove this flag
-			if(payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToToggleDownPeaceful), "to remove the peaceful status", "for setting faction to unpeaceful")) {
+			if(payForCommand(Config._economy.costToToggleDownPeaceful._, "to remove the peaceful status", "for setting faction to unpeaceful")) {
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
 				sender.sendMessage("You have removed peaceful status from the Faction!");
 			}

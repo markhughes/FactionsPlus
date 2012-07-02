@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public class CoreListener implements Listener{
 			if (!player.isOp()) {
 				BufferedReader buff=null;
 				try {
-					buff = new BufferedReader(new FileReader(FactionsPlus.fileDisableInWarzone));
+					buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
 
 					while ((filterRow = buff.readLine()) != null) {
 						if ((event.getMessage().equalsIgnoreCase(filterRow)) || (event.getMessage().toLowerCase().startsWith(filterRow + " "))) {
@@ -71,14 +72,14 @@ public class CoreListener implements Listener{
 		Faction faction = event.getFaction();
 		
 		// Annoucements
-		File tempFile = new File(FactionsPlus.folderAnnouncements, faction.getId());
+		File tempFile = new File(Config.folderAnnouncements, faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
 		tempFile = null;
 		
 		// Bans
-		File tempDir =FactionsPlus.folderFBans;
+		File tempDir =Config.folderFBans;
 		if(tempDir.isDirectory()){
 			for(File file : tempDir.listFiles()){
 				if(file.getName().startsWith(faction.getId() + ".")){
@@ -89,14 +90,14 @@ public class CoreListener implements Listener{
 		tempDir = null;
 		
 		// Rules
-		tempFile = new File(FactionsPlus.folderFRules, faction.getId());
+		tempFile = new File(Config.folderFRules, faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
 		tempFile = null;
 		
 		// Jailed Players and Jail locations
-		tempDir =FactionsPlus.folderJails;
+		tempDir =Config.folderJails;
 		if(tempDir.isDirectory()){
 			for(File file : tempDir.listFiles()){
 				if(file.getName().startsWith("jaildata." + faction.getId() + ".")){
@@ -108,7 +109,7 @@ public class CoreListener implements Listener{
 		}
 		
 		// Warps
-		tempFile = new File(FactionsPlus.folderWarps,  faction.getId());
+		tempFile = new File(Config.folderWarps,  faction.getId());
 		if(tempFile.exists()){
 			tempFile.delete();
 		}

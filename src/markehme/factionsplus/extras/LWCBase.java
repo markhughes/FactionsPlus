@@ -24,7 +24,7 @@ public abstract class LWCBase {
 		return null != getLWC();
 	}
 	
-	private static LWC getLWCInstance() {
+	public static LWC getLWCInstance() {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
 		LWCPlugin plugin=(LWCPlugin)pm.getPlugin(pluginName_LWC);
 		if ((null == plugin)||( ! pm.isPluginEnabled(pluginName_LWC))) {

@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 
 import org.bukkit.event.EventHandler;
@@ -23,14 +24,14 @@ public class DisguiseListener implements Listener {
 			FPlayer fplayer = FPlayers.i.get(event.getPlayer());
 
 			if(MobDisguiseAPI.isDisguised(event.getPlayer())) {
-				if(FactionsPlus.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
+				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
 					if(fplayer.isInEnemyTerritory()) {
 						MobDisguiseAPI.undisguisePlayer(event.getPlayer());
 						event.getPlayer().sendMessage("You have been un-disguised!");
 					}
 				}
 
-				if(FactionsPlus.config.getBoolean("unDisguiseIfInOwnTerritory")) {
+				if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
 					if(fplayer.isInOwnTerritory()) {
 						MobDisguiseAPI.undisguisePlayer(event.getPlayer());
 						event.getPlayer().sendMessage("You have been un-disguised!");
@@ -44,14 +45,14 @@ public class DisguiseListener implements Listener {
 			FPlayer fplayer = FPlayers.i.get(event.getPlayer());
 
 			if(dcAPI.isDisguised(event.getPlayer())) {
-				if(FactionsPlus.config.getBoolean("unDisguiseIfInEnemyTerritory")) {
+				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
 					if(fplayer.isInEnemyTerritory()) {
 						dcAPI.undisguisePlayer(event.getPlayer());
 						event.getPlayer().sendMessage("You have been un-disguised!");
 					}
 				}
 
-				if(FactionsPlus.config.getBoolean("unDisguiseIfInOwnTerritory")) {
+				if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
 					if(fplayer.isInOwnTerritory()) {
 						dcAPI.undisguisePlayer(event.getPlayer());
 						event.getPlayer().sendMessage("You have been un-disguised!");

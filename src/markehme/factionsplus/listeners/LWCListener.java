@@ -34,10 +34,9 @@ public class LWCListener implements Listener {
 					fPlayer.sendMessage( ChatColor.GOLD + "Automatically removed " + removedProtections
 						+ " LWC protections in the claimed chunk." );
 				}
-			} catch ( Exception e ) {
+			} catch ( Exception cause ) {
 				event.setCancelled( true );// disallow claim
-				e.printStackTrace();
-				FactionsPlus.severe( msg );
+				FactionsPlusPlugin.severe(cause, msg );
 				fPlayer.sendMessage( FactionsPlus.FP_TAG_IN_LOGS + msg );
 			}
 		}

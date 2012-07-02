@@ -3,9 +3,8 @@ package markehme.factionsplus.Cmds;
 
 import java.io.*;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusTemplates;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -55,44 +54,33 @@ public class CmdAddWarp extends FCommand {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = myFaction;
 
-		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
-			authallow = true;
-		} else {
-			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
-				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
-				authallow = true;
-			}
-		}
-
-		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+		if(!Config._warps.canSetOrRemoveWarps(fplayer)) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to create warps!");
 			return;
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
-			if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_mustBeInOwnTerritoryToCreate)) {
+			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
 				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp) > 0 && !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
-			if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToCreateWarp), "to create this warp", "for creating this warp")) {
+		if(Config._economy.costToCreateWarp._ > 0.0d && !Config._economy.enabled._) {
+			if (!payForCommand(Config._economy.costToCreateWarp._, "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
 
-		if(FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps) != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= FactionsPlus.config.getInt(FactionsPlus.confStr_maxWarps)) {
+		if(Config._warps.maxWarps._ != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
 				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
 				return;
 			}
 		}
 
-		File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
+		File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
 
 		if (!currentWarpFile.exists()) {
 			try {

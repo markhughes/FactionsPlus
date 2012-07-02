@@ -1,9 +1,10 @@
-package markehme.factionsplus.FactionsBridge;
+package markehme.factionsplus.util;
 
 import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 
 /**
@@ -13,8 +14,10 @@ import markehme.factionsplus.extras.*;
  * 
  * @param <LEFTSIDE>
  *            cannot be null
+ *            must be unique when compared to other elements on this side
  * @param <RIGHTSIDE>
  *            cannot be null
+ *            must be unique when compared to other elements on this side
  */
 public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, RIGHTSIDE> {// beware of some paranoid
 																							// programming below hehe, for fun:)
@@ -60,8 +63,8 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 	public boolean putLR( LEFTSIDE sideLeft, RIGHTSIDE sideRight ) {
 		nn( sideLeft );
 		nn( sideRight );
-		boolean existed1 = mapLRForward.containsKey( sideLeft );
-		boolean existed2 = mapRLBackward.containsKey( sideRight );
+//		boolean existed1 = mapLRForward.containsKey( sideLeft );
+//		boolean existed2 = mapRLBackward.containsKey( sideRight );
 		RIGHTSIDE prevVal = mapLRForward.put( sideLeft, sideRight );
 		LEFTSIDE prevKey = mapRLBackward.put( sideRight, sideLeft );
 		if ( ( null != prevVal ) ^ ( null != prevKey ) ) {
@@ -76,7 +79,8 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 			// since we're here it means, one of our maps had a connection which the other didn't
 			// which would indicate implementation failure somewhere in the coding on this class
 			// tmi?
-			throw new RuntimeException( "implementation failure" );
+			throw new RuntimeException( "implementation failure, wanted to put: `"+sideLeft+
+				"`->`"+sideRight+"` but this part existed already: `"+ (prevKey!=null?sideRight:sideLeft) +"`");
 		}
 		boolean existed = ( null != prevVal ) || ( null != prevKey );
 		return existed;// since prev can never be null because we don't accept null key/value(s)

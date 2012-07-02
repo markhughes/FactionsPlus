@@ -17,7 +17,7 @@ public abstract class Reflective {
 			sourceClass = Class.forName( sourceEnum );
 		} catch ( ClassNotFoundException e1 ) {
 			e1.printStackTrace();
-			throw FactionsPlus.bailOut( "Cannot find class " + sourceEnum );
+			throw FactionsPlusPlugin.bailOut( "Cannot find class " + sourceEnum );
 		}
 		
 		mapEnums(destinationMap, sourceClass, destinationEnum);
@@ -46,7 +46,7 @@ public abstract class Reflective {
 					Field destField = destinationEnum.getField( eachField.getName() );
 					if ( !destField.getType().equals( destinationEnum ) ) {
 						//typically this won't be reached
-						FactionsPlus.severe( "plugin author has set the wrong field type in " + destinationEnum
+						FactionsPlusPlugin.severe( "plugin author has set the wrong field type in " + destinationEnum
 							+ " for " + eachField + " it should be of the same type as the class" );
 						failed = true;
 					}
@@ -69,7 +69,7 @@ public abstract class Reflective {
 			} finally {
 				if ( failed ) {
 					// this will likely never happen, unless Factions' authors add new flags in 1.7's Relation enum
-					throw FactionsPlus.bailOut( "the plugin author forgot to define some flags in "
+					throw FactionsPlusPlugin.bailOut( "the plugin author forgot to define some flags in "
 						+ destinationEnum + " for " + eachField );
 				}
 			}

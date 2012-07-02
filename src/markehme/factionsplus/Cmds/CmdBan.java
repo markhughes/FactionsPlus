@@ -2,8 +2,8 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,9 +46,9 @@ public class CmdBan extends FCommand {
 
 		boolean authallow = false;
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanFactionBan) && Utilities.isLeader(fme)) {
+		if(Config._banning.leadersCanFactionBan._ && Utilities.isLeader(fme)) {
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanFactionBan) && Utilities.isOfficer(fme)) {
+		} else if(Config._banning.officersCanFactionBan._ && Utilities.isOfficer(fme)) {
 			authallow = true;
 		}
 
@@ -77,7 +77,7 @@ public class CmdBan extends FCommand {
 			playerBanThisPlayer.sendMessage("You have been banned from this Faction!");
 		}
 
-		File banFile = new File(FactionsPlus.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase());
+		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase());
 
 		if(banFile.exists()) {
 			me.sendMessage("This user is already banned from the Faction!");

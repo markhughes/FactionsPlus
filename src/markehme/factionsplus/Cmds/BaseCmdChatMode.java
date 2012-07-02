@@ -14,7 +14,7 @@ public abstract class BaseCmdChatMode extends FCommand{
 	protected BaseCmdChatMode( FactionsAny.ChatMode cm, String perm, String... arrayOfAliases) {
 		cMode=cm;
 		if (0 >= arrayOfAliases.length) {
-			FactionsPlus.bailOut( "coder forgot to add at least one alias for a command "+this.getClass() );
+			FactionsPlusPlugin.bailOut( "coder forgot to add at least one alias for a command "+this.getClass() );
 		}
 		
 		for ( int i = 0; i < arrayOfAliases.length; i++ ) {

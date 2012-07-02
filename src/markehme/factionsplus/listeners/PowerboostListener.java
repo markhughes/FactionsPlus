@@ -1,7 +1,7 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,54 +20,54 @@ public class PowerboostListener implements Listener{
 			if (p.getKiller() == null) {
 				if ((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE 
 						|| causeOfDeath == DamageCause.ENTITY_EXPLOSION) &&
-						(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByMob) > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByMob));
+						(Config._powerboosts.extraPowerLossIfDeathByMob._ > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByMob._);
 					return;
 				}
 				if ((causeOfDeath == DamageCause.CONTACT) && 
-						(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByCactus) > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByCactus));
+						(Config._powerboosts.extraPowerLossIfDeathByCactus._ > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByCactus._);
 					return;
 				}
 
 				if ((causeOfDeath == DamageCause.BLOCK_EXPLOSION) && 
-						(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByTNT) > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByTNT));
+						(Config._powerboosts.extraPowerLossIfDeathByTNT._ > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByTNT._);
 					return;
 				}
 
 				if (((causeOfDeath == DamageCause.FIRE) || (causeOfDeath == DamageCause.FIRE_TICK)) && 
-						(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByFire) > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByFire));
+						(Config._powerboosts.extraPowerLossIfDeathByFire._ > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByFire._);
 					return;
 				}
 
 				if ((causeOfDeath == DamageCause.MAGIC) && 
-						(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByPotion) > 0.0D)) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByPotion));
+						(Config._powerboosts.extraPowerLossIfDeathByPotion._ > 0.0D)) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByPotion._);
 					return;
 				}
 				
 				if ((causeOfDeath == DamageCause.SUICIDE)
-						&& ( FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerLossIfDeathBySuicide ) > 0.0D ) )
+						&& ( Config._powerboosts.extraPowerLossIfDeathBySuicide._ > 0.0D ) )
 				{
-					Utilities.removePower( p, FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerLossIfDeathBySuicide ) );
+					Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathBySuicide._  );
 					return;
 				}
 				
-				if(FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByOther) > 0) {
-					Utilities.removePower(p, FactionsPlus.config.getDouble(FactionsPlus.confStr_extraPowerLossIfDeathByOther));
+				if(Config._powerboosts.extraPowerLossIfDeathByOther._ > 0) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
 					return;
 				}
 			} else {//non-null killer
 				if ( ( causeOfDeath == DamageCause.ENTITY_ATTACK ) || ( causeOfDeath == DamageCause.PROJECTILE ) ) {
-					if ( FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerLossIfDeathByPVP) > 0.0D ) {
-						Utilities.removePower( p, FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerLossIfDeathByPVP) );
+					if ( Config._powerboosts.extraPowerLossIfDeathByPVP._ > 0.0D ) {
+						Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByPVP._ );
 					}
 					
-					if ( FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerWhenKillPlayer) > 0.0D ) {
+					if ( Config._powerboosts.extraPowerWhenKillPlayer._ > 0.0D ) {
 						Player k = p.getKiller();
-						Utilities.addPower( k, FactionsPlus.config.getDouble( FactionsPlus.confStr_extraPowerWhenKillPlayer) );
+						Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillPlayer._) ;
 					}
 					return;
 				}
