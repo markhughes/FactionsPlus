@@ -4,6 +4,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.util.*;
 
 
 
@@ -19,12 +20,12 @@ public abstract class Reflective {
 	public static <K extends Object, V extends Object> void mapEnums( Map<K, V> destinationMap, String sourceEnum,
 		Class<V> destinationEnum )
 	{
-		mapEnums( destinationMap, sourceEnum, destinationEnum, null, false );
+		mapEnums( destinationMap, sourceEnum, destinationEnum, null );
 	}
 	
 	
 	public static <K extends Object, V extends Object> void mapEnums( Map<K, V> destinationMap, String sourceEnum,
-		Class<V> destinationEnum, Map<String, V> mapOfRenameSourceNameToDestEnum, boolean skipNotFoundSourceEnums )
+		Class<V> destinationEnum, Map<String, V> mapOfRenameSourceNameToDestEnum )
 	{
 		Class<?> sourceClass;
 		try {
@@ -34,7 +35,7 @@ public abstract class Reflective {
 			throw FactionsPlusPlugin.bailOut( "Cannot find class " + sourceEnum );
 		}
 		
-		mapEnumsToSome( destinationMap, sourceClass, destinationEnum, mapOfRenameSourceNameToDestEnum, skipNotFoundSourceEnums );
+		mapEnumsToSome( destinationMap, sourceClass, destinationEnum, mapOfRenameSourceNameToDestEnum );
 	}
 	
 	
@@ -60,8 +61,12 @@ public abstract class Reflective {
 	 *            else, if false, all source enums will be mappes and throw if fail<br>
 	 */
 	public static <K extends Object, V extends Object> void mapEnumsToSome( Map<K, V> destinationMap, Class<?> sourceEnumClass,
-		Class<V> destinationEnum, Map<String, V> mapOfRenameSourceNameToDestEnum, boolean skipNotFoundSourceEnums )
+		Class<V> destinationEnum, Map<String, V> mapOfRenameSourceNameToDestEnum )
 	{
+		assert Q.nn( destinationEnum );
+		assert Q.nn( destinationMap );
+		assert Q.nn( sourceEnumClass );
+		
 		boolean useMap = ( null != mapOfRenameSourceNameToDestEnum ) && ( !mapOfRenameSourceNameToDestEnum.isEmpty() );
 		Field[] allFieldOfDestEnum;
 		if ( useMap ) {
@@ -74,6 +79,7 @@ public abstract class Reflective {
 			String sourceFieldName = eachSourceField.getName();
 			
 			boolean failed = false;
+			Throwable error=null;
 			try {
 				if ( ( sourceEnumClass.equals( eachSourceField.getType() ) ) ) {// get only the enums (aka same type as
 																				// enumclass)
@@ -81,73 +87,77 @@ public abstract class Reflective {
 					Field destField = null;
 					
 					if ( useMap ) {
+						@SuppressWarnings( "null" )
 						V destEnumInstance = mapOfRenameSourceNameToDestEnum.get( sourceFieldName );
-						if ( null == destEnumInstance ) {
-							if ( skipNotFoundSourceEnums ) {
-								continue;
-							} else {
-								FactionsPlusPlugin
-									.severe( "plugin author forgot add a mapping for field name of source in the "
-										+ "mapping... unmapped sourceFieldName=" + sourceFieldName );
-								failed = true;
-								return;
-							}
-						}
-						
-						for ( int i = 0; i < allFieldOfDestEnum.length; i++ ) {// it's not null!
-							if ( destEnumInstance == allFieldOfDestEnum[i].get( destinationEnum ) ) {
-								destField = allFieldOfDestEnum[i];
+						if ( null != destEnumInstance ) {
+//							if ( !skipNotFoundSourceEnums ) {
+//								// continue;
+//								// }else{
+//								throw FactionsPlusPlugin
+//									.bailOut( "plugin author forgot add a mapping for field name of source in the "
+//										+ "passed map parameter to mapEnums()... unmapped sourceFieldName=" + sourceFieldName );
+//								// failed = true;
+//								// return;
+//							}
+//						} else {
+							
+							for ( int i = 0; i < allFieldOfDestEnum.length; i++ ) {// it's not null!
+								if ( destEnumInstance == allFieldOfDestEnum[i].get( destinationEnum ) ) {
+									destField = allFieldOfDestEnum[i];
+								}
 							}
 						}
 					}
 					
-					// if using map and it's null (or not using map at all) then try to find real one
+					// if using map and it's null (or not using map at all) then try to find real field in destination
 					if ( ( !useMap ) || ( null == destField ) ) {
 						destField = destinationEnum.getField( sourceFieldName );
 						if ( null == destField ) {// but this one can be
-							if ( !skipNotFoundSourceEnums ) {
-								FactionsPlusPlugin.severe( "we cannot find a destination in enum class `" + destinationEnum
-									+ "` for the source field `" + eachSourceField + "` "
+//							if ( skipNotFoundSourceEnums ) {
+//								continue;// skip to next source field, ignoring sources that have no destination
+//							} else {
+								throw FactionsPlusPlugin.bailOut( "we cannot find a destination in enum class `"
+									+ destinationEnum + "` for the source field `" + eachSourceField + "` "
 									+ ( useMap ? "and we did check the map first, then we" : "we only" )
 									+ " tried to find a match in the destination enum" );
-								failed = true;
-								return;
-							} else {
-								continue;// skip to next source field, ignoring sources that have no destination
-							}
+								// failed = true;
+								// return;
+//							}
 						}
 					}
 					
 					if ( !destField.getType().equals( destinationEnum ) ) {
 						// typically this won't be reached
-						FactionsPlusPlugin.severe( "plugin author has set the wrong field type in " + destinationEnum + " for "
-							+ eachSourceField + " it should be of the same type as the class" );
-						failed = true;
-						return;
+						throw FactionsPlusPlugin.bailOut( "plugin author has set the wrong field type in " + destinationEnum
+							+ " for " + eachSourceField + " it should be of the same type as the class" );
+						// failed = true;
+						// return;
 					}
 					
 					// TODO: some redundant code here(from above 1 of 2 cases) which I can't be bother to compress right now:)
 					V ourFieldInstance = (V)( destField.get( destinationEnum ) );
+					
+					if ( !ourFieldInstance.getClass().equals( destinationEnum ) ) {
+						// oh well technically this will never happen... because the field instances are not changed
+						throw FactionsPlusPlugin.bailOut( "there was a clash: `" + destField
+							+ "` was already changed by a miracle to type `" + ourFieldInstance.getClass() + "` which value `"
+							+ ourFieldInstance );
+						// failed = true;
+						// return;
+					}
+					
 					K factionsFieldInstance = (K)eachSourceField.get( sourceEnumClass );
 					destinationMap.put( factionsFieldInstance, ourFieldInstance );
-					FactionsPlus.warn("mapped `"+sourceFieldName+"` to `"+ourFieldInstance+"`");
+					FactionsPlus.warn( destinationMap+" mapped for enum `" + sourceEnumClass + "` `" + sourceFieldName + "` to `"
+						+ ourFieldInstance + "` in destEnum=`" + destinationEnum + "`" );
 				}
-			} catch ( IllegalArgumentException e ) {// I didn't want to catch Exception e though
-				e.printStackTrace();
-				failed = true;
-			} catch ( IllegalAccessException e ) {
-				e.printStackTrace();
-				failed = true;
-			} catch ( NoSuchFieldException e ) {
-				e.printStackTrace();
-				failed = true;
-			} catch ( SecurityException e ) {
-				e.printStackTrace();
-				failed = true;
+			} catch ( Throwable t){
+				failed=true;
+				error=t;
 			} finally {
 				if ( failed ) {
 					// this will likely never happen, unless Factions' authors add new flags in 1.7's Relation enum
-					throw FactionsPlusPlugin.bailOut( "the plugin author forgot to define some flags in " + destinationEnum
+					throw FactionsPlusPlugin.bailOut(error, "the plugin author forgot to define some flags in " + destinationEnum
 						+ " for " + eachSourceField );
 				}
 			}
