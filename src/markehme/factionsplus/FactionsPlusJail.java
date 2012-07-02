@@ -36,7 +36,8 @@ public class FactionsPlusJail {
 	}
 	
 	public static Location getJailLocation(Player player) {
-		Faction CWFaction = Factions.i.get(player.getName());
+		FPlayer fplayer = FPlayers.i.get( player );
+		Faction CWFaction = Factions.i.get(fplayer.getFactionId());
 		World world;
 		
 		File currentJailFile = new File(Config.folderJails, "loc." + CWFaction.getId());

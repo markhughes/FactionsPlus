@@ -37,7 +37,8 @@ in other words, locks owned by people in your faction(including you) won't be re
   Even as Op, you are still charged the money (it's not like you can't afford it ;) ).
   /f toggle yourfactiontag  is equivalent with /f toggle
   Now tells you the faction tag which was affected by the change
-  
+
+* fixed NPE when joined while being previously in faction jail
 
 ### config.yml features
 

@@ -36,13 +36,13 @@ public class JailListener implements Listener{
 			player.sendMessage("You're currently in Jail!");
 		}
 	}
-	@EventHandler
+	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-//		if (Utilities.isJailed(player)) {
-//			player.teleport(FactionsPlusJail.getJailLocation(player));//NPE, on FPlayer join should be enough;)
-//			//event.setRespawnLocation(FactionsPlusJail.getJailLocation(player));
-//		}
+		if (Utilities.isJailed(player)) {
+			player.teleport(FactionsPlusJail.getJailLocation(player));
+			//event.setRespawnLocation(FactionsPlusJail.getJailLocation(player));
+		}
 	}
 
 	@EventHandler

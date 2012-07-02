@@ -116,32 +116,30 @@ public abstract class FactionsBase implements FactionsAny {
 	
 	@Override
 	public Relation getRole( RelationParticipator one ) {
-		boolean failed = false;
+		Throwable error= null;
 		FactionsAny.Relation ret = null;
 		try {
 			if ( null == one ) {
-				failed = true;
+				error = new NullPointerException("parameter was null");
 				return null;// not gonna happen really
 			}
 			
 			Object isReturn = mGetRole.invoke( one );
+			System.out.println(isReturn);
 			ret = mapRelation.get( isReturn );
 			if ( null == ret ) {
 				FactionsPlusPlugin.severe( "impossible to be null here, because it would've errored on .init()," +
-						"assuming the mapping was done right" );
+						"assuming the mapping was done right and the method call returned the right result" );
 			}
 		} catch ( IllegalAccessException e ) {
-			e.printStackTrace();
-			failed = true;
+			error = e;
 		} catch ( IllegalArgumentException e ) {
-			e.printStackTrace();
-			failed = true;
+			error = e;
 		} catch ( InvocationTargetException e ) {
-			e.printStackTrace();
-			failed = true;
+			error = e;
 		} finally {
-			if ( ( failed ) || ( null == ret ) ) {
-				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mGetRelationTo );
+			if ( ( null != error ) || ( null == ret ) ) {
+				throw FactionsPlusPlugin.bailOut( error, "failed to invoke " + mGetRole );
 			}
 		}
 		return ret;// actually reached

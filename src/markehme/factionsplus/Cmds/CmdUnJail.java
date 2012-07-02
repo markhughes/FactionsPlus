@@ -30,8 +30,8 @@ public class CmdUnJail extends FCommand {
 		String unJailingPlayer = this.argAsString( 0 );
 		
 		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			boolean isOfficer = Utilities.isOfficer( fme ) && Config._jails.officersCanJail._;
-			if ( isOfficer || ( Utilities.isLeader( fme ) && Config._jails.leadersCanJail._ )) {
+			boolean isOfficer = Config._jails.officersCanJail._ && Utilities.isOfficer( fme );
+			if ( isOfficer || ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )) {
 				if ( FactionsPlusJail.removeFromJail( unJailingPlayer, fme.getFactionId() ) ) {
 					fme.sendMessage( unJailingPlayer + " has been removed from jail." );
 				} else {
