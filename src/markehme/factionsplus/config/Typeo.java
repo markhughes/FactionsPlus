@@ -143,8 +143,6 @@ public abstract class Typeo {
 		assert isValidAliasFormat( realAliasDotted );
 		assert null != field;
 		Field existingField = dottedAllAliases_to_Fields.put( realAliasDotted, field );
-		// assert ( ( null != existingField ) == orderedListOfFields.contains( field )
-		// ):existingField+" "+orderedListOfFields.contains( field ) ;
 		
 		return existingField;
 	}
@@ -161,9 +159,6 @@ public abstract class Typeo {
 			fieldToOldAliasesArray.clear();
 			fieldToInstanceOfIt.clear();
 			parsify( rootClass, null, rootClass );
-			// for ( Field iterable_element : orderedListOfFields ) {
-			// FactionsPlus.info( ""+iterable_element.getName());
-			// }
 		}
 	}
 	
@@ -260,19 +255,6 @@ public abstract class Typeo {
 								+ " aka non-sections should not have their field name start with `" + SECTION_PREFIX
 								+ "`. Please correct in source code this field: `" + field + "`" );
 						}
-						// if ( !Modifier.isStatic( fieldModifiers ) || Modifier.isPrivate( fieldModifiers )
-						// || !Modifier.isFinal( fieldModifiers ) )
-						// // && ( null != dottedParentSection ) )
-						// {
-						// // means, we're currently examining a subsection, cause we allow toplevel sections to be static. ie.
-						// // Config.extras
-						// // but we don't allow Config.extras.lwc to be static, cause it would mean we have to use
-						// // SubSection_LWC to access lwc's fields
-						// // do you dig? we basically want to enforce using Config.toplevelsection to every subsection or
-						// // field
-						// throw FactionsPlus.bailOut( "bad coding: your @" + annotationType.getSimpleName()
-						// + " config option field must be public final static, but instead it is: `" + field + "`" );
-						// }
 						
 						// we already know it has an instance ie. it's new-ed
 						if ( !ConfigOptionName.class.isAssignableFrom( typeOfField ) ) {
@@ -282,8 +264,8 @@ public abstract class Typeo {
 						
 						
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
-						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
 						assert Typeo.isValidAliasFormat( realAlias ) : realAlias;
+						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "` in field `"+field+"`";
 						
 						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
 						
