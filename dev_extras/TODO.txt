@@ -69,3 +69,6 @@ support chat modes)
   
 - check unused config options: costToJail leaderCanNotBeBanned costToUnJail ,anything from "rules", 
   warpTeleportAllowedFromDifferentWorld
+
+- add ability to store lists in config.yml on multiple lines (must do some rework)
+

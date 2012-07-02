@@ -29,6 +29,11 @@ in other words, locks owned by people in your faction(including you) won't be re
   they prevent teleporting via ender pearls if they land into SafeZone/WarZone
   the used pearl is wasted and a message will show.
 
+* fixed /f togglestate to only charge you if economy.`enabled` is set
+  and to not cause internal error if inexistent faction tag was specified 
+  if you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
+   only if you are admin/officer/member in your faction (or you are Op) if those were set in the config
+  
 
 ### config.yml features
 
@@ -47,6 +52,11 @@ in other words, locks owned by people in your faction(including you) won't be re
   You are also notified on console about this.
   
 * comments "#" are kept on each save, you may delete them (any line starting with a "#" )
+
+### Known bugs:
+* if you're using groupmanager once you gave a permission like `factionsplus.togglestate.others` to your default group
+if you comment it out (remove)it and then `reload` the permission is still seen as active (even if you stop and 
+restart bukkit). Not sure if this is Vault+Groupmanager and the way we use Vault's permissions or something else.
 
 # FactionsPlus version 0.4.6
 * nothing specified here
