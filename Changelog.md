@@ -51,7 +51,7 @@ in other words, locks owned by people in your faction(including you) won't be re
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
   You are also notified on console about this.
   
-* comments "#" are kept on each save, you may delete them (any line starting with a "#" )
+* comments "#" are kept on each save, you may add more or delete them (any line starting with a "#" )
 
 
 
