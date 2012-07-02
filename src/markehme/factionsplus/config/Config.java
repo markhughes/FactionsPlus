@@ -1147,29 +1147,33 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	private static void putFieldValueInTheRightWYPlace( WYSection vroot, Field field, String dottedRealAlias ) {
-		assert Q.nn(vroot);
+		assert Q.nn( vroot );
 		assert Q.nn( field );
 		assert Typeo.isValidAliasFormat( dottedRealAlias );
-//		String[] array = dottedRealAlias.split( "\\." );
+		FactionsPlus.info( "putFieldValueInTheRightWYPlace " + dottedRealAlias );
+		// String[] array = dottedRealAlias.split( "\\." );
 		WYSection foundParentSection = parseCreateAndReturnParentSectionFor( vroot, field, dottedRealAlias );
-		assert null != foundParentSection:"impossible, it should've created and returned a parent even if it didn't exist";
+		assert null != foundParentSection : "impossible, it should've created and returned a parent even if it didn't exist";
 		int index = dottedRealAlias.lastIndexOf( Config.DOT );
-		if (index >=0) {//well not really 0
-			dottedRealAlias=dottedRealAlias.substring( 1+index);
+		if ( index >= 0 ) {// well not really 0
+			dottedRealAlias = dottedRealAlias.substring( 1 + index );
 		}
-		assert Typeo.isValidAliasFormat( dottedRealAlias ):dottedRealAlias;
-		WYIdentifier leaf=new WYIdentifier<COMetadata>( 0, dottedRealAlias, Typeo.getFieldValue( field ));
-//		leaf.setMetadata( metadata )
-		//XXX: new(unencountered) config options (in config.yml) are added as last in the subsection where `id: value` is
-		foundParentSection.append( leaf);
+		assert Typeo.isValidAliasFormat( dottedRealAlias ) : dottedRealAlias;
+		WYIdentifier leaf = new WYIdentifier<COMetadata>( 0, dottedRealAlias, Typeo.getFieldValue( field ) );
+		// leaf.setMetadata( metadata )
+		// XXX: new(unencountered) config options (in config.yml) are added as last in the subsection where `id: value` is
+		foundParentSection.append( leaf );
+//		System.out.println( foundParentSection.getInAbsoluteDottedForm() );
 	}
 	
 	
 	/**
 	 * attempts to create all parents for the passed ID
+	 * 
 	 * @param root
 	 * @param field
-	 * @param dottedID ie. extras.lwc.disableSomething
+	 * @param dottedID
+	 *            ie. extras.lwc.disableSomething
 	 * @return
 	 */
 	private static WYSection parseCreateAndReturnParentSectionFor( WYSection root, Field field, String dottedID ) {
@@ -1177,13 +1181,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		
 		WYItem<COMetadata> currentItem = root.getFirst();
-		
+//		FactionsPlus.severe("Entered "+root.getInAbsoluteDottedForm()+" with "+dottedID+" for field: "+field);
 		int index = dottedID.indexOf( Config.DOT );
-		if (index < 0) {
-			//we're just at the id
+		if ( index < 0 ) {
+			// we're just at the id
 			return root;
 		}
-		//else not yet reached
+		// else not yet reached
 		String findCurrent = dottedID.substring( 0, index );
 		
 		while ( null != currentItem ) {
@@ -1194,14 +1198,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			if ( WYSection.class == cls ) {
 				WYSection cs = (WYSection)currentItem;
 				if ( findCurrent.equals( cs.getId() ) ) {
-						return parseCreateAndReturnParentSectionFor( cs, field, findCurrent);// recurse
+					return parseCreateAndReturnParentSectionFor( cs, field, dottedID.substring( 1+index ) );// recurse
 				}
 			} else {
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
 					if ( findCurrent.equals( wid.getId() ) ) {
-						throw new RuntimeException("bad parameters for this method, because you searched for parent aka section, and we found it as an id");
-//						return root;
+						throw new RuntimeException(
+							"bad parameters for this method, because you searched for parent aka section, and we found it as an id" );
+						// return root;
 					}
 				} else {// non id
 					assert ( currentItem instanceof WYRawButLeveledLine );
@@ -1213,10 +1218,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			currentItem = currentItem.getNext();
 		}// inner while
 		
-		//if not found
-			//make parent section, without completing the line number (which will be recalculated later anyway)
-			WYSection<COMetadata> parent = new WYSection<COMetadata>( 0, findCurrent );
-				return parseCreateAndReturnParentSectionFor(parent, field, findCurrent);
+		// if not found
+		// make parent section, without completing the line number (which will be recalculated later anyway)
+		WYSection<COMetadata> parent = new WYSection<COMetadata>( 0, findCurrent );
+		root.append( parent );
+//		System.out.println("Created parent: "+parent.getInAbsoluteDottedForm());
+		return parseCreateAndReturnParentSectionFor( parent, field, dottedID.substring( 1+index ) );
 	}
 	
 	
