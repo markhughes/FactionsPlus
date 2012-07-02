@@ -1,0 +1,199 @@
+# FactionsPlus Configuration File: for help with the configuration and detailed descriptions of the settings, please consult
+# we cannot freaking keep comments :/ well in all honesty we could keep this header somehow
+
+# right we don't allow these with . jails.enableJails: true
+
+jails:
+  enableJails: true
+  enabled: true
+  leadersCanSetJails: true
+  #comment
+  officersCanSetJails: true
+  membersCanSetJails: false
+# another comment
+  leadersCanJail: true
+  officersCanJail: true
+  # comment here
+ 
+warps:
+  enableWarps: true
+  leadersCanSetWarps: true
+  officersCanSetWarps: true
+  membersCanSetWarps: false
+  #jails.enabled: true
+  mustBeInOwnTerritoryToCreate: true
+  maxWarps: 5
+ 
+  warpTeleportAllowedFromEnemyTerritory: true
+  
+  warpTeleportAllowedFromDifferentWorld: true
+   
+  warpTeleportAllowedEnemyDistance: 35
+    
+  warpTeleportIgnoreEnemiesIfInOwnTerritory: true
+  smokeEffectOnWarp: true
+#comment here
+banning:
+  enableBans: true
+  leadersCanFactionBan: true
+  officersCanFactionBan: true
+  
+  # say this comment would be linked to below config option but not to above one
+  leadersCanFactionUnban: true
+  #also this comment would be linked to above option since there's an empty line after it
+  
+  officersCanFactionUnban: true
+  #however this comment is linked to below option not the above one, due to no line after it
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+  leaderCanNotBeBanned: true
+      # comment everywhere (this is should be linked to above option due to spacing but it won't,
+      # it will be linked to the below one hmm, maybe fix this later)
+rules:
+  enableRules: true
+  leadersCanSetRules: true
+  officersCanSetRules: true
+  maxRulesPerFaction: 12
+     # comment with odd spaces
+peaceful:
+ #one space comment
+  leadersCanToggleState: false
+  officersCanToggleState: false
+  membersCanToggleState: false
+   
+  enablePeacefulBoosts: true
+ 
+  powerBoostIfPeaceful: 0
+powerboosts:
+  enablePowerBoosts: false
+  extraPowerWhenKillPlayer: 0.0
+  extraPowerLossIfDeathBySuicide: 0.0
+
+  
+  # comment after: empty line then line with same level (they're both above, in that order)
+  extraPowerLossIfDeathByPVP: 0.0
+  
+  extraPowerLossIfDeathByMob: 0.0
+  extraPowerLossIfDeathByCactus: 0.0
+  extraPowerLossIfDeathByTNT: 0.0
+  extraPowerLossIfDeathByFire: 0.0
+  extraPowerLossIfDeathByPotion: 0.0
+  extraPowerLossIfDeathByOther: 0.0
+  
+  #should just leave a spacing of the same level on above line then this comments should maybe be linked
+  #to the above option and not to the below one due to below one being on a less level also
+announce:
+  enableAnnounce: true
+  leadersCanAnnounce: true
+  officersCanAnnounce: true
+  showLastAnnounceOnLogin: true
+  showLastAnnounceOnLandEnter: true
+
+  
+  #some comment should be connected to above config not the below one
+economy:
+  enableEconomy: false
+  economyCostToWarp: 0
+  economyCostToCreateWarp: 0
+  economyCostToDeleteWarp: 0
+  economyCostToAnnounce: 0
+  economyCostToJail: 0
+  economyCostToSetJail: 0
+  economyCostToUnJail: 0
+  economyCostToToggleUpPeaceful: 0
+  economyCostToToggleDownPeaceful: 0
+
+  
+# comment for teleports
+Teleports:
+  # note: it is highly suggested if you use essentials teleport warmup time that you replace it with booscooldowns, the native factionsplus hook does not work if essentials teleport warmup is enabled!
+  disallowTeleportingToEnemyLandViaHomeCommand: true
+
+  # reports on console only
+  reportSuccessfulByCommandTeleportsIntoEnemyLand: true
+  disallowTeleportingToEnemyLandViaEnderPeals: false
+extras:
+  lwc:
+    # If enabled, it is highly suggested that you change the default factions lwc integration to false.
+    removeLWCLocksOnClaim: false
+    blockCPublicAccessOnNonOwnFactionTerritory: false
+    
+  #test
+  disguise:
+    enableDisguiseIntegration: false
+    unDisguiseIfInOwnTerritory: false
+    unDisguiseIfInEnemyTerritory: false
+  
+  disableUpdateCheck: false
+DoNotChangeMe: 8
+crap: 1
+homesintegration:
+  disallowTeleportingToEnemyLandViaHomeCommand: true
+  reportSuccessfulByCommandTeleportsIntoEnemyLand: true
+disableUpdateCheck: true
+unDisguiseIfInOwnTerritory: false
+unDisguiseIfInEnemyTerritory: false
+leadersCanSetWarps: true
+officersCanSetWarps: true
+membersCanSetWarps: false
+warpSetting: 1
+maxWarps: 5
+mustBeInOwnTerritoryToCreate: true
+warpTeleportAllowedFromEnemyTerritory: true
+warpTeleportAllowedFromDifferentWorld: true
+warpTeleportAllowedEnemyDistance: 35
+warpTeleportIgnoreEnemiesIfInOwnTerritory: true
+smokeEffectOnWarp: true
+powerBoostIfPeaceful: 0
+leadersCanSetJails: true
+officersCanSetJails: true
+leadersCanSetRules: true
+officersCanSetRules: true
+maxRulesPerFaction: 12
+membersCanSetJails: false
+leadersCanJail: true
+officersCanJail: true
+leadersCanAnnounce: true
+officersCanAnnounce: true
+showLastAnnounceOnLogin: true
+showLastAnnounceOnLandEnter: true
+leadersCanFactionBan: true
+officersCanFactionBan: true
+leadersCanFactionUnban: true
+officersCanFactionUnban: true
+leaderCanNotBeBanned: true
+leaderCanNotBeBanned: true
+leaderCanNotBeBanned: true
+leaderCanNotBeBanned: true
+
+leadersCanToggleState: true
+officersCanToggleState: false
+membersCanToggleState: false
+extraPowerLossIfDeathByOther: 0.0
+extraPowerWhenKillPlayer: 0.0
+extraPowerLossIfDeathBySuicide: 0.0
+extraPowerLossIfDeathByPVP: 0.0
+extraPowerLossIfDeathByMob: 0.0
+extraPowerLossIfDeathByCactus: 0.0
+extraPowerLossIfDeathByTNT: 0.0
+extraPowerLossIfDeathByFire: 0.0
+extraPowerLossIfDeathByPotion: 0.0
+enablePermissionGroups: false
+economy_enable: false
+economy_costToWarp: 0
+economy_costToCreateWarp: 0
+economy_costToDeleteWarp: 0
+economy_costToAnnounce: 0
+economy_costToJail: 0
+economy_costToSetJail: 0
+economy_costToUnJail: 0
+economy_costToToggleUpPeaceful: 0
+economy_costToToggleDownPeaceful: 0
+useLWCIntegrationFix: true
+disallowTeleportingToEnemyLandViaHomeCommand: true
+reportSuccessfulByCommandTeleportsIntoEnemyLand: true

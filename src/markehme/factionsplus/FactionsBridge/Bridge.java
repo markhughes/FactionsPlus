@@ -21,10 +21,10 @@ public abstract class Bridge {
 		
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(factionsPluginName);
 		if (null == plugin) {
-			throw FactionsPlus.bailOut( "missing required plugin "+factionsPluginName );
+			throw FactionsPlusPlugin.bailOut( "missing required plugin "+factionsPluginName );
 		} else {//I think the depend inside plugin.yml will make sure Factions is enabled prior to FactionsPlus yes?
 			if ( !plugin.isEnabled() ) {
-				throw FactionsPlus.bailOut( factionsPluginName+" is not yet enabled" );
+				throw FactionsPlusPlugin.bailOut( factionsPluginName+" is not yet enabled" );
 			}
 		}
 		
@@ -36,7 +36,7 @@ public abstract class Bridge {
 			if (factionsVersion.startsWith("1.7")) {
 				factions=new Factions17();
 			}else {
-				throw FactionsPlus.bailOut( "Unknown "+factionsPluginName+" version `"+factionsVersion+"`" );
+				throw FactionsPlusPlugin.bailOut( "Unknown "+factionsPluginName+" version `"+factionsVersion+"`" );
 			}
 		}
 		

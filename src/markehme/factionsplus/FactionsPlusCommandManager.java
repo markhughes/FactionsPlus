@@ -5,6 +5,7 @@ import com.massivecraft.factions.cmd.*;
 
 import markehme.factionsplus.Cmds.*;
 import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 
 
@@ -25,7 +26,7 @@ public class FactionsPlusCommandManager {
 	
 	public static void setup() {
 		// Warp Commands 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableWarps)) {
+		if(Config._warps.enabled._) {
 			addSC(new CmdAddWarp()); 
 			addSC(new CmdRemoveWarp());
 			addSC(new CmdWarp());
@@ -33,21 +34,21 @@ public class FactionsPlusCommandManager {
 		}
 		
 		// Jail Commands
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableJails)) {
+		if(Config._jails.enabled._) {
 			addSC(new CmdSetJail());
 			addSC(new CmdUnsetJail());
 			addSC(new CmdJail());
 			addSC(new CmdUnJail());
 		}
 		// General Commands
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableAnnounce)) {
+		if(Config._announce.enabled._) {
 			addSC(new CmdAnnounce());
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableBans)) {
+		if(Config._banning.enabled._) {
 			addSC(new CmdBan());
 			addSC(new CmdUnban());
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanToggleState) || FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanToggleState) || FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanToggleState)) {
+		if(Config._peaceful.officersCanToggleState._ || Config._peaceful.membersCanToggleState._ || Config._peaceful.leadersCanToggleState._) {
 			addSC(new CmdToggleState());
 		}
 		addSC(new CmdFC());

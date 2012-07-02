@@ -3,8 +3,9 @@ package markehme.factionsplus.Cmds;
 import java.io.File;
 
 import org.bukkit.ChatColor;
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
@@ -39,9 +40,9 @@ public class CmdUnban extends FCommand {
 		
 		boolean authallow = false;
 		
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanFactionUnban) && Utilities.isLeader(fme)){
+		if(Config._banning.leadersCanFactionUnban._ && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanFactionUnban) && Utilities.isOfficer(fme)){
+		} else if(Config._banning.officersCanFactionUnban._ && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		
@@ -50,7 +51,7 @@ public class CmdUnban extends FCommand {
 			return;
 		}
 		
-		File banFile = new File(FactionsPlus.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
+		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
 		
 		if(banFile.exists()){
 			banFile.delete();

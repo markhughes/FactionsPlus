@@ -2,8 +2,8 @@ package markehme.factionsplus.listeners;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,8 +24,8 @@ public class AnnounceListener implements Listener{
 		Player player = event.getPlayer();
 		FPlayer me = FPlayers.i.get(player);
 
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLogin)) {
-			File fAF = new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+		if(Config._announce.showLastAnnounceOnLogin._) {
+			File fAF = new File(Config.folderAnnouncements, me.getFactionId());
 			if(fAF.exists()) {
 				try {
 					event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
@@ -40,7 +40,7 @@ public class AnnounceListener implements Listener{
 		if(event.isCancelled()) {
 			return;
 		}
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_showLastAnnounceOnLandEnter)) {
+		if(Config._announce.showLastAnnounceOnLandEnter._) {
 			if (event.getFrom().equals(event.getTo())) return;
 
 			Player player = event.getPlayer();
@@ -49,7 +49,7 @@ public class AnnounceListener implements Listener{
 
 			if (Board.getFactionAt(new FLocation(event.getFrom())) != Board.getFactionAt(new FLocation(event.getTo()))) {
 				if(factionHere.getId().equals(me.getFactionId())) {
-					File fAF=new File(FactionsPlus.folderAnnouncements, me.getFactionId());
+					File fAF=new File(Config.folderAnnouncements, me.getFactionId());
 					if(fAF.exists()) {
 						try {
 							event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));

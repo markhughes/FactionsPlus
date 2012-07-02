@@ -8,8 +8,8 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.ChatColor;
 
@@ -51,20 +51,9 @@ public class CmdRemoveWarp extends FCommand {
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		
-		boolean authallow = false;
-
-		if(FactionsPlus.config.getBoolean(FactionsPlus.confStr_membersCanSetWarps)) {
-			authallow = true;
-		} else {
-			if(Utilities.isOfficer(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_officersCanSetWarps)) {
-				authallow = true;
-			} else if(Utilities.isLeader(fplayer) && FactionsPlus.config.getBoolean(FactionsPlus.confStr_leadersCanSetWarps)) {
-				authallow = true;
-			}
-		}
-
-		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+		
+		if(!Config._warps.canSetOrRemoveWarps(fplayer)) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to remove warps!");
 			return;
 		}
 		
@@ -74,8 +63,8 @@ public class CmdRemoveWarp extends FCommand {
 			boolean found = false;
 			
 			// Get out working files
-			File currentWarpFile = new File(FactionsPlus.folderWarps, currentFaction.getId());
-			File currentWarpFileTMP = new File(FactionsPlus.folderWarps,  currentFaction.getId() + ".tmp");
+			File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
+			File currentWarpFileTMP = new File(Config.folderWarps,  currentFaction.getId() + ".tmp");
 			
 			// Scan through the warp file for the correct 
 			Scanner scanner = new Scanner(new FileReader(currentWarpFile));
@@ -96,8 +85,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	return;
 		    }
 		    
-		    if(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp) > 0 && !FactionsPlus.config.getBoolean(FactionsPlus.confStr_enableEconomy)) {
-				if (!payForCommand(FactionsPlus.config.getInt(FactionsPlus.confStr_economyCostToDeleteWarp), "to remove this warp", "for removing the warp")) {
+		    if(Config._economy.costToDeleteWarp._ > 0.0d && !Config._economy.enabled._) {
+				if (!payForCommand(Config._economy.costToDeleteWarp._, "to remove this warp", "for removing the warp")) {
 					return;
 				}
 			}
@@ -130,7 +119,7 @@ public class CmdRemoveWarp extends FCommand {
 		    }
 		    
 		} catch (Exception e) {
-			FactionsPlus.info("Unexpected error " + e.getMessage());
+			FactionsPlusPlugin.info("Unexpected error " + e.getMessage());
 			e.printStackTrace();
 		    return;
 		}

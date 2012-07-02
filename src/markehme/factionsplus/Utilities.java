@@ -2,6 +2,8 @@ package markehme.factionsplus;
 
 import java.io.*;
 
+import markehme.factionsplus.config.*;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.*;
@@ -38,13 +40,21 @@ public class Utilities {
 
 
 	public static void writeToFile(String fileN, String T) {
+		BufferedWriter bw =null;
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fileN), true));
+			bw = new BufferedWriter(new FileWriter(new File(fileN), true));
 			bw.write(T);
 			bw.newLine();
-			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			if (null != bw) {
+				try {
+					bw.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -52,7 +62,7 @@ public class Utilities {
 
 	public static boolean isJailed(Player thePlayer) {
 		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
-		File jailDataFile = new File(FactionsPlus.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
+		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
@@ -70,7 +80,7 @@ public class Utilities {
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(FPlayer fplayer) {
-		String role = fplayer.getRole().toString().toLowerCase().trim();
+		String role = fplayer.getRole().toString().toLowerCase().trim();//TODO: bridge getRole
 		if(role.contains("officer") || role.contains("moderator")) {
 			return true;
 		}
@@ -85,13 +95,13 @@ public class Utilities {
 		return false;
 	}
 
-	public static boolean checkGroupPerm(World world, String group, String permission) {
-		if(FactionsPlus.config.getBoolean("enablePermissionGroups")) {
-			return(FactionsPlus.permission.groupHas(world, group, permission));
-		} else {
-			return true;
-		}
-	}
+//	public static boolean checkGroupPerm(World world, String group, String permission) {
+//		if(Config.config.getBoolean("enablePermissionGroups")) {
+//			return(FactionsPlus.permission.groupHas(world, group, permission));
+//		} else {
+//			return true;
+//		}
+//	}
 
 	public static void addPower(Player player, double amount) {
 		FPlayer fplayer = FPlayers.i.get(player);
@@ -122,7 +132,7 @@ public class Utilities {
 	}
 
 	public static int getCountOfWarps(Faction faction) {
-		File currentWarpFile = new File(FactionsPlus.folderWarps, faction.getId());
+		File currentWarpFile = new File(Config.folderWarps, faction.getId());
 
 		int c = 0;
 		if (currentWarpFile.exists()) {	
@@ -173,7 +183,7 @@ public class Utilities {
 	// ---------------- other simple utils
 	
 	public static File getCurrentFolder() {
-		return new File("");
+		return new File(".");
 	}
 	
 	/**
@@ -189,6 +199,21 @@ public class Utilities {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * uses .equals()
+	 * @param objRef
+	 * @param array
+	 * @return
+	 */
+	public static int getIndexOfObjectInArray( Object objRef, Object[] array ) {
+		for ( int i = 0; i < array.length; i++ ) {
+			if (objRef.equals(array[i])) { //not .equals(), we just want to know if that reference is in the array
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	/**

@@ -14,6 +14,7 @@ support chat modes)
 
 - must check what's /f toggle  supposed to do exactly, because the behaviour seems odd (also fix the possible NPE when faction inexistent)
   do this before release
+  do check this! leadersCanToggleState
 
 - newest version tosses a 'Strange argument. Use the command like this: /f' whenever using any commands. Figure it has something to do with some changes
 	made by basicsensei. I'll look into it tomorrow if it isn't fixed.
@@ -46,7 +47,7 @@ support chat modes)
 
 
 
-- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseen due to using both Factions .jar in classpath instead of Factions project ;)
+//done- fix java.lang.NoSuchFieldError: senderMustBeModerator  which went unseen due to using both Factions .jar in classpath instead of Factions project ;)
 
 - find a way to keep "#" comments inside the config when transferring them from defaults and old config
   but at the same time detect and keep the values in the old config(currently does so) rather than just write over the defaults by direct file copy(currently this doesn't happen)
@@ -55,4 +56,42 @@ support chat modes)
 - investigate how to hold and retrieve a list of strings in yaml config
 
 
-- stumped as to why blockCPublicAccessOnNonOwnFactionTerritory is not added from defaults into the existing file
+//fixed- stumped as to why blockCPublicAccessOnNonOwnFactionTerritory is not added from defaults into the existing file
+
+- update .settings.eclipse and .classpath etc.
+
+- make sure empty sections from existing config are removed, ie. mainly after their children which were obsolete/old aliases 
+  were removed - hmm maybe at the exact same time when removing those, can detect if parent is empty and kill it, and then when
+  config save happens, they are already gone
+  
+- add option to disable ender pearls teleporting in safe/warzones too
+
+- recheck all code comments and remove obsolete ones, also rename some methods and/or comment them, ie. parsify()
+
+- clean unused static hashmaps after they're used for config computing, on reload
+
+- disallow enabling plugin if X config options are detected as invalid, where X would be configurable ie. 5
+  - also add same thing for DUPlicates
+
+- remove config_defaults.yml (and config.yml) that's located inside .jar (/project root) they are not needed anymore
+    BUT FIRST do check if defaults are the same with the coded ones
+    
+- try find (from others) config.yml from 0.4.6 and test if successfuly imports (should be, but could have missed 1-2 options)
+
+- check and clean the unused imports
+
+- check all current occurrences of config options so that they are not used without the "._" ie. used the instance instead of the
+  value
+  
+- updateCheck into own thread so it's non-blocking main onEnable(), could maybe use invokeLater
+
+//done: recalculateLineNumbers - WYSection method to recalculate all line numbers based on current subtree
+
+//done first part- add metadata to WYItem or WYIdentifier to be able to mark as duplicate/invalid/overridden, so that later we can read
+  this and apply those after we've inserted the new/missing lines, and after having called the WYSection.recalcLines()
+  
+- set textual comments for each option, in java code on annotation
+- actually try to write those comments above the fields IF they are not already set (ignoring empty/whitespace lines 
+  in between)
+  
+  
