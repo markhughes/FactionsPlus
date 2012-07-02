@@ -63,6 +63,9 @@ public class Utilities {
 
 	public static boolean isJailed(Player thePlayer) {
 		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
+		
+		if(fplayer == null) return false;
+		
 		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
