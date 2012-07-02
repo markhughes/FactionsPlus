@@ -8,6 +8,7 @@ import com.massivecraft.factions.iface.*;
 
 public interface FactionsAny {
 	
+	
 	public static enum FFlag {
 		PEACEFUL,
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where
@@ -68,6 +69,12 @@ public interface FactionsAny {
 	
 	public FactionsAny.Relation getRelationBetween( RelationParticipator one, RelationParticipator two );
 	
+	
+	/**
+	 * @param one
+	 * @return can never return null
+	 */
+	public FactionsAny.Relation getRole( RelationParticipator one);
 	
 	public void addSubCommand( FCommand subCommand );
 	

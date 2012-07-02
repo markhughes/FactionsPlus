@@ -72,3 +72,5 @@ support chat modes)
 
 - add ability to store lists in config.yml on multiple lines (must do some rework)
 
+- apparently using "`a" or "`b" etc. would act like a color set, like "&a" or "&b" would do but only when using
+  FPlayer.msg();
