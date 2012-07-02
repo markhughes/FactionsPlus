@@ -16,7 +16,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * /f unban
 
-* Bridge between 1.6 and 1.7
+* Bridge between 1.6 and 1.7, you only need one FactionsPlus.jar regardless of what Factions.jar you're using
 
 * warpTeleportAllowedEnemyDistance
 
