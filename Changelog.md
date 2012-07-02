@@ -42,7 +42,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * fixed spazzing out while in faction jail and tried to move once, you may now look around
 
-* disallowed teleporting out while in faction jail either via command like /home or via ender peals etc.
+* disallowed teleporting out while in faction jail either via commands like /home or via ender peals etc.
 
 ### config.yml features
 
