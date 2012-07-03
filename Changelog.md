@@ -25,7 +25,7 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
 in other words, locks owned by people in your faction(including you) won't be removed
 
-* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. Permission "factionsplus.clearlocks"
+* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. Permission 'factionsplus.clearlwclocks'
 
 * /f unban
 
