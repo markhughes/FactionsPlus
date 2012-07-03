@@ -1,5 +1,6 @@
 package markehme.factionsplus.Cmds;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
@@ -30,15 +31,17 @@ public class CmdClearLocks extends FCommand {
 	public void perform() {
 		Location loc = fme.getPlayer().getLocation();
 		Player name = fme.getPlayer();
-		int clearedlocks = LWCFunctions.clearLocksCommand(name, loc);
-		if( clearedlocks < 0 ) {
-			return;
+		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.clearlocks")) {
+			int clearedlocks = LWCFunctions.clearLocksCommand(name, loc);
+			if( clearedlocks < 0 ) {
+				return;
+			}
+			if( clearedlocks == 0 ) {
+				name.sendMessage(ChatColor.GOLD + "No unlockable protections were found in this chunk");
+				return;
+			}
+			name.sendMessage(ChatColor.GOLD + "Successfully removed " + clearedlocks + " protections from this chunk");
 		}
-		if( clearedlocks == 0 ) {
-			name.sendMessage(ChatColor.GOLD + "No unlockable protections were found in this chunk");
-			return;
-		}
-		name.sendMessage(ChatColor.GOLD + "Successfully removed " + clearedlocks + " protections from this chunk");
 		
 	}
 

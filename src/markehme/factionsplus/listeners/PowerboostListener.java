@@ -11,10 +11,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+
 public class PowerboostListener implements Listener{
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
+		if (!checkFactionsSettings(event)) {
+			return;
+		}
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
 			DamageCause causeOfDeath = event.getEntity().getLastDamageCause().getCause();
@@ -60,7 +70,7 @@ public class PowerboostListener implements Listener{
 					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
 					return;
 				}
-			} else {//non-null killer
+			} else {
 				if ( ( causeOfDeath == DamageCause.ENTITY_ATTACK ) || ( causeOfDeath == DamageCause.PROJECTILE ) ) {
 					if ( Config._powerboosts.extraPowerLossIfDeathByPVP._ > 0.0D ) {
 						Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByPVP._ );
@@ -83,5 +93,27 @@ public class PowerboostListener implements Listener{
 				Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillMonster._);
 			}
 		}
+	}
+
+	private boolean checkFactionsSettings(EntityDeathEvent event) {
+		if (!Config._powerboosts.respectFactionsWarZonePowerLossRules._ && (!com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null)) {
+			if (event.getEntity() == null || !(event.getEntity() instanceof Player)) {
+				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
+				//TODO: Block power GAINS in powerloss disabled regions as well
+			}
+			FPlayer fp = FPlayers.i.get((Player)event.getEntity());
+			FLocation floc = new FLocation(event.getEntity().getLocation());
+			Faction owner = Board.getFactionAt(floc);
+			if(owner == Factions.i.getByTag("Wilderness") && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
+				return false;
+			}
+			if(owner == Factions.i.getByTag("WarZone") && !com.massivecraft.factions.Conf.warZonePowerLoss) {
+				return false;
+			}
+			if(owner == Factions.i.getByTag("SafeZone")) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
