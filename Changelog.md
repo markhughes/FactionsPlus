@@ -36,13 +36,13 @@ in other words, locks owned by people in your faction(including you) won't be re
 * General bugfixes, including a bunch of npes, and other annoyances 
 
 * fixed /f togglestate to only charge you if economy.`enabled` is set
-  and to not cause internal error if inexistent faction tag was specified 
-  if you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
-   only if you are (Op or)admin/officer/member in your faction if those were set in the config
-  Prevent changing the state of WarZone, SafeZone or Wilderness, unless you are Op
+  and to not cause internal error if inexistent faction tag was specified. 
+  If you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
+   only if you are (Op or)admin/officer/member in your faction if those were set in the config.
+  Prevent changing the state of WarZone, SafeZone or Wilderness, unless you are Op.
   Even as Op, you are still charged the money (it's not like you can't afford it ;) ).
   /f toggle yourfactiontag  is equivalent with /f toggle
-  Now tells you the faction tag which was affected by the change
+  - Now tells you the faction tag which was affected by the change
 
 * fixed NPE when joined while being previously in faction jail
 
