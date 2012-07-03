@@ -2,6 +2,9 @@ TODO:
 all todo/done/doing are now here: https://trello.com/board/factionsplus/4ff1b198121d470304e565e5
 maybe only devs can see that...
 
+the following are obsolete TODOs that are not moved to trello:
+--------------
+
 - maybe don't add /f gc and /f fc commands if Factions is 1.7 (easy to do but then the player might wonder why these 
 commands aren't there, thus by allowing them to exist in 1.7 also they are showing the message that 1.7 actually doesn't
 support chat modes)
@@ -13,8 +16,6 @@ support chat modes)
 
 - make bridging methods call-able from Utilities instead via Bridge.factions similar to existing ones like isLeader()
   so to make them seamless
-
-- make bridge for something like FPLayer.getRole()
 
 - teleporting to /home could be bypassed if /home has a warmup and another command is executed right after but before
   teleport actually happens
