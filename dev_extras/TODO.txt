@@ -1,4 +1,6 @@
 TODO:
+all todo/done/doing are now here: https://trello.com/board/factionsplus/4ff1b198121d470304e565e5
+maybe only devs can see that...
 
 - hook /f reload  to cause FactionsPlus to reload from disk too
 
@@ -12,9 +14,6 @@ support chat modes)
   Actually 1.7 can still do these commands but only if we tell the chats (which could be 3: EssentialsChat, HeroChat, CAPI)
   to switch channels somehow, seems tough... more info in this pkg(s): com.massivecraft.factions.integration.*
 
-- must check what's /f toggle  supposed to do exactly, because the behaviour seems odd (also fix the possible NPE when faction inexistent)
-  do this before release
-  do check this! leadersCanToggleState
 
 - look into setting permissions or groups of perms inside plugins.yml  with their description
 

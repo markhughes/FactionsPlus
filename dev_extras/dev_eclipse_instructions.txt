@@ -1,4 +1,6 @@
 ======================================
+TODO: These instructions might be outdated due to moving of files/folders inside dev_extras
+-------------------------
 
 To get FactionsPlus from github into your Eclipse workspace:
 ------
