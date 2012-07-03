@@ -56,7 +56,7 @@ public class CacheMap<KEY, VALUE> {
 		return val;
 	}
 
-	public VALUE remove( KEY id ) {
+	public synchronized VALUE remove( KEY id ) {
 		VALUE prev = map.remove( id );
 		boolean existed = queueFIFO.remove(id);
 		assert existed == (null != prev);
