@@ -3,6 +3,7 @@ package markehme.factionsplus.listeners;
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -71,6 +72,15 @@ public class PowerboostListener implements Listener{
 					}
 					return;
 				}
+			}
+		}
+		if(event.getEntity() instanceof Monster) {
+			if ( event.getEntity().getKiller() == null) {
+				return;
+			}
+			if ( Config._powerboosts.extraPowerWhenKillMonster._ > 0.0D) {
+				Player k = event.getEntity().getKiller();
+				Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillMonster._);
 			}
 		}
 	}

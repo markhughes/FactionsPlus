@@ -17,6 +17,10 @@ public final class Section_PowerBoosts {
 		}, realAlias_inNonDottedFormat = "extraPowerWhenKillPlayer" )
 	public  final _double extraPowerWhenKillPlayer=new _double( 0.0d ); // wow it's _double in Factions, how odd, I'd think it'd be int
 	
+	@Option(oldAliases_alwaysDotted={
+			"extraPowerWhenKillMonster"
+			}, realAlias_inNonDottedFormat = "extraPowerWhenKillMonster" )
+		public  final _double extraPowerWhenKillMonster=new _double( 0.0d );
 	
 	@Option(oldAliases_alwaysDotted={
 		"extraPowerLossIfDeathBySuicide"
