@@ -1,11 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.*;
@@ -40,6 +36,7 @@ public class CmdRemoveWarp extends FCommand {
 		this.setHelpShort("removes a warp");
 	}
 	
+	@SuppressWarnings( "static-access" )
 	@Override
 	public void perform() {
 		String warpname = this.argAsString(0);
@@ -59,6 +56,10 @@ public class CmdRemoveWarp extends FCommand {
 		
 		Faction currentFaction = fplayer.getFaction();
 		
+		FileReader fr=null;
+		Scanner scanner=null;
+		PrintWriter wrt=null;
+		BufferedReader rdr=null;
 		try {
 			boolean found = false;
 			
@@ -66,8 +67,9 @@ public class CmdRemoveWarp extends FCommand {
 			File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
 			File currentWarpFileTMP = new File(Config.folderWarps,  currentFaction.getId() + ".tmp");
 			
-			// Scan through the warp file for the correct 
-			Scanner scanner = new Scanner(new FileReader(currentWarpFile));
+			// Scan through the warp file for the correct
+			fr=new FileReader(currentWarpFile);
+			scanner = new Scanner(fr);
 			while (scanner.hasNextLine()) {
 		    	String[] warp = scanner.nextLine().split(":");
 		        if ((warp.length < 1) || (!warp[0].equalsIgnoreCase(warpname))) {
@@ -79,7 +81,7 @@ public class CmdRemoveWarp extends FCommand {
 		        break;
 		    }
 
-		    scanner.close();
+//		    scanner.close();
 
 		    if (!found) {
 		    	return;
@@ -91,8 +93,8 @@ public class CmdRemoveWarp extends FCommand {
 				}
 			}
 
-		    PrintWriter wrt = new PrintWriter(new FileWriter(currentWarpFileTMP));
-		    BufferedReader rdr = new BufferedReader(new FileReader(currentWarpFile));
+		    wrt = new PrintWriter(new FileWriter(currentWarpFileTMP));
+		    rdr = new BufferedReader(new FileReader(currentWarpFile));
 		      
 		    String line;
 		      
@@ -105,8 +107,8 @@ public class CmdRemoveWarp extends FCommand {
 		    	wrt.println(line);
 		    }
 
-		    wrt.close();
-		    rdr.close();
+//		    wrt.close();
+//		    rdr.close();
 		    
 		    if (!currentWarpFile.delete()) {
 		    	System.out.println("[FactionsPlus] Cannot delete " + currentWarpFile.getName());
@@ -122,6 +124,27 @@ public class CmdRemoveWarp extends FCommand {
 			FactionsPlusPlugin.info("Unexpected error " + e.getMessage());
 			e.printStackTrace();
 		    return;
+		}finally{
+			if (null != rdr) {
+				try {
+					rdr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != wrt) {
+				wrt.close();
+			}
+			if (null != scanner) {
+				scanner.close();
+			}
+			if (null != fr) {
+				try {
+					fr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 				
 		sender.sendMessage(ChatColor.GREEN + "Poof!");
