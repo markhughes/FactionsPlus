@@ -10,7 +10,11 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
   and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
   they prevent teleporting via ender pearls if they land into SafeZone/WarZone
   the used pearl is wasted and a message will show.
-  
+
+* new config option: powerboost.'respectFactionsWarZonePowerLossRules': Applies to both the wildernessPowerLoss and warZonePowerLoss settings and integrates a check for these in the powerboost listener
+
+* new config option: powerboost.'extraPowerWhenKillMonster': self-explanitory
+ 
 * fixed /f gc and /f cf commands to not error on console
   they won't work for Factions 1.7 due to it counting on other plugins like HeroChat to provide faction/global chat
   (this might be fixed in the future so that you can use these commands in 1.7 too)
@@ -20,6 +24,8 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 * LWC Locks Reset Fixing extras.Protection.LWC.`removeAllLocksOnClaim`
 this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
 in other words, locks owned by people in your faction(including you) won't be removed
+
+* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. Permission "factionsplus.clearlocks"
 
 * /f unban
 
