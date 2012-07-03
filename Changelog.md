@@ -1,6 +1,6 @@
 # FactionsPlus version 0.4.7
 
-* new command: /f reloadfp [all|config|templates] causes reloading of the specified config(s)
+* new command: `/f reloadfp [all|config|templates]` causes reloading of the specified config(s)
 just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
 permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)
 
@@ -54,7 +54,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * New Configuration setup
 
-* obsolete config options are automatically upgraded/transformed into the newly named ones. 
+* obsolete config options are automatically upgraded/transformed into the newly named ones.  
   This implies that the old value is kept. You are also notified on console about this.
 
 * invalid config options are automatically commented out.  You are also notified on console about this. 
@@ -66,10 +66,10 @@ in other words, locks owned by people in your faction(including you) won't be re
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
   You are also notified on console about this.
   
-* comments "#" are kept on each save, you may add more or delete them (any line starting with a "#" )
+* comments `#` are kept on each save, you may add more or delete them (any line starting with a `#` )
 
 
 
 # FactionsPlus version 0.4.6
-* nothing specified here
+* this Changelog file did not exist in this version, changes are unknown.
 
