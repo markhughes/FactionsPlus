@@ -65,4 +65,6 @@ this is also to keep out the clutter within the TODO file
     made by basicsensei. I'll look into it tomorrow if it isn't fixed.
     //I can't see anything wrong because I cannot reproduce - basicsensei.
   
-  
+//done- must check what's /f toggle  supposed to do exactly, because the behaviour seems odd (also fix the possible NPE when faction inexistent)
+  do this before release
+  do check this! leadersCanToggleState
