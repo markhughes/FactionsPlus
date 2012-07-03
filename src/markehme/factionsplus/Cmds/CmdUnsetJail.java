@@ -36,29 +36,17 @@ public class CmdUnsetJail extends FCommand {
 		
 		Faction currentFaction = fme.getFaction();
 		
-		boolean authallow = false;
-		
-		if(Config._jails.leadersCanSetJails._) {
-			if(fme.getRole().toString().contains("admin") || fme.getRole().toString().contains("LEADER")) { // 1.6.x
-				authallow = true;
-			}
-		}
-		
-		if(Config._jails.officersCanSetJails._) {
-			if(fme.getRole().toString().contains("mod") || fme.getRole().toString().contains("OFFICER")) {
-				authallow = true;
-			}
-		}
-
-		
-		if(Config._jails.membersCanSetJails._) {
-			authallow = true;
-		}
-		
-		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+		boolean authallow = ((Config._jails.leadersCanSetJails._) && (Utilities.isLeader( fme ))) 
+				|| ((Config._jails.officersCanSetJails._) && (Utilities.isOfficer( fme )))
+				|| (Config._jails.membersCanSetJails._);
+				
+				
+		if (!authallow) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your faction rank is not allowed to do that!");
+			//ie. leader maybe can't but officer can, depending on the options set in config (while clearly that's crazy to set,
+			//it's possible and up to server admin)
 			return;
-		}		
+		}
 		
 		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
 		
