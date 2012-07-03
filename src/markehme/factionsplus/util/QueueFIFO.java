@@ -5,7 +5,8 @@ import java.util.*;
 
 
 /**
- * non-null elements only
+ * non-null elements only<br>
+ * not thread safe, must be externally sync-ed
  * 
  * @param <ELEMENT>
  */

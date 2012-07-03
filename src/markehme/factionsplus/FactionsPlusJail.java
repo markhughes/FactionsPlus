@@ -52,10 +52,10 @@ public class FactionsPlusJail {
 		
 		Location jailLocation=cachedJailLocations.get(fid);
 		if (null != jailLocation) {
-			System.out.println("found in cache: "+fid+"->"+jailLocation);
+//			System.out.println("found in cache: "+fid+"->"+jailLocation);
 			return jailLocation;
 		}
-		System.out.println("not in cache: "+fid+"->"+jailLocation);
+//		System.out.println("not in cache: "+fid+"->"+jailLocation);
 		
 		Faction CWFaction = Factions.i.get(fid);
 		assert null != CWFaction:"player wasn't in a faction ? like not even wilderness? this should basically not be null";
@@ -84,8 +84,8 @@ public class FactionsPlusJail {
 			    
 			    jailLocation=new Location(world, x, y, z, Y, p);
 			    Location existed = cachedJailLocations.put( fid, jailLocation );
-			    System.out.println("added to cache: "+fid+"->"+jailLocation);
-			    assert null == existed:"bad code logic, should not have existed";
+//			    System.out.println("added to cache: "+fid+"->"+jailLocation);
+			    assert null == existed:"bad code logic, should not have existed, unless it skipped the above get at beginning of method";
 			    return jailLocation;
 			    
 			} catch (Exception e) {
