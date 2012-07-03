@@ -1,7 +1,6 @@
 package markehme.factionsplus;
 
 import java.io.*;
-import java.util.*;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.FactionsBridge.*;
@@ -11,15 +10,9 @@ import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.*;
-import org.bukkit.configuration.*;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import com.griefcraft.lwc.LWCPlugin;
 import com.massivecraft.factions.*;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -33,7 +26,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	Factions factions;
 	FPlayers fplayers;
 	Faction faction;
-	
+	 
     public static Permission permission = null;
     public static Economy economy = null;
     
