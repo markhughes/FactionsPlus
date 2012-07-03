@@ -13,7 +13,12 @@ public class _boolean extends _Base {
 	
 	@Override
 	public void setValue( String value ) {
-		_=Boolean.parseBoolean( value);
+		value=value.trim().toLowerCase();
+		if ( (!value.isEmpty())&& ( value.equals( "true" ) || value.equals( "false" ) || value.equals("0") || value.equals("1")) ) {
+			_=Boolean.parseBoolean( value);
+		}else{
+			throw new BooleanFormatException(value);
+		}
 	}
 
 	@Override

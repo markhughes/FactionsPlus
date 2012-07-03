@@ -1,6 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 import org.bukkit.*;
+import org.bukkit.command.*;
 
 import markehme.factionsplus.config.*;
 
@@ -61,7 +62,7 @@ public class CmdReloadFP extends FCommand {
 			if ( ret ) {
 				msg( "<i>Reloaded FactionPlus <h>%s <i>from disk, took <h>%,8dns<i>.", fileWhat, endTime );
 			} else {
-				msg( ChatColor.RED+"Errors occurred while loading %s", fileWhat );
+				msg( ChatColor.RED+"Errors occurred while loading %s. See console for details.", fileWhat);
 			}
 		}
 		

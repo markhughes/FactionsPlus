@@ -634,7 +634,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-	private static WYSection	virtualRoot		= null;
+	protected static WYSection	virtualRoot		= null;
 	
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();
