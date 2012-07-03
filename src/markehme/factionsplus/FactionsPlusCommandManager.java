@@ -68,6 +68,7 @@ public class FactionsPlusCommandManager {
 			addSC(new CmdClearLocks());
 		}
 		
+		addSC(new CmdReloadFP());
 		
 		Bridge.factions.finalizeHelp(); 
 	}

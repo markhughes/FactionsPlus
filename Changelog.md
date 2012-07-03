@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.7
 
+* new command: /f reloadfp [all|config|templates] causes reloading of the specified config(s)
+just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
+permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)
+
 * FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
 
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
