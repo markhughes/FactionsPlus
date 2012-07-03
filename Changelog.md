@@ -1,8 +1,15 @@
 # FactionsPlus version 0.4.7
 
+* FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
+
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
 if set(to true) this will prevent ender pearl teleports that land in enemy territory
 (you can still teleport outside of enemy land as long as ender pearl does land outside it)
+  
+* new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
+  and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
+  they prevent teleporting via ender pearls if they land into SafeZone/WarZone
+  the used pearl is wasted and a message will show.
   
 * fixed /f gc and /f cf commands to not error on console
   they won't work for Factions 1.7 due to it counting on other plugins like HeroChat to provide faction/global chat
@@ -23,11 +30,6 @@ in other words, locks owned by people in your faction(including you) won't be re
 * blockCPublicAccessOnNonOwnFactionTerritory - will allow you to make a door truly public
 
 * General bugfixes, including a bunch of npes, and other annoyances 
-
-* new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
-  and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
-  they prevent teleporting via ender pearls if they land into SafeZone/WarZone
-  the used pearl is wasted and a message will show.
 
 * fixed /f togglestate to only charge you if economy.`enabled` is set
   and to not cause internal error if inexistent faction tag was specified 
