@@ -11,6 +11,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.*;
+import org.bukkit.event.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -87,6 +88,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		FactionsPlusPlugin.info("Disabled successfuly.");
+		
+		HandlerList.unregisterAll( FactionsPlus.instance );
+		
 		}catch(Throwable t) {
 			FactionsPlusPlugin.info("unable to successfully disable"); 
 			FactionsPlus.severe(t);
