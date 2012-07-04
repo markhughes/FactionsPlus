@@ -20,7 +20,7 @@ public class FPConfigLoadedEvent extends Event {
     }
     
     public FPConfigLoadedEvent() {
-    	super(false);//not async
+    	super();//not async
     	
     }
 }

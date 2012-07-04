@@ -156,7 +156,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 		FLocation floc = new FLocation(loc);
 		Faction owner = Board.getFactionAt(floc);
 
-		if(!Utilities.isWilderness(owner) && owner != fp.getFaction()){
+		if(owner != fp.getFaction()){
 			fp.sendMessage("You can only clear locks in your own territory!");
 			return -1;
 		}
