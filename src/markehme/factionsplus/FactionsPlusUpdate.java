@@ -126,6 +126,7 @@ public class FactionsPlusUpdate implements Runnable {
 			
 			Scanner scanner = null;
 			try {
+				//TODO: find a way to kill blocking scanner when plugin needs to disable/shutdown, currently it delays shutdown
 				connection = new URL( "http://www.markeh.me/factionsplus.php?v=" + v ).openConnection();
 				scanner = new Scanner( connection.getInputStream() );
 				scanner.useDelimiter( "\\Z" );

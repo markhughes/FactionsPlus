@@ -13,12 +13,14 @@ import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.sections.*;
 import markehme.factionsplus.config.yaml.*;
+import markehme.factionsplus.events.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.util.*;
 
 import org.bukkit.*;
 import org.bukkit.configuration.*;
 import org.bukkit.configuration.file.*;
+import org.bukkit.event.*;
 import org.bukkit.plugin.*;
 import org.yaml.snakeyaml.*;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
@@ -133,6 +135,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * call this one time onEnable() never on onLoad() due to its evilness;)<br>
 	 */
 	public final static void init() {
+		assert !isLoaded();
 		setInited( false );
 		boolean failed = false;
 		// try {
@@ -204,7 +207,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			// last:
 			Config.setLoaded( true );
+			// Create the event here
+			Event event = new FPConfigLoadedEvent();
+			// Call the event
+//			throw null;//this will be caught
+			Bukkit.getServer().getPluginManager().callEvent(event);
+			//exceptions from inside the hooked event cannot be caught here for they are not let thru
 		} catch ( Throwable t ) {
+//			FactionsPlus.warn("caught");
 			Q.rethrow( t );
 		} finally {
 			if ( failed ) {

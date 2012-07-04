@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.plugin.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 
 /**
@@ -17,7 +18,11 @@ public abstract class Bridge {
 	
 	//technically this should not have a deinit() unless plugin totally disables when onDisable() which it doesn't
 	//ie. commands still work, in which case we don't want NPEs due to Bridge.factions being null
-	public static void init() {
+	public static void init() {//TODO: prevent initing again
+		assert Config.isInited();
+		assert !Config.isLoaded():"this must be called before config is loaded " +
+				"which also means you cannot really use config options while in here(you can, but they will have only " +
+				"the default values that are set in java code and none from config.yml";
 		
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(factionsPluginName);
 		if (null == plugin) {
