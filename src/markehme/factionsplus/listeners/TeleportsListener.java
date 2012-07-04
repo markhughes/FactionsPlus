@@ -48,8 +48,6 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		// TODO: implement disallow teleports via ender pearls into safe/warzone too
-		
 		if ( ( !isHomeTracking() ) && ( !isEnderPealing() ) ) {
 			// don't hook if neither of the two are set
 			return;
