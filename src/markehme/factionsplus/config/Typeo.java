@@ -195,24 +195,13 @@ public abstract class Typeo {
 					int fieldModifiers = field.getModifiers();
 					Class<?> typeOfField = field.getType();// get( rootClass );
 					
-					
-					Object fieldInstance;
-					try {
-						fieldInstance = field.get( parentInstance );
-					} catch ( Exception e ) {
-						e.printStackTrace();
-						throw FactionsPlus.bailOut( "bad coding: the field `" + field + "` doesn't have an instance, "
-							+ "did you forget to add `= new ...();`" );
-						// this means that you couldn't use Config.thisfield.itschildfield because thisfield would be null and
-						// NPE
-						// ie. Config.extras.lwc would NPE if `extras` doesn't have an instance, make sure
-						// that extras is new-ed like: Classhere extras=new Classhere(); in Config
+					//allow private fields, due to enforcing using some methods instead of the field directly 
+					//ie. Config._economy.isHooked()  instead of Config._economy.enabled._
+					if (Modifier.isPrivate( fieldModifiers )) {
+						field.setAccessible( true );//allow access to it, forever (on runtime)
 					}
-					
-					
-					
 					// must be non-private , but yes Final!
-					boolean badMods = !( !Modifier.isPrivate( fieldModifiers ) && ( Modifier.isFinal( fieldModifiers ) ) );
+					boolean badMods = !(  Modifier.isFinal( fieldModifiers ) );//!Modifier.isPrivate( fieldModifiers ) && (
 					
 					// allowed like this for some clarity:
 					if ( isTopLevelSection ) {
@@ -234,6 +223,20 @@ public abstract class Typeo {
 							+ " field must be final+non-private+" + ( isTopLevelSection ? " static" : "non-static" )
 							+ " but instead it is: `" + field + "`" );
 					}
+					
+					
+					Object fieldInstance;
+					try {
+						fieldInstance = field.get( parentInstance );
+					} catch ( Exception e ) {
+						throw FactionsPlus.bailOut(e, "bad coding: the field `" + field + "` doesn't have an instance, "
+							+ "did you forget to add `= new ...();`" );
+						// this means that you couldn't use Config.thisfield.itschildfield because thisfield would be null and
+						// NPE
+						// ie. Config.extras.lwc would NPE if `extras` doesn't have an instance, make sure
+						// that extras is new-ed like: Classhere extras=new Classhere(); in Config
+					}
+					
 					
 					if ( Section.class == annotationType ) {
 						

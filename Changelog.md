@@ -1,5 +1,13 @@
 # FactionsPlus version 0.4.7
 
+* properly closing any resources which were previously leaking
+
+* new command: `/f reloadfp [all|config|templates]` causes reloading of the specified config(s)
+just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
+permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)  
+Note that if you delete `config.yml` before issuing `/f reloadfp` then the created one will have the same settings as
+the previous one except the comments (because those are not yet implemented: namely each option having it's own comment)
+
 * FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
 
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
@@ -37,14 +45,14 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * General bugfixes, including a bunch of npes, and other annoyances 
 
-* fixed /f togglestate to only charge you if economy.`enabled` is set
-  and to not cause internal error if inexistent faction tag was specified 
-  if you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
-   only if you are (Op or)admin/officer/member in your faction if those were set in the config
-  Prevent changing the state of WarZone, SafeZone or Wilderness, unless you are Op
-  Even as Op, you are still charged the money (it's not like you can't afford it ;) ).
-  /f toggle yourfactiontag  is equivalent with /f toggle
-  Now tells you the faction tag which was affected by the change
+* - fixed /f togglestate to only charge you if economy.`enabled` is set
+  and to not cause internal error if inexistent faction tag was specified. 
+  - If you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
+   only if you are (Op or)admin/officer/member in your faction if those were set in the config.
+  - Prevent changing the state of WarZone, SafeZone or Wilderness, unless you are Op.
+  - Even as Op, you are still charged the money (it's not like you can't afford it ;) ).
+  - /f toggle yourfactiontag  is equivalent with /f toggle
+  - Now tells you the faction tag which was affected by the change
 
 * fixed NPE when joined while being previously in faction jail
 
@@ -56,7 +64,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * New Configuration setup
 
-* obsolete config options are automatically upgraded/transformed into the newly named ones. 
+* obsolete config options are automatically upgraded/transformed into the newly named ones.  
   This implies that the old value is kept. You are also notified on console about this.
 
 * invalid config options are automatically commented out.  You are also notified on console about this. 
@@ -68,10 +76,11 @@ in other words, locks owned by people in your faction(including you) won't be re
   a warning showing on console, the commented options are preceded by "# DUPLICATE #"
   You are also notified on console about this.
   
-* comments "#" are kept on each save, you may add more or delete them (any line starting with a "#" )
+* comments `#` are kept on each save, you may add more or delete them.  
+Comments are any lines whose first non-whitespace character is `#`.
 
 
 
 # FactionsPlus version 0.4.6
-* nothing specified here
+* this Changelog file did not exist in this version, changes are unknown.
 
