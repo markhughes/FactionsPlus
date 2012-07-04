@@ -302,4 +302,45 @@ public class Utilities {
 		from.setZ( to.getZ() );
 		return from;
 	}
+	//***********************************World Checking/Common Condition Checking for Listeners to also respect factions settings***********************//
+	/**
+	 * Checks if world is an ignored PvP world in faction config
+	 * @param world
+	 * @return boolean (true if it is an ignored world)
+	 */
+	public static final boolean noMonitorPvPWorld(World world) {
+		String name = world.getName();
+		if(FactionsPlus.ignoredPvPWorlds.contains(name)) {
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	/**
+	 * Checks if claiming in world is disabled in config
+	 * @param world
+	 * @return boolean (true if it is a disabled claiming world)
+	 */
+	public static final boolean noClaimWorld(World world) {
+		String name = world.getName();
+		if(FactionsPlus.noClaimingWorlds.contains(name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Checks if powerloss in world is disabled in config
+	 * @param world
+	 * @return boolean (true if it is a powerloss disabled world)
+	 */
+	public static final boolean noPowerLossWorld(World world) {
+		String name = world.getName();
+		if(FactionsPlus.noPowerLossWorlds.contains(name)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

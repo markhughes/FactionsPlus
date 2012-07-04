@@ -1,6 +1,7 @@
 package markehme.factionsplus;
 
 import java.io.*;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.FactionsBridge.*;
@@ -56,7 +57,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static String FactionsVersion;
 	
 	private static Metrics metrics=null;
-
+	
+	public static Set<String> ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
+	public static Set<String> noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
+	public static Set<String> noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
 	
 	public FactionsPlus() {//constructor
 		super();
