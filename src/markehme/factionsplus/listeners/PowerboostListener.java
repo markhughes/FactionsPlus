@@ -93,6 +93,7 @@ public class PowerboostListener implements Listener{
 	}
 
 	private boolean checkFactionsSettings(EntityDeathEvent event) {
+		//FIXME: 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss
 		if (!Config._powerboosts.respectFactionsWarZonePowerLossRules._ && (!com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null)) {
 			if (event.getEntity() == null || !(event.getEntity() instanceof Player)) {
 				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
