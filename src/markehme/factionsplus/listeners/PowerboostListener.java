@@ -96,20 +96,21 @@ public class PowerboostListener implements Listener{
 	}
 
 	private boolean checkFactionsSettings(EntityDeathEvent event) {
+		//FIXME: 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss
 		if (!Config._powerboosts.respectFactionsWarZonePowerLossRules._ && (!com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null)) {
 			if (event.getEntity() == null || !(event.getEntity() instanceof Player)) {
 				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
 				//TODO: Block power GAINS in powerloss disabled regions as well
 			}
 			FLocation floc = new FLocation(event.getEntity().getLocation());
-			Faction owner = Board.getFactionAt(floc);
-			if(owner.isNone() && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
+			Faction owningFaction = Board.getFactionAt(floc);
+			if(Utilities.isWilderness( owningFaction) && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
 				return false;
 			}
-			if(owner.isWarZone() && !com.massivecraft.factions.Conf.warZonePowerLoss) {
+			if(Utilities.isWarZone( owningFaction) && !com.massivecraft.factions.Conf.warZonePowerLoss) {
 				return false;
 			}
-			if(owner.isSafeZone()) {
+			if(Utilities.isSafeZone(owningFaction)) {
 				return false;
 			}
 		}
