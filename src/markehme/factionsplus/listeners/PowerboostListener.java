@@ -22,6 +22,9 @@ public class PowerboostListener implements Listener{
 		if (!checkFactionsSettings(event)) {
 			return;
 		}
+		if (Utilities.noPowerLossWorld(event.getEntity().getWorld())) {
+			return;
+		}
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
 			DamageCause causeOfDeath = event.getEntity().getLastDamageCause().getCause();
