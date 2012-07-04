@@ -268,7 +268,7 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		if(FactionsPlus.economy != null) {
+		if(Config._economy.isHooked()) {
 			if(Config._economy.costToSetJail._ > 0.0d) {//TODO: fill those empty strings
 				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
 					return false;

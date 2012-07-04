@@ -98,7 +98,7 @@ public class CmdToggleState extends FCommand {
 		
 		if(!factiont.isPeaceful()) {//done: is economy enabled ?!
 			//if faction wasn't already peaceful, then we set it
-			if ( (!Config._economy.enabled._)
+			if ( (!Config._economy.isHooked())
 					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
 						"for setting faction `"+factiont.getTag()+"` to peaceful")) ) {
 				
@@ -108,7 +108,7 @@ public class CmdToggleState extends FCommand {
 			}
 		} else {
 			//faction was peaceful, we now remove this flag
-			if ( (!Config._economy.enabled._) 
+			if ( (!Config._economy.isHooked()) 
 					|| (payForCommand(Config._economy.costToToggleDownPeaceful._, "to remove the peaceful status", 
 						"for removing the peaceful flag from faction `"+factiont.getTag()+"`")) ) {
 				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
