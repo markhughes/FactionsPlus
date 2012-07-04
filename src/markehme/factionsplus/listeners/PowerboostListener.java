@@ -13,10 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
 
 public class PowerboostListener implements Listener{
 	@EventHandler(priority=EventPriority.MONITOR)
@@ -101,16 +98,15 @@ public class PowerboostListener implements Listener{
 				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
 				//TODO: Block power GAINS in powerloss disabled regions as well
 			}
-			FPlayer fp = FPlayers.i.get((Player)event.getEntity());
 			FLocation floc = new FLocation(event.getEntity().getLocation());
 			Faction owner = Board.getFactionAt(floc);
-			if(owner == Factions.i.getByTag("Wilderness") && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
+			if(owner.isNone() && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
 				return false;
 			}
-			if(owner == Factions.i.getByTag("WarZone") && !com.massivecraft.factions.Conf.warZonePowerLoss) {
+			if(owner.isWarZone() && !com.massivecraft.factions.Conf.warZonePowerLoss) {
 				return false;
 			}
-			if(owner == Factions.i.getByTag("SafeZone")) {
+			if(owner.isSafeZone()) {
 				return false;
 			}
 		}
