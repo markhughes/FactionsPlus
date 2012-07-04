@@ -43,7 +43,7 @@ public class CmdListWarps extends FCommand  {
 			currentFaction = Factions.i.get(argAsString(0));
 		}
 		
-		if(currentFaction.isNone()) {
+		if(Utilities.isWilderness(currentFaction)) {
 			fme.msg("This Faction does not exist.");
 			return;
 			

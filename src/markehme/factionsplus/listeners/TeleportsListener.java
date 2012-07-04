@@ -232,7 +232,7 @@ public class TeleportsListener implements Listener {
 				break;
 			}
 			
-			if ((Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._)&&(factionAtTarget.isSafeZone())) {
+			if ((Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._)&&(Utilities.isSafeZone(factionAtTarget))) {
 				player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside Safe-Zone" );
 				denyTeleport( event );
 				break;

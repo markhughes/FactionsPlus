@@ -99,14 +99,14 @@ public class PowerboostListener implements Listener{
 				//TODO: Block power GAINS in powerloss disabled regions as well
 			}
 			FLocation floc = new FLocation(event.getEntity().getLocation());
-			Faction owner = Board.getFactionAt(floc);
-			if(owner.isNone() && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
+			Faction owningFaction = Board.getFactionAt(floc);
+			if(Utilities.isWilderness( owningFaction) && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
 				return false;
 			}
-			if(owner.isWarZone() && !com.massivecraft.factions.Conf.warZonePowerLoss) {
+			if(Utilities.isWarZone( owningFaction) && !com.massivecraft.factions.Conf.warZonePowerLoss) {
 				return false;
 			}
-			if(owner.isSafeZone()) {
+			if(Utilities.isSafeZone(owningFaction)) {
 				return false;
 			}
 		}
