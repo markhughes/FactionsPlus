@@ -235,14 +235,24 @@ public class Utilities {
 	{
 		return faction.getId().equals("-2");
 	}
-	
+
+	public static boolean isSafeZone(Faction faction)
+	{
+		return faction.getId().equals("-1");
+	}
+
+	public static boolean isWilderness(Faction faction)
+	{
+		return faction.getId().equals("0");
+	}
+
 	/**
 	 * aka non-safezone and non-warzone and not wilderness
 	 * @param faction
 	 * @return true is so
 	 */
 	public static boolean isNormalFaction(Faction faction) {
-		return !isWarZone( faction ) && !faction.isSafeZone() && !faction.isNone();
+		return !isWarZone( faction ) && !isSafeZone(faction) && !isWilderness( faction );
 	}
 	
 	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*

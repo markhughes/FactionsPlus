@@ -11,6 +11,8 @@ import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.*;
+import org.bukkit.event.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -90,6 +92,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
 		FactionsPlusPlugin.info("Disabled successfuly.");
+		
+		HandlerList.unregisterAll( FactionsPlus.instance );
+		
 		}catch(Throwable t) {
 			FactionsPlusPlugin.info("unable to successfully disable"); 
 			FactionsPlus.severe(t);
@@ -100,17 +105,18 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	@Override
 	public void onEnable() { try { super.onEnable();//be first
 		Config.init();
-		Config.reload();//be as soon as possible
-	    
+		Bridge.init();
 		PluginManager pm = this.getServer().getPluginManager();
+		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
+		FactionsPlusPlugin.info("Factions version " + FactionsVersion );//before reload
+		pm.registerEvents(new FPConfigLoadedListener(),this);
+		Config.reload();//be as soon as possible but after the above
 		
 		pm.registerEvents(this.corelistener, this);
 		
 		FactionsPlusJail.server = getServer();
 		
-		Bridge.init();
-		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
-		FactionsPlusPlugin.info("Factions version " + FactionsVersion );
+	
 		
 		
 		FactionsPlusCommandManager.setup();
@@ -121,8 +127,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
             permission = permissionProvider.getProvider();
         }
         
-        
-        Config._economy.enableOrDisableEconomy();//TODO: move this into onConfigLoaded method which triggers on that event(not yet done)
         
         if(Config._announce.enabled._){
     		pm.registerEvents(this.announcelistener, this);

@@ -69,7 +69,7 @@ public class LWCModule extends JavaModule {//to fix
 			Player p = event.getPlayer();
 			Faction owner = Board.getFactionAt(floc);
 			FPlayer fp = FPlayers.i.get(p);
-			if(fp.getFaction() != owner && !owner.isNone()) {
+			if(fp.getFaction() != owner && !Utilities.isWilderness(owner)) {
 				event.setResult(CANCEL);
 				return;
 			}
@@ -84,7 +84,7 @@ public class LWCModule extends JavaModule {//to fix
 
 	@Override
 	public void onRegisterProtection( LWCProtectionRegisterEvent event ) {
-		//well actually other modules can already have this cancelled
+		//other modules can already have this cancelled
 		if (event.isCancelled()) {
 			return;
 		}
@@ -97,7 +97,7 @@ public class LWCModule extends JavaModule {//to fix
 		Faction owner = Board.getFactionAt(floc);
 
 //		if(!LWCFunctions.checkInTerritory(p,b)) {
-		if (owner.isNone() || Utilities.hasPermissionOrIsOp( p, permForDontPreventLWCLocking ) || owner.equals( fp.getFaction() )) {
+		if (Utilities.isWilderness(owner) || Utilities.hasPermissionOrIsOp( p, permForDontPreventLWCLocking ) || owner.equals( fp.getFaction() )) {
 			//allow locks if it's in wilderness, or is op or has perm, or is in own faction land
 			return;//the 'if' is easier to read this way
 		}else {

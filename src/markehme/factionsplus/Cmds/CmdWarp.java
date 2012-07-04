@@ -92,7 +92,7 @@ public class CmdWarp extends FCommand {
 		Location loc = player.getLocation().clone();
 		if
 		(
-				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Board.getFactionAt(new FLocation(loc)).isSafeZone() 
+				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(Board.getFactionAt(new FLocation(loc))) 
 				&& ( ! fplayer.isInOwnTerritory()
 						|| ( fplayer.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory._))){
 			World w = loc.getWorld();

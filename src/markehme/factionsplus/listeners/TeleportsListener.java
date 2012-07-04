@@ -48,8 +48,6 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
-		// TODO: implement disallow teleports via ender pearls into safe/warzone too
-		
 		if ( ( !isHomeTracking() ) && ( !isEnderPealing() ) ) {
 			// don't hook if neither of the two are set
 			return;
@@ -234,7 +232,7 @@ public class TeleportsListener implements Listener {
 				break;
 			}
 			
-			if ((Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._)&&(factionAtTarget.isSafeZone())) {
+			if ((Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._)&&(Utilities.isSafeZone(factionAtTarget))) {
 				player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside Safe-Zone" );
 				denyTeleport( event );
 				break;

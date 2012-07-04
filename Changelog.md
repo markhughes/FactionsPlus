@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.7
 
+* fixed situations in which, while using Factions 1.7, any checks for SafeZone were true if the faction had explosions
+disabled
+
 * properly closing any resources which were previously leaking
 
 * new command: `/f reloadfp [all|config|templates]` causes reloading of the specified config(s)
