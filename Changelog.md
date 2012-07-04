@@ -82,7 +82,9 @@ in other words, locks owned by people in your faction(including you) won't be re
 * comments `#` are kept on each save, you may add more or delete them.  
 Comments are any lines whose first non-whitespace character is `#`.
 
-
+### Known issues:
+* `/f reloadfp` refreshes only the economy state, ie. if you disabled some options which were previously enabled they 
+may still be in effect after reload (except economy that will auto enabled/disable on reload)
 
 # FactionsPlus version 0.4.6
 * this Changelog file did not exist in this version, changes are unknown.
