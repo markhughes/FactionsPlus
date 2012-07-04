@@ -2,9 +2,7 @@ package markehme.factionsplus.Cmds;
 
 
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
@@ -74,12 +72,12 @@ public class CmdAnnounce extends FCommand {
 		
 		String formatedMessage = FactionsPlusTemplates.Go("announcement_message", argsa);
 		
-		DataOutputStream announceWrite;
 		
 		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
 			fplayerlisting.msg(formatedMessage);
 		}
 		
+		DataOutputStream announceWrite=null;
 		try {
 			File fAF = new File(Config.folderAnnouncements, fplayer.getFactionId());
 			if(!fAF.exists()) {
@@ -95,13 +93,21 @@ public class CmdAnnounce extends FCommand {
 		
 			sender.sendMessage("Failed to set announcement (Internal error -21)");
 			return;
+		}finally{
+			if (null != announceWrite) {
+				try {
+					announceWrite.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !Config._economy.enabled._ || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !Config._economy.isHooked() || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
 		
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);

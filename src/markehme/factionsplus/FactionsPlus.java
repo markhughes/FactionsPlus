@@ -28,7 +28,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	Faction faction;
 	 
     public static Permission permission = null;
-    public static Economy economy = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
     public static boolean isMobDisguiseEnabled = false;
@@ -119,13 +118,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config._economy.enabled._) {
-        	RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        	
-        	if (economyProvider != null) {
-            	economy = economyProvider.getProvider();
-        	}
-        }
+        Config._economy.enableOrDisableEconomy();//TODO: move this into onConfigLoaded method which triggers on that event(not yet done)
+        
         if(Config._announce.enabled._){
     		pm.registerEvents(this.announcelistener, this);
         }

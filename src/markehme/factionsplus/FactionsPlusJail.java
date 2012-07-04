@@ -1,13 +1,12 @@
 package markehme.factionsplus;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
+import markehme.factionsplus.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,23 +20,47 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.zcore.persist.*;
 
 public class FactionsPlusJail {
 	public static Server server;
+	/**
+	 * caches mappings between faction id (as String) and its jail Location 
+	 */
+	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
 	
 	public static boolean removeFromJail(String unJailingPlayer, String id) {
 		File jailingFile = new File(Config.folderJails, "jaildata." + id + "." + unJailingPlayer);
 		if(jailingFile.exists()){
 			jailingFile.delete();
+//			cachedJailLocations.remove(id);could or could not have existed, hmm maybe not remove this due to possibility that
+			//jailLocation can be used again, yep makes sense
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	
+	
+	
 	public static Location getJailLocation(Player player) {
-		FPlayer fplayer = FPlayers.i.get( player );
-		Faction CWFaction = Factions.i.get(fplayer.getFactionId());
+		FPlayer fplayer = FPlayers.i.get( player );//considering Factions' implementation of this, this is never null
+		assert (null != fplayer)&&(FPlayers.i.isCreative());//if is creative, even if player didn't exist it will be instance-created
+		//thing is, it's always creative, on both 1.6 and 1.7 (for players, not for factions)
+		String fid = fplayer.getFactionId().trim();//just in case
+		
+		Location jailLocation=cachedJailLocations.get(fid);
+		if (null != jailLocation) {
+//			System.out.println("found in cache: "+fid+"->"+jailLocation);
+			return jailLocation;
+		}
+//		System.out.println("not in cache: "+fid+"->"+jailLocation);
+		
+		Faction CWFaction = Factions.i.get(fid);
+		assert null != CWFaction:"player wasn't in a faction ? like not even wilderness? this should basically not be null";
+		assert fid.equals(CWFaction.getId());
+		
 		World world;
 		
 		File currentJailFile = new File(Config.folderJails, "loc." + CWFaction.getId());
@@ -59,7 +82,11 @@ public class FactionsPlusJail {
 			        	
 			    world = server.getWorld(jail_data[5]);
 			    
-			    return(new Location(world, x, y, z, Y, p));
+			    jailLocation=new Location(world, x, y, z, Y, p);
+			    Location existed = cachedJailLocations.put( fid, jailLocation );
+//			    System.out.println("added to cache: "+fid+"->"+jailLocation);
+			    assert null == existed:"bad code logic, should not have existed, unless it skipped the above get at beginning of method";
+			    return jailLocation;
 			    
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -224,27 +251,15 @@ public class FactionsPlusJail {
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
-		boolean authallow = false;
+		boolean authallow = ((Config._jails.leadersCanSetJails._) && (Utilities.isLeader( fplayer ))) 
+		|| ((Config._jails.officersCanSetJails._) && (Utilities.isOfficer( fplayer )))
+		|| (Config._jails.membersCanSetJails._);
 		
-		if(Config._jails.leadersCanSetJails._) {
-			if(fplayer.getRole().toString().contains("admin") || fplayer.getRole().toString().contains("LEADER")) { // 1.6.x
-				authallow = true;
-			}
-		}
-		
-		if(Config._jails.officersCanSetJails._) {
-			if(fplayer.getRole().toString().contains("mod") || fplayer.getRole().toString().contains("OFFICER")) {
-				authallow = true;
-			}
-		}
-
-		
-		if(Config._jails.membersCanSetJails._) {
-			authallow = true;
-		}
 		
 		if(!authallow) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+			sender.sendMessage(ChatColor.RED + "Sorry, your faction rank is not allowed to do that!");
+			//ie. leader maybe can't but officer can, depending on the options set in config (while clearly that's crazy to set,
+			//it's possible and up to server admin)
 			return false;
 		}
 		
@@ -253,7 +268,7 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		if(FactionsPlus.economy != null) {
+		if(Config._economy.isHooked()) {
 			if(Config._economy.costToSetJail._ > 0.0d) {//TODO: fill those empty strings
 				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
 					return false;
@@ -261,7 +276,8 @@ public class FactionsPlusJail {
 			}
 		}
 		
-		File currentJailFile = new File(Config.folderJails,"loc." + currentFaction.getId());
+		String cfid = currentFaction.getId();
+		File currentJailFile = new File(Config.folderJails,"loc." + cfid);
 		
 		Player player = (Player)sender;
 		
@@ -271,14 +287,15 @@ public class FactionsPlusJail {
         loc.getY() + ":" + 
         loc.getZ() + ":" + 
         loc.getYaw() + ":" + 
-        loc.getPitch() + ":" + player.getWorld().getName();
+        loc.getPitch() + ":" + loc.getWorld().getName();
 		
-		DataOutputStream jailWrite;
+		DataOutputStream jailWrite=null;
 		try {
 			jailWrite = new DataOutputStream(new FileOutputStream(currentJailFile, false));
 			jailWrite.write(jailData.getBytes());
 			jailWrite.close();
 			
+			cachedJailLocations.put( cfid, loc );
 			sender.sendMessage("Jail set!");
 			
 			return true;
@@ -287,6 +304,14 @@ public class FactionsPlusJail {
 			
 			sender.sendMessage("Failed to set jail (Internal error -2)");
 			return false;
+		}finally{
+			if (null != jailWrite) {
+				try {
+					jailWrite.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 	}

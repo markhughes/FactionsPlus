@@ -42,7 +42,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static FileConfiguration			templates;
 	
 	// and it contains the defaults, so that they are no longer hardcoded in java code
-	private static File						fileConfig				= new File( Config.folderBase, "config.yml" );
+	public final static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
 	// never change this, it's yaml compatible:
 	public static final char				DOT						= '.';
@@ -126,12 +126,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	private static boolean					inited					= false;
+	private static boolean					loaded= false;
 	
 	
 	/**
 	 * call this one time onEnable() never on onLoad() due to its evilness;)<br>
 	 */
 	public final static void init() {
+		setInited( false );
 		boolean failed = false;
 		// try {
 		if ( Q.isInconsistencyFileBug() ) {
@@ -149,7 +151,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// names
 		
 		Typeo.sanitize_AndUpdateClassMapping( configClass );
-		
+		setInited( true);
 	}
 	
 	/**
@@ -184,11 +186,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
-	 * called on plugin.onEnable() and every time you want the config to reload
+	 * called on plugin.onEnable() and every time you want the config to reload<br>
+	 * aka reload all (well, config and templates)<br>
 	 */
-	public final static void reload() {
+	public synchronized final static void reload() {
 		
-		Config.setInited( false );// must be here to cause config to reload on every plugin(s) reload from console
+		Config.setLoaded( false );// must be here to cause config to reload on every plugin(s) reload from console
 		Config.templates = null;
 		boolean failed = false;
 		try {
@@ -197,12 +200,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			reloadConfig();
 			
-			
-			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
-			
+			reloadTemplates();
 			
 			// last:
-			Config.setInited( true );
+			Config.setLoaded( true );
 		} catch ( Throwable t ) {
 			Q.rethrow( t );
 		} finally {
@@ -215,10 +216,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static void setInited( boolean nowState ) {
-		inited = nowState;
-	}
-	
+
 	
 	protected static void ensureFoldersExist() {
 		File dataF = FactionsPlus.instance.getDataFolder();
@@ -636,13 +634,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
-	private static WYSection	virtualRoot		= null;
+	protected static WYSection	virtualRoot		= null;
 	
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();
 	
 	
-	private final static void reloadConfig() {
+	public synchronized final static boolean reloadConfig() {
 		
 		if ( Config.fileConfig.exists() ) {
 			if ( !Config.fileConfig.isFile() ) {
@@ -705,6 +703,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		applyChanges();
 		
 		saveConfig();
+		
+		return true;
 	}
 	
 	
@@ -980,6 +980,27 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public static boolean isInited() {
 		return inited;
+	}
+	
+	private static void setInited( boolean nowState ) {
+		inited = nowState;
+	}
+	
+	private static void setLoaded( boolean nowState ) {
+		loaded = nowState;
+	}
+	
+	public static boolean isLoaded() {
+		return loaded;
+	}
+	
+	public final synchronized static boolean reloadTemplates() {
+		if (!Config.isInited()) {
+			return false;
+		}else {
+			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
+			return null != Config.templates;
+		}
 	}
 	
 }

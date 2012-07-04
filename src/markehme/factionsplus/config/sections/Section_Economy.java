@@ -1,17 +1,22 @@
 package markehme.factionsplus.config.sections;
 
+import net.milkbowl.vault.economy.*;
+
+import org.bukkit.*;
+import org.bukkit.plugin.*;
+
+import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
 
 public final class Section_Economy {
-	
 	
 	@Option(oldAliases_alwaysDotted={
 		"economy.enableEconomy"
 		,"enableEconomy"
 		,"economy_enable"
 	}, realAlias_inNonDottedFormat = "enabled" )
-	public  final _boolean enabled=new _boolean(false);
+	private final _boolean enabled=new _boolean(false);//it's private because you're supposed to use .isHooked() instead ;)
 	
 	
 	
@@ -85,4 +90,56 @@ public final class Section_Economy {
 		,"economy_costToToggleDownPeaceful"//very old one
 		}, realAlias_inNonDottedFormat = "costToToggleDownPeaceful" )
 	public  final _double costToToggleDownPeaceful=new _double( 0.0d );
+	
+	
+	
+	
+	private static Economy economyInstance = null;
+	
+	public synchronized boolean isHooked() {
+		return null != economyInstance;
+	}
+	
+	/**
+	 * @return true if it's enabled(aka existed & enabled)<br>
+	 * false if it's disabled (ie. was disabled in config or was enabled by not found)
+	 */
+	public synchronized boolean enableOrDisableEconomy() {
+		boolean wanted=Config._economy.enabled._;
+		//check is the state differs from the current state
+		if (wanted && !isHooked()) {
+			return turnOnEconomy();
+		}else if (!wanted && isHooked()) {
+			turnOffEconomy();
+			return false;
+		}
+		
+		//state is the same if we're here
+		FactionsPlus.info( "Economy integration is "+(wanted?"ON":"OFF") );
+		return wanted;
+	}
+
+	private synchronized void turnOffEconomy() {
+		assert isHooked();
+		economyInstance=null;
+		FactionsPlus.info( "Economy integration is OFF" );
+	}
+
+	private synchronized boolean turnOnEconomy() {
+		assert !isHooked();
+		
+    	RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().
+    			getRegistration(net.milkbowl.vault.economy.Economy.class);
+    	
+    	if (economyProvider != null) {
+        	economyInstance = economyProvider.getProvider();
+        	//we need the message here, to say on console when economy was turned on or off, because we may call this from
+        	//the /f reloadfp command too, not just from onEnable()
+        	FactionsPlus.info( "Economy integration is ON" );
+        	return true;
+    	}else {
+    		FactionsPlus.info( "Economy is not found and thus integration is DISABLED." );
+    		return false;
+    	}
+	}
 }

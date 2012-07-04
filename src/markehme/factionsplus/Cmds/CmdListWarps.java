@@ -77,8 +77,11 @@ public class CmdListWarps extends FCommand  {
 	    	}
 	    }
 	    
+	    Scanner scanner=null;
+	    FileReader fr = null;
 	    try {
-	    	Scanner scanner = new Scanner(new FileReader(currentWarpFile));
+	    	fr=new FileReader(currentWarpFile);
+	    	scanner = new Scanner(fr);
 	        String buffer = ChatColor.RED + "Your Factions warps: " + ChatColor.WHITE;
 	        boolean warps = false;
 	        while (scanner.hasNextLine()) {
@@ -109,6 +112,17 @@ public class CmdListWarps extends FCommand  {
 	        sender.sendMessage(ChatColor.RED + "An internal error occured (03)");
 	        
 	        e.printStackTrace();
+	    }finally{
+	    	if (null != scanner) {
+	    		scanner.close();//technically this would also close fr, but I can't really suppress warnings on the entire method
+	    	}
+	    	if (null != fr) {
+	    		try {
+					fr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+	    	}
 	    }
 
 	}

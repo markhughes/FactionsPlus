@@ -1,9 +1,13 @@
 ======================================
 TODO: These instructions might be outdated due to moving of files/folders inside dev_extras
 -------------------------
-
 To get FactionsPlus from github into your Eclipse workspace:
 ------
+Prerequisites:
+- Eclipse for Java Developers or Eclipse SDK  ie. version 3.8.0
+- EGIT plugin for Eclipse (Help->Install New Software, Work with: All Available Sites, type filter text "egit" ...)
+
+---
 File->Import,  Git->Projects From Git, Next, URI, Next
 fill in URI: with one of the following:
 git://github.com/MarkehMe/FactionsPlus.git
@@ -12,10 +16,11 @@ https://github.com/MarkehMe/FactionsPlus.git
  https://github.com/MarkehMe/FactionsPlus
 )
 Next, Next
-Choose a location in your eclipse workspace under a folder named "FactionsPlus"
+Choose a location in your eclipse workspace under a folder named "FactionsPlus" (typically this means just Browse to
+your eclipse workspace and click Save)
 ie. Directory: C:\eclipse.workspace\FactionsPlus
 or wherever else you want to store the git part
-copy this path to clipboard ie. Ctrl+D Ctlr+A then Ctrl+C
+now copy this path to clipboard ie. Ctrl+D Ctrl+A then Ctrl+C
 click Next, after the cloning is done (requires internet connection *doh* ) then
 open explorer or Winkey+E
 select the address/location  or Alt+D
@@ -23,22 +28,12 @@ paste the previously copied path ie. Ctrl+V
 press Enter to go into that folder, 
 you're now in the folder where you cloned the project
 
-now you have 2 options:
-1. run eclipsify.bat file which does 2. automatically for you
-OR
-2. copy the folder .settings.eclipse  to .settings
-   and the file .classpath.eclipse to .classpath
-   (this will not work within explorer, at least in win7 due to it needing
-    a name before the "." part)
-note: if you're dev with write access to the repo then don't rename instead of 
-copying because then you may accidentally commit these changes later: 
-the deletion of the folder+file . 
- If you did 2. but renamed instead of copying then you'll need
-to do Team->Reset, Local->master, select Hard (...working directory updated)
-then click Reset button and answer Yes to lose local changes (assuming you 
-didn't edit files yourself yet - workdir would be already changed because of the
-rename you did)
-
+Copy some files from "dev_extras" into current folder:
+   a) enter the "dev_extras" folder
+   b) Ctrl+click aka select the following 3 folder/files: ".settings", ".classpath" and ".project"
+      and Copy them (to clipboard) ie. Ctrl+C
+   c) go into parent folder (the one you where before you entered "dev_extras") and press Ctrl+V aka Paste
+   
 you may close explorer, ie. Ctrl+W
 then go back to the Cloning window in eclipse
 Select Import existing projects
@@ -53,7 +48,7 @@ In order to be able to compile this without errors in Eclipse, here's what you n
 
 ------
 A. jars needed (put them in the "lib" folder in the FactionsPlus project)
-note: if "lib" doesn't exist just create it:
+note: if "lib" doesn't exist(quite likely) just create it:
 File->New->Folder
 select FactionsPlus
 type: lib
@@ -99,10 +94,11 @@ Finish
    http://dev.bukkit.org/server-mods/lwc/files/
    LWC 4.2.0 tested
    
-8. At this point if you don't care about correctly following the sourcecode (ie. F3) you can get one of the 
-Factions.jar files
-instead of the Factions project, so choose one variant to follow below(using both will fail with correct sourcecode following 
-ie. you end up at wrong lines in code upon F3 -ing in some Factions method)
+8. At this point if you don't care about correctly following the sourcecode (ie. F3-ing around while cursor is 
+positioned on java identifiers: fields/methods etc.) you can get one of the  Factions.jar files instead of the Factions 
+project, so choose one variant to follow below(using both will fail to correctly follow sourcecode ie. you end up at 
+wrong lines in code upon F3 -ing in some Factions method)
+
 choose one: (B. recommended)
     A) Factions.jar
         get any of 1.6 or 1.7 versions:
@@ -145,13 +141,12 @@ Expand FactionPlus,
 make sure only "src" folder is selected
 click FactionsPlus
 make sure only the following files are selected:
-config_defaults.yml
 plugin.yml
 
 now go below and ensure the options look like so:
 [v] Export generated class files and resources
 [ ] Export all output folders for checked projects
-[v] (Optional)Export Java source files and resources(if you want to include sourcecode *.java files)
+[v] (Optional)Export Java source files and resources(if you want to include sourcecode *.java files in the jar)
 [ ] Export refactorings for checked projects.
 
 Jar file: x:\XXX\FactionsPlus.jar
@@ -177,7 +172,7 @@ Finish
 --------------
 
 This is how to export the .jar the "right" way:
-double click the "fpexport_release_template.jardesc"  file from within Eclipse
+From within Eclipse, double click the file "fpexport_release_template.jardesc" which is under "dev_extras" folder. 
 you shouldn't have to modify anything there, all the settings are right and if you just click Finish
 it would create Factions.jar file inside the built.jar (folder which resides in the project)
 
@@ -205,27 +200,28 @@ and this is now detected and can be committed to the repository
 ================
 
 Caveats:
----1
+---1  (for users or devs)
 Note: If you're getting these errors in bukkit:
 
 [SEVERE] Could not load 'plugins\FactionsPlus.jar' in folder 'plugins'
-org.bukkit.plugin.InvalidPluginException: java.lang.UnsupportedClassVersionError
-: markehme/factionsplus/FactionsPlus : Unsupported major.minor version 51.0
+org.bukkit.plugin.InvalidPluginException: java.lang.UnsupportedClassVersionError: 
+markehme/factionsplus/FactionsPlus : Unsupported major.minor version 51.0
 
-Caused by: java.lang.UnsupportedClassVersionError: markehme/factionsplus/Faction
-sPlus : Unsupported major.minor version 51.0
+Caused by: java.lang.UnsupportedClassVersionError: markehme/factionsplus/FactionsPlus : 
+Unsupported major.minor version 51.0
 
-It just means, that your server is running in jvm with a lower version that the compiled FactionsPlus.jar  
-ie. your server running on jre6 and your jar was compiled with jre7 (well compiler compliance level 1.7 to be more exact)
+It just means, that your server is running in a JVM with a lower version that the compiled FactionsPlus.jar  
+ie. your server running on jre6 and your jar was compiled with jre7 (well compiler compliance level (ccl) 1.7 to be 
+more exact)
 
 Fix:
 1. either run the server in jre7
 2. or recompile FactionsPlus.jar with jre6 (which automatically means it'll use 1.6 ccl)
 
-(we should have the project set to ccl 1.6 at the time of this writing, so you shouldn't have to worry about this)
+(we do already have the project set to ccl 1.6 at the time of this writing, so you shouldn't have to worry about this)
 ---
 
----2
+---2  (for devs)
 Do not use both Factions jars  which are v 1.6 and v1.7 or you won't spot fields/methods that actually don't exist in one
 of the versions like the field senderMustBeModerator of FCommand class which means when running inside bukkit with the 
 Factions version that didn't have the field, it will stack dump err on console
@@ -239,15 +235,14 @@ you can switch between branches at will:  in Factions  1.6.x branch  and master 
 
 Note to devs:
 ---====----
-1. always keep .project file in the repository
-2. never add .settings folder(or files within) or the .classpath file to the repository
+1. never add .project or .settings folder(or files within) or the .classpath file to the repository
 This would ensure that devs working on this won't accidentally overwrite eclipse project stuff on commit and affect each 
 other 
 
 ------
 To make sure we don't get errors due to Factions 1.6 vs 1.7
-when you're ready to make the FactionsPlus.jar , first switch between 1.6 and 1.7 (jars or branches of the Factions proj)
-to check if FactionsPlus doesn't give errors on compile
+when you're ready to make the FactionsPlus.jar , first switch between 1.6 and 1.7 (jars or git branches of the 
+Factions project) to check if FactionsPlus doesn't give errors on compile
  An example when this would happen, is when using senderMustBeModerator of FCommand and using Factions 1.6 jar or the 
 1.6.x branch of Factions project, the FactionsPlus will compile just fine, but when you switch to 1.7 it will error, that
 field doesn't exist in 1.7 (it's actually renamed).
