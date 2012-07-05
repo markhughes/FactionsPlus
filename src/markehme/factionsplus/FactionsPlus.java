@@ -81,6 +81,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 		}
 		
+		Config.deInit();
+		
 		//TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE 
 		//since we deinited some of our parts
 		

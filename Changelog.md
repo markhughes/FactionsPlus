@@ -62,7 +62,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * General bugfixes, including a bunch of NPEs, and other annoyances 
 
-* - fixed /f togglestate to only charge you if economy.`enabled` is set
+* - fixed /f togglestate to only charge you if we're hooked into economy  
   and to not cause internal error if inexistent faction tag was specified. 
   - If you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
    only if you are (Op or)admin/officer/member in your faction if those were set in the config.

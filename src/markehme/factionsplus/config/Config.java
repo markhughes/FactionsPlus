@@ -1012,5 +1012,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			return null != Config.templates;
 		}
 	}
+
+	public static void deInit() {
+		if (isInited()) {
+			if (isLoaded()) {
+				setLoaded( false );
+			}
+			setInited( false );
+		}
+	}
 	
 }
