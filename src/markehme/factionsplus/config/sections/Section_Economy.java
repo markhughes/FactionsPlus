@@ -115,7 +115,7 @@ public final class Section_Economy {
 		}
 		
 		//state is the same if we're here
-		FactionsPlus.info( "Economy integration is "+(wanted?"ON":"OFF") );
+		FactionsPlus.info( "Economy integration is still "+(wanted?"ON":"OFF") );
 		return wanted;
 	}
 

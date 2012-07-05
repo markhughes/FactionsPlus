@@ -19,7 +19,13 @@ public abstract class EssentialsIntegration {
 	private static IEssentials		ess							= null;
 //	public static ESS_HAVE			haveEssentials				= ESS_HAVE.NOT_INITED;			// since last Plugin.onEnable()
 	private static boolean	isLoadedButNotEnabled=false;
-																								
+							
+	
+	public synchronized static void onDisable(){
+		ess=null;
+		isLoadedButNotEnabled=false;
+	}
+	
 //	public enum ESS_HAVE {
 //		INITED_AND_HAVE, NOT_INITED, INITED_AND_NOT_HAVE
 //	}

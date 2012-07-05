@@ -17,15 +17,29 @@ the previous one except the comments (because those are not yet implemented: nam
 "/home" command only if they would've landed you in an enemy faction (enemy is a relation between you and that faction)  
 It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
 
-* added new config option Teleports.`reportSuccessfulByCommandTeleportsIntoEnemyLand` which defaults to `true` also,
-it will show you a message on console if a user is detected to have landed in an enemy faction territory by using a
-command which supposedly caused the teleport and also shows you the command that was used(if the teleport wasn't delayed by
- warm-up delay, it should be accurate). This will likely not happen when 
- Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` is true, because it should simply disallow those from happening,
-thus it is recommended for you to have both of these on if you're interested in catching any exploits that would bypass
-this somehow.  
-The expected console message would look like this:
+* added new config options to deny/report teleports via /home command or ender pearls that would land inside 
+ally/neutral/enemy territory or into safezone/warzone. Here they are with their defaults:  
+- `Teleports.intoTerritory.Ally.deny.ViaHomeCommand`: false
+- `Teleports.intoTerritory.Ally.deny.ViaEnderPeals`: false
+- `Teleports.intoTerritory.Ally.reportOnConsole.ifTeleportCauseIs_Command`: false
+- `Teleports.intoTerritory.Ally.reportOnConsole.ViaEnderPeals`: false
+- `Teleports.intoTerritory.Enemy.deny.ViaHomeCommand`: true
+- `Teleports.intoTerritory.Enemy.deny.ViaEnderPeals`: true
+- `Teleports.intoTerritory.Enemy.reportOnConsole.ifTeleportCauseIs_Command`: true
+- `Teleports.intoTerritory.Enemy.reportOnConsole.ViaEnderPeals`: true
+- `Teleports.intoTerritory.Neutral.deny.ViaHomeCommand`: false
+- `Teleports.intoTerritory.Neutral.deny.ViaEnderPeals`: false
+- `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
+- `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
+- `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
+- `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
+Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
+realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
+Reporting is done on console only. Denying will be instant, regardless of any warm-up delays other plugins may have.
+The expected console message upon report would look similar to this:
 > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
+You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
+allowed for OPs.
 
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
 if set(to true; by default) this will prevent ender pearl teleports that land in enemy territory
