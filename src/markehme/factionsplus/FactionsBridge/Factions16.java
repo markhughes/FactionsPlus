@@ -13,6 +13,7 @@ import com.massivecraft.factions.cmd.*;
 
 
 
+@SuppressWarnings( "unused" )
 public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	private Method							mSetPeaceful		= null;
@@ -112,14 +113,14 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	
 	@Override
-	public void addSubCommand( FCommand subCommand ) {
-		super.addSubCommand( subCommand );
+	public void addSubCommand( FCommand base, FCommand subCommand ) {
+		super.addSubCommand( base, subCommand );
 		// for 1.6 need to add the command to help manually
 		if ( null == instanceOfCmdHelp ) {
 			boolean failed = false;
 			try {
 				// lazy init this(one time since plugin.onEnable()), cause on .init() was probably too soon
-				instanceOfCmdHelp = fieldCmdHelp.get( P.p.cmdBase );
+				instanceOfCmdHelp = fieldCmdHelp.get( P.p.cmdBase );//this is good here, cmdBase!
 				methodUpdateHelp.invoke( instanceOfCmdHelp );// P.p.cmdBase.cmdHelp.updateHelp();
 				instanceOfHelpPages = (ArrayList<ArrayList<String>>)fHelpPages.get( instanceOfCmdHelp );
 			} catch ( IllegalAccessException e ) {

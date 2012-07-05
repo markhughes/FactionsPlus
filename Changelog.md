@@ -1,5 +1,12 @@
 # FactionsPlus version 0.4.7
 
+* `/f money top [page=1]` shows the list of factions that have the most money ie. `/f money top 10` shows the 10th page
+  - sorting happens at most once every 30 seconds and only when command is issued; if already sorted it uses the previously 
+  sorted table
+  - the sorted table is dereferenced from memory after 120 sec from the last use to allow gc freeing up some RAM
+  
+* allow `/f debug` from console(or ingame OPs) and now shows workers
+
 * fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
 it had explosions disabled
 

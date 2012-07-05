@@ -76,9 +76,6 @@ public interface FactionsAny {
 	 */
 	public FactionsAny.Relation getRole( RelationParticipator one);
 	
-	public void addSubCommand( FCommand subCommand );
-	
-	
 	/**
 	 * this should only ever be called after {@link #addSubCommand(FCommand)} as the last statement<br>
 	 * this will update the help just in case last commands didn't fit the page entirely<br>
@@ -106,4 +103,7 @@ public interface FactionsAny {
 	 * @param flagState
 	 */
 	public void setSenderMustBeFactionAdmin( FCommand fCommandInstance, boolean flagState );
+
+
+	void addSubCommand( FCommand base, FCommand subCommand );
 }
