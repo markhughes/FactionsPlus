@@ -32,7 +32,7 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
   - `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
   - `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
   - `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
-  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false  
+  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
 Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
 realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
 Reporting is done on console only. Denying will be instant, regardless of any warm-up delays other plugins may have.
@@ -41,11 +41,6 @@ The expected console message upon report would look similar to this:
 You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
 allowed for OPs.  
 The used pearl is wasted and a message will show.
-
-* new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
-  and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
-  they prevent teleporting via ender pearls if they land into SafeZone/WarZone
-  the used pearl is wasted and a message will show.
 
 * new config option: powerboost.'respectFactionsWarZonePowerLossRules': Applies to both the wildernessPowerLoss and warZonePowerLoss settings and integrates a check for these in the powerboost listener
 
