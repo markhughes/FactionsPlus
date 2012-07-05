@@ -33,10 +33,14 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
   - `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
   - `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
   - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
-
+  _
+  -
 Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
 realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
-Reporting is done on console only. Denying will be instant, regardless of any warm-up delays other plugins may have.
+Reporting is done on console only.
+
+Denying will be instant, regardless of any warm-up delays other plugins may have.
+
 The expected console message upon report would look similar to this:  
 > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
 
