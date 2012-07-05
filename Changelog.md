@@ -19,20 +19,20 @@ It makes sure that you cannot exploit this by having home set outside enemy land
 
 * added new config options to deny/report teleports via /home command or ender pearls that would land inside 
 ally/neutral/enemy territory or into safezone/warzone. Here they are with their defaults:  
-- `Teleports.intoTerritory.Ally.deny.ViaHomeCommand`: false
-- `Teleports.intoTerritory.Ally.deny.ViaEnderPeals`: false
-- `Teleports.intoTerritory.Ally.reportOnConsole.ifTeleportCauseIs_Command`: false
-- `Teleports.intoTerritory.Ally.reportOnConsole.ViaEnderPeals`: false
-- `Teleports.intoTerritory.Enemy.deny.ViaHomeCommand`: true
-- `Teleports.intoTerritory.Enemy.deny.ViaEnderPeals`: true
-- `Teleports.intoTerritory.Enemy.reportOnConsole.ifTeleportCauseIs_Command`: true
-- `Teleports.intoTerritory.Enemy.reportOnConsole.ViaEnderPeals`: true
-- `Teleports.intoTerritory.Neutral.deny.ViaHomeCommand`: false
-- `Teleports.intoTerritory.Neutral.deny.ViaEnderPeals`: false
-- `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
-- `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
-- `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
-- `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
+  - `Teleports.intoTerritory.Ally.deny.ViaHomeCommand`: false
+  - `Teleports.intoTerritory.Ally.deny.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Ally.reportOnConsole.ifTeleportCauseIs_Command`: false
+  - `Teleports.intoTerritory.Ally.reportOnConsole.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Enemy.deny.ViaHomeCommand`: true
+  - `Teleports.intoTerritory.Enemy.deny.ViaEnderPeals`: true
+  - `Teleports.intoTerritory.Enemy.reportOnConsole.ifTeleportCauseIs_Command`: true
+  - `Teleports.intoTerritory.Enemy.reportOnConsole.ViaEnderPeals`: true
+  - `Teleports.intoTerritory.Neutral.deny.ViaHomeCommand`: false
+  - `Teleports.intoTerritory.Neutral.deny.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
+  - `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
+  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
 Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
 realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
 Reporting is done on console only. Denying will be instant, regardless of any warm-up delays other plugins may have.
