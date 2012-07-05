@@ -12,35 +12,34 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.material.*;
 import org.bukkit.permissions.*;
 import org.bukkit.plugin.*;
 
-// import com.earth2me.essentials.*;
-// import com.earth2me.essentials.api.*;
+import com.avaje.ebeaninternal.server.subclass.*;
+import com.earth2me.essentials.*;
 import com.massivecraft.factions.*;
 
 
 
 public class TeleportsListener implements Listener {
 	
-	private static final Permission	permissionForHomeToEnemy	= new Permission(
-																	"factionsplus.allowTeleportingToEnemyLandViaHomeCommand",
-																	PermissionDefault.FALSE );
-	private static final ChatColor	constOneColor				= ChatColor.DARK_RED;
-	private static Listener			preventTeleports			= new TeleportsListener();
+	private static final Permission		permissionForHomeToEnemy	=
+																		new Permission(
+																			"factionsplus.allowTeleportingToEnemyLandViaHomeCommand",
+																			PermissionDefault.FALSE );
+	private static final ChatColor		constOneColor				= ChatColor.DARK_RED;
+	private static final String			homeCMD						= "/home";							// lowercase pls
+	private static final String			defaultHardCodedHomeName	= "home";							// ie. /home does /home
+																										// home
+	private static TeleportsListener	preventTeleports			= new TeleportsListener();
+	private static boolean				tpInited					= false;
 	
 	
 	// XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
-	// private static Essentials ess=null;
-	// private static ESS_HAVE haveEssentials=ESS_HAVE.NOT_INITED;//since last Plugin.onEnable()
-	// private enum ESS_HAVE {
-	// INITED_AND_HAVE,
-	// NOT_INITED,
-	// INITED_AND_NOT_HAVE
-	// }
 	
-	public static void init( Plugin plugin ) {
+	public synchronized static void init( Plugin plugin ) {
 		if ( !plugin.isEnabled() ) {
 			return;
 		}
@@ -50,14 +49,44 @@ public class TeleportsListener implements Listener {
 		
 		if ( ( !isHomeTracking() ) && ( !isEnderPealing() ) ) {
 			// don't hook if neither of the two are set
+			if ( isInited() ) {
+				deInit();
+			}
 			return;
 		}
 		
 		// must init these every time on reload
-		// ess=null;
-		// haveEssentials=ESS_HAVE.NOT_INITED;
+		if ( !EssentialsIntegration.isHooked() ) {
+			FactionsPlus.warn( "Due to failing to hook into Essentials plugin" + " the following enabled config option "
+				+ ( EssentialsIntegration.isLoadedButNotEnabled() ? "MAY" : "WILL" ) + " have no effect: "
+				+ Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand._dottedName_asString
+				+ "\nHowever you may try /f reloadfp to cause this recheck" );// FIXME:
+		}
 		
+		
+		preventTeleports.registerSelf( plugin );
+		tpInited = true;
+	}
+	
+	
+	private synchronized static void deInit() {
+		preventTeleports.unregisterSelf();
+		tpInited = false;
+	}
+	
+	
+	public synchronized static boolean isInited() {
+		return tpInited;
+	}
+	
+	
+	private final void registerSelf( Plugin plugin ) {
 		Bukkit.getPluginManager().registerEvents( preventTeleports, plugin );
+	}
+	
+	
+	private final void unregisterSelf() {
+		HandlerList.unregisterAll( preventTeleports );
 	}
 	
 	
@@ -73,31 +102,7 @@ public class TeleportsListener implements Listener {
 			|| Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._;
 	}
 	
-	// /**
-	// * with lazy init
-	// * @return
-	// */
-	// public static final Essentials getEssentialsInstance() {
-	// if (ESS_HAVE.NOT_INITED == haveEssentials) {
-	// //lazyly init or XXX: maybe add depend (not soft) in plugin.yml
-	// Plugin essPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
-	// if ((null != essPlugin) && (essPlugin.isEnabled()) ) {
-	// haveEssentials=ESS_HAVE.INITED_AND_HAVE;
-	// ess=(Essentials)essPlugin;
-	// }else{
-	// haveEssentials=ESS_HAVE.INITED_AND_NOT_HAVE;
-	// }
-	// }
-	// return ess;//can be null
-	// }
 	
-	// private double getTeleportDelay(Player player) {
-	// Essentials esi = getEssentialsInstance();
-	// if (null != esi) {
-	// return esi.getRanks().getTeleportDelay( esi.getUser( player ) );fail no such method
-	// }
-	// return -1;
-	// }
 	
 	// done: investigate what happens on reload(from console) when the hooks here were loaded and now the flag says don't load
 	// them
@@ -115,14 +120,147 @@ public class TeleportsListener implements Listener {
 			priority = EventPriority.MONITOR )
 	// MONITOR means it will be called last, after ie. HIGHEST
 		public
-		void onCommand( PlayerCommandPreprocessEvent event ) {
+		void onCommand( PlayerCommandPreprocessEvent event ) {// XXX: doesn't trigger on console commands
 		if ( !isHomeTracking() ) {
 			return;
 		}
-		// this hook will trigger on any command ie. only those chat messages preceeded by "/"
-		Player sender = event.getPlayer();
-		mapLastExecutedCommand.put( sender, event.getMessage() );
+		// this hook will trigger on any command ie. only those chat messages preceded by "/"
+		Player playerInGame = event.getPlayer();
+		// System.out.println(sender+" "+sender.getClass());
+		
+		String cmd = event.getMessage();
+		// TODO: think about having a list of commands here which when used to teleport into X territory
+		// would be denied; X is configurable too
+		mapLastExecutedCommand.put( playerInGame, cmd );
+		// playerInGame.sendMessage( "oh hi1 " + Utilities.hasPermissionOrIsOp( playerInGame, permissionForHomeToEnemy ) + " "
+		// + playerInGame.isOp() + " " + playerInGame.hasPermission( permissionForHomeToEnemy ) );
+		
+		if ( ( Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand._ ) && ( EssentialsIntegration.isHooked() )
+			&& ( !Utilities.hasPermissionOrIsOp( playerInGame, permissionForHomeToEnemy ) ) )
+		{
+			// disallowed and no permission to bypass ? then check
+			if ( cmd.toLowerCase().startsWith( homeCMD ) ) {
+				// playerInGame.sendMessage( "oh hi" );
+				
+				String[] ar = cmd.split( "\\s+" );// whitespace, one or more
+				// for ( int j = 0; j < ar.length; j++ ) {
+				// System.out.println("!"+ar[j]+"!");
+				// }
+				if ( !ar[0].equalsIgnoreCase( homeCMD ) ) {
+					// maybe it was /homesomething ie. not the /home command
+					return;
+				}
+				String homeName = null;
+				if ( ar.length == 1 ) {
+					// no params, 2 cases: 1. it will list all homes, 2. it will do /home home if only default home is set
+					if ( EssentialsIntegration.getHomesCount( playerInGame ) <= 1 ) {
+						// even if no homes are set apparently... it will tp to bed !!
+						homeName = defaultHardCodedHomeName;
+					} else {
+						// it's going to list the homes, because we're in case 1. we have multiple homes and /home will list
+						// them
+					}
+				} else {
+					if ( ar.length == 2 ) {
+						// just one parameter
+						homeName = ar[1];
+					} else {
+						if ( ar.length > 2 ) {
+							// too many params
+							playerInGame.sendMessage( "You specified more than one parameter to command `" + ar[0] + "`" );
+							event.setCancelled( true );
+							return;
+						}
+					}
+				}
+				
+				assert null != homeName;
+				assert !homeName.isEmpty();
+				
+				Location targetLocation = null;
+				// using /home without having any homes set will try do /home bed
+				// if you never used a bed but had homes set previously(which you lated deleted) then /home bed is something
+				// around the lines of the last known home
+				Location bedLocation = playerInGame.getBedSpawnLocation();
+				
+				int count = 0;
+				while ( ( null == targetLocation ) && ( count <= 2 ) ) {
+					try {
+						targetLocation = EssentialsIntegration.getHomeForPlayer( playerInGame, homeName );
+					} catch ( Exception e ) {
+						e.printStackTrace();
+						playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
+							+ "Internal error occurred calling Essentials, command ignored. Check console." );
+						assert null == targetLocation;
+					}
+					
+					if ( null == targetLocation ) {
+						// means player's parameter was ignored because he has only the default home set, so it's like doing a
+						// /home without params
+						if ( homeName != defaultHardCodedHomeName ) {
+							homeName = defaultHardCodedHomeName;
+						} else {
+							// it already was:
+							targetLocation = bedLocation;
+							// done: must also check if exact tp location isn't in faction land anyway due to 1 block difference
+							// from bed location
+							// the bed location should be X blocks away from enemy land to prevent exploit, X appears to be at
+							// least 21 ffs
+						}
+					}
+					
+					count++;
+				}
+				
+				
+				// assert null != targetLocation;//even in this case, it will still tp to a the previous "home"
+				if ( null == targetLocation ) {
+					assert null == bedLocation : "else above loop failed";
+					// this means player could've used "/home bed" even without any homes set or just "/home" without homes set
+					// would also do that equivalent of "/home bed"
+					// targetLocation=playerInGame.getBedSpawnLocation();
+					playerInGame.sendMessage( ChatColor.RED + "You have no homes/bed set. Command ignored." );
+					event.setCancelled( true );
+					return;
+				}
+				
+				Location potentiallyModifiedTarget = null;
+				try {
+					potentiallyModifiedTarget = Util.getSafeDestination( targetLocation );
+				} catch ( Exception e ) {
+					e.printStackTrace();
+					playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
+						+ "Internal error occurred calling Essentials, command ignored. Check console." );
+					assert null == potentiallyModifiedTarget;
+				}
+				
+				// assert null != potentiallyModifiedTarget;
+				
+				// it is home, then let us check if his home is in enemy territory
+				if ( ( isEnemyLandAt( playerInGame, targetLocation ) )
+					|| ( isEnemyLandAt( playerInGame, potentiallyModifiedTarget ) ) )
+				{
+					playerInGame.sendMessage( ChatColor.RED
+						+ "You are not allowed to teleport to your /home which is now in enemy territory" );
+					event.setCancelled( true );
+					return;
+					// }else {
+					// if (targetLocation == bedLocation){//yep reference comparison, we only deny tp to bed if no homes exist
+					// for user
+					// //XXX: temporarily preventing bed exploit by denying it
+					// //TODO: check if can be exploited with homes too, yep totally exploitable
+					// playerInGame.sendMessage( ChatColor.RED +
+					// "You are not allowed to use this exploit. Try doing /sethome before using this." );
+					// FactionsPlus.warn(
+					// "Player `"+playerInGame.getName()+"` tried to teleport to bed while having no homes using command `"+cmd+"`");
+					// event.setCancelled( true );
+					// return;
+					// }
+				}
+			}
+		}
 	}
+	
 	
 	
 	@EventHandler(
@@ -182,25 +320,10 @@ public class TeleportsListener implements Listener {
 				// possibly could be the /home command
 				// now we check if the last command the player executed was /home
 				String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
+				assert null != lastExecutedCommandByPlayer;
 				// this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 				// ( null != lastExecutedCommandByPlayer ) && (
-				if ( ( Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand._ )
-					&& ( !Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ) ) )
-				{
-					// disallowed and no permission to bypass ? then check
-					if ( lastExecutedCommandByPlayer.startsWith( "/home" ) ) {
-						// TODO: think about having a list of commands here which when used to teleport into X territory
-						// would be denied; X is configurable too
-						
-						// it is home, then let us check if his home is in enemy territory
-						Location targetLocation = event.getTo();
-						if ( isEnemyLandAt( player, targetLocation ) ) {
-							player.sendMessage( ChatColor.RED
-								+ "You are not allowed to teleport to your /home which is now in enemy territory" );
-							denyTeleport( event );
-						}
-					}
-				}
+				// checkIfHomeTeleportWouldLandInEnemyTerritory(event, lastExecutedCommandByPlayer);
 				
 				if ( ( Config._teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand._ ) && ( !event.isCancelled() ) ) {
 					// yeah report even if player had bypass permission but only if it will be a successful teleport
@@ -213,6 +336,21 @@ public class TeleportsListener implements Listener {
 							+ constOneColor + "'." );
 					}
 				}
+				// try {
+				// User ep = getEssentialsInstance().getUser( player );
+				// for ( String home : ep.getHomes()){
+				// Location homeLoc = ep.getHome( home);
+				// if (homeLoc.equals( event.getTo() ) ) {//they won't ever be equal
+				// player.sendMessage( "EQ home="+home+" homeLoc="+homeLoc+" tploc="+event.getTo() );
+				// }else {
+				// player.sendMessage( "noeq home="+home+" homeLoc="+homeLoc+" tploc="+event.getTo() );
+				// }
+				// }
+				//
+				//
+				// } catch ( Exception e ) {
+				// e.printStackTrace();
+				// }
 			}// homeTracking
 			
 			break;// cause COMMAND
@@ -228,28 +366,54 @@ public class TeleportsListener implements Listener {
 			}
 			
 			Faction factionAtTarget = getFactionAt( event.getTo() );
-			if (null == factionAtTarget) {
+			if ( null == factionAtTarget ) {
 				break;
 			}
 			
-			if ((Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._)&&(Utilities.isSafeZone(factionAtTarget))) {
+			if ( ( Config._teleports.disallowTeleportingToSafeZoneViaEnderPeals._ )
+				&& ( Utilities.isSafeZone( factionAtTarget ) ) )
+			{
 				player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside Safe-Zone" );
 				denyTeleport( event );
 				break;
 			}
 			
-			if ((Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._)&&(Utilities.isWarZone(factionAtTarget))){
+			if ( ( Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._ ) && ( Utilities.isWarZone( factionAtTarget ) ) )
+			{
 				player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside WarZone" );
 				denyTeleport( event );
 				break;
 			}
-//			 || (Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._)&&(factionAtTarget ))) {
-
+			// || (Config._teleports.disallowTeleportingToWarZoneViaEnderPeals._)&&(factionAtTarget ))) {
+			
 			break;
 		default:
 			// unhandled cause ? do nothing
 		}
 	}
+	
+	
+	// private boolean isHomeTeleportLandingInEnemyTerritory( PlayerEvent event, Location targetLocation, String commandUsed ) {
+	// Player player = event.getPlayer();
+	// if ( ( Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand._ )
+	// && ( !Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ) ) )
+	// {
+	// // disallowed and no permission to bypass ? then check
+	// if ( commandUsed.startsWith( "/home" ) ) {
+	// // TODO: think about having a list of commands here which when used to teleport into X territory
+	// // would be denied; X is configurable too
+	//
+	// // it is home, then let us check if his home is in enemy territory
+	// if ( isEnemyLandAt( player, targetLocation ) ) {
+	// player.sendMessage( ChatColor.RED
+	// + "You are not allowed to teleport to your /home which is now in enemy territory" );
+	// return true;
+	// denyTeleport( event );
+	// }
+	// }
+	// }
+	// }
+	
 	
 	private final void denyTeleport( PlayerTeleportEvent ptEvent ) {
 		ptEvent.setCancelled( true );

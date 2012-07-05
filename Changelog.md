@@ -1,7 +1,7 @@
 # FactionsPlus version 0.4.7
 
-* fixed situations in which, while using Factions 1.7, any checks for SafeZone were true if the faction had explosions
-disabled
+* fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
+it had explosions disabled
 
 * properly closing any resources which were previously leaking
 
@@ -13,10 +13,24 @@ the previous one except the comments (because those are not yet implemented: nam
 
 * FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
 
+* New config option Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` which will deny all teleports caused by
+"/home" command only if they would've landed you in an enemy faction (enemy is a relation between you and that faction)  
+It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
+
+* added new config option Teleports.`reportSuccessfulByCommandTeleportsIntoEnemyLand` which defaults to `true` also,
+it will show you a message on console if a user is detected to have landed in an enemy faction territory by using a
+command which supposedly caused the teleport and also shows you the command that was used(if the teleport wasn't delayed by
+ warm-up delay, it should be accurate). This will likely not happen when 
+ Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` is true, because it should simply disallow those from happening,
+thus it is recommended for you to have both of these on if you're interested in catching any exploits that would bypass
+this somehow.  
+The expected console message would look like this:
+> 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
+
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
-if set(to true) this will prevent ender pearl teleports that land in enemy territory
+if set(to true; by default) this will prevent ender pearl teleports that land in enemy territory
 (you can still teleport outside of enemy land as long as ender pearl does land outside it)
-  
+
 * new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
   and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
   they prevent teleporting via ender pearls if they land into SafeZone/WarZone
@@ -24,7 +38,7 @@ if set(to true) this will prevent ender pearl teleports that land in enemy terri
 
 * new config option: powerboost.'respectFactionsWarZonePowerLossRules': Applies to both the wildernessPowerLoss and warZonePowerLoss settings and integrates a check for these in the powerboost listener
 
-* new config option: powerboost.'extraPowerWhenKillMonster': self-explanitory
+* new config option: powerboost.'extraPowerWhenKillMonster': self-explanatory
  
 * fixed /f gc and /f cf commands to not error on console
   they won't work for Factions 1.7 due to it counting on other plugins like HeroChat to provide faction/global chat
@@ -46,7 +60,7 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * blockCPublicAccessOnNonOwnFactionTerritory - will allow you to make a door truly public
 
-* General bugfixes, including a bunch of npes, and other annoyances 
+* General bugfixes, including a bunch of NPEs, and other annoyances 
 
 * - fixed /f togglestate to only charge you if economy.`enabled` is set
   and to not cause internal error if inexistent faction tag was specified. 
