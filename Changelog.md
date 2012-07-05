@@ -32,7 +32,7 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
   - `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
   - `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
   - `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
-  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false
+  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false  
   _
   -
 Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
