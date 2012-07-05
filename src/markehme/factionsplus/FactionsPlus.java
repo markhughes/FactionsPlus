@@ -70,38 +70,70 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		instance=this;
 	}
 	
+	
 	@Override
 	public void onDisable() {
+		Throwable failed = null;// TODO: find a way to chain all thrown exception rather than overwrite all older
 		try {
-		if (null != metrics) {
-			try {
-				metrics.disable();
-			} catch ( IOException e ) {
-				e.printStackTrace();
+			if ( null != metrics ) {
+				try {
+					metrics.disable();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
 			}
-		}
-		
-		EssentialsIntegration.onDisable();
-		
-		Config.deInit();
-		
-		//TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE 
-		//since we deinited some of our parts
-		
-		if (LWCBase.isLWC()) {
-			LWCFunctions.unhookLWC();
-		}
-		
-		FactionsPlusUpdate.ensureNotRunning();
-		
-		getServer().getServicesManager().unregisterAll(this);//not really needed at this point, only for when using .register(..)
-		FactionsPlusPlugin.info("Disabled successfuly.");
-		
-		HandlerList.unregisterAll( FactionsPlus.instance );
-		
-		}catch(Throwable t) {
-			FactionsPlusPlugin.info("unable to successfully disable"); 
-			FactionsPlus.severe(t);
+			
+			try {
+				EssentialsIntegration.onDisable();
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			try {
+				Config.deInit();
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
+			// since we deinited some of our parts
+			
+			try {
+				if ( LWCBase.isLWC() ) {
+					LWCFunctions.unhookLWC();
+				}
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			try {
+				FactionsPlusUpdate.ensureNotRunning();
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			try {
+				getServer().getServicesManager().unregisterAll( this );// not really needed at this point, only for when using
+																		// .register(..)
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			try {
+				HandlerList.unregisterAll( FactionsPlus.instance );
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			FactionsPlusPlugin.info( "Disabled successfuly." );
+			
+		} catch ( Throwable t ) {
+			failed = t;
+		} finally {
+			if ( null != failed ) {
+				FactionsPlusPlugin.info( "unable to successfully disable" );
+				FactionsPlus.severe( failed, "This is the last seen exception:" );
+			}
 		}
 	}
 	

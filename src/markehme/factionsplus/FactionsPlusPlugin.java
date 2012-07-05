@@ -128,7 +128,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		}
 		String msg = FactionsPlus.FP_TAG_IN_LOGS + logInfoMsg;
 		if ( null == cause ) {
-			FactionsPlus.log.severe( msg );// allowed so that [SEVERE] appears
+			FactionsPlus.log.log( Level.SEVERE, msg);// allowed so that [SEVERE] appears
 		} else {
 			FactionsPlus.log.log( Level.SEVERE, msg, cause );// allowed so that [SEVERE] appears
 		}
