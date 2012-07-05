@@ -9,7 +9,7 @@ it had explosions disabled
 just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
 permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)  
 Note that if you delete `config.yml` before issuing `/f reloadfp` then the created one will have the same settings as
-the previous one except the comments (because those are not yet implemented: namely each option having it's own comment)
+the previous one except the comments (because those are not yet implemented: that is each option having it's own comment)
 
 * FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
 
