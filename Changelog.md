@@ -36,14 +36,11 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
 Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
 realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
 Reporting is done on console only. Denying will be instant, regardless of any warm-up delays other plugins may have.
-The expected console message upon report would look similar to this:
+The expected console message upon report would look similar to this:  
 > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
 You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
-allowed for OPs.
-
-* added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
-if set(to true; by default) this will prevent ender pearl teleports that land in enemy territory
-(you can still teleport outside of enemy land as long as ender pearl does land outside it)
+allowed for OPs.  
+The used pearl is wasted and a message will show.
 
 * new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
   and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
