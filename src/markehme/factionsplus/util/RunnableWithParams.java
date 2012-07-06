@@ -1,4 +1,4 @@
-package markehme.factionsplus.Cmds;
+package markehme.factionsplus.util;
 
 
 public abstract class RunnableWithParams<FIRSTPARAM, STATUS> implements Runnable {
