@@ -1,4 +1,4 @@
-# FactionsPlus version 0.4.7
+# FactionsPlus version 0.4.8
 
 * `/f money top [page=1]` shows the list of factions that have the most money ie. `/f money top 10` shows the 10th page
   - sorting happens at most once every 30 seconds and only when command is issued; if already sorted it uses the previously 
@@ -6,23 +6,6 @@
   - the sorted table is dereferenced from memory after 120 sec from the last use to allow gc freeing up some RAM
   
 * allow `/f debug` from console(or ingame OPs) and now shows workers
-
-* fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
-it had explosions disabled
-
-* properly closing any resources which were previously leaking
-
-* new command: `/f reloadfp [all|config|templates]` causes reloading of the specified config(s)
-just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
-permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)  
-Note that if you delete `config.yml` before issuing `/f reloadfp` then the created one will have the same settings as
-the previous one except the comments (because those are not yet implemented: that is each option having it's own comment)
-
-* FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
-
-* New config option Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` which will deny all teleports caused by
-"/home" command only if they would've landed you in an enemy faction (enemy is a relation between you and that faction)  
-It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
 
 * added new config options to deny/report teleports via /home command or ender pearls that would land inside 
 ally/neutral/enemy territory or into safezone/warzone. Here they are with their defaults:  
@@ -42,11 +25,13 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
   - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false  
   _
   -
-Note that these are automatically added into your config, you don't have to add them manually but if you do, you'll have
-realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoYTerritory: and so on 4 spaces...
+Note that these are automatically added into your config, and the old config options that apply will be automatically
+upgraded to these new ones, you don't have to add them manually but if you do, you'll have
+realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoTerritory: and so on 4 spaces...
 Reporting is done on console only.
 
 Denying will be instant, regardless of any warm-up delays other plugins may have.
+It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
 
 The expected console message upon report would look similar to this:  
 > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
@@ -54,6 +39,35 @@ The expected console message upon report would look similar to this:
 You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
 allowed for OPs.  
 The used pearl is wasted and a message will show.
+
+
+# FactionsPlus version 0.4.7
+
+* fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
+it had explosions disabled
+
+* properly closing any resources which were previously leaking
+
+* new command: `/f reloadfp [all|config|templates]` causes reloading of the specified config(s)
+just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
+permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)  
+Note that if you delete `config.yml` before issuing `/f reloadfp` then the created one will have the same settings as
+the previous one except the comments (because those are not yet implemented: that is each option having it's own comment)
+
+* FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
+
+* added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
+if set(to true) this will prevent ender pearl teleports that land in enemy territory
+(you can still teleport outside of enemy land as long as ender pearl does land outside it)
+This is currently easily exploitable.
+
+* new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
+and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
+they prevent teleporting via ender pearls if they land into SafeZone/WarZone
+the used pearl is wasted and a message will show.
+
+* New config option Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` which will deny all teleports caused by
+"/home" command only if they would've landed you in an enemy faction (enemy is a relation between you and that faction)  
 
 * new config option: powerboost.'respectFactionsWarZonePowerLossRules': Applies to both the wildernessPowerLoss and warZonePowerLoss settings and integrates a check for these in the powerboost listener
 
