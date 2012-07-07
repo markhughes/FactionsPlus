@@ -43,6 +43,10 @@ The used pearl is wasted and a message will show.
 
 # FactionsPlus version 0.4.7
 
+* max warps fixed
+
+* auto update checks properly now. It's also in a new thread
+
 * fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
 it had explosions disabled
 
@@ -134,5 +138,175 @@ Comments are any lines whose first non-whitespace character is `#`.
 may still be in effect after reload (except economy that will auto enabled/disable on reload)
 
 # FactionsPlus version 0.4.6
-* this Changelog file did not exist in this version, changes are unknown.
 
+- fixed bug with extraPowerLossIfDeathBySuicide
+
+- fixed bug with unjailing (I think?)
+
+- fixed mysterious NoSuchFieldError related to /f help
+
+- fixed showLastAnnounceOnLandEnter (WOO-HOOO!)
+
+- fixed bug with /f fc
+
+- added Metrics
+
+- removed useless code
+
+- general fixes/stability between the two versions
+
+- fixes security bug related to banning players in other Factions
+
+- fixes security bug related to jailing players in other Factions
+
+# FactionsPlus version 0.4.5
+
+- built against new Factions version
+
+- added /f debug (only ops can run)
+
+- added message to /f unjail
+
+- added permission check to /f unjail
+
+- moved to new leader/admin, officer/mod checking system - easier for me to program with
+
+- help page fix for newest version (it's only now became more complex for me to handle the help pages)
+
+- added updating checking system (I really hope this doens't kill my bandwidth)
+
+# FactionsPlus version 0.4.4
+
+- Fixed Permissions on /f unjail [player], permission: factionsplus.unjail
+
+- Added command /f unsetjail, permission: factionsplus.unsetjail
+
+- Added extraPowerWhenKillPlayer for real this time!
+
+- Fixed bug with /f jail [player] where it would jail yourself
+
+- Fixed security hole in /f jail [player] where you can jail players not in your Faction
+
+- The configuration will update this time
+
+- Removed useless code related to the DisguiseCraft API
+
+- Fixed small mistake in the error text with /f warp
+
+- Fixed a bug when the warp data file was being removed when you try to create a warp
+
+# FactionsPlus version 0.4.3
+
+- Faction Jails; yes they work now but only basic /f jail [player] and /f unjail [player] etc .. will add timed jails within time. Permission: factionsplus.jail
+
+- Added /f setjail command, permission: factionsplus.setjail
+
+- Huge code cleanup
+
+- Added new aliases to createwarp:
+
+  - addwarp
+
+  - setwarp
+
+- Added a new alias to removewarp:
+
+  - unsetwarp
+
+- Added support for DisguiseCraft
+
+- Added support for MobDisguise
+
+- Fixed bug with the permission factionsplus.listwarps
+
+- Added new configuration options:
+
+  - maxRulesPerFaction
+
+  - extraPowerWhenKillPlayer
+
+  - unDisguiseIfInEnemyTerritory
+
+  - unDisguiseIfInOwnTerritory
+
+  - extraPowerLossIfDeathBySuicide
+
+  - extraPowerLossIfDeathByPVP
+
+  - extraPowerLossIfDeathByMob
+
+  - extraPowerLossIfDeathByCactus
+
+  - extraPowerLossIfDeathByTNT
+
+  - extraPowerLossIfDeathByFire
+
+  - extraPowerLossIfDeathByPotion
+
+  - enablePermissionGroups (currently not in use)
+
+- You can now un-disguise a player according to the configuration options unDisguiseIfInEnemyTerritory, and unDisguiseIfInOwnTerritory
+
+- Fixed bug with Peaceful Factions, and players leaving them not removing the power, in relation to peaceful bonus
+
+- Added the command /f fc to go into Faction Chat, with the permission factionsplus.factionchatcommand
+
+- Added the command /f gc to go into Public/Global Chat, with the permission factionsplus.globalchatcommand
+
+- Bunch of small, minor, bug fixes
+
+# FactionsPlus version 0.4.3
+
+- Fixed a bug with /f warp
+
+- Removed a bunch of left over ugly disgusting looking debug code
+
+# FactionsPlus version 0.4.1
+
+(this version was removed after being released)
+
+- Added configuration options:
+
+  - economy_costToToggleDownPeaceful
+
+  - economy_costToToggleUpPeaceful
+
+  - leadersCanFactionBan
+
+  - officersCanFactionBan
+
+  - leadersCanToggleState
+
+  - officersCanToggleState
+
+  - membersCanToggleState
+
+- Added command /f togglestate <faction>
+
+- Added command /f ban [player]
+
+- Added the option to put passwords on warps using /f createwarp [name] <password>
+
+- Allowed using warps with /f warp [name] <password>
+
+- Fixed up configuration creation, and updating
+
+- Fixed a horrible configuration problem I hope no one ever discovers
+
+- Fixed up some event validation stuff related to canceling
+
+- Some general cleanup in the code (expect a massive cleanup in the next release!)
+
+# FactionsPlus version 0.4
+
+- Economy working, using same method as Factions plugin
+
+- Added possibility to deny commands in WarZone
+
+- Made the Announcements more useful by allowing them to be shown to Faction members on login, and when they enter their land
+
+- Added puff of smoke on teleport effect
+
+- Added new configuration options: - smokeEffectOnWarp - powerBoostI(it seems the paste was truncated here!?)
+source for pre 0.4.7 changelog was this:
+http://dev.bukkit.org/server-mods/factionsplus/files/23-factions-plus-0-4-7-for-1-7-5-and-1-6-8/
