@@ -6,10 +6,10 @@
 *.bak
 *.swp
 *~
-.classpath
+/.classpath
 /.settings
 .loadpath
 /built.jar
 fpexport_personalized.jardesc
-.project
+/.project
 /fpexport_toOUTPUT.jardesc
