@@ -5,10 +5,6 @@ import markehme.factionsplus.config.*;
 
 public final class Section_Announce {
 	
-	// can't due to annotations differing: maybe check to see if we can inherit 'enabled' field from a base abstract class to
-	// extend for each of the section
-	// that needs it, to avoid dupe code, and set the default value for it in class constructor
-	
 	@Option(oldAliases_alwaysDotted = {
 		"announce.enableAnnounce"
 		,"enableAnnounce"
