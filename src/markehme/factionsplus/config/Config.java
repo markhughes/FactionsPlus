@@ -714,6 +714,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		saveConfig();
 		
+		//last:
+		virtualRoot=null;//to allow gc to reclaim this memory, whenever
 		return true;
 	}
 	
