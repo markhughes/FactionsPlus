@@ -98,7 +98,6 @@ public class CmdMoneyTop extends FCommand {
 	
 	
 	public CmdMoneyTop() {
-//		lastSortTimeStamp = 0;
 		this.aliases.add( "top" );
 		this.optionalArgs.put( "page", "1" );
 		
@@ -122,10 +121,6 @@ public class CmdMoneyTop extends FCommand {
 		} )
 		@Override
 		public void run2( CommandSender sender) {
-//			long 
-//				timeSinceLastSort = System.currentTimeMillis() - lastSortTimeStamp;
-//			if ( ( timeSinceLastSort >= MILISEC_BETWEEN_SORTS ) || ( null == scoreBoard ) ) {
-//				System.out.println("sorting started...");
 				
 			long sortStartedAt = System.currentTimeMillis();
 			// preventing resorting while in sort, if sorting time takes more than MILISEC_BETWEEN_SORTS
@@ -156,8 +151,6 @@ public class CmdMoneyTop extends FCommand {
 			// updating these:
 			lastSortTimeStamp = System.currentTimeMillis();
 			lastSortDuration = lastSortTimeStamp - sortStartedAt;
-//			}//if
-//			}//if must sort
 			
 			//after sorting is done or skipped:
 			synchronized ( sortQueryLock ) {
@@ -187,7 +180,7 @@ public class CmdMoneyTop extends FCommand {
 				return;
 			}else {
 				if (!Econ.shouldBeUsed()) {
-					//XXX: even though we can still show the top without it!!
+					//XXX: even though we can still show the top without it!! at this point
 					sender.sendMessage( "Economy is disabled in Factions plugin" );
 					return;
 				}
@@ -226,7 +219,7 @@ public class CmdMoneyTop extends FCommand {
 		
 		synchronized ( sortQueryLock ) {
 			if ( sortingTaskId<0 ) {// done sorting?
-//				System.out.println("showing not queueing");
+//				System.out.println("showing not queuing");
 				showPage(sender, page);
 			} else {
 				// still sorting or about to begin, then queue the user->page to be shown at end of sorting
@@ -276,13 +269,6 @@ public class CmdMoneyTop extends FCommand {
 			maxSeenMoneyLength+"s", 
 					prefixing, ChatColor.AQUA, i+1, ChatColor.RESET, f.getTag(), ChatColor.DARK_BLUE, f.getId(),
 					ChatColor.RESET, ChatColor.YELLOW, Config._economy.getFormatted( d.getSecond().doubleValue()))
-//				prefixing+ChatColor.AQUA+ (i + 1) + ". " +ChatColor.RESET+ 
-//				String.format( "%"+maxSeenTagLength+"s", f.getTag())
-//				+ChatColor.DARK_BLUE+ " [" + 
-//				String.format("%"+maxSeenIdLength+"s",f.getId()) 
-//				+ "] "+ChatColor.RESET+": " +
-////			ChatColor.YELLOW+ 
-//			String.format("%"+maxSeenMoneyLength+"s", Config._economy.getFormatted( d.getSecond().doubleValue())) 
 			);
 		}
 	}
@@ -294,9 +280,7 @@ public class CmdMoneyTop extends FCommand {
 			if ( sortingTaskId >= 0 ) {// was scheduled, possibly still running or not yet started
 				BukkitScheduler sched = Bukkit.getServer().getScheduler();
 				if ( sched.isCurrentlyRunning( sortingTaskId ) ) {
-					sender.sendMessage( "Please wait still sorting " + sortingCode.getStatus() + " factions... "
-					// +(System.currentTimeMillis()-lastSortTimeStamp)/1000+" seconds elapsed so far"
-						);
+					sender.sendMessage( "Please wait still sorting " + sortingCode.getStatus() + " factions... " );
 					return;
 				} else {
 					sender.sendMessage( "Please wait the sorting is scheduled to start soon..." );
