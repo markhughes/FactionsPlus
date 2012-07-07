@@ -360,9 +360,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private final static void parseOneTime_and_CheckForValids( WYSection root, String dottedParentSection ) {
 		assert Q.nn( root );
 		WYItem<COMetadata> currentItem = root.getFirst();
-		// WYSection parent = root;
-		// int level=0;
-		// while ( null != parent ) {
 		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
 		
 		while ( null != currentItem ) {
@@ -378,8 +375,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
 				
 				parseOneTime_and_CheckForValids( cs, dotted );// recurse
-				// parent = cs;
-				// currentItem = cs.getFirst();
 			} else {
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
@@ -411,160 +406,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							// above
 							wid.setMetadata( new CO_FieldPointer( foundAsField, wid ) );
 						}
-						// System.out.println( "!!!" + dotted );
-						// TODO: must check if config.yml has the same id twice or more, if yes then what? last overrides?
-						// or throw
-						// or move extras into file?
-						
-						// : we can let the HashMap check if one already exists even though they will != but they will
-						// .equals()
-						// if we define that
-						// so if two differed(subsequent) dotted forms map to the same Field, then we found duplicate
-						// options in
-						// .yml file
-						// well actually no, the above is false premising in the current context
-						
-						// HashMap<WYIdentifier, String> existingWYIdList =
-						// mapField_to_WYIdDotted.get( foundAsField );
-						// if ( null == existingWYIdList ) {
-						// // first time creating the list for this Field 'found'
-						// // which also means there should be no duplicate checks in this {} block
-						// existingWYIdList = new HashMap<WYIdentifier, String>();
-						// HashMap<WYIdentifier, String> impossible =
-						// mapField_to_WYIdDotted.put( foundAsField, existingWYIdList );
-						// assert null == impossible :
-						// "this just cannot freaking happen, but still, can never really `know when you're missing something` aka `be sure`";
-						// assert existingWYIdList == mapField_to_WYIdDotted.get( foundAsField );
-						//
-						//
-						// existingWYIdList.put(wid, dotted);
-						// // new DualPack( dotted, wid ) );// add all config options one by one in
-						// // the
-						// // order of occurrence
-						// // in
-						// // config.yml
-						//
-						// assert existingWYIdList.contains( new DualPack( dotted, wid ) );
-						//
-						// } else {
-						// // check only if the list wasn't empty, if we're here it wasn't, thus it may already have at
-						// // least 1
-						// // element which we
-						// // must check against and see if wid isn't already existing there (as different instance though)
-						// // does id already exist, ie. duplicate encountered in .yml ?
-						//
-						// // FIXME: this compares wid regardless of parents, but we must compare their dotted form instead
-						// // so either store hashmap or make sure equals compares dotted forms
-						// // hashmap will be faster, a hashmap of dotted -> wid
-						// // or a wid.setEqualsComparesIncludingParentsUpTo(virtualRoot) - naah this one is too much
-						// // overhead,
-						// // hashmap ftw!
-						//
-						//
-						// int index = existingWYIdList.indexOf( new DualPack( dotted, WYIdentifier.NULL ) );
-						// // seeks dotted format 'wid' in list by doing .equals() on each of
-						// // them // inside // the list
-						// if ( index >= 0 ) {// exists already ?
-						// WYIdentifier activeCfgOption = existingWYIdList.get( index ).getSecond();
-						// int activeLine = activeCfgOption.getLineNumber();
-						//
-						// COMetadata oldmd = wid.setMetadata( new CO_Duplicate( wid, dotted, activeCfgOption ) );
-						// assert null == oldmd : "should not already have metadata, else we failed somewhere else";
-						//
-						// // WYSection widsParent = wid.getParent();
-						// // TODO: also check if it is in any other lists, it probably isn't at this time.
-						// // currentItem = widsParent.replaceAndTransformInto_WYComment( wid, commentPrefixForDUPs );
-						// // wid.replaceAndTransformSelfInto_WYComment();
-						// // so we still have a getNext() to go to, after wid is basically destroyed(at
-						// // least its getNext will be null after this)
-						// // let's not forget to remove this from list,
-						// // existingWYIdList.remove( index );// a MUST
-						// // assert existingWYIdList.contains( wid );
-						// // System.out.println(existingWYIdList.get( index ));
-						// // existingWYIdList.add( index, currentItem );
-						// // assert !existingWYIdList.contains( wid );
-						// // assert existingWYIdList.contains( currentItem);
-						//
-						// // this means, it will compare id without considering values (as per WYIdentifier's
-						// // .equals()
-						//
-						// // if we're here this will work:
-						//
-						//
-						// // TODO: what to do when same config is encountered twice, does it override the prev one? do
-						// // we
-						// // stop? do
-						// // we move it to some file for reviewal? or do we comment it out?
-						// } else {
-						// // doesn't exit, we add it to list
-						// existingWYIdList.addLast( new DualPack( dotted, wid ) );
-						// }
-						// }
-						// assert null != existingWYIdList;// obviously
-						
 						
 					}// end of else found
-					
-					// Object rtcid = getRuntimeConfigIdFor( wid );// pinpoint an annotated field in {@Link Config.class}
-					// if ( null == rtcid ) {
-					// // there isn't a runtime option for the encountered id(=config option name)
-					// // therefore we check if it's an old alias
-					// Object newId = getNewIdForTheOldAlias( wid );// if any
-					// if ( null != newId ) {
-					// // not old alias either
-					// // thus it's an invalid config option encountered
-					// String failMsg = "invalid config option encountered: " + wid;// TODO: also show the in config
-					// line/pos
-					// // for it
-					// // first make sure it won't be written on next config save, by removing it from chain
-					// // wid.removeSelf();
-					// throw new RuntimeException( failMsg );//it won't be written to config if we abort
-					// }
-					//
-					// // we then found an old alias for this id, since we're here
-					// if ( newId.encounteredAliasesCount() < 1 ) {
-					// // update the newID's value with the old alias' value
-					// newId.setValue( wid.getValue() );
-					// newId.addEncounteredOldAlias( wid );
-					// } else {
-					// // we already encountered an alias for this id
-					// // how would we know which is the right value
-					// // for now we consider the last encountered alias as the overriding value
-					// newId.setValue( wid.getValue() );
-					// newId.addEncounteredOldAlias( wid );
-					// FactionsPlus
-					// .warn( " Config option " + newId.getInAbsoluteDottedForm()
-					// + " was overwritten by old alias found for it "
-					// + wid.getInAbsoluteDottedForm( virtualRoot ) );
-					// }
-					// } else {
-					// if ( rtcid.wasAlreadyLinked() ) {// was linked to new id, meaning it was already set
-					//
-					// } else {
-					// rtcid.linkTo( wid );
-					// rtcid.setValue( wid.getValue() );
-					// }
-					// }
-					
-					
 					
 				} else {// non id
 					assert ( currentItem instanceof WYRawButLeveledLine );
 					// ignore raw lines like comments or empty lines, for now
-					// currentItem = currentItem.getNext();
 				}
 			}// else
 			
-			// if (null == currentItem) {
-			// WYSection par = currentItem.getParent();
-			// if (null != par);
-			// }
 			currentItem = currentItem.getNext();
 		}// inner while
-			// parent = parent.getParent();
-		// }// outer while
-		
-		// }// sync
 	}
 	
 	private static BufferedWriter	bw;
@@ -902,7 +754,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					aSet.put( dottedOverrider, overriderWID );
 					assert aSet.size() == 1;
 					//DONT: comment out any empty Sections before write, in #applyChanges(), because the commented 
-					//dup/invalid/overriden ones will be orphaned and reader would not know who the parent was
+					//dup/invalid/overridden ones will be orphaned and reader would not know who the parent was
 				}
 			}// sync2
 		}// sync1
