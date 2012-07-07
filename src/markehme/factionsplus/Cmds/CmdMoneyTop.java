@@ -318,7 +318,7 @@ public class CmdMoneyTop extends FCommand {
 			BukkitScheduler sched = Bukkit.getServer().getScheduler();
 			
 			//FIXME: prevent infinite loop by adding a timeout, tho this will never infini loop if bukkit works ok
-			//wait for the simply cleaning thread to finish before canceling it
+			//wait for the simple cleaning thread to finish before canceling it
 			while (sched.isCurrentlyRunning( cleaningTaskId )) {
 				Thread.yield();
 			}
