@@ -30,7 +30,7 @@ public class CO_Invalid extends COMetadata {
 	protected void override_apply() {
 		// WYComment<COMetadata> newItem =
 		appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForINVALIDs );
-		FactionsPlus.warn( "Invalid config option\n" + colorOnINVALID + thePassedDottedFormatForThisWID + ChatColor.RESET
+		Config.warn( "Invalid config option\n" + colorOnINVALID + thePassedDottedFormatForThisWID + ChatColor.RESET
 			+ " was auto commented at line "
 			// // + fileConfig
 			// + " at line "

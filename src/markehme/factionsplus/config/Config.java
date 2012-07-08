@@ -566,7 +566,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		saveConfig();
 		
+		
+		//bechmarked: 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
 		//last:
+		if (encountered>SKIP_AFTER_ENCOUNTERED) {
+			FactionsPlus.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
+				+" more messages due to being over the limit of "+SKIP_AFTER_ENCOUNTERED );
+		}
+		encountered=0;
 		virtualRoot=null;//to allow gc to reclaim this memory, whenever
 		return true;
 	}
@@ -653,6 +660,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias );
 						assert null != x;
 						
+						//these should always be shown, mainly because they cannot be THAT many to be requiring skipping
 						FactionsPlus.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
 						continue;
 					}
@@ -876,4 +884,21 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		}
 	}
 	
+	private static final int SKIP_AFTER_ENCOUNTERED=300;
+	private static int encountered=0;
+	//these are to be used only when reporting config options while parsing config.yml
+	protected static void info(String msg) {
+		encountered++;
+		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
+			FactionsPlus.info( msg );
+		}
+	}
+	
+	
+	protected static void warn(String msg) {
+		encountered++;
+		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
+			FactionsPlus.warn(msg);
+		}
+	}
 }
