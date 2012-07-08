@@ -41,7 +41,7 @@ public class CO_Upgraded extends CO_FieldPointer {
 		upgradedWID.getParent().replaceAndTransformInto_WYComment( upgradedWID,
 			String.format( commentPrefixForUPGRADEDones, theNewUpgradeDotted, theNewUpgrade.getLineNumber() ) );
 		
-		FactionsPlus.info( "Upgraded `" + ChatColor.DARK_AQUA + upgradedDotted + ChatColor.RESET + "` of line `"
+		Config.info( "Upgraded `" + ChatColor.DARK_AQUA + upgradedDotted + ChatColor.RESET + "` of line `"
 			+ ChatColor.DARK_AQUA + upgradedWID.getLineNumber() + ChatColor.RESET + "` to the new config name of `"
 			+ COLOR_FOR_NEW_OPTIONS_ADDED + theNewUpgradeDotted + ChatColor.RESET + "` of line `" + COLOR_FOR_NEW_OPTIONS_ADDED
 			+ theNewUpgrade.getLineNumber() + "`" );

@@ -1,9 +1,12 @@
 package markehme.factionsplus.Cmds;
 
+import java.util.*;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
@@ -27,20 +30,26 @@ public class CmdDebug extends FCommand {
 	}
 	@Override
 	public void perform() {
-		if(fme.isOnline()) {
-			if(!fme.getPlayer().isOp()) {
+		if ( (null != fme) && (fme.isOnline()) && (!sender.isOp())) {
 				return;
-			}
 		}
 		
-		fme.msg("--- START ---");
-		fme.msg("Bukkit Version: " + Bukkit.getBukkitVersion());
-		fme.msg("Bukkit Version: " + Bukkit.getServer().getVersion());
-		fme.msg("Active Workers: " + Bukkit.getScheduler().getActiveWorkers().toString());
-		fme.msg("Permissions: " + FactionsPlus.permission.getClass().getName());
-		fme.msg("--- END ---");
+		sender.sendMessage("--- START ---");
+		sender.sendMessage("Bukkit Version: " + Bukkit.getBukkitVersion());
+		sender.sendMessage("Bukkit Version: " + Bukkit.getServer().getVersion());
+		List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
+		sender.sendMessage("Active Workers: "+workers.size());
 		
-		fme.msg(Utilities.getCountOfWarps(fme.getFaction()) + "");
+		for ( BukkitWorker bukkitWorker : workers ) {
+			sender.sendMessage("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId()
+				+", "+bukkitWorker.getThread().getName());			
+		}
+		sender.sendMessage("Permissions: " + FactionsPlus.permission.getClass().getName());
+		sender.sendMessage("--- END ---");
+		
+		if (null != fme) {
+			sender.sendMessage(Utilities.getCountOfWarps(fme.getFaction()) + "");
+		}
 		
 		
 	}

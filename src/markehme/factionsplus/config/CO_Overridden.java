@@ -39,7 +39,7 @@ public class CO_Overridden extends COMetadata {
 		lostOne.getParent().replaceAndTransformInto_WYComment( lostOne,
 			String.format( commentPrefixForOVERRIDDENones, dottedOverriddenByThis, overriddenByThis.getLineNumber() ) );
 		
-		FactionsPlus.warn( "Config option " + ChatColor.AQUA + dottedOverriddenByThis + ChatColor.RESET + " at line "
+		Config.warn( "Config option " + ChatColor.AQUA + dottedOverriddenByThis + ChatColor.RESET + " at line "
 			+ ChatColor.AQUA + overriddenByThis.getLineNumber() + ChatColor.RESET + " overrides the old alias for it `"
 			+ ChatColor.DARK_AQUA + dottedLostOne + ChatColor.RESET + "` which is at line " + ChatColor.DARK_AQUA
 			+ lostOne.getLineNumber() + ChatColor.RESET + " which was also transformed into comment to show it's ignored." );

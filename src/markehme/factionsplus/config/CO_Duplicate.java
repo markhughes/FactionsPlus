@@ -44,7 +44,7 @@ public class CO_Duplicate extends COMetadata {
 		// WYItem<COMetadata> newItem=
 		appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForDUPs );
 		
-		FactionsPlus.warn( "Duplicate config option encountered at line " + colorLineNumOnDuplicate
+		Config.warn( "Duplicate config option encountered at line " + colorLineNumOnDuplicate
 			+ appliesToWID.getLineNumber()
 			+ ChatColor.RESET
 			+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
