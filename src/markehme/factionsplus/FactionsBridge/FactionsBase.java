@@ -5,6 +5,7 @@ import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.extras.*;
+import markehme.factionsplus.util.*;
 
 import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.*;
@@ -174,8 +175,10 @@ public abstract class FactionsBase implements FactionsAny {
 	
 	
 	@Override
-	public void addSubCommand( FCommand subCommand ) {
-		P.p.cmdBase.addSubCommand( subCommand );// practically all that we need to do for 1.7 to have the commands in help
+	public void addSubCommand(FCommand base, FCommand subCommand ) {
+		assert Q.nn( base );
+		assert Q.nn( subCommand );
+		base.addSubCommand( subCommand );// practically all that we need to do for 1.7 to have the commands in help
 	}
 	
 	

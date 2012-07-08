@@ -1,7 +1,54 @@
+# FactionsPlus version 0.4.8
+
+* `/f money top [page=1]` shows the list of factions that have the most money ie. `/f money top 10` shows the 10th page
+  - sorting happens at most once every 30 seconds and only when command is issued; if already sorted it uses the previously 
+  sorted table
+  - the sorted table is dereferenced from memory after 120 sec from the last use to allow gc freeing up some RAM
+  
+* allow `/f debug` from console(or ingame OPs) and now shows workers
+
+* added new config options to deny/report teleports via /home command or ender pearls that would land inside 
+ally/neutral/enemy territory or into safezone/warzone. Here they are with their defaults:  
+  - `Teleports.intoTerritory.Ally.deny.ViaHomeCommand`: false
+  - `Teleports.intoTerritory.Ally.deny.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Ally.reportOnConsole.ifTeleportCauseIs_Command`: false
+  - `Teleports.intoTerritory.Ally.reportOnConsole.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Enemy.deny.ViaHomeCommand`: true
+  - `Teleports.intoTerritory.Enemy.deny.ViaEnderPeals`: true
+  - `Teleports.intoTerritory.Enemy.reportOnConsole.ifTeleportCauseIs_Command`: true
+  - `Teleports.intoTerritory.Enemy.reportOnConsole.ViaEnderPeals`: true
+  - `Teleports.intoTerritory.Neutral.deny.ViaHomeCommand`: false
+  - `Teleports.intoTerritory.Neutral.deny.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.Neutral.reportOnConsole.ifTeleportCauseIs_Command`: false
+  - `Teleports.intoTerritory.Neutral.reportOnConsole.ViaEnderPeals`: false
+  - `Teleports.intoTerritory.SafeZone.denyIfViaEnderPeals`: false
+  - `Teleports.intoTerritory.WarZone.denyIfViaEnderPeals`: false  
+  _
+  -
+Note that these are automatically added into your config, and the old config options that apply will be automatically
+upgraded to these new ones, you don't have to add them manually but if you do, you'll have
+realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoTerritory: and so on 4 spaces...
+Reporting is done on console only.
+
+Denying will be instant, regardless of any warm-up delays other plugins may have.
+It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
+
+The expected console message upon report would look similar to this:  
+> 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
+
+You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
+allowed for OPs.  
+The used pearl is wasted and a message will show.
+
+
 # FactionsPlus version 0.4.7
 
-* fixed situations in which, while using Factions 1.7, any checks for SafeZone were true if the faction had explosions
-disabled
+* max warps fixed
+
+* auto update checks properly now. It's also in a new thread
+
+* fixed situations in which, while using Factions 1.7, checking if a faction was or not SafeZone would yield true if
+it had explosions disabled
 
 * properly closing any resources which were previously leaking
 
@@ -9,22 +56,26 @@ disabled
 just in case you manually edited them, you now thus don't have to issue a bukkit 'reload' or start/stop server
 permission used is the same as the one for Factions, namely `factions.reload` (for both v 1.7 and 1.6)  
 Note that if you delete `config.yml` before issuing `/f reloadfp` then the created one will have the same settings as
-the previous one except the comments (because those are not yet implemented: namely each option having it's own comment)
+the previous one except the comments (because those are not yet implemented: that is each option having it's own comment)
 
 * FactionsPlus commands are shown in /f help in both Factions 1.6 and 1.7
 
 * added new config option Teleports.`disallowTeleportingToEnemyLandViaEnderPeals`
 if set(to true) this will prevent ender pearl teleports that land in enemy territory
 (you can still teleport outside of enemy land as long as ender pearl does land outside it)
-  
+This is currently easily exploitable.
+
 * new config options: Teleports.`disallowTeleportingToWarZoneViaEnderPeals` 
-  and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
-  they prevent teleporting via ender pearls if they land into SafeZone/WarZone
-  the used pearl is wasted and a message will show.
+and Teleports.`disallowTeleportingToSafeZoneViaEnderPeals`
+they prevent teleporting via ender pearls if they land into SafeZone/WarZone
+the used pearl is wasted and a message will show.
+
+* New config option Teleports.`disallowTeleportingToEnemyLandViaHomeCommand` which will deny all teleports caused by
+"/home" command only if they would've landed you in an enemy faction (enemy is a relation between you and that faction)  
 
 * new config option: powerboost.'respectFactionsWarZonePowerLossRules': Applies to both the wildernessPowerLoss and warZonePowerLoss settings and integrates a check for these in the powerboost listener
 
-* new config option: powerboost.'extraPowerWhenKillMonster': self-explanitory
+* new config option: powerboost.'extraPowerWhenKillMonster': self-explanatory
  
 * fixed /f gc and /f cf commands to not error on console
   they won't work for Factions 1.7 due to it counting on other plugins like HeroChat to provide faction/global chat
@@ -46,9 +97,9 @@ in other words, locks owned by people in your faction(including you) won't be re
 
 * blockCPublicAccessOnNonOwnFactionTerritory - will allow you to make a door truly public
 
-* General bugfixes, including a bunch of npes, and other annoyances 
+* General bugfixes, including a bunch of NPEs, and other annoyances 
 
-* - fixed /f togglestate to only charge you if economy.`enabled` is set
+* - fixed /f togglestate to only charge you if we're hooked into economy  
   and to not cause internal error if inexistent faction tag was specified. 
   - If you have `factionsplus.togglestate.others` permission (or you are Op) you can toggle other factions
    only if you are (Op or)admin/officer/member in your faction if those were set in the config.
@@ -87,5 +138,175 @@ Comments are any lines whose first non-whitespace character is `#`.
 may still be in effect after reload (except economy that will auto enabled/disable on reload)
 
 # FactionsPlus version 0.4.6
-* this Changelog file did not exist in this version, changes are unknown.
 
+- fixed bug with extraPowerLossIfDeathBySuicide
+
+- fixed bug with unjailing (I think?)
+
+- fixed mysterious NoSuchFieldError related to /f help
+
+- fixed showLastAnnounceOnLandEnter (WOO-HOOO!)
+
+- fixed bug with /f fc
+
+- added Metrics
+
+- removed useless code
+
+- general fixes/stability between the two versions
+
+- fixes security bug related to banning players in other Factions
+
+- fixes security bug related to jailing players in other Factions
+
+# FactionsPlus version 0.4.5
+
+- built against new Factions version
+
+- added /f debug (only ops can run)
+
+- added message to /f unjail
+
+- added permission check to /f unjail
+
+- moved to new leader/admin, officer/mod checking system - easier for me to program with
+
+- help page fix for newest version (it's only now became more complex for me to handle the help pages)
+
+- added updating checking system (I really hope this doens't kill my bandwidth)
+
+# FactionsPlus version 0.4.4
+
+- Fixed Permissions on /f unjail [player], permission: factionsplus.unjail
+
+- Added command /f unsetjail, permission: factionsplus.unsetjail
+
+- Added extraPowerWhenKillPlayer for real this time!
+
+- Fixed bug with /f jail [player] where it would jail yourself
+
+- Fixed security hole in /f jail [player] where you can jail players not in your Faction
+
+- The configuration will update this time
+
+- Removed useless code related to the DisguiseCraft API
+
+- Fixed small mistake in the error text with /f warp
+
+- Fixed a bug when the warp data file was being removed when you try to create a warp
+
+# FactionsPlus version 0.4.3
+
+- Faction Jails; yes they work now but only basic /f jail [player] and /f unjail [player] etc .. will add timed jails within time. Permission: factionsplus.jail
+
+- Added /f setjail command, permission: factionsplus.setjail
+
+- Huge code cleanup
+
+- Added new aliases to createwarp:
+
+  - addwarp
+
+  - setwarp
+
+- Added a new alias to removewarp:
+
+  - unsetwarp
+
+- Added support for DisguiseCraft
+
+- Added support for MobDisguise
+
+- Fixed bug with the permission factionsplus.listwarps
+
+- Added new configuration options:
+
+  - maxRulesPerFaction
+
+  - extraPowerWhenKillPlayer
+
+  - unDisguiseIfInEnemyTerritory
+
+  - unDisguiseIfInOwnTerritory
+
+  - extraPowerLossIfDeathBySuicide
+
+  - extraPowerLossIfDeathByPVP
+
+  - extraPowerLossIfDeathByMob
+
+  - extraPowerLossIfDeathByCactus
+
+  - extraPowerLossIfDeathByTNT
+
+  - extraPowerLossIfDeathByFire
+
+  - extraPowerLossIfDeathByPotion
+
+  - enablePermissionGroups (currently not in use)
+
+- You can now un-disguise a player according to the configuration options unDisguiseIfInEnemyTerritory, and unDisguiseIfInOwnTerritory
+
+- Fixed bug with Peaceful Factions, and players leaving them not removing the power, in relation to peaceful bonus
+
+- Added the command /f fc to go into Faction Chat, with the permission factionsplus.factionchatcommand
+
+- Added the command /f gc to go into Public/Global Chat, with the permission factionsplus.globalchatcommand
+
+- Bunch of small, minor, bug fixes
+
+# FactionsPlus version 0.4.3
+
+- Fixed a bug with /f warp
+
+- Removed a bunch of left over ugly disgusting looking debug code
+
+# FactionsPlus version 0.4.1
+
+(this version was removed after being released)
+
+- Added configuration options:
+
+  - economy_costToToggleDownPeaceful
+
+  - economy_costToToggleUpPeaceful
+
+  - leadersCanFactionBan
+
+  - officersCanFactionBan
+
+  - leadersCanToggleState
+
+  - officersCanToggleState
+
+  - membersCanToggleState
+
+- Added command /f togglestate <faction>
+
+- Added command /f ban [player]
+
+- Added the option to put passwords on warps using /f createwarp [name] <password>
+
+- Allowed using warps with /f warp [name] <password>
+
+- Fixed up configuration creation, and updating
+
+- Fixed a horrible configuration problem I hope no one ever discovers
+
+- Fixed up some event validation stuff related to canceling
+
+- Some general cleanup in the code (expect a massive cleanup in the next release!)
+
+# FactionsPlus version 0.4
+
+- Economy working, using same method as Factions plugin
+
+- Added possibility to deny commands in WarZone
+
+- Made the Announcements more useful by allowing them to be shown to Faction members on login, and when they enter their land
+
+- Added puff of smoke on teleport effect
+
+- Added new configuration options: - smokeEffectOnWarp - powerBoostI(it seems the paste was truncated here!?)
+source for pre 0.4.7 changelog was this:
+http://dev.bukkit.org/server-mods/factionsplus/files/23-factions-plus-0-4-7-for-1-7-5-and-1-6-8/

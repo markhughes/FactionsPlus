@@ -37,6 +37,9 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		// usually when you override onLoad on subclass, you don't call super(), we're counting on this to detect if coder tried
 		// to do this and is unaware of the potential problems this may imply
 		didNotOverrideOnLoad = true;
+		// PlugMan actually never calls super.onLoad() which means we never get this variable to true, and thus plugman can
+		// never enable us
+//		System.out.println("---------- onLoad() ---------");//yep not even called by PlugMan
 	}
 	
 	
@@ -44,7 +47,8 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	public void onEnable() {
 		if ( !didNotOverrideOnLoad ) {
 			throw bailOut( "You should not override & use onLoad() because it may cause problems, please just use onEnable()"
-				+ " thus we won't allow bukkit to enable us at this time" );
+				+ " thus we won't allow bukkit to enable us at this time. This error is also caused by PlugMan not calling our " +
+				"onLoad() method after having unloaded the Plugin class. Maybe try using /f reloadfp instead." );
 		}
 	}
 	
@@ -84,7 +88,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
 	public static RuntimeException bailOut( Throwable cause, String msg ) {
 		severe( cause, msg );
-		throw new BailingOutException(msg, cause);//disableSelf( FactionsPlus.instance, true );
+		throw new BailingOutException( msg, cause );// disableSelf( FactionsPlus.instance, true );
 	}
 	
 	
@@ -107,9 +111,11 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		tellConsole( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS + ChatColor.DARK_PURPLE + logInfoMsg );
 	}
 	
-	public static void severe( Throwable cause) {
-		severe(cause,null);
+	
+	public static void severe( Throwable cause ) {
+		severe( cause, null );
 	}
+	
 	
 	/**
 	 * @param cause
@@ -117,12 +123,12 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * @param logInfoMsg
 	 */
 	public static void severe( Throwable cause, String logInfoMsg ) {
-		if (null == logInfoMsg) {
-			logInfoMsg=cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
+		if ( null == logInfoMsg ) {
+			logInfoMsg = cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
 		}
 		String msg = FactionsPlus.FP_TAG_IN_LOGS + logInfoMsg;
 		if ( null == cause ) {
-			FactionsPlus.log.severe( msg );// allowed so that [SEVERE] appears
+			FactionsPlus.log.log( Level.SEVERE, msg);// allowed so that [SEVERE] appears
 		} else {
 			FactionsPlus.log.log( Level.SEVERE, msg, cause );// allowed so that [SEVERE] appears
 		}
@@ -143,15 +149,15 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	}
 	
 	
-//	public static RuntimeException disableSelf( FactionsPlus fpInstance, boolean forceStop ) {
-//		fpInstance.disableSelf();
-//		if ( forceStop ) {
-//			// FactionsPlus.log.log( Level.INFO, )
-//			throw new RuntimeException( FactionsPlus.FP_TAG_IN_LOGS
-//				+ " execution stopped by disableSelf() which means read the above colored message" );
-//		}
-//		return null;
-//	}
+	// public static RuntimeException disableSelf( FactionsPlus fpInstance, boolean forceStop ) {
+	// fpInstance.disableSelf();
+	// if ( forceStop ) {
+	// // FactionsPlus.log.log( Level.INFO, )
+	// throw new RuntimeException( FactionsPlus.FP_TAG_IN_LOGS
+	// + " execution stopped by disableSelf() which means read the above colored message" );
+	// }
+	// return null;
+	// }
 	
 	
 	/**

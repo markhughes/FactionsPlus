@@ -57,10 +57,14 @@ public class FactionsPlusCommandManager {
 		// Region based Commands
 		//addSC(new CmdPlot());
 		
+		
+		if (Config._economy.isHooked()){
+			Bridge.factions.addSubCommand(P.p.cmdBase.cmdMoney, new CmdMoneyTop());
+		}
+		
 		// New Admin commands 
 		addSC(new CmdFactionHome());
 		
-		P.p.cmdBase.cmdMoney.addSubCommand(new CmdMoneyTop());//FIXME: add this too on 1.6 help
 		addSC(new CmdDebug());
 		
 		//LWC Officer/Faction Owner clear chunk of non-member claims command
@@ -74,7 +78,7 @@ public class FactionsPlusCommandManager {
 	}
 
 	private static final void addSC(FCommand subCommand) {
-		Bridge.factions.addSubCommand(subCommand);
+		Bridge.factions.addSubCommand(P.p.cmdBase, subCommand);
 	}
 	
 }

@@ -122,6 +122,15 @@ Note: F3 key in Eclipse does: Open Declaration  (of the text that's under the cu
       
 After you put all the files in the lib folder don't forget to F5 aka refresh, in
 eclipse on the project or the lib folder, else eclipse won't see them.
+
+9. You also need Essentials, just like on 8., you can choose between Essentials eclipse project from github(recommended) 
+git://github.com/essentials/Essentials.git
+BUT you'll have to switch from 'master' branch to the '2.9' branch, otherwise things will get messed up with the 
+imports needing to be modified...
+OR you can get the Essentials.jar from 
+http://dev.bukkit.org/server-mods/essentials/files/
+should be something like Essentials-2.9.2  definitely not Essentials 3 (if it exists)
+
 If you have all these, the FactionsPlus project should compile without errors.
 ======================================
 
