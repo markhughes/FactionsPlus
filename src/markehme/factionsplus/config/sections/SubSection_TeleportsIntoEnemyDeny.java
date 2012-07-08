@@ -13,6 +13,10 @@ public class SubSection_TeleportsIntoEnemyDeny {
 		}, realAlias_inNonDottedFormat = "viaHomeCommand" )
 	public  final _boolean viaHome=new _boolean(true);
 	
+	@Option(oldAliases_alwaysDotted={
+		}, realAlias_inNonDottedFormat = "viaBackCommand" )
+	public  final _boolean viaBack=new _boolean(true);
+	
 	
 	@Option(oldAliases_alwaysDotted={
 		"Teleports.disallowTeleportingToEnemyLandViaEnderPeals"
@@ -22,7 +26,7 @@ public class SubSection_TeleportsIntoEnemyDeny {
 
 
 	public boolean isAnySet() {
-		return viaHome._ || viaPearls._;
+		return viaHome._ || viaPearls._ || viaBack._;
 	}
 
 
@@ -30,6 +34,9 @@ public class SubSection_TeleportsIntoEnemyDeny {
 		return viaHome._;
 	}
 
+	public boolean shouldPreventBackTelepors() {
+		return viaBack._;
+	}
 
 	public boolean shouldPreventEnderPearlsTeleports() {
 		return viaPearls._;

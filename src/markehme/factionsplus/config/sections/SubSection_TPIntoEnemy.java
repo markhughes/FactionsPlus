@@ -33,6 +33,10 @@ public class SubSection_TPIntoEnemy {
 	public boolean shouldPreventHomeTelepors() {
 		return _deny.shouldPreventHomeTelepors();
 	}
+	
+	public boolean shouldPreventBackTelepors() {
+		return _deny.shouldPreventBackTelepors();
+	}
 
 
 
