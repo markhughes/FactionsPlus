@@ -4,6 +4,8 @@
   - sorting happens at most once every 30 seconds and only when command is issued; if already sorted it uses the previously 
   sorted table
   - the sorted table is dereferenced from memory after 120 sec from the last use to allow gc freeing up some RAM
+  - sorting happens in a worker thread in the background, results are shown to all requesting users when sorting is
+  complete
   
 * allow `/f debug` from console(or ingame OPs) and now shows workers
 
