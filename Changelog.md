@@ -1,5 +1,11 @@
 # FactionsPlus version 0.4.8
 
+* added new config options to deny teleports via /back command that would end up inside  
+ally/neutral/enemy territory Here they are with their defaults:  
+  - `Teleports.intoTerritory.Ally.deny.ViaBackCommand`: false
+  - `Teleports.intoTerritory.Enemy.deny.ViaBackCommand`: true
+  - `Teleports.intoTerritory.Neutral.deny.ViaBackCommand`: false
+
 * `/f money top [page=1]` shows the list of factions that have the most money ie. `/f money top 10` shows the 10th page
   - sorting happens at most once every 30 seconds and only when command is issued; if already sorted it uses the previously 
   sorted table
