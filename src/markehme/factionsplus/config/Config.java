@@ -568,6 +568,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		
 		//bechmarked: 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
+		//that yielded a 15.6 MB file which on f reloadfp was parsed w/o info/warns in under 570ms
 		//last:
 		if (encountered>SKIP_AFTER_ENCOUNTERED) {
 			FactionsPlus.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
