@@ -122,9 +122,24 @@ public abstract class EssentialsIntegration {
 		return getEssentialsInstance().getUser( player ).getHomes().size();
 	}
 	
+
+	/**
+	 * @param player
+	 * @return can be null
+	 */
+	public final static Location getLastLocation( Player player) {
+		checkInvariants();
+		return getEssentialsInstance().getUser( player ).getLastLocation();
+	}
+	
+	
 	private final static void checkInvariants() {
 		if (!isHooked()) {
 			throw new RuntimeException("coding error: using "+pluginName+" functions while it was not hooked");
 		}
+	}
+
+	public static Location getSafeDestination( Location targetLocation ) throws Exception {
+		return Util.getSafeDestination( targetLocation );
 	}
 }

@@ -9,17 +9,25 @@ public class SubSection_TeleportsIntoAllyDeny {
 	@Option(
 			oldAliases_alwaysDotted = {}, realAlias_inNonDottedFormat = "ViaHomeCommand" )
 	public final _boolean	viaHome		= new _boolean( false );	
+	
+	@Option(
+		oldAliases_alwaysDotted = {}, realAlias_inNonDottedFormat = "ViaBackCommand" )
+	public final _boolean	viaBack		= new _boolean( false );	
 																	
 	@Option(
 			oldAliases_alwaysDotted = {}, realAlias_inNonDottedFormat = "ViaEnderPeals" )
 	public final _boolean	viaPearls	= new _boolean( false );	
 
 	public boolean isAnySet() {
-		return viaHome._ || viaPearls._;
+		return viaHome._ || viaPearls._ || viaBack._;
 	}
 
 	public boolean shouldPreventHomeTelepors() {
 		return viaHome._;
+	}
+	
+	public boolean shouldPreventBackTelepors() {
+		return viaBack._;
 	}
 
 	public boolean shouldPreventEnderPearlsTeleports() {
