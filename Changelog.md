@@ -307,6 +307,49 @@ may still be in effect after reload (except economy that will auto enabled/disab
 
 - Added puff of smoke on teleport effect
 
-- Added new configuration options: - smokeEffectOnWarp - powerBoostI(it seems the paste was truncated here!?)
-source for pre 0.4.7 changelog was this:
-http://dev.bukkit.org/server-mods/factionsplus/files/23-factions-plus-0-4-7-for-1-7-5-and-1-6-8/
+- Added new configuration options: 
+    - smokeEffectOnWarp
+    - powerBoostIfPeaceful
+    - showLastAnnounceOnLogin
+    - showLastAnnounceOnLandEnter
+- Plenty of general code improvements 
+- Completed some more help pages 
+- NOTE: 1.6.x users: Board.getFactionAt is picky in 1.6.x, and therefore the config option showLastAnnounceOnLandEnter is not working in this version! Expect 0.4b to fix this.
+
+# FactionsPlus version 0.3c
+- Fixed issue with announcements 
+
+# FactionsPlus version 0.3b
+- Fixed infinite loop on new configuration creation 
+
+# FactionsPlus version 0.3
+- Templates file is now being used REMOVE CURRENT TEMPLATE FILE
+- Announcements now using templates.yml 
+- Removed a bunch of debugging information 
+- Removed more useless code related to checking if the player is a player (Factions does it for us!)
+- Added Faction Home command /f factionhome [tag]
+- If a warp doesn't exist, it tells you now
+- Support for both 1.6.7 and 1.7.4 
+- Announcements bug fixed with permissions etc
+
+# FactionsPlus version 0.2
+- Fixed bug with duplicate records in warps file
+- Fixed a small problem with the use of File.separator
+- Configuration works now, and will update automatically
+- Introduced "mustBeInOwnTerritoryToCreate" configuration option + a lot more
+- Supports Factions 1.6.x as well as 1.7.x now (I think, I hope)
+- Added checks for admin/mod (support for 1.6.x and 1.7.x of Factions)
+- Faction Announcements now check for ranking 
+- Removed a bunch of useless code related to checking if player is a player (Factions plugin does it for us)
+- Economy is approaching us, but leave it disabled for now (too buggy)
+- Templates file introduced (but not yet used)
+- Announcements can be modified via templates file
+- Permissions!
+
+# FactionsPlus version 0.1
+- Initial Release 
+- My first plugin release ever
+- Faction Warps
+- Faction Announcements
+(source for these: pre 0.4.6 changelog lines was: http://dev.bukkit.org/server-mods/factionsplus/files.rss )
+ 
