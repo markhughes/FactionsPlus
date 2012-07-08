@@ -33,6 +33,7 @@ public class TeleportsListener implements Listener {
 	private static final String			homeCMD						= "/home";							// lowercase pls
 	private static final String			defaultHardCodedHomeName	= "home";							// ie. /home does /home
 																										// home
+	private static final String			backCMD						= "/back";							// lowercase pls
 	private static TeleportsListener	preventTeleports			= new TeleportsListener();
 	private static boolean				tpInited					= false;
 	
@@ -90,8 +91,8 @@ public class TeleportsListener implements Listener {
 	}
 	
 	
-	private final static boolean isHomeTracking() {// private/final so it can be inlined by compiler, supposedly
-		return Config._teleports.shouldReportCommands() || Config._teleports.shouldPreventHomeTelepors();
+	private final static boolean isReportingCommands() {// private/final so it can be inlined by compiler, supposedly
+		return Config._teleports.shouldReportCommands();
 	}
 	
 	
@@ -118,25 +119,101 @@ public class TeleportsListener implements Listener {
 	// MONITOR means it will be called last, after ie. HIGHEST
 		public
 		void onCommand( PlayerCommandPreprocessEvent event ) {// XXX: doesn't trigger on console commands
-		if ( !isHomeTracking() ) {
-			return;
-		}
 		// this hook will trigger on any command ie. only those chat messages preceded by "/"
 		Player playerInGame = event.getPlayer();
 		// System.out.println(sender+" "+sender.getClass());
 		
 		String cmd = event.getMessage();
 		// TODO: think about having a list of commands here which when used to teleport into X territory
-		// would be denied; X is configurable too
-		mapLastExecutedCommand.put( playerInGame, cmd );
-		// playerInGame.sendMessage( "oh hi1 " + Utilities.hasPermissionOrIsOp( playerInGame, permissionForHomeToEnemy ) + " "
-		// + playerInGame.isOp() + " " + playerInGame.hasPermission( permissionForHomeToEnemy ) );
+		// would be denied; X is configurable too; actually we can only do whitelist of commands to be allowed to tp when COMMAND is cause
+		if (isReportingCommands()) {
+			mapLastExecutedCommand.put( playerInGame, cmd );
+		}
+
+		String realCmd = cmd.trim().toLowerCase();
+		
+		if ( (Config._teleports.shouldPreventBackTelepors())  && ( EssentialsIntegration.isHooked() ) && ( !playerInGame.isOp())){
+			// /back is allowed for OPs and checked only if essentials exists/hooked
+			if ( realCmd.startsWith( backCMD )  ) {
+				if ( (realCmd.length() == backCMD.length()) || realCmd.split( "\\s+" )[0].equals( backCMD )) {
+					//ok we got "/back" or "/back something"
+//					FactionsPlus.info("triggered "+EssentialsIntegration.getLastLocation( playerInGame ));
+					Location whereTo = EssentialsIntegration.getLastLocation( playerInGame );
+					Location safeTo=null;
+					try {
+						safeTo = EssentialsIntegration.getSafeDestination(whereTo);
+					} catch ( Exception e ) {
+						e.printStackTrace();
+						playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
+							+ "Internal error occurred calling Essentials, command ignored. Check console." );
+						event.setCancelled( true );
+						assert null == safeTo;
+						return;
+					}
+					
+					
+					boolean allowed = false;
+					int count = 2;
+					FactionsAny.Relation rel = null;
+					Location locToCheck = whereTo;
+					while ( count > 0 ) {
+						rel = getRelation( playerInGame, locToCheck );
+						switch ( rel ) {
+						case ALLY:
+							if ( !Config._teleports._into._allyTerritory._deny.viaBack._ ) {
+								allowed = true;
+							}else {
+								allowed=false;//yes needed
+							}
+							break;
+						case ENEMY:
+							if ( !Config._teleports._into._enemyTerritory._deny.viaBack._ ) {
+								allowed = true;
+							}else {
+								allowed=false;//yes needed
+							}
+							break;
+						case NEUTRAL:
+							if ( !Config._teleports._into._neutralTerritory._deny.viaBack._ ) {
+								allowed = true;
+							}else {
+								allowed=false;//yes needed
+							}
+							break;
+						case MEMBER:
+							allowed=true;//auto allow /back-ing into own faction land
+							break;
+						default:
+							playerInGame.sendMessage( ChatColor.RED + "Internal error, thus command denied" );
+							event.setCancelled( true );
+							throw new RuntimeException( "will never happen: " + rel );
+						}
+						if ( !allowed ) {
+							break;
+						}// else check the getSafeLocation one too
+						count--;
+						locToCheck = safeTo;//now also check the safe location, we don't bother knowing that it's obstructed or not
+					}// while
+					
+					assert null != rel;
+//					System.out.println("final: "+playerInGame+" "+rel+" current="+allowed);
+					if ( !allowed ) {
+						playerInGame.sendMessage( ChatColor.RED + "You are not allowed to go /back in "
+							+ rel + " territory" );
+						event.setCancelled( true );
+						return;
+//					}else {
+//						System.out.println("allowed "+rel);
+					}
+				}
+			}
+		}
 		
 		if ( ( Config._teleports.shouldPreventHomeTelepors() ) && ( EssentialsIntegration.isHooked() )
 		 && ( !playerInGame.isOp()))
 		{
 			// disallowed and no permission to bypass ? then check
-			if ( cmd.toLowerCase().startsWith( homeCMD ) ) {
+			if ( realCmd.startsWith( homeCMD ) ) {
 				// playerInGame.sendMessage( "oh hi" );
 				
 				String[] ar = cmd.split( "\\s+" );// whitespace, one or more
@@ -224,7 +301,7 @@ public class TeleportsListener implements Listener {
 				
 				Location potentiallyModifiedTarget = null;
 				try {
-					potentiallyModifiedTarget = Util.getSafeDestination( targetLocation );
+					potentiallyModifiedTarget = EssentialsIntegration.getSafeDestination(targetLocation);
 				} catch ( Exception e ) {
 					e.printStackTrace();
 					playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
@@ -281,6 +358,8 @@ public class TeleportsListener implements Listener {
 					count--;
 					locToCheck = potentiallyModifiedTarget;
 				}// while
+				
+				assert null != rel;
 //				System.out.println("final: "+playerInGame+" "+rel+" current="+allowed);
 				if ( !allowed ) {
 					playerInGame.sendMessage( ChatColor.RED + "You are not allowed to teleport to your /home which is now in "
@@ -299,7 +378,7 @@ public class TeleportsListener implements Listener {
 	@EventHandler(
 			priority = EventPriority.MONITOR )
 	public void onPlayerLogout( PlayerQuitEvent event ) {
-		if ( !isHomeTracking() ) {
+		if ( !isReportingCommands() ) {
 			return;
 		}
 		// this hook will trigger whenever a player quits/disconnects
@@ -350,7 +429,7 @@ public class TeleportsListener implements Listener {
 		TeleportCause cause = event.getCause();
 		switch ( cause ) {
 		case COMMAND:
-			if ( isHomeTracking() ) {
+			if ( isReportingCommands() ) {
 				// possibly could be the /home command
 				// now we check if the last command the player executed was /home
 				String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );

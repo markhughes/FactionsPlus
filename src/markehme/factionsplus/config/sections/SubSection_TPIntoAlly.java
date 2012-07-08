@@ -32,7 +32,10 @@ public class SubSection_TPIntoAlly {
 	public boolean shouldPreventHomeTelepors() {
 		return _deny.shouldPreventHomeTelepors();
 	}
-
+	
+	public boolean shouldPreventBackTelepors() {
+		return _deny.shouldPreventBackTelepors();
+	}
 
 
 	public boolean shouldPreventEnderPearlsTeleports() {

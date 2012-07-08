@@ -20,6 +20,10 @@ public final class Section_Teleports {
 	public boolean shouldPreventHomeTelepors() {
 		return _into.shouldPreventHomeTelepors();
 	}
+	
+	public boolean shouldPreventBackTelepors() {
+		return _into.shouldPreventBackTelepors();
+	}
 
 	public boolean shouldPreventEnderPearlsTeleports() {
 		return _into.shouldPreventEnderPearlsTeleports();

@@ -45,6 +45,11 @@ public class SubSection_TeleportsInto {
 		return _allyTerritory.shouldPreventHomeTelepors()
 				||_enemyTerritory.shouldPreventHomeTelepors() || _neutralTerritory.shouldPreventHomeTelepors();
 	}
+	
+	public boolean shouldPreventBackTelepors() {
+		return _allyTerritory.shouldPreventBackTelepors()
+				||_enemyTerritory.shouldPreventBackTelepors() || _neutralTerritory.shouldPreventBackTelepors();
+	}
 
 
 	public boolean shouldPreventEnderPearlsTeleports() {
