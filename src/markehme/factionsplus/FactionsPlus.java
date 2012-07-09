@@ -45,9 +45,11 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public final JailListener jaillistener = new JailListener();
 	public final PeacefulListener peacefullistener = new PeacefulListener();
 	public final PowerboostListener powerboostlistener = new PowerboostListener();
+	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
 	
 	public final DCListener dclistener = new DCListener();
 	public final MDListener mdlistener = new MDListener();
+
 	
 
 	public static WorldEditPlugin worldEditPlugin = null;
@@ -241,6 +243,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         if(Config._powerboosts.enabled._) {
         	pm.registerEvents(this.powerboostlistener, this);
+        }
+        if(Config._extras.crossBorderLiquidFlowBlock._) {
+        	pm.registerEvents(this.liquidflowlistener, this);
         }
 
         

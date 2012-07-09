@@ -18,4 +18,8 @@ public final class Section_Extras {
 			realAlias_neverDotted = "disguise" )
 	public final SubSection_Disguise _disguise=new SubSection_Disguise();  
 	
+	@Option(comment={"Warning: High Intensity/Resource Hog Check, prevents stuff like cobblestone grief using lava/water"},
+			realAlias_inNonDottedFormat = "crossBorderLiquidFlowBlock" )
+		public final _boolean		crossBorderLiquidFlowBlock	= new _boolean( false );
+	
 }
