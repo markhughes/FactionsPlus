@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,6 +15,9 @@ public class LiquidFlowListener implements Listener{
 	public static void onBlockFromTo(BlockFromToEvent event) {
 		Chunk fromchunk = event.getBlock().getChunk();
 		Chunk tochunk = event.getToBlock().getChunk();
+		if(!((event.getBlock().getTypeId() == 8)||(event.getBlock().getTypeId() == 9)||(event.getBlock().getTypeId() == 10)||(event.getBlock().getTypeId() == 11))) {
+			return;
+		}
 		if(fromchunk==tochunk) {
 			return;
 		}
@@ -21,8 +25,9 @@ public class LiquidFlowListener implements Listener{
 		FLocation toLoc = new FLocation(event.getToBlock().getLocation());
 	if(Board.getFactionAt(fromLoc) != Board.getFactionAt(toLoc)) {
 		event.setCancelled(true);
-		//Attempt to remove the source block to prevent lag:
-		//Water and lava only flow down, and not up.
+		//Replace border with cobblestone to prevent major lagging
+		event.getBlock().setType(Material.COBBLESTONE);
+		
 	}
 		
 	}
