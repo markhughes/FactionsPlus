@@ -44,7 +44,8 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
     allowed for OPs.    
     The used pearl is wasted and a message will show.  
-
+    The exploitable /home prevetion in 0.4.7 is now fixed in 0.4.8 such that it's highly unlikely that it can be exploited
+    mainly because we're now hooking into essentials (the plugin that has /home) 
 
 # FactionsPlus version 0.4.7
 
