@@ -433,7 +433,7 @@ public class TeleportsListener implements Listener {
 				// possibly could be the /home command
 				// now we check if the last command the player executed was /home
 				String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
-				assert null != lastExecutedCommandByPlayer;
+				//assert null != lastExecutedCommandByPlayer;//XXX: apparently this can be NULL see issue 60
 				// this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 				// ( null != lastExecutedCommandByPlayer ) && (
 				// checkIfHomeTeleportWouldLandInEnemyTerritory(event, lastExecutedCommandByPlayer);

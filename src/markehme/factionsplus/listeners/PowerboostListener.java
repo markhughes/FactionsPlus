@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.massivecraft.factions.Board;
@@ -27,7 +27,17 @@ public class PowerboostListener implements Listener{
 		}
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
-			DamageCause causeOfDeath = event.getEntity().getLastDamageCause().getCause();
+			EntityDamageEvent ldc = event.getEntity().getLastDamageCause();//it can be null, see issue 60
+			if (null == ldc) {
+				//"null if hitherto unharmed"
+				//how odd that it died and yet the last damage event is null, did it dot die via prev damage event ? 
+				//and last one got cancelled?
+				if(Config._powerboosts.extraPowerLossIfDeathByOther._ > 0) {
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
+				}
+				return;
+			}
+			DamageCause causeOfDeath = ldc.getCause();
 			if (p.getKiller() == null) {
 				if ((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE 
 						|| causeOfDeath == DamageCause.ENTITY_EXPLOSION) &&

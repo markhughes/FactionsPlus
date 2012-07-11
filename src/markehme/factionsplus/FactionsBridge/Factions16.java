@@ -152,7 +152,6 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		} else {
 			currentPerPage++;
 		}
-		
 	}
 	
 	
@@ -161,8 +160,10 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		if ( null == instanceOfHelpPages ) {
 			throw FactionsPlusPlugin.bailOut( "this should not happen, bad call order" );
 		} else {
-			instanceOfHelpPages.add( pageLines );
-			pageLines = null;
+			if ( null != pageLines ) {
+				instanceOfHelpPages.add( pageLines );
+				pageLines = null;
+			}
 			currentPerPage = 0;
 		}
 	}
