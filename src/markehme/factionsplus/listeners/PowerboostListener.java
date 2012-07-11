@@ -34,7 +34,6 @@ public class PowerboostListener implements Listener{
 				//and last one got cancelled?
 				if(Config._powerboosts.extraPowerLossIfDeathByOther._ > 0) {
 					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
-					return;
 				}
 				return;
 			}
