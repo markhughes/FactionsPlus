@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* fixes for NPEs from issue 60
+
+* fixes /f help NPE on last page
+
 * added new config options to deny teleports via /back command that would end up inside  
 ally/neutral/enemy territory Here they are with their defaults:  
   - `Teleports.intoTerritory.Ally.deny.ViaBackCommand`: false
