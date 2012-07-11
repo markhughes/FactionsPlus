@@ -35,19 +35,17 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
   -
 Note that these are automatically added into your config, and the old config options that apply will be automatically
 upgraded to these new ones, you don't have to add them manually but if you do, you'll have
-realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoTerritory: and so on 4 spaces...
-Reporting is done on console only.
-
-Denying will be instant, regardless of any warm-up delays other plugins may have.
-It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.
-
-The expected console message upon report would look similar to this:  
-> 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.
-
-You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
-allowed for OPs.  
-The used pearl is wasted and a message will show.
-
+realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoTerritory: and so on 4 spaces...  
+    Reporting is done on console only.  
+    Denying will be instant, regardless of any warm-up delays other plugins may have.  
+    It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.  
+    The expected console message upon report would look similar to this:    
+    > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.  
+    You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
+    allowed for OPs.    
+    The used pearl is wasted and a message will show.  
+    The exploitable /home prevetion in 0.4.7 is now fixed in 0.4.8 such that it's highly unlikely that it can be exploited
+    mainly because we're now hooking into essentials (the plugin that has /home) 
 
 # FactionsPlus version 0.4.7
 
