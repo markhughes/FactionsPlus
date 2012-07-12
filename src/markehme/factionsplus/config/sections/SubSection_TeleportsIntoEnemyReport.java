@@ -17,12 +17,12 @@ public class SubSection_TeleportsIntoEnemyReport {
 	public final _boolean	viaPearls	= new _boolean( true );
 	
 	
-	public boolean isAnySet() {
+	public final  boolean isAnySet() {
 		return viaCommand._ || viaPearls._;
 	}
 
 
-	public boolean shouldReportCommands() {
+	public final  boolean shouldReportCommands() {
 		return viaCommand._;
 	}
 }

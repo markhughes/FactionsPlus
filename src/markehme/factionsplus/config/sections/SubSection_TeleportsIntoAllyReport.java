@@ -12,11 +12,11 @@ public class SubSection_TeleportsIntoAllyReport {
 		oldAliases_alwaysDotted = {}, realAlias_inNonDottedFormat = "ViaEnderPeals" )
 	public final _boolean	viaPearls	= new _boolean( false );	
 
-	public boolean isAnySet() {
+	public final  boolean isAnySet() {
 		return viaCommand._ || viaPearls._;
 	}
 
-	public boolean shouldReportCommands() {
+	public  final boolean shouldReportCommands() {
 		return viaCommand._;
 	}
 }
