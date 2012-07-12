@@ -23,7 +23,7 @@ public class CmdUnJail extends FCommand {
 		this.disableOnLock = false;
 		
 		senderMustBePlayer = true;
-		senderMustBeMember = false;
+		senderMustBeMember = true;
 		
 		this.setHelpShort( "removes a player from jail" );
 	}
