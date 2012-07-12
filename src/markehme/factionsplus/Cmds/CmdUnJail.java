@@ -33,36 +33,32 @@ public class CmdUnJail extends FCommand {
 	public void perform() {
 		String playerToUnjail = this.argAsString( 0 );
 		
-		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
-					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
-					|| (Utilities.isOp( fme ))) {
-				
-				if (!FPlayers.i.exists( playerToUnjail )) {
-					fme.sendMessage(ChatColor.RED+ "That player does not exist on this server" );
-					return;
-				}
-				
-				FPlayer fp = FPlayers.i.get( playerToUnjail );//never null
-				
-				if (!fme.getFactionId().equals( fp.getFactionId() )) {
-					fme.sendMessage( ChatColor.RED+"That player is not in your faction" );
-					return;
-				}
-				
-				if ( FactionsPlusJail.removeFromJail( playerToUnjail, fp.getFactionId() ) ) {
-					fme.sendMessage( playerToUnjail + " has been removed from jail." );
-				} else {
-					fme.sendMessage( playerToUnjail + " is not jailed." );
-				}
+		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
+				|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
+				|| ( Utilities.isOp( fme ) )
+				|| ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) )
+		{
+			
+			if ( !FPlayers.i.exists( playerToUnjail ) ) {
+				fme.sendMessage( ChatColor.RED + "That player does not exist on this server" );
 				return;
 			}
 			
-			fme.sendMessage( ChatColor.RED+"As a "+Bridge.factions.getRole( fme )+" you have No permission to unjail!" );
-		}else{
-			fme.sendMessage( ChatColor.RED+"You don't have the required permission node to unjail!" );
+			FPlayer fp = FPlayers.i.get( playerToUnjail );// never null
+			
+			if ( !fme.getFactionId().equals( fp.getFactionId() ) ) {
+				fme.sendMessage( ChatColor.RED + "That player is not in your faction" );
+				return;
+			}
+			
+			if ( FactionsPlusJail.removeFromJail( playerToUnjail, fp.getFactionId() ) ) {
+				fme.sendMessage( playerToUnjail + " has been removed from jail." );
+			} else {
+				fme.sendMessage( playerToUnjail + " is not jailed." );
+			}
+			return;
 		}
-		
+		fme.sendMessage(ChatColor.RED+ "No permission to unjail!" );
 		
 	}
 }

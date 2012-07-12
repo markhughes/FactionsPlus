@@ -31,25 +31,17 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-//		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
-//		System.out.println(Bridge.factions.getRole( fme));
-		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
-					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
-					|| (Utilities.isOp( fme ))) {
-				FactionsPlusJail.sendToJail( playerToJail,  fme.getPlayer(), -1 );
-//					fme.sendMessage( playerToJail + " has been jailed." );
-//				} else {
-//					fme.sendMessage( playerToJail + " is not jailed." );
-//				}
-				return;
-			}
-			fme.sendMessage(ChatColor.RED+ "As a "+Bridge.factions.getRole( fme )+" you have No permission to jail!" );
-		}else{
-			fme.sendMessage(ChatColor.RED+ "You don't have the required permission node to jail!" );
+		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
+			|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
+			|| ( Utilities.isOp( fme ) )
+			|| ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) )
+		{
+			
+			FactionsPlusJail.sendToJail( playerToJail, fme.getPlayer(), -1 );
+			return;
 		}
-		
-		
-		
+		fme.sendMessage(ChatColor.RED+ "No permission to jail!" );
 	}
+	
+	
 }
