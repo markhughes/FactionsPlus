@@ -306,6 +306,7 @@ public class FactionsPlusJail {
 			e.printStackTrace();
 			
 			sender.sendMessage("Failed to set jail (Internal error -2)");
+			cachedJailLocations.remove( cfid );//just in case
 			return false;
 		}finally{
 			if (null != jailWrite) {
