@@ -107,7 +107,7 @@ public class CmdAnnounce extends FCommand {
 	}
 	
 	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !Config._economy.isHooked() || ! Econ.shouldBeUsed() || player.getPlayer() == null || cost == 0.0) return true;
+		if ( !Config._economy.isHooked() || ! Econ.shouldBeUsed() || Utilities.getPlayerExact(player) == null || cost == 0.0) return true;
 		
 		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);

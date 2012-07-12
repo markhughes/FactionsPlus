@@ -1,8 +1,9 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 
 import org.bukkit.Location;
+import org.bukkit.entity.*;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
@@ -31,8 +32,9 @@ public class CmdPlot extends FCommand {
 			return;
 		}
 		
-		Location pointA = FactionsPlus.worldEditPlugin.getSelection(fme.getPlayer()).getMaximumPoint();
-		Location pointB = FactionsPlus.worldEditPlugin.getSelection(fme.getPlayer()).getMinimumPoint();
+		Player player = Utilities.getPlayerExact(fme);
+		Location pointA = FactionsPlus.worldEditPlugin.getSelection(player).getMaximumPoint();
+		Location pointB = FactionsPlus.worldEditPlugin.getSelection(player).getMinimumPoint();
 		
 		
 		

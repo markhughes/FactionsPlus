@@ -35,7 +35,7 @@ public class CmdListWarps extends FCommand  {
 		Faction currentFaction = myFaction;
 		
 		if(this.argAsString(0) != null) {
-			if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.listwarps")) {
+			if(!FactionsPlus.permission.has(Utilities.getPlayerExact(fme), "factionsplus.listwarps")) {
 				fme.msg("No permission!");
 				return;
 			}

@@ -129,6 +129,21 @@ public class Utilities {
 		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.LEADER );
 	}
 
+	
+	public final static Player getPlayerExact(FPlayer fplayer) {
+		if (null == fplayer) {
+			return null;
+		}
+		return Utilities.getPlayerExact( fplayer.getId() );
+	}
+	
+	public final static Player getPlayerExact(String playerName) {
+		if ((null == playerName) || (playerName.isEmpty())) {
+			return null;
+		}
+		return Bukkit.getPlayerExact( playerName );
+	}
+	
 //	public static boolean checkGroupPerm(World world, String group, String permission) {
 //		if(Config.config.getBoolean("enablePermissionGroups")) {
 //			return(FactionsPlus.permission.groupHas(world, group, permission));
@@ -265,7 +280,7 @@ public class Utilities {
 	}
 	
 	public static boolean isOp(FPlayer fplayer) {
-		return fplayer.getPlayer().isOp();
+		return Utilities.getPlayerExact(fplayer).isOp();
 	}
 	
 	public static boolean isWarZone(Faction faction)

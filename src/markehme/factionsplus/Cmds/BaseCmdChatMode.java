@@ -34,7 +34,7 @@ public abstract class BaseCmdChatMode extends FCommand{
 	
 	@Override
 	public final void perform() {
-		if(!FactionsPlus.permission.has(fme.getPlayer(), strPermission )) {
+		if(!FactionsPlus.permission.has(Utilities.getPlayerExact( fme), strPermission )) {
 			fme.msg("No permission!");
 			return;
 		}	

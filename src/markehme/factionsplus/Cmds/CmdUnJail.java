@@ -36,7 +36,7 @@ public class CmdUnJail extends FCommand {
 		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
 				|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
 				|| ( Utilities.isOp( fme ) )
-				|| ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) )
+				|| ( FactionsPlus.permission.playerHas( Utilities.getPlayerExact(fme), "factionsplus.unjail" ) ) )
 		{
 			
 			FactionsPlusJail.removeFromJail( playerToUnjail, fme);

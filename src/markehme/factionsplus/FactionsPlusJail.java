@@ -34,8 +34,8 @@ public class FactionsPlusJail {
 		}
 		
 		FPlayer fpToBeUnjailed = FPlayers.i.get( nameOfPlayerToBeUnjailed );// never null
-		unjailer.sendMessage( "mapped "+nameOfPlayerToBeUnjailed+" to "+fpToBeUnjailed.getName() );
-		unjailer.sendMessage( "mapped "+Bukkit.getPlayer( nameOfPlayerToBeUnjailed )+" to "+fpToBeUnjailed.getId() );
+//		unjailer.sendMessage( "mapped "+nameOfPlayerToBeUnjailed+" to "+fpToBeUnjailed.getName() );
+//		unjailer.sendMessage( "mapped "+Bukkit.getPlayer( nameOfPlayerToBeUnjailed )+" to "+fpToBeUnjailed.getId() );
 
 		String factionId=fpToBeUnjailed.getFactionId();
 		
@@ -52,7 +52,7 @@ public class FactionsPlusJail {
 			FileInputStream fos = null;
 			InputStreamReader osw = null;
 			BufferedReader bw = null;
-			Player onlinejplayer = fpToBeUnjailed.getPlayer();
+			Player onlinejplayer = Utilities.getPlayerExact( fpToBeUnjailed);
 			Location originalLocation=null;
 			if ( null != onlinejplayer ) {
 				try {
@@ -282,6 +282,7 @@ public class FactionsPlusJail {
 		
 		World world;
 		//online or offline at the time of the jailing
+		//TODO: investigate if getOfflinePlayer acts as  getPlayerExact or as getPlayer    for offline players. It'd better act as Exact ffs
 		OfflinePlayer playerToBeJailed = server.getOfflinePlayer( nameOfPlayerToBeJailed);
 		
 		

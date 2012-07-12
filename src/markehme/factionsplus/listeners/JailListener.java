@@ -22,8 +22,9 @@ public class JailListener implements Listener{
 			return;
 		}
 		// If player is still jailed, SEND THEM TO THE BRIG!
-		if(Utilities.isJailed(event.getFPlayer().getPlayer())){
-			event.getFPlayer().getPlayer().teleport(FactionsPlusJail.getJailLocation(event.getFPlayer().getPlayer()));
+		Player player = Utilities.getPlayerExact( event.getFPlayer() );
+		if(Utilities.isJailed(player)){
+			player.teleport(FactionsPlusJail.getJailLocation(player));
 		}
 	}
 	@EventHandler

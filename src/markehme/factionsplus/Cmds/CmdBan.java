@@ -57,7 +57,7 @@ public class CmdBan extends FCommand {
 			return;
 		}
 
-		Player playerBanThisPlayer = Bukkit.getServer().getPlayer(banningThisPlayer);
+		Player playerBanThisPlayer = Utilities.getPlayerExact(banningThisPlayer);
 
 		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(banningThisPlayer);
 

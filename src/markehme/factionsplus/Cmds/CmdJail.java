@@ -34,10 +34,10 @@ public class CmdJail extends FCommand {
 		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
 			|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
 			|| ( Utilities.isOp( fme ) )
-			|| ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) )
+			|| ( FactionsPlus.permission.playerHas( Utilities.getPlayerExact(fme), "factionsplus.unjail" ) ) )
 		{
 			
-			FactionsPlusJail.sendToJail( playerToJail, fme.getPlayer(), -1 );
+			FactionsPlusJail.sendToJail( playerToJail, Utilities.getPlayerExact(fme), -1 );
 			return;
 		}
 		fme.sendMessage(ChatColor.RED+ "No permission to jail!" );
