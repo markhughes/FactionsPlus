@@ -22,7 +22,7 @@ public class JailListener implements Listener{
 			return;
 		}
 		// If player is still jailed, SEND THEM TO THE BRIG!
-		Player player = Utilities.getPlayerExact( event.getFPlayer() );
+		Player player = Utilities.getOnlinePlayerExact( event.getFPlayer() );
 		if(Utilities.isJailed(player)){
 			player.teleport(FactionsPlusJail.getJailLocation(player));
 		}

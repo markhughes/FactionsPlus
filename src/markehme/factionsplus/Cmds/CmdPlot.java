@@ -32,7 +32,7 @@ public class CmdPlot extends FCommand {
 			return;
 		}
 		
-		Player player = Utilities.getPlayerExact(fme);
+		Player player = Utilities.getOnlinePlayerExact(fme);
 		Location pointA = FactionsPlus.worldEditPlugin.getSelection(player).getMaximumPoint();
 		Location pointB = FactionsPlus.worldEditPlugin.getSelection(player).getMinimumPoint();
 		

@@ -29,8 +29,8 @@ public class CmdClearLocks extends FCommand {
 	
 	@Override
 	public void perform() {
-		Location loc = Utilities.getPlayerExact(fme).getLocation();
-		Player name = Utilities.getPlayerExact(fme);
+		Location loc = Utilities.getOnlinePlayerExact(fme).getLocation();
+		Player name = Utilities.getOnlinePlayerExact(fme);
 		int clearedlocks = LWCFunctions.clearLocksCommand(name, loc);
 		if( clearedlocks < 0 ) {
 			return;

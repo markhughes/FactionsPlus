@@ -130,14 +130,22 @@ public class Utilities {
 	}
 
 	
-	public final static Player getPlayerExact(FPlayer fplayer) {
+	/**
+	 * @param fplayer
+	 * @return null if offline
+	 */
+	public final static Player getOnlinePlayerExact(FPlayer fplayer) {
 		if (null == fplayer) {
 			return null;
 		}
-		return Utilities.getPlayerExact( fplayer.getId() );
+		return Utilities.getOnlinePlayerExact( fplayer.getId() );
 	}
 	
-	public final static Player getPlayerExact(String playerName) {
+	/**
+	 * @param playerName
+	 * @return null if offline
+	 */
+	public final static Player getOnlinePlayerExact(String playerName) {
 		if ((null == playerName) || (playerName.isEmpty())) {
 			return null;
 		}
@@ -280,7 +288,7 @@ public class Utilities {
 	}
 	
 	public static boolean isOp(FPlayer fplayer) {
-		return Utilities.getPlayerExact(fplayer).isOp();
+		return Utilities.getOnlinePlayerExact(fplayer).isOp();
 	}
 	
 	public static boolean isWarZone(Faction faction)

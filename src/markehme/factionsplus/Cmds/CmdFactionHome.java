@@ -36,7 +36,7 @@ public class CmdFactionHome extends FCommand {
 		String factionName = this.argAsString(0).toString();
 		Faction currentF = Factions.i.getByTag(factionName);
 		
-		Player player = Utilities.getPlayerExact(fme);
+		Player player = Utilities.getOnlinePlayerExact(fme);
 		if(FactionsPlus.permission.has(player, "factionsplus.otherfactionshome")) {
 			if(currentF == null) {
 				player.sendMessage("Faction was not found!");

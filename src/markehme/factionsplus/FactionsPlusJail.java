@@ -52,7 +52,7 @@ public class FactionsPlusJail {
 			FileInputStream fos = null;
 			InputStreamReader osw = null;
 			BufferedReader bw = null;
-			Player onlinejplayer = Utilities.getPlayerExact( fpToBeUnjailed);
+			Player onlinejplayer = Utilities.getOnlinePlayerExact( fpToBeUnjailed);
 			Location originalLocation=null;
 			if ( null != onlinejplayer ) {
 				try {
