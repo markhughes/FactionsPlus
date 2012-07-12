@@ -352,7 +352,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
-	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
+	 * must be inside: synchronized ( mapFieldToID )<br>
 	 * this parses the entire representation of the config.yml and marks duplicates and invalid configs<br>
 	 * 
 	 * @param root
@@ -431,7 +431,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			OutputStreamWriter osw = null;
 			bw = null;
 			try {
-				//for tests:new File( Config.fileConfig.getParent(), "config2.yml" ) );
+				//for tests:
+//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
 				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
@@ -500,6 +501,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();
+	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
 	
 	
 	public synchronized final static boolean reloadConfig() {
@@ -528,7 +530,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				
 				// now read the existing config
 				virtualRoot = WannabeYaml.read( fileConfig );
-				
+				cleanAutoComments(virtualRoot, null);
 				
 				
 				// now check to see if we have any old config options or invalid ones in the config
@@ -582,6 +584,38 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
+	private final static void cleanAutoComments( WYSection root, String dottedParentSection ) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		WYItem nextItem;
+		while ( null != currentItem ) {
+			nextItem=currentItem.getNext();
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				
+				cleanAutoComments( cs, dotted );// recurse
+			} else {
+				if (currentItem instanceof WYRawButLeveledLine) {
+					if (cls == WYComment.class) {
+						WYComment comment=(WYComment)currentItem;
+						if (comment.getRawButLeveledLine().startsWith( AUTOCOMMENTS_PREFIX ) ){
+//							System.out.println(comment.getRawButLeveledLine());
+							root.remove( comment );
+						}
+					}
+				}//else whatever
+			}// else
+			
+			currentItem =nextItem;
+		}// inner while
+	}
+
 	private static WYSection createWYRootFromFields() {
 		Q.ni();
 		return virtualRoot;

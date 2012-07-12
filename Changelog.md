@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* in config.yml, all comments starting with "### " (3 # and a space) instead of just "#" are automatically discarded.
+
 * jailed players are now returned to their original location, as long as they were online when they were unjailed 
 (but also when they were jailed)  
 if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  

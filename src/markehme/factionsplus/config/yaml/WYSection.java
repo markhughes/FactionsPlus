@@ -55,6 +55,35 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	}
 	
 	
+	
+	public void remove(WYItem<METADATA_TYPE> child) {
+		assert child.getParent() == this : "bad parameter passed";
+		
+		if (firstChild == child) {
+			firstChild=child.getNext();//can be null;
+		}
+		
+		if (lastChild==child) {
+			lastChild=child.getPrev();//can be null
+		}
+		
+		WYItem oldPrev = child.getPrev();
+		if ( null != oldPrev ) {// need to set its next
+			assert oldPrev.getNext() == child : "bug somewhere else";
+			oldPrev.setNext( child.getNext() );//which can be null
+		}
+		
+		WYItem oldNext = child.getNext();
+		if ( null != oldNext ) {
+			assert oldNext.getPrev() == child : "bug somewhere else";
+			oldNext.setPrev( child.getPrev() );
+		}
+		
+		child.setParent( null );
+		child.setPrev( null );
+		child.setNext( null );
+	}
+	
 	/**
 	 * @param wid
 	 *            identifier (aka "id: value")
