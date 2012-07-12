@@ -129,7 +129,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				failed = t;
 			}
 			
-			FactionsPlusPlugin.info( "Disabled successfuly." );
+			if (null == failed) {
+				FactionsPlusPlugin.info( "Disabled successfuly." );
+			}
 			
 		} catch ( Throwable t ) {
 			failed = t;
@@ -218,8 +220,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
 					FactionsPlusPlugin.info( "Consider setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
-						+ "` to reset locks(on land claim) for more than just chests," +
-						" which is what Factions plugin already does right now" );
+						+ "` to reset locks(on land claim) for more than _just_chests_(" +
+						"which is what Factions plugin already does right now)" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
 				}
 				
