@@ -301,19 +301,19 @@ public class Utilities {
 	            return false;
 	        }
 //	        System.out.println(getIntegerPartMultipzliedBy(from.getX(), 10)+" vs "+from.getX());
-	        if (getIntegerPartMultipzliedBy(from.getX(), margin) != getIntegerPartMultipzliedBy(to.getX(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getX(), margin) != getIntegerPartMultipliedBy(to.getX(), margin)) {
 	            return false;
 	        }
-	        if (getIntegerPartMultipzliedBy(from.getY(), margin) != getIntegerPartMultipzliedBy(to.getY(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getY(), margin) != getIntegerPartMultipliedBy(to.getY(), margin)) {
 	            return false;
 	        }
-	        if (getIntegerPartMultipzliedBy(from.getZ(), margin) != getIntegerPartMultipzliedBy(to.getZ(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getZ(), margin) != getIntegerPartMultipliedBy(to.getZ(), margin)) {
 	            return false;
 	        }
 	        return true;
 	}
 	
-	public static final int getIntegerPartMultipzliedBy(double d, int multipliedByThis) {
+	public static final int getIntegerPartMultipliedBy(double d, int multipliedByThis) {
 		assert multipliedByThis>0;
 		String asString = Double.toString( d*multipliedByThis );
 		int dotAt = asString.indexOf( Config.DOT );
