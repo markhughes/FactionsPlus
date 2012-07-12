@@ -1,6 +1,7 @@
 # FactionsPlus version 0.4.8
 
-* jailed players are now returned to their original location, as long as they were online when they were unjailed  
+* jailed players are now returned to their original location, as long as they were online when they were unjailed 
+(but also when they were jailed)  
 if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  
 if a player was jailed while offline it will only be teleported to the jail upon login (same as in 0.4.7)
 
