@@ -132,7 +132,7 @@ public class FactionsPlusUpdate implements Runnable {
 				scanner.useDelimiter( "\\Z" );
 				content = scanner.next();
 			}catch (java.net.UnknownHostException uhe) {
-				FactionsPlusPlugin.info( "Failed to check for updates. "+uhe.getMessage() );
+				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
 				return;
 			}catch ( Exception ex ) {
 				ex.printStackTrace();
