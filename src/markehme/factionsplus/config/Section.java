@@ -28,7 +28,7 @@ public @interface Section {
 	 * comment to be added above of this config option, inside the config file<br>
 	 * named value() so you can use @ConfigSection({"comments here","next line"})
 	 */
-	String[] comments() default "";
+	String[] comments() default {};
 	
 	
 	// this won't need old aliases, but it will need 1 alias
