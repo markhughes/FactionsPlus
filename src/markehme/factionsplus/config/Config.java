@@ -166,7 +166,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			,""
 			,"You may not use `.` aka dot in config options names even though we are referring to them like that"
 			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
-			," Each level is indented by 2 spaces, no more no less"
+			," Each level is indented by exactly 2 spaces"
 			,""
 			,""
 			,""
@@ -458,8 +458,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			bw = null;
 			try {
 				//for tests:
-				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
-//				fos = new FileOutputStream( Config.fileConfig);
+//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
+				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
@@ -556,7 +556,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				
 				// now read the existing config
 				virtualRoot = WannabeYaml.read( fileConfig );
-				cleanAutoComments(virtualRoot, null);
+				cleanAutoComments(virtualRoot, null);//without updating the line numbers
 				
 				
 				// now check to see if we have any old config options or invalid ones in the config
