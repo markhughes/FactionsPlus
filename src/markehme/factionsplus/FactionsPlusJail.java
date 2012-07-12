@@ -83,7 +83,7 @@ public class FactionsPlusJail {
 					
 				} catch ( Throwable e ) {
 					// we're just ignoring old formats for this file which may contain only the time argument => useless
-					e.printStackTrace();//FIXME: remove this, temporary
+//					e.printStackTrace();//: remove this, temporary
 				} finally {
 					if ( null != bw ) {
 						try {
