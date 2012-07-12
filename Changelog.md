@@ -1,5 +1,12 @@
 # FactionsPlus version 0.4.8
 
+* new config option jails.`denyMovementWhileJailed` if `true`(by default) it will only allow the jailed player to look 
+around, but not move from the place where the jail was set(constrained to 1 block), 
+even if there are no blocks below feet. When `false` the 
+jailed player can move around and can possibly be broken out of jail by other members if they're allowed to break 
+blocks in that region (ie. if no /f owner or /f access on the chunk, or other stuff like /region ) or jail can be 
+tnt cannon-ed etc.
+
 * fixed /f removewarp  not removing warps 
 
 * fixes for NPEs from issue 60
