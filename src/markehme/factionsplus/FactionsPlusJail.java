@@ -1,6 +1,7 @@
 package markehme.factionsplus;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
@@ -25,15 +26,123 @@ public class FactionsPlusJail {
 	 */
 	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
 	
-	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, String factionId) {
+	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, FPlayer unjailer) {
+
+		if ( !FPlayers.i.exists( nameOfPlayerToBeUnjailed ) ) {
+			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
+			return false;
+		}
+		
+		FPlayer fpToBeUnjailed = FPlayers.i.get( nameOfPlayerToBeUnjailed );// never null
+		unjailer.sendMessage( "mapped "+nameOfPlayerToBeUnjailed+" to "+fpToBeUnjailed.getName() );
+		unjailer.sendMessage( "mapped "+Bukkit.getPlayer( nameOfPlayerToBeUnjailed )+" to "+fpToBeUnjailed.getId() );
+
+		String factionId=fpToBeUnjailed.getFactionId();
+		
+		if ( !unjailer.getFactionId().equals( factionId ) ) {
+			unjailer.sendMessage( ChatColor.RED + "That player is not in your faction" );
+			return false;
+		}
+		
+		
 		File jailingFile = new File(Config.folderJails, "jaildata." + factionId + "." + nameOfPlayerToBeUnjailed);
 		if(jailingFile.exists()){
+			
+			//done: teleport player to original before-jailed location, works only when player is online
+			FileInputStream fos = null;
+			InputStreamReader osw = null;
+			BufferedReader bw = null;
+			Player onlinejplayer = fpToBeUnjailed.getPlayer();
+			Location originalLocation=null;
+			if ( null != onlinejplayer ) {
+				try {
+					fos = new FileInputStream( jailingFile );
+					osw = new InputStreamReader( fos, Q.UTF8 );
+					bw = new BufferedReader( osw );
+					
+					bw.readLine();// ignore the `time` line
+					
+					// XXX: if player isn't online when unjailed, it won't be sent back to original location
+					// I don't feel like keeping track of this in the file, it would require changing the isJailed to check
+					// inside the file if a flag is set (jailed=YES/NO; teleportedBack=YES/NO) and when both are YES then delete 
+					//the file, else keep it until both are YES, ie. when player comes online 
+					
+					
+					String worldName = bw.readLine();
+					if ( null != worldName ) {
+						World world = server.getWorld( worldName );
+						double x = Double.parseDouble( bw.readLine() );
+						double y = Double.parseDouble( bw.readLine() );
+						double z = Double.parseDouble( bw.readLine() );
+						float yo = Float.parseFloat( bw.readLine() );
+						float peach = Float.parseFloat( bw.readLine() );
+						
+						originalLocation = new Location( world, x, y, z, yo, peach );
+					}
+					
+					
+				} catch ( Throwable e ) {
+					// we're just ignoring old formats for this file which may contain only the time argument => useless
+					e.printStackTrace();//FIXME: remove this, temporary
+				} finally {
+					if ( null != bw ) {
+						try {
+							bw.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+					if ( null != osw ) {
+						try {
+							osw.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+					if ( null != fos ) {
+						try {
+							fos.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			
 			jailingFile.delete();
-			//TODO: teleport player to original before-jailed location
+			
+			
+			
+			boolean tpSuccess = false;
+			if (null != onlinejplayer) {
+				if ( null == originalLocation ) {
+					// however we should teleport the player somewhere other than remain inside jail
+					Faction f = fpToBeUnjailed.getFaction();
+					if ( null != f ) {
+						originalLocation = f.getHome();
+						if ( null == originalLocation ) {
+							originalLocation = onlinejplayer.getBedSpawnLocation();
+							if ( null == originalLocation ) {
+								originalLocation = onlinejplayer.getWorld().getSpawnLocation();
+							}
+						}
+					}
+				}
+				
+				if ( null != originalLocation ) {
+					tpSuccess = onlinejplayer.teleport( originalLocation );
+//					unjailer.sendMessage( "teleported "+onlinejplayer.getName()+" to orig location" );wow if jailer is 's2' and jailed one is 's' then the former gets teleported
+				}
+			}
+			
 //			cachedJailLocations.remove(id);could or could not have existed, hmm maybe not remove this due to possibility that
 			//jailLocation can be used again, yep makes sense
+			
+			unjailer.sendMessage( nameOfPlayerToBeUnjailed + " has been removed from jail."+
+				(!tpSuccess?ChatColor.RED+" But was not teleported to original location.":""));
 			return true;
 		} else {
+			unjailer.sendMessage( nameOfPlayerToBeUnjailed + " is not jailed." );
 			return false;
 		}
 	}
@@ -188,56 +297,114 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
+		Location jailLoc = getJailLocation( player );
 		
-		if(currentJailFile.exists()) {
-			Scanner scanner=null;
-			try {
-				scanner=new Scanner(currentJailFile);
-				String JailData = scanner.useDelimiter("\\A").next();//'teh ?
+//		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
+		
+//		if(currentJailFile.exists()) {
+		if ( null != jailLoc ) {
+			// Scanner scanner=null;
+			// try {
+			// scanner=new Scanner(currentJailFile);
+			// String JailData = scanner.useDelimiter("\\A").next();//'teh ?
+			//
+			// String[] jail_data = JailData.split(":");
+			//
+			// double x = Double.parseDouble(jail_data[0]);
+			// double y = Double.parseDouble(jail_data[1]); // y axis
+			// double z = Double.parseDouble(jail_data[2]);
+			//
+			// float yo = Float.parseFloat(jail_data[3]); // yaw
+			// float peach = Float.parseFloat(jail_data[4]);
+			//
+			// world = server.getWorld(jail_data[5]);
+			
+			File jailingFile =
+				new File( Config.folderJails, "jaildata." + currentFaction.getId() + "." + playerToBeJailed.getName() );
+			
+			if ( !jailingFile.exists() ) {
+				
+				FileOutputStream fos = null;
+				OutputStreamWriter osw = null;
+				BufferedWriter bw = null;
+				try {
+					fos = new FileOutputStream( jailingFile);
+					osw = new OutputStreamWriter( fos, Q.UTF8 );
+					bw = new BufferedWriter( osw );
 					
-				String[] jail_data =  JailData.split(":");
+					bw.write( Integer.toString( argTime ));
+					bw.newLine();
 					
-			    double x = Double.parseDouble(jail_data[0]);
-			    double y = Double.parseDouble(jail_data[1]); // y axis
-			    double z = Double.parseDouble(jail_data[2]);
-			    
-			    float yo = Float.parseFloat(jail_data[3]); // yaw
-			    float peach = Float.parseFloat(jail_data[4]);
-			    
-			    world = server.getWorld(jail_data[5]);
-			    
-			    Player onlinejplayer = playerToBeJailed.getPlayer();
-			    if (null != onlinejplayer ){
-			    	//FIXME: what if it returns false aka teleport was not successful?
-			    	onlinejplayer.teleport(new Location(world, x, y, z, yo, peach));
-			    }
-			    
-			    File jailingFile = new File(Config.folderJails, "jaildata." + currentFaction.getId() + "." + playerToBeJailed.getName());
-			    
-			    if(!jailingFile.exists()){
-			    	FileWriter filewrite = new FileWriter(jailingFile, true);
-					try {
-						filewrite.write( argTime );
-						sender.sendMessage( ChatColor.GREEN + fjplayer.getName() + " has been jailed!" );
-					} finally {
-						filewrite.close();//"Closes the stream, flushing it first. "
-					}
-			    } else {
-			    	sender.sendMessage(ChatColor.RED + fjplayer.getName() +" is already jailed!");
-			    }
-			       	
-			} catch (Exception e) {
-				e.printStackTrace();
-				sender.sendMessage(ChatColor.RED + "Can not read the jail data, is a jail set?");
-			}finally {
-				if (null != scanner) {
-					scanner.close();
-				}
-			}
+					Player onlinejplayer = playerToBeJailed.getPlayer();
+					boolean tpSuccess=false;
+					if ( null != onlinejplayer ) {
+						// done inform: what if it returns false aka teleport was not successful?
 
+						Location originalLocation = onlinejplayer.getLocation();
+						bw.write( originalLocation.getWorld().getName() );
+						bw.newLine();
+						bw.write( Double.toString( originalLocation.getX() ));
+						bw.newLine();
+						bw.write( Double.toString( originalLocation.getY() ));
+						bw.newLine();
+						bw.write( Double.toString( originalLocation.getZ() ));
+						bw.newLine();
+						bw.write( Float.toString( originalLocation.getYaw() ));
+						bw.newLine();
+						bw.write( Float.toString( originalLocation.getPitch() ));
+						bw.newLine();
+						
+						tpSuccess=onlinejplayer.teleport( jailLoc );
+					}
+					
+					sender.sendMessage( ChatColor.GREEN + fjplayer.getName() + " has been jailed!"
+						+ (null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
+							(tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!")
+						  ) 
+						              );
+					
+				} catch ( IOException e ) {
+					e.printStackTrace();
+					sender.sendMessage( ChatColor.RED+"internal error happened");
+				} finally {
+					if ( null != bw ) {
+						try {
+							bw.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+					if ( null != osw ) {
+						try {
+							osw.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+					if ( null != fos ) {
+						try {
+							fos.close();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+				}
+					
+			} else {
+				sender.sendMessage( ChatColor.RED + fjplayer.getName() + " is already jailed!" );
+			}
+			
+			// } catch (Exception e) {
+			// e.printStackTrace();
+			// sender.sendMessage(ChatColor.RED + "Can not read the jail data, is a jail set?");
+			// }finally {
+			// if (null != scanner) {
+			// scanner.close();
+			// }
+			// }
+			
 		} else {
-			sender.sendMessage(ChatColor.RED + "There is no jail currently set.");
+			sender.sendMessage( ChatColor.RED + "There is no jail currently set." );
 		}
 		
 		return false;

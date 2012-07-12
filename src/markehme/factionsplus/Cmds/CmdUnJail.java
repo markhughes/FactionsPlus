@@ -39,23 +39,8 @@ public class CmdUnJail extends FCommand {
 				|| ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) )
 		{
 			
-			if ( !FPlayers.i.exists( playerToUnjail ) ) {
-				fme.sendMessage( ChatColor.RED + "That player does not exist on this server" );
-				return;
-			}
+			FactionsPlusJail.removeFromJail( playerToUnjail, fme);
 			
-			FPlayer fp = FPlayers.i.get( playerToUnjail );// never null
-			
-			if ( !fme.getFactionId().equals( fp.getFactionId() ) ) {
-				fme.sendMessage( ChatColor.RED + "That player is not in your faction" );
-				return;
-			}
-			
-			if ( FactionsPlusJail.removeFromJail( playerToUnjail, fp.getFactionId() ) ) {
-				fme.sendMessage( playerToUnjail + " has been removed from jail." );
-			} else {
-				fme.sendMessage( playerToUnjail + " is not jailed." );
-			}
 			return;
 		}
 		fme.sendMessage(ChatColor.RED+ "No permission to unjail!" );
