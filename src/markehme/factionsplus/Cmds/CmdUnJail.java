@@ -1,9 +1,12 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.*;
+
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
+import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
@@ -28,16 +31,29 @@ public class CmdUnJail extends FCommand {
 	
 	@Override
 	public void perform() {
-		String unJailingPlayer = this.argAsString( 0 );
+		String playerToUnjail = this.argAsString( 0 );
 		
 		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
 			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
 					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
 					|| (Utilities.isOp( fme ))) {
-				if ( FactionsPlusJail.removeFromJail( unJailingPlayer, fme.getFactionId() ) ) {
-					fme.sendMessage( unJailingPlayer + " has been removed from jail." );
+				
+				if (!FPlayers.i.exists( playerToUnjail )) {
+					fme.sendMessage(ChatColor.RED+ "That player does not exist on this server" );
+					return;
+				}
+				
+				FPlayer fp = FPlayers.i.get( playerToUnjail );//never null
+				
+				if (!fme.getFactionId().equals( fp.getFactionId() )) {
+					fme.sendMessage( ChatColor.RED+"That player is not in your faction" );
+					return;
+				}
+				
+				if ( FactionsPlusJail.removeFromJail( playerToUnjail, fp.getFactionId() ) ) {
+					fme.sendMessage( playerToUnjail + " has been removed from jail." );
 				} else {
-					fme.sendMessage( unJailingPlayer + " is not jailed." );
+					fme.sendMessage( playerToUnjail + " is not jailed." );
 				}
 				return;
 			}
