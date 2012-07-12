@@ -57,8 +57,12 @@ public class CmdUnJail extends FCommand {
 				}
 				return;
 			}
+			
+			fme.sendMessage( ChatColor.RED+"As a "+Bridge.factions.getRole( fme )+" you have No permission to unjail!" );
+		}else{
+			fme.sendMessage( ChatColor.RED+"You don't have the required permission node to unjail!" );
 		}
 		
-		fme.sendMessage( "As a "+Bridge.factions.getRole( fme )+" you have No permission to unjail!" );
+		
 	}
 }
