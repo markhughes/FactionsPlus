@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 public @interface Section {
 	
 	/**
+	 * XXX: currently unused! (for Sections)
 	 * comment to be added above of this config option, inside the config file<br>
 	 * named value() so you can use @ConfigSection({"comments here","next line"})
 	 */

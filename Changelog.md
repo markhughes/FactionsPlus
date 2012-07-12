@@ -1,5 +1,15 @@
 # FactionsPlus version 0.4.8
 
+* every config option inside config.yml now has above it auto comments(lines starting with "### ") which explain what 
+the config option does. These comments are automatically removed and updated on every config reload(which also does a save) 
+to be sure they are always up to date with the currently running version of FactionsPlus.  
+If you want to place and keep your own comments just use normal comments ( lines starting with one "#" ) they'll be kept 
+inside the config.yml during saves. A save occurs on every config reload (ie. when plugin is enabled or `/f reloadfp`)  
+You may also notice that we include the dotted format of the config option right above it ie. `jails.enabled` would be right above
+`enabled`, however do remember that you cannot use dotted format in config names. These are there for copy/pasting simplicity
+when referring to config options and an easier way to see which option you're really looking at without having to check for its
+parent sections.
+
 * in config.yml, all comments starting with "### " (3 # and a space) instead of just "#" are automatically discarded.
 
 * jailed players are now returned to their original location, as long as they were online when they were unjailed 

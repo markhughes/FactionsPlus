@@ -36,10 +36,15 @@ public abstract class Typeo {
 	// basically cached the reflection here: //one to many
 	private static final HashMap<Field, String[]>	fieldToOldAliasesArray		= new HashMap<Field, String[]>();
 	
+	/**
+	 * sections are not included only the key:value fields
+	 */
+	private static final HashMap<Field, String[]>	fieldToCommentsArray		= new HashMap<Field, String[]>();
+	
 	// field to dotted form of alias//one to one
 	private static final HashMap<Field, String>		fieldToDottedRealAlias		= new HashMap<Field, String>();
 	
-	// field to-> instance of the parent class it is in
+	// field to-> instance of the parent class(aka parentClass) it is in; cause we've to do parentClass.get(field) to get field instance
 	private static final HashMap<Field, Object>		fieldToInstanceOfIt			= new HashMap<Field, Object>();
 	
 	
@@ -97,6 +102,20 @@ public abstract class Typeo {
 		return dottedAllAliases_to_Fields.get( thisDottedFormat );
 	}
 	
+	
+	private final static String[] EMPTY={};
+	protected static final String[] getComments( Field forField ) {
+		assert Q.nn( forField );
+		assert !fieldToCommentsArray.isEmpty();
+		String[] comments = fieldToCommentsArray.get( forField );
+//		if ( (null == comments) || (comments.length <=0) ) {
+//			return EMPTY;
+//		}else {
+//			System.out.println(comments.length);
+//		}
+		assert Q.nn( comments );// cannot be null due to "default {}" inside the {@link @Option} annotation
+		return comments;
+	}
 	
 	protected static final String[] getListOfOldAliases( Field forField ) {
 		assert Q.nn( forField );
@@ -158,6 +177,7 @@ public abstract class Typeo {
 			fieldToDottedRealAlias.clear();
 			fieldToOldAliasesArray.clear();
 			fieldToInstanceOfIt.clear();
+			fieldToCommentsArray.clear();
 			parsify( rootClass, null, rootClass );
 		}
 	}
@@ -289,6 +309,10 @@ public abstract class Typeo {
 						String[] aliasesArray = co.oldAliases_alwaysDotted();
 						assert null != aliasesArray : "impossible, due to how annotation default works for arrays";
 						fieldToOldAliasesArray.put( field, aliasesArray );
+						
+						String[] commentArray = co.comment();
+						assert null != commentArray:field;//can be empty though
+						fieldToCommentsArray.put( field, commentArray);
 						
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non

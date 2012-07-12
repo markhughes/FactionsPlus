@@ -1,5 +1,6 @@
 package markehme.factionsplus.config.yaml;
 
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.util.*;
 
@@ -213,6 +214,35 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	public void recalculateLineNumbers() {
 		
 		recalculateLineNumbers( this, 0 );
+	}
+
+
+	public void insertBefore( WYItem<METADATA_TYPE> insertThis, WYItem<METADATA_TYPE> beforeThis ) {
+		assert null != insertThis;
+		assert null != beforeThis; 
+		assert beforeThis.getParent() == this;
+		
+		assert insertThis.getParent() == null;
+		assert insertThis.getNext() == null;
+		assert insertThis.getPrev() == null;
+		
+		if (beforeThis == firstChild) {
+			firstChild=insertThis;
+		}else {
+			assert beforeThis.getPrev() != null;
+		}
+		
+		WYItem oldPrev = beforeThis.getPrev();
+		if (null != oldPrev) {
+			oldPrev.setNext( insertThis );
+		}
+		insertThis.setPrev( oldPrev );
+		beforeThis.setPrev( insertThis );
+		
+		
+		insertThis.setNext( beforeThis );
+		
+		insertThis.setParent( this );
 	}
 	
 }
