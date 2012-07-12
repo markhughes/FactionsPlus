@@ -130,7 +130,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	private static boolean					inited					= false;
 	private static boolean					loaded= false;
-	
+	private static String[]	fpConfigHeaderArray;
 	
 	/**
 	 * call this one time onEnable() never on onLoad() due to its evilness;)<br>
@@ -156,17 +156,29 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		Typeo.sanitize_AndUpdateClassMapping( configClass );
 		
-		final String[]	fpConfigHeaderArray	= new String[]{
+		fpConfigHeaderArray	= new String[]{
 			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
-			,"You may not use `.` aka dot in config options names"
-			,"All comments starting with `### ` (3 # and a space) will be automatically updated, please refrain from making any changes inside those lines"
+			,""
+			,""
+			,"All comments starting with `### ` (3 # and a space) will be automatically updated, " 
+			," please refrain from making any changes inside those lines because they will be lost upon save"
 			,"Making comments starting with just one `#` will remain in place"
+			,""
+			,"You may not use `.` aka dot in config options names even though we are referring to them like that"
+			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
+			," Each level is indented by 2 spaces, no more no less"
+			,""
+			,""
+			,""
+			,""
 		};
 		
-		for ( int j = 0; j < fpConfigHeaderArray.length; j++ ) {
-			fpConfigHeader.append( new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+fpConfigHeaderArray[j] ) );
+		for ( int i = 0; i < fpConfigHeaderArray.length; i++ ) {
+			if (fpConfigHeaderArray[i].contains("\n") || fpConfigHeaderArray[i].contains( "\r" ) ) {
+				throw FactionsPlus.bailOut( "Do not use newlines inside the header, " +
+						"but instead add a new element line in the array. Problematic line #"+i+"\n`"+fpConfigHeaderArray[i]+"`" );
+			}
 		}
-		
 		
 		setInited( true);
 	}
@@ -597,14 +609,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
-	private static final WYSection fpConfigHeader=new WYSection<COMetadata>( 0, "FactionsPlus config.yml header" );
+//	private static final WYSection fpConfigHeader=new WYSection<COMetadata>( 0, "FactionsPlus config.yml header" );
 	
 	private static void prependHeader( WYSection root ) {
-		WYItem cur = fpConfigHeader.getLast();
-		while (null != cur) {
-			assert cur instanceof WYRawButLeveledLine:cur.getClass();//definitely no sections
-			root.prependWithCloneAndOrphaning( cur );
-			cur=cur.getPrev();
+		for ( int j = fpConfigHeaderArray.length-1; j >= 0; j-- ) {
+			String line = fpConfigHeaderArray[j];
+//			if ((null == line)||(line.isEmpty())) {
+//				root.prepend(new WYEmptyLine<COMetadata>( 0 ));actually this is bad, because these are kept
+//			}else{
+				//line numbers are irrelevant because they will be recalculated later
+			root.prepend( new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+line ) );
+//			}
 		}
 	}
 
