@@ -105,7 +105,7 @@ public class CmdListWarps extends FCommand  {
 	        	buffer += ". ";
 	        }
 	        sender.sendMessage(buffer);
-	        scanner.close();
+//	        scanner.close();
 	    } catch (Exception e) {
 	    	FactionsPlusPlugin.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 	    	

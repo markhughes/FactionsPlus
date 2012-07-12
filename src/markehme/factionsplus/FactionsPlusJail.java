@@ -291,10 +291,12 @@ public class FactionsPlusJail {
         loc.getPitch() + ":" + loc.getWorld().getName();
 		
 		DataOutputStream jailWrite=null;
+		FileOutputStream fos = null;
 		try {
-			jailWrite = new DataOutputStream(new FileOutputStream(currentJailFile, false));
+			fos=new FileOutputStream(currentJailFile, false);
+			jailWrite = new DataOutputStream(fos);
 			jailWrite.write(jailData.getBytes());
-			jailWrite.close();
+//			jailWrite.close();
 			
 			cachedJailLocations.put( cfid, loc );
 			sender.sendMessage("Jail set!");
@@ -309,6 +311,13 @@ public class FactionsPlusJail {
 			if (null != jailWrite) {
 				try {
 					jailWrite.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			if (null != fos) {
+				try {
+					fos.close();//likely already closed by jailWrite
 				} catch ( IOException e ) {
 					e.printStackTrace();
 				}

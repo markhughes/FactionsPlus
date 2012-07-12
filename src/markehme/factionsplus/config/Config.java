@@ -424,7 +424,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public final static void saveConfig() {
 		try {
-			// FIXME: actually meld the class options/values into the WYIdentifiers here in the represented yml file
+			// done earlier: actually meld the class options/values into the WYIdentifiers here in the represented yml file
 			// before you write virtualRoot
 			
 			FileOutputStream fos = null;

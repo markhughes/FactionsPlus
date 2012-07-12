@@ -86,7 +86,7 @@ public class CmdAnnounce extends FCommand {
 			formatedMessage = "Previously, " + formatedMessage;
 			announceWrite = new DataOutputStream(new FileOutputStream(fAF, false));
 			announceWrite.write(formatedMessage.getBytes());
-			announceWrite.close();
+//			announceWrite.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

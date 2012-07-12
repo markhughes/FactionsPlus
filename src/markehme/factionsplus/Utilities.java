@@ -19,10 +19,15 @@ public class Utilities {
 	/* ********** FILE RELATED ********** */
 	
 	public static String readFileAsString(File filePath) {
+		FileInputStream fstream=null;
+		DataInputStream in=null;
+		BufferedReader br=null;
+		InputStreamReader isr = null;
 		try {
-			FileInputStream fstream = new FileInputStream(filePath);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			fstream = new FileInputStream(filePath);
+			in = new DataInputStream(fstream);
+			isr=new InputStreamReader(in);
+			br = new BufferedReader(isr);
 			String strLine;
 			String fullThing = "";
 
@@ -30,11 +35,43 @@ public class Utilities {
 				fullThing = fullThing + strLine + "\r\n";
 			}
 
-			in.close();
+//			in.close();
 
 			return fullThing;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != isr) {
+				try {
+					isr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != in) {
+				try {
+					in.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != fstream) {
+				try {
+					fstream.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return null;
