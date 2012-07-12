@@ -51,6 +51,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	// Begin Config Pointers
 	
+	
 	/**
 	 * Caveats: YOU CAN rename all the fields, it won't affect config.yml because it uses the name inside the annotation above
 	 * the field
@@ -154,6 +155,19 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// names
 		
 		Typeo.sanitize_AndUpdateClassMapping( configClass );
+		
+		final String[]	fpConfigHeaderArray	= new String[]{
+			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
+			,"You may not use `.` aka dot in config options names"
+			,"All comments starting with `### ` (3 # and a space) will be automatically updated, please refrain from making any changes inside those lines"
+			,"Making comments starting with just one `#` will remain in place"
+		};
+		
+		for ( int j = 0; j < fpConfigHeaderArray.length; j++ ) {
+			fpConfigHeader.append( new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+fpConfigHeaderArray[j] ) );
+		}
+		
+		
 		setInited( true);
 	}
 	
@@ -432,8 +446,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			bw = null;
 			try {
 				//for tests:
-//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
-				fos = new FileOutputStream( Config.fileConfig);
+				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
+//				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
@@ -562,7 +576,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					+ "'" );
 			}
 			
-		
+		prependHeader(virtualRoot);
 		
 		applyChanges();
 		
@@ -583,7 +597,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
+	private static final WYSection fpConfigHeader=new WYSection<COMetadata>( 0, "FactionsPlus config.yml header" );
 	
+	private static void prependHeader( WYSection root ) {
+		WYItem cur = fpConfigHeader.getLast();
+		while (null != cur) {
+			assert cur instanceof WYRawButLeveledLine:cur.getClass();//definitely no sections
+			root.prependWithCloneAndOrphaning( cur );
+			cur=cur.getPrev();
+		}
+	}
+
 	private final static void cleanAutoComments( WYSection root, String dottedParentSection ) {
 		assert Q.nn( root );
 		WYItem<COMetadata> currentItem = root.getFirst();

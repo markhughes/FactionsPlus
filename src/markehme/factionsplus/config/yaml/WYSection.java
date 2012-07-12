@@ -39,6 +39,7 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 			lastChild.setNext( child );
 			child.setPrev( lastChild );
 			lastChild = child;
+			assert child.getNext() == null;
 		} else {
 			// was previously empty
 			firstChild = lastChild = child;
@@ -46,7 +47,39 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 			assert null == child.getNext();
 		}
 		
+		assert child.getParent() == null;
 		child.setParent( this );
+	}
+	
+	
+	public void prependWithCloneAndOrphaning( WYItem childToBeClonedAndOrphaned ) {
+		try {
+			WYItem clone = childToBeClonedAndOrphaned.clone();
+			clone.setNext( null );
+			clone.setPrev( null );
+			clone.setParent( null );
+			prepend(clone);
+		} catch ( CloneNotSupportedException e ) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void prepend( WYItem orphanedChild ) {
+		if ( firstChild != null ) {// means first is also non-null
+			assert firstChild.getPrev() == null;
+			firstChild.setPrev( orphanedChild );
+			orphanedChild.setNext( firstChild );
+			firstChild = orphanedChild;
+			assert orphanedChild.getPrev() == null;
+		} else {
+			// was previously empty
+			firstChild = lastChild = orphanedChild;
+			assert null == orphanedChild.getPrev();
+			assert null == orphanedChild.getNext();
+		}
+		
+		assert orphanedChild.getParent() == null;
+		orphanedChild.setParent( this );
 	}
 	
 	
