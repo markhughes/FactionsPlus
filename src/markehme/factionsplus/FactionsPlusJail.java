@@ -326,14 +326,14 @@ public class FactionsPlusJail {
 		
 	}
 
-	@Deprecated
-	public static void unjailPlayer(String name, int id) {
-		new File(Config.folderJails, "jaildata." + id + "." + name).delete();
-	}
-
-	@Deprecated
-	public static double getTempJailTime(Player p) {
-		// TODO: getTempJailTime Function
-		return 0;
-	}
+//	@Deprecated
+//	public static void unjailPlayer(String name, int id) {
+//		new File(Config.folderJails, "jaildata." + id + "." + name).delete();
+//	}
+//
+//	@Deprecated
+//	public static double getTempJailTime(Player p) {
+//		// TODO: getTempJailTime Function
+//		return 0;
+//	}
 }
