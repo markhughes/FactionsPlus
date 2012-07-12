@@ -25,7 +25,7 @@ public class SubSection_TeleportsInto {
 	public final SubSection_TPIntoWarZone _warzone=new SubSection_TPIntoWarZone();
 
 
-	public boolean isAnySet() {
+	public final boolean isAnySet() {
 		return _allyTerritory.isAnySet() || 
 				_enemyTerritory.isAnySet() ||
 				_neutralTerritory.isAnySet() ||
@@ -34,25 +34,25 @@ public class SubSection_TeleportsInto {
 	}
 
 
-	public boolean shouldReportCommands() {
+	public final boolean shouldReportCommands() {
 		return _allyTerritory.shouldReportCommands() ||
 				_enemyTerritory.shouldReportCommands() ||
 				_neutralTerritory.shouldReportCommands();
 	}
 
 
-	public boolean shouldPreventHomeTelepors() {
+	public final boolean shouldPreventHomeTelepors() {
 		return _allyTerritory.shouldPreventHomeTelepors()
 				||_enemyTerritory.shouldPreventHomeTelepors() || _neutralTerritory.shouldPreventHomeTelepors();
 	}
 	
-	public boolean shouldPreventBackTelepors() {
+	public final boolean shouldPreventBackTelepors() {
 		return _allyTerritory.shouldPreventBackTelepors()
 				||_enemyTerritory.shouldPreventBackTelepors() || _neutralTerritory.shouldPreventBackTelepors();
 	}
 
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public final boolean shouldPreventEnderPearlsTeleports() {
 		return _allyTerritory.shouldPreventEnderPearlsTeleports()
 				||_enemyTerritory.shouldPreventEnderPearlsTeleports() || _neutralTerritory.shouldPreventEnderPearlsTeleports()
 				||_safezone.shouldPreventEnderPearlsTeleports()

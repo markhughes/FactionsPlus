@@ -17,28 +17,28 @@ public class SubSection_TPIntoAlly {
 
 
 
-	public boolean isAnySet() {
+	public final boolean isAnySet() {
 		return _deny.isAnySet() || _report.isAnySet();
 	}
 
 
 
-	public boolean shouldReportCommands() {
+	public final boolean shouldReportCommands() {
 		return _report.shouldReportCommands();
 	}
 
 
 
-	public boolean shouldPreventHomeTelepors() {
+	public final boolean shouldPreventHomeTelepors() {
 		return _deny.shouldPreventHomeTelepors();
 	}
 	
-	public boolean shouldPreventBackTelepors() {
+	public final boolean shouldPreventBackTelepors() {
 		return _deny.shouldPreventBackTelepors();
 	}
 
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public final  boolean shouldPreventEnderPearlsTeleports() {
 		return _deny.shouldPreventEnderPearlsTeleports();
 	}
 }

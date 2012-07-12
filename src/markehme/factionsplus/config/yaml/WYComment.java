@@ -8,8 +8,12 @@ import markehme.factionsplus.extras.*;
  */
 public class WYComment<METADATA_TYPE> extends WYRawButLeveledLine<METADATA_TYPE> {
 
-	public WYComment(int lineNumber, String theCommentWithoutLeadingSpaces){//, WYSection parent, WYItem prev ) {
-		super(lineNumber, theCommentWithoutLeadingSpaces);//, parent, prev );
+	/**
+	 * @param lineNumber
+	 * @param theCommentWithoutLeadingSpaces but including the "#" comment char
+	 */
+	public WYComment(int lineNumber, String theCommentWithoutLeadingSpaces){
+		super(lineNumber, theCommentWithoutLeadingSpaces);
 	}
 	
 }

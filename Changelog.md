@@ -1,5 +1,28 @@
 # FactionsPlus version 0.4.8
 
+* in config.yml, all comments starting with "### " (3 # and a space) instead of just "#" are automatically discarded.
+
+* jailed players are now returned to their original location, as long as they were online when they were unjailed 
+(but also when they were jailed)  
+if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  
+if a player was jailed while offline it will only be teleported to the jail upon login (same as in 0.4.7)  
+if all else fails, when unjailed the player will be teleported back to bed or world spawn
+
+* fixed uses of getPlayer which were expected to act as getPlayerExact  
+
+* new config option jails.`denyMovementWhileJailed` if `true`(by default) it will only allow the jailed player to look 
+around, but not move from the place where the jail was set(constrained to 1 block), 
+even if there are no blocks below feet. When `false` the 
+jailed player can move around and can possibly be broken out of jail by other members if they're allowed to break 
+blocks in that region (ie. if no /f owner or /f access on the chunk, or other stuff like /region ) or jail can be 
+tnt cannon-ed etc.
+
+* fixed /f removewarp  not removing warps 
+
+* fixes for NPEs from issue 60
+
+* fixes /f help NPE on last page
+
 * added new config options to deny teleports via /back command that would end up inside  
 ally/neutral/enemy territory Here they are with their defaults:  
   - `Teleports.intoTerritory.Ally.deny.ViaBackCommand`: false

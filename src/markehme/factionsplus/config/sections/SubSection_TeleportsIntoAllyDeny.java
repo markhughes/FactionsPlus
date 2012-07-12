@@ -18,19 +18,19 @@ public class SubSection_TeleportsIntoAllyDeny {
 			oldAliases_alwaysDotted = {}, realAlias_inNonDottedFormat = "ViaEnderPeals" )
 	public final _boolean	viaPearls	= new _boolean( false );	
 
-	public boolean isAnySet() {
+	public  final boolean isAnySet() {
 		return viaHome._ || viaPearls._ || viaBack._;
 	}
 
-	public boolean shouldPreventHomeTelepors() {
+	public  final boolean shouldPreventHomeTelepors() {
 		return viaHome._;
 	}
 	
-	public boolean shouldPreventBackTelepors() {
+	public  final boolean shouldPreventBackTelepors() {
 		return viaBack._;
 	}
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public  final boolean shouldPreventEnderPearlsTeleports() {
 		return viaPearls._;
 	}
 }

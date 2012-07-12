@@ -1,5 +1,7 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.*;
+
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
@@ -29,22 +31,17 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-//		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(playerToJail);
-		
-		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
-					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
-					|| (Utilities.isOp( fme ))) {
-				FactionsPlusJail.sendToJail( playerToJail,  fme.getPlayer(), -1 );
-//					fme.sendMessage( playerToJail + " has been jailed." );
-//				} else {
-//					fme.sendMessage( playerToJail + " is not jailed." );
-//				}
-				return;
-			}
+		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
+			|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
+			|| ( Utilities.isOp( fme ) )
+			|| ( FactionsPlus.permission.playerHas( Utilities.getOnlinePlayerExact(fme), "factionsplus.unjail" ) ) )
+		{
+			
+			FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact(fme), -1 );
+			return;
 		}
-		
-		fme.sendMessage( "As a "+Bridge.factions.getRole( fme )+" you have No permission to jail!" );
-		
+		fme.sendMessage(ChatColor.RED+ "No permission to jail!" );
 	}
+	
+	
 }

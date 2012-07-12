@@ -30,7 +30,7 @@ public abstract class Typeo {
 	// many to one
 	private static final HashMap<String, Field>		dottedAllAliases_to_Fields	= new HashMap<String, Field>();
 	
-	// TODO: this is the order in which the config options will be written in the config.yml
+	// done: this is the order in which the config options will be written in the config.yml
 	protected static final TypedLinkedList<Field>	orderedListOfFields			= new TypedLinkedList<Field>();
 	
 	// basically cached the reflection here: //one to many

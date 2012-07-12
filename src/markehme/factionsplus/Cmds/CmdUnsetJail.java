@@ -29,7 +29,7 @@ public class CmdUnsetJail extends FCommand {
 	
 	@Override
 	public void perform() {
-		if(!FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.unsetjail")) {
+		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact(fme), "factionsplus.unsetjail")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;
 		}

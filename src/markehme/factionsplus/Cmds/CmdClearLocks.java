@@ -1,6 +1,6 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
@@ -29,8 +29,8 @@ public class CmdClearLocks extends FCommand {
 	
 	@Override
 	public void perform() {
-		Location loc = fme.getPlayer().getLocation();
-		Player name = fme.getPlayer();
+		Location loc = Utilities.getOnlinePlayerExact(fme).getLocation();
+		Player name = Utilities.getOnlinePlayerExact(fme);
 		int clearedlocks = LWCFunctions.clearLocksCommand(name, loc);
 		if( clearedlocks < 0 ) {
 			return;

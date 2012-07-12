@@ -2,6 +2,7 @@ package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -21,8 +22,9 @@ public class JailListener implements Listener{
 			return;
 		}
 		// If player is still jailed, SEND THEM TO THE BRIG!
-		if(Utilities.isJailed(event.getFPlayer().getPlayer())){
-			event.getFPlayer().getPlayer().teleport(FactionsPlusJail.getJailLocation(event.getFPlayer().getPlayer()));
+		Player player = Utilities.getOnlinePlayerExact( event.getFPlayer() );
+		if(Utilities.isJailed(player)){
+			player.teleport(FactionsPlusJail.getJailLocation(player));
 		}
 	}
 	@EventHandler
@@ -92,7 +94,7 @@ public class JailListener implements Listener{
 			return;
 		}
 		Player playa = event.getPlayer();
-		if (Utilities.isJailed(playa)) {
+		if ( (Utilities.isJailed(playa)) && (Config._jails.denyMovementWhileJailed._) ) {
 			
 			Location jailLocation = FactionsPlusJail.getJailLocation(playa);
 			if (Utilities.isJustLookingAround(event.getFrom(),jailLocation)) {
@@ -117,7 +119,8 @@ public class JailListener implements Listener{
 //			event.setCancelled(false);
 			
 			return;
-		}
+		}//is jailed
+		
 	}
 
 	
@@ -138,7 +141,7 @@ public class JailListener implements Listener{
 //						+jailLocation+" now="+event.getFrom() );
 				return;
 			}else{
-				//this is reached only when PlayerMoveEvent is NOT cancelled
+				//this is reached only when PlayerMoveEvent is NOT cancelled but it's set to move to certain location
 //				player.sendMessage("allowed");
 			}
 			

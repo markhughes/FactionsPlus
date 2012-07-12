@@ -17,15 +17,15 @@ public final class Section_Teleports {
 		return _into.shouldReportCommands();
 	}
 
-	public boolean shouldPreventHomeTelepors() {
+	public final boolean shouldPreventHomeTelepors() {
 		return _into.shouldPreventHomeTelepors();
 	}
 	
-	public boolean shouldPreventBackTelepors() {
+	public final boolean shouldPreventBackTelepors() {
 		return _into.shouldPreventBackTelepors();
 	}
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public final boolean shouldPreventEnderPearlsTeleports() {
 		return _into.shouldPreventEnderPearlsTeleports();
 	}
 }

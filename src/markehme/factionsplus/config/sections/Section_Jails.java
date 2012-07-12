@@ -43,5 +43,8 @@ public final class Section_Jails {
 	public  final _boolean officersCanJail=new _boolean(true);
 	
 	
+	@Option(oldAliases_alwaysDotted={
+		}, realAlias_inNonDottedFormat = "denyMovementWhileJailed" )
+	public  final _boolean denyMovementWhileJailed=new _boolean(true);
 	
 }
