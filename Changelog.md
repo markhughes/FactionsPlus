@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* fixed /f removewarp  not removing warps 
+
 * fixes for NPEs from issue 60
 
 * fixes /f help NPE on last page
