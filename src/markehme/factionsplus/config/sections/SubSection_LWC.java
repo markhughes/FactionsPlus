@@ -7,7 +7,15 @@ public final class SubSection_LWC {
 	
 //	public static final static final String	str_removeLWCLocksOnClaim	= "removeLWCLocksOnClaim";
 
-	@Option(oldAliases_alwaysDotted={
+	@Option(comment={
+		"It is highly encounraged to have this enabled IF you have Factions' \"onCaptureResetLwcLocks\": true,"
+		,"and you should then set onCaptureResetLwcLocks to false because all that one does is reset chests' locks,"
+		,"which is already done by this option below & more."
+		,"The following are unlocked: chests, furnaces, signs, dispensers, wooden doors, iron doors, trap doors."
+		,"The locks are removed only if they are owned by someone that is not in your faction."
+		,"The removal happens when you claim land ie. /f claim"
+	},
+		oldAliases_alwaysDotted={
 		"extras.lwc.removeLWCLocksOnClaim",
 		"removeLWCLocksOnClaim" //the first one in this line is the latest ID for this option, and will be used when saving the config.yml
 		//all below lines are used to import the from the obsolete names for this same config option, the higher ones override the lower ones
@@ -17,7 +25,8 @@ public final class SubSection_LWC {
 	}, realAlias_inNonDottedFormat = "removeAllLocksOnClaim" )
 	public  final _boolean removeAllLocksOnClaim=new _boolean(false);
 	
-	@Option(oldAliases_alwaysDotted={
+	@Option(comment={"will allow you to make a door truly public via /cpublic"},
+		oldAliases_alwaysDotted={
 		"extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory"
 	},
 			realAlias_inNonDottedFormat = "blockCPublicAccessOnNonOwnFactionTerritory" )
