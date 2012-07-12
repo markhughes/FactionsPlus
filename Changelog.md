@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* fixed uses of getPlayer which were expected to act as getPlayerExact  
+
 * new config option jails.`denyMovementWhileJailed` if `true`(by default) it will only allow the jailed player to look 
 around, but not move from the place where the jail was set(constrained to 1 block), 
 even if there are no blocks below feet. When `false` the 
