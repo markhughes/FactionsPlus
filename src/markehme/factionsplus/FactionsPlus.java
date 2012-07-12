@@ -60,6 +60,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	private static Metrics metrics=null;
 	
+	// XXX: if Factions gets reloaded (ie. via plugman) and it has different settings for these now, they will have new
+	// instances but we're still gonna be pointing to the old ones because of this
 	public static Set<String> ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
 	public static Set<String> noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
 	public static Set<String> noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
@@ -67,7 +69,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public FactionsPlus() {//constructor
 		super();
 		if (null != instance) {
-			throw bailOut("this was not expected, getting new-ed again");
+			throw bailOut("this was not expected, getting new-ed again without getting unloaded first");
 		}
 		instance=this;
 	}
@@ -127,7 +129,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				failed = t;
 			}
 			
-			FactionsPlusPlugin.info( "Disabled successfuly." );
+			if (null == failed) {
+				FactionsPlusPlugin.info( "Disabled successfuly." );
+			}
 			
 		} catch ( Throwable t ) {
 			failed = t;
@@ -216,8 +220,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
 					// TODO: maybe someone can modify this message so that it would make sense to the console reader
 					FactionsPlusPlugin.info( "Consider setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
-						+ "` to reset locks(on land claim) for more than just chests," +
-						" which is what Factions plugin already does right now" );
+						+ "` to reset locks(on land claim) for more than _just_chests_(" +
+						"which is what Factions plugin already does right now)" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
 				}
 				

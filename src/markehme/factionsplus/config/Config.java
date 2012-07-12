@@ -51,6 +51,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	// Begin Config Pointers
 	
+	
 	/**
 	 * Caveats: YOU CAN rename all the fields, it won't affect config.yml because it uses the name inside the annotation above
 	 * the field
@@ -129,7 +130,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	private static boolean					inited					= false;
 	private static boolean					loaded= false;
-	
+	private static String[]	fpConfigHeaderArray;
 	
 	/**
 	 * call this one time onEnable() never on onLoad() due to its evilness;)<br>
@@ -154,6 +155,31 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// names
 		
 		Typeo.sanitize_AndUpdateClassMapping( configClass );
+		
+		fpConfigHeaderArray	= new String[]{
+			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
+			,""
+			,""
+			,"All comments starting with `### ` (3 # and a space) will be automatically updated, " 
+			," please refrain from making any changes inside those lines because they will be lost upon save"
+			,"Making comments starting with just one `#` will remain in place"
+			,""
+			,"You may not use `.` aka dot in config options names even though we are referring to them like that"
+			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
+			," Each level is indented by 2 spaces, no more no less"
+			,""
+			,""
+			,""
+			,""
+		};
+		
+		for ( int i = 0; i < fpConfigHeaderArray.length; i++ ) {
+			if (fpConfigHeaderArray[i].contains("\n") || fpConfigHeaderArray[i].contains( "\r" ) ) {
+				throw FactionsPlus.bailOut( "Do not use newlines inside the header, " +
+						"but instead add a new element line in the array. Problematic line #"+i+"\n`"+fpConfigHeaderArray[i]+"`" );
+			}
+		}
+		
 		setInited( true);
 	}
 	
@@ -352,7 +378,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	/**
-	 * must be inside: synchronized ( mapField_to_ListOfWYIdentifier )<br>
+	 * must be inside: synchronized ( mapFieldToID )<br>
 	 * this parses the entire representation of the config.yml and marks duplicates and invalid configs<br>
 	 * 
 	 * @param root
@@ -424,15 +450,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	public final static void saveConfig() {
 		try {
-			// FIXME: actually meld the class options/values into the WYIdentifiers here in the represented yml file
+			// done earlier: actually meld the class options/values into the WYIdentifiers here in the represented yml file
 			// before you write virtualRoot
 			
 			FileOutputStream fos = null;
 			OutputStreamWriter osw = null;
 			bw = null;
 			try {
-				//for tests:new File( Config.fileConfig.getParent(), "config2.yml" ) );
-				fos = new FileOutputStream( Config.fileConfig);
+				//for tests:
+				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
+//				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
@@ -500,6 +527,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();
+	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
 	
 	
 	public synchronized final static boolean reloadConfig() {
@@ -528,7 +556,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				
 				// now read the existing config
 				virtualRoot = WannabeYaml.read( fileConfig );
-				
+				cleanAutoComments(virtualRoot, null);
 				
 				
 				// now check to see if we have any old config options or invalid ones in the config
@@ -560,7 +588,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					+ "'" );
 			}
 			
-		
+		prependHeader(virtualRoot);
 		
 		applyChanges();
 		
@@ -581,7 +609,52 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
+//	private static final WYSection fpConfigHeader=new WYSection<COMetadata>( 0, "FactionsPlus config.yml header" );
 	
+	private static void prependHeader( WYSection root ) {
+		for ( int j = fpConfigHeaderArray.length-1; j >= 0; j-- ) {
+			String line = fpConfigHeaderArray[j];
+//			if ((null == line)||(line.isEmpty())) {
+//				root.prepend(new WYEmptyLine<COMetadata>( 0 ));actually this is bad, because these are kept
+//			}else{
+				//line numbers are irrelevant because they will be recalculated later
+			root.prepend( new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+line ) );
+//			}
+		}
+	}
+
+	private final static void cleanAutoComments( WYSection root, String dottedParentSection ) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		WYItem nextItem;
+		while ( null != currentItem ) {
+			nextItem=currentItem.getNext();
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				
+				cleanAutoComments( cs, dotted );// recurse
+			} else {
+				if (currentItem instanceof WYRawButLeveledLine) {
+					if (cls == WYComment.class) {
+						WYComment comment=(WYComment)currentItem;
+						if (comment.getRawButLeveledLine().startsWith( AUTOCOMMENTS_PREFIX ) ){
+//							System.out.println(comment.getRawButLeveledLine());
+							root.remove( comment );
+						}
+					}
+				}//else whatever
+			}// else
+			
+			currentItem =nextItem;
+		}// inner while
+	}
+
 	private static WYSection createWYRootFromFields() {
 		Q.ni();
 		return virtualRoot;

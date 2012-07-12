@@ -19,10 +19,15 @@ public class Utilities {
 	/* ********** FILE RELATED ********** */
 	
 	public static String readFileAsString(File filePath) {
+		FileInputStream fstream=null;
+		DataInputStream in=null;
+		BufferedReader br=null;
+		InputStreamReader isr = null;
 		try {
-			FileInputStream fstream = new FileInputStream(filePath);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			fstream = new FileInputStream(filePath);
+			in = new DataInputStream(fstream);
+			isr=new InputStreamReader(in);
+			br = new BufferedReader(isr);
 			String strLine;
 			String fullThing = "";
 
@@ -30,11 +35,43 @@ public class Utilities {
 				fullThing = fullThing + strLine + "\r\n";
 			}
 
-			in.close();
+//			in.close();
 
 			return fullThing;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != isr) {
+				try {
+					isr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != in) {
+				try {
+					in.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != fstream) {
+				try {
+					fstream.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return null;
@@ -92,6 +129,29 @@ public class Utilities {
 		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.LEADER );
 	}
 
+	
+	/**
+	 * @param fplayer
+	 * @return null if offline
+	 */
+	public final static Player getOnlinePlayerExact(FPlayer fplayer) {
+		if (null == fplayer) {
+			return null;
+		}
+		return Utilities.getOnlinePlayerExact( fplayer.getId() );
+	}
+	
+	/**
+	 * @param playerName
+	 * @return null if offline
+	 */
+	public final static Player getOnlinePlayerExact(String playerName) {
+		if ((null == playerName) || (playerName.isEmpty())) {
+			return null;
+		}
+		return Bukkit.getPlayerExact( playerName );
+	}
+	
 //	public static boolean checkGroupPerm(World world, String group, String permission) {
 //		if(Config.config.getBoolean("enablePermissionGroups")) {
 //			return(FactionsPlus.permission.groupHas(world, group, permission));
@@ -228,7 +288,7 @@ public class Utilities {
 	}
 	
 	public static boolean isOp(FPlayer fplayer) {
-		return fplayer.getPlayer().isOp();
+		return Utilities.getOnlinePlayerExact(fplayer).isOp();
 	}
 	
 	public static boolean isWarZone(Faction faction)
@@ -264,19 +324,19 @@ public class Utilities {
 	            return false;
 	        }
 //	        System.out.println(getIntegerPartMultipzliedBy(from.getX(), 10)+" vs "+from.getX());
-	        if (getIntegerPartMultipzliedBy(from.getX(), margin) != getIntegerPartMultipzliedBy(to.getX(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getX(), margin) != getIntegerPartMultipliedBy(to.getX(), margin)) {
 	            return false;
 	        }
-	        if (getIntegerPartMultipzliedBy(from.getY(), margin) != getIntegerPartMultipzliedBy(to.getY(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getY(), margin) != getIntegerPartMultipliedBy(to.getY(), margin)) {
 	            return false;
 	        }
-	        if (getIntegerPartMultipzliedBy(from.getZ(), margin) != getIntegerPartMultipzliedBy(to.getZ(), margin)) {
+	        if (getIntegerPartMultipliedBy(from.getZ(), margin) != getIntegerPartMultipliedBy(to.getZ(), margin)) {
 	            return false;
 	        }
 	        return true;
 	}
 	
-	public static final int getIntegerPartMultipzliedBy(double d, int multipliedByThis) {
+	public static final int getIntegerPartMultipliedBy(double d, int multipliedByThis) {
 		assert multipliedByThis>0;
 		String asString = Double.toString( d*multipliedByThis );
 		int dotAt = asString.indexOf( Config.DOT );

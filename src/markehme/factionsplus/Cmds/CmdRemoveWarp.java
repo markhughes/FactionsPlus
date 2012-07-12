@@ -56,10 +56,6 @@ public class CmdRemoveWarp extends FCommand {
 		
 		Faction currentFaction = fplayer.getFaction();
 		
-		FileReader fr=null;
-		Scanner scanner=null;
-		PrintWriter wrt=null;
-		BufferedReader rdr=null;
 		try {
 			boolean found = false;
 			
@@ -68,18 +64,34 @@ public class CmdRemoveWarp extends FCommand {
 			File currentWarpFileTMP = new File(Config.folderWarps,  currentFaction.getId() + ".tmp");
 			
 			// Scan through the warp file for the correct
-			fr=new FileReader(currentWarpFile);
-			scanner = new Scanner(fr);
-			while (scanner.hasNextLine()) {
-		    	String[] warp = scanner.nextLine().split(":");
-		        if ((warp.length < 1) || (!warp[0].equalsIgnoreCase(warpname))) {
-		        	continue;
-		        }
-		        
-		        found = true;
-		        
-		        break;
-		    }
+			
+			FileReader fr=null;
+			Scanner scanner=null;
+			try {
+				fr = new FileReader( currentWarpFile );
+				scanner = new Scanner( fr );
+				while ( scanner.hasNextLine() ) {
+					String[] warp = scanner.nextLine().split( ":" );
+					if ( ( warp.length < 1 ) || ( !warp[0].equalsIgnoreCase( warpname ) ) ) {
+						continue;
+					}
+					
+					found = true;
+					
+					break;
+				}
+			}finally{
+				if (null != scanner) {
+					scanner.close();
+				}
+				if (null != fr) {
+					try {
+						fr.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+			}
 
 //		    scanner.close();
 
@@ -93,23 +105,39 @@ public class CmdRemoveWarp extends FCommand {
 				}
 			}
 
-		    wrt = new PrintWriter(new FileWriter(currentWarpFileTMP));
-		    rdr = new BufferedReader(new FileReader(currentWarpFile));
-		      
-		    String line;
-		      
-		    while ((line = rdr.readLine()) != null) {
-		    	String[] warp = line.split(":");
-		    	if ((warp.length >= 1) && (warp[0].equalsIgnoreCase(warpname))) {
-		    		continue;
-		    	}
-		    	
-		    	wrt.println(line);
-		    }
 
-//		    wrt.close();
-//		    rdr.close();
-		    
+			PrintWriter wrt=null;
+			BufferedReader rdr=null;
+			try {
+				wrt = new PrintWriter( new FileWriter( currentWarpFileTMP ) );
+				rdr = new BufferedReader( new FileReader( currentWarpFile ) );
+				
+				String line;
+				
+				while ( ( line = rdr.readLine() ) != null ) {
+					String[] warp = line.split( ":" );
+					if ( ( warp.length >= 1 ) && ( warp[0].equalsIgnoreCase( warpname ) ) ) {
+						continue;
+					}
+					
+					wrt.println( line );
+				}
+				
+				// wrt.close();
+				// rdr.close();
+			} finally {
+				if ( null != rdr ) {
+					try {
+						rdr.close();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+				}
+				if ( null != wrt ) {
+					wrt.close();
+				}
+			}
+		
 		    if (!currentWarpFile.delete()) {
 		    	System.out.println("[FactionsPlus] Cannot delete " + currentWarpFile.getName());
 		        return;
@@ -124,27 +152,6 @@ public class CmdRemoveWarp extends FCommand {
 			FactionsPlusPlugin.info("Unexpected error " + e.getMessage());
 			e.printStackTrace();
 		    return;
-		}finally{
-			if (null != rdr) {
-				try {
-					rdr.close();
-				} catch ( IOException e ) {
-					e.printStackTrace();
-				}
-			}
-			if (null != wrt) {
-				wrt.close();
-			}
-			if (null != scanner) {
-				scanner.close();
-			}
-			if (null != fr) {
-				try {
-					fr.close();
-				} catch ( IOException e ) {
-					e.printStackTrace();
-				}
-			}
 		}
 				
 		sender.sendMessage(ChatColor.GREEN + "Poof!");

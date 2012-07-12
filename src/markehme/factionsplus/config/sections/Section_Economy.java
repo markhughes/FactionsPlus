@@ -30,7 +30,7 @@ public final class Section_Economy {
 		, "economy.economycostToWarp"// newer
 		, "economy_costToWarp"// very old one
 			}, realAlias_inNonDottedFormat = "costToWarp" )
-	public final _double	costToWarp					= new _double( 0.0d );		// current one (the field name)
+	public final _double	costToWarp					= new _double( 0.0d );
 																					
 																					
 	@Option(
@@ -109,17 +109,17 @@ public final class Section_Economy {
 	private static Economy	economyInstance				= null;
 	
 	
-	public synchronized boolean isHooked() {
+	public final synchronized boolean isHooked() {
 		return null != economyInstance;
 	}
 	
 	
-	public static synchronized double getBalance( String accountId ) {
+	public final static synchronized double getBalance( String accountId ) {
 		return economyInstance.getBalance( accountId );
 	}
 	
 	
-	public synchronized String getAccountId( Faction fac ) {
+	public final synchronized String getAccountId( Faction fac ) {
 		assert null != fac;
 		String aid = "faction-" + fac.getId();//both 1.6 and 1.7
 		
@@ -131,7 +131,7 @@ public final class Section_Economy {
 	}
 	
 	
-	public synchronized boolean setBalance( String accountId, double amount ) {
+	public final synchronized boolean setBalance( String accountId, double amount ) {
 		assert null != accountId;
 		assert !accountId.isEmpty();
 		double current = economyInstance.getBalance( accountId );
@@ -142,7 +142,7 @@ public final class Section_Economy {
 	}
 	
 	
-	public synchronized static String getFormatted( double amount ) {
+	public final synchronized static String getFormatted( double amount ) {
 		return economyInstance.format( amount );
 	}
 	
@@ -151,7 +151,7 @@ public final class Section_Economy {
 	 * @return true if it's enabled(aka existed & enabled)<br>
 	 *         false if it's disabled (ie. was disabled in config or was enabled by not found)
 	 */
-	public synchronized boolean enableOrDisableEconomy() {
+	public final synchronized boolean enableOrDisableEconomy() {
 		boolean wanted = Config._economy.enabled._;
 		// check is the state differs from the current state
 		if ( wanted && !isHooked() ) {
@@ -168,14 +168,14 @@ public final class Section_Economy {
 	}
 	
 	
-	private synchronized void turnOffEconomy() {
+	private final synchronized void turnOffEconomy() {
 		assert isHooked();
 		economyInstance = null;
 		FactionsPlus.info( "Economy integration is OFF" );
 	}
 	
 	
-	private synchronized boolean turnOnEconomy() {
+	private final synchronized boolean turnOnEconomy() {
 		assert !isHooked();
 		
 		RegisteredServiceProvider<Economy> economyProvider =

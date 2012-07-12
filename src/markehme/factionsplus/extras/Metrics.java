@@ -406,17 +406,23 @@ public class Metrics {
 
         // Write the data
         final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-        writer.write(data.toString());
-        writer.flush();
-
-        // Now read the response
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        final String response = reader.readLine();
-
-        // close resources
-        writer.close();
-        reader.close();
-
+		try {
+			writer.write( data.toString() );
+			writer.flush();//redundant?
+		} finally {
+			// close resources
+			writer.close();//"Closes the stream, flushing it first."
+		}
+		
+		// Now read the response
+		final BufferedReader reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+		String response = null;
+		try {
+			response = reader.readLine();
+		} finally {
+			reader.close();
+		}
+		
         if (response == null || response.startsWith("ERR")) {
             throw new IOException(response); //Throw the exception
         } else {

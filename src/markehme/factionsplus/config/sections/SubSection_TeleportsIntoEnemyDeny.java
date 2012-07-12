@@ -25,16 +25,16 @@ public class SubSection_TeleportsIntoEnemyDeny {
 	public  final _boolean viaPearls=new _boolean(true);
 
 
-	public boolean isAnySet() {
+	public final  boolean isAnySet() {
 		return viaHome._ || viaPearls._ || viaBack._;
 	}
 
 
-	public boolean shouldPreventHomeTelepors() {
+	public  final boolean shouldPreventHomeTelepors() {
 		return viaHome._;
 	}
 
-	public boolean shouldPreventBackTelepors() {
+	public final  boolean shouldPreventBackTelepors() {
 		return viaBack._;
 	}
 

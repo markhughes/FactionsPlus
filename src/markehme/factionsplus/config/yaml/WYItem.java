@@ -15,7 +15,7 @@ package markehme.factionsplus.config.yaml;
  *            the base class for the accepted metadata objects, this type is only so it could help with compile time typing,
  *            it's erased to Object type at runtime
  */
-public abstract class WYItem<METADATA_TYPE> {
+public abstract class WYItem<METADATA_TYPE> implements Cloneable {
 	
 	private WYItem			prev;
 	private WYItem			next;
@@ -28,6 +28,10 @@ public abstract class WYItem<METADATA_TYPE> {
 	// we'd insert a new item all lines after it must be recomputed which may not be what we want ... i see
 	// maybe allow a method to be called to recompute all lines, once, and not on every init
 	
+	@Override
+	public WYItem clone() throws CloneNotSupportedException {
+		return (WYItem)super.clone();
+	}
 	
 	/**
 	 * just a lonely WYItem, not part of any parents

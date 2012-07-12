@@ -10,11 +10,11 @@ public class SubSection_TPIntoSafeZone {
 		realAlias_inNonDottedFormat = "denyIfViaEnderPeals" )
 	public  final _boolean denyIfViaPearls=new _boolean(false);
 
-	public boolean isAnySet() {
+	public final  boolean isAnySet() {
 		return denyIfViaPearls._;
 	}
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public  final boolean shouldPreventEnderPearlsTeleports() {
 		return denyIfViaPearls._;
 	}
 }

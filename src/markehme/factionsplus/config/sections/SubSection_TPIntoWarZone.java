@@ -9,11 +9,11 @@ public class SubSection_TPIntoWarZone {
 		}, realAlias_inNonDottedFormat = "denyIfViaEnderPeals" )
 	public  final _boolean denyIfViaEnderPeals=new _boolean(false);
 
-	public boolean isAnySet() {
+	public final  boolean isAnySet() {
 		return denyIfViaEnderPeals._;
 	}
 
-	public boolean shouldPreventEnderPearlsTeleports() {
+	public final  boolean shouldPreventEnderPearlsTeleports() {
 		return denyIfViaEnderPeals._;
 	}
 }

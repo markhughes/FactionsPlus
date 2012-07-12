@@ -1,9 +1,12 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.*;
+
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
+import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
@@ -20,7 +23,7 @@ public class CmdUnJail extends FCommand {
 		this.disableOnLock = false;
 		
 		senderMustBePlayer = true;
-		senderMustBeMember = false;
+		senderMustBeMember = true;
 		
 		this.setHelpShort( "removes a player from jail" );
 	}
@@ -28,21 +31,19 @@ public class CmdUnJail extends FCommand {
 	
 	@Override
 	public void perform() {
-		String unJailingPlayer = this.argAsString( 0 );
+		String playerToUnjail = this.argAsString( 0 );
 		
-		if ( FactionsPlus.permission.playerHas( fme.getPlayer(), "factionsplus.unjail" ) ) {
-			if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme ) 
-					|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) )
-					|| (Utilities.isOp( fme ))) {
-				if ( FactionsPlusJail.removeFromJail( unJailingPlayer, fme.getFactionId() ) ) {
-					fme.sendMessage( unJailingPlayer + " has been removed from jail." );
-				} else {
-					fme.sendMessage( unJailingPlayer + " is not jailed." );
-				}
-				return;
-			}
+		if ( Config._jails.officersCanJail._ && Utilities.isOfficer( fme )
+				|| ( Config._jails.leadersCanJail._ && Utilities.isLeader( fme ) ) 
+				|| ( Utilities.isOp( fme ) )
+				|| ( FactionsPlus.permission.playerHas( Utilities.getOnlinePlayerExact(fme), "factionsplus.unjail" ) ) )
+		{
+			
+			FactionsPlusJail.removeFromJail( playerToUnjail, fme);
+			
+			return;
 		}
+		fme.sendMessage(ChatColor.RED+ "No permission to unjail!" );
 		
-		fme.sendMessage( "As a "+Bridge.factions.getRole( fme )+" you have No permission to unjail!" );
 	}
 }

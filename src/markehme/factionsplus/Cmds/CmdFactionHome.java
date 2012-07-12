@@ -1,9 +1,10 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.*;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.*;
 
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
@@ -35,16 +36,17 @@ public class CmdFactionHome extends FCommand {
 		String factionName = this.argAsString(0).toString();
 		Faction currentF = Factions.i.getByTag(factionName);
 		
-		if(FactionsPlus.permission.has(fme.getPlayer(), "factionsplus.otherfactionshome")) {
+		Player player = Utilities.getOnlinePlayerExact(fme);
+		if(FactionsPlus.permission.has(player, "factionsplus.otherfactionshome")) {
 			if(currentF == null) {
-				fme.getPlayer().sendMessage("Faction was not found!");
+				player.sendMessage("Faction was not found!");
 			} else {
 				if(currentF.hasHome()) {
 					Location FactionHome = currentF.getHome();
-					fme.getPlayer().teleport(FactionHome);
-					fme.getPlayer().sendMessage("You have been teleported to the Faction home of " + ChatColor.RED + factionName);
+					player.teleport(FactionHome);
+					player.sendMessage("You have been teleported to the Faction home of " + ChatColor.RED + factionName);
 				} else {
-					fme.getPlayer().sendMessage("That faction doesn't have a home!");
+					player.sendMessage("That faction doesn't have a home!");
 				}
 			}
 		}

@@ -1,10 +1,6 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
@@ -56,42 +52,73 @@ public class CmdRules extends FCommand {
 		argsa[1] = sender.getName();
 		argsa[2] = message;
 		
-		try {
-			File fRF = new File(Config.folderFRules, fplayer.getFactionId());
-			if(!fRF.exists()) {
-				fme.msg("No rules have been set for your Faction.");
-				return;
-			}
-			
-			try {
-				FileInputStream fstream = new FileInputStream(fRF);
-				
-				DataInputStream in = new DataInputStream(fstream);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in));
-				
-				String strLine;
-				
-				int rCurrent = 0;
-				
-				while ((strLine = br.readLine()) != null)   {
-					rCurrent = rCurrent + 1;
-					
-					if(!strLine.isEmpty() || strLine.trim() != "") {
-						fme.msg("Rule " + rCurrent + ": " + strLine);
-					}
-				}
-				
-				in.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}			
-		} catch (Exception e) {
-			e.printStackTrace();
-		
-			sender.sendMessage("Failed to show rules (Internal error -1021)");
+		File fRF = new File( Config.folderFRules, fplayer.getFactionId() );
+		if ( !fRF.exists() ) {
+			fme.msg( "No rules have been set for your Faction." );
 			return;
 		}
-
+		
+		FileInputStream fstream=null;
+		DataInputStream in=null;
+		InputStreamReader isr = null;
+		BufferedReader br=null;
+		try {
+			fstream = new FileInputStream( fRF );
+			
+			in = new DataInputStream( fstream );
+			isr=new InputStreamReader( in );
+			br = new BufferedReader( isr );
+			
+			String strLine;
+			
+			int rCurrent = 0;
+			
+			while ( ( strLine = br.readLine() ) != null ) {
+				rCurrent = rCurrent + 1;
+				
+				if ( !strLine.isEmpty() || strLine.trim() != "" ) {
+					fme.msg( "Rule " + rCurrent + ": " + strLine );
+				}
+			}
+			
+//			in.close();
+		} catch ( Exception e ) {
+			e.printStackTrace();
+			sender.sendMessage( "Failed to show rules (Internal error -1021)" );
+			return;
+		}finally{
+			if (null != br) {
+				try {
+					br.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != isr) {
+				try {
+					isr.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != in) {
+				try {
+					in.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (null != fstream) {
+				try {
+					fstream.close();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+			}
+		}
 
 	}
 
