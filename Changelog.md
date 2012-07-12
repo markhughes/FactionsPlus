@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* jailed players are now returned to their original location, as long as they were online when they were unjailed  
+if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  
+if a player was jailed while offline it will only be teleported to the jail upon login (same as in 0.4.7)
+
 * fixed uses of getPlayer which were expected to act as getPlayerExact  
 
 * new config option jails.`denyMovementWhileJailed` if `true`(by default) it will only allow the jailed player to look 
