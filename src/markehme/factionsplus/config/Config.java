@@ -168,6 +168,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
 			," Each level is indented by exactly 2 spaces"
 			,""
+			,"You may use `/f debug configdiff` to see the config options that you've changed from their default (OPs/console only)"
+			,""
 			,""
 			,""
 			,""

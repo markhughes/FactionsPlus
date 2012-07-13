@@ -5,6 +5,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.command.*;
+
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.yaml.*;
 import markehme.factionsplus.util.*;
@@ -120,7 +122,6 @@ public abstract class Typeo {
 			return currentValue;
 		}
 	}
-	
 	
 	protected static final Field getField_correspondingTo_DottedFormat( String thisDottedFormat ) {
 		assert isValidAliasFormat( thisDottedFormat );
@@ -376,6 +377,8 @@ public abstract class Typeo {
 
 
 	public static final void resetConfigToDefaults() {
+		assert null != orderedListOfFields;
+		assert orderedListOfFields.size()>0;
 		for ( Field field : Typeo.orderedListOfFields ) {
 //			if (null != 
 					resetFieldToDefaultValue(field) ;
@@ -385,6 +388,21 @@ public abstract class Typeo {
 		}
 	}
 
-
+	public static final void showDiff(CommandSender sender) {
+		assert null != orderedListOfFields;
+		assert orderedListOfFields.size()>0;
+		sender.sendMessage("Showing all config options that have a different value from the (default):");
+		int count = 0;
+		for ( Field field : Typeo.orderedListOfFields ) {
+			_Base basic=getFieldInstance(field);
+			
+			String currentValue = basic.getValue();
+			if (!currentValue.equals( basic.getDefaultValue() )) {
+				sender.sendMessage( basic._dottedName_asString+": "+currentValue+" ("+basic.getDefaultValue()+")" );
+				count++;
+			}
+		}
+		sender.sendMessage( count+" found." );
+	}
 	
 }

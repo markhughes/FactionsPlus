@@ -4,6 +4,7 @@ import java.util.*;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.*;
@@ -17,7 +18,7 @@ public class CmdDebug extends FCommand {
 		this.errorOnToManyArgs = true;
 		
 		//this.requiredArgs.add("message");
-		//this.optionalArgs.put("on/off", "flip");
+		this.optionalArgs.put("configdiff", "");
 
 		this.permission = Permission.HELP.node;
 		this.disableOnLock = false;
@@ -32,6 +33,12 @@ public class CmdDebug extends FCommand {
 	public void perform() {
 		if ( (null != fme) && (fme.isOnline()) && (!sender.isOp())) {
 				return;
+		}
+		
+		String param = this.argAsString(0).toLowerCase().trim();
+		if (param.equals( "configdiff" )) {
+			Typeo.showDiff( sender );
+			return;
 		}
 		
 		sender.sendMessage("--- START ---");

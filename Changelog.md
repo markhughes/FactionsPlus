@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* You may use `/f debug configdiff` to see the config options that you've changed from the default (OPs/console only)
+
 * every config option inside config.yml now has above it auto comments(lines starting with "### ") which explain what 
 the config option does. These comments are automatically removed and updated on every config reload(which also does a save) 
 to be sure they are always up to date with the currently running version of FactionsPlus.  
