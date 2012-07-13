@@ -8,7 +8,7 @@ public final class SubSection_LWC {
 //	public static final static final String	str_removeLWCLocksOnClaim	= "removeLWCLocksOnClaim";
 
 	@Option(comment={
-		"It is highly encounraged to have this enabled IF you have Factions' \"onCaptureResetLwcLocks\": true,"
+		"It is highly encouraged to have this enabled IF you have Factions' \"onCaptureResetLwcLocks\": true,"
 		,"and you should then set onCaptureResetLwcLocks to false because all that one does is reset chests' locks,"
 		,"which is already done by this option below & more."
 		,"The following are unlocked: chests, furnaces, signs, dispensers, wooden doors, iron doors, trap doors."
