@@ -5,9 +5,11 @@ import markehme.factionsplus.config.*;
 
 public class _boolean extends _Base {
 	public boolean _;
+	public boolean _defaultValue;
 	
 	
 	public _boolean(boolean defaultValue) {
+		_defaultValue=defaultValue;
 		_=defaultValue;
 	}
 	
@@ -24,6 +26,11 @@ public class _boolean extends _Base {
 	@Override
 	public String getValue() {
 		return Boolean.toString( _ );
+	}
+
+	@Override
+	public String getDefaultValue() {
+		return Boolean.toString( _defaultValue );
 	}
 	
 }

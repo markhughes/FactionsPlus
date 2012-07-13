@@ -116,7 +116,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int				doNotChangeMe			= new _int( 11 );
+	public static final _int				doNotChangeMe			= new _int( 12 );
 	
 	// the root class that contains the @Section and @Options to scan for
 	private static final Class				configClass				= Config.class;
@@ -529,7 +529,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static final HM1	mapFieldToID	= new HM1();
 	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
 	private static final String	BEGINNING_OF_NEXT_CFG_OPTION	= "###########################################################";
-	
+	private static boolean firstTime=true;
 	
 	public synchronized final static boolean reloadConfig() {
 		
@@ -552,19 +552,32 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 //			virtualRoot=createWYRootFromFields();
 		}
-			// config file exists
-			try {
-				
-				// now read the existing config
-				virtualRoot = WannabeYaml.read( fileConfig );
-				cleanAutoComments(virtualRoot, null);//without updating the line numbers
-				
-				
-				// now check to see if we have any old config options or invalid ones in the config
-				// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
-				// remove old
-				// but only if new values are not already set
-				synchronized ( mapFieldToID ) {
+		
+		
+		// config file exists
+		try {
+			
+			if (firstTime) {
+				firstTime=false;
+				//first time they are already set to defaults, no need to set them again
+			}else {
+				//not first time? ie. /f reloadfp  instead of bukkit 'reload'
+				//we restore defaults just in case ie. a config option was deleted or the entire file was deleted
+				//in which case we'll need to restore the default value for that(those) option(s) rather than the previous value 
+				//we already had set
+				Typeo.resetConfigToDefaults();
+			}
+			
+			// now read the existing config
+			virtualRoot = WannabeYaml.read( fileConfig );
+			cleanAutoComments( virtualRoot, null );// without updating the line numbers
+			
+			
+			// now check to see if we have any old config options or invalid ones in the config
+			// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
+			// remove old
+			// but only if new values are not already set
+			synchronized ( mapFieldToID ) {
 				synchronized ( Typeo.lock1 ) {
 					mapFieldToID.clear();
 					
@@ -581,13 +594,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					mapFieldToID.clear();// free up memory for gc
 					
 				}// sync
-				}
-				
-			} catch ( IOException e ) {
-//				e.printStackTrace();
-				throw FactionsPlusPlugin.bailOut(e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
-					+ "'" );
 			}
+			
+		} catch ( IOException e ) {
+			// e.printStackTrace();
+			throw FactionsPlusPlugin.bailOut( e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
+				+ "'" );
+		}
 			
 		prependHeader(virtualRoot);
 		
@@ -743,7 +756,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// previousField
 						// TODO: make sure this field added has the comment above them, and if it's already there don't prepend
 						// it again
-						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias ,comments);
+						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias ,comments, field);
 						assert null != x;
 						
 //						for ( int i = 0; i < comments.length; i++ ) {
@@ -790,7 +803,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						dottedOverrider = dottedRealAlias;
 						
 						//and we can add comments now; case 2 of 3: when realAlias already existed in config
-						prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments);
+						prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
 //						for ( int i = 0; i < comments.length; i++ ) {
 ////							System.out.println(field.getName()+" 2 "+comments[i]);
 //							overriderWID.getParent().insertBefore( getAsAutoComment( comments[i] ), overriderWID );
@@ -840,7 +853,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYIdentifier<COMetadata> old = overriderWID;
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
-						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias, comments );
+						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias, comments, field );
 						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
@@ -869,7 +882,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	
-	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias , String[] comments) {
+	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias , String[] comments, Field field) {
 		assert Q.nn( vroot );
 		assert Q.nn( value );
 		assert Typeo.isValidAliasFormat( dottedRealAlias );
@@ -892,12 +905,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// System.out.println( foundParentSection.getInAbsoluteDottedForm() );
 		
 		//and we can add comments now; case 1&3 of 3: when newly added cfgoption in .yml OR when old alias existed only => newly added must happen
-		prependComments(foundParentSection, leaf, dottedRealAlias, comments);
+		prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
 		return leaf;
 	}
 	
 	
-	private static final void prependComments(WYSection parentOfChild, WYIdentifier<COMetadata> beforeThisChild,String dottedAlias, String[] comments) {
+	private static final void prependComments(WYSection parentOfChild, WYIdentifier<COMetadata> beforeThisChild,
+		String dottedAlias, String[] comments, Field field) {
 		assert null != parentOfChild;
 		assert null != beforeThisChild;
 		assert beforeThisChild.getParent() == parentOfChild;
@@ -913,6 +927,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// commented empty line
 		parentOfChild.insertBefore( getAsAutoComment( ""/*BEGINNING_OF_NEXT_CFG_OPTION*/ ), beforeThisChild );
 		parentOfChild.insertBefore( getAsAutoComment( "# "+dottedAlias ), beforeThisChild );
+		parentOfChild.insertBefore( getAsAutoComment( "default value: "+Typeo.getFieldDefaultValue( field )), beforeThisChild );
 //		}
 		
 		for ( int i = 0; i < comments.length; i++ ) {

@@ -76,24 +76,49 @@ public abstract class Typeo {
 	
 	
 	protected static final String getFieldValue( Field field )  {
+		return getFieldInstance(field).getValue();
+	}
+	
+	protected static final String getFieldDefaultValue( Field field ) {
+		return getFieldInstance(field).getDefaultValue();
+	}
+	
+	
+	protected static final _Base getFieldInstance( Field field ) {
+		assert null != field;
 		assert !fieldToInstanceOfIt.isEmpty() : "should not call this prior to having the map initialized";
 		
 		// the instance of the class where the field resides
 		Object parentInstance = fieldToInstanceOfIt.get( field );
 		assert null != parentInstance : "should've been set";
-		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
+		// actually we're not setting the field, remember the field is an instance of a subclass of {@link _Base}
 		// field.set( parentInstance, value );
 		
-		_Base basic=null;
+		_Base basic = null;
 		try {
 			basic = (_Base)field.get( parentInstance );
 		} catch ( IllegalArgumentException e ) {
-			throw Q.rethrow(e);
+			throw Q.rethrow( e );
 		} catch ( IllegalAccessException e ) {
-			throw Q.rethrow(e);
+			throw Q.rethrow( e );
 		}
-		// System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
-		return basic.getValue();
+		return basic;
+	}
+	
+	/**
+	 * @param field
+	 * @return previous value if reset, null if it was already set to default
+	 */
+	private static final String resetFieldToDefaultValue( Field field )  {
+		_Base basic=getFieldInstance(field);
+		
+		String currentValue = basic.getValue();
+		if (currentValue.equals( basic.getDefaultValue() )) {
+			return null;
+		}else {
+			basic.setValue(basic.getDefaultValue());
+			return currentValue;
+		}
 	}
 	
 	
@@ -348,4 +373,18 @@ public abstract class Typeo {
 			}
 		}
 	}
+
+
+	public static final void resetConfigToDefaults() {
+		for ( Field field : Typeo.orderedListOfFields ) {
+//			if (null != 
+					resetFieldToDefaultValue(field) ;
+//					){
+//				System.out.println("resetting field "+field.getName()+" to default value.");
+//			}
+		}
+	}
+
+
+	
 }
