@@ -389,18 +389,26 @@ public abstract class Typeo {
 		}
 	}
 
+	
+	private static final ChatColor colorForDefaultValue=ChatColor.GOLD;
+	private static final ChatColor colorForConfigOptionName=ChatColor.YELLOW;
+	private static final ChatColor colorForCurrentValue=ChatColor.AQUA;
+	
 	public static final void showDiff(CommandSender sender) {
 		assert null != orderedListOfFields;
 		assert orderedListOfFields.size()>0;
-		sender.sendMessage("Showing all config options that have a different value from the (default):");
+		sender.sendMessage("Showing all "+colorForConfigOptionName+"config options"
+		+ChatColor.RESET+" that have a different "+colorForCurrentValue+"(current)value"+ChatColor.RESET+" from the ("+
+				colorForDefaultValue+"default"+ChatColor.RESET+"):");
 		int count = 0;
 		for ( Field field : Typeo.orderedListOfFields ) {
 			_Base basic=getFieldInstance(field);
 			
 			String currentValue = basic.getValue();
 			if (!currentValue.equals( basic.getDefaultValue() )) {
-				sender.sendMessage( ChatColor.YELLOW+basic._dottedName_asString+ChatColor.RESET+": "+ChatColor.AQUA+currentValue
-					+ChatColor.RESET+" ("+ChatColor.GOLD+basic.getDefaultValue()+ChatColor.RESET+")" );
+				sender.sendMessage( colorForConfigOptionName+basic._dottedName_asString+ChatColor.RESET+": "+
+						colorForCurrentValue+currentValue
+					+ChatColor.RESET+" ("+colorForDefaultValue+basic.getDefaultValue()+ChatColor.RESET+")" );
 				count++;
 			}
 		}
