@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.*;
 import org.bukkit.command.*;
 
 import markehme.factionsplus.*;
@@ -398,11 +399,12 @@ public abstract class Typeo {
 			
 			String currentValue = basic.getValue();
 			if (!currentValue.equals( basic.getDefaultValue() )) {
-				sender.sendMessage( basic._dottedName_asString+": "+currentValue+" ("+basic.getDefaultValue()+")" );
+				sender.sendMessage( ChatColor.YELLOW+basic._dottedName_asString+ChatColor.RESET+": "+ChatColor.AQUA+currentValue
+					+ChatColor.RESET+" ("+ChatColor.GOLD+basic.getDefaultValue()+ChatColor.RESET+")" );
 				count++;
 			}
 		}
-		sender.sendMessage( count+" found." );
+		sender.sendMessage( ""+ChatColor.GREEN+count+ChatColor.RESET+" diffs found." );
 	}
 	
 }
