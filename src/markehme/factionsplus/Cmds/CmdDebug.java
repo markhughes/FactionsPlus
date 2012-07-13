@@ -9,6 +9,7 @@ import markehme.factionsplus.config.*;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.*;
 
+import com.massivecraft.factions.*;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
@@ -35,8 +36,8 @@ public class CmdDebug extends FCommand {
 				return;
 		}
 		
-		String param = this.argAsString(0).toLowerCase().trim();
-		if (param.equals( "configdiff" )) {
+		String param = this.argAsString(0);
+		if ((param != null) && (param.trim().equalsIgnoreCase( "configdiff" ))) {
 			Typeo.showDiff( sender );
 			return;
 		}
@@ -52,11 +53,15 @@ public class CmdDebug extends FCommand {
 				+", "+bukkitWorker.getThread().getName());			
 		}
 		sender.sendMessage("Permissions: " + FactionsPlus.permission.getClass().getName());
+		if (null != fme) {
+			Faction f=fme.getFaction();
+			if (null != f) {
+				sender.sendMessage(Utilities.getCountOfWarps(f) + " warps for faction "+f.getTag());
+			}
+		}
 		sender.sendMessage("--- END ---");
 		
-		if (null != fme) {
-			sender.sendMessage(Utilities.getCountOfWarps(fme.getFaction()) + "");
-		}
+	
 		
 		
 	}
