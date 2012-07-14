@@ -14,6 +14,7 @@ public final class SubSection_LWC {
 		,"The following are unlocked: chests, furnaces, signs, dispensers, wooden doors, iron doors, trap doors."
 		,"The locks are removed only if they are owned by someone that is not in your faction."
 		,"The removal happens when you claim land ie. /f claim"
+		,"If onCaptureResetLwcLocks is true (in Factions plugin) then this option will be autoset to true in memory"
 	},
 		oldAliases_alwaysDotted={
 		"extras.lwc.removeLWCLocksOnClaim",

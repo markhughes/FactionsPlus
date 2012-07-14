@@ -218,10 +218,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
 				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
-					// TODO: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Consider setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
-						+ "` to reset locks(on land claim) for more than _just_chests_(" +
-						"which is what Factions plugin already does right now)" );
+					Config._extras._protection._lwc.removeAllLocksOnClaim._=true;
+					// meh: maybe someone can modify this message so that it would make sense to the console reader
+					FactionsPlusPlugin.info( "Automatically setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
+						+ "` for this session because you have Factions.`onCaptureResetLwcLocks` set to true" );
 					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
 				}
 				

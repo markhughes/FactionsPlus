@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+* extras.Protection.LWC.`removeAllLocksOnClaim` is automatically set to true if `onCaptureResetLwcLocks` in Factions plugin
+is set to true. This doesn't save the setting in the config.yml, you'll have to do it yourself.
+
 * You may use `/f debug configdiff` to see the config options that you've changed from the default (OPs/console only)
 
 * every config option inside config.yml now has above it auto comments(lines starting with "### ") which explain what 
