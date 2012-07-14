@@ -5,6 +5,9 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.Map.Entry;
 
+import org.bukkit.*;
+import org.bukkit.command.*;
+
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.yaml.*;
 import markehme.factionsplus.util.*;
@@ -36,10 +39,15 @@ public abstract class Typeo {
 	// basically cached the reflection here: //one to many
 	private static final HashMap<Field, String[]>	fieldToOldAliasesArray		= new HashMap<Field, String[]>();
 	
+	/**
+	 * sections are not included only the key:value fields
+	 */
+	private static final HashMap<Field, String[]>	fieldToCommentsArray		= new HashMap<Field, String[]>();
+	
 	// field to dotted form of alias//one to one
 	private static final HashMap<Field, String>		fieldToDottedRealAlias		= new HashMap<Field, String>();
 	
-	// field to-> instance of the parent class it is in
+	// field to-> instance of the parent class(aka parentClass) it is in; cause we've to do parentClass.get(field) to get field instance
 	private static final HashMap<Field, Object>		fieldToInstanceOfIt			= new HashMap<Field, Object>();
 	
 	
@@ -71,32 +79,70 @@ public abstract class Typeo {
 	
 	
 	protected static final String getFieldValue( Field field )  {
+		return getFieldInstance(field).getValue();
+	}
+	
+	protected static final String getFieldDefaultValue( Field field ) {
+		return getFieldInstance(field).getDefaultValue();
+	}
+	
+	
+	protected static final _Base getFieldInstance( Field field ) {
+		assert null != field;
 		assert !fieldToInstanceOfIt.isEmpty() : "should not call this prior to having the map initialized";
 		
 		// the instance of the class where the field resides
 		Object parentInstance = fieldToInstanceOfIt.get( field );
 		assert null != parentInstance : "should've been set";
-		// actually we're not setting the field, remember the field is an instance of a subclass of {@link ConfigOptionName}
+		// actually we're not setting the field, remember the field is an instance of a subclass of {@link _Base}
 		// field.set( parentInstance, value );
 		
-		_Base basic=null;
+		_Base basic = null;
 		try {
 			basic = (_Base)field.get( parentInstance );
 		} catch ( IllegalArgumentException e ) {
-			throw Q.rethrow(e);
+			throw Q.rethrow( e );
 		} catch ( IllegalAccessException e ) {
-			throw Q.rethrow(e);
+			throw Q.rethrow( e );
 		}
-		// System.out.println("Setting `"+basic._dottedName_asString+"` to value `"+value+"`");
-		return basic.getValue();
+		return basic;
 	}
 	
+	/**
+	 * @param field
+	 * @return previous value if reset, null if it was already set to default
+	 */
+	private static final String resetFieldToDefaultValue( Field field )  {
+		_Base basic=getFieldInstance(field);
+		
+		String currentValue = basic.getValue();
+		if (currentValue.equals( basic.getDefaultValue() )) {
+			return null;
+		}else {
+			basic.setValue(basic.getDefaultValue());
+			return currentValue;
+		}
+	}
 	
 	protected static final Field getField_correspondingTo_DottedFormat( String thisDottedFormat ) {
 		assert isValidAliasFormat( thisDottedFormat );
 		return dottedAllAliases_to_Fields.get( thisDottedFormat );
 	}
 	
+	
+	private final static String[] EMPTY={};
+	protected static final String[] getComments( Field forField ) {
+		assert Q.nn( forField );
+		assert !fieldToCommentsArray.isEmpty();
+		String[] comments = fieldToCommentsArray.get( forField );
+//		if ( (null == comments) || (comments.length <=0) ) {
+//			return EMPTY;
+//		}else {
+//			System.out.println(comments.length);
+//		}
+		assert Q.nn( comments );// cannot be null due to "default {}" inside the {@link @Option} annotation
+		return comments;
+	}
 	
 	protected static final String[] getListOfOldAliases( Field forField ) {
 		assert Q.nn( forField );
@@ -158,6 +204,7 @@ public abstract class Typeo {
 			fieldToDottedRealAlias.clear();
 			fieldToOldAliasesArray.clear();
 			fieldToInstanceOfIt.clear();
+			fieldToCommentsArray.clear();
 			parsify( rootClass, null, rootClass );
 		}
 	}
@@ -290,6 +337,10 @@ public abstract class Typeo {
 						assert null != aliasesArray : "impossible, due to how annotation default works for arrays";
 						fieldToOldAliasesArray.put( field, aliasesArray );
 						
+						String[] commentArray = co.comment();
+						assert null != commentArray:field;//can be empty though
+						fieldToCommentsArray.put( field, commentArray);
+						
 						int aliasesCount = aliasesArray.length;
 						int current = -1;// from -1 to allow the real (field name) to be added too (first actually, tho it's non
 											// ordered)
@@ -324,4 +375,44 @@ public abstract class Typeo {
 			}
 		}
 	}
+
+
+	public static final void resetConfigToDefaults() {
+		assert null != orderedListOfFields;
+		assert orderedListOfFields.size()>0;
+		for ( Field field : Typeo.orderedListOfFields ) {
+//			if (null != 
+					resetFieldToDefaultValue(field) ;
+//					){
+//				System.out.println("resetting field "+field.getName()+" to default value.");
+//			}
+		}
+	}
+
+	
+	private static final ChatColor colorForDefaultValue=ChatColor.GOLD;
+	private static final ChatColor colorForConfigOptionName=ChatColor.YELLOW;
+	private static final ChatColor colorForCurrentValue=ChatColor.AQUA;
+	
+	public static final void showDiff(CommandSender sender) {
+		assert null != orderedListOfFields;
+		assert orderedListOfFields.size()>0;
+		sender.sendMessage("Showing all "+colorForConfigOptionName+"config options"
+		+ChatColor.RESET+" that have a different "+colorForCurrentValue+"(current)value"+ChatColor.RESET+" from the ("+
+				colorForDefaultValue+"default"+ChatColor.RESET+"):");
+		int count = 0;
+		for ( Field field : Typeo.orderedListOfFields ) {
+			_Base basic=getFieldInstance(field);
+			
+			String currentValue = basic.getValue();
+			if (!currentValue.equals( basic.getDefaultValue() )) {
+				sender.sendMessage( colorForConfigOptionName+basic._dottedName_asString+ChatColor.RESET+": "+
+						colorForCurrentValue+currentValue
+					+ChatColor.RESET+" ("+colorForDefaultValue+basic.getDefaultValue()+ChatColor.RESET+")" );
+				count++;
+			}
+		}
+		sender.sendMessage( ""+ChatColor.GREEN+count+ChatColor.RESET+" diffs found." );
+	}
+	
 }
