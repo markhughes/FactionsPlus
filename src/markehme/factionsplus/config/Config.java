@@ -66,7 +66,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * fields could be named _something so that when you type Config._ and code completion with Ctrl+Space you can see only the
 	 * relevant fields<br>
 	 */
-	@Section(
+	@Section(comments = {
+		"this has no effect @Section for now", "so don't even try to fill in @Section comments"
+	},
 			realAlias_neverDotted = "jails" )
 	public static final Section_Jails		_jails					= new Section_Jails();
 	
@@ -103,9 +105,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	@Section(
-			comments = {
-		"some comment here, if any", "second line of comment"
-			}, realAlias_neverDotted = "Teleports" )
+			 realAlias_neverDotted = "Teleports" )
 	public static final Section_Teleports	_teleports				= new Section_Teleports();
 	
 	@Section(
@@ -116,7 +116,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_inNonDottedFormat = "DoNotChangeMe" )
 	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
 	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int				doNotChangeMe			= new _int( 11 );
+	public static final _int				doNotChangeMe			= new _int( 12 );
 	
 	// the root class that contains the @Section and @Options to scan for
 	private static final Class				configClass				= Config.class;
@@ -153,20 +153,22 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// first make sure the (hard)coded options are valid while at the same time build a list of all obsolete+new
 		// option
 		// names
-		
 		Typeo.sanitize_AndUpdateClassMapping( configClass );
 		
+		//this header will be included at the top of the config.yml
 		fpConfigHeaderArray	= new String[]{
 			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
 			,""
 			,""
-			,"All comments starting with `### ` (3 # and a space) will be automatically updated, " 
+			,"All comments starting with `### ` (3 # and a space)(aka auto comments) will be automatically updated, " 
 			," please refrain from making any changes inside those lines because they will be lost upon save"
-			,"Making comments starting with just one `#` will remain in place"
+			,"Comments with just one `#` will remain, though they will be moved before/after the auto comments"
 			,""
 			,"You may not use `.` aka dot in config options names even though we are referring to them like that"
 			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
 			," Each level is indented by exactly 2 spaces"
+			,""
+			,"You may use `/f debug configdiff` to see the config options that you've changed from their default (OPs/console only)"
 			,""
 			,""
 			,""
@@ -458,7 +460,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			bw = null;
 			try {
 				//for tests:
-//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );
+//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );//FIXME: for tests only
 				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
@@ -528,7 +530,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();
 	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
-	
+	private static final String	BEGINNING_OF_NEXT_CFG_OPTION	= "###########################################################";
+	private static boolean firstTime=true;
 	
 	public synchronized final static boolean reloadConfig() {
 		
@@ -551,19 +554,32 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 //			virtualRoot=createWYRootFromFields();
 		}
-			// config file exists
-			try {
-				
-				// now read the existing config
-				virtualRoot = WannabeYaml.read( fileConfig );
-				cleanAutoComments(virtualRoot, null);//without updating the line numbers
-				
-				
-				// now check to see if we have any old config options or invalid ones in the config
-				// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
-				// remove old
-				// but only if new values are not already set
-				synchronized ( mapFieldToID ) {
+		
+		
+		// config file exists
+		try {
+			
+			if (firstTime) {
+				firstTime=false;
+				//first time they are already set to defaults, no need to set them again
+			}else {
+				//not first time? ie. /f reloadfp  instead of bukkit 'reload'
+				//we restore defaults just in case ie. a config option was deleted or the entire file was deleted
+				//in which case we'll need to restore the default value for that(those) option(s) rather than the previous value 
+				//we already had set
+				Typeo.resetConfigToDefaults();
+			}
+			
+			// now read the existing config
+			virtualRoot = WannabeYaml.read( fileConfig );
+			cleanAutoComments( virtualRoot, null );// without updating the line numbers
+			
+			
+			// now check to see if we have any old config options or invalid ones in the config
+			// remove invalids (move them to config_invalids.yml and carry over the old config values to the new ones, then
+			// remove old
+			// but only if new values are not already set
+			synchronized ( mapFieldToID ) {
 				synchronized ( Typeo.lock1 ) {
 					mapFieldToID.clear();
 					
@@ -580,13 +596,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					mapFieldToID.clear();// free up memory for gc
 					
 				}// sync
-				}
-				
-			} catch ( IOException e ) {
-//				e.printStackTrace();
-				throw FactionsPlusPlugin.bailOut(e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
-					+ "'" );
 			}
+			
+		} catch ( IOException e ) {
+			// e.printStackTrace();
+			throw FactionsPlusPlugin.bailOut( e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
+				+ "'" );
+		}
 			
 		prependHeader(virtualRoot);
 		
@@ -609,18 +625,23 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
-//	private static final WYSection fpConfigHeader=new WYSection<COMetadata>( 0, "FactionsPlus config.yml header" );
-	
 	private static void prependHeader( WYSection root ) {
 		for ( int j = fpConfigHeaderArray.length-1; j >= 0; j-- ) {
 			String line = fpConfigHeaderArray[j];
-//			if ((null == line)||(line.isEmpty())) {
-//				root.prepend(new WYEmptyLine<COMetadata>( 0 ));actually this is bad, because these are kept
-//			}else{
-				//line numbers are irrelevant because they will be recalculated later
-			root.prepend( new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+line ) );
-//			}
+			//line numbers are irrelevant because they will be recalculated later
+			root.prepend( getAsAutoComment(line) );
 		}
+	}
+	
+	private static final WYComment<COMetadata> getAsAutoComment(String line) {
+		return new WYComment<COMetadata>( 0, AUTOCOMMENTS_PREFIX+line );
+	}
+	
+	private static final boolean isAutoComment(String line) {
+		if ( (null == line) || (line.isEmpty()) ) {
+			return false;
+		}
+		return line.startsWith( AUTOCOMMENTS_PREFIX );
 	}
 
 	private final static void cleanAutoComments( WYSection root, String dottedParentSection ) {
@@ -639,11 +660,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
 				
 				cleanAutoComments( cs, dotted );// recurse
+				
+				//insert empty line between sections (well at the end of each)
+//				root.append( new WYEmptyLine<COMetadata>( 0 ) );ok bad idea
 			} else {
 				if (currentItem instanceof WYRawButLeveledLine) {
 					if (cls == WYComment.class) {
 						WYComment comment=(WYComment)currentItem;
-						if (comment.getRawButLeveledLine().startsWith( AUTOCOMMENTS_PREFIX ) ){
+						if (isAutoComment( comment.getRawButLeveledLine() ) ){
 //							System.out.println(comment.getRawButLeveledLine());
 							root.remove( comment );
 						}
@@ -723,6 +747,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				for ( Iterator iterator = Typeo.orderedListOfFields.iterator(); iterator.hasNext(); ) {
 					field = (Field)iterator.next();
 					// Option anno = field.getAnnotation( Option.class );
+					String[] comments=Typeo.getComments(field);
 					String[] orderOfAliases = Typeo.getListOfOldAliases( field );
 					String dottedRealAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
 					assert null != orderOfAliases;// due to the way annotation works
@@ -733,9 +758,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// previousField
 						// TODO: make sure this field added has the comment above them, and if it's already there don't prepend
 						// it again
-						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias );
+						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias ,comments, field);
 						assert null != x;
 						
+//						for ( int i = 0; i < comments.length; i++ ) {
+//							//System.out.println(field.getName()+" "+comments[i]);
+//							x.getParent().insertBefore( getAsAutoComment( comments[i] ), x );
+//						}
 						//these should always be shown, mainly because they cannot be THAT many to be requiring skipping
 						FactionsPlus.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
 						continue;
@@ -774,8 +803,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					} else {
 						// the real alias overrides any of the old aliases
 						dottedOverrider = dottedRealAlias;
+						
+						//and we can add comments now; case 2 of 3: when realAlias already existed in config
+						prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
+//						for ( int i = 0; i < comments.length; i++ ) {
+////							System.out.println(field.getName()+" 2 "+comments[i]);
+//							overriderWID.getParent().insertBefore( getAsAutoComment( comments[i] ), overriderWID );
+//						}
 					}
 					// so we have our overrider
+
 					// now we have to parse the aSet and mark all that are not overriderWID as overridden by overriderWID
 					
 					assert ( null != overriderWID );
@@ -818,7 +855,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYIdentifier<COMetadata> old = overriderWID;
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
-						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias );
+						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias, comments, field );
 						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
@@ -847,7 +884,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	
-	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias ) {
+	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias , String[] comments, Field field) {
 		assert Q.nn( vroot );
 		assert Q.nn( value );
 		assert Typeo.isValidAliasFormat( dottedRealAlias );
@@ -855,19 +892,50 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		WYSection foundParentSection = parseCreateAndReturnParentSectionFor( vroot,  dottedRealAlias );
 		assert null != foundParentSection : "impossible, it should've created and returned a parent even if it didn't exist";
 		int index = dottedRealAlias.lastIndexOf( Config.DOT );
+		String lastPartOfRealAlias;
 		if ( index >= 0 ) {// well not really 0
-			dottedRealAlias = dottedRealAlias.substring( 1 + index );
+			lastPartOfRealAlias = dottedRealAlias.substring( 1 + index );
+		}else{
+			lastPartOfRealAlias=dottedRealAlias;
 		}
-		assert Typeo.isValidAliasFormat( dottedRealAlias ) : dottedRealAlias;
-		WYIdentifier leaf = new WYIdentifier<COMetadata>( 0, dottedRealAlias, value );
+		assert Typeo.isValidAliasFormat( lastPartOfRealAlias ) : lastPartOfRealAlias;
+		WYIdentifier leaf = new WYIdentifier<COMetadata>( 0, lastPartOfRealAlias, value );
 		// leaf.setMetadata( metadata )
 		// XXX: new(unencountered) config options (in config.yml) are added as last in the subsection where the `id: value` is
 		// for now, ideally TODO: add new config options in the right place in the Fields order
 		foundParentSection.append( leaf );
 		// System.out.println( foundParentSection.getInAbsoluteDottedForm() );
+		
+		//and we can add comments now; case 1&3 of 3: when newly added cfgoption in .yml OR when old alias existed only => newly added must happen
+		prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
 		return leaf;
 	}
 	
+	
+	private static final void prependComments(WYSection parentOfChild, WYIdentifier<COMetadata> beforeThisChild,
+		String dottedAlias, String[] comments, Field field) {
+		assert null != parentOfChild;
+		assert null != beforeThisChild;
+		assert beforeThisChild.getParent() == parentOfChild;
+		assert null != comments;
+		
+//		if (!dottedAlias.contains( "." )) {
+//			System.out.println(dottedAlias);
+//			new Exception().printStackTrace();
+//		}
+//		if (comments.length>0) {
+//			parentOfChild.insertBefore( new WYRawButLeveledLine<COMetadata>( 0, "" ), beforeThisChild );
+			// empty line before, so we can see clearly; actually we can't do empty lines because they are kept, but we can do
+			// commented empty line
+		parentOfChild.insertBefore( getAsAutoComment( ""/*BEGINNING_OF_NEXT_CFG_OPTION*/ ), beforeThisChild );
+		parentOfChild.insertBefore( getAsAutoComment( "# "+dottedAlias ), beforeThisChild );
+		parentOfChild.insertBefore( getAsAutoComment( "default value: "+Typeo.getFieldDefaultValue( field )), beforeThisChild );
+//		}
+		
+		for ( int i = 0; i < comments.length; i++ ) {
+			parentOfChild.insertBefore( getAsAutoComment( comments[i] ), beforeThisChild );
+		}
+	}
 	
 	/**
 	 * attempts to create all parents for the passed ID

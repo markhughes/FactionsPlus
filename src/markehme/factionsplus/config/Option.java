@@ -18,12 +18,10 @@ import java.lang.annotation.*;
 } )
 public @interface Option {
 	
-	// the ID that would be used in the config file
-	// String realID();
 	/**
 	 * comment to be added above of this config option, inside the config file
 	 */
-	String[] comment() default "";
+	String[] comment() default {};
 	
 	
 	/**

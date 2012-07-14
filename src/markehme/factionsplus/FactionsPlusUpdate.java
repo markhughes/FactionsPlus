@@ -131,7 +131,10 @@ public class FactionsPlusUpdate implements Runnable {
 				scanner = new Scanner( connection.getInputStream() );
 				scanner.useDelimiter( "\\Z" );
 				content = scanner.next();
-			} catch ( Exception ex ) {
+			}catch (java.net.UnknownHostException uhe) {
+				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
+				return;
+			}catch ( Exception ex ) {
 				ex.printStackTrace();
 				FactionsPlusPlugin.info( "Failed to check for updates." );
 				return;

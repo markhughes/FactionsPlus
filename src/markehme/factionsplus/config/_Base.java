@@ -48,4 +48,6 @@ public abstract class _Base {// must be abstract, we can't have it instanced, us
 		throw new RuntimeException("do not use this, it's here to trap by mistake if you're trying to add these to a HashMap/HashSet" +
 				"because then the .equals() comparison between then is not what you may want");
 	}
+
+	public abstract String getDefaultValue();
 }
