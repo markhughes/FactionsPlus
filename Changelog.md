@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* you're now informed on console when the state changes for teleports listening due to ie. `/f reloadfp` and you changing the
+options inside the `Teleports:` section. For example turning them all to false will stop listening for teleport events, while
+turning any from false to true will start listening (unless it was already listening).
+
 * extras.Protection.LWC.`removeAllLocksOnClaim` is automatically set to true if `onCaptureResetLwcLocks` in Factions plugin
 is set to true. This doesn't save the setting in the config.yml, you'll have to do it yourself.
 

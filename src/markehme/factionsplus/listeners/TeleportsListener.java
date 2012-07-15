@@ -49,12 +49,18 @@ public class TeleportsListener implements Listener {
 			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
 		}
 		
+		
 		if ( !Config._teleports.isAnySet() ) {
 			// don't hook if neither of the two are set
 			if ( isInited() ) {
 				deInit();
 			}
 			return;
+		}else{
+			//set or still set
+			if (isInited()) {
+				return;//keep listening, since we're already listening
+			}
 		}
 		
 		// if ( !EssentialsIntegration.isHooked() ) {
@@ -67,12 +73,14 @@ public class TeleportsListener implements Listener {
 		
 		preventTeleports.registerSelf( plugin );
 		tpInited = true;
+		FactionsPlus.info("Started listening for teleport events");
 	}
 	
 	
 	private synchronized static void deInit() {
 		preventTeleports.unregisterSelf();
 		tpInited = false;
+		FactionsPlus.info("Stopped listening for teleport events");
 	}
 	
 	
