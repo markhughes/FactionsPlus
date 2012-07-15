@@ -18,5 +18,8 @@ public class FPConfigLoadedListener implements Listener {
         //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
         //and now the config may dictate that they are disabled (state changed) so we must properly handle that behaviour.
         TeleportsListener.initOrDeInit(FactionsPlus.instance);
+        
+        
+        FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
 	}
 }

@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+* while `disableUpdateCheck` is `false` the checking for new version of the plugin will be done automatically every time 
+the plugin is enabled(ie. bukkit server start) and every 24 hours.
+
 * you're now informed on console when the state changes for teleports listening due to ie. `/f reloadfp` and you changing the
 options inside the `Teleports:` section. For example turning them all to false will stop listening for teleport events, while
 turning any from false to true will start listening (unless it was already listening).

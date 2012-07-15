@@ -13,67 +13,50 @@ import markehme.factionsplus.config.*;
 
 
 
+@SuppressWarnings( "unused" )
 public class FactionsPlusUpdate implements Runnable {
 	
+	private static final long	DELAY	= 5*20;//5 sec delay on startup before checking for updates
+
+	private static final long	PERIOD	= 24*60*60*20;//20 ticks per sec, check every 24 hours
+
 	private static FactionsPlusUpdate	once	= null;
-	// private static Thread updateThread = null;
+
 	// TODO: fix when no-internet access allowed and does 'reload' two times, the second waits 10 sec for the first run of
 	// thread to timeout on reading due to unknown host (after 10 sec)
 	
-	private static volatile int			taskId;		// if modified in two threads
+	private static volatile int			taskId=Integer.MIN_VALUE;		// if modified in two threads
 														
-														
-	// private static ReentrantLock rl = new ReentrantLock();
-	// private static final int MAXWAITTIME = 5;
-	
+	static {
+		if ( PERIOD < 60 * 20){
+//			FactionsPlus.instance.disableSelf();
+			throw FactionsPlus.bailOut("Please set the repeating delay to at least every 60 seconds though it should be much more");
+			//yeah this will still not stop it
+		}
+	}
 	
 	static public void checkUpdates( FactionsPlus instance ) {
 		synchronized ( FactionsPlusUpdate.class ) {
 			if ( null == once ) {
 				once = new FactionsPlusUpdate();
-				// assert null == updateThread;
-				// updateThread = new Thread( once );
-				// updateThread.setDaemon( false );
 			}
-			// else {
-			// updateThread.stop();
-			// }
-			// updateThread.start();
-			// }
-			// if (taskId > 0) {//will never detect this, due to load/unload aka reinit of all fields
-			// FactionsPlus.warn("The check-for-updates thread was already running from the last time the plugin was started!");
-			// }
-			
-			// try {
-			// rl.tryLock( MAXWAITTIME, TimeUnit.SECONDS );
-			// } catch ( InterruptedException e ) {
-			// e.printStackTrace();
-			// }
-			// if ( rl.isLocked() ) {
-			// try {
-			// synchronized ( FactionsPlusUpdate.class ) {
-			taskId = Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask( instance, once );
+			taskId = Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask( instance, once, DELAY, PERIOD );
 			if ( taskId < 0 ) {// not possible
 				FactionsPlus.warn( "Failed to start the check-for-updates thread!" );
 			}
 		}
-		// } finally {
-		// rl.unlock();
-		// }
-		// }
 	}
 	
+	public static boolean isRunning() {
+		synchronized ( FactionsPlusUpdate.class ) {
+			return (taskId >= 0) && (once != null);
+		}
+	}
 	
 	public static void ensureNotRunning() {
-		// try {
-		// rl.tryLock( MAXWAITTIME, TimeUnit.SECONDS );
-		// } catch ( InterruptedException e ) {
-		// e.printStackTrace();
-		// }
-		// if ( rl.isLocked() ) {
-		// try {
+
 		synchronized ( FactionsPlusUpdate.class ) {
-			if ( taskId > 0 ) {
+			if ( taskId >= 0 ) {
 				BukkitScheduler sched = Bukkit.getServer().getScheduler();
 				if ( sched.isCurrentlyRunning( taskId ) ) {// not possible due to lock
 					FactionsPlus.warn( "The check-for-updates thread was still running" );
@@ -85,42 +68,38 @@ public class FactionsPlusUpdate implements Runnable {
 					FactionsPlus.warn( "Stopped the check-for-updates thread" );
 				}
 			}
+			
+			once=null;
 		}
-		// } finally {
-		// rl.unlock();
-		// }
-		// }
-		//
-		// if ( ( null != updateThread ) && ( updateThread.isAlive() ) ) {
-		// updateThread.interrupt();
-		// if ( !updateThread.isInterrupted() ) {
-		// FactionsPlus.warn( "Killing update thread!" );
-		// updateThread.stop();
-		// }
-		// synchronized ( FactionsPlusUpdate.class ) {
-		// assert !updateThread.isAlive();
-		// }
-		// }
 	}
 	
+	
+	public static void enableOrDisableCheckingForUpdates() {
+		synchronized ( FactionsPlusUpdate.class ) {
+			if ( Config._extras.disableUpdateCheck._ ) {
+				FactionsPlusUpdate.ensureNotRunning();
+				FactionsPlus.info("Never checking for updates");
+			} else {
+				// enable
+				if ( !isRunning() ) {
+					FactionsPlus.info("Will now check for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
+					FactionsPlusUpdate.checkUpdates( FactionsPlus.instance );
+				}else{
+					//still running
+					FactionsPlus.info("Still checking for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
+//					next check is in "
+//						Bukkit.getServer().getScheduler().);
+				}
+			}
+		}
+	}
 	
 	@Override
 	public void run() {
 		synchronized ( FactionsPlusUpdate.class ) {
-			// try {
-			// rl.tryLock( MAXWAITTIME, TimeUnit.SECONDS );
-			// } catch ( InterruptedException e ) {
-			// e.printStackTrace();
-			// }
-			// if ( rl.isLocked() ) {
-			// try {
 			String content = null;
 			URLConnection connection = null;
 			String v = FactionsPlus.version;
-			
-			if ( Config._extras.disableUpdateCheck._ ) {
-				return;
-			}
 			
 			FactionsPlusPlugin.info( "Checking for updates ... " );
 			
@@ -177,9 +156,5 @@ public class FactionsPlusUpdate implements Runnable {
 				FactionsPlusPlugin.info( "Up to date!" );
 			}
 		}
-		// } finally {
-		// rl.unlock();
-		// }
-		// }
 	}
 }
