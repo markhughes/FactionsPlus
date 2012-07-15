@@ -41,7 +41,7 @@ public class TeleportsListener implements Listener {
 	// XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
 	
 	
-	public synchronized static void init( Plugin plugin ) {
+	public synchronized static void initOrDeInit( Plugin plugin ) {
 		if ( !plugin.isEnabled() ) {
 			return;
 		}

@@ -162,7 +162,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		
 		FactionsPlusCommandManager.setup();
-		TeleportsListener.init(this);
+		
 		
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
         if (permissionProvider != null) {
