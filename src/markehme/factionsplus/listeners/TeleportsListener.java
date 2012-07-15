@@ -51,7 +51,6 @@ public class TeleportsListener implements Listener {
 		
 		
 		if ( !Config._teleports.isAnySet() ) {
-			// don't hook if neither of the two are set
 			if ( isInited() ) {
 				deInit();
 			}
