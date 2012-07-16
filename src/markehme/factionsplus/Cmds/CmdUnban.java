@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.sections.*;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
@@ -30,36 +31,38 @@ public class CmdUnban extends FCommand {
 	
 	@Override
 	public void perform(){
-		String unbanningThisPlayer = this.argAsString(0);
-		Faction pFaction = fme.getFaction();
-		
-		if(!FactionsPlus.permission.has(sender, "factionsplus.unban")){
-			sender.sendMessage(ChatColor.RED + "No permissions!");
+		if ((Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._)
+				&&(!FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName))) {
+			sender.sendMessage(ChatColor.RED + "You don't have the required permission node!");
 			return;
 		}
 		
+		String unbanningThisPlayer = this.argAsString(0);
+		Faction pFaction = fme.getFaction();
+		
 		boolean authallow = false;
 		
-		if(Config._banning.leadersCanFactionUnban._ && Utilities.isLeader(fme)){
+		if(Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(fme)){
 			authallow = true;
-		} else if(Config._banning.officersCanFactionUnban._ && Utilities.isOfficer(fme)){
+		} else if(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(fme)){
 			authallow = true;
 		}
 		
 		if(!authallow){
-			fme.msg(ChatColor.RED + "Sorry, your ranking is not high enought to do that!");
+			fme.msg(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
 			return;
 		}
+		
 		
 		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
 		
 		if(banFile.exists()){
-			banFile.delete();
-			me.sendMessage(unbanningThisPlayer + " has been unbanned from the Faction!");
-			return;
+			boolean deleted=banFile.delete();
+			me.sendMessage(unbanningThisPlayer + " has "+(deleted?"":"not")+" been unbanned from the Faction!");
 		} else {
 			me.sendMessage("This user isn't banned from the Faction!");
-			return;
 		}
+		
+		
 	}
 }

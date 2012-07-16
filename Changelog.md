@@ -1,5 +1,18 @@
 # FactionsPlus version 0.4.8
 
+* new config option banning.`canBanToPreventFutureJoins` if set to true(as by default) it will allow preemptive banning of players
+even if they are not already in your faction, so that they cannot join in the future, ie. if your faction is open and doesn't require invitations
+or simply you just want to make sure nobody can invite a certain player to join in the future.
+
+* config options `leadersCanFactionUnban` and `officersCanFactionUnban` have been removed  
+the options `leadersCanFactionBan` and `officersCanFactionBan` have been upgraded to `leadersCanFactionBanAndUnban` and 
+`officersCanFactionBanAndUnban`
+
+* `/f ban` will no longer cause a player leave fee; will cause a FPlayerLeaveEvent with KICKED reason (which is cancellable)
+previously it was LEAVE reason; the banned player is also deinvited from that faction;    
+`factionsplus.ban` and `factionsplus.unban` permissions are completely ignored, please use `factionsplus.banunban` permission 
+node instead which only has effect if the new option `furtherRestrictBanUnBanToThoseThatHavePermission` is `true`(false by default) in config(explained by comments inside the config after one run)
+
 * while `disableUpdateCheck` is `false` the checking for new version of the plugin will be done automatically every time 
 the plugin is enabled(ie. bukkit server start) and every 24 hours.
 
@@ -28,7 +41,9 @@ parent sections.
 (but also when they were jailed)  
 if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  
 if a player was jailed while offline it will only be teleported to the jail upon login (same as in 0.4.7)  
-if all else fails, when unjailed the player will be teleported back to bed or world spawn
+if all else fails, when unjailed the player will be teleported back to bed or world spawn  
+`factionsplus.unjail` permission is completely ignored, but if the new option `furtherRestrictJailUnjailToThoseThatHavePermission` is `true` (false by default)
+then `factionsplus.jailunjail` permission node is used to further restrict leaders/officers from using jail/unjail.
 
 * fixed uses of getPlayer which were expected to act as getPlayerExact  
 
