@@ -86,7 +86,7 @@ public class CmdListWarps extends FCommand  {
 	        boolean warps = false;
 	        while (scanner.hasNextLine()) {
 	        	String item = scanner.nextLine();
-	        	if(item.trim() != "") {
+	        	if(!item.trim().isEmpty()) {
 	        		String[] items = item.split(":");
 	        		if (items.length > 0) {
 	        			if (buffer.length() + items[0].length() + 2 >= 256) {

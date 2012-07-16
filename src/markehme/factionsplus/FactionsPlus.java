@@ -79,11 +79,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public void onDisable() {
 		Throwable failed = null;// TODO: find a way to chain all thrown exception rather than overwrite all older
 		try {
-			if ( null != metrics ) {
-				try {
-					metrics.disable();
-				} catch ( IOException e ) {
-					e.printStackTrace();
+			synchronized ( Metrics.class ) {
+				if ( null != metrics ) {
+					try {
+						metrics.disable();
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
@@ -260,20 +262,22 @@ public class FactionsPlus extends FactionsPlusPlugin {
         
 		FactionsPlusPlugin.info("Ready.");
 		
-		try {
-			if (null == metrics) {
-				//first time
-				metrics = new Metrics(this);
-				metrics.start();
-			}else{
-				//second+  time(s)
-				metrics.enable();
+			try {
+				synchronized ( Metrics.class ) {
+					if ( null == metrics ) {
+						// first time
+						metrics = new Metrics( this );
+						metrics.start();
+					} else {
+						// second+ time(s)
+						metrics.enable();
+					}
+				}
+				
+			} catch ( IOException e ) {
+				FactionsPlusPlugin.info( "Waah! Couldn't metrics-up! :'(" );
 			}
-		    
-		} catch (IOException e) {
-		    FactionsPlusPlugin.info("Waah! Couldn't metrics-up! :'(");
-		}
-		
+
 		
 		
 		//put your code above, let this be last:

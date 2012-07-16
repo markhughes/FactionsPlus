@@ -102,10 +102,14 @@ public class CmdWarp extends FCommand {
 
 			for (Player playa : me.getServer().getOnlinePlayers())
 			{
-				if (playa == null || !playa.isOnline() || playa.isDead() || playa == fme || playa.getWorld() != w)
+				if (playa == null || !playa.isOnline() || playa.isDead() || playa.getWorld() != w)
 					continue;
 
 				FPlayer fp = FPlayers.i.get(playa);
+				if (fp.equals(fme)) {
+					continue;
+				}
+				
 				if ( ! FactionsAny.Relation.ENEMY.equals( 
 					Bridge.factions.getRelationBetween( fplayer, fp ) 
 					)) {

@@ -76,7 +76,7 @@ public class CmdRules extends FCommand {
 			while ( ( strLine = br.readLine() ) != null ) {
 				rCurrent = rCurrent + 1;
 				
-				if ( !strLine.isEmpty() || strLine.trim() != "" ) {
+				if ( !strLine.isEmpty() || !strLine.trim().isEmpty() ) {
 					fme.msg( "Rule " + rCurrent + ": " + strLine );
 				}
 			}
