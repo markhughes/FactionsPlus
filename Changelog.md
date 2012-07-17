@@ -100,12 +100,17 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     Denying will be instant, regardless of any warm-up delays other plugins may have.  
     It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.  
     The expected console message upon report would look similar to this:    
-    > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.  
+    > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac. Their last typed command: '/home my1'.  
     You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
     allowed for OPs.    
-    The used pearl is wasted and a message will show.  
+    The reported last command typed by the player that teleported is not necessarily(and usually unlikely to be) the cause of 
+    the teleport, for example another player might've used /tphere (thanks @deathnote1029). Or warm-up delays for teleports due to Essentials allowed the
+    teleporting player to type more commands before the teleport event happened. For reasons like this and the fact that there's no
+    real way of associating the command with the teleport event, we cannot know for sure which command(and of which player)
+    actually caused the teleport to happen.  
     The exploitable /home prevetion in 0.4.7 is now fixed in 0.4.8 such that it's highly unlikely that it can be exploited
-    mainly because we're now hooking into essentials (the plugin that has /home) 
+    mainly because we're now hooking into essentials (the plugin that has /home)  
+    The used pearl is wasted and a message will show.
 
 # FactionsPlus version 0.4.7
 

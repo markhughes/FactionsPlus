@@ -478,8 +478,9 @@ public class TeleportsListener implements Listener {
 					if ( report ) {
 						FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
 							+ constOneColor + "'"+(player.isOp()?"(op)":"")+" teleported into " + rel + " land faction '" + ChatColor.DARK_AQUA
-							+ fac.getTag() + constOneColor + "' using command: '" + ChatColor.AQUA
-							+ lastExecutedCommandByPlayer + constOneColor + "'." );
+							+ fac.getTag() + constOneColor + "'. Their last typed command: '" + ChatColor.AQUA
+							+ lastExecutedCommandByPlayer + constOneColor + "'."+ChatColor.RESET+
+							"\n(doesn't mean this command was the cause of the teleport!)" );
 					}
 				}
 			}// homeTracking

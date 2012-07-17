@@ -5,13 +5,12 @@ import markehme.factionsplus.config.*;
 
 public class SubSection_TeleportsIntoEnemyReport {
 	@Option(comment={
-		"When true this will report on server Console all commands that were used and were successful"
-		,"in teleporting players inside enemy territory. Enemy is relative to the specific player that"
-		," teleported and evaluated at the time of the teleport"
-		,"This will not be triggered if you have set to true the option to deny teleports into enemy territory (0.4.8+)"
-		,"This may be inaccurate if the command had a warm-up delay or caused the teleport event after a delay, mainly due to"
-		,"the ability of the player to insert commands inbetween and our inability to associate the command that caused the teleport"
-		,"with the teleport event itself"
+		"When true this will report(on server Console) the player that landed(via teleport caused by a command)"
+		," inside enemy territory. The command that caused the teleport cannot be known, but the last command typed"
+		," by the teleported player is shown as a helper. For example: another player can use /tphere to teleport that player"
+		," and that player's last command will be reported(ie. /who) which is not the command that caused the teleport."
+		,"Enemy is the relation between that player that teleported and the faction that owns the territory where player would've landed, and it is evaluated at the time of the teleport"
+		,"This will not be triggered for /home or /back if you have set(to true) the option(s) to deny teleports into enemy territory (0.4.8+)"
 	}
 		,oldAliases_alwaysDotted={
 		"Teleports.reportSuccessfulByCommandTeleportsIntoEnemyLand",//newest
