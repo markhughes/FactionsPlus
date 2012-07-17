@@ -212,9 +212,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
 
+        //FIXME: make this compliant with /f reloadfp
 		if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
-			
-			LWCFunctions.hookLWC();// this must be inside an if, else NoClassDefFoundError if LWC is not on
 			
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
@@ -228,6 +227,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				}
 				
 			}
+
+			//this after the above setting
+			LWCFunctions.hookLWC();// this must be inside an if, else NoClassDefFoundError if LWC is not on
 			
 		} else {//no LWC
 			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
