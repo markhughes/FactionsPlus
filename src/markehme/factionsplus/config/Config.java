@@ -119,7 +119,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final _int				doNotChangeMe			= new _int( 12 );
 	
 	@Option(
-		comment={"if true it will remove all auto comments which explain what each option does in the config file."
+		comment={
+			"NOT IMPLEMENTED",//FIXME: remove this line after implemented
+			"if true it will remove all auto comments which explain what each option does in the config file."
 			,"This option is here only for those that want to increase readability in the config file."
 		},
 		realAlias_inNonDottedFormat = "disableAutoCommentsInConfig" )
@@ -535,7 +537,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	protected static WYSection	virtualRoot		= null;
 	
 	// one to many
-	private static final HM1	mapFieldToID	= new HM1();
+	private static final HM1	mapFieldToID	= new HM1();//store all except newly added fields
 	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
 	private static final String	BEGINNING_OF_NEXT_CFG_OPTION	= "###########################################################";
 //	private static boolean firstTime=true;
@@ -592,7 +594,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseOneTime_and_CheckForValids( virtualRoot, null );
 					
-					// FIXME: still have to make sure the fields have their comments above them!!!!!!!!!!!!!!!!!!
+					// done: still have to make sure the fields have their comments above them!!!!!!!!!!!!!!!!!!
 					parseSecondTime_and_sortOverrides( virtualRoot );// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
@@ -613,7 +615,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 		prependHeader(virtualRoot);
 		
-		applyChanges();
+		
+		//TODO:
+		//1.setvalues for all fields
+		//2.put or not autocomments
+		//3.apply changes like commenting out dups/invalids/overridden ones (which implies line recalc happens at this point)
+		
+		applyChanges();//comment out dups etc. & set fields value to the specified values inside config; FIXME: split in two methods
 		
 		saveConfig();
 		
