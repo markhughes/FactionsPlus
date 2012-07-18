@@ -626,7 +626,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		saveConfig();
 		
 		
-		//bechmarked: 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
+		//bechmarked(0.4.7 code or so): 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
 		//that yielded a 15.6 MB file which on f reloadfp was parsed w/o info/warns in under 570ms
 		// 2.3 seconds if all info/warn are suppressed
 		
