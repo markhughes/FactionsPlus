@@ -512,54 +512,56 @@ public class TeleportsListener implements Listener {
 					//not warzone/safezone then check:
 					
 				FactionsAny.Relation rel = getRelation( player, fac );
-				switch ( rel ) {
-				case ALLY:
-					if ( !Config._teleports._into._allyTerritory._deny.viaPearls._ ) {
-						allowed = true;
+				if ( !player.isOp() ) {// only check if player isn't op
+					switch ( rel ) {
+					case ALLY:
+						if ( !Config._teleports._into._allyTerritory._deny.viaPearls._ ) {
+							allowed = true;
+						}
+						if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
+							report = false;
+						}
+						break;
+					case ENEMY:
+						if ( !Config._teleports._into._enemyTerritory._deny.viaPearls._ ) {
+							allowed = true;
+						}
+						if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
+							report = false;
+						}
+						break;
+					case NEUTRAL:
+					case TRUCE:
+						if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
+							allowed = true;
+						}
+						if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
+							report = false;
+						}
+						break;
+					case MEMBER:
+						allowed = true;// you may ender into your own territory
+						report = false;// and don't report this obviously
+						break;
+					default:
+						denyTeleport( event );
+						player.sendMessage( ChatColor.RED + "Internal error, thus teleporting denied" );
+						throw new RuntimeException( "will never happen: " + rel );
 					}
-					if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
-						report = false;
+					
+					if ( !allowed ) {
+						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + rel
+							+ " territory" );
+						denyTeleport( event );
+						break;
 					}
-					break;
-				case ENEMY:
-					if ( !Config._teleports._into._enemyTerritory._deny.viaPearls._ ) {
-						allowed = true;
-					}
-					if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
-						report = false;
-					}
-					break;
-				case NEUTRAL:
-				case TRUCE:
-					if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
-						allowed = true;
-					}
-					if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
-						report = false;
-					}
-					break;
-				case MEMBER:
-					allowed = true;// you may ender into your own territory
-					report = false;// and don't report this obviously
-					break;
-				default:
-					denyTeleport( event );
-					player.sendMessage( ChatColor.RED + "Internal error, thus teleporting denied" );
-					throw new RuntimeException( "will never happen: " + rel );
-				}
-				
-				if ( !allowed ) {
-					player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + rel
-						+ " territory" );
-					denyTeleport( event );
-					break;
 				}
 				
 				if ( ( report ) && ( !event.isCancelled() ) ) {
 					FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
 						+ constOneColor + "'" + ( player.isOp() ? "(op)" : "" ) + " teleported into " + rel + " land faction '"
 						+ ChatColor.DARK_AQUA + fac.getTag() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
-	}
+				}
 //				}
 				
 			}
