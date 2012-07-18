@@ -45,14 +45,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 				}
 			}
 		} else {
-			if ( alreadyRegistered ) {
-				try {
-					HandlerList.unregisterAll( lwcListener );
-					FactionsPlus.info("Stopped LWC listener");
-				} finally {
-					alreadyRegistered = false;
-				}
-			}
+			deregListenerIfNeeded();
 		}
 		
 		if (!hooked) {
@@ -67,12 +60,24 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		assert hooked;
 		try {
+			deregListenerIfNeeded();
 			getLWC().getModuleLoader().removeModules(  FactionsPlus.instance );
 		}finally{
 			hooked=false;
 		}
 	}
 	
+	
+	public static void deregListenerIfNeeded() {
+		if ( alreadyRegistered ) {
+			try {
+				HandlerList.unregisterAll( lwcListener );
+				FactionsPlus.info("Stopped LWC listener");
+			} finally {
+				alreadyRegistered = false;
+			}
+		}
+	}
 	
 	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST //is TileEntity

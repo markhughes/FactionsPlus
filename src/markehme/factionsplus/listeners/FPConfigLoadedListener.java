@@ -49,7 +49,8 @@ public class FPConfigLoadedListener implements Listener {
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
 						+ " This means those settings will be ignored & have no effect" );
 			}
-			return;
+			
+			LWCFunctions.deregListenerIfNeeded();
 		}
         
 	}//onConfigLoaded method ends
