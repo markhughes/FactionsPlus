@@ -6,6 +6,7 @@ import org.bukkit.entity.*;
 import org.bukkit.permissions.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 
 import com.griefcraft.lwc.*;
 import com.griefcraft.scripting.*;
@@ -20,11 +21,8 @@ public class LWCModule extends JavaModule {//to fix
 //	implements Module { this won't yet work, this will cause no methods/events to be registered unless you use JavaModule instead
 	
 	private static final Permission	permForDontPreventLWCLocking	= new Permission( "factionsplus.dontPreventLWCLocking" );
-	private final boolean	blockCPublic;
 	
-	public LWCModule(boolean _blockCPublic) {
-		//caching some config settings...
-		blockCPublic=_blockCPublic;
+	public LWCModule() {
 	}
 
     @Override
@@ -64,7 +62,7 @@ public class LWCModule extends JavaModule {//to fix
 
 	@Override
 	public void onProtectionInteract( LWCProtectionInteractEvent event ) {
-		if(blockCPublic) {
+		if(Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ ) {
 			FLocation floc = new FLocation(event.getProtection().getBlock().getLocation());
 			Player p = event.getPlayer();
 			Faction owner = Board.getFactionAt(floc);

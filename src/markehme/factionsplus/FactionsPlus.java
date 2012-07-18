@@ -69,7 +69,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public FactionsPlus() {//constructor
 		super();
 		if (null != instance) {
-			throw bailOut("this was not expected, getting new-ed again without getting unloaded first");
+			throw bailOut("this was not expected, getting new-ed again without getting unloaded first.\n"
+				+"Safest way to reload is to stop and start the server!");
 		}
 		instance=this;
 	}
@@ -212,38 +213,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
 
-        //FIXME: make this compliant with /f reloadfp
-		if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
-			
-			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
-				// if Faction plugin has setting to reset locks (which only resets for chests)
-				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
-					Config._extras._protection._lwc.removeAllLocksOnClaim._=true;
-					// meh: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Automatically setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
-						+ "` for this session because you have Factions.`onCaptureResetLwcLocks` set to true" );
-					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
-				}
-				
-			}
-
-			//this after the above setting
-			LWCFunctions.hookLWC();// this must be inside an if, else NoClassDefFoundError if LWC is not on
-			
-		} else {//no LWC
-			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
-				|| Config._extras._protection._lwc.removeAllLocksOnClaim._ ) 
-			{
-				FactionsPlusPlugin
-					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
-						+ " This means those settings will be ignored & have no effect" );
-			}
-			return;
-		}
-        
-	
-       
         
         
         if(Config._peaceful.enablePeacefulBoosts._) {
