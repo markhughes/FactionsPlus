@@ -162,7 +162,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 	
 	
-	private static boolean isProtectionTypeToRemove( Material type ) {
+	private final static boolean isProtectionTypeToRemove( Material type ) {
 		return Utilities.isReferenceInArray( type, protectionsTypesToRemove );
 	}
 
