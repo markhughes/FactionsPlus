@@ -494,24 +494,39 @@ public class TeleportsListener implements Listener {
 			if ( isEnderPearling() ) {
 				Location targetLocation = event.getTo();
 				Faction fac = getFactionAt( targetLocation );
-				FactionsAny.Relation rel = getRelation( player, fac );
 				boolean allowed = false;
 				boolean report=true;
+				if (
+						((Utilities.isSafeZone( fac ) && Config._teleports._into._safezone.denyIfViaPearls._))
+						||((Utilities.isWarZone( fac ) && Config._teleports._into._warzone.denyIfViaEnderPeals._))
+						) {
+					allowed=false;
+					report=false;
+					if ( !allowed ) {
+						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + fac.getTag()
+							+ " territory" );
+						denyTeleport( event );
+						break;
+					}
+				} //else {
+					//not warzone/safezone then check:
+					
+				FactionsAny.Relation rel = getRelation( player, fac );
 				switch ( rel ) {
 				case ALLY:
 					if ( !Config._teleports._into._allyTerritory._deny.viaPearls._ ) {
 						allowed = true;
 					}
-					if (!Config._teleports._into._allyTerritory._report.viaPearls._) {
-						report=false;
+					if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
+						report = false;
 					}
 					break;
 				case ENEMY:
 					if ( !Config._teleports._into._enemyTerritory._deny.viaPearls._ ) {
 						allowed = true;
 					}
-					if (!Config._teleports._into._enemyTerritory._report.viaPearls._) {
-						report=false;
+					if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
+						report = false;
 					}
 					break;
 				case NEUTRAL:
@@ -519,13 +534,13 @@ public class TeleportsListener implements Listener {
 					if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
 						allowed = true;
 					}
-					if (!Config._teleports._into._neutralTerritory._report.viaPearls._) {
-						report=false;
+					if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
+						report = false;
 					}
 					break;
 				case MEMBER:
-					allowed=true;//you may ender into your own territory
-					report=false;//and don't report this obviously
+					allowed = true;// you may ender into your own territory
+					report = false;// and don't report this obviously
 					break;
 				default:
 					denyTeleport( event );
@@ -540,12 +555,13 @@ public class TeleportsListener implements Listener {
 					break;
 				}
 				
-				if ( ( report )&&(!event.isCancelled()) ) {
+				if ( ( report ) && ( !event.isCancelled() ) ) {
 					FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
-						+ constOneColor + "'"+(player.isOp()?"(op)":"")+" teleported into " + rel + " land faction '" + ChatColor.DARK_AQUA
-						+ fac.getTag() + constOneColor + "' using " + ChatColor.AQUA
-						+ "ender pearls" );
-				}
+						+ constOneColor + "'" + ( player.isOp() ? "(op)" : "" ) + " teleported into " + rel + " land faction '"
+						+ ChatColor.DARK_AQUA + fac.getTag() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
+	}
+//				}
+				
 			}
 			break;
 		default:
