@@ -5,3 +5,12 @@ website: http://markeh.me
 version: 0.4.8
 depend: [ Factions, Vault ]
 soft-depend: [DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit, Essentials]
+dev-url: http://dev.bukkit.org/server-mods/factionsplus/
+#permissions:
+#  factionsplus.xyz:
+#    default: false 
+#    description: something
+#  factionsplus.*:
+#    default: false
+#    children:
+#      factionsplus.xyz: true
