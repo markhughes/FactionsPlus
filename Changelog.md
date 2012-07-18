@@ -106,7 +106,7 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
     allowed for OPs.    
     The reported last command typed by the player that teleported is not necessarily(and usually unlikely to be) the cause of 
-    the teleport, for example another player might've used /tphere (thanks @deathnote1029). Or warm-up delays for teleports due to Essentials allowed the
+    the teleport, for example another player might've used /tphere. Or warm-up delays for teleports due to Essentials allowed the
     teleporting player to type more commands before the teleport event happened. For reasons like this and the fact that there's no
     real way of associating the command with the teleport event, we cannot know for sure which command(and of which player)
     actually caused the teleport to happen.  
