@@ -23,9 +23,9 @@ public class CmdToggleState extends FCommand {
 		this.aliases.add("togglestate");
 		
 		//this.requiredArgs.add("state");
-		this.optionalArgs.put("faction", "faction");
+		this.optionalArgs.put("faction", "yours");
 		
-		this.permission = "factionsplus.togglestate.use";//Permission.HELP.node;
+		this.permission = "factionsplus.togglestate.use";//Permission.HELP.node;//
 		this.disableOnLock = false;
 		
 		senderMustBePlayer = true;
@@ -43,19 +43,19 @@ public class CmdToggleState extends FCommand {
 		
 		String factionToggling = this.argAsString(0);
 		Faction factiont;
-		boolean authallow=false;
+//		boolean authallow=false;
 		//nvm seems fixed in Essentials-2.9.2 : groupmanager bug, once you set the  "factionsplus.togglestate.others" permission for Default group, reload then
 		//you remove and reload, it's still seen as set/active
 		
 //		System.out.println(""+Utilities.hasPermissionOrIsOp( (Player)sender, new org.bukkit.permissions.Permission("factionsplus.togglestate.others"))
 //			+" vs "+FactionsPlus.permission.has(sender,"factionsplus.togglestate.others"));
-		if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.use")) {
-			sender.sendMessage(ChatColor.RED + "No permission!");
-			return;
-		}else {//here if either has that perm or is Op
-			authallow|=sender.isOp();
-		}
-
+//		if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.use")) {unneeded because this.permission already handles this
+//			sender.sendMessage(ChatColor.RED + "No permission!");
+//			return;
+//		}else {//here if either has that perm or is Op
+//			authallow|=sender.isOp();
+//		}
+		boolean authallow=sender.isOp();
 		factiont = fme.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
 
 		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getTag())) ) {
