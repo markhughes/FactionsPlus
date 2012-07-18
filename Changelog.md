@@ -104,7 +104,7 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The expected console message upon report would look similar to this:    
     > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac. Their last typed command: '/home my1'.  
     You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
-    allowed for OPs.    
+    OPs are exempt for any such denials but the reporting on console still happens for them.    
     The reported last command typed by the player that teleported is not necessarily(and usually unlikely to be) the cause of 
     the teleport, for example another player might've used /tphere. Or warm-up delays for teleports due to Essentials allowed the
     teleporting player to type more commands before the teleport event happened. For reasons like this and the fact that there's no
