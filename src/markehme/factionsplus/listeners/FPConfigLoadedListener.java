@@ -23,6 +23,7 @@ public class FPConfigLoadedListener implements Listener {
         
         FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
         
+        LWCBase.refreshLWC();
         if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
 			
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
