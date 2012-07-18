@@ -181,6 +181,7 @@ public class TeleportsListener implements Listener {
 							}
 							break;
 						case NEUTRAL:
+						case TRUCE:
 							if ( !Config._teleports._into._neutralTerritory._deny.viaBack._ ) {
 								allowed = true;
 							}else {
@@ -345,6 +346,7 @@ public class TeleportsListener implements Listener {
 						}
 						break;
 					case NEUTRAL:
+					case TRUCE:
 						if ( !Config._teleports._into._neutralTerritory._deny.viaHome._ ) {
 							allowed = true;
 						}else {
@@ -463,6 +465,7 @@ public class TeleportsListener implements Listener {
 						}
 						break;
 					case NEUTRAL:
+					case TRUCE:
 						if ( !Config._teleports._into._neutralTerritory._report.viaCommand._ ) {
 							report = false;
 						}
@@ -512,6 +515,7 @@ public class TeleportsListener implements Listener {
 					}
 					break;
 				case NEUTRAL:
+				case TRUCE:
 					if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
 						allowed = true;
 					}

@@ -60,6 +60,8 @@ tnt cannon-ed etc.
 
 * fixes /f help NPE on last page
 
+* for Factions 1.7 the TRUCE relationship is handled the same as NEUTRAL when considering denying or reporting teleports `Teleports.intoTerritory.*`
+
 * added new config options to deny teleports via /back command that would end up inside  
 ally/neutral/enemy territory Here they are with their defaults:  
   - `Teleports.intoTerritory.Ally.deny.ViaBackCommand`: false
