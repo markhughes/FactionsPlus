@@ -112,11 +112,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_neverDotted = "extras" )
 	public final static Section_Extras		_extras					= new Section_Extras();
 	
-	@Option(
-			realAlias_inNonDottedFormat = "DoNotChangeMe" )
-	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
-	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int				doNotChangeMe			= new _int( 12 );
+//	@Option(
+//			realAlias_inNonDottedFormat = "DoNotChangeMe" )
+//	// this is now useless, done: remove this field, OR rename and increment it every time something changes in the config ie.
+//	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
+//	public static final _int				doNotChangeMe			= new _int( 12 );
 	
 	@Option(
 		comment={
