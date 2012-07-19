@@ -36,12 +36,12 @@ public class CmdAnnounce extends FCommand {
 	
 	@Override
 	public void perform() {
-		String message = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
-		
 		if(!FactionsPlus.permission.has(sender, "factionsplus.announce")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;
 		}
+		
+		String message = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
 		
 		FPlayer fplayer = FPlayers.i.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();

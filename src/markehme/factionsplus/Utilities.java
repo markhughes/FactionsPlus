@@ -249,7 +249,7 @@ public class Utilities {
 	 * @param array
 	 * @return
 	 */
-	public static boolean isReferenceInArray( Object objRef, Object[] array ) {
+	public final static boolean isReferenceInArray( Object objRef, Object[] array ) {
 		for ( int i = 0; i < array.length; i++ ) {
 			if (objRef == array[i]) { //not .equals(), we just want to know if that reference is in the array
 				return true;

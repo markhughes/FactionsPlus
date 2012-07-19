@@ -1,5 +1,21 @@
 # FactionsPlus version 0.4.8
 
+* added config option `disableAutoCommentsInConfig` is true (false by default) it will omit the "### " (auto)comments that are 
+prepended in front of the config options inside config.yml which explain what that config option does.
+
+* new config option banning.`canBanToPreventFutureJoins` if set to true(as by default) it will allow preemptive banning of players
+even if they are not already in your faction, so that they cannot join in the future, ie. if your faction is open and doesn't require invitations
+or simply you just want to make sure nobody can invite a certain player to join in the future.
+
+* config options `leadersCanFactionUnban` and `officersCanFactionUnban` have been removed  
+the options `leadersCanFactionBan` and `officersCanFactionBan` have been upgraded to `leadersCanFactionBanAndUnban` and 
+`officersCanFactionBanAndUnban`
+
+* `/f ban` will no longer cause a player leave fee; will cause a FPlayerLeaveEvent with KICKED reason (which is cancellable)
+previously it was LEAVE reason; the banned player is also deinvited from that faction;    
+`factionsplus.ban` and `factionsplus.unban` permissions are completely ignored, please use `factionsplus.banunban` permission 
+node instead which only has effect if the new option `furtherRestrictBanUnBanToThoseThatHavePermission` is `true`(false by default) in config(explained by comments inside the config after one run)
+
 * while `disableUpdateCheck` is `false` the checking for new version of the plugin will be done automatically every time 
 the plugin is enabled(ie. bukkit server start) and every 24 hours.
 
@@ -28,7 +44,9 @@ parent sections.
 (but also when they were jailed)  
 if they were offline while unjailed, they retain the position they had upon logoff (same as in 0.4.7)  
 if a player was jailed while offline it will only be teleported to the jail upon login (same as in 0.4.7)  
-if all else fails, when unjailed the player will be teleported back to bed or world spawn
+if all else fails, when unjailed the player will be teleported back to bed or world spawn  
+`factionsplus.unjail` permission is completely ignored, but if the new option `furtherRestrictJailUnjailToThoseThatHavePermission` is `true` (false by default)
+then `factionsplus.jailunjail` permission node is used to further restrict leaders/officers from using jail/unjail.
 
 * fixed uses of getPlayer which were expected to act as getPlayerExact  
 
@@ -44,6 +62,8 @@ tnt cannon-ed etc.
 * fixes for NPEs from issue 60
 
 * fixes /f help NPE on last page
+
+* for Factions 1.7 the TRUCE relationship is handled the same as NEUTRAL when considering denying or reporting teleports `Teleports.intoTerritory.*`
 
 * added new config options to deny teleports via /back command that would end up inside  
 ally/neutral/enemy territory Here they are with their defaults:  
@@ -85,12 +105,17 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     Denying will be instant, regardless of any warm-up delays other plugins may have.  
     It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.  
     The expected console message upon report would look similar to this:    
-    > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac' using command: '/home my1'.  
+    > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac. Their last typed command: '/home my1'.  
     You may test this by making yourself op and using /home to tp into enemy territory. Which is denied by default, but
-    allowed for OPs.    
-    The used pearl is wasted and a message will show.  
+    OPs are exempt for any such denials but the reporting on console still happens for them.    
+    The reported last command typed by the player that teleported is not necessarily(and usually unlikely to be) the cause of 
+    the teleport, for example another player might've used /tphere. Or warm-up delays for teleports due to Essentials allowed the
+    teleporting player to type more commands before the teleport event happened. For reasons like this and the fact that there's no
+    real way of associating the command with the teleport event, we cannot know for sure which command(and of which player)
+    actually caused the teleport to happen.  
     The exploitable /home prevetion in 0.4.7 is now fixed in 0.4.8 such that it's highly unlikely that it can be exploited
-    mainly because we're now hooking into essentials (the plugin that has /home) 
+    mainly because we're now hooking into essentials (the plugin that has /home)  
+    The used pearl is wasted and a message will show.
 
 # FactionsPlus version 0.4.7
 

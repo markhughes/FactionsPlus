@@ -6,7 +6,8 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.*;
 
-import org.bukkit.Bukkit;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.*;
@@ -32,9 +33,23 @@ public class CmdDebug extends FCommand {
 	}
 	@Override
 	public void perform() {
+		// TEMP, remove this completely after this inconsistency is fixed; if it's commented out it means it's not fixed
+//		if ( null != fme ) {
+//			Player player = Bukkit.getPlayerExact( fme.getId() );
+//			if ( null != player ) {
+//				sender.sendMessage( player.getWorld().toString() );
+//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( player, "factionsplus.xyz" ) );
+//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( (World)null, player.getName(), "factionsplus.xyz" ) );
+//				sender.sendMessage( "has perm: "
+//					+ FactionsPlus.permission.playerHas( player.getWorld(), player.getName(), "factionsplus.xyz" ) );
+//			}
+//		}
+
 		if ( (null != fme) && (fme.isOnline()) && (!sender.isOp())) {
 				return;
 		}
+		
+		
 		
 		String param = this.argAsString(0);
 		if ((param != null) && (param.trim().equalsIgnoreCase( "configdiff" ))) {

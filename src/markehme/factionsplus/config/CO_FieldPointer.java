@@ -7,30 +7,17 @@ import markehme.factionsplus.util.*;
 
 
 public class CO_FieldPointer extends COMetadata {
-	private final Field field;
-	private final WYIdentifier<COMetadata> wid;
+	public final Field field;
+	public final WYIdentifier<COMetadata> wid;
+	public final boolean existing;//just for info purposes: if false it means this was newly added to the config either due to upgrading old or due to not existing
 	
-	public CO_FieldPointer( Field _field, WYIdentifier<COMetadata> _wid ) {
+	public CO_FieldPointer( Field _field, WYIdentifier<COMetadata> _wid, boolean _existing ) {
 		field=_field;
 		wid=_wid;
 		assert Q.nn( field );
 		assert Q.nn(wid);
-	}
-
-	@Override
-	protected void override_apply() {
-		try {
-			Typeo.setFieldValue(field,wid.getValue());
-		}catch(Throwable t) {
-			if (t.getClass().equals(NumberFormatException.class) || t.getClass().equals( BooleanFormatException.class )) {
-				Q.rethrow(new InvalidConfigValueTypeException(wid, field, t));
-			}else{
-				Q.rethrow(new FailedToSetConfigValueException(wid, field, t));
-			}
-		}
+		existing=_existing;
 	}
 	
-	Field getField(){
-		return field;
-	}
+
 }

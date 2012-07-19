@@ -29,6 +29,7 @@ public class CmdUnsetJail extends FCommand {
 	
 	@Override
 	public void perform() {
+		//TODO: check the set/unsetjail permissions just like we did for ban and jail
 		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact(fme), "factionsplus.unsetjail")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;

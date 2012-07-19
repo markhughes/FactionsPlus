@@ -21,7 +21,7 @@ public @interface Option {
 	/**
 	 * comment to be added above of this config option, inside the config file
 	 */
-	String[] comment() default {};
+	String[] autoComment() default {};
 	
 	
 	/**

@@ -33,11 +33,11 @@ public class CoreListener implements Listener{
 
 		//FPlayer fplayer = FPlayers.i.get(player.getName());
 
-		if ((event.getMessage().equalsIgnoreCase("/f reload")) || (event.getMessage().toLowerCase().startsWith("/f reload"))) {
-			event.getPlayer().sendMessage("Yo yo, lets reload FactionsPlus? ;)");
-		}
+//		if ((event.getMessage().equalsIgnoreCase("/f reload")) || (event.getMessage().toLowerCase().startsWith("/f reload"))) {
+//			event.getPlayer().sendMessage("Yo yo, lets reload FactionsPlus? ;)");
+//		}this had no effect
 		Faction factionHere = Board.getFactionAt(new FLocation(player.getLocation()));
-
+//FIXME: lots to be fixed here: ie. warzone check and cache those commands from file instead of open/close on every command
 		if(factionHere.getTag().trim().equalsIgnoreCase("WarZone")) {
 
 			if (!player.isOp()) {

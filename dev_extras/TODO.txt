@@ -4,6 +4,8 @@ maybe only devs can see that...
 
 the following are obsolete TODOs that are not moved to trello:
 --------------
+- we really need to a good way to use wildcard permissions, if they're defined they won't always be seen as set
+  more info here: https://github.com/MilkBowl/Vault/issues/223
 
 - maybe don't add /f gc and /f fc commands if Factions is 1.7 (easy to do but then the player might wonder why these 
 commands aren't there, thus by allowing them to exist in 1.7 also they are showing the message that 1.7 actually doesn't

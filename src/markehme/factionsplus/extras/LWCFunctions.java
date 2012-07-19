@@ -7,6 +7,7 @@ import markehme.factionsplus.listeners.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.*;
 import org.bukkit.plugin.*;
 
 import com.griefcraft.lwc.LWC;
@@ -20,30 +21,65 @@ import com.massivecraft.factions.*;
  */
 public abstract class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
 	
+	private static final LWCListener lwcListener=new LWCListener();
+	private static final LWCModule lwcModule=new LWCModule();
+	
+	private static boolean hooked=false;
+	private static boolean	alreadyRegistered=false;
+	
 	/**
+	 * you may call this repeatedly while running<br>
 	 * assumes LWC is loaded by bukkit already else NoClassDefFoundError when calling this
 	 */
-	public static void hookLWC() {
+	public static void hookLWCIfNeeded() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		
-		if ( Config._extras._protection._lwc.removeAllLocksOnClaim._  ) {
+		if ( Config._extras._protection._lwc.removeAllLocksOnClaim._ )  {
 			// register after we integrate
-			Bukkit.getPluginManager().registerEvents( new LWCListener(), FactionsPlus.instance );
+			if ( !alreadyRegistered ) {
+				try {
+					Bukkit.getPluginManager().registerEvents( lwcListener, FactionsPlus.instance );
+					FactionsPlus.info( "Started LWC listener" );
+				} finally {
+					alreadyRegistered = true;
+				}
+			}
+		} else {
+			deregListenerIfNeeded();
 		}
 		
-		//we always need this in order to prevent people from locking ie. chests in enemy faction
-		getLWC().getModuleLoader().registerModule( FactionsPlus.instance,  
-			new LWCModule(Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ ));
-		
-		FactionsPlusPlugin.info("Hooked into LWC!");
+		if (!hooked) {
+			//we always need this in order to prevent people from locking ie. chests in enemy faction
+			getLWC().getModuleLoader().registerModule( FactionsPlus.instance, lwcModule );
+			hooked=true;
+			FactionsPlusPlugin.info("Successfuly hooked into LWC!");
+		}//else , still hooked
 	}
 	
 	public static void unhookLWC() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
-		
-		getLWC().getModuleLoader().removeModules(  FactionsPlus.instance );
+		try {
+			deregListenerIfNeeded();
+			if ( hooked ) {
+				getLWC().getModuleLoader().removeModules( FactionsPlus.instance );
+			}
+		} finally {
+			hooked = false;
+		}
+
 	}
 	
+	
+	public static void deregListenerIfNeeded() {
+		if ( alreadyRegistered ) {
+			try {
+				HandlerList.unregisterAll( lwcListener );
+				FactionsPlus.info("Stopped LWC listener");
+			} finally {
+				alreadyRegistered = false;
+			}
+		}
+	}
 	
 	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST //is TileEntity
@@ -128,7 +164,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 	
 	
-	private static boolean isProtectionTypeToRemove( Material type ) {
+	private final static boolean isProtectionTypeToRemove( Material type ) {
 		return Utilities.isReferenceInArray( type, protectionsTypesToRemove );
 	}
 
