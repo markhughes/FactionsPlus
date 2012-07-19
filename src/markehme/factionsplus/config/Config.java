@@ -120,8 +120,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	@Option(
 		comment={
-			"NOT IMPLEMENTED",//FIXME: remove this line after implemented
 			"if true it will remove all auto comments which explain what each option does in the config file."
+			,"The config header is not removed."
 			,"This option is here only for those that want to increase readability in the config file."
 		},
 		realAlias_inNonDottedFormat = "disableAutoCommentsInConfig" )
@@ -622,6 +622,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		setFieldValuesToThoseFromConfig();
 		
 		//2.put or not autocomments
+		if (!Config.disableAutoCommentsInConfig._){
+			addAutoCommentsInConfig();
+		}
 		
 		//3.apply changes like commenting out dups/invalids/overridden ones (which implies line recalc happens at this point)
 		applyChangesInsideConfig();//comment out dups etc. & set fields value to the specified values inside config;
@@ -644,7 +647,49 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
-	private static int howManyWeSet=0;
+	private static void addAutoCommentsInConfig() {
+		synchronized ( Typeo.lock1 ) {
+			parseAndAddAutoComments(virtualRoot,null);
+		}
+	}
+
+	private static void parseAndAddAutoComments( WYSection root, String dottedParentSection) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		while ( null != currentItem ) {
+			WYItem nextItem = currentItem.getNext();//this is because currentItem will change and have it's next not point to old next:)
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+//				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
+				
+				parseAndAddAutoComments( cs , dotted );// recurse
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					Field field = Typeo.getField_correspondingTo_DottedFormat( dotted );
+					assert null != field:"something went wrong somewhere else";
+					String[] comments = Typeo.getComments( field );
+					prependComments( root, wid, dotted, comments, field );
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+				}
+			}// else
+			
+			currentItem = nextItem;
+		}// while
+	}
+
+
+	private static int howManyWeSet=0;//temporary, for tests
 	private static void setFieldValuesToThoseFromConfig() {
 		synchronized ( Typeo.lock1 ) {
 			howManyWeSet=0;
@@ -916,7 +961,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				for ( Iterator iterator = Typeo.orderedListOfFields.iterator(); iterator.hasNext(); ) {
 					field = (Field)iterator.next();
 					// Option anno = field.getAnnotation( Option.class );
-					String[] comments=Typeo.getComments(field);
+//					String[] comments=Typeo.getComments(field);
 					String[] orderOfAliases = Typeo.getListOfOldAliases( field );
 					String dottedRealAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
 					assert null != orderOfAliases;// due to the way annotation works
@@ -929,7 +974,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						// it again
 						//true: this will use default value ie. on /f reloadfp  due to all fields getting their values reset if not first time config load
 						//tho maybe we should use getFieldDefaultValue just in case
-						WYIdentifier<COMetadata> x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldDefaultValue( field ), dottedRealAlias ,comments, field);
+						WYIdentifier<COMetadata> x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldDefaultValue( field ), dottedRealAlias);
 						assert null != x;
 						COMetadata previousMD = x.setMetadata( new CO_FieldPointer( field, x) );//we still have to set the field to its default value
 						assert null == previousMD:previousMD;
@@ -978,7 +1023,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						
 						//and we can add comments now; case 2 of 3: when realAlias already existed in config
 //						if (!Config.disableAutoCommentsInConfig._){this won't work here
-							prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
+							//prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
 //						}
 //						for ( int i = 0; i < comments.length; i++ ) {
 ////							System.out.println(field.getName()+" 2 "+comments[i]);
@@ -1002,17 +1047,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							String widDotted = entry.getKey();
 							COMetadata previousMD =
 								wid.setMetadata( new CO_Overridden( wid, widDotted, overriderWID, dottedOverrider ) );
-								// it has to have been associated with the field, if it has a prev metadata
-								assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
-									+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
-									+ "pointer to the Field";
-								CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-								Field pfield = fp.field;
-								assert null != pfield;
-								assert pfield.equals( field ) : "should've been the same field, else code logic failed";
-								// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
-								// assert contained;
-//							}
+							// it has to have been associated with the field, if it has a prev metadata
+							assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
+								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
+								+ "pointer to the Field";
+							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
+							Field pfield = fp.field;
+							assert null != pfield;
+							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
+							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
+							// assert contained;
+							// }
 							
 						}
 					}
@@ -1029,20 +1074,20 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYIdentifier<COMetadata> old = overriderWID;
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
-						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias, comments, field );
+						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias );
 						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
-							// it has to have been associated with the field, if it has a prev metadata
-							assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
-								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
-								+ "pointer to the Field";
-							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-							Field pfield = fp.field;
-							assert null != pfield;
-							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
-							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
-							// assert contained;
+						// it has to have been associated with the field, if it has a prev metadata
+						assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
+							+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
+							+ "pointer to the Field";
+						CO_FieldPointer fp = (CO_FieldPointer)previousMD;
+						Field pfield = fp.field;
+						assert null != pfield;
+						assert pfield.equals( field ) : "should've been the same field, else code logic failed";
+						// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
+						// assert contained;
 					}
 					assert null != overriderWID;
 					assert Typeo.isValidAliasFormat( dottedOverrider );
@@ -1068,7 +1113,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	 * @param field
 	 * @return
 	 */
-	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias , String[] comments, Field field) {
+	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias) {
 		assert Q.nn( vroot );
 		assert Q.nn( value );
 		assert Typeo.isValidAliasFormat( dottedRealAlias );
@@ -1092,7 +1137,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		//and we can add comments now; case 1&3 of 3: when newly added cfgoption in .yml OR when old alias existed only => newly added must happen
 //		if (!Config.disableAutoCommentsInConfig._){won't work here
-			prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
+			//prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
 //		}
 		return leaf;
 	}
@@ -1118,7 +1163,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		parentOfChild.insertBefore( getAsAutoComment( "default value: "+Typeo.getFieldDefaultValue( field )), beforeThisChild );
 //		}
 		
-		for ( int i = 0; i < comments.length; i++ ) {
+		for ( int i = 0; i < comments.length; i++ ) {//auto skipped if no comments defined
 			parentOfChild.insertBefore( getAsAutoComment( comments[i] ), beforeThisChild );
 		}
 	}

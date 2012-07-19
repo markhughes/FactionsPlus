@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+* added config option `disableAutoCommentsInConfig` is true (false by default) it will omit the "### " (auto)comments that are 
+prepended in front of the config options inside config.yml which explain what that config option does.
+
 * new config option banning.`canBanToPreventFutureJoins` if set to true(as by default) it will allow preemptive banning of players
 even if they are not already in your faction, so that they cannot join in the future, ie. if your faction is open and doesn't require invitations
 or simply you just want to make sure nobody can invite a certain player to join in the future.
