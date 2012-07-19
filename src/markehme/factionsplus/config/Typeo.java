@@ -337,7 +337,7 @@ public abstract class Typeo {
 						assert null != aliasesArray : "impossible, due to how annotation default works for arrays";
 						fieldToOldAliasesArray.put( field, aliasesArray );
 						
-						String[] commentArray = co.comment();
+						String[] commentArray = co.autoComment();
 						assert null != commentArray:field;//can be empty though
 						fieldToCommentsArray.put( field, commentArray);
 						

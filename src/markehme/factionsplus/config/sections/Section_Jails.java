@@ -51,7 +51,7 @@ public final class Section_Jails {
 	public  final _boolean denyMovementWhileJailed=new _boolean(true);
 	
 	@Option(
-		comment={"if true, it'll require leaders/officers to also have "+permissionNodeNameForCanJailUnjail+" permission node"
+		autoComment={"if true, it'll require leaders/officers to also have "+permissionNodeNameForCanJailUnjail+" permission node"
 		,"before they will be allowed to jail/unjail"	
 		},
 		oldAliases_alwaysDotted={

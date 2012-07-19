@@ -4,7 +4,7 @@ import markehme.factionsplus.config.*;
 
 
 public class SubSection_TeleportsIntoEnemyReport {
-	@Option(comment={
+	@Option(autoComment={
 		"When true this will report(on server Console) the player that landed(via teleport caused by a command)"
 		," inside enemy territory. The command that caused the teleport cannot be known, but the last command typed"
 		," by the teleported player is shown as a helper. For example: another player can use /tphere to teleport that player"
@@ -20,7 +20,7 @@ public class SubSection_TeleportsIntoEnemyReport {
 		}, realAlias_inNonDottedFormat = "ifTeleportCauseIs_Command" )
 	public  final _boolean viaCommand=new _boolean(true);
 																
-	@Option(comment={
+	@Option(autoComment={
 		"Reports on server Console when a teleport via ender pearls caused the player to land inside enemy territory"
 		,"This should be accurate."
 	}

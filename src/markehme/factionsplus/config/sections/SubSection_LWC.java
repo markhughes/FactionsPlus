@@ -7,7 +7,7 @@ public final class SubSection_LWC {
 	
 //	public static final static final String	str_removeLWCLocksOnClaim	= "removeLWCLocksOnClaim";
 
-	@Option(comment={
+	@Option(autoComment={
 		"It is highly encouraged to have this enabled IF you have Factions' \"onCaptureResetLwcLocks\": true,"
 		,"and you should then set onCaptureResetLwcLocks to false because all that one does is reset chests' locks,"
 		,"which is already done by this option below & more."
@@ -26,7 +26,7 @@ public final class SubSection_LWC {
 	}, realAlias_inNonDottedFormat = "removeAllLocksOnClaim" )
 	public  final _boolean removeAllLocksOnClaim=new _boolean(false);
 	
-	@Option(comment={"will allow you to make a door truly public via /cpublic"},
+	@Option(autoComment={"will allow you to make a door truly public via /cpublic"},
 		oldAliases_alwaysDotted={
 		"extras.lwc.blockCPublicAccessOnNonOwnFactionTerritory"
 	},

@@ -119,7 +119,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 //	public static final _int				doNotChangeMe			= new _int( 12 );
 	
 	@Option(
-		comment={
+		autoComment={
 			"if true it will remove all auto comments which explain what each option does in the config file."
 			,"The config header is not removed."
 			,"This option is here only for those that want to increase readability in the config file."

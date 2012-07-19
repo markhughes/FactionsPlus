@@ -13,7 +13,7 @@ public final class Section_Banning {
 	
 	
 	@Option(
-		comment={"unused, but acts like it's always true"},
+		autoComment={"unused, but acts like it's always true"},
 		oldAliases_alwaysDotted={
 		"leaderCanNotBeBanned"
 	}, realAlias_inNonDottedFormat = "leaderCanNotBeBanned" )
@@ -47,7 +47,7 @@ public final class Section_Banning {
 	
 	
 	public static final String banUnBanPermissionNodeName="factionsplus.banunban";
-	@Option(comment={
+	@Option(autoComment={
 		"If set to true this will automatically restrict the use of ban/unban commands"
 		,"to those leaders/officers that have `"+banUnBanPermissionNodeName+"` permission node"
 		,"For example if leaders/officers can ban/unban (from the above options)"
@@ -60,7 +60,7 @@ public final class Section_Banning {
 	public  final _boolean furtherRestrictBanUnBanToThoseThatHavePermission=new _boolean(false);
 
 
-	@Option(comment={
+	@Option(autoComment={
 		"If true it allows banning of any players(that exist on the server) regardless if they are already in your faction",
 		"This is so that you can prevent a certain player from joining your faction even though your faction is open and",
 		"doesn't require invitation",
