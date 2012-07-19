@@ -121,7 +121,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	@Option(
 		autoComment={
 			"if true it will remove all auto comments which explain what each option does in the config file."
-			,"The config header is not removed."
+			,"The config file header is not removed."
 			,"This option is here only for those that want to increase readability in the config file."
 		},
 		realAlias_inNonDottedFormat = "disableAutoCommentsInConfig" )
