@@ -58,13 +58,15 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	
 	public static void unhookLWC() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
-		assert hooked;
 		try {
 			deregListenerIfNeeded();
-			getLWC().getModuleLoader().removeModules(  FactionsPlus.instance );
-		}finally{
-			hooked=false;
+			if ( hooked ) {
+				getLWC().getModuleLoader().removeModules( FactionsPlus.instance );
+			}
+		} finally {
+			hooked = false;
 		}
+
 	}
 	
 	

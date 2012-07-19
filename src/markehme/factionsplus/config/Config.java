@@ -441,7 +441,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						} else {
 							// this wid was new so we associate it with the field, the field was already associated with it
 							// above
-							wid.setMetadata( new CO_FieldPointer( foundAsField, wid ) );
+							wid.setMetadata( new CO_FieldPointer( foundAsField, wid, true ) );
 						}
 						
 					}// end of else found
@@ -649,7 +649,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	private static void addAutoCommentsInConfig() {
 		synchronized ( Typeo.lock1 ) {
+			howManyWeSet=0;
+			
 			parseAndAddAutoComments(virtualRoot,null);
+			
+			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all/or more fields were set: "+
+					howManyWeSet+" / "+Typeo.orderedListOfFields.size();
+			
 		}
 	}
 
@@ -673,11 +679,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			} else {
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
-					String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
-					Field field = Typeo.getField_correspondingTo_DottedFormat( dotted );
-					assert null != field:"something went wrong somewhere else";
-					String[] comments = Typeo.getComments( field );
-					prependComments( root, wid, dotted, comments, field );
+					COMetadata meta = wid.getMetadata();
+					if ( ( null != meta ) && ( meta.getClass().equals(CO_FieldPointer.class) ) ) {
+						howManyWeSet++;
+						//then it's a valid field ie. not dup/invalid/overridden/upgraded but rather real
+						String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+						Field field = Typeo.getField_correspondingTo_DottedFormat( dotted );
+						assert null != field:"something went wrong somewhere else field not found for: "+dotted;
+						String[] comments = Typeo.getComments( field );
+						prependComments( root, wid, dotted, comments, field );
+					}
 				} else {// non id
 					assert ( currentItem instanceof WYRawButLeveledLine );
 					// ignore raw lines like comments or empty lines, for now
@@ -727,7 +738,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 //						if (meta.getClass().equals(CO_Upgraded.class)) {
 //							FactionsPlus.warn(((CO_FieldPointer)meta).wid+" vs "+wid+" and "+((CO_FieldPointer)meta).field);
 //						}
-						if ( meta instanceof CO_FieldPointer ) {//this includes the CO_Upgraded which is a subclass
+						if ( meta.getClass().equals( CO_FieldPointer.class)  ) {
+							//this doesn't include the CO_Upgraded which is a subclass and the old config value, 
+							//because the field it was upgraded to was already added and it's a CO_FieldPointer
 							CO_FieldPointer fpmeta = (CO_FieldPointer)meta;
 							try {
 								howManyWeSet++;
@@ -976,7 +989,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						//tho maybe we should use getFieldDefaultValue just in case
 						WYIdentifier<COMetadata> x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldDefaultValue( field ), dottedRealAlias);
 						assert null != x;
-						COMetadata previousMD = x.setMetadata( new CO_FieldPointer( field, x) );//we still have to set the field to its default value
+						COMetadata previousMD = x.setMetadata( new CO_FieldPointer( field, x, false) );//we still have to set the field to its default value
 						assert null == previousMD:previousMD;
 //						for ( int i = 0; i < comments.length; i++ ) {
 //							//System.out.println(field.getName()+" "+comments[i]);
@@ -1075,6 +1088,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
 						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias );
+						assert null != overriderWID;
+						COMetadata pre = overriderWID.setMetadata( new CO_FieldPointer( field, overriderWID, false) );//we still have to set the field to its default value
+						assert null == pre:pre;
+						
 						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
@@ -1088,6 +1105,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						assert pfield.equals( field ) : "should've been the same field, else code logic failed";
 						// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
 						// assert contained;
+						
 					}
 					assert null != overriderWID;
 					assert Typeo.isValidAliasFormat( dottedOverrider );

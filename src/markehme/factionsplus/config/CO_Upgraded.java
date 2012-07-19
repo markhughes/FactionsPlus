@@ -23,7 +23,7 @@ public class CO_Upgraded extends CO_FieldPointer {
 	
 	public CO_Upgraded( WYIdentifier<COMetadata> theOld, String dottedOld, Field _field, WYIdentifier newUpgradeWID, String newUpgradeDotted )
 	{
-		super(_field, newUpgradeWID);
+		super(_field, newUpgradeWID, true);
 		assert null != theOld;
 		assert Typeo.isValidAliasFormat( dottedOld );
 //		assert null != newUpgradeWID;
