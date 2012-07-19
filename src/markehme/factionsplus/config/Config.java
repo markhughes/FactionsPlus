@@ -618,10 +618,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		//TODO:
 		//1.setvalues for all fields
-		//2.put or not autocomments
-		//3.apply changes like commenting out dups/invalids/overridden ones (which implies line recalc happens at this point)
+		//all config options should be already in the virtualRoot (even those upgraded or new non-existing ones)
+		setFieldValuesToThoseFromConfig();
 		
-		applyChanges();//comment out dups etc. & set fields value to the specified values inside config; FIXME: split in two methods
+		//2.put or not autocomments
+		
+		//3.apply changes like commenting out dups/invalids/overridden ones (which implies line recalc happens at this point)
+		applyChangesInsideConfig();//comment out dups etc. & set fields value to the specified values inside config;
 		
 		saveConfig();
 		
@@ -640,6 +643,70 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
+	
+	private static int howManyWeSet=0;
+	private static void setFieldValuesToThoseFromConfig() {
+		synchronized ( Typeo.lock1 ) {
+			howManyWeSet=0;
+		
+			parseAndSetFields(virtualRoot);
+		
+			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all fields were set "+howManyWeSet+" / "+Typeo.orderedListOfFields.size();
+		}
+	}
+	
+	private static void parseAndSetFields( WYSection root ) {// , String dottedParentSection) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		// boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		while ( null != currentItem ) {
+			WYItem nextItem = currentItem.getNext();//this is because currentItem will change and have it's next not point to old next:)
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				// String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
+				parseAndSetFields( cs );// , dotted );// recurse
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					// String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					COMetadata meta = wid.getMetadata();
+					if ( null != meta ) {
+						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
+						if ( meta instanceof CO_FieldPointer ) {
+							CO_FieldPointer fpmeta = (CO_FieldPointer)meta;
+							try {
+								howManyWeSet++;
+								Typeo.setFieldValue( fpmeta.field, wid.getValue() );
+							} catch ( Throwable t ) {
+								//TODO: maybe collect these and display after instead of quitting on the first bad one, just in case 
+								// there are plenty it would require running or /f reloadfp multiple times after each fix
+								if ( t.getClass().equals( NumberFormatException.class )
+									|| t.getClass().equals( BooleanFormatException.class ) )
+								{
+									Q.rethrow( new InvalidConfigValueTypeException( wid, fpmeta.field, t ) );
+								} else {
+									Q.rethrow( new FailedToSetConfigValueException( wid, fpmeta.field, t ) );
+								}
+							}
+						}
+					}
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+				}
+			}// else
+			
+			currentItem = nextItem;
+		}// while
+	}
+	
+
 	private static void prependHeader( WYSection root ) {
 		for ( int j = fpConfigHeaderArray.length-1; j >= 0; j-- ) {
 			String line = fpConfigHeaderArray[j];
@@ -701,14 +768,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 
 
-	private static void applyChanges() {
+	private static void applyChangesInsideConfig() {
 		virtualRoot.recalculateLineNumbers();
 		parseAndApplyChanges( virtualRoot );
 		// that will set lines as comments due to duplicates/invalid/overridden
-		// and most importantly will apply the values from the config into the Fields
+		// but will not apply the values from the config into the Fields, this is done earlier before this call
 	}
 	
 	
+	@SuppressWarnings( "boxing" )
 	private static void parseAndApplyChanges( WYSection root ) {// , String dottedParentSection) {
 		assert Q.nn( root );
 		WYItem<COMetadata> currentItem = root.getFirst();
@@ -732,7 +800,87 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					COMetadata meta = wid.getMetadata();
 					if ( null != meta ) {
 						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
-						meta.apply();
+						while (true) {
+							Class<? extends COMetadata> metaClass = meta.getClass();
+							if ( metaClass.equals( CO_Duplicate.class ) ) {
+								CO_Duplicate metaDup = (CO_Duplicate)meta;
+								metaDup.appliesToWID.getParent().replaceAndTransformInto_WYComment( metaDup.appliesToWID,
+									metaDup.commentPrefixForDUPs );
+								
+								Config
+									.warn( "Duplicate config option encountered at line "
+										+ metaDup.colorLineNumOnDuplicate
+										+ metaDup.appliesToWID.getLineNumber()
+										+ ChatColor.RESET
+										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+										// + "This is how the line looks now(without leading spaces):\n"
+										+ metaDup.colorOnDuplicate + metaDup.appliesToWID.toString() + "\n" + ChatColor.RESET
+										+ "the option at line " + ChatColor.AQUA + metaDup.theActiveFirstWID.getLineNumber()
+										+ ChatColor.RESET + " overriddes this duplicate with value " + ChatColor.AQUA
+										+ metaDup.theActiveFirstWID.getValue() );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Invalid.class ) ) {
+								CO_Invalid metaInvalid = (CO_Invalid)meta;
+								metaInvalid.appliesToWID.getParent().replaceAndTransformInto_WYComment(
+									metaInvalid.appliesToWID, metaInvalid.commentPrefixForINVALIDs );
+								Config.warn( "Invalid config option\n" + metaInvalid.colorOnINVALID
+									+ metaInvalid.thePassedDottedFormatForThisWID + ChatColor.RESET
+									+ " was auto commented at line "
+									// // + fileConfig
+									// + " at line "
+									+ metaInvalid.colorOnINVALID + metaInvalid.appliesToWID.getLineNumber() + '\n'// +ChatColor.RESET
+									// +
+									// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+									// + "This is how the line looks now(without leading spaces):\n"
+									+ metaInvalid.colorOnINVALID + metaInvalid.appliesToWID.toString() );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Overridden.class ) ) {
+								CO_Overridden metaOverridden = (CO_Overridden)meta;
+								metaOverridden.lostOne.getParent()
+									.replaceAndTransformInto_WYComment(
+										metaOverridden.lostOne,
+										String.format( metaOverridden.commentPrefixForOVERRIDDENones,
+											metaOverridden.dottedOverriddenByThis,
+											metaOverridden.overriddenByThis.getLineNumber() ) );
+								
+								Config.warn( "Config option " + ChatColor.AQUA + metaOverridden.dottedOverriddenByThis
+									+ ChatColor.RESET + " at line " + ChatColor.AQUA
+									+ metaOverridden.overriddenByThis.getLineNumber() + ChatColor.RESET
+									+ " overrides the old alias for it `" + ChatColor.DARK_AQUA + metaOverridden.dottedLostOne
+									+ ChatColor.RESET + "` which is at line " + ChatColor.DARK_AQUA
+									+ metaOverridden.lostOne.getLineNumber() + ChatColor.RESET
+									+ " which was also transformed into comment to show it's ignored." );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Upgraded.class ) ) {
+								CO_Upgraded metaUpgraded = (CO_Upgraded)meta;
+								metaUpgraded.upgradedWID.getParent().replaceAndTransformInto_WYComment(
+									metaUpgraded.upgradedWID,
+									String.format( metaUpgraded.commentPrefixForUPGRADEDones, metaUpgraded.theNewUpgradeDotted,
+										metaUpgraded.wid.getLineNumber() ) );
+								
+								Config.info( "Upgraded `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedDotted + ChatColor.RESET
+									+ "` of line `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedWID.getLineNumber()
+									+ ChatColor.RESET + "` to the new config name of `"
+									+ metaUpgraded.COLOR_FOR_NEW_OPTIONS_ADDED + metaUpgraded.theNewUpgradeDotted
+									+ ChatColor.RESET + "` of line `" + metaUpgraded.COLOR_FOR_NEW_OPTIONS_ADDED
+									+ metaUpgraded.wid.getLineNumber() + "`" );
+								
+								break;
+							}
+							
+							//last:
+							break;//just in case
+						}//hacky while
+//						meta.apply();
 						// if you need the applied/new item, the nextItem.getPrev() would be it
 					}
 				} else {// non id
@@ -850,7 +998,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 									+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
 									+ "pointer to the Field";
 								CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-								Field pfield = fp.getField();
+								Field pfield = fp.field;
 								assert null != pfield;
 								assert pfield.equals( field ) : "should've been the same field, else code logic failed";
 								// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
@@ -881,7 +1029,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
 								+ "pointer to the Field";
 							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-							Field pfield = fp.getField();
+							Field pfield = fp.field;
 							assert null != pfield;
 							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
 							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
