@@ -651,7 +651,8 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 			parseAndSetFields(virtualRoot);
 		
-			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all fields were set "+howManyWeSet+" / "+Typeo.orderedListOfFields.size();
+			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all/or more fields were set: "+
+					howManyWeSet+" / "+Typeo.orderedListOfFields.size();
 		}
 	}
 	
@@ -678,10 +679,18 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					COMetadata meta = wid.getMetadata();
 					if ( null != meta ) {
 						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
-						if ( meta instanceof CO_FieldPointer ) {
+//						if (meta.getClass().equals(CO_Upgraded.class)) {
+//							FactionsPlus.warn(((CO_FieldPointer)meta).wid+" vs "+wid+" and "+((CO_FieldPointer)meta).field);
+//						}
+						if ( meta instanceof CO_FieldPointer ) {//this includes the CO_Upgraded which is a subclass
 							CO_FieldPointer fpmeta = (CO_FieldPointer)meta;
 							try {
 								howManyWeSet++;
+//								assert wid == fpmeta.wid;
+								assert fpmeta.wid.getValue().equals(wid.getValue());
+//								if (fpmeta.getClass().equals(CO_Upgraded.class)) {
+//									FactionsPlus.warn(fpmeta.wid+" vs "+wid+" and "+fpmeta.field);
+//								}
 								Typeo.setFieldValue( fpmeta.field, wid.getValue() );
 							} catch ( Throwable t ) {
 								//TODO: maybe collect these and display after instead of quitting on the first bad one, just in case 
