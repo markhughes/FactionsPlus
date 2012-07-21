@@ -1,5 +1,18 @@
 package markehme.factionsplus.extras;
 
+/* 
+  STOP.
+  
+  STOP.
+  
+  STOP.
+  DO NOT MODIFY THIS FILE.
+  
+  It was modified before and seems to have been broken. This version is fixed. don't touch, close the file - right now.
+  
+  -- MarkehMe
+ */ 
+
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.
  *
@@ -27,6 +40,8 @@ package markehme.factionsplus.extras;
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
+
+package org.mcstats;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,7 +80,6 @@ import java.util.logging.Level;
  * void start(); <br/>
  * </code>
  */
-
 public class Metrics {
 
     /**
@@ -112,8 +126,7 @@ public class Metrics {
     /**
      * The default graph, used for addCustomData when you don't want a specific graph
      */
-    @SuppressWarnings( "synthetic-access" )
-	private final Graph defaultGraph = new Graph("Default");
+    private final Graph defaultGraph = new Graph("Default");
 
     /**
      * The plugin configuration file
@@ -140,13 +153,12 @@ public class Metrics {
      */
     private volatile int taskId = -1;
 
-    @SuppressWarnings("boxing")
-	public Metrics(final Plugin argPlugin) throws IOException {
-        if (argPlugin == null) {
+    public Metrics(final Plugin plugin) throws IOException {
+        if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
 
-        this.plugin = argPlugin;
+        this.plugin = plugin;
 
         // load the config
         configurationFile = new File(CONFIG_FILE);
@@ -179,8 +191,7 @@ public class Metrics {
         }
 
         // Construct the graph object
-        @SuppressWarnings( "synthetic-access" )
-		final Graph graph = new Graph(name);
+        final Graph graph = new Graph(name);
 
         // Now we can add our graph
         graphs.add(graph);
@@ -228,29 +239,15 @@ public class Metrics {
      */
     public boolean start() {
         synchronized (optOutLock) {
-            // Did we opt out?
-            if (isOptOut()) {
-                return false;
-            }
-
-            // Is metrics already running?
-            if (taskId >= 0) {
-                return true;
-            }
-
-            // Begin hitting the server with glorious data
             taskId = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
 
                 private boolean firstPost = true;
 
-                @Override
-				@SuppressWarnings( "synthetic-access" )
-				public void run() {
+                public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
-                            // Disable Task, if it is running and the server owner decided to opt-out
-                            if (isOptOut() && taskId > 0) {
+                            if ( taskId > 0) {
                                 plugin.getServer().getScheduler().cancelTask(taskId);
                                 taskId = -1;
                                 // Tell all plotters to stop gathering information.
@@ -304,8 +301,7 @@ public class Metrics {
     *
     * @throws IOException
     */
-    @SuppressWarnings("boxing")
-	public void enable() throws IOException {
+    public void enable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
         	// Check if the server owner has already set opt-out, if not, set it.
@@ -326,8 +322,7 @@ public class Metrics {
      *
      * @throws IOException
      */
-    @SuppressWarnings("boxing")
-	public void disable() throws IOException {
+    public void disable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
@@ -348,7 +343,7 @@ public class Metrics {
      * Generic method that posts a plugin to the metrics website
      */
     private void postPlugin(final boolean isPing) throws IOException {
-        // The plugin's description file containing all of the plugin data such as name, version, author, etc
+        // The plugin's description file containg all of the plugin data such as name, version, author, etc
         final PluginDescriptionFile description = plugin.getDescription();
 
         // Construct the post data
@@ -406,23 +401,17 @@ public class Metrics {
 
         // Write the data
         final OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-		try {
-			writer.write( data.toString() );
-			writer.flush();//redundant?
-		} finally {
-			// close resources
-			writer.close();//"Closes the stream, flushing it first."
-		}
-		
-		// Now read the response
-		final BufferedReader reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
-		String response = null;
-		try {
-			response = reader.readLine();
-		} finally {
-			reader.close();
-		}
-		
+        writer.write(data.toString());
+        writer.flush();
+
+        // Now read the response
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final String response = reader.readLine();
+
+        // close resources
+        writer.close();
+        reader.close();
+
         if (response == null || response.startsWith("ERR")) {
             throw new IOException(response); //Throw the exception
         } else {
@@ -501,8 +490,8 @@ public class Metrics {
          */
         private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
 
-		private Graph(final String argName) {
-            this.name = argName;
+        private Graph(final String name) {
+            this.name = name;
         }
 
         /**
@@ -583,10 +572,10 @@ public class Metrics {
         /**
          * Construct a plotter with a specific plot name
          *
-         * @param argName
+         * @param name
          */
-		public Plotter(final String argName) {
-            this.name = argName;
+        public Plotter(final String name) {
+            this.name = name;
         }
 
         /**
