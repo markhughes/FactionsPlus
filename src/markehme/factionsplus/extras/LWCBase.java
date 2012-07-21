@@ -13,7 +13,11 @@ public abstract class LWCBase {
 	private static LWC lwc;//moved this to here, to avoid devs using this directly, use getLWC() instead which will try get LWCInstance 
 	//before NPE-ing, if it does NPE then you simply forgot to check if LWC is enabled before calling it's functions ;)
 	
-	public static LWC getLWC() {
+	public static void refreshLWC() {
+		lwc=getLWCInstance();
+	}
+	
+	public static LWC getLWC() {//caching this may be evil when something like plugman unloads/reloads lwc
 		if (null == lwc) {
 			lwc=getLWCInstance();//can still be null
 		}

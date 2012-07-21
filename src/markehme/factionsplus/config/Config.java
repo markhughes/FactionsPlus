@@ -112,11 +112,20 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_neverDotted = "extras" )
 	public final static Section_Extras		_extras					= new Section_Extras();
 	
+//	@Option(
+//			realAlias_inNonDottedFormat = "DoNotChangeMe" )
+//	// this is now useless, done: remove this field, OR rename and increment it every time something changes in the config ie.
+//	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
+//	public static final _int				doNotChangeMe			= new _int( 12 );
+	
 	@Option(
-			realAlias_inNonDottedFormat = "DoNotChangeMe" )
-	// this is now useless, FIXME: remove this field, OR rename and increment it every time something changes in the config ie.
-	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-	public static final _int				doNotChangeMe			= new _int( 12 );
+		autoComment={
+			"if true it will remove all auto comments which explain what each option does in the config file."
+			,"The config file header is not removed."
+			,"This option is here only for those that want to increase readability in the config file."
+		},
+		realAlias_inNonDottedFormat = "disableAutoCommentsInConfig" )
+	public static final _boolean disableAutoCommentsInConfig=new _boolean(false);
 	
 	// the root class that contains the @Section and @Options to scan for
 	private static final Class				configClass				= Config.class;
@@ -432,7 +441,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						} else {
 							// this wid was new so we associate it with the field, the field was already associated with it
 							// above
-							wid.setMetadata( new CO_FieldPointer( foundAsField, wid ) );
+							wid.setMetadata( new CO_FieldPointer( foundAsField, wid, true ) );
 						}
 						
 					}// end of else found
@@ -528,10 +537,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	protected static WYSection	virtualRoot		= null;
 	
 	// one to many
-	private static final HM1	mapFieldToID	= new HM1();
+	private static final HM1	mapFieldToID	= new HM1();//store all except newly added fields
 	private static final String	AUTOCOMMENTS_PREFIX	= "### ";
 	private static final String	BEGINNING_OF_NEXT_CFG_OPTION	= "###########################################################";
-	private static boolean firstTime=true;
+//	private static boolean firstTime=true;
 	
 	public synchronized final static boolean reloadConfig() {
 		
@@ -559,16 +568,16 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// config file exists
 		try {
 			
-			if (firstTime) {
-				firstTime=false;
-				//first time they are already set to defaults, no need to set them again
-			}else {
-				//not first time? ie. /f reloadfp  instead of bukkit 'reload'
-				//we restore defaults just in case ie. a config option was deleted or the entire file was deleted
-				//in which case we'll need to restore the default value for that(those) option(s) rather than the previous value 
-				//we already had set
-				Typeo.resetConfigToDefaults();
-			}
+//			if (firstTime) {
+//				firstTime=false;
+//				//first time they are already set to defaults, no need to set them again
+//			}else {
+//				//not first time? ie. /f reloadfp  instead of bukkit 'reload'
+//				//we restore defaults just in case ie. a config option was deleted or the entire file was deleted
+//				//in which case we'll need to restore the default value for that(those) option(s) rather than the previous value 
+//				//we already had set
+////				Typeo.resetConfigToDefaults();//done: this may not be needed anymore now, due to any new options getting default values
+//			}
 			
 			// now read the existing config
 			virtualRoot = WannabeYaml.read( fileConfig );
@@ -585,7 +594,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					parseOneTime_and_CheckForValids( virtualRoot, null );
 					
-					// FIXME: still have to make sure the fields have their comments above them!!!!!!!!!!!!!!!!!!
+					// done: still have to make sure the fields have their comments above them!!!!!!!!!!!!!!!!!!
 					parseSecondTime_and_sortOverrides( virtualRoot );// from mapField_to_ListOfWYIdentifier
 					// now we need to use mapField_to_ListOfWYIdentifier to see which values (first in list) will have effect
 					// and notify admin on console only if the below values which were overridden have had a different value
@@ -606,12 +615,24 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 		prependHeader(virtualRoot);
 		
-		applyChanges();
+		
+		//TODO:
+		//1.setvalues for all fields
+		//all config options should be already in the virtualRoot (even those upgraded or new non-existing ones)
+		setFieldValuesToThoseFromConfig();
+		
+		//2.put or not autocomments
+		if (!Config.disableAutoCommentsInConfig._){
+			addAutoCommentsInConfig();
+		}
+		
+		//3.apply changes like commenting out dups/invalids/overridden ones (which implies line recalc happens at this point)
+		applyChangesInsideConfig();//comment out dups etc. & set fields value to the specified values inside config;
 		
 		saveConfig();
 		
 		
-		//bechmarked: 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
+		//bechmarked(0.4.7 code or so): 274339 lines in an 11.6MB config.yml file at under 5 seconds with 300 info/warns shown on console
 		//that yielded a 15.6 MB file which on f reloadfp was parsed w/o info/warns in under 570ms
 		// 2.3 seconds if all info/warn are suppressed
 		
@@ -625,6 +646,134 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return true;
 	}
 	
+	
+	private static void addAutoCommentsInConfig() {
+		synchronized ( Typeo.lock1 ) {
+			howManyWeSet=0;
+			
+			parseAndAddAutoComments(virtualRoot,null);
+			
+			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all/or more fields were set: "+
+					howManyWeSet+" / "+Typeo.orderedListOfFields.size();
+			
+		}
+	}
+
+	private static void parseAndAddAutoComments( WYSection root, String dottedParentSection) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		while ( null != currentItem ) {
+			WYItem nextItem = currentItem.getNext();//this is because currentItem will change and have it's next not point to old next:)
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+//				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
+				
+				parseAndAddAutoComments( cs , dotted );// recurse
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					COMetadata meta = wid.getMetadata();
+					if ( ( null != meta ) && ( meta.getClass().equals(CO_FieldPointer.class) ) ) {
+						howManyWeSet++;
+						//then it's a valid field ie. not dup/invalid/overridden/upgraded but rather real
+						String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+						Field field = Typeo.getField_correspondingTo_DottedFormat( dotted );
+						assert null != field:"something went wrong somewhere else field not found for: "+dotted;
+						String[] comments = Typeo.getComments( field );
+						prependComments( root, wid, dotted, comments, field );
+					}
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+				}
+			}// else
+			
+			currentItem = nextItem;
+		}// while
+	}
+
+
+	private static int howManyWeSet=0;//temporary, for tests
+	private static void setFieldValuesToThoseFromConfig() {
+		synchronized ( Typeo.lock1 ) {
+			howManyWeSet=0;
+		
+			parseAndSetFields(virtualRoot);
+		
+			assert Typeo.orderedListOfFields.size() == howManyWeSet:"not all/or more fields were set: "+
+					howManyWeSet+" / "+Typeo.orderedListOfFields.size();
+		}
+	}
+	
+	private static void parseAndSetFields( WYSection root ) {// , String dottedParentSection) {
+		assert Q.nn( root );
+		WYItem<COMetadata> currentItem = root.getFirst();
+		// boolean isTopLevelSection = ( null == dottedParentSection ) || dottedParentSection.isEmpty();
+		
+		while ( null != currentItem ) {
+			WYItem nextItem = currentItem.getNext();//this is because currentItem will change and have it's next not point to old next:)
+			
+			Class<? extends WYItem> cls = currentItem.getClass();
+			
+			
+			if ( WYSection.class == cls ) {
+				WYSection cs = (WYSection)currentItem;
+				// String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
+				parseAndSetFields( cs );// , dotted );// recurse
+			} else {
+				if ( WYIdentifier.class == cls ) {
+					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
+					// String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					COMetadata meta = wid.getMetadata();
+					if ( null != meta ) {
+						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
+//						if (meta.getClass().equals(CO_Upgraded.class)) {
+//							FactionsPlus.warn(((CO_FieldPointer)meta).wid+" vs "+wid+" and "+((CO_FieldPointer)meta).field);
+//						}
+						if ( meta.getClass().equals( CO_FieldPointer.class)  ) {
+							//this doesn't include the CO_Upgraded which is a subclass and the old config value, 
+							//because the field it was upgraded to was already added and it's a CO_FieldPointer
+							CO_FieldPointer fpmeta = (CO_FieldPointer)meta;
+							try {
+								howManyWeSet++;
+//								assert wid == fpmeta.wid;
+								assert fpmeta.wid.getValue().equals(wid.getValue());
+//								if (fpmeta.getClass().equals(CO_Upgraded.class)) {
+//									FactionsPlus.warn(fpmeta.wid+" vs "+wid+" and "+fpmeta.field);
+//								}
+								Typeo.setFieldValue( fpmeta.field, wid.getValue() );
+							} catch ( Throwable t ) {
+								//TODO: maybe collect these and display after instead of quitting on the first bad one, just in case 
+								// there are plenty it would require running or /f reloadfp multiple times after each fix
+								if ( t.getClass().equals( NumberFormatException.class )
+									|| t.getClass().equals( BooleanFormatException.class ) )
+								{
+									Q.rethrow( new InvalidConfigValueTypeException( wid, fpmeta.field, t ) );
+								} else {
+									Q.rethrow( new FailedToSetConfigValueException( wid, fpmeta.field, t ) );
+								}
+							}
+						}
+					}
+				} else {// non id
+					assert ( currentItem instanceof WYRawButLeveledLine );
+					// ignore raw lines like comments or empty lines, for now
+				}
+			}// else
+			
+			currentItem = nextItem;
+		}// while
+	}
+	
+
 	private static void prependHeader( WYSection root ) {
 		for ( int j = fpConfigHeaderArray.length-1; j >= 0; j-- ) {
 			String line = fpConfigHeaderArray[j];
@@ -686,14 +835,15 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 
 
-	private static void applyChanges() {
+	private static void applyChangesInsideConfig() {
 		virtualRoot.recalculateLineNumbers();
 		parseAndApplyChanges( virtualRoot );
 		// that will set lines as comments due to duplicates/invalid/overridden
-		// and most importantly will apply the values from the config into the Fields
+		// but will not apply the values from the config into the Fields, this is done earlier before this call
 	}
 	
 	
+	@SuppressWarnings( "boxing" )
 	private static void parseAndApplyChanges( WYSection root ) {// , String dottedParentSection) {
 		assert Q.nn( root );
 		WYItem<COMetadata> currentItem = root.getFirst();
@@ -717,7 +867,87 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					COMetadata meta = wid.getMetadata();
 					if ( null != meta ) {
 						// ok this one has meta, ie. it's one of duplicate/invalid/overridden
-						meta.apply();
+						while (true) {
+							Class<? extends COMetadata> metaClass = meta.getClass();
+							if ( metaClass.equals( CO_Duplicate.class ) ) {
+								CO_Duplicate metaDup = (CO_Duplicate)meta;
+								metaDup.appliesToWID.getParent().replaceAndTransformInto_WYComment( metaDup.appliesToWID,
+									metaDup.commentPrefixForDUPs );
+								
+								Config
+									.warn( "Duplicate config option encountered at line "
+										+ metaDup.colorLineNumOnDuplicate
+										+ metaDup.appliesToWID.getLineNumber()
+										+ ChatColor.RESET
+										+ " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+										// + "This is how the line looks now(without leading spaces):\n"
+										+ metaDup.colorOnDuplicate + metaDup.appliesToWID.toString() + "\n" + ChatColor.RESET
+										+ "the option at line " + ChatColor.AQUA + metaDup.theActiveFirstWID.getLineNumber()
+										+ ChatColor.RESET + " overriddes this duplicate with value " + ChatColor.AQUA
+										+ metaDup.theActiveFirstWID.getValue() );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Invalid.class ) ) {
+								CO_Invalid metaInvalid = (CO_Invalid)meta;
+								metaInvalid.appliesToWID.getParent().replaceAndTransformInto_WYComment(
+									metaInvalid.appliesToWID, metaInvalid.commentPrefixForINVALIDs );
+								Config.warn( "Invalid config option\n" + metaInvalid.colorOnINVALID
+									+ metaInvalid.thePassedDottedFormatForThisWID + ChatColor.RESET
+									+ " was auto commented at line "
+									// // + fileConfig
+									// + " at line "
+									+ metaInvalid.colorOnINVALID + metaInvalid.appliesToWID.getLineNumber() + '\n'// +ChatColor.RESET
+									// +
+									// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
+									// + "This is how the line looks now(without leading spaces):\n"
+									+ metaInvalid.colorOnINVALID + metaInvalid.appliesToWID.toString() );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Overridden.class ) ) {
+								CO_Overridden metaOverridden = (CO_Overridden)meta;
+								metaOverridden.lostOne.getParent()
+									.replaceAndTransformInto_WYComment(
+										metaOverridden.lostOne,
+										String.format( metaOverridden.commentPrefixForOVERRIDDENones,
+											metaOverridden.dottedOverriddenByThis,
+											metaOverridden.overriddenByThis.getLineNumber() ) );
+								
+								Config.warn( "Config option " + ChatColor.AQUA + metaOverridden.dottedOverriddenByThis
+									+ ChatColor.RESET + " at line " + ChatColor.AQUA
+									+ metaOverridden.overriddenByThis.getLineNumber() + ChatColor.RESET
+									+ " overrides the old alias for it `" + ChatColor.DARK_AQUA + metaOverridden.dottedLostOne
+									+ ChatColor.RESET + "` which is at line " + ChatColor.DARK_AQUA
+									+ metaOverridden.lostOne.getLineNumber() + ChatColor.RESET
+									+ " which was also transformed into comment to show it's ignored." );
+								
+								break;
+							}
+							
+							if ( metaClass.equals( CO_Upgraded.class ) ) {
+								CO_Upgraded metaUpgraded = (CO_Upgraded)meta;
+								metaUpgraded.upgradedWID.getParent().replaceAndTransformInto_WYComment(
+									metaUpgraded.upgradedWID,
+									String.format( metaUpgraded.commentPrefixForUPGRADEDones, metaUpgraded.theNewUpgradeDotted,
+										metaUpgraded.wid.getLineNumber() ) );
+								
+								Config.info( "Upgraded `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedDotted + ChatColor.RESET
+									+ "` of line `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedWID.getLineNumber()
+									+ ChatColor.RESET + "` to the new config name of `"
+									+ metaUpgraded.COLOR_FOR_NEW_OPTIONS_ADDED + metaUpgraded.theNewUpgradeDotted
+									+ ChatColor.RESET + "` of line `" + metaUpgraded.COLOR_FOR_NEW_OPTIONS_ADDED
+									+ metaUpgraded.wid.getLineNumber() + "`" );
+								
+								break;
+							}
+							
+							//last:
+							break;//just in case
+						}//hacky while
+//						meta.apply();
 						// if you need the applied/new item, the nextItem.getPrev() would be it
 					}
 				} else {// non id
@@ -740,14 +970,11 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				// realAlias if found in .yml always overrides any old aliases found, else if no realAlias found, then
 				// the top oldAliases override the bottom ones when looking at the @Option annotation
 				Field field = null;
-				// SetOfIDs pointerToLastFoundSet=null;//the last field which had a WYIdentifier connection to .yml
-				// Field pointerToLastFoundField=null;
-				// String pointerToLastDottedRealAliasOfFoundField=null;
-//				WYIdentifier<COMetadata> lastGoodOverriderWID = null;
+//				mapFieldToID.get( Typeo.orderedListOfFields. )
 				for ( Iterator iterator = Typeo.orderedListOfFields.iterator(); iterator.hasNext(); ) {
 					field = (Field)iterator.next();
 					// Option anno = field.getAnnotation( Option.class );
-					String[] comments=Typeo.getComments(field);
+//					String[] comments=Typeo.getComments(field);
 					String[] orderOfAliases = Typeo.getListOfOldAliases( field );
 					String dottedRealAlias = Typeo.getDottedRealAliasOfField( field );// anno.realAlias_inNonDottedFormat();
 					assert null != orderOfAliases;// due to the way annotation works
@@ -756,11 +983,14 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					if ( null == aSet ) {
 						// this config option was not yet defined in .yml so it means we have to add it
 						// previousField
-						// TODO: make sure this field added has the comment above them, and if it's already there don't prepend
+						// done: make sure this field added has the comment above them, and if it's already there don't prepend
 						// it again
-						WYIdentifier x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldValue( field ), dottedRealAlias ,comments, field);
+						//true: this will use default value ie. on /f reloadfp  due to all fields getting their values reset if not first time config load
+						//tho maybe we should use getFieldDefaultValue just in case
+						WYIdentifier<COMetadata> x = putFieldValueInTheRightWYPlace( vroot, Typeo.getFieldDefaultValue( field ), dottedRealAlias);
 						assert null != x;
-						
+						COMetadata previousMD = x.setMetadata( new CO_FieldPointer( field, x, false) );//we still have to set the field to its default value
+						assert null == previousMD:previousMD;
 //						for ( int i = 0; i < comments.length; i++ ) {
 //							//System.out.println(field.getName()+" "+comments[i]);
 //							x.getParent().insertBefore( getAsAutoComment( comments[i] ), x );
@@ -805,7 +1035,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						dottedOverrider = dottedRealAlias;
 						
 						//and we can add comments now; case 2 of 3: when realAlias already existed in config
-						prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
+//						if (!Config.disableAutoCommentsInConfig._){this won't work here
+							//prependComments(overriderWID.getParent(), overriderWID, dottedOverrider, comments, field);
+//						}
 //						for ( int i = 0; i < comments.length; i++ ) {
 ////							System.out.println(field.getName()+" 2 "+comments[i]);
 //							overriderWID.getParent().insertBefore( getAsAutoComment( comments[i] ), overriderWID );
@@ -828,17 +1060,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 							String widDotted = entry.getKey();
 							COMetadata previousMD =
 								wid.setMetadata( new CO_Overridden( wid, widDotted, overriderWID, dottedOverrider ) );
-								// it has to have been associated with the field, if it has a prev metadata
-								assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
-									+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
-									+ "pointer to the Field";
-								CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-								Field pfield = fp.getField();
-								assert null != pfield;
-								assert pfield.equals( field ) : "should've been the same field, else code logic failed";
-								// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
-								// assert contained;
-//							}
+							// it has to have been associated with the field, if it has a prev metadata
+							assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
+								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
+								+ "pointer to the Field";
+							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
+							Field pfield = fp.field;
+							assert null != pfield;
+							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
+							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
+							// assert contained;
+							// }
 							
 						}
 					}
@@ -855,20 +1087,25 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						WYIdentifier<COMetadata> old = overriderWID;
 						//this is gonna be tricky to replace and removing it's parentSections if they're empty
 						
-						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias, comments, field );
+						overriderWID=putFieldValueInTheRightWYPlace( vroot, valueToCarry, dottedRealAlias );
+						assert null != overriderWID;
+						COMetadata pre = overriderWID.setMetadata( new CO_FieldPointer( field, overriderWID, false) );//we still have to set the field to its default value
+						assert null == pre:pre;
+						
 						COMetadata previousMD = old.setMetadata( new CO_Upgraded( old, dottedOverrider, field, overriderWID, dottedRealAlias ) );
 						dottedOverrider=dottedRealAlias;
 						
-							// it has to have been associated with the field, if it has a prev metadata
-							assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
-								+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
-								+ "pointer to the Field";
-							CO_FieldPointer fp = (CO_FieldPointer)previousMD;
-							Field pfield = fp.getField();
-							assert null != pfield;
-							assert pfield.equals( field ) : "should've been the same field, else code logic failed";
-							// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
-							// assert contained;
+						// it has to have been associated with the field, if it has a prev metadata
+						assert ( CO_FieldPointer.class.isAssignableFrom( previousMD.getClass() ) ) : "this should be the only way"
+							+ "that the wid we got here had a previously associated metadata with it, aka it has to have the"
+							+ "pointer to the Field";
+						CO_FieldPointer fp = (CO_FieldPointer)previousMD;
+						Field pfield = fp.field;
+						assert null != pfield;
+						assert pfield.equals( field ) : "should've been the same field, else code logic failed";
+						// boolean contained = iter.remove( entry );this won't work, ConcurrentModificationException
+						// assert contained;
+						
 					}
 					assert null != overriderWID;
 					assert Typeo.isValidAliasFormat( dottedOverrider );
@@ -884,7 +1121,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	
 	
 	
-	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias , String[] comments, Field field) {
+	/**
+	 * called when either 1. cfgoption didn't exist in config file OR 2. when it was upgraded from oldalias to the new one,<br>
+	 * the new one didn't exist and thus cfgoption was newly created (in both cases)
+	 * @param vroot
+	 * @param value
+	 * @param dottedRealAlias
+	 * @param comments
+	 * @param field
+	 * @return
+	 */
+	private static WYIdentifier putFieldValueInTheRightWYPlace( WYSection vroot, String value, String dottedRealAlias) {
 		assert Q.nn( vroot );
 		assert Q.nn( value );
 		assert Typeo.isValidAliasFormat( dottedRealAlias );
@@ -907,7 +1154,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		// System.out.println( foundParentSection.getInAbsoluteDottedForm() );
 		
 		//and we can add comments now; case 1&3 of 3: when newly added cfgoption in .yml OR when old alias existed only => newly added must happen
-		prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
+//		if (!Config.disableAutoCommentsInConfig._){won't work here
+			//prependComments(foundParentSection, leaf, dottedRealAlias, comments, field);
+//		}
 		return leaf;
 	}
 	
@@ -932,7 +1181,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		parentOfChild.insertBefore( getAsAutoComment( "default value: "+Typeo.getFieldDefaultValue( field )), beforeThisChild );
 //		}
 		
-		for ( int i = 0; i < comments.length; i++ ) {
+		for ( int i = 0; i < comments.length; i++ ) {//auto skipped if no comments defined
 			parentOfChild.insertBefore( getAsAutoComment( comments[i] ), beforeThisChild );
 		}
 	}

@@ -88,12 +88,14 @@ public abstract class EssentialsIntegration {
 		if ( null == ess ) {
 			// lazyly init or : maybe add depend (not soft) in plugin.yml
 			Plugin essPlugin = Bukkit.getPluginManager().getPlugin( pluginName );
-			isLoadedButNotEnabled=!essPlugin.isEnabled();
 			if ( ( null != essPlugin ) && ( essPlugin.isEnabled() ) ) {
 				ess = (IEssentials)essPlugin;
+				isLoadedButNotEnabled=!essPlugin.isEnabled();
 //				haveEssentials = ESS_HAVE.INITED_AND_HAVE;
 //			} else {
 //				haveEssentials = ESS_HAVE.INITED_AND_NOT_HAVE;
+//			}else{
+//				isLoadedButNotEnabled=false;
 			}
 		}
 		return ess;// can be null

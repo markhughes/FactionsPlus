@@ -9,12 +9,12 @@ import markehme.factionsplus.config.yaml.*;
 
 public class CO_Invalid extends COMetadata {
 	
-	private static final String				commentPrefixForINVALIDs	= "INVALID #";
-	private static final ChatColor			colorOnINVALID				= ChatColor.YELLOW;
+	public static final String				commentPrefixForINVALIDs	= "INVALID #";
+	public static final ChatColor			colorOnINVALID				= ChatColor.YELLOW;
 	
 	
-	private final WYIdentifier<COMetadata>	appliesToWID;
-	private final String					thePassedDottedFormatForThisWID;
+	public final WYIdentifier<COMetadata>	appliesToWID;
+	public final String					thePassedDottedFormatForThisWID;
 	
 	
 	public CO_Invalid( WYIdentifier<COMetadata> wid, String dotted ) {
@@ -26,19 +26,4 @@ public class CO_Invalid extends COMetadata {
 	
 	
 	
-	@Override
-	protected void override_apply() {
-		// WYComment<COMetadata> newItem =
-		appliesToWID.getParent().replaceAndTransformInto_WYComment( appliesToWID, commentPrefixForINVALIDs );
-		Config.warn( "Invalid config option\n" + colorOnINVALID + thePassedDottedFormatForThisWID + ChatColor.RESET
-			+ " was auto commented at line "
-			// // + fileConfig
-			// + " at line "
-			+ colorOnINVALID + appliesToWID.getLineNumber() + '\n'// +ChatColor.RESET
-			// +
-			// " and this was transformed into comment so that you can review it & know that it was ignored.\n"
-			// + "This is how the line looks now(without leading spaces):\n"
-			+ colorOnINVALID + appliesToWID.toString() );
-		// return newItem;
-	}
 }
