@@ -1,5 +1,16 @@
 # FactionsPlus version 0.4.8
 
+* fixed bad calls to metrics which would set `opt-out` option to `true` (only with 0.4.7) when server would shutdown or 
+FactionsPlus plugin would be disabled `opt-out` is by default `false` which means that every plugin using metrics will send stats to mcstats.org  
+  However now the option being `true` will cause all of those plugins to not send any stats (unless they modified metrics code
+ to ignore the `opt-out` option and thus send stats anyway).  
+  You can revert to metrics defaults by deleting the `plugins\PluginMetrics\config.yml` file OR by editing it and changing 
+  `opt-out` to `false` but not before you make sure you're running FactionsPlus 0.4.8 (or just not the 0.4.7 version which 
+  sets that to `true` as I said above). If you do no such thing, but you ran the 0.4.7 version at least once, then metrics stats
+  will not be sent from your sever by any plugins that use metrics.
+
+* Our plugin is now ignoring the `opt-out` option and will always send metrics stats.
+
 * added config option `disableAutoCommentsInConfig` is true (false by default) it will omit the "### " (auto)comments that are 
 prepended in front of the config options inside config.yml which explain what that config option does.
 
