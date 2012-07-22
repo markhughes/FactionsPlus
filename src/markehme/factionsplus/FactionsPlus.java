@@ -125,7 +125,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			try {
 				//this will deInit metrics, but it will be enabled again onEnable
-				FactionsPlus.instance.getServer().getScheduler().cancelTasks( this);
+				getServer().getScheduler().cancelTasks( this);
 			} catch ( Throwable t ) {
 				failed = t;
 			}
