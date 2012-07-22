@@ -80,15 +80,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public void onDisable() {
 		Throwable failed = null;// TODO: find a way to chain all thrown exception rather than overwrite all older
 		try {
-			synchronized ( Metrics.class ) {
-				if ( null != metrics ) {
-					try {
-						metrics.disable();
-					} catch ( IOException e ) {
-						e.printStackTrace();
-					}
-				}
-			}
 			
 			try {
 				EssentialsIntegration.onDisable();
@@ -128,6 +119,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			try {
 				HandlerList.unregisterAll( FactionsPlus.instance );
+			} catch ( Throwable t ) {
+				failed = t;
+			}
+			
+			try {
+				//this will deInit metrics, but it will be enabled again onEnable
+				FactionsPlus.instance.getServer().getScheduler().cancelAllTasks();
 			} catch ( Throwable t ) {
 				failed = t;
 			}
@@ -234,19 +232,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		FactionsPlusPlugin.info("Ready.");
 		
 			try {
-				synchronized ( Metrics.class ) {
-					if ( null == metrics ) {
-						// first time
-						metrics = new Metrics( this );
-						metrics.start();
-					} else {
-						// second+ time(s)
-						metrics.enable();
-					}
-				}
-				
+				metrics = new Metrics( this );
+				metrics.start();
 			} catch ( IOException e ) {
-				FactionsPlusPlugin.info( "Waah! Couldn't metrics-up! :'(" );
+				FactionsPlusPlugin.info("Waah! Couldn't metrics-up! :'( "+e.getMessage() );
 			}
 
 		
