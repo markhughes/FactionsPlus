@@ -5,6 +5,7 @@ import org.bukkit.*;
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.sections.Section_Jails;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
@@ -31,7 +32,11 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-		if (Config._jails.canJailUnjail( fme ))
+		if (fme.getName() == playerToJail) {
+			//May seem redundant, but this is necessary to prevent people from using /f jail to escape enemy territory.
+			fme.sendMessage(ChatColor.RED + "You cannot jail yourself!");
+		}
+		if (Section_Jails.canJailUnjail( fme ))
 		{
 			FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact(fme), -1 );
 			return;
