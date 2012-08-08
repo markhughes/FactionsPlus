@@ -75,7 +75,7 @@ public class JailListener implements Listener{
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChat(PlayerChatEvent event) {
+	public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
 		if(event.isCancelled()) {
 			return;
 		}
