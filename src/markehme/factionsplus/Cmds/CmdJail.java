@@ -35,6 +35,7 @@ public class CmdJail extends FCommand {
 		if (fme.getName() == playerToJail) {
 			//May seem redundant, but this is necessary to prevent people from using /f jail to escape enemy territory.
 			fme.sendMessage(ChatColor.RED + "You cannot jail yourself!");
+			return;
 		}
 		if (Section_Jails.canJailUnjail( fme ))
 		{
