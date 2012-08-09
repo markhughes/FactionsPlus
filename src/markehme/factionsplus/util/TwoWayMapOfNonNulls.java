@@ -2,10 +2,6 @@ package markehme.factionsplus.util;
 
 import java.util.*;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.extras.*;
-import markehme.factionsplus.util.*;
-
 
 /**
  * maps/links a tuple of two non-null instances<br>

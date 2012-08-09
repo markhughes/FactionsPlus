@@ -1,6 +1,5 @@
 package markehme.factionsplus;
 
-import java.io.*;
 import java.util.logging.*;
 
 import markehme.factionsplus.extras.*;
@@ -9,8 +8,6 @@ import markehme.factionsplus.util.*;
 import org.bukkit.*;
 import org.bukkit.configuration.file.*;
 import org.bukkit.plugin.java.*;
-
-import com.avaje.ebean.*;
 
 
 

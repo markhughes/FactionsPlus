@@ -1,6 +1,5 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;

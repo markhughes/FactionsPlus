@@ -8,10 +8,8 @@ import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.listeners.*;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.*;
 import org.bukkit.event.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;

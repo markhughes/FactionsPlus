@@ -2,9 +2,6 @@ package markehme.factionsplus.config;
 
 import java.lang.reflect.*;
 
-import org.bukkit.*;
-
-import markehme.factionsplus.*;
 import markehme.factionsplus.config.yaml.*;
 
 

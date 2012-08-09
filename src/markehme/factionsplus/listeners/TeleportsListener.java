@@ -4,21 +4,14 @@ import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.FactionsBridge.FactionsAny.Relation;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
-
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.material.*;
-import org.bukkit.permissions.*;
 import org.bukkit.plugin.*;
 
-import com.avaje.ebeaninternal.server.subclass.*;
-import com.earth2me.essentials.*;
 import com.massivecraft.factions.*;
 
 

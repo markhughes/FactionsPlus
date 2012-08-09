@@ -3,16 +3,11 @@ package markehme.factionsplus.Cmds;
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
-
 import org.bukkit.ChatColor;
-import org.bukkit.entity.*;
-
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 //import com.massivecraft.factions.struct;
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
 
 public class CmdToggleState extends FCommand {
 	

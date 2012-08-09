@@ -1,8 +1,5 @@
 package markehme.factionsplus;
 
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.listeners.TeleportsListener.*;
-
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.*;

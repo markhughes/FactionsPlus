@@ -2,8 +2,6 @@ package markehme.factionsplus.util;
 
 import java.util.*;
 
-import markehme.factionsplus.config.*;
-
 
 
 public class TypedLinkedList<TYPE> implements Iterable<TYPE> {

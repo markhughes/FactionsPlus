@@ -1,7 +1,5 @@
 package markehme.factionsplus.extras;
 
-import static markehme.factionsplus.extras.LWCBase.*;
-
 import org.bukkit.*;
 import org.bukkit.plugin.*;
 

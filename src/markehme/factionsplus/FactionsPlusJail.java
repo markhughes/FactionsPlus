@@ -1,11 +1,9 @@
 package markehme.factionsplus;
 
 import java.io.*;
-import java.nio.charset.*;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
-import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.util.*;
 
@@ -17,7 +15,6 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.zcore.persist.*;
 
 public class FactionsPlusJail {
 	public static Server server;

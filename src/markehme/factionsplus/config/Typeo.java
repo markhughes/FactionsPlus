@@ -3,13 +3,10 @@ package markehme.factionsplus.config;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.Map.Entry;
-
 import org.bukkit.*;
 import org.bukkit.command.*;
 
 import markehme.factionsplus.*;
-import markehme.factionsplus.config.yaml.*;
 import markehme.factionsplus.util.*;
 
 

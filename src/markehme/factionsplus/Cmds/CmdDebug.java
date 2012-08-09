@@ -7,7 +7,6 @@ import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.*;
 import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.*;

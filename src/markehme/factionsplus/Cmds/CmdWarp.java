@@ -7,8 +7,6 @@ import java.util.List;
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

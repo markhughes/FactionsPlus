@@ -2,8 +2,6 @@ package markehme.factionsplus.config;
 
 import org.bukkit.*;
 
-import markehme.factionsplus.config.yaml.*;
-
 
 /**
  * config option metadata<br>

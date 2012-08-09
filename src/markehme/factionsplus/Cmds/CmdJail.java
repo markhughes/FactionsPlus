@@ -3,12 +3,8 @@ package markehme.factionsplus.Cmds;
 import org.bukkit.*;
 
 import markehme.factionsplus.*;
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
 import markehme.factionsplus.config.sections.Section_Jails;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 

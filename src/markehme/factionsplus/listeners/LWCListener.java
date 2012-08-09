@@ -1,13 +1,10 @@
 package markehme.factionsplus.listeners;
 
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.event.LandClaimEvent;
 

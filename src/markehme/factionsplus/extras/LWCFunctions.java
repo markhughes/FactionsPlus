@@ -8,10 +8,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
-import org.bukkit.plugin.*;
-
-import com.griefcraft.lwc.LWC;
-import com.griefcraft.lwc.LWCPlugin;
 import com.griefcraft.model.*;
 import com.massivecraft.factions.*;
 

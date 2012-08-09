@@ -1,6 +1,5 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.event.EventHandler;

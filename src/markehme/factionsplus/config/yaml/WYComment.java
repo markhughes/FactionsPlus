@@ -1,7 +1,5 @@
 package markehme.factionsplus.config.yaml;
 
-import markehme.factionsplus.extras.*;
-
 
 /**
  * the comment should contain the comment char, but not the leading spaces before it<br>

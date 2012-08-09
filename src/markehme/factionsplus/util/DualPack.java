@@ -1,10 +1,5 @@
 package markehme.factionsplus.util;
 
-import javax.management.*;
-
-import markehme.factionsplus.extras.*;
-import markehme.factionsplus.util.*;
-
 
 /**
  * holds a tuple of non-nulls, where .equals() is applied only on the first one<br>

@@ -6,8 +6,6 @@ import org.bukkit.*;
 import org.bukkit.plugin.*;
 
 import com.massivecraft.factions.*;
-import com.massivecraft.factions.integration.*;
-
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
