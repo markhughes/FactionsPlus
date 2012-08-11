@@ -3,6 +3,7 @@ package markehme.factionsplus.Cmds;
 import org.bukkit.*;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 import markehme.factionsplus.config.sections.Section_Jails;
 
 import com.massivecraft.factions.cmd.FCommand;
@@ -28,14 +29,14 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-		if (fme.getName() == playerToJail) {
-			//May seem redundant, but this is necessary to prevent people from using /f jail to escape enemy territory.
-			fme.sendMessage(ChatColor.RED + "You cannot jail yourself!");
-			return;
-		}
+
 		if (Section_Jails.canJailUnjail( fme ))
 		{
-			FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact(fme), -1 );
+			if ( ( !Config._jails.canJailOnlyIfIssuerIsInOwnTerritory._ ) || ( fme.isInOwnTerritory() ) ) {
+				FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact( fme ), -1 );
+			} else {
+				fme.sendMessage( ChatColor.RED + "You must be in your own faction territory to jail someone." );
+			}
 			return;
 		}
 		fme.sendMessage(ChatColor.RED+ "No permission to jail!" );

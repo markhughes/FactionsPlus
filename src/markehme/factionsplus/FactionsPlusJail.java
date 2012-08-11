@@ -295,6 +295,11 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
+		if (fplayer.equals( fjplayer )) {
+			fplayer.sendMessage(ChatColor.RED + "You cannot jail yourself!");
+			return false;
+		}
+		
 		Location jailLoc = getJailLocation( player );
 		
 //		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
