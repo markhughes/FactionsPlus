@@ -29,11 +29,7 @@ public class CmdJail extends FCommand {
 	@Override
 	public void perform() {
 		String playerToJail = this.argAsString(0);
-		if (fme.getName().equalsIgnoreCase( playerToJail) ) {
-			//May seem redundant, but this is necessary to prevent people from using /f jail to escape enemy territory.
-			fme.sendMessage(ChatColor.RED + "You cannot jail yourself!");
-			return;
-		}
+
 		if (Section_Jails.canJailUnjail( fme ))
 		{
 			if ( ( !Config._jails.canJailOnlyIfIssuerIsInOwnTerritory._ ) || ( fme.isInOwnTerritory() ) ) {
