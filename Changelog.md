@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* new config option jails.`canJailOnlyIfIssuerIsInOwnTerritory` when true (by default) the player issuing `/f jail` 
+in an attempt to jail another player, must be inside its own faction territory. This should prevent 2+ players from jailing
+each other to their advantage while they are near or inside enemy base.
+
 * Fixed jail command: leaders can no longer jail/unjail themselves to escape from enemy territory
 
 * Cobble monster griefing protection: changes behaviour of lava/water flow so that lava does not flowed between different boundaries (lava+water allowed the creation of cobblestone griefing, which could be done cross-border)

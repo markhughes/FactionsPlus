@@ -56,7 +56,19 @@ public final class Section_Jails {
 		},
 		oldAliases_alwaysDotted={
 	}, realAlias_inNonDottedFormat = "furtherRestrictJailUnjailToThoseThatHavePermission" )
-public  final _boolean furtherRestrictJailUnjailToThoseThatHavePermission=new _boolean(false);
+	public  final _boolean furtherRestrictJailUnjailToThoseThatHavePermission=new _boolean(false);
+	
+	
+	@Option(
+		autoComment={"if true, it'll require the player that issues /f jail to be located inside his own faction"
+		," before they will be allowed to jail (unjailing will work regardless)"
+		,"if false, /f jail can be used from any location"
+		,"setting this to true will prevent two+ players for abusing /f jail",
+		" by issuing it on each other when they are in danger"
+		},
+		oldAliases_alwaysDotted={
+	}, realAlias_inNonDottedFormat = "canJailOnlyIfIssuerIsInOwnTerritory" )
+	public  final _boolean canJailOnlyIfIssuerIsInOwnTerritory=new _boolean(true);
 	
 	
 	public final static String permissionNodeNameForCanJailUnjail="factionsplus.jailunjail";
