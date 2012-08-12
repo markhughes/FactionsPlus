@@ -60,7 +60,7 @@ public final class Section_Jails {
 	
 	
 	@Option(
-		autoComment={"if true, it'll require the player that issues /f jail to be located inside his own faction"
+		autoComment={"if true, it'll require the player that issues /f jail to be located inside his own faction territory"
 		," before they will be allowed to jail (unjailing will work regardless)"
 		,"if false, /f jail can be used from any location"
 		,"setting this to true will prevent two+ players for abusing /f jail",
