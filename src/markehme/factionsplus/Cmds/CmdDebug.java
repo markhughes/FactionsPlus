@@ -5,8 +5,10 @@ import java.util.*;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.sections.*;
 
 import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.*;
@@ -35,12 +37,14 @@ public class CmdDebug extends FCommand {
 		// TEMP, remove this completely after this inconsistency is fixed; if it's commented out it means it's not fixed
 //		if ( null != fme ) {
 //			Player player = Bukkit.getPlayerExact( fme.getId() );
+//			assert Utilities.getOnlinePlayerExact( fme ).equals(player);
 //			if ( null != player ) {
+//				String perm = Section_Jails.permissionNodeNameForCanJailUnjail;//"factionsplus.xyz"
 //				sender.sendMessage( player.getWorld().toString() );
-//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( player, "factionsplus.xyz" ) );
-//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( (World)null, player.getName(), "factionsplus.xyz" ) );
+//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( player, perm ) );
+//				sender.sendMessage( "has perm: " + FactionsPlus.permission.playerHas( (World)null, player.getName(), perm ) );
 //				sender.sendMessage( "has perm: "
-//					+ FactionsPlus.permission.playerHas( player.getWorld(), player.getName(), "factionsplus.xyz" ) );
+//					+ FactionsPlus.permission.playerHas( player.getWorld(), player.getName(), perm ) );
 //			}
 //		}
 
