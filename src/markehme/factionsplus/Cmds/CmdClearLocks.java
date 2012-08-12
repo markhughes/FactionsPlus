@@ -29,6 +29,11 @@ public class CmdClearLocks extends FCommand {
 	
 	@Override
 	public void perform() {
+		if(!FactionsPlus.permission.has(sender, "factionsplus.clearlocks")) {
+			sender.sendMessage(ChatColor.RED + "No permission!");
+			return;
+		}
+		
 		Location loc = Utilities.getOnlinePlayerExact(fme).getLocation();
 		Player name = Utilities.getOnlinePlayerExact(fme);
 		int clearedlocks = LWCFunctions.clearLocksCommand(name, loc);
