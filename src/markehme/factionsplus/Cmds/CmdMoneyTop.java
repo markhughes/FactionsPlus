@@ -169,7 +169,10 @@ public class CmdMoneyTop extends FCommand {
 		assert !alreadyIn:"this should never happen right? due to events `happening` sequentially";
 		alreadyIn = true;
 		try {
-			
+			if(!FactionsPlus.permission.has(sender, "factionsplus.moneytop")) {
+				sender.sendMessage(ChatColor.RED + "No permission!");
+				return;
+			}
 			if ( !Config._economy.isHooked() ) {
 				sender.sendMessage( "Economy is unavailable or disabled in FactionsPlus configs" );
 				return;
