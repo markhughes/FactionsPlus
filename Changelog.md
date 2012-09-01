@@ -140,7 +140,7 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     mainly because we're now hooking into essentials (the plugin that has /home)  
     The used pearl is wasted and a message will show.
 
-### Known issues:
+### Known issues in 0.4.8:
 * Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(s) or `reload` the server or stop/start the server for the following cases):
   + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:
     - `warps.enabled` ie. changing this to `false` (if it was `true` when server started) will still allow those commands to be used (if you used `/f reloadfp` instead of restarting server after changing this to `false`)
