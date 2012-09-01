@@ -140,6 +140,29 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     mainly because we're now hooking into essentials (the plugin that has /home)  
     The used pearl is wasted and a message will show.
 
+### Known issues:
+* `/f reloadfp` is not as good as reloading the plugin; it is best you stop and start the server to properly reload the config.
+Except in the following cases, in which `reloadfp` works fine:   
+  - any options inside and including the following sections (in config.yml): `Teleports` , `economy` , `LWC` and `disguise`.   
+In other words, `/f reloadfp` does not init/deinit or hook/unhook (except in the above noted cases). For example: the warp commands (see /f help)
+are not added or removed if you change `warps.enabled` config option and then `reloadfp`. So if `warps.enabled` was `true` and you changed it to 
+`false` and then you `/f reloadfp`, you can still use all the warp commands.   
+  - so `/f reloadfp` will not add/remove commands from `/f help` and if they appear there they can be used otherwise they cannot.  
+
+* changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
+it will only prevent newly created warps from being in non-owned territory.
+
+* unclaiming land where a warp resides will not remove that warp
+
+* warps and jail location are not deleted on auto faction disband
+
+* wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
+
+* if using Factions 1.7.x and `respectFactionsWarZonePowerLossRules` is `false` it will give an error on console and that feat. won't work.
+
+* if you replace the FactionsPlus.jar (and possibly any other .jar which FP depends on) while the server is running and you do a `reload`
+it will sometimes show a NoClassDefFoundError exception, this is "normal" and it is to be ignored.
+
 # FactionsPlus version 0.4.7
 
 * max warps fixed
