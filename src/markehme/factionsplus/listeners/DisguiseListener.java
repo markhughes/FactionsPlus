@@ -25,8 +25,12 @@ public class DisguiseListener implements Listener {
 			return;
 		}
 
+		FPlayer fplayer = FPlayers.i.get(event.getPlayer());
+		if (!fplayer.hasFaction()){
+    		return;
+    	}
+		
 		if(isMobDisguiseIntegrated()) {
-			FPlayer fplayer = FPlayers.i.get(event.getPlayer());
 
 			if(MobDisguiseAPI.isDisguised(event.getPlayer())) {
 				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
@@ -47,7 +51,6 @@ public class DisguiseListener implements Listener {
 
 		if(isDisguiseCraftIntegrated()) {
 			DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
-			FPlayer fplayer = FPlayers.i.get(event.getPlayer());
 
 			if(dcAPI.isDisguised(event.getPlayer())) {
 				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {

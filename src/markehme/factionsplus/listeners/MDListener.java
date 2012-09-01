@@ -4,6 +4,7 @@ import markehme.factionsplus.config.*;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
 
+import org.bukkit.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,12 +20,15 @@ public class MDListener implements Listener  {//http://dev.bukkit.org/server-mod
 		}
 		
 		FPlayer fplayer = FPlayers.i.get(e.getPlayer());
+		if (!fplayer.hasFaction()){
+    		return;
+    	}
 		
         	if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
         		if(fplayer.isInEnemyTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());
-        			e.getPlayer().sendMessage("You have been un-disguised due to being in enemy territory!");
+        			e.getPlayer().sendMessage(ChatColor.RED+"You may not disguise in enemy territory!");
         			e.setCancelled(true);
         		}
         	}
@@ -33,7 +37,7 @@ public class MDListener implements Listener  {//http://dev.bukkit.org/server-mod
         		if(fplayer.isInOwnTerritory()) {
         			
         			MobDisguiseAPI.undisguisePlayer(e.getPlayer());
-        			e.getPlayer().sendMessage("You have been un-disguised due to being in your own territory!");
+        			e.getPlayer().sendMessage(ChatColor.RED+"You may not disguise in your own territory!");
         			e.setCancelled(true);
         		}
         	}
