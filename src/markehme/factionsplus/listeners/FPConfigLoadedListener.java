@@ -5,8 +5,7 @@ import markehme.factionsplus.config.*;
 import markehme.factionsplus.events.*;
 import markehme.factionsplus.extras.*;
 
-import org.bukkit.event.Listener;
-import org.bukkit.event.EventHandler;
+import org.bukkit.event.*;
 
 
 
@@ -54,5 +53,7 @@ public class FPConfigLoadedListener implements Listener {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
+        
+        DisguiseListener.enableOrDisable(FactionsPlus.instance);
 	}//onConfigLoaded method ends
 }

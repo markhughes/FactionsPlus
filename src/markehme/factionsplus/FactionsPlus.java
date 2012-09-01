@@ -31,22 +31,17 @@ public class FactionsPlus extends FactionsPlusPlugin {
     public static Permission permission = null;
     
     public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
-    public static boolean isMobDisguiseEnabled = false;
-	public static boolean isDisguiseCraftEnabled = false;
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
 	
 	public final AnnounceListener announcelistener = new AnnounceListener();
 	public final BanListener banlistener = new BanListener();
 	public final CoreListener corelistener = new CoreListener();
-	public final DisguiseListener disguiselistener = new DisguiseListener();
 	public final JailListener jaillistener = new JailListener();
 	public final PeacefulListener peacefullistener = new PeacefulListener();
 	public final PowerboostListener powerboostlistener = new PowerboostListener();
 	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
 	
-	public final DCListener dclistener = new DCListener();
-	public final MDListener mdlistener = new MDListener();
 
 	
 
@@ -178,23 +173,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
         if(Config._jails.enabled._) {
         	pm.registerEvents(this.jaillistener, this);
         }
-        if(Config._extras._disguise.enableDisguiseIntegration._ && (Config._extras._disguise.unDisguiseIfInOwnTerritory._ || Config._extras._disguise.unDisguiseIfInEnemyTerritory._)) {
-        	if(getServer().getPluginManager().isPluginEnabled("DisguiseCraft")) {
-        		pm.registerEvents(this.dclistener, this);
-        		FactionsPlusPlugin.info("Hooked into DisguiseCraft!");
-        		isDisguiseCraftEnabled = true;
-        		pm.registerEvents(this.disguiselistener, this);
-        	}
-        	if(getServer().getPluginManager().isPluginEnabled("MobDisguise")) {
-        		pm.registerEvents(this.mdlistener, this);
-        		FactionsPlusPlugin.info("Hooked into MobDisguise!");
-        		isMobDisguiseEnabled = true;
-        		pm.registerEvents(this.disguiselistener, this);
-        	}
-        	else {
-        		FactionsPlusPlugin.info("MobDisguise or DisguiseCraft enabled, but no plugin found!");
-        	}
-        }
+        
+        
+        
         if(1<2) {        //Temporary Always True Until a Config Option is Created 
         	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
         		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");

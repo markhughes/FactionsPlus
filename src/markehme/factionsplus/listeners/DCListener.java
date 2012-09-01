@@ -11,9 +11,13 @@ import com.massivecraft.factions.FPlayers;
 
 import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 
-public class DCListener implements Listener  {
+public class DCListener implements Listener  {//http://dev.bukkit.org/server-mods/disguisecraft/
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerDisguise(PlayerDisguiseEvent e) {
+		if (e.isCancelled()){
+			return;
+		}
+		
     	FPlayer fplayer = FPlayers.i.get(e.getPlayer());
     		if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
     			if(fplayer.isInEnemyTerritory()) {
