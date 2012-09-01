@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* MD/DC allows factionless players to disguise, fixes issue #71
+
 * `/f reloadfp` is now reloading the MobDisguise/DisguiseCraft settings(for FactionsPlus) and hooking/unhooking as necessary
 
 * new config option jails.`canJailOnlyIfIssuerIsInOwnTerritory` when true (by default) the player issuing `/f jail` 
