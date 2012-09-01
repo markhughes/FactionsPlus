@@ -147,7 +147,8 @@ Except in the following cases, in which `reloadfp` works fine:
 In other words, `/f reloadfp` does not init/deinit or hook/unhook (except in the above noted cases). For example: the warp commands (see /f help)
 are not added or removed if you change `warps.enabled` config option and then `reloadfp`. So if `warps.enabled` was `true` and you changed it to 
 `false` and then you `/f reloadfp`, you can still use all the warp commands.   
-  - so `/f reloadfp` will not add/remove commands from `/f help` and if they appear there they can be used otherwise they cannot.  
+  - so `/f reloadfp` will not add/remove commands from `/f help` and if they appear there they can be used otherwise they cannot.
+  - rule of thumb here would be that if you think the option that you've changed requires some reinitialization to be done(ie. a listener to be attached) in order for the option to have effect, then `/f reloadfp` is not the one you want (except in the noted above cases). Simple options that are checked every time you execute a command(or an event happens) are updated/refreshed correctly and it's thus recommended that you use `/f reloadfp` ie. reloading for a change in `powerboosts.extraPowerWhenKillPlayer` will work but for `powerboosts.enabled` will not (if it was enabled when plugin was enabled it will remain enabled, if it wasn't then it's disabled and in this case `extraPowerWhenKillPlayer` has no effect).   
 
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
