@@ -1,11 +1,20 @@
 ======================================
-TODO: These instructions might be outdated due to moving of files/folders inside dev_extras
+these instrunctions are for PC (as opposed to ie. Mac)
 -------------------------
 To get FactionsPlus from github into your Eclipse workspace:
 ------
 Prerequisites:
 - Eclipse for Java Developers or Eclipse SDK  ie. version 3.8.0
-- EGIT plugin for Eclipse (Help->Install New Software, Work with: All Available Sites, type filter text "egit" ...)
+  ie. http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/junor
+  unpack the zip somewhere then run 
+  eclipse\eclipse.exe
+  if you're being asked, select a workspace folder, inside it FactionsPlus project folder will be stored
+  You may tick the use this as the default and do not ask again OR next time you start eclipse make sure you choose the same folder (it will be remembered automatically)
+  Make sure you close the Welcome screen, or later after importing a project you won't see the Package Explorer view
+
+
+- EGIT plugin for Eclipse (Help->Install New Software, Work with: All Available Sites, type filter text "egit" ...) this already exists in Eclipse Juno (4.2)
+  to see if you have it, check if you have File->import, Git->Project From Git. If you don't then you have to install it (likely you're running Eclipse 3.x)
 
 ---
 File->Import,  Git->Projects From Git, Next, URI, Next
@@ -32,16 +41,18 @@ Copy some files from "dev_extras" into current folder:
    a) enter the "dev_extras" folder
    b) Ctrl+click aka select the following 3 folder/files: ".settings", ".classpath" and ".project"
       and Copy them (to clipboard) ie. Ctrl+C
-   c) go into parent folder (the one you where before you entered "dev_extras") and press Ctrl+V aka Paste
+   c) go into parent folder (the one you where before you entered "dev_extras") (ie. by pressing backspace key) and then press Ctrl+V aka Paste
    
 you may close explorer, ie. Ctrl+W
 then go back to the Cloning window in eclipse
-Select Import existing projects
-Next,
+
+ignore this in Eclipse Juno (aka 4.2), in Eclipse 3.8 you have to:
+- Select Import existing projects
+- Next,
+
 Finish
 
-You now have the project but it likely has a red "!" on it, because of missing required .jar files
-and the Factions project (which should be in your workspace), read below
+You now have the project "[!] FactionsPlus [FactionsPlus master]" but it likely has a red "!" on it, because of missing required .jar files
 ======================================
 
 In order to be able to compile this without errors in Eclipse, here's what you need:
@@ -63,6 +74,10 @@ Finish
     left click FactionsPlus project then right click, choose Properties, 
     left click Java Build Path  then Libraries tab, click the "bukkit...jar" in list and Edit and 
     choose the downloaded file, click Open, then Ok
+then you may notice the other red [x] .jar files that you require in order to successfuly compile FactionsPlus, 
+but for now you may just press that Ok because you don't have to change those here, 
+just get those jars and place them in that `lib` folder ... see below.
+
 
 2. DisguiseCraft.jar
    get the top one from here:
@@ -103,15 +118,21 @@ choose one: (B. recommended)
     A) Factions.jar
         get any of 1.6 or 1.7 versions:
         http://dev.bukkit.org/server-mods/factions/files/
-        -make sure the file name is Factions.jar  or modify the classpath yourself to point to it see step. 1
+        -make sure the file name is Factions.jar  or/and modify the classpath yourself to point to it see step. 1
+        - Properties, Java Build Path, Libraries, make sure you add Factions.jar there by clicking Add JARs... and I assume that you put it in lib folder already, else
+         just do Add External JARs and point to it.
         -if you use this make sure you don't add both .jar or else you would never spot when you'll use a feature that
         exists in one version but doesn't in the other, ie. the field senderMustBeModerator exists in 1.6 but not in 1.7
         and using both jars would not err about this, and you cannot switch between the versions and spot this, unless ofc
-        you'd remove the Factions 1.7 jar 
+        you'd remove the Factions 1.7 jar
+        - since you used this variant(A), you have to remove the Factions project requirement, on FactionsPlus project right click and choose Properties, 
+          then choose Java Build Path, then Projects tab then click Factions and click Remove, then Ok.
 
     B) the Factions eclipse project, the 1.6.x branch
        from: https://github.com/MassiveCraft/Factions
-       -checkout this project in the same way that you checked out FactionsPlus project (aka this project)
+       -checkout this project in almost the same way that you checked out FactionsPlus project (aka this project) 
+        ie. by using this url: git://github.com/MassiveCraft/Factions.git
+	 make sure you choose Initial branch: 1.6.x  instead of master (where master is the 1.7.7 version of Factions which will cause a compile error currently inside FactionsPlus)
        -and make sure that you compile it with jre6 just as FactionsPlus is (unless you use jre7 for running bukkit server
         then you can use jre7 for both projects, but u won't be able to run bukkit with jre6 without minor major version 
         errors which effectively disables FactionsPlus from loading, see below)
@@ -123,15 +144,39 @@ Note: F3 key in Eclipse does: Open Declaration  (of the text that's under the cu
 After you put all the files in the lib folder don't forget to F5 aka refresh, in
 eclipse on the project or the lib folder, else eclipse won't see them.
 
-9. You also need Essentials, just like on 8., you can choose between Essentials eclipse project from github(recommended) 
+9. You also need Essentials, choose one of A or B below:  (B is easier)
+ A) almost just like on 8., you can choose between Essentials eclipse project from github(recommended only if you know what you're doing) + read below
 git://github.com/essentials/Essentials.git
+
+When you're doing the import, make sure you choose Initial branch 2.9 instead of master, which is right below and after you do the "now copy this path to clipboard ie. Ctrl+D Ctrl+A then Ctrl+C" part.
+
+If you import from github you cannot use the Import Existing, instead use the import using the new project wizard and choose Java Project, give it the name Essentials (so it will be imported actually) [has to have the same name as the folder you gave it when you imported it from git, which if you didn't change it's name (only it's location, so to put it in workspace - you had to!) it will be in the workspace and in Essentials folder.
 BUT you'll have to switch from 'master' branch to the '2.9' branch, otherwise things will get messed up with the 
 imports needing to be modified...
-OR you can get the Essentials.jar from 
+
+Now, select Essentials project (left click it), then right click it and choose Properties, then Java Build Path, Libraries, then click "bukkit...jar (missing)" click Edit, and choose the one that you downloaded at step 1 above.
+
+Looks like the source folders don't get automatically imported as such when choosing a branch like '2.9' instead of just leaving the default 'master' branch, so
+at this point you have to add them manually, else FactionsPlus will complain IEssentials can not be resolved.
+
+OR 
+B) you can get the Essentials.jar from 
 http://dev.bukkit.org/server-mods/essentials/files/
 should be something like Essentials-2.9.2  definitely not Essentials 3 (if it exists)
+get that zip (not the one with 'extra' in it's name), and unpack the Essentials.jar file into 'lib' folder, then F5 on it from eclipse, then
+right click FactionsPlus project then choose Properties then Java Build Path then Libraries then:
+  1. Add JARs... point to Essentials.jar  from FactionsPlus\lib
+  2. click Projects tab and remove Essentials project
+press ok.
 
 If you have all these, the FactionsPlus project should compile without errors.
+
+
+If you see:
+warZonePowerLoss cannot be resolved or is not a field
+then you're using 1.7.x Factions .jar file, or the master branch of Factions project, this gives an error until we fix our inconsistency in FactionsPlus, to fix
+and be able to compile, depending on which variants you're using, please either:
+ use 1.6.x Factions .jar file OR switch to the '2.6' named branch of Factions project
 ======================================
 
 
@@ -183,9 +228,9 @@ Finish
 This is how to export the .jar the "right" way:
 From within Eclipse, double click the file "fpexport_release_template.jardesc" which is under "dev_extras" folder. 
 you shouldn't have to modify anything there, all the settings are right and if you just click Finish
-it would create Factions.jar file inside the built.jar (folder which resides in the project)
+it would create Factions.jar file inside the built.jar (folder which resides in the project, you may have to F5 aka Refresh to see it the first time)
 
-If you wanna go advanced, you can have build.jar folder symlink to the right folder you want the .jar to be exported into
+If you wanna go advanced, you can have build.jar folder symlink to the right folder you want the .jar to be exported into(useful if you compile the .jar frequently)
 ie. go into shell and into the FactionsPlus folder then:
     make sure built.jar folder doesn't exist (ie. rmdir built.jar)
     mklink /d built.jar c:\craftbukkitserver\plugins\
