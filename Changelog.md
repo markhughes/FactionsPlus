@@ -141,15 +141,20 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The used pearl is wasted and a message will show.
 
 ### Known issues:
-* `/f reloadfp` is not as good as reloading the plugin; it is best you stop and start the server to properly reload the config.
-Except in the following cases, in which `reloadfp` works fine:   
-  - any options inside and including the following sections (in config.yml): `Teleports` , `economy` , `LWC` and `disguise`.   
-In other words, `/f reloadfp` does not init/deinit or hook/unhook (except in the above noted cases). For example: the warp commands (see /f help)
-are not added or removed if you change `warps.enabled` config option and then `reloadfp`. So if `warps.enabled` was `true` and you changed it to 
-`false` and then you `/f reloadfp`, you can still use all the warp commands.   
-  - so `/f reloadfp` will not add/remove commands from `/f help` and if they appear there they can be used otherwise they cannot.
-  - rule of thumb here would be that if you think the option that you've changed requires some reinitialization to be done(ie. a listener to be attached) in order for the option to have effect, then `/f reloadfp` is not the one you want (except in the noted above cases). Simple options that are checked every time you execute a command(or an event happens) are updated/refreshed correctly and it's thus recommended that you use `/f reloadfp` ie. reloading for a change in `powerboosts.extraPowerWhenKillPlayer` will work but for `powerboosts.enabled` will not (if it was enabled when plugin was enabled it will remain enabled, if it wasn't then it's disabled and in this case `extraPowerWhenKillPlayer` has no effect).   
-
+* Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(or the server) or stop/start the server for the following cases):   
+  + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:   
+    - `warps.enabled`
+    - `jails.enabled`
+    - `announce.enabled`
+    - `banning.enabled`   
+  + will not add/remove the listeners when the following options are changed:   
+    - `powerboosts.enabled`
+    - `peaceful.enablePeacefulBoosts`
+    - `extras.crossBorderLiquidFlowBlock`   
+  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
+  + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
+  + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
+  
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
 

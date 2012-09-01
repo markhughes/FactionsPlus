@@ -11,6 +11,9 @@ import org.bukkit.event.*;
 
 public class FPConfigLoadedListener implements Listener {
 	
+	/**
+	 * called after the config is (re)loaded, which is typically when plugin is enabled and when /f reloadfp  is issued<br>
+	 */
 	@EventHandler
 	public void onConfigLoaded( @SuppressWarnings( "unused" ) FPConfigLoadedEvent event ) {
         Config._economy.enableOrDisableEconomy();
