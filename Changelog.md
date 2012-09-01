@@ -141,20 +141,20 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The used pearl is wasted and a message will show.
 
 ### Known issues:
-* Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(or the server) or stop/start the server for the following cases):   
-  + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:   
+* Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(or the server) or stop/start the server for the following cases):
+  + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:
     - `warps.enabled`
     - `jails.enabled`
     - `announce.enabled`
     - `banning.enabled`   
-  + will not add/remove the listeners when the following options are changed:   
+  + will not add/remove the listeners when the following options are changed:
     - `powerboosts.enabled`
     - `peaceful.enablePeacefulBoosts`
     - `extras.crossBorderLiquidFlowBlock`   
   + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
   + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
   + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
-  
+   
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
 
