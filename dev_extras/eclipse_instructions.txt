@@ -114,7 +114,7 @@ positioned on java identifiers: fields/methods etc.) you can get one of the  Fac
 project, so choose one variant to follow below(using both will fail to correctly follow sourcecode ie. you end up at 
 wrong lines in code upon F3 -ing in some Factions method)
 
-choose one: (B. recommended)
+choose one: (B. recommended if you want to edit/explore code, else do A if you just want to compile the .jar)
     A) Factions.jar
         get any of 1.6 or 1.7 versions:
         http://dev.bukkit.org/server-mods/factions/files/
@@ -251,6 +251,10 @@ inside the file(it's normally on true, and we don't want that - for obvious reas
  and then rename it and overwrite to fpexport_release_template.jardesc
 and this is now detected and can be committed to the repository
 
+===
+To get the latest updates, right click FactionsPlus then Team->Pull, when that's done then recompile the .jar
+If you made changes of your own, you might want to do Team->Fetch from upsteam and then Team->Merge, if there are any
+conflicts you will have to resolve them before you can export the .jar
 ================
 
 Caveats:
