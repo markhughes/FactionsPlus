@@ -129,7 +129,7 @@ public class PowerboostListener implements Listener{
 	 */
 	private final boolean canLosePowerInThisArea(Player p) {
 		//TODO: ok, looks like faction.getFlag(FFlag.POWERLOSS) is Conf.warZonePowerLoss  and Conf.wildernessPowerLoss 
-		if ( Bridge.factions.isFactions16() ) {
+		if ( !Bridge.factions.isFactions17() ) {
 			// Factions 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss, so we only check these if we're alongside
 			// 1.6.x, this still means that we cannot compile this with Factions 1.7, it will compile err below, but it's ok since
 			//we're using the same FP jar for both anyway (just compile with Factions 1.6, it will run alongside 1.7) 

@@ -101,7 +101,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 
 
 	@Override
-	public final boolean isFactions16() {
-		return false;
+	public final boolean isFactions17() {
+		return true;
 	}
 }
