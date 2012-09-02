@@ -180,10 +180,10 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 
 	public static int clearLocksCommand(Player name, Location loc) {
 		FPlayer fp = FPlayers.i.get(name);
-		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
-			name.sendMessage(ChatColor.RED + "No Permission!");
-			return -1; //-1 return signifies lack of permissions.
-		}
+//		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
+//			name.sendMessage(ChatColor.RED + "No Permission!");
+//			return -1; //-1 return signifies lack of permissions.
+//		}
 		Chunk chunk = loc.getChunk();
 		FLocation floc = new FLocation(loc);
 		Faction owner = Board.getFactionAt(floc);

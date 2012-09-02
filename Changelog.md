@@ -1,15 +1,23 @@
 # FactionsPlus version 0.4.8
 
+* MD/DC allows factionless players to disguise, fixes issue #71
+
+* `/f reloadfp` is now reloading the MobDisguise/DisguiseCraft settings(for FactionsPlus) and hooking/unhooking as necessary
+
 * new config option jails.`canJailOnlyIfIssuerIsInOwnTerritory` when true (by default) the player issuing `/f jail` 
 in an attempt to jail another player, must be inside its own faction territory. This should prevent 2+ players from jailing
-each other to their advantage while they are near or inside enemy base.
+each other to their advantage while they are near or inside enemy base. 
+It may be better if you use a cool down plugin ie. boosCooldown and prevent the `f jail` and `/f jail` (depending on your Factions settings)
+from being executed too often by placing a warmup delay of ie. 10 sec, so that the jailer cannot jail a player which is currently 
+battling in enemy zone to have him escape near death (it can jail him but the effect of the jail command will happen after 10 seconds)
 
 * Fixed jail command: leaders can no longer jail themselves to escape from enemy territory
 
 * Cobble monster griefing protection: changes behaviour of lava/water flow so that lava does not flowed between different boundaries (lava+water allowed the creation of cobblestone griefing, which could be done cross-border)
 
 * fixed bad calls to metrics which would set `opt-out` option to `true` (only with 0.4.7) when server would shutdown or 
-FactionsPlus plugin would be disabled `opt-out` is by default `false` which means that every plugin using metrics will send stats to mcstats.org  
+FactionsPlus plugin would be disabled.   
+ `opt-out` is by default `false` which means that every plugin using metrics will send stats to mcstats.org  
   However now the option being `true` will cause all of those plugins to not send any stats (unless they modified metrics code
  to ignore the `opt-out` option and thus send stats anyway).  
   You can revert to metrics defaults by deleting the `plugins\PluginMetrics\config.yml` file OR by editing it and changing 
@@ -135,6 +143,35 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The exploitable /home prevetion in 0.4.7 is now fixed in 0.4.8 such that it's highly unlikely that it can be exploited
     mainly because we're now hooking into essentials (the plugin that has /home)  
     The used pearl is wasted and a message will show.
+
+### Known issues in 0.4.8:
+* Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(s) or `reload` the server or stop/start the server for the following cases):
+  + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:
+    - `warps.enabled` ie. changing this to `false` (if it was `true` when server started) will still allow those commands to be used (if you used `/f reloadfp` instead of restarting server after changing this to `false`)
+    - `jails.enabled`
+    - `announce.enabled`
+    - `banning.enabled`   
+  + will not add/remove the listeners when the following options are changed:
+    - `powerboosts.enabled`
+    - `peaceful.enablePeacefulBoosts`
+    - `extras.crossBorderLiquidFlowBlock`   
+  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
+  + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
+  + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
+   
+* changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
+it will only prevent newly created warps from being in non-owned territory.
+
+* unclaiming land where a warp resides will not remove that warp
+
+* warps and jail location are not deleted on auto faction disband
+
+* wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
+
+* if using Factions 1.7.x and `respectFactionsWarZonePowerLossRules` is `false` it will give an error on console and that feat. won't work.
+
+* if you replace the FactionsPlus.jar (and possibly any other .jar which FP depends on) while the server is running and you do a `reload`
+it will sometimes show a NoClassDefFoundError exception, this is "normal" and it is to be ignored.
 
 # FactionsPlus version 0.4.7
 

@@ -58,9 +58,12 @@ public class FactionsPlusUpdate implements Runnable {
 		synchronized ( FactionsPlusUpdate.class ) {
 			if ( taskId >= 0 ) {
 				BukkitScheduler sched = Bukkit.getServer().getScheduler();
-				if ( sched.isCurrentlyRunning( taskId ) ) {// not possible due to lock
-					FactionsPlus.warn( "The check-for-updates thread was still running" );
-				}
+				
+				//this is nolonger relevant, since we're checking for updates every x hours, it will always be detected 
+				//as still running here (except when never started)
+//				if ( sched.isCurrentlyRunning( taskId ) ) {// not possible due to lock
+//					FactionsPlus.warn( "The check-for-updates thread was still running" );
+//				}
 				sched.cancelTask( taskId );// yeah it's doing the same thing as I did
 				// thread still runs even though plugin restarted, and now runs twice
 				taskId = Integer.MIN_VALUE;

@@ -36,7 +36,11 @@ public final class Section_Warps{
 	public  final _boolean membersCanSetWarps=new _boolean(false);
 	
 	
-	@Option(oldAliases_alwaysDotted={
+	@Option(
+		autoComment={
+			"changing this from true to false does NOT remove all warps that are outside territories"//TODO:
+		},
+		oldAliases_alwaysDotted={
 //		"warps.mustBeInOwnTerritoryToCreate"
 		"mustBeInOwnTerritoryToCreate"
 	}, realAlias_inNonDottedFormat = "mustBeInOwnTerritoryToCreate" )

@@ -5,13 +5,15 @@ import markehme.factionsplus.config.*;
 import markehme.factionsplus.events.*;
 import markehme.factionsplus.extras.*;
 
-import org.bukkit.event.Listener;
-import org.bukkit.event.EventHandler;
+import org.bukkit.event.*;
 
 
 
 public class FPConfigLoadedListener implements Listener {
 	
+	/**
+	 * called after the config is (re)loaded, which is typically when plugin is enabled and when /f reloadfp  is issued<br>
+	 */
 	@EventHandler
 	public void onConfigLoaded( @SuppressWarnings( "unused" ) FPConfigLoadedEvent event ) {
         Config._economy.enableOrDisableEconomy();
@@ -54,5 +56,7 @@ public class FPConfigLoadedListener implements Listener {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
+        
+        DisguiseListener.enableOrDisable(FactionsPlus.instance);
 	}//onConfigLoaded method ends
 }
