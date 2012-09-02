@@ -29,8 +29,8 @@ public class CmdClearLocks extends FCommand {
 	
 	@Override
 	public void perform() {
-		if(!FactionsPlus.permission.has(sender, "factionsplus.clearlocks")) {
-			sender.sendMessage(ChatColor.RED + "No permission!");
+		if(!FactionsPlus.permission.has(sender, "factionsplus.clearlwclocks")) {
+			sender.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
 			return;
 		}
 		

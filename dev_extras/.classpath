@@ -7,9 +7,9 @@
 	<classpathentry kind="lib" path="lib/Vault.jar" sourcepath="/Vault"/>
 	<classpathentry kind="lib" path="lib/WorldEdit.jar"/>
 	<classpathentry kind="lib" path="lib/WorldGuard.jar"/>
-	<classpathentry kind="lib" path="lib/bukkit-1.2.5-R4.1-20120618.060128-13.jar" sourcepath="/bukkit"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Factions"/>
 	<classpathentry kind="lib" path="lib/LWC.jar" sourcepath="/LWC/java"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Essentials"/>
+	<classpathentry kind="lib" path="lib/Factions.jar"/>
+	<classpathentry kind="lib" path="lib/Essentials.jar"/>
+	<classpathentry kind="lib" path="lib/bukkit-1.3.2-R0.2-20120827.230256-3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
