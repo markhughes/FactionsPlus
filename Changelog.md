@@ -6,7 +6,10 @@
 
 * new config option jails.`canJailOnlyIfIssuerIsInOwnTerritory` when true (by default) the player issuing `/f jail` 
 in an attempt to jail another player, must be inside its own faction territory. This should prevent 2+ players from jailing
-each other to their advantage while they are near or inside enemy base.
+each other to their advantage while they are near or inside enemy base. 
+It may be better if you use a cool down plugin ie. boosCooldown and prevent the `f jail` and `/f jail` (depending on your Factions settings)
+from being executed too often by placing a warmup delay of ie. 10 sec, so that the jailer cannot jail a player which is currently 
+battling in enemy zone to have him escape near death (it can jail him but the effect of the jail command will happen after 10 seconds)
 
 * Fixed jail command: leaders can no longer jail themselves to escape from enemy territory
 
