@@ -106,4 +106,6 @@ public interface FactionsAny {
 
 
 	void addSubCommand( FCommand base, FCommand subCommand );
+	
+	public boolean isFactions16();
 }

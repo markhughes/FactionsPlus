@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.entity.Monster;
@@ -20,8 +21,11 @@ public class PowerboostListener implements Listener{
 	public void onEntityDeath(EntityDeathEvent event)
 	{
 		if (!checkFactionsSettings(event)) {
+			//FIXME: this check is supposed to be for Player only, maybe move the call for this method below
+			//we don't want this check to happen on every entity death on the server
 			return;
 		}
+//		FactionsPlus.info( "here");
 		if (Utilities.noPowerLossWorld(event.getEntity().getWorld())) {
 			return;
 		}
@@ -106,22 +110,31 @@ public class PowerboostListener implements Listener{
 	}
 
 	private boolean checkFactionsSettings(EntityDeathEvent event) {
-		//FIXME: 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss
-		if (!Config._powerboosts.respectFactionsWarZonePowerLossRules._ && (!com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null)) {
-			if (event.getEntity() == null || !(event.getEntity() instanceof Player)) {
-				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
-				//TODO: Block power GAINS in powerloss disabled regions as well
-			}
-			FLocation floc = new FLocation(event.getEntity().getLocation());
-			Faction owningFaction = Board.getFactionAt(floc);
-			if(Utilities.isWilderness( owningFaction) && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
-				return false;
-			}
-			if(Utilities.isWarZone( owningFaction) && !com.massivecraft.factions.Conf.warZonePowerLoss) {
-				return false;
-			}
-			if(Utilities.isSafeZone(owningFaction)) {
-				return false;
+		if ( Bridge.factions.isFactions16() ) {
+			// Factions 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss, so we only check these if we're alongside
+			// 1.6.x, this still means that we cannot compile this with Factions 1.7, it will compile err below, but it's ok since
+			//we're using the same FP jar for both anyway (just compile with Factions 1.6, it will run alongside 1.7) 
+			//FIXME: the logic here is broken, if this config is false, then the powerloss are respected! but they should be 
+			//when this is true, right?
+			if ( !Config._powerboosts.respectFactionsWarZonePowerLossRules._
+				&& ( !com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null ) )
+			{
+				if ( event.getEntity() == null || !( event.getEntity() instanceof Player ) ) {
+					return true; // Means we should continue with the rest of the code, as the dead entity is not a player and
+									// as such not subject to factions
+					// TODO: Block power GAINS in powerloss disabled regions as well
+				}
+				FLocation floc = new FLocation( event.getEntity().getLocation() );
+				Faction owningFaction = Board.getFactionAt( floc );
+				if ( Utilities.isWilderness( owningFaction ) && !com.massivecraft.factions.Conf.wildernessPowerLoss ) {
+					return false;
+				}
+				if ( Utilities.isWarZone( owningFaction ) && !com.massivecraft.factions.Conf.warZonePowerLoss ) {
+					return false;
+				}
+				if ( Utilities.isSafeZone( owningFaction ) ) {
+					return false;
+				}
 			}
 		}
 		return true;

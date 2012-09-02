@@ -98,4 +98,10 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 		throw new RuntimeException("not supposed to be called in 1.7");
 //		return null;
 	}
+
+
+	@Override
+	public final boolean isFactions16() {
+		return false;
+	}
 }
