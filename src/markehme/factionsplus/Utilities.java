@@ -316,9 +316,9 @@ public class Utilities {
 	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*
 	
 	//XXX:don't change the following 3 constants:
-	private static final String	ID_WARZONE	= "-2";
-	private static final String	ID_SAFEZONE	= "-1";
-	private static final String	ID_WILDERNESS	= "0";
+	public static final String	ID_WARZONE	= "-2";
+	public static final String	ID_SAFEZONE	= "-1";
+	public  static final String	ID_WILDERNESS	= "0";
 	
 	public static boolean isJustLookingAround(Location from, Location to) {
 		assert Q.nn( from );

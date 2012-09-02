@@ -131,6 +131,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 //				break;
 			case POWERLOSS:
 				if (Utilities.isWarZone( forFaction )) {
+					//warzone always overrides the nopowerlossworlds list even if that is not even considered here
 					//XXX: if you see compile error here, please use Factions.jar for version 1.6.x instead of 1.7.x (or github branch 1.6.x not master)
 					//the .jar will work with 1.7.x version of Faction, once it's compiled anyway.
 					return Conf.warZonePowerLoss;
@@ -140,7 +141,9 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 					return true;
 				}
 
-				if (!Conf.peacefulMembersDisablePowerLoss && Utilities.isPeaceful( forFaction ) && !Utilities.isWilderness( forFaction )) {
+				if (!Conf.peacefulMembersDisablePowerLoss && Utilities.isPeaceful( forFaction ) 
+						&& !Utilities.isWilderness( forFaction )
+						&& !Utilities.isSafeZone( forFaction )) {
 					return true;
 				}
 				
