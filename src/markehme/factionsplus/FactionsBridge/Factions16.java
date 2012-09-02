@@ -17,6 +17,7 @@ import com.massivecraft.factions.cmd.*;
 public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	private Method							mSetPeaceful		= null;
+	private Method							mIsPeaceful		= null;
 	private Method							methodUpdateHelp	= null;
 	private Object							instanceOfCmdHelp	= null;
 	private Field							fieldCmdHelp		= null;
@@ -36,6 +37,8 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		
 		try {
 			mSetPeaceful = Faction.class.getMethod( "setPeaceful", boolean.class );
+			
+			mIsPeaceful=Factions.class.getMethod("isPeaceful");
 			
 			Class clas = Class.forName( "com.massivecraft.factions.cmd.CmdHelp" );
 			
@@ -76,6 +79,10 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	
 	@Override
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState ) {
+		assert null != forFaction;
+		assert null != whichFlag;
+		assert null != whatState;
+		
 		boolean failed = false;
 		try {
 			switch ( whichFlag ) {
@@ -85,7 +92,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 			// TODO: add all flags here, those from FactionsAny.FFlag
 				//or make a mapping between the methods and the flags, clearly. 
 			default:
-				throw FactionsPlusPlugin.bailOut( "plugin author forgot to define a case to handle this flag: "
+				throw FactionsPlusPlugin.bailOut( "setFlag, plugin author forgot to define a case to handle this flag: "
 					+ whichFlag );
 				// or forgot to put a "break;"
 			}
@@ -107,6 +114,61 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	}
 	
 	
+	@Override
+	public boolean getFlag( Faction forFaction, FactionsAny.FFlag whichFlag ) {
+		assert null != forFaction;
+		assert null != whichFlag;
+		
+		Throwable err=null;
+		try {
+			
+			switch ( whichFlag ) {
+			case PEACEFUL:
+				Object ret = mIsPeaceful.invoke( forFaction );
+				assert null != ret;
+				assert ret instanceof Boolean;
+				return ((Boolean)ret).booleanValue();
+//				break;
+			case POWERLOSS:
+				if (Utilities.isWarZone( forFaction )) {
+					//XXX: if you see compile error here, please use Factions.jar for version 1.6.x instead of 1.7.x (or github branch 1.6.x not master)
+					//the .jar will work with 1.7.x version of Faction, once it's compiled anyway.
+					return Conf.warZonePowerLoss;
+				}
+				// not warzone
+				if (Conf.wildernessPowerLoss && Utilities.isWilderness( forFaction )  ) {
+					return true;
+				}
+
+				if (!Conf.peacefulMembersDisablePowerLoss && Utilities.isPeaceful( forFaction ) && !Utilities.isWilderness( forFaction )) {
+					return true;
+				}
+				
+				return false;
+			default:
+				throw FactionsPlusPlugin.bailOut( "getFlag, plugin author forgot to define a case to handle this flag: "
+					+ whichFlag );
+				// or forgot to put a "break;"
+			}
+			
+			
+		} catch ( IllegalArgumentException e ) {
+			err=e;
+		} catch ( IllegalAccessException e ) {
+			err=e;
+		} catch ( InvocationTargetException e ) {
+			err=e;
+		} finally {
+			if ( null != err ) {
+				throw FactionsPlusPlugin.bailOut( err, "failed in getFlag");
+			}
+		}
+//		return false;
+		throw null;//should not be reached
+	}
+
+	
+	
 	private final static byte	howManyPerPage	= 5;
 	private byte				currentPerPage	= 0;
 	private ArrayList<String>	pageLines		= null;
@@ -117,24 +179,21 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		super.addSubCommand( base, subCommand );
 		// for 1.6 need to add the command to help manually
 		if ( null == instanceOfCmdHelp ) {
-			boolean failed = false;
+			Throwable failed = null;
 			try {
 				// lazy init this(one time since plugin.onEnable()), cause on .init() was probably too soon
 				instanceOfCmdHelp = fieldCmdHelp.get( P.p.cmdBase );//this is good here, cmdBase!
 				methodUpdateHelp.invoke( instanceOfCmdHelp );// P.p.cmdBase.cmdHelp.updateHelp();
 				instanceOfHelpPages = (ArrayList<ArrayList<String>>)fHelpPages.get( instanceOfCmdHelp );
 			} catch ( IllegalAccessException e ) {
-				e.printStackTrace();
-				failed = true;
+				failed = e;
 			} catch ( IllegalArgumentException e ) {
-				e.printStackTrace();
-				failed = true;
+				failed = e;
 			} catch ( InvocationTargetException e ) {
-				e.printStackTrace();
-				failed = true;
+				failed = e;
 			} finally {
-				if ( failed ) {
-					throw FactionsPlusPlugin.bailOut( "failed to invoke " + methodUpdateHelp );
+				if ( null != failed ) {
+					throw FactionsPlusPlugin.bailOut(failed, "failed to invoke " + methodUpdateHelp );
 				}
 			}
 		}

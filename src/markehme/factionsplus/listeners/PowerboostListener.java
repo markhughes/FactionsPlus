@@ -127,9 +127,9 @@ public class PowerboostListener implements Listener{
 	 * @param p player
 	 * @return always true in Factions 1.7
 	 */
-	private final boolean canLosePowerInThisArea(Player p) {
+	private final boolean canLosePowerInThisArea(Player player) {
 		//TODO: ok, looks like faction.getFlag(FFlag.POWERLOSS) is Conf.warZonePowerLoss  and Conf.wildernessPowerLoss 
-		if ( !Bridge.factions.isFactions17() ) {
+//		if ( !Bridge.factions.isFactions17() ) {
 			// Factions 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss, so we only check these if we're alongside
 			// 1.6.x, this still means that we cannot compile this with Factions 1.7, it will compile err below, but it's ok since
 			//we're using the same FP jar for both anyway (just compile with Factions 1.6, it will run alongside 1.7) 
@@ -137,44 +137,77 @@ public class PowerboostListener implements Listener{
 			//when this is true, right?
 			
 			if ( Config._powerboosts.respectFactionsWarZonePowerLossRules._
-				&& ( !Conf.warZonePowerLoss 
-						|| !Conf.wildernessPowerLoss 
-						|| ((null != Conf.worldsNoPowerLoss)
-						   &&(!Conf.worldsNoPowerLoss.isEmpty()))
-				   ) )
+//				&& ( 
+////						   !Conf.warZonePowerLoss
+////						|| !Conf.wildernessPowerLoss||
+//						 ((null != Conf.worldsNoPowerLoss)
+//						   &&(!Conf.worldsNoPowerLoss.isEmpty()))
+//				   )
+					)
 			{
-				//so, if respect?  and one of warzone/wilderness/nopowerlossworlds is set to not lose power on player death then:
 					// TODO: Block power GAINS in powerloss disabled regions as well: this is gonna be tricky
-				FLocation floc = new FLocation( p.getLocation() );
-				Faction factionAtFeet = Board.getFactionAt( floc );
+//				FLocation floc = new FLocation( player.getLocation() );
+				Faction factionAtFeet = Board.getFactionAt( new FLocation( player.getLocation() ) );
 //				FPlayer fp=FPlayers.i.get(p);
 //				assert null != fp;
 				
+			if ( Utilities.isWarZone( factionAtFeet ) ) {
+				// war zones always override worldsNoPowerLoss either way, thus this layout
 				
-				if ( !Conf.wildernessPowerLoss && Utilities.isWilderness( factionAtFeet ) ) {
+				return Utilities.confIs_warzonePowerLoss();
+				// {
+				// // fplayer.msg("<i>You didn't lose any power since you were in a war zone.");
+				// return;
+				// }
+				// if (Conf.worldsNoPowerLoss.contains(player.getWorld().getName()))
+				// {
+				// fplayer.msg("<b>The world you are in has power loss normally disabled, but you still lost power since you were in a war zone.");
+				// }
+			} else
+				if ( Utilities.isWilderness( factionAtFeet ) && !Utilities.confIs_wildernessPowerLoss()
+					//XXX: this is gone in 1.7: && !Conf.worldsNoWildernessProtection.contains( player.getWorld().getName() ) )
+				{
+					// fplayer.msg("<i>You didn't lose any power since you were in the wilderness.");
 					return false;
-				}
-				
-				//if warZonePowerLoss is true then it overrides worldsNoPowerLoss as per Factions code seen here:
-				//com.massivecraft.factions.listeners.FactionsEntityListener.onEntityDeath(EntityDeathEvent)  (F3 on the class not the method)
-				if (Utilities.isWarZone( factionAtFeet ) ) {
-					//always lose power in warzone, even in worldsNoPowerLoss, unless warZonePowerLoss is false (then you don't lose)
-					return Conf.warZonePowerLoss;
-				}else {
-					//not in warzone ? maybe we're in a nopowerloss world in which case we lose no power
-					if ( (null != Conf.worldsNoPowerLoss) && (Conf.worldsNoPowerLoss.contains(p.getWorld().getName())) ) {
+				} else
+					if ( Conf.worldsNoPowerLoss.contains( player.getWorld().getName() ) ) {
+						// fplayer.msg("<i>You didn't lose any power due to the world you died in.");
 						return false;
-					}
-				}
+					} else
+						if ( Conf.peacefulMembersDisablePowerLoss && !Utilities.isWilderness( factionAtFeet )
+							&& Utilities.isPeaceful( factionAtFeet ) )
+						{
+							// fplayer.msg("<i>You didn't lose any power since you are in a peaceful faction.");
+							return false;
+						} else
+							if ( Utilities.isSafeZone( factionAtFeet ) ) {
+								return false;
+							}
 				
-				if ( Utilities.isSafeZone( factionAtFeet ) ) {
-					return false;
-				}
+//				if (!Utilities.confIs_wildernessPowerLoss(factionAtFeet) && Utilities.isWilderness( factionAtFeet )) {
+////				if ( !Conf.wildernessPowerLoss && Utilities.isWilderness( factionAtFeet ) ) {
+//					return false;
+//				}
+//				
+//				//if warZonePowerLoss is true then it overrides worldsNoPowerLoss as per Factions code seen here:
+//				//com.massivecraft.factions.listeners.FactionsEntityListener.onEntityDeath(EntityDeathEvent)  (F3 on the class not the method)
+//				if (Utilities.isWarZone( factionAtFeet ) ) {
+//					//always lose power in warzone, even in worldsNoPowerLoss, unless warZonePowerLoss is false (then you don't lose)
+//					return Conf.warZonePowerLoss;
+//				}else {
+//					//not in warzone ? maybe we're in a nopowerloss world in which case we lose no power
+//					if ( (null != Conf.worldsNoPowerLoss) && (Conf.worldsNoPowerLoss.contains(p.getWorld().getName())) ) {
+//						return false;
+//					}
+//				}
+//				if ( Utilities.isSafeZone( factionAtFeet ) ) {
+//					return false;
+//				}				
 			}
 //			return true;
 //		}else {
 //			return (null != Conf.worldsNoPowerLoss) && (Conf.worldsNoPowerLoss.contains(p.getWorld().getName()));
-		}
+//		}
 		return true;
 	}
 }

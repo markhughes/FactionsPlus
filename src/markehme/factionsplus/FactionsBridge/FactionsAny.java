@@ -11,12 +11,13 @@ public interface FactionsAny {
 	
 	public static enum FFlag {
 		PEACEFUL,
+		POWERLOSS,
 		// adding new flags here requires adding switch-cases in two locations, do Ctrl+Alt+H on one of the flags to track where
 		//this is mainly because 1.6 requires a different method to be called for setting each flag
+		//the above are considered handled, the below are not yet
 		
 		PERMANENT,
 		INFPOWER,
-		POWERLOSS,
 		PVP,
 		FRIENDLYFIRE,
 		MONSTERS,
@@ -65,6 +66,7 @@ public interface FactionsAny {
 	}
 	
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState );
+	public boolean getFlag( Faction forFaction, FactionsAny.FFlag whichFlag);
 	
 	
 	public FactionsAny.Relation getRelationBetween( RelationParticipator one, RelationParticipator two );

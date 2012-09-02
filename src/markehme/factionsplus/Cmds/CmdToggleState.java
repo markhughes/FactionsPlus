@@ -91,13 +91,14 @@ public class CmdToggleState extends FCommand {
 		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 		
 		
-		if(!factiont.isPeaceful()) {//done: is economy enabled ?!
+		if(!Utilities.isPeaceful(factiont)) {//done: is economy enabled ?!
 			//if faction wasn't already peaceful, then we set it
 			if ( (!Config._economy.isHooked())
 					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
 						"for setting faction `"+factiont.getTag()+"` to peaceful")) ) {
 				
-				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
+//				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
+				Utilities.setPeaceful(factiont);
 				
 				sender.sendMessage("You have toggled the faction `"+factiont.getTag()+"` to Peaceful!");
 			}
