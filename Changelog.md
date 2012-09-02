@@ -16,7 +16,8 @@ battling in enemy zone to have him escape near death (it can jail him but the ef
 * Cobble monster griefing protection: changes behaviour of lava/water flow so that lava does not flowed between different boundaries (lava+water allowed the creation of cobblestone griefing, which could be done cross-border)
 
 * fixed bad calls to metrics which would set `opt-out` option to `true` (only with 0.4.7) when server would shutdown or 
-FactionsPlus plugin would be disabled `opt-out` is by default `false` which means that every plugin using metrics will send stats to mcstats.org  
+FactionsPlus plugin would be disabled.   
+ `opt-out` is by default `false` which means that every plugin using metrics will send stats to mcstats.org  
   However now the option being `true` will cause all of those plugins to not send any stats (unless they modified metrics code
  to ignore the `opt-out` option and thus send stats anyway).  
   You can revert to metrics defaults by deleting the `plugins\PluginMetrics\config.yml` file OR by editing it and changing 
