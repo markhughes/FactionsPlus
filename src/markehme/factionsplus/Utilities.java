@@ -439,7 +439,4 @@ public class Utilities {
 		return Bridge.factions.getFlag(Factions.i.get(ID_WARZONE), FactionsAny.FFlag.POWERLOSS);
 	}
 	
-	public static final boolean confIs_peacefulMembersDisablePowerLoss(Faction faction) {
-		1
-	}
 }
