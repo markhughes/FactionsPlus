@@ -90,7 +90,7 @@ tnt cannon-ed etc.
 
 * fixed /f removewarp  not removing warps 
 
-* fixes for NPEs from issue 60
+* fixes for NPEs from issue 60 http://dev.bukkit.org/server-mods/factionsplus/tickets/60-error-of-the-player-death-event-and-player-teleport/
 
 * fixes /f help NPE on last page
 
