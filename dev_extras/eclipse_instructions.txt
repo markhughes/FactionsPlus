@@ -29,6 +29,7 @@ Choose a location in your eclipse workspace under a folder named "FactionsPlus" 
 your eclipse workspace and click Save)
 ie. Directory: C:\eclipse.workspace\FactionsPlus
 or wherever else you want to store the git part
+(If you name this anything other than FactionsPlus the automatic jar export script from later below won't work)
 now copy this path to clipboard ie. Ctrl+D Ctrl+A then Ctrl+C
 click Next, after the cloning is done (requires internet connection *doh* ) then
 open explorer or Winkey+E
