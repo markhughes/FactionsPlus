@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
+if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applies, otherwise they are not.
+Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.
+
 * MD/DC allows factionless players to disguise, fixes issue #71
 
 * `/f reloadfp` is now reloading the MobDisguise/DisguiseCraft settings(for FactionsPlus) and hooking/unhooking as necessary
@@ -167,8 +171,6 @@ it will only prevent newly created warps from being in non-owned territory.
 * warps and jail location are not deleted on auto faction disband
 
 * wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
-
-* if using Factions 1.7.x and `respectFactionsWarZonePowerLossRules` is `false` it will give an error on console and that feat. won't work.
 
 * if you replace the FactionsPlus.jar (and possibly any other .jar which FP depends on) while the server is running and you do a `reload`
 it will sometimes show a NoClassDefFoundError exception, this is "normal" and it is to be ignored.

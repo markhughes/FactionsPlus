@@ -70,17 +70,5 @@ public final class Section_PowerBoosts {
 	public  final _double extraPowerLossIfDeathByOther=new _double( 0.0d );
 
 
-	@Option(autoComment={//FIXME: maybe remove this as an option, why would it be needed? it should always act as if it's true anyway
-		"-this should always be true; it shouldn't even be an option",
-		"-basically if the Factions plugin does powerloss to you",
-		"then FactionsPlus also applies the extra powerlosses or gains from above",
-		"if this option is false, then FactionsPlus applies the extras even when Factions Plugin doesn't"
-		},
-			oldAliases_alwaysDotted={
-			"respectFactionsWarZonePowerLossRules",
-			"powerboosts.respectFactionsWarZonePowerLossRules"
-			}, realAlias_inNonDottedFormat = "respectFactionsPluginPowerLossRules" )
-		public  final _boolean respectFactionsPluginPowerLossRules=new _boolean(true);	
-	
 	
 }

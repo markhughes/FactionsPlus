@@ -38,7 +38,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		try {
 			mSetPeaceful = Faction.class.getMethod( "setPeaceful", boolean.class );
 			
-			mIsPeaceful=Factions.class.getMethod("isPeaceful");
+			mIsPeaceful=Faction.class.getMethod("isPeaceful");
 			
 			Class clas = Class.forName( "com.massivecraft.factions.cmd.CmdHelp" );
 			
