@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+* new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
+Any user can use this.
+
 * removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
 if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applies, otherwise they are not.   
 Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.   

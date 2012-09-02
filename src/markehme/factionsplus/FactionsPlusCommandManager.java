@@ -74,6 +74,10 @@ public class FactionsPlusCommandManager {
 		
 		addSC(new CmdReloadFP());
 		
+//		Bridge.factions.addSubCommand(P.p.cmdBase.cmdPower, new CmdPowPow());
+		addSC(new CmdPowSettings());
+		
+		//last:
 		Bridge.factions.finalizeHelp(); 
 	}
 

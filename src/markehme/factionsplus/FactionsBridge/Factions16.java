@@ -135,6 +135,7 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 					//XXX: if you see compile error here, please use Factions.jar for version 1.6.x instead of 1.7.x (or github branch 1.6.x not master)
 					//the .jar will work with 1.7.x version of Faction, once it's compiled anyway.
 					return Conf.warZonePowerLoss;
+					//TODO: hide these with reflection, so there would be no compile errors!
 				}
 				// not warzone
 				if (Conf.wildernessPowerLoss && Utilities.isWilderness( forFaction )  ) {
