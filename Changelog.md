@@ -1,8 +1,9 @@
 # FactionsPlus version 0.4.8
 
 * removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
-if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applies, otherwise they are not.
-Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.
+if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applies, otherwise they are not.   
+Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.   
+This also fixes the error you'd get on console when using Factions 1.7.x when this option was false (which was also broken because it then acted as if it were true)
 
 * MD/DC allows factionless players to disguise, fixes issue #71
 
