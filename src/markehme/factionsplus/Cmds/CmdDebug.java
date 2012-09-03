@@ -48,26 +48,6 @@ public class CmdDebug extends FCommand {
 //					+ FactionsPlus.permission.playerHas( player.getWorld(), player.getName(), perm ) );
 //			}
 //		}
-		//temp: test these as non-op
-//		sender.sendMessage( "Conf.wildernessPowerLoss: "+Utilities.confIs_wildernessPowerLoss() );
-//		sender.sendMessage( "Conf.warzonePowerLoss: "+Utilities.confIs_warzonePowerLoss() );
-//		sender.sendMessage("will normally lose power, at feet: "+PowerboostListener.canLosePowerWherePlayerIsAt(fme.getPlayer()));
-//		sender.sendMessage("will normally lose power, in wilderness: "+PowerboostListener.canLosePowerInThisFaction(Factions.i.getNone(), fme.getPlayer().getWorld()));
-//		sender.sendMessage("will normally lose power, in warzone: "+PowerboostListener.canLosePowerInThisFaction(Factions.i.get(Utilities.ID_WARZONE), fme.getPlayer().getWorld()));
-//		sender.sendMessage("will normally lose power, in safezone: "+PowerboostListener.canLosePowerInThisFaction(Factions.i.get(Utilities.ID_SAFEZONE), fme.getPlayer().getWorld()));
-//
-//
-//		if (fme.hasFaction()) {
-//			sender.sendMessage("own faction isPeaceful: "+Utilities.isPeaceful( fme.getFaction() ));
-//			Utilities.setPeaceful( fme.getFaction(), !Utilities.isPeaceful( fme.getFaction() ) );
-//			sender.sendMessage("toggling own faction peaceful; after that it is now: "+Utilities.isPeaceful( fme.getFaction() ));
-//		}
-//		sender.sendMessage("is wilderness peaceful: "+Utilities.isPeaceful(Factions.i.getNone()));
-//		sender.sendMessage("is warzone peaceful: "+Utilities.isPeaceful(Factions.i.get(Utilities.ID_WARZONE)));
-//		sender.sendMessage("is safezone peaceful: "+Utilities.isPeaceful(Factions.i.get(Utilities.ID_SAFEZONE)));
-//		sender.sendMessage("is peaceful at feet: "+
-//				Utilities.isPeaceful(Board.getFactionAt( new FLocation( fme.getPlayer().getLocation() ) )));
-		//end temp
 
 		if ( (null != fme) && (fme.isOnline()) && (!sender.isOp())) {
 				return;
