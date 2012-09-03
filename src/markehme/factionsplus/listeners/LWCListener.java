@@ -1,15 +1,13 @@
 package markehme.factionsplus.listeners;
 
-import org.bukkit.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.event.LandClaimEvent;
-
 import markehme.factionsplus.*;
-import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.*;
+
+import org.bukkit.*;
+import org.bukkit.event.*;
+
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.event.*;
 
 
 

@@ -1,8 +1,8 @@
 package markehme.factionsplus.config;
 
-import org.bukkit.*;
-
 import markehme.factionsplus.config.yaml.*;
+
+import org.bukkit.*;
 
 
 

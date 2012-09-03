@@ -4,11 +4,10 @@ package markehme.factionsplus.Cmds;
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.integration.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdSetJail extends FCommand {
 	public CmdSetJail() {

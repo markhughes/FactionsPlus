@@ -1,19 +1,15 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlusJail;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 import org.bukkit.event.player.*;
 
-import com.massivecraft.factions.event.FPlayerJoinEvent;
+import com.massivecraft.factions.event.*;
 
 public class JailListener implements Listener{
 	@EventHandler

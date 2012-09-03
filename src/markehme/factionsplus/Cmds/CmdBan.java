@@ -1,17 +1,16 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.File;
+import java.io.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.config.sections.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 
 import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.cmd.*;
 import com.massivecraft.factions.event.*;
 import com.massivecraft.factions.struct.*;
 

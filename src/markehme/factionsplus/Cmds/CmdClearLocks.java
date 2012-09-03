@@ -4,12 +4,11 @@ import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.extras.*;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdClearLocks extends FCommand {
 	public CmdClearLocks() {

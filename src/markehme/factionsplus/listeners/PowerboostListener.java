@@ -5,14 +5,12 @@ import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.massivecraft.factions.*;
-import com.massivecraft.factions.struct.*;
 
 public class PowerboostListener implements Listener{
 	

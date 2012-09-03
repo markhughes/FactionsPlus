@@ -12,9 +12,9 @@ import org.bukkit.command.*;
 import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.cmd.*;
 import com.massivecraft.factions.integration.*;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.struct.*;
 
 
 

@@ -2,18 +2,16 @@ package markehme.factionsplus.Cmds;
 
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdRemoveWarp extends FCommand {
 	public CmdRemoveWarp() {

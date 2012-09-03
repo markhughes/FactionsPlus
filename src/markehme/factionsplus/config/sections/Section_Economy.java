@@ -1,13 +1,13 @@
 package markehme.factionsplus.config.sections;
 
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
 import net.milkbowl.vault.economy.*;
 
 import org.bukkit.*;
 import org.bukkit.plugin.*;
 
 import com.massivecraft.factions.*;
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
 
 
 

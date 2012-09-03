@@ -1,14 +1,10 @@
 package markehme.factionsplus.listeners;
 
-import org.bukkit.Chunk;
-import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.*;
 //Warning: REALLY high-resource use check that prevents lava flow between different faction owned territories (say good bye to cobble monsters)
 public class LiquidFlowListener implements Listener{
 	@EventHandler(priority=EventPriority.HIGHEST)

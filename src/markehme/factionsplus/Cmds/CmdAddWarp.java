@@ -6,15 +6,12 @@ import java.io.*;
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdAddWarp extends FCommand {
 	public CmdAddWarp() {

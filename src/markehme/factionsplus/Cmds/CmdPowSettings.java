@@ -4,7 +4,6 @@ import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.config.sections.*;
 import markehme.factionsplus.listeners.*;
 
 import org.bukkit.*;

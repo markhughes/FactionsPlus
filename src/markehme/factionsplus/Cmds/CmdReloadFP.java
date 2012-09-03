@@ -1,7 +1,8 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
 import markehme.factionsplus.config.*;
+
+import org.bukkit.*;
 
 import com.massivecraft.factions.cmd.*;
 import com.massivecraft.factions.struct.*;

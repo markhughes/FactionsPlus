@@ -1,12 +1,12 @@
 package markehme.factionsplus.extras;
 
+import markehme.factionsplus.*;
+import markehme.factionsplus.config.*;
+
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.permissions.*;
-
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
 
 import com.griefcraft.lwc.*;
 import com.griefcraft.scripting.*;

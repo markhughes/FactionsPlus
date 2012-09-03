@@ -1,15 +1,12 @@
 package markehme.factionsplus;
 
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Scanner;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
+import java.net.*;
+import java.util.*;
+
+import markehme.factionsplus.config.*;
 
 import org.bukkit.*;
 import org.bukkit.scheduler.*;
-
-import markehme.factionsplus.config.*;
 
 
 

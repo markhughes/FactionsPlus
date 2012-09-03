@@ -2,8 +2,8 @@ package markehme.factionsplus;
 
 import markehme.factionsplus.config.*;
 
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.*;
+import org.bukkit.configuration.file.*;
 
 public class FactionsPlusTemplates {
 	public static String Go(String templateOption, String args[]) {

@@ -1,12 +1,12 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
-
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import org.bukkit.*;
+
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 
 

@@ -1,20 +1,17 @@
 package markehme.factionsplus;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.*;
 
-import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.Cmds.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.util.*;
 
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.*;
 
 public class FactionsPlusJail {
 	public static Server server;

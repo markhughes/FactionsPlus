@@ -1,27 +1,20 @@
 package markehme.factionsplus.Cmds;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.integration.EssentialsFeatures;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.integration.*;
 import com.massivecraft.factions.struct.*;
-import com.massivecraft.factions.zcore.util.SmokeUtil;
+import com.massivecraft.factions.zcore.util.*;
 
 public class CmdWarp extends FCommand {
 	public CmdWarp() {

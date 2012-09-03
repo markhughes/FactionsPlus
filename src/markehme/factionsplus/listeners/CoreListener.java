@@ -1,24 +1,15 @@
 package markehme.factionsplus.listeners;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import markehme.factionsplus.config.*;
 
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
-
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.event.FactionDisbandEvent;
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.event.*;
 
 public class CoreListener implements Listener{
 	@EventHandler

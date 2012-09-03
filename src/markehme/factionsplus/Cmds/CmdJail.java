@@ -1,13 +1,13 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
-
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.config.sections.Section_Jails;
+import markehme.factionsplus.config.sections.*;
 
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import org.bukkit.*;
+
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdJail extends FCommand {
 	public CmdJail() {

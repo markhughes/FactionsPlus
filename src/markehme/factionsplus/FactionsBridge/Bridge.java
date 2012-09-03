@@ -1,10 +1,10 @@
 package markehme.factionsplus.FactionsBridge;
 
-import org.bukkit.*;
-import org.bukkit.plugin.*;
-
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
+
+import org.bukkit.*;
+import org.bukkit.plugin.*;
 
 
 /**

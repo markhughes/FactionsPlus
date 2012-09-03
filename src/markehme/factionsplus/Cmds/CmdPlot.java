@@ -2,11 +2,11 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.*;
 
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdPlot extends FCommand {
 	public CmdPlot() {

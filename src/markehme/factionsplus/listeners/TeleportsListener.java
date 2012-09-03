@@ -5,6 +5,7 @@ import java.util.*;
 import markehme.factionsplus.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
+
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;

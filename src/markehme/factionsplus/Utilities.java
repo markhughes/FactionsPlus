@@ -7,7 +7,7 @@ import markehme.factionsplus.config.*;
 import markehme.factionsplus.util.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.permissions.*;
 
 import com.massivecraft.factions.*;

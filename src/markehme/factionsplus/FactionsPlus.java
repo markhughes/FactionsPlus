@@ -1,22 +1,21 @@
 package markehme.factionsplus;
 
 import java.io.*;
-import java.util.Set;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
 import markehme.factionsplus.listeners.*;
-import net.milkbowl.vault.permission.Permission;
+import net.milkbowl.vault.permission.*;
 
 import org.bukkit.event.*;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.*;
 
 import com.massivecraft.factions.*;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldedit.bukkit.*;
+import com.sk89q.worldguard.bukkit.*;
 
 public class FactionsPlus extends FactionsPlusPlugin {
 

@@ -1,12 +1,12 @@
 package markehme.factionsplus;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-
 import markehme.factionsplus.Cmds.*;
 import markehme.factionsplus.FactionsBridge.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.extras.*;
+
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
 
 
 

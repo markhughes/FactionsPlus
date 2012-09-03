@@ -2,19 +2,15 @@ package markehme.factionsplus.Cmds;
 
 import java.util.*;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
+import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
-import markehme.factionsplus.config.sections.*;
-import markehme.factionsplus.listeners.*;
 
 import org.bukkit.*;
-import org.bukkit.entity.*;
 import org.bukkit.scheduler.*;
 
 import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdDebug extends FCommand {
 	public CmdDebug() {

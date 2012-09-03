@@ -1,16 +1,16 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.File;
-
-import org.bukkit.ChatColor;
+import java.io.*;
 
 import markehme.factionsplus.*;
 import markehme.factionsplus.config.*;
 import markehme.factionsplus.config.sections.*;
 
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.factions.struct.Permission;
+import org.bukkit.*;
+
+import com.massivecraft.factions.*;
+import com.massivecraft.factions.cmd.*;
+import com.massivecraft.factions.struct.*;
 
 public class CmdUnban extends FCommand {
 	public CmdUnban() {
