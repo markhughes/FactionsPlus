@@ -177,7 +177,7 @@ realize that each "." actually represents a section ie. Teleports: then next lin
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
 
-* unclaiming land where a warp resides will not remove that warp
+* unclaiming land where a warp resides will not remove that warp - this still needs to be fixed
 
 * warps and jail location are not deleted on auto faction disband
 
