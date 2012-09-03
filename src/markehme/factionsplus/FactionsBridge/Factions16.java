@@ -26,6 +26,9 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 	private ArrayList<ArrayList<String>>	instanceOfHelpPages	= null;
 	private Method 							mSetChatMode		= null;
 	private Method 							mGetChatMode		= null;
+	private Field fWarZonePowerLoss=null;
+	private Field fPeacefulMembersDisablePowerLoss=null;
+	private Field fWildernessPowerLoss=null;
 	
 	//maps Factions 1.6 com.massivecraft.factions.struct.ChatMode  to FactionsAny.ChatMode
 	private TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>	mapChatMode		= new TwoWayMapOfNonNulls<Object, FactionsAny.ChatMode>();
@@ -36,6 +39,36 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 		boolean failed = false;
 		
 		try {
+			
+			fWarZonePowerLoss=Conf.class.getField( "warZonePowerLoss");
+			fWildernessPowerLoss=Conf.class.getField("wildernessPowerLoss");
+			fPeacefulMembersDisablePowerLoss=Conf.class.getField("peacefulMembersDisablePowerLoss");
+			//XXX:do not cache here the Field.get() because it's a wrapped primitve boolean into a Boolean when returned and won't point to the updated value later on
+			/*//this will prove the point:
+import java.lang.reflect.*;
+
+
+
+public class Moo1 {
+	public static boolean f1=true;
+	
+	public static void main( String[] args ) throws IllegalArgumentException, IllegalAccessException, SecurityException, NoSuchFieldException {
+		Moo1 m= new Moo1();
+		System.out.println(m.f1);
+		Field f=Moo1.class.getField("f1");
+		Boolean b=(Boolean)f.get(null);
+		System.out.println(b);
+		m.f1=false;
+		System.out.println(b);
+		b=(Boolean)f.get(null);
+		System.out.println(b);
+	}
+}
+
+			 */
+			
+			
+			
 			mSetPeaceful = Faction.class.getMethod( "setPeaceful", boolean.class );
 			
 			mIsPeaceful=Faction.class.getMethod("isPeaceful");
@@ -134,17 +167,19 @@ public class Factions16 extends FactionsBase implements FactionsAny {
 					//warzone always overrides the nopowerlossworlds list even if that is not even considered here
 					//XXX: if you see compile error here, please use Factions.jar for version 1.6.x instead of 1.7.x (or github branch 1.6.x not master)
 					//the .jar will work with 1.7.x version of Faction, once it's compiled anyway.
-					return Conf.warZonePowerLoss;
+					return ((Boolean)fWarZonePowerLoss.get(null)).booleanValue();//Conf.warZonePowerLoss;
 					//TODO: hide these with reflection, so there would be no compile errors!
 				}
 				// not warzone
-				if (Conf.wildernessPowerLoss && Utilities.isWilderness( forFaction )  ) {
+				if ( Utilities.isWilderness( forFaction ) && ((Boolean)fWildernessPowerLoss.get(null)).booleanValue() ) {
 					return true;
 				}
 
-				if (!Conf.peacefulMembersDisablePowerLoss && Utilities.isPeaceful( forFaction ) 
+				if (Utilities.isPeaceful( forFaction ) 
 						&& !Utilities.isWilderness( forFaction )
-						&& !Utilities.isSafeZone( forFaction )) {
+						&& !Utilities.isSafeZone( forFaction )
+						&& !((Boolean)fPeacefulMembersDisablePowerLoss.get(null)).booleanValue()
+						) {
 					return true;
 				}
 				

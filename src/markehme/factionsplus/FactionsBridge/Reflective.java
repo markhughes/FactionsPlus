@@ -133,6 +133,9 @@ public abstract class Reflective {
 					
 					// TODO: some redundant code here(from above 1 of 2 cases) which I can't be bother to compress right now:)
 					V ourFieldInstance = (V)( destField.get( destinationEnum ) );
+					//FIXME: we should make sure that we're not caching the instance of a field which is a primitive, 
+					//else it will fail to see when it gets updated, and thus still point to the old value (ie. imagine boolean 
+					//which is wrapped into Boolean instace by the above Field.get())
 					
 					if ( !ourFieldInstance.getClass().equals( destinationEnum ) ) {
 						// oh well technically this will never happen... because the field instances are not changed
