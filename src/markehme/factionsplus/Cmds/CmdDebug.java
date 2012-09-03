@@ -5,10 +5,12 @@ import java.util.List;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Typeo;
+import markehme.factionsplus.extras.LWCBase;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitWorker;
 
+import com.griefcraft.lwc.LWC;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
@@ -32,6 +34,7 @@ public class CmdDebug extends FCommand {
 	}
 	@Override
 	public void perform() {
+//		sendMessage( LWC.getInstance()+"/"+LWCBase.getLWC() );a plugman reload lwc  will show different instances here
 		// TEMP, remove this completely after this inconsistency is fixed; if it's commented out it means it's not fixed
 //		if ( null != fme ) {
 //			Player player = Bukkit.getPlayerExact( fme.getId() );

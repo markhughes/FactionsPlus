@@ -226,7 +226,8 @@ the used pearl is wasted and a message will show.
 this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
 in other words, locks owned by people in your faction(including you) won't be removed
 
-* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. Permission 'factionsplus.clearlwclocks'
+* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. 
+You need to also have permission 'factionsplus.clearlwclocks' before you can use it.
 
 * /f unban
 
