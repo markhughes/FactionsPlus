@@ -25,7 +25,7 @@ import com.massivecraft.factions.Faction;
 
 public class PowerboostListener implements Listener{
 	
-	public static PowerboostListener powerboostlistener = null;
+	private static PowerboostListener powerboostlistener = null;
 
 	
 	@EventHandler(priority=EventPriority.MONITOR)
@@ -158,17 +158,17 @@ public class PowerboostListener implements Listener{
 
 	public static void startOrStopPowerBoostsListenerAsNeeded() {
 		if ( Config._powerboosts.enabled._ ) {
-			if ( null == PowerboostListener.powerboostlistener ) {
-				PowerboostListener.powerboostlistener = new PowerboostListener();
-				Bukkit.getPluginManager().registerEvents( PowerboostListener.powerboostlistener, FactionsPlus.instance );
+			if ( null == powerboostlistener ) {
+				powerboostlistener = new PowerboostListener();
+				Bukkit.getPluginManager().registerEvents( powerboostlistener, FactionsPlus.instance );
 				FactionsPlus.info("Started PowerBoosts listener");
 			}//else already listening
 			else{
 				FactionsPlus.info("PowerBoosts listener is still active");
 			}
 		} else {
-			if ( null != PowerboostListener.powerboostlistener ) {
-				HandlerList.unregisterAll( PowerboostListener.powerboostlistener );
+			if ( null != powerboostlistener ) {
+				HandlerList.unregisterAll( powerboostlistener );
 				PowerboostListener.powerboostlistener = null;
 				FactionsPlus.info("Removed PowerBoosts listener");
 			}
