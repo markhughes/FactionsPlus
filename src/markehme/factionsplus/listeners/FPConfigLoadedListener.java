@@ -29,8 +29,8 @@ public class FPConfigLoadedListener implements Listener {
         
         FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
         
-        LWCBase.refreshLWC();
-        if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
+//        LWCBase.refreshLWC();
+        if ( LWCBase.isLWCPluginPresent() ) {// LWCFunctions.isLWC() also works here though
 			
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)

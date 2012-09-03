@@ -2,6 +2,7 @@ package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 
 import org.bukkit.ChatColor;
@@ -27,6 +28,10 @@ public class LWCListener implements Listener {
 		} else {
 			FPlayer fPlayer = event.getFPlayer();
 			try {
+				if (!LWCBase.isLWCPluginPresent()) {//ie. run this on server: plugman unload lwc
+					fPlayer.sendMessage( ChatColor.RED+"LWC plugin is not active." );
+					return;
+				}
 				int removedProtections = LWCFunctions.clearLocks( event.getLocation(), fPlayer );
 				if ( removedProtections > 0 ) {
 					fPlayer.sendMessage( ChatColor.GOLD + "Automatically removed " + removedProtections

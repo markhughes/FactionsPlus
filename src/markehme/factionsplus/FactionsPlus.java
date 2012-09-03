@@ -99,7 +99,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			// since we deinited some of our parts
 			
 			try {
-				if ( LWCBase.isLWC() ) {
+				if ( LWCBase.isLWCPluginPresent() ) {
 					LWCFunctions.unhookLWC();
 				}
 			} catch ( Throwable t ) {

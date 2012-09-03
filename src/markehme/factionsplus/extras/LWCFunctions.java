@@ -7,6 +7,7 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.listeners.LWCListener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,6 +41,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	 */
 	public static void hookLWCIfNeeded() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
+		assert LWCBase.isLWCPluginPresent();
 		
 		if ( Config._extras._protection._lwc.removeAllLocksOnClaim._ )  {
 			// register after we integrate
@@ -176,7 +178,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 
 
-	public static boolean checkInTerritory(Player p, Block b) {
+	public static boolean checkInTerritory(Player p, Block b) {//hmm, unused?
 		FPlayer fp = FPlayers.i.get(p);
 		FLocation floc = new FLocation(b.getLocation());
 		Faction owner = Board.getFactionAt(floc);
@@ -190,6 +192,10 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 
 
 	public static int clearLocksCommand(Player name, Location loc) {
+		if (!LWCBase.isLWCPluginPresent()) {
+			name.sendMessage( ChatColor.RED+"LWC plugin is not active." );
+			return -1;
+		}
 		FPlayer fp = FPlayers.i.get(name);
 //		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
 //			name.sendMessage(ChatColor.RED + "No Permission!");
