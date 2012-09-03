@@ -275,6 +275,9 @@ Comments are any lines whose first non-whitespace character is `#`.
 ### Known issues:
 * `/f reloadfp` refreshes only the economy state, ie. if you disabled some options which were previously enabled they 
 may still be in effect after reload (except economy that will auto enabled/disable on reload)
+* `opt-out` option of metrics is set to true when plugin is disabled. Please upgrade to 0.4.8 and after you make sure 0.4.8 is running
+then you may check and set the `opt-out` option as described in 0.4.8's Changelog above, which you may view at this url:
+https://github.com/MarkehMe/FactionsPlus/blob/master/Changelog.md#factionsplus-version-048
 
 # FactionsPlus version 0.4.6
 
