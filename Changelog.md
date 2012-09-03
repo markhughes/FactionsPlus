@@ -183,6 +183,8 @@ it will sometimes show a NoClassDefFoundError exception, this is "normal" and it
 * unloading or reloading only LWC plugin(ie. `plugman reload lwc`) may cause some issues (in theory anyway);
 it's best to stop/start the server instead.
 
+* passing `--plugins <directory>` or `-P <directory>` to bukkit will cause FactionsPlus to refuse to load, unless `<directory>` is `plugins` as per default.
+
 # FactionsPlus version 0.4.7
 
 * max warps fixed
