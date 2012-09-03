@@ -185,6 +185,10 @@ it's best to stop/start the server instead.
 
 * passing `--plugins <directory>` or `-P <directory>` to bukkit will cause FactionsPlus to refuse to load, unless `<directory>` is `plugins` as per default.
 
+* while in admin bypass mode(`/f admin` in Factions 1.7 or `/f bypass` in 1.6) some commands may still not allow you to use them, 
+such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
+
+
 # FactionsPlus version 0.4.7
 
 * max warps fixed
