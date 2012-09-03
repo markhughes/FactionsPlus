@@ -16,7 +16,9 @@ public abstract class LWCBase {
 		lwc=getLWCInstance();
 	}
 	
-	public static LWC getLWC() {//caching this may be evil when something like plugman unloads/reloads lwc
+	public static LWC getLWC() {
+		//FIXME: caching this may be evil when something like plugman unloads/reloads lwc; maybe use LWC.getInstance(), 
+		//for now refreshLWC() does it, but imagine if plugman reloads only the LWC plugin
 		if (null == lwc) {
 			lwc=getLWCInstance();//can still be null
 		}
