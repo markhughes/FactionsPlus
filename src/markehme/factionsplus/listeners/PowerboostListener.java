@@ -7,9 +7,7 @@ import markehme.factionsplus.config.*;
 import org.bukkit.*;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
@@ -17,10 +15,14 @@ import com.massivecraft.factions.*;
 import com.massivecraft.factions.struct.*;
 
 public class PowerboostListener implements Listener{
+	
+	public static PowerboostListener powerboostlistener = null;
+
+	
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
-		
+//		FactionsPlus.info( "inside PB listener");//temp, tested to work with /f reloadfp (and Factions 1.7.x)
 		//1of2
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
@@ -142,5 +144,25 @@ public class PowerboostListener implements Listener{
 		}
 		//
 		return true;
+	}
+
+
+	public static void startOrStopPowerBoostsListenerAsNeeded() {
+		if ( Config._powerboosts.enabled._ ) {
+			if ( null == PowerboostListener.powerboostlistener ) {
+				PowerboostListener.powerboostlistener = new PowerboostListener();
+				Bukkit.getPluginManager().registerEvents( PowerboostListener.powerboostlistener, FactionsPlus.instance );
+				FactionsPlus.info("Started PowerBoosts listener");
+			}//else already listening
+			else{
+				FactionsPlus.info("PowerBoosts listener is still active");
+			}
+		} else {
+			if ( null != PowerboostListener.powerboostlistener ) {
+				HandlerList.unregisterAll( PowerboostListener.powerboostlistener );
+				PowerboostListener.powerboostlistener = null;
+				FactionsPlus.info("Removed PowerBoosts listener");
+			}
+		}
 	}
 }

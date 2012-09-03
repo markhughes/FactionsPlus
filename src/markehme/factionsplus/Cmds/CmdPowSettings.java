@@ -58,18 +58,20 @@ public class CmdPowSettings extends FCommand {
 
 		sm("Player power min/starting/max: "+num(Conf.powerPlayerMin)+"/"+num(Conf.powerPlayerStarting)+"/"+num(Conf.powerPlayerMax));
 
-		sm("Players lose "+num(Conf.powerPerDeath)+" power per death. Add to this the extra loss from below:");
+		sm("Players lose "+num(Conf.powerPerDeath)+" power per death."+(Config._powerboosts.enabled._?" Add to this the extra loss from below:":" Extra losses/gains are not enabled."));
 		// done: show how much power will be lost in all cases (consider Factions+FactionsPlus settings)
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathBySuicide._, "suicide" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByCactus._, "cactus" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByFire._, "fire" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByMob._, "mob" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByPotion._, "potion" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByPVP._, "PVP/player" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByTNT._, "TNT" );
-		showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByOther._, "other" );
-		showExtraGain( Config._powerboosts.extraPowerWhenKillMonster._, "mob" );
-		showExtraGain( Config._powerboosts.extraPowerWhenKillPlayer._, "PVP/player" );
+		if ( Config._powerboosts.enabled._ ) {
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathBySuicide._, "suicide" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByCactus._, "cactus" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByFire._, "fire" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByMob._, "mob" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByPotion._, "potion" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByPVP._, "PVP/player" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByTNT._, "TNT" );
+			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathByOther._, "other" );
+			showExtraGain( Config._powerboosts.extraPowerWhenKillMonster._, "mob" );
+			showExtraGain( Config._powerboosts.extraPowerWhenKillPlayer._, "PVP/player" );
+		}
 
 		sm("Player regenerates "+num(Conf.powerPerMinute)+" power per minute.");
 

@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* `/f reloadfp` now starts/stops the listener for PowerBoosts depending on the powerboosts.`enabled` config setting
+
 * new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
 Any user can use this.
 
@@ -160,7 +162,6 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     - `announce.enabled`
     - `banning.enabled`   
   + will not add/remove the listeners when the following options are changed:
-    - `powerboosts.enabled`
     - `peaceful.enablePeacefulBoosts`
     - `extras.crossBorderLiquidFlowBlock`   
   + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
