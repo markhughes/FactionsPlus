@@ -1,12 +1,13 @@
 package markehme.factionsplus.listeners;
 
-import java.io.*;
+import java.io.File;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.event.*;
+import com.massivecraft.factions.event.FPlayerJoinEvent;
 
 public class BanListener implements Listener{
 	@EventHandler

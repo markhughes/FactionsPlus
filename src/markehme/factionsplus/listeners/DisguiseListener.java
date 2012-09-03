@@ -1,18 +1,22 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import me.desmin88.mobdisguise.api.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.config.Config;
+import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 
-import org.bukkit.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
-import org.bukkit.plugin.*;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.PluginManager;
 
-import pgDev.bukkit.DisguiseCraft.*;
-import pgDev.bukkit.DisguiseCraft.api.*;
+import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
+import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 
 public class DisguiseListener implements Listener {
 	private static final String	MOB_DISGUISE	= "MobDisguise";

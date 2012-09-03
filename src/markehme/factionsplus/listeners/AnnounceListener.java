@@ -1,15 +1,22 @@
 package markehme.factionsplus.listeners;
 
-import java.io.*;
+import java.io.File;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 
 public class AnnounceListener implements Listener{
 	@EventHandler(priority=EventPriority.MONITOR)

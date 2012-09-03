@@ -1,17 +1,28 @@
 package markehme.factionsplus.Cmds;
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusTemplates;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.struct.Permission;
 
 public class CmdAddWarp extends FCommand {
 	public CmdAddWarp() {

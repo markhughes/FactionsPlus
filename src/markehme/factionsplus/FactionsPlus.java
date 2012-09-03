@@ -1,21 +1,32 @@
 package markehme.factionsplus;
 
-import java.io.*;
-import java.util.*;
-import java.util.logging.*;
+import java.io.IOException;
+import java.util.Set;
+import java.util.logging.Logger;
 
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
-import markehme.factionsplus.listeners.*;
-import net.milkbowl.vault.permission.*;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.LWCBase;
+import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.listeners.AnnounceListener;
+import markehme.factionsplus.listeners.BanListener;
+import markehme.factionsplus.listeners.CoreListener;
+import markehme.factionsplus.listeners.FPConfigLoadedListener;
+import markehme.factionsplus.listeners.JailListener;
+import markehme.factionsplus.listeners.LiquidFlowListener;
+import markehme.factionsplus.listeners.PeacefulListener;
+import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.event.*;
-import org.bukkit.plugin.*;
+import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.massivecraft.factions.*;
-import com.sk89q.worldedit.bukkit.*;
-import com.sk89q.worldguard.bukkit.*;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class FactionsPlus extends FactionsPlusPlugin {
 

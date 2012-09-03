@@ -1,11 +1,13 @@
 package markehme.factionsplus.FactionsBridge;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.util.TwoWayMapOfNonNulls;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.Faction;
 
 
 

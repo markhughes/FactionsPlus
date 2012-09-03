@@ -1,6 +1,6 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
 
 public class CmdFC extends BaseCmdChatMode  {
 	public CmdFC() {

@@ -1,9 +1,11 @@
 package markehme.factionsplus.config.sections;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.Option;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayer;
 
 
 public final class Section_Jails {

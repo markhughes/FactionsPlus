@@ -1,17 +1,20 @@
 package markehme.factionsplus.Cmds;
 
-import java.util.*;
+import java.util.Locale;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.listeners.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.listeners.PowerboostListener;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.Conf;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.struct.Permission;
 
 
 public class CmdPowSettings extends FCommand {

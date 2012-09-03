@@ -1,20 +1,27 @@
 package markehme.factionsplus.Cmds;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.DualPack;
+import markehme.factionsplus.util.RunnableWithParams;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.scheduler.BukkitScheduler;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.integration.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.struct.Permission;
 
 
 

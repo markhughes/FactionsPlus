@@ -1,10 +1,12 @@
 package markehme.factionsplus;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.plugin.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Util;
 
 
 /**

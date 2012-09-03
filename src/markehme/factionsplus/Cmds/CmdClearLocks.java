@@ -1,14 +1,16 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.extras.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.extras.LWCFunctions;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.struct.Permission;
 
 public class CmdClearLocks extends FCommand {
 	public CmdClearLocks() {

@@ -1,8 +1,8 @@
 package markehme.factionsplus.config;
 
-import java.util.*;
+import java.util.HashMap;
 
-import markehme.factionsplus.config.yaml.*;
+import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
 /**

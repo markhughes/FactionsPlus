@@ -1,8 +1,8 @@
 package markehme.factionsplus.config;
 
-import markehme.factionsplus.config.yaml.*;
+import markehme.factionsplus.config.yaml.WYIdentifier;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 
 
 

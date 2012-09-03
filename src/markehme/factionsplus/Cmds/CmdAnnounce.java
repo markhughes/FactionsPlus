@@ -2,18 +2,26 @@ package markehme.factionsplus.Cmds;
 
 
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusTemplates;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.integration.*;
-import com.massivecraft.factions.struct.*;
-import com.massivecraft.factions.zcore.util.*;
+import com.massivecraft.factions.Conf;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.zcore.util.TextUtil;
 
 public class CmdAnnounce extends FCommand {
 	public CmdAnnounce() {

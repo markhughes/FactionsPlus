@@ -1,11 +1,15 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.events.*;
-import markehme.factionsplus.extras.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.FactionsPlusUpdate;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.events.FPConfigLoadedEvent;
+import markehme.factionsplus.extras.LWCBase;
+import markehme.factionsplus.extras.LWCFunctions;
 
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 
 

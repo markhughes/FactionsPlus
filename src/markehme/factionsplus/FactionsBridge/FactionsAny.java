@@ -1,8 +1,9 @@
 package markehme.factionsplus.FactionsBridge;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.iface.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.iface.RelationParticipator;
 
 
 

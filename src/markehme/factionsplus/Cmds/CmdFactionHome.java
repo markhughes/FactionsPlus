@@ -1,13 +1,17 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.struct.Permission;
 
 public class CmdFactionHome extends FCommand {
 	Factions factions;

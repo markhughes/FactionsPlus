@@ -1,11 +1,12 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.event.*;
+import com.massivecraft.factions.event.FPlayerJoinEvent;
 
 public class PeacefulListener implements Listener{
 	@EventHandler

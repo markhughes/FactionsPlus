@@ -1,11 +1,14 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.FactionsBridge.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.struct.Permission;
 
 
 public abstract class BaseCmdChatMode extends FCommand{

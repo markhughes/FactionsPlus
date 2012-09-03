@@ -1,6 +1,7 @@
 package markehme.factionsplus.config.sections;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Option;
+import markehme.factionsplus.config.Section;
 
 
 public class SubSection_Protection {

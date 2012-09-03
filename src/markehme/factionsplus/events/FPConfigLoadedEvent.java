@@ -1,6 +1,7 @@
 package markehme.factionsplus.events;
 
-import org.bukkit.event.*;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 
 /**

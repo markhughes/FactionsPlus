@@ -1,10 +1,10 @@
 package markehme.factionsplus.config;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 
-import markehme.factionsplus.config.yaml.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.config.yaml.WYIdentifier;
+import markehme.factionsplus.util.Q;
 
 
 

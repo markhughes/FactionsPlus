@@ -1,17 +1,32 @@
 package markehme.factionsplus.extras;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.*;
-import org.bukkit.block.*;
-import org.bukkit.entity.*;
-import org.bukkit.permissions.*;
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
-import com.griefcraft.lwc.*;
-import com.griefcraft.scripting.*;
-import com.griefcraft.scripting.event.*;
-import com.massivecraft.factions.*;
+import com.griefcraft.lwc.LWC;
+import com.griefcraft.scripting.JavaModule;
+import com.griefcraft.scripting.event.LWCAccessEvent;
+import com.griefcraft.scripting.event.LWCBlockInteractEvent;
+import com.griefcraft.scripting.event.LWCCommandEvent;
+import com.griefcraft.scripting.event.LWCDropItemEvent;
+import com.griefcraft.scripting.event.LWCProtectionDestroyEvent;
+import com.griefcraft.scripting.event.LWCProtectionInteractEvent;
+import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
+import com.griefcraft.scripting.event.LWCProtectionRegistrationPostEvent;
+import com.griefcraft.scripting.event.LWCProtectionRemovePostEvent;
+import com.griefcraft.scripting.event.LWCRedstoneEvent;
+import com.griefcraft.scripting.event.LWCReloadEvent;
+import com.griefcraft.scripting.event.LWCSendLocaleEvent;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 
 
 /**

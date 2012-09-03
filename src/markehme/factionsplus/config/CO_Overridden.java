@@ -1,6 +1,6 @@
 package markehme.factionsplus.config;
 
-import markehme.factionsplus.config.yaml.*;
+import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
 

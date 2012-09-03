@@ -1,9 +1,10 @@
 package markehme.factionsplus.extras;
 
-import org.bukkit.*;
-import org.bukkit.plugin.*;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 
-import com.griefcraft.lwc.*;
+import com.griefcraft.lwc.LWC;
+import com.griefcraft.lwc.LWCPlugin;
 
 
 public abstract class LWCBase {

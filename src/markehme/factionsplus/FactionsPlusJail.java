@@ -1,17 +1,34 @@
 package markehme.factionsplus;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Scanner;
 
-import markehme.factionsplus.Cmds.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.CacheMap;
+import markehme.factionsplus.util.Q;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 
 public class FactionsPlusJail {
 	public static Server server;

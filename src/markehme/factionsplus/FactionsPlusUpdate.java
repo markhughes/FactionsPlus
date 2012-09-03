@@ -1,12 +1,13 @@
 package markehme.factionsplus;
 
-import java.net.*;
-import java.util.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Scanner;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitScheduler;
 
 
 
