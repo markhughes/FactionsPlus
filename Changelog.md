@@ -180,6 +180,9 @@ it will only prevent newly created warps from being in non-owned territory.
 * if you replace the FactionsPlus.jar (and possibly any other .jar which FP depends on) while the server is running and you do a `reload`
 it will sometimes show a NoClassDefFoundError exception, this is "normal" and it is to be ignored.
 
+* unloading or reloading only LWC plugin(ie. `plugman reload lwc`) may cause some issues (in theory anyway);
+it's best to stop/start the server instead.
+
 # FactionsPlus version 0.4.7
 
 * max warps fixed
