@@ -123,6 +123,9 @@ public class CmdPowSettings extends FCommand {
 		}
 		
 		
+		sm("Players & faction-warps "+(Config._warps.mustBeInOwnTerritoryToCreate._?goodColor+"have to":badColor+"don't have to")+
+			msgColor1+" be in the player's own faction's territory for create/teleport-to.");
+		
 		sendMessage(p.txt.getPage(allLines, this.argAsInt(0, 1), "Power settings&stats, page: "));
 	}
 	

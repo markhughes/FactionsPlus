@@ -1,5 +1,11 @@
 # FactionsPlus version 0.4.8
 
+* can no longer use warps to get inside inaccessible places by obstructing their destination.
+
+* if warps.`mustBeInOwnTerritoryToCreate` is true then players can teleport to faction-warps located only inside their own faction's territory. 
+This fixes the possibility for players to have warps in unclaimed territory.
+
+
 * `/f reloadfp` now starts/stops the listener for PowerBoosts depending on the powerboosts.`enabled` config setting
 
 * new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.

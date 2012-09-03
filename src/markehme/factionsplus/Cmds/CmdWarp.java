@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import markehme.factionsplus.EssentialsIntegration;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
@@ -26,6 +27,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.EssentialsFeatures;
 import com.massivecraft.factions.struct.Permission;
@@ -44,7 +46,7 @@ public class CmdWarp extends FCommand {
 		this.errorOnToManyArgs = false;
 
 		senderMustBePlayer = true;
-		senderMustBeMember = false;
+		senderMustBeMember = true;
 
 		this.setHelpShort("warps to a specific warp");
 
@@ -69,7 +71,7 @@ public class CmdWarp extends FCommand {
 
 		Player player = (Player)sender;
 
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
+		FPlayer fplayer = FPlayers.i.get(player);
 
 		Faction currentFaction = fplayer.getFaction();
 
@@ -177,18 +179,42 @@ public class CmdWarp extends FCommand {
 						}
 					}
 
+					Location newTel = new Location(world, x, y, z, Y, playa);
+					
+					if (Config._warps.mustBeInOwnTerritoryToCreate._) {
+						//the the destination warp should be in player's own faction's territory, else deny tp-ing to it
+						//XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
+						//2. disbanding faction or unclaiming land won't remove the warp
+						int count=0;
+						do {
+							FLocation warpFLocation = new FLocation( newTel );
+							String ownfid = fplayer.getFactionId();
+							String warpatFID = Board.getIdAt( warpFLocation );
+							if ( !ownfid.equalsIgnoreCase( warpatFID ) ) {
+								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname
+									+ " <b>because it "+(0<count?"will make you land outside of":"is not in")
+									+" your faction territory. <i>ie. maybe it's obstructed" );
+								return;
+							}
+							newTel=EssentialsIntegration.getSafeDestination( newTel );
+						} while ( ++count < 2 );//XXX:make this 1 to not check for safedestination, or 2 to do check
+					}//else, since warps can be created in non-faction land then you can tp to them.
+					
 					if(Config._economy.costToWarp._ > 0.0d) {
-						if (!payForCommand(Config._economy.costToWarp._, "to teleport to this warp", "for teleporting to your faction home")) {
+						if (!payForCommand(Config._economy.costToWarp._, "to teleport to warp "+warpname, 
+							"for teleporting to faction warp "+warpname)) {
 							return;
 						}
 					}
 
 					player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);
 
-					Location newTel = new Location(world, x, y, z, Y, playa);
+					
 
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
+					//we still don't try to tp to the safe location. I better not be sorry for this
+					newTel=new Location(world, x, y, z, Y, playa);
 					// Create a smoke effect
 					if (Config._warps.smokeEffectOnWarp._) {
 						List<Location> smokeLocations = new ArrayList<Location>();
@@ -199,7 +225,9 @@ public class CmdWarp extends FCommand {
 						SmokeUtil.spawnCloudRandom(smokeLocations, 3f);
 					}
 
-					player.teleport(new Location(world, x, y, z, Y, playa));
+					player.teleport(newTel);
+					//done: investigate if ie. Essentials or something will change the actual tp location if obstructed 
+					//and thus it will land you somewhere else possible a chunk that you don't own
 
 //					in.close();
 
