@@ -3,7 +3,7 @@
 * `/f reloadfp` now starts/stops the listener for PowerBoosts depending on the powerboosts.`enabled` config setting
 
 * new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
-Any user can use this.
+Any user can use this. There are 3 pages, use `/f powsets 2`  and `/f powsets 3` to view page 2 & 3.
 
 * removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
 if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applies, otherwise they are not.   

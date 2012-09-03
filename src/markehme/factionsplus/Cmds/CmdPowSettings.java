@@ -1,5 +1,7 @@
 package markehme.factionsplus.Cmds;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import markehme.factionsplus.Utilities;
@@ -28,6 +30,7 @@ public class CmdPowSettings extends FCommand {
 		this.permission = Permission.HELP.node;
 		this.disableOnLock = false;
 		this.errorOnToManyArgs = true;
+		this.optionalArgs.put("page", "1");
 		
 		this.setHelpShort( "show the settings for power loss or gains" );
 		
@@ -49,11 +52,14 @@ public class CmdPowSettings extends FCommand {
 	private static final String _badDONT=ChatColor.RED+_dont_colorless;
 	
 	
+	private List<String> allLines=new ArrayList<String>();
+	
 	@Override
 	public void perform() {
-		//TODO: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
+		allLines.clear();
+		//done: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
 		
-		sm(ChatColor.GRAY,"---Factions+FactionsPlus power settings/stats---");
+//		sm(ChatColor.GRAY,"---Factions+FactionsPlus power settings/stats---");
 		
 		sm("Factions "+(Conf.powerFactionMax>0.0?badColor+"are limited to "+msgColor1+Conf.powerFactionMax:
 			_goodDONT+" have a limit on")+" max power.");
@@ -115,6 +121,9 @@ public class CmdPowSettings extends FCommand {
 						_goodDONT:_badDO)+
 					" lose power if you died in this spot." );
 		}
+		
+		
+		sendMessage(p.txt.getPage(allLines, this.argAsInt(0, 1), "Power settings&stats, page: "));
 	}
 	
 	private void showExtraLoss( double extraLoss,String deathBy ) {
@@ -138,6 +147,7 @@ public class CmdPowSettings extends FCommand {
 	}
 	
 	private final void sm(ChatColor startColor, String msg) {
-		sender.sendMessage( startColor+msg );
+//		sender.sendMessage( startColor+msg );
+		allLines.add( startColor+msg  );
 	}
 }
