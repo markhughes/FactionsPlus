@@ -115,7 +115,7 @@ Finish
    LWC 4.3.0 tested
    
 8. Factions.jar
-    get 1.6.9.1 (or any latest 1.6 version, not 1.7 else it will give an error on compile):
+    get 1.6.9.1 (or any latest 1.6 version, actually now you may use 1.7 too, it won't err on compile):
     http://dev.bukkit.org/server-mods/factions/files/
     -make sure the file name is Factions.jar  (or modify the classpath yourself to point to it see step. 1)
     -use only one Factions.jar not both, or else you would never spot when you'll use a feature that
@@ -136,11 +136,6 @@ eclipse on the project or the lib folder, else eclipse won't see them.
 If you have all these, the FactionsPlus project should compile without errors.
 
 
-If you see:
-warZonePowerLoss cannot be resolved or is not a field
-then you're using 1.7.x Factions .jar file, or the master branch of Factions project, this gives an error until we fix our inconsistency in FactionsPlus, to fix
-and be able to compile, depending on which variants you're using, please either:
- use 1.6.x Factions .jar file OR switch to the '2.6' named branch of Factions project
 ======================================
 
 
@@ -255,13 +250,8 @@ java.lang.NoSuchFieldError: senderMustBeModerator
 
 to fix: just use the Factions project in Eclipse, without having any Factions .jar files added to FactionsPlus classpath
 you can switch between branches at will:  in Factions  1.6.x branch  and master (aka 1.7 branch)
----
-
----3 (for users or devs)
-warZonePowerLoss cannot be resolved or is not a field
-then you're using 1.7.x Factions .jar file, or the master branch of Factions project, this gives an error until we fix our inconsistency in FactionsPlus, to fix
-and be able to compile, depending on which variants you're using, please either:
- use 1.6.x Factions .jar file OR switch to the '2.6' named branch of Factions project
+OR you may simply use only one Factions.jar and switch between them by editing the Java Build Path->Libraries every time(harder 
+than switching branches)
 ---
 
 ================
