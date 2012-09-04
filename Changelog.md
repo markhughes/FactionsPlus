@@ -14,7 +14,7 @@ This fixes the possibility for players to have warps in unclaimed territory.
   - `extras.crossBorderLiquidFlowBlock`
 
 * new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
-Any user can use this. There are 3 pages, use `/f powsets 2`  and `/f powsets 3` to view page 2 & 3.
+Any user can use this. There are 3 pages, use `/f powsets 2`  and `/f powsets 3` to view page 2 & 3. Can run this from Console, 2 pages there.
 
 * removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
 if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applied, otherwise they are not.   
