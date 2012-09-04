@@ -94,7 +94,7 @@ public class CmdAddWarp extends FCommand {
 			try {
 				currentWarpFile.createNewFile();
 			} catch (Exception e) {
-				System.out.println("[FactionPlus] Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
+				FactionsPlus.warn("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 				sender.sendMessage(ChatColor.RED + "An internal error occured (04)");
 				return;
 			}
@@ -175,7 +175,8 @@ public class CmdAddWarp extends FCommand {
 
 			filewrite.close();
 		} catch (Exception e) {
-			System.out.println("[FactionPlus] Unexpected error " + e.getMessage());
+			FactionsPlus.warn("Unexpected error:");// + e.getMessage());
+			e.printStackTrace();
 			sender.sendMessage(ChatColor.RED + "An internal error occured (05)");
 			return;
 		}
@@ -190,6 +191,7 @@ public class CmdAddWarp extends FCommand {
 
 		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", argsa);
 		// notify all the players in the faction
+//		currentFaction.sendMessage( announcemsg ); //this would work too, same thing
 		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
 			fplayerlisting.msg(announcemsg);
 		}

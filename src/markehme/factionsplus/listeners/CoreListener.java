@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.entity.Player;
@@ -34,8 +35,8 @@ public class CoreListener implements Listener{
 //			event.getPlayer().sendMessage("Yo yo, lets reload FactionsPlus? ;)");
 //		}this had no effect
 		Faction factionHere = Board.getFactionAt(new FLocation(player.getLocation()));
-//FIXME: lots to be fixed here: ie. warzone check and cache those commands from file instead of open/close on every command
-		if(factionHere.getTag().trim().equalsIgnoreCase("WarZone")) {
+//FIXME: lots to be fixed here: ie. cache those commands from file instead of open/close on every command, and test timestamp to know when to reload for changes, or only when /f reloadfp
+		if(Utilities.isWarZone( factionHere)) {
 
 			if (!player.isOp()) {
 				BufferedReader buff=null;
