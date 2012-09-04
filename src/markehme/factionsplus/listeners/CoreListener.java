@@ -27,7 +27,6 @@ public class CoreListener implements Listener{
 		}
 
 		Player player = event.getPlayer();
-		String filterRow = null;
 
 		//FPlayer fplayer = FPlayers.i.get(player.getName());
 
@@ -43,6 +42,7 @@ public class CoreListener implements Listener{
 				try {
 					buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
 
+					String filterRow = null;
 					while ((filterRow = buff.readLine()) != null) {
 						if ((event.getMessage().equalsIgnoreCase(filterRow)) || (event.getMessage().toLowerCase().startsWith(filterRow + " "))) {
 							event.setCancelled(true);
