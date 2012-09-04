@@ -134,8 +134,6 @@ public class PowerboostListener implements Listener{
 	
 	public static final boolean canLosePowerWherePlayerIsAt( Player player ) {
 		Faction factionAtFeet = Board.getFactionAt( new FLocation( player.getLocation() ) );
-		// FPlayer fp=FPlayers.i.get(p);
-		// assert null != fp;
 		return canLosePowerInThisFaction(factionAtFeet, player.getWorld());
 	}
 	
@@ -149,7 +147,6 @@ public class PowerboostListener implements Listener{
 			// warzone will always lose power regardless of worldsNoPowerLoss setting, Factions plugin does this too.
 			if ( !Utilities.isWarZone( faction ) && null != worldName && Conf.worldsNoPowerLoss.contains( worldName.getName() ) )
 			{
-				// fplayer.msg("<i>You didn't lose any power due to the world you died in.");
 				return false;
 			}
 		}
@@ -158,24 +155,4 @@ public class PowerboostListener implements Listener{
 	}
 
 
-//	public static void startOrStopPowerBoostsListenerAsNeeded() {
-//		if ( Config._powerboosts.enabled._ ) {
-//			if ( null == powerboostlistener ) {
-//				powerboostlistener = new PowerboostListener();
-//				Bukkit.getPluginManager().registerEvents( powerboostlistener, FactionsPlus.instance );
-//				FactionsPlus.info("Started PowerBoosts listener");
-//			}//else already listening
-//			else{
-//				FactionsPlus.info("PowerBoosts listener is still active");
-//			}
-//		} else {
-//			if ( null != powerboostlistener ) {
-//				HandlerList.unregisterAll( powerboostlistener );
-//				powerboostlistener = null;
-//				FactionsPlus.info("Removed PowerBoosts listener");
-//			}
-//		}
-//	}
-	
-	
 }

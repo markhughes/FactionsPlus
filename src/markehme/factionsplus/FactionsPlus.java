@@ -97,7 +97,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
-			// since we deinited some of our parts
+			// since we deinited some of our parts; can add an if for each command and check if we're enabled and make it in a base class
 			
 			try {
 				if ( LWCBase.isLWCPluginPresent() ) {
