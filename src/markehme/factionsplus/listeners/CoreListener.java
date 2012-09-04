@@ -65,6 +65,11 @@ public class CoreListener implements Listener{
 	}
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onFactionDisband(FactionDisbandEvent event){
+		//XXX: Factions doesn't call this event on autodisband faction(ie. when all players auto leave after a time) the data below remains
+		//actually this is a good thing, if they want to recreate the faction next time; but a bad thing if someone else recreates it, they
+		//can then use the warps (if any)
+		//XXX: Factions doesn't call this event when the last person(aka faction admin) leaves the faction via /f leave
+		
 		// Clean up old files used by faction
 		// Announcements, bans, rules, jails, warps, etc
 		Faction faction = event.getFaction();
@@ -107,7 +112,7 @@ public class CoreListener implements Listener{
 		}
 		
 		// Warps
-		tempFile = new File(Config.folderWarps,  faction.getId());
+		tempFile = new File( Config.folderWarps, faction.getId() );
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
