@@ -21,7 +21,7 @@ if Factions plugin does make you lose some power then the FactionsPlus extra pow
 Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.   
 This also fixes the error you'd get on console when using Factions 1.7.x when this option was false (which was also broken because it then acted as if it were true)
 
-* MD/DC allows factionless players to disguise, fixes issue #71
+* MD/DC allows factionless players to disguise, fixes issue #71 http://dev.bukkit.org/server-mods/factionsplus/tickets/71-mob-disguise-issue/
 
 * `/f reloadfp` is now reloading the MobDisguise/DisguiseCraft settings(for FactionsPlus) and hooking/unhooking as necessary
 
