@@ -44,12 +44,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
 	
-	public final AnnounceListener announcelistener = new AnnounceListener();
-	public final BanListener banlistener = new BanListener();
 	public final CoreListener corelistener = new CoreListener();
-	public final JailListener jaillistener = new JailListener();
-	public final PeacefulListener peacefullistener = new PeacefulListener();
-	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
+
+//	public final AnnounceListener announcelistener = new AnnounceListener();
+//	public final BanListener banlistener = new BanListener();
+//	public final JailListener jaillistener = new JailListener();
+//	public final PeacefulListener peacefullistener = new PeacefulListener();
+//	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
 	
 
 	
@@ -173,17 +174,25 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config._announce.enabled._){
-    		pm.registerEvents(this.announcelistener, this);
-        }
-        if(Config._banning.enabled._) {
-        	pm.registerEvents(this.banlistener, this);
-        }
-        if(Config._jails.enabled._) {
-        	pm.registerEvents(this.jaillistener, this);
-        }
-        
-        
+//        if(Config._announce.enabled._){
+//    		pm.registerEvents(this.announcelistener, this);
+//        }
+//        if(Config._banning.enabled._) {
+//        	pm.registerEvents(this.banlistener, this);
+//        }
+//        if(Config._jails.enabled._) {
+//        	pm.registerEvents(this.jaillistener, this);
+//        }
+//        
+//        
+//        if(Config._peaceful.enablePeacefulBoosts._) {
+//        	pm.registerEvents(this.peacefullistener, this);
+//        }
+//        
+//        if(Config._extras.crossBorderLiquidFlowBlock._) {
+//        	pm.registerEvents(this.liquidflowlistener, this);
+//        }
+
         
         if(1<2) {        //Temporary Always True Until a Config Option is Created 
         	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
@@ -198,16 +207,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
             }
         }
         
-
-        
-        
-        if(Config._peaceful.enablePeacefulBoosts._) {
-        	pm.registerEvents(this.peacefullistener, this);
-        }
-        
-        if(Config._extras.crossBorderLiquidFlowBlock._) {
-        	pm.registerEvents(this.liquidflowlistener, this);
-        }
 
         
         

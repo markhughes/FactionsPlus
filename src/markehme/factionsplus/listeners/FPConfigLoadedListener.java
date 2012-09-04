@@ -64,6 +64,13 @@ public class FPConfigLoadedListener implements Listener {
         DisguiseListener.enableOrDisable(FactionsPlus.instance);
         
         
-        PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
+		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
+		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._announce.enabled._, AnnounceListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._banning.enabled._, BanListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._jails.enabled._, JailListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._peaceful.enablePeacefulBoosts._, PeacefulListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
+        
 	}//onConfigLoaded method ends
 }

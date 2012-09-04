@@ -26,7 +26,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 
 
-public class Utilities {
+public abstract class Utilities {
 	/* ********** FILE RELATED ********** */
 	
 	public static String readFileAsString(File filePath) {

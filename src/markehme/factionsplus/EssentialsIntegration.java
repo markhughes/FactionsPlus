@@ -84,6 +84,7 @@ public abstract class EssentialsIntegration {
 	 * @return the instance or null
 	 */
 	private synchronized static final IEssentials getEssentialsInstance() {
+		//FIXME: caching the instance should be a bad idea if something like plugman reloads or unloads only the Essentials plugin
 		if ( null == ess ) {
 			// lazyly init or : maybe add depend (not soft) in plugin.yml
 			Plugin essPlugin = Bukkit.getPluginManager().getPlugin( pluginName );

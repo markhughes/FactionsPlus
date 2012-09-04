@@ -1,5 +1,7 @@
 package markehme.factionsplus.listeners;
 
+import java.util.HashMap;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
@@ -156,22 +158,24 @@ public class PowerboostListener implements Listener{
 	}
 
 
-	public static void startOrStopPowerBoostsListenerAsNeeded() {
-		if ( Config._powerboosts.enabled._ ) {
-			if ( null == powerboostlistener ) {
-				powerboostlistener = new PowerboostListener();
-				Bukkit.getPluginManager().registerEvents( powerboostlistener, FactionsPlus.instance );
-				FactionsPlus.info("Started PowerBoosts listener");
-			}//else already listening
-			else{
-				FactionsPlus.info("PowerBoosts listener is still active");
-			}
-		} else {
-			if ( null != powerboostlistener ) {
-				HandlerList.unregisterAll( powerboostlistener );
-				PowerboostListener.powerboostlistener = null;
-				FactionsPlus.info("Removed PowerBoosts listener");
-			}
-		}
-	}
+//	public static void startOrStopPowerBoostsListenerAsNeeded() {
+//		if ( Config._powerboosts.enabled._ ) {
+//			if ( null == powerboostlistener ) {
+//				powerboostlistener = new PowerboostListener();
+//				Bukkit.getPluginManager().registerEvents( powerboostlistener, FactionsPlus.instance );
+//				FactionsPlus.info("Started PowerBoosts listener");
+//			}//else already listening
+//			else{
+//				FactionsPlus.info("PowerBoosts listener is still active");
+//			}
+//		} else {
+//			if ( null != powerboostlistener ) {
+//				HandlerList.unregisterAll( powerboostlistener );
+//				powerboostlistener = null;
+//				FactionsPlus.info("Removed PowerBoosts listener");
+//			}
+//		}
+//	}
+	
+	
 }

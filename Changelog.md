@@ -5,8 +5,13 @@
 * if warps.`mustBeInOwnTerritoryToCreate` is true then players can teleport to faction-warps located only inside their own faction's territory. 
 This fixes the possibility for players to have warps in unclaimed territory.
 
-
-* `/f reloadfp` now starts/stops the listener for PowerBoosts depending on the powerboosts.`enabled` config setting
+* `/f reloadfp` now starts/stops the listener when the following config options change state(while it previously didn't do so):   
+  - `powerboosts.enabled`
+  - `announce.enabled`
+  - `banning.enabled`
+  - `jails.enabled`
+  - `peaceful.enablePeacefulBoosts`
+  - `extras.crossBorderLiquidFlowBlock`
 
 * new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
 Any user can use this. There are 3 pages, use `/f powsets 2`  and `/f powsets 3` to view page 2 & 3.
@@ -167,9 +172,6 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     - `jails.enabled`
     - `announce.enabled`
     - `banning.enabled`   
-  + will not add/remove the listeners when the following options are changed:
-    - `peaceful.enablePeacefulBoosts`
-    - `extras.crossBorderLiquidFlowBlock`   
   + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
   + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
   + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
