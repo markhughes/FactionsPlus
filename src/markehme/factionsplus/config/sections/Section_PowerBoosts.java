@@ -1,6 +1,6 @@
 package markehme.factionsplus.config.sections;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Option;
 
 
 public final class Section_PowerBoosts {
@@ -70,10 +70,5 @@ public final class Section_PowerBoosts {
 	public  final _double extraPowerLossIfDeathByOther=new _double( 0.0d );
 
 
-	@Option(oldAliases_alwaysDotted={
-			"respectFactionsWarZonePowerLossRules"
-			}, realAlias_inNonDottedFormat = "respectFactionsWarZonePowerLossRules" )
-		public  final _boolean respectFactionsWarZonePowerLossRules=new _boolean(true);	
-	
 	
 }

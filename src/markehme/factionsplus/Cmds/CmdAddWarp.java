@@ -1,10 +1,18 @@
 package markehme.factionsplus.Cmds;
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusTemplates;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -13,10 +21,9 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdAddWarp extends FCommand {
+public class CmdAddWarp extends FPCommand {
 	public CmdAddWarp() {
 		this.aliases.add("createwarp");
 		this.aliases.add("addwarp");
@@ -37,7 +44,7 @@ public class CmdAddWarp extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		String warpname = this.argAsString(0);
 
 		String pass = null;
@@ -86,7 +93,7 @@ public class CmdAddWarp extends FCommand {
 			try {
 				currentWarpFile.createNewFile();
 			} catch (Exception e) {
-				System.out.println("[FactionPlus] Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
+				FactionsPlus.warn("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
 				sender.sendMessage(ChatColor.RED + "An internal error occured (04)");
 				return;
 			}
@@ -167,7 +174,8 @@ public class CmdAddWarp extends FCommand {
 
 			filewrite.close();
 		} catch (Exception e) {
-			System.out.println("[FactionPlus] Unexpected error " + e.getMessage());
+			FactionsPlus.warn("Unexpected error:");// + e.getMessage());
+			e.printStackTrace();
 			sender.sendMessage(ChatColor.RED + "An internal error occured (05)");
 			return;
 		}
@@ -182,6 +190,7 @@ public class CmdAddWarp extends FCommand {
 
 		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", argsa);
 		// notify all the players in the faction
+//		currentFaction.sendMessage( announcemsg ); //this would work too, same thing
 		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
 			fplayerlisting.msg(announcemsg);
 		}

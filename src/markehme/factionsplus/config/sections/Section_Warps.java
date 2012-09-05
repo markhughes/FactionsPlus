@@ -1,9 +1,10 @@
 package markehme.factionsplus.config.sections;
 
-import com.massivecraft.factions.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.Option;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import com.massivecraft.factions.FPlayer;
 
 
 public final class Section_Warps{

@@ -1,8 +1,8 @@
 package markehme.factionsplus.config;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
 
-import markehme.factionsplus.config.yaml.*;
+import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
 

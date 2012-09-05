@@ -1,13 +1,14 @@
 package markehme.factionsplus;
 
-import java.util.logging.*;
+import java.util.logging.Level;
 
-import markehme.factionsplus.extras.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.extras.BailingOutException;
+import markehme.factionsplus.util.Q;
 
-import org.bukkit.*;
-import org.bukkit.configuration.file.*;
-import org.bukkit.plugin.java.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 
 

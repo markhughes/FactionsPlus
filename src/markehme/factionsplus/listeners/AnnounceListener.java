@@ -2,8 +2,8 @@ package markehme.factionsplus.listeners;
 
 import java.io.File;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

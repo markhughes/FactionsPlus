@@ -1,32 +1,47 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
+import markehme.factionsplus.config.Config;
 
+import org.bukkit.World;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.massivecraft.factions.Board;
+import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
 
 public class PowerboostListener implements Listener{
+	
+	private static PowerboostListener powerboostlistener = null;
+
+	
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
-		if (!checkFactionsSettings(event)) {
-			return;
-		}
-		if (Utilities.noPowerLossWorld(event.getEntity().getWorld())) {
-			return;
-		}
+//		FactionsPlus.info( "inside PB listener");//temp, tested to work with /f reloadfp (and Factions 1.7.x)
+		//1of2
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
+			
+			if (!canLosePowerWherePlayerIsAt(p)) {
+				// this check is supposed to be for Player only, maybe move the call for this method below
+				//we don't want this check to happen on every entity death on the server
+//				FactionsPlus.info( "no power loss");
+				return;//this will deny extra gain or loss from below
+			}
+//			FactionsPlus.info( "would lose power");
+			
+			
 			EntityDamageEvent ldc = event.getEntity().getLastDamageCause();//it can be null, see issue 60
 			if (null == ldc) {
 				//"null if hitherto unharmed"
@@ -94,36 +109,45 @@ public class PowerboostListener implements Listener{
 				}
 			}
 		}
+		
+		//2of2
 		if(event.getEntity() instanceof Monster) {
-			if ( event.getEntity().getKiller() == null) {
+			Player k = event.getEntity().getKiller();
+			if (k == null) {
 				return;
 			}
 			if ( Config._powerboosts.extraPowerWhenKillMonster._ > 0.0D) {
-				Player k = event.getEntity().getKiller();
-				Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillMonster._);
+				// done: Block power GAINS in powerloss disabled regions as well: this is gonna be tricky
+				if (canLosePowerWherePlayerIsAt(k)) {//this IF is here to save some CPU cycles since likely the 0 value is above
+					//allow increase only if player can also lose ie. disallow gain in worldsNoPowerLoss worlds 
+					Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillMonster._);
+				}
 			}
 		}
 	}
 
-	private boolean checkFactionsSettings(EntityDeathEvent event) {
-		//FIXME: 1.7 doesn't have: warZonePowerLoss and wildernessPowerLoss
-		if (!Config._powerboosts.respectFactionsWarZonePowerLossRules._ && (!com.massivecraft.factions.Conf.warZonePowerLoss || !com.massivecraft.factions.Conf.wildernessPowerLoss || com.massivecraft.factions.Conf.worldsNoPowerLoss != null)) {
-			if (event.getEntity() == null || !(event.getEntity() instanceof Player)) {
-				return true; // Means we should continue with the rest of the code, as the dead entity is not a player and as such not subject to factions
-				//TODO: Block power GAINS in powerloss disabled regions as well
-			}
-			FLocation floc = new FLocation(event.getEntity().getLocation());
-			Faction owningFaction = Board.getFactionAt(floc);
-			if(Utilities.isWilderness( owningFaction) && !com.massivecraft.factions.Conf.wildernessPowerLoss) {
-				return false;
-			}
-			if(Utilities.isWarZone( owningFaction) && !com.massivecraft.factions.Conf.warZonePowerLoss) {
-				return false;
-			}
-			if(Utilities.isSafeZone(owningFaction)) {
+	
+	public static final boolean canLosePowerWherePlayerIsAt( Player player ) {
+		Faction factionAtFeet = Board.getFactionAt( new FLocation( player.getLocation() ) );
+		return canLosePowerInThisFaction(factionAtFeet, player.getWorld());
+	}
+	
+	public static final boolean canLosePowerInThisFaction(Faction faction, World worldName) {
+		if ( !Bridge.factions.getFlag( faction, FactionsAny.FFlag.POWERLOSS ) ) {//this handles safezone too
+			return false;
+		} else {
+			// safezone check is not needed here because both 1.6 bridge and 1.7 powerloss are false for safezone,
+			// except that 1.7 can set it to true if wanted but it's false by default in factions.json
+			
+			// warzone will always lose power regardless of worldsNoPowerLoss setting, Factions plugin does this too.
+			if ( !Utilities.isWarZone( faction ) && null != worldName && Conf.worldsNoPowerLoss.contains( worldName.getName() ) )
+			{
 				return false;
 			}
 		}
+		//
 		return true;
 	}
+
+
 }

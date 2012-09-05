@@ -2,7 +2,7 @@ package markehme.factionsplus.listeners;
 
 import java.io.File;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,6 +1,6 @@
 package markehme.factionsplus.config.sections;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Option;
 
 
 public final class SubSection_LWC {

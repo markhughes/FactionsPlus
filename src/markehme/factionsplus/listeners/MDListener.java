@@ -1,10 +1,10 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

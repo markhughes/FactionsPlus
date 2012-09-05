@@ -1,6 +1,6 @@
 package markehme.factionsplus;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;

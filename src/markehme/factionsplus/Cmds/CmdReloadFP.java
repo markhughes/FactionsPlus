@@ -1,21 +1,21 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import org.bukkit.ChatColor;
+
+import com.massivecraft.factions.struct.Permission;
 
 
 
-public class CmdReloadFP extends FCommand {
+public class CmdReloadFP extends FPCommand {
 	
 	public CmdReloadFP() {
 		super();
 		this.aliases.add( "reloadfp" );
 		
 		this.optionalArgs.put( "all|conf|templates", "all");
-		
+		//XXX: only people that have factions.reload  permission can use /f reloadfp
 		this.permission = Permission.RELOAD.node;
 		this.disableOnLock = false;
 		
@@ -30,7 +30,7 @@ public class CmdReloadFP extends FCommand {
 	
 	@SuppressWarnings( "boxing" )
 	@Override
-	public void perform() {
+	public void performfp() {
 		long startTime = System.nanoTime();
 		String what = this.argAsString( 0, "all" ).toLowerCase();
 		String fileWhat = null;

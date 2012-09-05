@@ -1,13 +1,16 @@
 package markehme.factionsplus.config;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
-import org.bukkit.*;
-import org.bukkit.command.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.util.Q;
+import markehme.factionsplus.util.TypedLinkedList;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
 
 

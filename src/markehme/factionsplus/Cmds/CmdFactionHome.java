@@ -1,18 +1,18 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdFactionHome extends FCommand {
+public class CmdFactionHome extends FPCommand {
 	Factions factions;
 	FPlayers fplayers;
 	Faction faction;
@@ -32,7 +32,7 @@ public class CmdFactionHome extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		String factionName = this.argAsString(0).toString();
 		Faction currentF = Factions.i.getByTag(factionName);
 		
@@ -49,6 +49,8 @@ public class CmdFactionHome extends FCommand {
 					player.sendMessage("That faction doesn't have a home!");
 				}
 			}
+		}else {
+			sendMessage( ChatColor.RED+"No permission to use this command!" );
 		}
 	}
 }
