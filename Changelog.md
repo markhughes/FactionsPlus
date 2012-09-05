@@ -77,7 +77,7 @@ previously it was LEAVE reason; the banned player is also deinvited from that fa
 `factionsplus.ban` and `factionsplus.unban` permissions are completely ignored, please use `factionsplus.banunban` permission 
 node instead which only has effect if the new option `furtherRestrictBanUnBanToThoseThatHavePermission` is `true`(false by default) in config(explained by comments inside the config after one run)
 
-* while `disableUpdateCheck` is `true` the checking for new version of the plugin will be done automatically every time 
+* while `disableUpdateCheck` is `false` the checking for new version of the plugin will be done automatically every time 
 the plugin is enabled(ie. bukkit server start) and every 24 hours.
 
 * you're now informed on console when the state changes for teleports listening due to ie. `/f reloadfp` and you changing the
