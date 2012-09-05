@@ -6,6 +6,8 @@ import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
 
+import org.bukkit.ChatColor;
+
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.struct.Permission;
 
@@ -38,7 +40,7 @@ public abstract class BaseCmdChatMode extends FPCommand{
 	@Override
 	public final void performfp() {
 		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact( fme), strPermission )) {
-			fme.msg("No permission!");
+			fme.msg(ChatColor.RED+"No permission!");
 			return;
 		}	
 		changeChatMode(fme,cMode);

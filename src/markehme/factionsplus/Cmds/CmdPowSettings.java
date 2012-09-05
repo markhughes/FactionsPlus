@@ -59,7 +59,6 @@ public class CmdPowSettings extends FPCommand {
 		//done: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
 		
 //		sm(ChatColor.GRAY,"---Factions+FactionsPlus power settings/stats---");
-		
 		sm("Factions "+(Conf.powerFactionMax>0.0?badColor+"are limited to "+msgColor1+Conf.powerFactionMax:
 			_goodDONT+" have a limit on")+" max power.");
 
@@ -100,6 +99,9 @@ public class CmdPowSettings extends FPCommand {
 		if (sender instanceof Player) {
 			Player player = (Player)sender;
 			FPlayer fplayer=FPlayers.i.get( player );
+			if (Utilities.isJailed( player )) {
+				sm(ChatColor.RED+"You are currently in jail.");
+			}
 			sm("Your exact current power is "+num(fplayer.getPower()));
 			
 			boolean noLossWorld=Utilities.noPowerLossWorld( player.getWorld() );

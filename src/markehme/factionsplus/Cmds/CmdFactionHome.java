@@ -49,6 +49,8 @@ public class CmdFactionHome extends FPCommand {
 					player.sendMessage("That faction doesn't have a home!");
 				}
 			}
+		}else {
+			sendMessage( ChatColor.RED+"No permission to use this command!" );
 		}
 	}
 }

@@ -58,7 +58,7 @@ public class CmdToggleState extends FPCommand {
 
 		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getTag())) ) {
 			if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.others")) {
-				sender.sendMessage(ChatColor.RED + "No permission!");
+				sender.sendMessage(ChatColor.RED + "No permission to toggle peaceful for other factions!");
 				return;
 			}else {//here if either has that perm or is Op
 				authallow|=sender.isOp();

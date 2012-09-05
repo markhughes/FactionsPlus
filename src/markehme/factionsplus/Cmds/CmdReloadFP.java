@@ -15,7 +15,7 @@ public class CmdReloadFP extends FPCommand {
 		this.aliases.add( "reloadfp" );
 		
 		this.optionalArgs.put( "all|conf|templates", "all");
-		
+		//XXX: only people that have factions.reload  permission can use /f reloadfp
 		this.permission = Permission.RELOAD.node;
 		this.disableOnLock = false;
 		

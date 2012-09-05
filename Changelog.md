@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* added permissions in plugin.yml
+
+* jail/unjail now tells everyone in faction which player was jailed and by whom.
+
 * 3 new options inside the subsection `extras`.`protection`.`pvp`: `denyClaimWhenEnemyNearBy`, 
 `denyClaimWhenAllyNearBy`, `denyClaimWhenNeutralNearBy`, which when true(by default only Enemy), 
 will deny players to /f claim a chunk if other players are in that chunk.
