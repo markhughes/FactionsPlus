@@ -71,6 +71,7 @@ public class FPConfigLoadedListener implements Listener {
 		Listen.startOrStopListenerAsNeeded( Config._jails.enabled._, JailListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._peaceful.enablePeacefulBoosts._, PeacefulListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
         
 	}//onConfigLoaded method ends
 }

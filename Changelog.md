@@ -1,5 +1,10 @@
 # FactionsPlus version 0.4.8
 
+* 3 new options inside the subsection `extras`.`protection`.`pvp`: `denyClaimWhenEnemyNearBy`, 
+`denyClaimWhenAllyNearBy`, `denyClaimWhenNeutralNearBy`, which when true(by default only Enemy), 
+will deny players to /f claim a chunk if other players are in that chunk.
+https://github.com/MassiveCraft/Factions/issues/157
+
 * plugman compatibility improved: FactionsPlus commands show an unavailability error message when trying to be used 
 while FactionsPlus plugin is disabled (which can happen by using a plugin called plugman ie. `plugman disable factionsplus`).
 Even though the commands still show in Faction's help (`/f help`).
