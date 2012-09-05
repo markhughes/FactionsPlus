@@ -309,8 +309,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			}
 			
 		} catch ( Exception e ) {
-			e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut( "something failed when ensuring the folders exist" );
+			throw FactionsPlusPlugin.bailOut(e, "something failed when ensuring the folders exist" );
 		}
 	}
 	
