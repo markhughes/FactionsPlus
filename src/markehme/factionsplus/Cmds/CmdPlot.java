@@ -6,10 +6,9 @@ import markehme.factionsplus.Utilities;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdPlot extends FCommand {
+public class CmdPlot extends FPCommand {
 	public CmdPlot() {
 		this.aliases.add("plot");
 		
@@ -27,7 +26,7 @@ public class CmdPlot extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		if(! (FactionsPlus.isWorldEditEnabled && FactionsPlus.isWorldGuardEnabled)) {
 			fme.msg("This server does not have WorldGuard and WorldEdit enabled, and therefore this command can not be used.");
 			return;

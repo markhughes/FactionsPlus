@@ -9,13 +9,8 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
-import markehme.factionsplus.listeners.AnnounceListener;
-import markehme.factionsplus.listeners.BanListener;
 import markehme.factionsplus.listeners.CoreListener;
 import markehme.factionsplus.listeners.FPConfigLoadedListener;
-import markehme.factionsplus.listeners.JailListener;
-import markehme.factionsplus.listeners.LiquidFlowListener;
-import markehme.factionsplus.listeners.PeacefulListener;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.event.HandlerList;

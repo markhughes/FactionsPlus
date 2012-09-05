@@ -10,10 +10,9 @@ import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 //import com.massivecraft.factions.struct;
 
-public class CmdToggleState extends FCommand {
+public class CmdToggleState extends FPCommand {
 	
 	public CmdToggleState() {
 		super();
@@ -38,7 +37,7 @@ public class CmdToggleState extends FCommand {
 	
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		
 		String factionToggling = this.argAsString(0);
 		Faction factiont;

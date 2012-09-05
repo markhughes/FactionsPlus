@@ -4,12 +4,11 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
 
 
-public class CmdReloadFP extends FCommand {
+public class CmdReloadFP extends FPCommand {
 	
 	public CmdReloadFP() {
 		super();
@@ -31,7 +30,7 @@ public class CmdReloadFP extends FCommand {
 	
 	@SuppressWarnings( "boxing" )
 	@Override
-	public void perform() {
+	public void performfp() {
 		long startTime = System.nanoTime();
 		String what = this.argAsString( 0, "all" ).toLowerCase();
 		String fileWhat = null;

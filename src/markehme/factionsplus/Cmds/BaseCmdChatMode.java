@@ -7,11 +7,10 @@ import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
 
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
 
-public abstract class BaseCmdChatMode extends FCommand{
+public abstract class BaseCmdChatMode extends FPCommand{
 	protected final FactionsAny.ChatMode cMode;
 	private final String strPermission;
 
@@ -37,7 +36,7 @@ public abstract class BaseCmdChatMode extends FCommand{
 	}
 	
 	@Override
-	public final void perform() {
+	public final void performfp() {
 		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact( fme), strPermission )) {
 			fme.msg("No permission!");
 			return;

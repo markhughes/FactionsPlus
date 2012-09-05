@@ -15,10 +15,9 @@ import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdListWarps extends FCommand  {
+public class CmdListWarps extends FPCommand  {
 	public CmdListWarps() {
 		this.aliases.add("listwarps");
 
@@ -36,7 +35,7 @@ public class CmdListWarps extends FCommand  {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		Faction currentFaction = myFaction;
 		
 		if(this.argAsString(0) != null) {

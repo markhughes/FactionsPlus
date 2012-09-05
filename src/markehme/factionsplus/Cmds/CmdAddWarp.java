@@ -21,10 +21,9 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdAddWarp extends FCommand {
+public class CmdAddWarp extends FPCommand {
 	public CmdAddWarp() {
 		this.aliases.add("createwarp");
 		this.aliases.add("addwarp");
@@ -45,7 +44,7 @@ public class CmdAddWarp extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		String warpname = this.argAsString(0);
 
 		String pass = null;

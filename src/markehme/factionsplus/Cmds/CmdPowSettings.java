@@ -15,11 +15,10 @@ import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
 
-public class CmdPowSettings extends FCommand {
+public class CmdPowSettings extends FPCommand {
 	
 	public CmdPowSettings() {
 		this.aliases.add( "powsets" );
@@ -55,7 +54,7 @@ public class CmdPowSettings extends FCommand {
 	private List<String> allLines=new ArrayList<String>();
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		allLines.clear();
 		//done: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
 		

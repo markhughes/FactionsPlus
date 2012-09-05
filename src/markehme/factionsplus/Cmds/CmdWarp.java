@@ -27,13 +27,11 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.EssentialsFeatures;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.zcore.util.SmokeUtil;
 
-public class CmdWarp extends FCommand {
+public class CmdWarp extends FPCommand {
 	public CmdWarp() {
 		this.aliases.add("warp");
 
@@ -53,7 +51,7 @@ public class CmdWarp extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		String warpname = this.argAsString(0);
 		String setPassword = null;
 

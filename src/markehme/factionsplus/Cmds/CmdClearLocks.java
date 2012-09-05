@@ -9,10 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdClearLocks extends FCommand {
+public class CmdClearLocks extends FPCommand {
 	public CmdClearLocks() {
 		this.aliases.add("clearlocks");
 		this.errorOnToManyArgs = true;
@@ -29,7 +28,7 @@ public class CmdClearLocks extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		if(!FactionsPlus.permission.has(sender, "factionsplus.clearlwclocks")) {
 			sender.sendMessage(ChatColor.RED + "You don't have permission to use this command!");
 			return;

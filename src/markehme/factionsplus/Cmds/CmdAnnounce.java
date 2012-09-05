@@ -18,12 +18,11 @@ import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.zcore.util.TextUtil;
 
-public class CmdAnnounce extends FCommand {
+public class CmdAnnounce extends FPCommand {
 	public CmdAnnounce() {
 		this.aliases.add("announce");
 		this.errorOnToManyArgs = false;
@@ -40,7 +39,7 @@ public class CmdAnnounce extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		if(!FactionsPlus.permission.has(sender, "factionsplus.announce")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;

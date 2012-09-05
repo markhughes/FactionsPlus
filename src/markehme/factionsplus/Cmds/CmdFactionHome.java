@@ -10,10 +10,9 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdFactionHome extends FCommand {
+public class CmdFactionHome extends FPCommand {
 	Factions factions;
 	FPlayers fplayers;
 	Faction faction;
@@ -33,7 +32,7 @@ public class CmdFactionHome extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		String factionName = this.argAsString(0).toString();
 		Faction currentF = Factions.i.getByTag(factionName);
 		

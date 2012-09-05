@@ -16,11 +16,10 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.P;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdBan extends FCommand {
+public class CmdBan extends FPCommand {
 	public CmdBan() {
 		this.aliases.add("ban");
 
@@ -40,7 +39,7 @@ public class CmdBan extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		String banningThisPlayer = this.argAsString(0);
 		Faction pFaction = fme.getFaction();
 		assert null != pFaction;

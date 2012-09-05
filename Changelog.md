@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* plugman compatibility improved: FactionsPlus commands show an unavailability error message when trying to be used 
+while FactionsPlus plugin is disabled (which can happen by using a plugin called plugman ie. `plugman disable factionsplus`).
+Even though the commands still show in Faction's help (`/f help`).
+
 * warps/announcements/bans/jail/rules data are now removed for the faction that gets disbanded when the last player 
 does /f leave  or on autoLeaveOnInactivityRoutine(if it causes the faction to be disbanded).
 Previously only /f disband would do so.
@@ -195,6 +199,8 @@ it will sometimes show a NoClassDefFoundError exception, this is "normal" and it
 * while in admin bypass mode(`/f admin` in Factions 1.7 or `/f bypass` in 1.6) some commands may still not allow you to use them, 
 such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
 
+* due to how `plugman` plugin works trying to load FP by using `plugman load factionsplus` will not load, 
+but other plugman commands like reload, disable, enable will work.
 
 # FactionsPlus version 0.4.7
 

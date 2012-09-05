@@ -19,13 +19,12 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Permission;
 
 
 
-public class CmdMoneyTop extends FCommand {
+public class CmdMoneyTop extends FPCommand {
 	private static final int	shownPerPage	= 10;
 	
 	// will sort no more than once every 30 sec, but only when the command is issued
@@ -172,7 +171,7 @@ public class CmdMoneyTop extends FCommand {
 	};
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		assert !alreadyIn:"this should never happen right? due to events `happening` sequentially";
 		alreadyIn = true;
 		try {
