@@ -207,6 +207,9 @@ such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
 * due to how `plugman` plugin works trying to load FP by using `plugman load factionsplus` will not load, 
 but other plugman commands like reload, disable, enable will work.
 
+* reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
+Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
+
 # FactionsPlus version 0.4.7
 
 * max warps fixed
