@@ -1,15 +1,18 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
+import markehme.factionsplus.config.Config;
+
 import org.bukkit.ChatColor;
+
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 //import com.massivecraft.factions.struct;
-import com.massivecraft.factions.cmd.FCommand;
 
-public class CmdToggleState extends FCommand {
+public class CmdToggleState extends FPCommand {
 	
 	public CmdToggleState() {
 		super();
@@ -34,7 +37,7 @@ public class CmdToggleState extends FCommand {
 	
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		
 		String factionToggling = this.argAsString(0);
 		Faction factiont;
@@ -55,7 +58,7 @@ public class CmdToggleState extends FCommand {
 
 		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getTag())) ) {
 			if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.others")) {
-				sender.sendMessage(ChatColor.RED + "No permission!");
+				sender.sendMessage(ChatColor.RED + "No permission to toggle peaceful for other factions!");
 				return;
 			}else {//here if either has that perm or is Op
 				authallow|=sender.isOp();
@@ -91,13 +94,14 @@ public class CmdToggleState extends FCommand {
 		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
 		
 		
-		if(!factiont.isPeaceful()) {//done: is economy enabled ?!
+		if(!Utilities.isPeaceful(factiont)) {//done: is economy enabled ?!
 			//if faction wasn't already peaceful, then we set it
 			if ( (!Config._economy.isHooked())
 					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
 						"for setting faction `"+factiont.getTag()+"` to peaceful")) ) {
 				
-				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
+//				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
+				Utilities.setPeaceful(factiont);
 				
 				sender.sendMessage("You have toggled the faction `"+factiont.getTag()+"` to Peaceful!");
 			}

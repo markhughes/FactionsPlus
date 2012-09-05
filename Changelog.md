@@ -1,6 +1,44 @@
 # FactionsPlus version 0.4.8
 
-* MD/DC allows factionless players to disguise, fixes issue #71
+* added permissions in plugin.yml
+
+* jail/unjail now tells everyone in faction which player was jailed and by whom.
+
+* 3 new options inside the subsection `extras`.`protection`.`pvp`: `denyClaimWhenEnemyNearBy`, 
+`denyClaimWhenAllyNearBy`, `denyClaimWhenNeutralNearBy`, which when true(by default only Enemy), 
+will deny players to /f claim a chunk if other players are in that chunk.
+https://github.com/MassiveCraft/Factions/issues/157
+
+* plugman compatibility improved: FactionsPlus commands show an unavailability error message when trying to be used 
+while FactionsPlus plugin is disabled (which can happen by using a plugin called plugman ie. `plugman disable factionsplus`).
+Even though the commands still show in Faction's help (`/f help`).
+
+* warps/announcements/bans/jail/rules data are now removed for the faction that gets disbanded when the last player 
+does /f leave  or on autoLeaveOnInactivityRoutine(if it causes the faction to be disbanded).
+Previously only /f disband would do so.
+
+* can no longer use warps to get inside inaccessible places by obstructing their destination.
+
+* if warps.`mustBeInOwnTerritoryToCreate` is true then players can teleport to faction-warps located only inside their own faction's territory. 
+This fixes the possibility for players to have warps in unclaimed territory.
+
+* `/f reloadfp` now starts/stops the listener when the following config options change state(while it previously didn't do so):   
+  - `powerboosts.enabled`
+  - `announce.enabled`
+  - `banning.enabled`
+  - `jails.enabled`
+  - `peaceful.enablePeacefulBoosts`
+  - `extras.crossBorderLiquidFlowBlock`
+
+* new command: `/f powsets` or `/f powersettings` or `/f powsettings` shows the settings for power loss or gains that both Factions and FactionsPlus have.
+Any user can use this. There are 3 pages, use `/f powsets 2`  and `/f powsets 3` to view page 2 & 3. Can run this from Console, 2 pages there.
+
+* removed powerboost.'respectFactionsWarZonePowerLossRules' and it will always act as if it's `true`. In other words, 
+if Factions plugin does make you lose some power then the FactionsPlus extra power gain/loss is also applied, otherwise they are not.   
+Also note that the only thing that can make you lose power in NoPowerLoss worlds is WarZone, this is Factions plugin logic.   
+This also fixes the error you'd get on console when using Factions 1.7.x when this option was false (which was also broken because it then acted as if it were true)
+
+* MD/DC allows factionless players to disguise, fixes issue #71 http://dev.bukkit.org/server-mods/factionsplus/tickets/71-mob-disguise-issue/
 
 * `/f reloadfp` is now reloading the MobDisguise/DisguiseCraft settings(for FactionsPlus) and hooking/unhooking as necessary
 
@@ -86,7 +124,7 @@ tnt cannon-ed etc.
 
 * fixed /f removewarp  not removing warps 
 
-* fixes for NPEs from issue 60
+* fixes for NPEs from issue 60 http://dev.bukkit.org/server-mods/factionsplus/tickets/60-error-of-the-player-death-event-and-player-teleport/
 
 * fixes /f help NPE on last page
 
@@ -151,10 +189,6 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     - `jails.enabled`
     - `announce.enabled`
     - `banning.enabled`   
-  + will not add/remove the listeners when the following options are changed:
-    - `powerboosts.enabled`
-    - `peaceful.enablePeacefulBoosts`
-    - `extras.crossBorderLiquidFlowBlock`   
   + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
   + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
   + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
@@ -162,16 +196,23 @@ realize that each "." actually represents a section ie. Teleports: then next lin
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
 
-* unclaiming land where a warp resides will not remove that warp
-
-* warps and jail location are not deleted on auto faction disband
+* unclaiming land where a warp resides will not remove that warp, but if `mustBeInOwnTerritoryToCreate` is `true` it will not allow you to teleport to it.
 
 * wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
 
-* if using Factions 1.7.x and `respectFactionsWarZonePowerLossRules` is `false` it will give an error on console and that feat. won't work.
-
 * if you replace the FactionsPlus.jar (and possibly any other .jar which FP depends on) while the server is running and you do a `reload`
 it will sometimes show a NoClassDefFoundError exception, this is "normal" and it is to be ignored.
+
+* passing `--plugins <directory>` or `-P <directory>` to bukkit will cause FactionsPlus to refuse to load, unless `<directory>` is `plugins` as per default.
+
+* while in admin bypass mode(`/f admin` in Factions 1.7 or `/f bypass` in 1.6) some commands may still not allow you to use them, 
+such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
+
+* due to how `plugman` plugin works trying to load FP by using `plugman load factionsplus` will not load, 
+but other plugman commands like reload, disable, enable will work.
+
+* reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
+Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
 
 # FactionsPlus version 0.4.7
 
@@ -219,7 +260,8 @@ the used pearl is wasted and a message will show.
 this will remove the locks in the claimed chunk, unless the locks are owned by anyone in the same faction you are in
 in other words, locks owned by people in your faction(including you) won't be removed
 
-* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. Permission 'factionsplus.clearlwclocks'
+* New command: /f clearlocks: faction admin accessible only, basically performs a clean of all non-faction owned protections in that chunk. 
+You need to also have permission 'factionsplus.clearlwclocks' before you can use it.
 
 * /f unban
 
@@ -268,6 +310,9 @@ Comments are any lines whose first non-whitespace character is `#`.
 ### Known issues:
 * `/f reloadfp` refreshes only the economy state, ie. if you disabled some options which were previously enabled they 
 may still be in effect after reload (except economy that will auto enabled/disable on reload)
+* `opt-out` option of metrics is set to true when plugin is disabled. Please upgrade to 0.4.8 and after you make sure 0.4.8 is running
+then you may check and set the `opt-out` option as described in 0.4.8's Changelog above, which you may view at this url:
+https://github.com/MarkehMe/FactionsPlus/blob/master/Changelog.md#factionsplus-version-048
 
 # FactionsPlus version 0.4.6
 

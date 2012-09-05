@@ -1,11 +1,15 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.events.*;
-import markehme.factionsplus.extras.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.FactionsPlusUpdate;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.events.FPConfigLoadedEvent;
+import markehme.factionsplus.extras.LWCBase;
+import markehme.factionsplus.extras.LWCFunctions;
 
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 
 
@@ -25,8 +29,8 @@ public class FPConfigLoadedListener implements Listener {
         
         FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
         
-        LWCBase.refreshLWC();
-        if ( LWCBase.isLWC() ) {// LWCFunctions.isLWC() also works here though
+//        LWCBase.refreshLWC();
+        if ( LWCBase.isLWCPluginPresent() ) {// LWCFunctions.isLWC() also works here though
 			
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
@@ -58,5 +62,16 @@ public class FPConfigLoadedListener implements Listener {
         
         
         DisguiseListener.enableOrDisable(FactionsPlus.instance);
+        
+        
+		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
+		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._announce.enabled._, AnnounceListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._banning.enabled._, BanListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._jails.enabled._, JailListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._peaceful.enablePeacefulBoosts._, PeacefulListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
+		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
+        
 	}//onConfigLoaded method ends
 }

@@ -1,15 +1,15 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
-
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 import markehme.factionsplus.config.sections.Section_Jails;
 
-import com.massivecraft.factions.cmd.FCommand;
+import org.bukkit.ChatColor;
+
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdJail extends FCommand {
+public class CmdJail extends FPCommand {
 	public CmdJail() {
 		this.aliases.add("jail");
 		
@@ -27,7 +27,7 @@ public class CmdJail extends FCommand {
 	}
 
 	@Override
-	public void perform() {
+	public void performfp() {
 		String playerToJail = this.argAsString(0);
 
 		if (Section_Jails.canJailUnjail( fme ))

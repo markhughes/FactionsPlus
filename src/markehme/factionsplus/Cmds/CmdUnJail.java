@@ -1,16 +1,15 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.*;
+import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.config.Config;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
 
 
-public class CmdUnJail extends FCommand {
+public class CmdUnJail extends FPCommand {
 	
 	public CmdUnJail() {
 		this.aliases.add( "unjail" );
@@ -28,7 +27,7 @@ public class CmdUnJail extends FCommand {
 	
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		String playerToUnjail = this.argAsString( 0 );
 		
 		if (Config._jails.canJailUnjail( fme ))

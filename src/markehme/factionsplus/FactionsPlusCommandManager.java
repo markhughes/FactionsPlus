@@ -1,12 +1,31 @@
 package markehme.factionsplus;
 
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
+import markehme.factionsplus.Cmds.CmdAddWarp;
+import markehme.factionsplus.Cmds.CmdAnnounce;
+import markehme.factionsplus.Cmds.CmdBan;
+import markehme.factionsplus.Cmds.CmdClearLocks;
+import markehme.factionsplus.Cmds.CmdDebug;
+import markehme.factionsplus.Cmds.CmdFC;
+import markehme.factionsplus.Cmds.CmdFactionHome;
+import markehme.factionsplus.Cmds.CmdGC;
+import markehme.factionsplus.Cmds.CmdJail;
+import markehme.factionsplus.Cmds.CmdListWarps;
+import markehme.factionsplus.Cmds.CmdMoneyTop;
+import markehme.factionsplus.Cmds.CmdPowSettings;
+import markehme.factionsplus.Cmds.CmdReloadFP;
+import markehme.factionsplus.Cmds.CmdRemoveWarp;
+import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.Cmds.CmdToggleState;
+import markehme.factionsplus.Cmds.CmdUnJail;
+import markehme.factionsplus.Cmds.CmdUnban;
+import markehme.factionsplus.Cmds.CmdUnsetJail;
+import markehme.factionsplus.Cmds.CmdWarp;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.LWCBase;
 
-import markehme.factionsplus.Cmds.*;
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
+import com.massivecraft.factions.P;
+import com.massivecraft.factions.cmd.FCommand;
 
 
 
@@ -68,12 +87,16 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdDebug());
 		
 		//LWC Officer/Faction Owner clear chunk of non-member claims command
-		if(LWCBase.isLWC()) {
+		if(LWCBase.isLWCPluginPresent()) {
 			addSC(new CmdClearLocks());
 		}
 		
 		addSC(new CmdReloadFP());
 		
+//		Bridge.factions.addSubCommand(P.p.cmdBase.cmdPower, new CmdPowPow());
+		addSC(new CmdPowSettings());
+		
+		//last:
 		Bridge.factions.finalizeHelp(); 
 	}
 

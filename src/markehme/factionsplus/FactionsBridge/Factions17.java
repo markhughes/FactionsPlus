@@ -1,16 +1,20 @@
 package markehme.factionsplus.FactionsBridge;
 
-import java.lang.reflect.*;
-import markehme.factionsplus.*;
-import markehme.factionsplus.util.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-import com.massivecraft.factions.*;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.util.TwoWayMapOfNonNulls;
+
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.Faction;
 
 
 
 public class Factions17 extends FactionsBase implements FactionsAny {
 	
 	private Method			mSetFlag		= null;// Faction.setFlag(FFlag);
+	private Method			mGetFlag		= null;// FFlag Faction.getFlag();
 	private Class			classFFlag		= null;// FFlag.class
 	
 	private TwoWayMapOfNonNulls<Object, FactionsAny.FFlag>	mapFFlag		= new TwoWayMapOfNonNulls<Object, FactionsAny.FFlag>();
@@ -24,6 +28,7 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 			classFFlag = Class.forName( "com.massivecraft.factions.struct.FFlag" );
 			
 			mSetFlag = Faction.class.getMethod( "setFlag", classFFlag, boolean.class );
+			mGetFlag = Faction.class.getMethod( "getFlag", classFFlag);
 			
 			Reflective.mapEnums( mapFFlag, "com.massivecraft.factions.struct.FFlag", FactionsAny.FFlag.class, null);
 			
@@ -49,32 +54,57 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 	
 	@Override
 	public void setFlag( Faction forFaction, FactionsAny.FFlag whichFlag, Boolean whatState ) {
-		boolean failed = false;
+		Throwable failed = null;
 		try {
 			Object flag = mapFFlag.getLeftSide( whichFlag );
 			if (null == flag) {
-				failed=true;
-				throw FactionsPlusPlugin.bailOut( "failed to proplerly map in .init()" );
+				failed=new NullPointerException("flag returned null which means: failed to proplerly map in .init()");
+				throw null;//FactionsPlusPlugin.bailOut( "failed to proplerly map in .init()" );
 			}else {
 				// factiont.setFlag(com.massivecraft.factions.struct.FFlag.PEACEFUL, true);
 				mSetFlag.invoke( forFaction, flag, whatState );
 			}
 		} catch ( IllegalAccessException e ) {
-			e.printStackTrace();
-			failed = true;
+			failed = e;
 		} catch ( IllegalArgumentException e ) {
-			e.printStackTrace();
-			failed = true;
+			failed = e;
 		} catch ( InvocationTargetException e ) {
-			e.printStackTrace();
-			failed = true;
+			failed = e;
 		} finally {
-			if ( failed ) {
-				throw FactionsPlusPlugin.bailOut( "failed to invoke " + mSetFlag );
+			if ( null != failed ) {
+				throw FactionsPlusPlugin.bailOut(failed, "failed to invoke " + mSetFlag );
 			}
 		}
 	}
 	
+	@Override
+	public boolean getFlag( Faction forFaction, FactionsAny.FFlag whichFlag ) {
+		Throwable failed = null;
+		try {
+			Object flag = mapFFlag.getLeftSide( whichFlag );
+			if ( null == flag ) {
+				failed = new NullPointerException( "flag returned null which means: failed to proplerly map in .init()" );
+				throw null;// FactionsPlusPlugin.bailOut( "failed to proplerly map in .init()" );
+			} else {
+				// boolean ret=forFaction.getFlag(flag);
+				Object ret = mGetFlag.invoke( forFaction, flag );
+				assert null != ret;
+				assert ret instanceof Boolean;
+				return ((Boolean)ret).booleanValue();
+			}
+		} catch ( IllegalArgumentException e ) {
+			failed = e;
+		} catch ( IllegalAccessException e ) {
+			failed = e;
+		} catch ( InvocationTargetException e ) {
+			failed = e;
+		} finally {
+			if ( null != failed ) {
+				throw FactionsPlusPlugin.bailOut( failed, "failed to invoke " + mGetFlag );
+			}
+		}
+		throw null;//unreachable
+	}
 	
 	@Override
 	public final void finalizeHelp() {
@@ -98,4 +128,13 @@ public class Factions17 extends FactionsBase implements FactionsAny {
 		throw new RuntimeException("not supposed to be called in 1.7");
 //		return null;
 	}
+
+
+	@Override
+	public final boolean isFactions17() {
+		return true;
+	}
+
+
+	
 }

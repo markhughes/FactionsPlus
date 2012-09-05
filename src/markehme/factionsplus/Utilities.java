@@ -1,21 +1,32 @@
 package markehme.factionsplus;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.Q;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.*;
+import org.bukkit.permissions.Permission;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 
 
-public class Utilities {
+public abstract class Utilities {
 	/* ********** FILE RELATED ********** */
 	
 	public static String readFileAsString(File filePath) {
@@ -293,17 +304,17 @@ public class Utilities {
 	
 	public static boolean isWarZone(Faction faction)
 	{
-		return faction.getId().equals("-2");
+		return faction.getId().equals(ID_WARZONE);
 	}
 
 	public static boolean isSafeZone(Faction faction)
 	{
-		return faction.getId().equals("-1");
+		return faction.getId().equals(ID_SAFEZONE);
 	}
 
 	public static boolean isWilderness(Faction faction)
 	{
-		return faction.getId().equals("0");
+		return faction.getId().equals(ID_WILDERNESS);
 	}
 
 	/**
@@ -316,6 +327,12 @@ public class Utilities {
 	}
 	
 	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*
+	
+	//XXX:don't change the following 3 constants:
+	public static final String	ID_WARZONE	= "-2";
+	public static final String	ID_SAFEZONE	= "-1";
+	public  static final String	ID_WILDERNESS	= "0";
+	
 	public static boolean isJustLookingAround(Location from, Location to) {
 		assert Q.nn( from );
 		assert Q.nn( to );
@@ -403,4 +420,36 @@ public class Utilities {
 			return false;
 		}
 	}
+	
+	public static final void setPeaceful(Faction faction) {
+		setPeaceful(faction, Boolean.TRUE);
+	}
+
+	public static final void setPeaceful(Faction faction, Boolean state) {
+		assert Q.nn( faction );
+		Bridge.factions.setFlag( faction, FactionsAny.FFlag.PEACEFUL,  state );
+	}
+	
+	public static final boolean isPeaceful(Faction faction) {
+		return Bridge.factions.getFlag( faction, FactionsAny.FFlag.PEACEFUL );
+	}
+	
+	/**
+	 * use this method instead of Conf.wildernessPowerLoss
+	 * @return
+	 */
+	public static final boolean confIs_wildernessPowerLoss() {
+		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
+		return Bridge.factions.getFlag(Factions.i.getNone(), FactionsAny.FFlag.POWERLOSS);
+	}
+	
+	/**
+	 * use this method instead of Conf.warZonePowerLoss
+	 * @return
+	 */
+	public static final boolean confIs_warzonePowerLoss() {
+		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
+		return Bridge.factions.getFlag(Factions.i.get(ID_WARZONE), FactionsAny.FFlag.POWERLOSS);
+	}
+	
 }

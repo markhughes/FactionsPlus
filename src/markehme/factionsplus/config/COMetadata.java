@@ -1,6 +1,6 @@
 package markehme.factionsplus.config;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 
 
 /**

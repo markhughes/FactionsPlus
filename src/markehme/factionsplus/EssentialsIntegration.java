@@ -1,10 +1,12 @@
 package markehme.factionsplus;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.plugin.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Util;
 
 
 /**
@@ -82,6 +84,7 @@ public abstract class EssentialsIntegration {
 	 * @return the instance or null
 	 */
 	private synchronized static final IEssentials getEssentialsInstance() {
+		//FIXME: caching the instance should be a bad idea if something like plugman reloads or unloads only the Essentials plugin
 		if ( null == ess ) {
 			// lazyly init or : maybe add depend (not soft) in plugin.yml
 			Plugin essPlugin = Bukkit.getPluginManager().getPlugin( pluginName );

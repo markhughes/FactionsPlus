@@ -1,16 +1,16 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Config;
 
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
+
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
-
-import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 
 public class DCListener implements Listener  {//http://dev.bukkit.org/server-mods/disguisecraft/
 	@EventHandler(priority=EventPriority.HIGHEST)

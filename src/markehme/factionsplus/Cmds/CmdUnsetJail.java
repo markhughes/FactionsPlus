@@ -2,16 +2,16 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdUnsetJail extends FCommand {
+public class CmdUnsetJail extends FPCommand {
 	public CmdUnsetJail() {
 		this.aliases.add("unsetjail");
 
@@ -28,7 +28,7 @@ public class CmdUnsetJail extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		//TODO: check the set/unsetjail permissions just like we did for ban and jail
 		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact(fme), "factionsplus.unsetjail")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");

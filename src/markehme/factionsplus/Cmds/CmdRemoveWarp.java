@@ -1,21 +1,26 @@
 package markehme.factionsplus.Cmds;
 
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdRemoveWarp extends FCommand {
+public class CmdRemoveWarp extends FPCommand {
 	public CmdRemoveWarp() {
 		/*
 		 * This is a dummy function, it'll do exactly the same as /f deletewarp [warp]
@@ -38,7 +43,7 @@ public class CmdRemoveWarp extends FCommand {
 	
 	@SuppressWarnings( "static-access" )
 	@Override
-	public void perform() {
+	public void performfp() {
 		String warpname = this.argAsString(0);
 		
 		if(!FactionsPlus.permission.has(sender, "factionsplus.deletewarp")) {

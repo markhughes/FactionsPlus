@@ -1,13 +1,27 @@
 package markehme.factionsplus;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.CacheMap;
+import markehme.factionsplus.util.Q;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -135,8 +149,14 @@ public class FactionsPlusJail {
 //			cachedJailLocations.remove(id);could or could not have existed, hmm maybe not remove this due to possibility that
 			//jailLocation can be used again, yep makes sense
 			
-			unjailer.sendMessage( nameOfPlayerToBeUnjailed + " has been removed from jail."+
-				(!tpSuccess?ChatColor.RED+" But was not teleported to original location.":""));
+			String unjailMsg = ChatColor.WHITE+nameOfPlayerToBeUnjailed + ChatColor.GREEN+" has been removed from jail by "+
+					ChatColor.WHITE+unjailer.getName()+ChatColor.GREEN+"."+
+			(!tpSuccess?ChatColor.RED+" But was not teleported to original location.":"");
+			if (!unjailer.getFactionId().equals(fpToBeUnjailed.getFactionId())) {
+				unjailer.sendMessage( unjailMsg);
+			}
+			
+			fpToBeUnjailed.getFaction().sendMessage( unjailMsg );
 			return true;
 		} else {
 			unjailer.sendMessage( nameOfPlayerToBeUnjailed + " is not jailed." );
@@ -295,8 +315,8 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		if (fplayer.equals( fjplayer )) {
-			fplayer.sendMessage(ChatColor.RED + "You cannot jail yourself!");
+		if (fplayer.equals( fjplayer ) && (!Utilities.isOp( fplayer ))) {//allow ops to can jail themselves (for some reason)
+			fplayer.sendMessage(ChatColor.RED + "You cannot jail yourself, unless you're OP!");
 			return false;
 		}
 		
@@ -360,11 +380,14 @@ public class FactionsPlusJail {
 						tpSuccess=onlinejplayer.teleport( jailLoc );
 					}
 					
-					sender.sendMessage( ChatColor.GREEN + fjplayer.getName() + " has been jailed!"
-						+ (null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
-							(tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!")
-						  ) 
-						              );
+					Faction fjpfaction = fjplayer.getFaction();
+					String jailedMsg = ChatColor.WHITE + fjplayer.getName()+ChatColor.GREEN + " has been jailed by "+
+							ChatColor.WHITE+fplayer.getName()+ ChatColor.GREEN+"!"+(null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
+								(tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!") );
+					if (fjpfaction != fplayer.getFaction()) {
+						fplayer.sendMessage( jailedMsg);
+					}
+					fjplayer.getFaction().sendMessage( jailedMsg );
 					
 				} catch ( IOException e ) {
 					e.printStackTrace();

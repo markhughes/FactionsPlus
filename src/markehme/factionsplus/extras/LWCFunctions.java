@@ -1,15 +1,27 @@
 package markehme.factionsplus.extras;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.listeners.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.listeners.LWCListener;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-import com.griefcraft.model.*;
-import com.massivecraft.factions.*;
+import org.bukkit.event.HandlerList;
+
+import com.griefcraft.model.Protection;
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 
 /**
  * call these methods only when LWC plugin is loaded in bukkit, else NoClassDefFoundError<br>
@@ -29,6 +41,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	 */
 	public static void hookLWCIfNeeded() {
 		//beware here NoClassDefFoundError if LWC isn't loaded
+		assert LWCBase.isLWCPluginPresent();
 		
 		if ( Config._extras._protection._lwc.removeAllLocksOnClaim._ )  {
 			// register after we integrate
@@ -165,7 +178,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 
 
-	public static boolean checkInTerritory(Player p, Block b) {
+	public static boolean checkInTerritory(Player p, Block b) {//hmm, unused?
 		FPlayer fp = FPlayers.i.get(p);
 		FLocation floc = new FLocation(b.getLocation());
 		Faction owner = Board.getFactionAt(floc);
@@ -179,6 +192,10 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 
 
 	public static int clearLocksCommand(Player name, Location loc) {
+		if (!LWCBase.isLWCPluginPresent()) {
+			name.sendMessage( ChatColor.RED+"LWC plugin is not active." );
+			return -1;
+		}
 		FPlayer fp = FPlayers.i.get(name);
 //		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
 //			name.sendMessage(ChatColor.RED + "No Permission!");

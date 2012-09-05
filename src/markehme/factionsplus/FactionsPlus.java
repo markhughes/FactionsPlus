@@ -1,20 +1,25 @@
 package markehme.factionsplus;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import markehme.factionsplus.FactionsBridge.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.extras.*;
-import markehme.factionsplus.listeners.*;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.LWCBase;
+import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.listeners.CoreListener;
+import markehme.factionsplus.listeners.FPConfigLoadedListener;
 import net.milkbowl.vault.permission.Permission;
 
-import org.bukkit.event.*;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import com.massivecraft.factions.*;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -34,13 +39,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
 	
-	public final AnnounceListener announcelistener = new AnnounceListener();
-	public final BanListener banlistener = new BanListener();
 	public final CoreListener corelistener = new CoreListener();
-	public final JailListener jaillistener = new JailListener();
-	public final PeacefulListener peacefullistener = new PeacefulListener();
-	public final PowerboostListener powerboostlistener = new PowerboostListener();
-	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
+
+//	public final AnnounceListener announcelistener = new AnnounceListener();
+//	public final BanListener banlistener = new BanListener();
+//	public final JailListener jaillistener = new JailListener();
+//	public final PeacefulListener peacefullistener = new PeacefulListener();
+//	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
 	
 
 	
@@ -87,10 +92,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
-			// since we deinited some of our parts
+			// since we deinited some of our parts; can add an if for each command and check if we're enabled and make it in a base class
 			
 			try {
-				if ( LWCBase.isLWC() ) {
+				if ( LWCBase.isLWCPluginPresent() ) {
 					LWCFunctions.unhookLWC();
 				}
 			} catch ( Throwable t ) {
@@ -164,17 +169,25 @@ public class FactionsPlus extends FactionsPlusPlugin {
         }
         
         
-        if(Config._announce.enabled._){
-    		pm.registerEvents(this.announcelistener, this);
-        }
-        if(Config._banning.enabled._) {
-        	pm.registerEvents(this.banlistener, this);
-        }
-        if(Config._jails.enabled._) {
-        	pm.registerEvents(this.jaillistener, this);
-        }
-        
-        
+//        if(Config._announce.enabled._){
+//    		pm.registerEvents(this.announcelistener, this);
+//        }
+//        if(Config._banning.enabled._) {
+//        	pm.registerEvents(this.banlistener, this);
+//        }
+//        if(Config._jails.enabled._) {
+//        	pm.registerEvents(this.jaillistener, this);
+//        }
+//        
+//        
+//        if(Config._peaceful.enablePeacefulBoosts._) {
+//        	pm.registerEvents(this.peacefullistener, this);
+//        }
+//        
+//        if(Config._extras.crossBorderLiquidFlowBlock._) {
+//        	pm.registerEvents(this.liquidflowlistener, this);
+//        }
+
         
         if(1<2) {        //Temporary Always True Until a Config Option is Created 
         	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
@@ -189,18 +202,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
             }
         }
         
-
-        
-        
-        if(Config._peaceful.enablePeacefulBoosts._) {
-        	pm.registerEvents(this.peacefullistener, this);
-        }
-        if(Config._powerboosts.enabled._) {
-        	pm.registerEvents(this.powerboostlistener, this);
-        }
-        if(Config._extras.crossBorderLiquidFlowBlock._) {
-        	pm.registerEvents(this.liquidflowlistener, this);
-        }
 
         
         

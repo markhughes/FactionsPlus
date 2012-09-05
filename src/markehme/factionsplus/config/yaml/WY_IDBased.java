@@ -1,7 +1,7 @@
 package markehme.factionsplus.config.yaml;
 
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.Q;
 
 
 

@@ -1,13 +1,18 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.FactionsBridge.*;
-import com.massivecraft.factions.*;
-import com.massivecraft.factions.cmd.*;
-import com.massivecraft.factions.struct.*;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.FactionsBridge.Bridge;
+import markehme.factionsplus.FactionsBridge.FactionsAny;
+
+import org.bukkit.ChatColor;
+
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.struct.Permission;
 
 
-public abstract class BaseCmdChatMode extends FCommand{
+public abstract class BaseCmdChatMode extends FPCommand{
 	protected final FactionsAny.ChatMode cMode;
 	private final String strPermission;
 
@@ -33,9 +38,9 @@ public abstract class BaseCmdChatMode extends FCommand{
 	}
 	
 	@Override
-	public final void perform() {
+	public final void performfp() {
 		if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact( fme), strPermission )) {
-			fme.msg("No permission!");
+			fme.msg(ChatColor.RED+"No permission!");
 			return;
 		}	
 		changeChatMode(fme,cMode);

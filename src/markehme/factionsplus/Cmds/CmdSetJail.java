@@ -1,16 +1,16 @@
 package markehme.factionsplus.Cmds;
 
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
 import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdSetJail extends FCommand {
+public class CmdSetJail extends FPCommand {
 	public CmdSetJail() {
 		this.aliases.add("setjail");
 		
@@ -24,7 +24,7 @@ public class CmdSetJail extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		FactionsPlusJail.setJail(Utilities.getOnlinePlayerExact(fme));
 	}
 	

@@ -1,6 +1,7 @@
 package markehme.factionsplus.config.sections;
 
-import markehme.factionsplus.config.*;
+import markehme.factionsplus.config.Option;
+import markehme.factionsplus.config.Section;
 
 
 public class SubSection_Protection {
@@ -8,6 +9,10 @@ public class SubSection_Protection {
 	@Section(
 			realAlias_neverDotted = "LWC" )
 	public final SubSection_LWC	_lwc							= new SubSection_LWC();
+	
+	@Section(
+		realAlias_neverDotted = "PVP" )
+	public final SubSection_PVP	_pvp							= new SubSection_PVP();
 	
 	// FIXME: this interferes with LWC's option
 	@Option(autoComment={"unused"},

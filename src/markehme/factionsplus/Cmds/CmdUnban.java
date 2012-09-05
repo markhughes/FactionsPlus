@@ -2,17 +2,17 @@ package markehme.factionsplus.Cmds;
 
 import java.io.File;
 
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.sections.Section_Banning;
+
 import org.bukkit.ChatColor;
 
-import markehme.factionsplus.*;
-import markehme.factionsplus.config.*;
-import markehme.factionsplus.config.sections.*;
-
 import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.struct.Permission;
 
-public class CmdUnban extends FCommand {
+public class CmdUnban extends FPCommand {
 	public CmdUnban() {
 		this.aliases.add("unban");
 		
@@ -30,7 +30,7 @@ public class CmdUnban extends FCommand {
 	}
 	
 	@Override
-	public void perform(){
+	public void performfp(){
 		if ((Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._)
 				&&(!FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName))) {
 			sender.sendMessage(ChatColor.RED + "You don't have the required permission node!");

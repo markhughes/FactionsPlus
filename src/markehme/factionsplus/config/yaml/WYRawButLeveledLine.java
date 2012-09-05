@@ -1,6 +1,6 @@
 package markehme.factionsplus.config.yaml;
 
-import markehme.factionsplus.util.*;
+import markehme.factionsplus.util.Q;
 
 
 public class WYRawButLeveledLine<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
