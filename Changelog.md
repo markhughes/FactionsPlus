@@ -192,7 +192,7 @@ realize that each "." actually represents a section ie. Teleports: then next lin
 * changing `mustBeInOwnTerritoryToCreate` from `true` to false, will not remove any warps that are now violating this constraint, 
 it will only prevent newly created warps from being in non-owned territory.
 
-* unclaiming land where a warp resides will not remove that warp - this still needs to be fixed
+* unclaiming land where a warp resides will not remove that warp, but if `mustBeInOwnTerritoryToCreate` is `true` it will not allow you to teleport to it.
 
 * wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
 
