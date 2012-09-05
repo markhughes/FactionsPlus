@@ -1,5 +1,9 @@
 # FactionsPlus version 0.4.8
 
+* warps/announcements/bans/jail/rules data are now removed for the faction that gets disbanded when the last player 
+does /f leave  or on autoLeaveOnInactivityRoutine(if it causes the faction to be disbanded).
+Previously only /f disband would do so.
+
 * can no longer use warps to get inside inaccessible places by obstructing their destination.
 
 * if warps.`mustBeInOwnTerritoryToCreate` is true then players can teleport to faction-warps located only inside their own faction's territory. 
@@ -180,8 +184,6 @@ realize that each "." actually represents a section ie. Teleports: then next lin
 it will only prevent newly created warps from being in non-owned territory.
 
 * unclaiming land where a warp resides will not remove that warp - this still needs to be fixed
-
-* warps and jail location are not deleted on auto faction disband
 
 * wildcard permissions do not fully work ie. using `factionsplus.*` will not work as if you manually typed each permission
 
