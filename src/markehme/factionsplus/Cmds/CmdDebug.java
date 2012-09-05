@@ -34,7 +34,6 @@ public class CmdDebug extends FCommand {
 	}
 	@Override
 	public void perform() {
-//		sendMessage( LWC.getInstance()+"/"+LWCBase.getLWC() );a plugman reload lwc  will show different instances here
 		// TEMP, remove this completely after this inconsistency is fixed; if it's commented out it means it's not fixed
 //		if ( null != fme ) {
 //			Player player = Bukkit.getPlayerExact( fme.getId() );
