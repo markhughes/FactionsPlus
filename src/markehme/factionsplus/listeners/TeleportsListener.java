@@ -522,22 +522,16 @@ public class TeleportsListener implements Listener {
 					//not warzone/safezone then check:
 					
 				FactionsAny.Relation rel = getRelation( player, fac );
-				if ( !player.isOp() ) {// only check if player isn't op
+				if ( !player.isOp() ) {// only deny teleports to non-op players
 					switch ( rel ) {
 					case ALLY:
 						if ( !Config._teleports._into._allyTerritory._deny.viaPearls._ ) {
 							allowed = true;
 						}
-						if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
-							report = false;
-						}
 						break;
 					case ENEMY:
 						if ( !Config._teleports._into._enemyTerritory._deny.viaPearls._ ) {
 							allowed = true;
-						}
-						if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
-							report = false;
 						}
 						break;
 					case NEUTRAL:
@@ -545,13 +539,9 @@ public class TeleportsListener implements Listener {
 						if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
 							allowed = true;
 						}
-						if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
-							report = false;
-						}
 						break;
 					case MEMBER:
 						allowed = true;// you may ender into your own territory
-						report = false;// and don't report this obviously
 						break;
 					default:
 						denyTeleport( event );
@@ -565,6 +555,31 @@ public class TeleportsListener implements Listener {
 						denyTeleport( event );
 						break;
 					}
+				}
+				
+				//we report both normal and OP players
+				switch ( rel ) {
+				case ALLY:
+					if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
+						report = false;
+					}
+					break;
+				case ENEMY:
+					if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
+						report = false;
+					}
+					break;
+				case NEUTRAL:
+				case TRUCE:
+					if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
+						report = false;
+					}
+					break;
+				case MEMBER:
+					report = false;// and don't report this obviously
+					break;
+				default:
+					FactionsPlus.warn( "reportPearls fail, will never happen: " + rel );
 				}
 				
 				if ( ( report ) && ( !event.isCancelled() ) ) {
