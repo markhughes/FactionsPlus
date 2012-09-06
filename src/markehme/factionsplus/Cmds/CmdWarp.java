@@ -180,9 +180,6 @@ public class CmdWarp extends FPCommand {
 
 					Location newTel = new Location(world, x, y, z, Y, playa);
 					
-					// the the destination warp should be in player's own faction's territory, else deny tp-ing to it
-					// XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
-					// 2. disbanding faction or unclaiming land won't remove the warp
 					int count = 0;
 					String ownfid = fplayer.getFactionId();
 					do {
@@ -190,6 +187,9 @@ public class CmdWarp extends FPCommand {
 						String warpatFID = Board.getIdAt( warpFLocation );
 						if ( !ownfid.equalsIgnoreCase( warpatFID ) ) {
 							if ( Config._warps.mustBeInOwnTerritoryToCreate._ ) {
+								// the the destination warp should be in player's own faction's territory, else deny tp-ing to it
+								// XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
+								// 2. disbanding faction or unclaiming land won't remove the warp
 								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
 									+ ( 0 < count ? "will make you land outside of" : "is not in" )
 									+ " your faction territory."+(0<count?" <i>(because it's obstructed)":"") );
