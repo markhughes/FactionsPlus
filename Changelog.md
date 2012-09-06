@@ -1,5 +1,12 @@
 # FactionsPlus version 0.4.8
 
+* added 3 new options to prevent /f warp inside enemy/neutral(and truce in 1.7)/ally territory. 
+warps.`denyWarpToEnemyLand` defaults to `true`, and warps.`denyWarpToAllyLand` and warps.`denyWarpToNeutralOrTruceLand`
+default to `false`.
+These options only have effect when warps.`mustBeInOwnTerritoryToCreate` is `false`, because when it's true, you're 
+automatically denied warp teleports that land outside of your own faction's land.   
+Also you cannot exploit this by obstructing destination and thus causing the teleport to land nearby.
+
 * added permissions in plugin.yml
 
 * jail/unjail now tells everyone in faction which player was jailed and by whom.
@@ -166,8 +173,8 @@ ally/neutral/enemy territory or into safezone/warzone. Here they are with their 
 Note that these are automatically added into your config, and the old config options that apply will be automatically
 upgraded to these new ones, you don't have to add them manually but if you do, you'll have
 realize that each "." actually represents a section ie. Teleports: then next line 2 spaces then intoTerritory: and so on 4 spaces...  
-    Reporting is done on console only.  
-    Denying will be instant, regardless of any warm-up delays other plugins may have.  
+    Reporting is done on console only. Reports both OPs and normal players.  
+    Denying will be instant, regardless of any warm-up delays other plugins may have. Denies only normal(non-OP) players.  
     It makes sure that you cannot exploit this by having home set outside enemy land and obstructing it to get you inside.  
     The expected console message upon report would look similar to this:    
     > 19:12:52 [INFO] [FactionsPlus] Player 's2' teleported into enemy land faction 'fac. Their last typed command: '/home my1'.  

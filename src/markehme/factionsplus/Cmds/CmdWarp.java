@@ -14,6 +14,7 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
+import markehme.factionsplus.FactionsBridge.FactionsAny.Relation;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
@@ -179,24 +180,38 @@ public class CmdWarp extends FPCommand {
 
 					Location newTel = new Location(world, x, y, z, Y, playa);
 					
-					if (Config._warps.mustBeInOwnTerritoryToCreate._) {
-						//the the destination warp should be in player's own faction's territory, else deny tp-ing to it
-						//XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
-						//2. disbanding faction or unclaiming land won't remove the warp
-						int count=0;
-						do {
-							FLocation warpFLocation = new FLocation( newTel );
-							String ownfid = fplayer.getFactionId();
-							String warpatFID = Board.getIdAt( warpFLocation );
-							if ( !ownfid.equalsIgnoreCase( warpatFID ) ) {
-								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname
-									+ " <b>because it "+(0<count?"will make you land outside of":"is not in")
-									+" your faction territory. <i>ie. maybe it's obstructed" );
+					// the the destination warp should be in player's own faction's territory, else deny tp-ing to it
+					// XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
+					// 2. disbanding faction or unclaiming land won't remove the warp
+					int count = 0;
+					String ownfid = fplayer.getFactionId();
+					do {
+						FLocation warpFLocation = new FLocation( newTel );
+						String warpatFID = Board.getIdAt( warpFLocation );
+						if ( !ownfid.equalsIgnoreCase( warpatFID ) ) {
+							if ( Config._warps.mustBeInOwnTerritoryToCreate._ ) {
+								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
+									+ ( 0 < count ? "will make you land outside of" : "is not in" )
+									+ " your faction territory."+(0<count?" <i>(because it's obstructed)":"") );
 								return;
+							} else {// you can land anywhere if the 3 config options allows it below:
+								Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(), Board.getFactionAt( warpFLocation ) );
+								if (
+										((Config._warps.denyWarpToEnemyLand._) && (FactionsAny.Relation.ENEMY.equals( rel )))
+										||((Config._warps.denyWarpToAllyLand._) && (FactionsAny.Relation.ALLY.equals( rel )))
+										||((Config._warps.denyWarpToNeutralOrTruceLand._) && 
+												(FactionsAny.Relation.NEUTRAL.equals( rel )
+												|| FactionsAny.Relation.NEUTRAL.equals( rel )) )
+									){
+									fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
+											+ ( 0 < count ? "will make you land inside of" : "is in" )
+											+ " "+ChatColor.WHITE+rel+"<b> faction territory."+(0<count?" <i>(because it's obstructed)":"") );
+										return;
+								}
 							}
-							newTel=EssentialsIntegration.getSafeDestination( newTel );
-						} while ( ++count < 2 );//XXX:make this 1 to not check for safedestination, or 2 to do check
-					}//else, since warps can be created in non-faction land then you can tp to them.
+						}
+						newTel = EssentialsIntegration.getSafeDestination( newTel );
+					} while ( ++count < 2 );// XXX:make this 1 to not check for safedestination, or 2 to do check
 					
 					if(Config._economy.costToWarp._ > 0.0d) {
 						if (!payForCommand(Config._economy.costToWarp._, "to teleport to warp "+warpname, 
