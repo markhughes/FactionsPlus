@@ -39,7 +39,8 @@ public final class Section_Warps{
 	
 	@Option(
 		autoComment={
-			"changing this from true to false does NOT remove all warps that are outside territories"//TODO:
+			"changing this from true to false does NOT remove all warps that are outside territories",//don't do;
+			"when false, allows you to create and teleport to warps in any places even if they are in enemy land"
 		},
 		oldAliases_alwaysDotted={
 //		"warps.mustBeInOwnTerritoryToCreate"
@@ -47,7 +48,32 @@ public final class Section_Warps{
 	}, realAlias_inNonDottedFormat = "mustBeInOwnTerritoryToCreate" )
 	public  final _boolean mustBeInOwnTerritoryToCreate=new _boolean(true);
 	
+	@Option(
+		autoComment={
+			"only has effect when `mustBeInOwnTerritoryToCreate` is false,",
+			"if true, you cannot teleport to a warp residing inside enemy land"
+		},
+		oldAliases_alwaysDotted={
+	}, realAlias_inNonDottedFormat = "denyWarpToEnemyLand" )
+	public  final _boolean denyWarpToEnemyLand=new _boolean(true);
 	
+	@Option(
+		autoComment={
+			"only has effect when `mustBeInOwnTerritoryToCreate` is false,",
+			"if true, you cannot teleport to a warp residing inside ally land"
+		},
+		oldAliases_alwaysDotted={
+	}, realAlias_inNonDottedFormat = "denyWarpToAllyLand" )
+	public  final _boolean denyWarpToAllyLand=new _boolean(false);
+	
+	@Option(
+		autoComment={
+			"only has effect when `mustBeInOwnTerritoryToCreate` is false,",
+			"if true, you cannot teleport to a warp residing inside neutral(and truce in 1.7) land"
+		},
+		oldAliases_alwaysDotted={
+	}, realAlias_inNonDottedFormat = "denyWarpToNeutralOrTruceLand" )
+	public  final _boolean denyWarpToNeutralOrTruceLand=new _boolean(false);
 	
 	@Option(oldAliases_alwaysDotted={
 //		"warps.maxWarps"
