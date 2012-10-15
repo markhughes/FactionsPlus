@@ -57,7 +57,9 @@ public class FPConfigLoadedListener implements Listener {
 						+ " This means those settings will be ignored & have no effect" );
 			}
 			
-			LWCFunctions.deregListenerIfNeeded();
+			// Prints massive error when trying to run this method when LWC is not on the server
+			// Reason being is because you are referencing com.griefcraft.scripting.Module (part of LWC)
+//			LWCFunctions.deregListenerIfNeeded();
 		}
         
         
