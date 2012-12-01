@@ -1,5 +1,6 @@
 # FactionsPlus version 0.4.8
 
+* `/f warp` now works even when Essentials is not running on server
 
 * don't err when LWC is not on the system
 
