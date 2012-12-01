@@ -114,6 +114,9 @@ public class FactionsPlusUpdate implements Runnable {
 			}catch (java.net.UnknownHostException uhe) {
 				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
 				return;
+			}catch (java.net.ConnectException ce) {
+				FactionsPlusPlugin.info( "Failed to check for updates. "+ce.getMessage() );
+				return;
 			}catch ( Exception ex ) {
 				ex.printStackTrace();
 				FactionsPlusPlugin.info( "Failed to check for updates." );
