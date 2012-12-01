@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+* FP now detects when Essentials is reloaded or unloaded or unloaded then reloaded and updates it's internally cached referent to Essentials' 
+instance accordingly.
+
 * `/f warp` now works even when Essentials is not running on server
 
 * don't err when LWC is not on the system
@@ -225,8 +228,12 @@ but other plugman commands like reload, disable, enable will work.
 * reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
 Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
 
-* reloading any of your plugins upon which FP depends on can cause undetermined behaviour. Either use bukkit "reload" or better yet "stop" and start it again. 
-This is because FP will cache the instance of ie. LWC, Essentials ... but after plugman reload there will be a new instance and the old one is subject to garbage collection.
+* reloading any of your plugins upon which FP depends on(except Essentials)  can cause undetermined behaviour. 
+Although `plugman reload pluginhere` seems to work (because keeps the same instance at least in the case of Essentials -tested), 
+something like `plugman unload pluginhere` and then `plugman load pluginhere` will not work.
+Either use bukkit "reload" or better yet "stop" and start it again. 
+This is because FP will cache the instance of ie. LWC, Essentials ... 
+but after plugman reload there will be a new instance and the old one is subject to garbage collection.
 
 # FactionsPlus version 0.4.7
 
