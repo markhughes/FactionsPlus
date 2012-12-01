@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.8
 
+
+* don't err when LWC is not on the system
+
 * added 3 new options to prevent /f warp inside enemy/neutral(and truce in 1.7)/ally territory. 
 warps.`denyWarpToEnemyLand` defaults to `true`, and warps.`denyWarpToAllyLand` and warps.`denyWarpToNeutralOrTruceLand`
 default to `false`.
@@ -220,6 +223,9 @@ but other plugman commands like reload, disable, enable will work.
 
 * reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
 Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
+
+* reloading any of your plugins upon which FP depends on can cause undetermined behaviour. Either use bukkit "reload" or better yet "stop" and start it again. 
+This is because FP will cache the instance of ie. LWC, Essentials ... but after plugman reload there will be a new instance and the old one is subject to garbage collection.
 
 # FactionsPlus version 0.4.7
 
