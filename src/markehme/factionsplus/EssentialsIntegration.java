@@ -142,6 +142,11 @@ public abstract class EssentialsIntegration {
 	}
 
 	public static Location getSafeDestination( Location targetLocation ) throws Exception {
-		return Util.getSafeDestination( targetLocation );
+		if (isHooked()){
+			return Util.getSafeDestination( targetLocation );
+		}else{
+			//not running Essentials on server? return same location
+			return targetLocation;
+		}
 	}
 }
