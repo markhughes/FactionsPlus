@@ -2,6 +2,8 @@
 
 * FP now detects when Essentials is reloaded or unloaded or unloaded then reloaded and updates it's internally cached referent to Essentials' 
 instance accordingly.
+NOTE: that currently (Factions 1.6.9.2) doing `plugman unload essentials` then `plugman load essentials` will break Factions plugin.
+You can see by issuing any of `/f home` or `/f warp x`.
 
 * `/f warp` now works even when Essentials is not running on server
 
@@ -197,6 +199,9 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The used pearl is wasted and a message will show.
 
 ### Known issues in 0.4.8:
+* currently (Factions 1.6.9.2) doing `plugman unload essentials` then `plugman load essentials` will break Factions plugin.
+You can see by issuing any of `/f home` or `/f warp x`.
+
 * Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(s) or `reload` the server or stop/start the server for the following cases):
   + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:
     - `warps.enabled` ie. changing this to `false` (if it was `true` when server started) will still allow those commands to be used (if you used `/f reloadfp` instead of restarting server after changing this to `false`)

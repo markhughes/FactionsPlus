@@ -224,6 +224,7 @@ public class CmdWarp extends FPCommand {
 
 					
 
+					//XXX: this will fail (in Factions not FP) when Essentials is unloaded then loaded again via plugman, also /f home
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					//we still don't try to tp to the safe location. I better not be sorry for this
