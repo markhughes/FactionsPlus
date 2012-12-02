@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* `/f reloadfp` reports time it took to execute in milliseconds instead of nanoseconds.
+
 * FP now detects when Essentials is reloaded or unloaded or unloaded then reloaded and updates it's internally cached referent to Essentials' 
 instance accordingly.
 NOTE: that currently (Factions 1.6.9.2) doing `plugman unload essentials` then `plugman load essentials` will break Factions plugin.
