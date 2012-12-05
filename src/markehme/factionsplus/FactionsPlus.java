@@ -1,6 +1,7 @@
 package markehme.factionsplus;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -13,9 +14,11 @@ import markehme.factionsplus.listeners.CoreListener;
 import markehme.factionsplus.listeners.FPConfigLoadedListener;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.scheduler.BukkitWorker;
 
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
@@ -127,6 +130,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			} catch ( Throwable t ) {
 				failed = t;
 			}
+			
+			//TODO: investigate why nag author happens ... even though we seem to be shuttind down task correctly
+			//some tasks still remain from both FP and Vault at this point if doing a server `reload` as soon as you see "[FactionsPlus] Ready." 
+//			List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
+//			info("Active Workers: "+workers.size());
+//			
+//			for ( BukkitWorker bukkitWorker : workers ) {
+//				info("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId()
+//					+", "+bukkitWorker.getThread().getName());			
+//			}
 			
 			if (null == failed) {
 				FactionsPlusPlugin.info( "Disabled successfuly." );
