@@ -210,7 +210,8 @@ You can see by issuing any of `/f home` or `/f warp x`.
     - `jails.enabled`
     - `announce.enabled`
     - `banning.enabled`   
-  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
+  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.
+  Also this means that `/f toggle` command is not automatically registered or removed to reflect the value of these config options (you'll have to restart server)   
   + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
   + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
    
@@ -230,7 +231,9 @@ it will sometimes show a NoClassDefFoundError exception, this is "normal" and it
 such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
 
 * due to how `plugman` plugin works trying to load FP by using `plugman load factionsplus` will not load, 
-but other plugman commands like reload, disable, enable will work.
+but other plugman commands like reload, disable, enable will work. However doing `plugman reload factionsplus` will cause
+all commands in the Factions help pages to be re-added at the end, see `/f h` this is why restarting server is the way to go 
+instead of reload via plugman. FIXME: see if this can actually be fixed 
 
 * reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
 Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
