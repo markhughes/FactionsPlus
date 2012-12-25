@@ -104,7 +104,7 @@ public class CmdRemoveWarp extends FPCommand {
 		    	return;
 		    }
 		    
-		    if(Config._economy.costToDeleteWarp._ > 0.0d && !Config._economy.isHooked()) {
+		    if(Config._economy.costToDeleteWarp._ > 0.0d && Config._economy.isHooked()) {
 				if (!payForCommand(Config._economy.costToDeleteWarp._, "to remove this warp", "for removing the warp")) {
 					return;
 				}

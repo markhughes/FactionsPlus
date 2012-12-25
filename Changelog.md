@@ -1,6 +1,6 @@
 # FactionsPlus version 0.4.8
 
-* fixed economy was trying to charge for warp creation even when the setting for economy was false
+* fixed economy was trying to charge for warp creation/removal even when the setting for economy was false
 
 * `/f reloadfp` reports time it took to execute in milliseconds instead of nanoseconds.
 
