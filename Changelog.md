@@ -1,5 +1,7 @@
 # FactionsPlus version 0.4.8
 
+* fixed economy was trying to charge for warp creation even when the setting for economy was false
+
 * `/f reloadfp` reports time it took to execute in milliseconds instead of nanoseconds.
 
 * FP now detects when Essentials is reloaded or unloaded or unloaded then reloaded and updates it's internally cached referent to Essentials' 
