@@ -38,7 +38,7 @@ public abstract class Bridge {
 		if(factionsVersion.startsWith("1.6")) {
 			factions=new Factions16();
 		} else {
-			if (factionsVersion.startsWith("1.7")) {
+			if (factionsVersion.startsWith("1.7") || factionsVersion.startsWith("1.8")) {
 				factions=new Factions17();
 			}else {
 				throw FactionsPlusPlugin.bailOut( "Unknown "+factionsPluginName+" version `"+factionsVersion+"`" );
