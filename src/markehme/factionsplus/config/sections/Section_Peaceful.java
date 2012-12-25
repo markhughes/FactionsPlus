@@ -5,7 +5,15 @@ import markehme.factionsplus.config.Option;
 
 public final class Section_Peaceful {
 	
-	@Option(oldAliases_alwaysDotted={
+	@Option(
+		autoComment={
+			"if all these 3 options below are `false` then `/f togglestate` command won't be available"
+			," you won't see it in `/f help`"
+			,"if any of these 3 is `true` then `/f toggle` should be in `/f help`"
+			,"but to make the command appear or disappear from help after changing these"
+			," you have to restart the server"
+		}
+		,oldAliases_alwaysDotted={
 		"leadersCanToggleState"
 		}, realAlias_inNonDottedFormat = "leadersCanToggleState" )
 	public  final _boolean leadersCanToggleState=new _boolean(false);

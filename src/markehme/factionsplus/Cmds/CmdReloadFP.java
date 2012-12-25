@@ -58,7 +58,7 @@ public class CmdReloadFP extends FPCommand {
 		} finally {
 			long endTime = System.nanoTime() - startTime;
 			if ( ret ) {
-				msg( "<i>Reloaded FactionPlus <h>%s <i>from disk, took <h>%,8dns<i>.", fileWhat, endTime );
+				msg( "<i>Reloaded FactionPlus <h>%s <i>from disk, took <h>%,2dms<i>.", fileWhat, endTime / 1000000);//ns to ms
 			} else {
 				msg( ChatColor.RED+"Errors occurred while loading %s. See console for details.", fileWhat);
 			}

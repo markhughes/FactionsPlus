@@ -29,6 +29,7 @@ public class LWCListener implements Listener {
 			FPlayer fPlayer = event.getFPlayer();
 			try {
 				if (!LWCBase.isLWCPluginPresent()) {//ie. run this on server: plugman unload lwc
+					//... but if you then also run /f reloadfp  then this listener will be unloaded
 					fPlayer.sendMessage( ChatColor.RED+"LWC plugin is not active." );
 					return;
 				}

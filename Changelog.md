@@ -1,5 +1,18 @@
 # FactionsPlus version 0.4.8
 
+* fixed economy was trying to charge for warp creation/removal even when the setting for economy was false
+
+* `/f reloadfp` reports time it took to execute in milliseconds instead of nanoseconds.
+
+* FP now detects when Essentials is reloaded or unloaded or unloaded then reloaded and updates it's internally cached referent to Essentials' 
+instance accordingly.
+NOTE: that currently (Factions 1.6.9.2) doing `plugman unload essentials` then `plugman load essentials` will break Factions plugin.
+You can see by issuing any of `/f home` or `/f warp x`.
+
+* `/f warp` now works even when Essentials is not running on server
+
+* don't err when LWC is not on the system
+
 * added 3 new options to prevent /f warp inside enemy/neutral(and truce in 1.7)/ally territory. 
 warps.`denyWarpToEnemyLand` defaults to `true`, and warps.`denyWarpToAllyLand` and warps.`denyWarpToNeutralOrTruceLand`
 default to `false`.
@@ -190,13 +203,17 @@ realize that each "." actually represents a section ie. Teleports: then next lin
     The used pearl is wasted and a message will show.
 
 ### Known issues in 0.4.8:
+* currently (Factions 1.6.9.2) doing `plugman unload essentials` then `plugman load essentials` will break Factions plugin.
+You can see by issuing any of `/f home` or `/f warp x`.
+
 * Running `/f reloadfp` (at any time), has no effect in the following cases(and thus requires that you reload the plugin(s) or `reload` the server or stop/start the server for the following cases):
   + will not add or remove the FactionsPlus commands that are seen by `/f help` (and thus these commands are unavailable to be used when not shown in /f help) when changing the following options:
     - `warps.enabled` ie. changing this to `false` (if it was `true` when server started) will still allow those commands to be used (if you used `/f reloadfp` instead of restarting server after changing this to `false`)
     - `jails.enabled`
     - `announce.enabled`
     - `banning.enabled`   
-  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.   
+  + when plugin was loaded, if all of the `peaceful.*CanToggleState` were true then changing them all to false will not detach the listener (and you can thus later re-enable them). If they were all false, the listener was not attached, thus changing any of them to true has no effect.
+  Also this means that `/f toggle` command is not automatically registered or removed to reflect the value of these config options (you'll have to restart server)   
   + when plugin was loaded, if `economy.enabled` was false OR if it was true but we couldn't hook into it, then `/f money top` command is not available because it wasn't added when the plugin was loaded.   
   + when plugin was loaded, if there was no LWC plugin installed or enabled, `/clearlocks` command is not available.   
    
@@ -216,10 +233,19 @@ it will sometimes show a NoClassDefFoundError exception, this is "normal" and it
 such as: `/f jail`, `/f unjail`, `/f ban`, `/f unban`
 
 * due to how `plugman` plugin works trying to load FP by using `plugman load factionsplus` will not load, 
-but other plugman commands like reload, disable, enable will work.
+but other plugman commands like reload, disable, enable will work. However doing `plugman reload factionsplus` will cause
+all commands in the Factions help pages to be re-added at the end, see `/f h` this is why restarting server is the way to go 
+instead of reload via plugman. FIXME: see if this can actually be fixed 
 
 * reloading only the Essentials plugin (without then reloading FP) requires that you reload FP too, to prevent possible undefined behaviour. 
 Simply because FP caches the Essentials instance at startup, assuming nothing unloads or reloads Essentials without also reloading FP afterwards.
+
+* reloading any of your plugins upon which FP depends on(except Essentials)  can cause undetermined behaviour. 
+Although `plugman reload pluginhere` seems to work (because keeps the same instance at least in the case of Essentials -tested), 
+something like `plugman unload pluginhere` and then `plugman load pluginhere` will not work.
+Either use bukkit "reload" or better yet "stop" and start it again. 
+This is because FP will cache the instance of ie. LWC, Essentials ... 
+but after plugman reload there will be a new instance and the old one is subject to garbage collection.
 
 # FactionsPlus version 0.4.7
 
