@@ -1,0 +1,15 @@
+/lib
+/bin
+*.pydevproject
+.metadata
+*.tmp
+*.bak
+*.swp
+*~
+/.classpath
+/.settings
+.loadpath
+/built.jar
+fpexport_personalized.jardesc
+/.project
+/fpexport_toOUTPUT.jardesc
