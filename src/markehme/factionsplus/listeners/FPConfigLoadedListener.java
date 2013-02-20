@@ -63,7 +63,10 @@ public class FPConfigLoadedListener implements Listener {
 		}
         
         
+<<<<<<< HEAD
+=======
         DisguiseListener.enableOrDisable(FactionsPlus.instance);
+>>>>>>> 34bdaf45da083af7afbf857bf9602b3a42e224fd
         
         
 		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();

@@ -1,6 +1,10 @@
 name: FactionsPlus
 main: markehme.factionsplus.FactionsPlus
+<<<<<<< HEAD
+authors: ['MarkehMe', 'unv', 'andrew2060', 'basicsensei']
+=======
 authors: ['MarkehMe', 'unv_annihilator', 'andrew2060', 'basicsensei']
+>>>>>>> 34bdaf45da083af7afbf857bf9602b3a42e224fd
 website: http://markeh.me
 version: 0.4.8
 depend: [ Factions, Vault ]
@@ -99,4 +103,8 @@ permissions:
       factionsplus.togglestate.use: true
       factionsplus.togglestate.others: true
       factionsplus.dontPreventLWCLocking: true
+<<<<<<< HEAD
 #      factionsplus.xyz: true
+=======
+#      factionsplus.xyz: true
+>>>>>>> 34bdaf45da083af7afbf857bf9602b3a42e224fd
