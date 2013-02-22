@@ -25,15 +25,15 @@ import com.massivecraft.factions.Faction;
 
 /**
  * call these methods only when LWC plugin is loaded in bukkit, else NoClassDefFoundError<br>
- * to avoid that, call LWCBase.isLWC() first
+ * to avoid that, call LWCBase.isLWCPluginPresent() first
  */
 public abstract class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
 	
-	private static final LWCListener lwcListener=new LWCListener();
+	
 	private static final LWCModule lwcModule=new LWCModule();
 	
 	private static boolean hooked=false;
-	private static boolean	alreadyRegistered=false;
+	
 	
 	/**
 	 * you may call this repeatedly while running<br>
@@ -79,16 +79,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 	
 	
-	public static void deregListenerIfNeeded() {
-		if ( alreadyRegistered ) {
-			try {
-				HandlerList.unregisterAll( lwcListener );
-				FactionsPlus.info("Stopped LWC listener");
-			} finally {
-				alreadyRegistered = false;
-			}
-		}
-	}
+	
 	
 	private final static Material[] protectionsTypesToRemove={
 		 Material.CHEST //is TileEntity

@@ -1,5 +1,7 @@
 package markehme.factionsplus;
 
+import java.lang.ref.Reference;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -84,10 +86,22 @@ public abstract class EssentialsIntegration {
 	 * @return the instance or null
 	 */
 	private synchronized static final IEssentials getEssentialsInstance() {
-		//FIXME: caching the instance should be a bad idea if something like plugman reloads or unloads only the Essentials plugin
-		if ( null == ess ) {
+		//fixed: caching the instance should be a bad idea if something like plugman reloads or unloads only the Essentials plugin
+		//the following cases are handled:
+		//plugman reload - doesn't change the reference
+		//plugman unload then plugman reload - changes the reference (this breaks Factions but not FP currently, although /f warp x will trigger it)
+		//plugman unload when previously was loaded
+		//plugman load when previously was unloaded/nonexistent
+		
+		Plugin essPlugin;
+		if (	   ( null == ess ) 
+				|| (!ess.isEnabled())
+				//short circuit may not eval the next one
+				|| (ess != (essPlugin = Bukkit.getPluginManager().getPlugin( pluginName ))) ) {
+			
 			// lazyly init or : maybe add depend (not soft) in plugin.yml
-			Plugin essPlugin = Bukkit.getPluginManager().getPlugin( pluginName );
+			essPlugin = Bukkit.getPluginManager().getPlugin( pluginName );
+			
 			if ( ( null != essPlugin ) && ( essPlugin.isEnabled() ) ) {
 				ess = (IEssentials)essPlugin;
 				isLoadedButNotEnabled=!essPlugin.isEnabled();
@@ -96,10 +110,21 @@ public abstract class EssentialsIntegration {
 //				haveEssentials = ESS_HAVE.INITED_AND_NOT_HAVE;
 //			}else{
 //				isLoadedButNotEnabled=false;
+				FactionsPlus.info( "updated the cached reference to Essentials' instance: `"+ess+"`" );
+			}else {
+				if (null != ess) {
+					FactionsPlus.info( "Essentials plugin is nolonger on the system");
+				}
+				ess=null;
+				
 			}
+			
+			
 		}
+		
 		return ess;// can be null
 	}
+	
 	
 	public final static boolean isLoadedButNotEnabled() {
 		return !isHooked() && isLoadedButNotEnabled;
@@ -142,6 +167,11 @@ public abstract class EssentialsIntegration {
 	}
 
 	public static Location getSafeDestination( Location targetLocation ) throws Exception {
-		return Util.getSafeDestination( targetLocation );
+		if (isHooked()){
+			return Util.getSafeDestination( targetLocation );
+		}else{
+			//not running Essentials on server? return same location
+			return targetLocation;
+		}
 	}
 }
