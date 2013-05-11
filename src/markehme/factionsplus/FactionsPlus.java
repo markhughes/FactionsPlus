@@ -28,7 +28,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class FactionsPlus extends FactionsPlusPlugin {
 
-	public static FactionsPlus instance;//should never be null, unless not yet loaded by bukkit
+	public static FactionsPlus instance;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	
@@ -149,7 +149,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			failed = t;
 		} finally {
 			if ( null != failed ) {
-				FactionsPlusPlugin.info( "unable to successfully disable" );
+				FactionsPlusPlugin.info( "Did not disable successfuly." );
 				FactionsPlus.severe( failed, "This is the last seen exception:" );
 			}
 		}
@@ -157,90 +157,65 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	
 	@Override
-	public void onEnable() { try { super.onEnable();//be first
-		Config.init();
-		Bridge.init();
-		PluginManager pm = this.getServer().getPluginManager();
-		FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
-		FactionsPlusPlugin.info("Factions version " + FactionsVersion );//before reload
-		pm.registerEvents(new FPConfigLoadedListener(),this);
-		Config.reload();//be as soon as possible but after the above
-		
-		pm.registerEvents(this.corelistener, this);
-		
-		FactionsPlusJail.server = getServer();
-		
-	
-		
-		
-		FactionsPlusCommandManager.setup();
-		
-		
-        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
-            permission = permissionProvider.getProvider();
-        }
-        
-        
-//        if(Config._announce.enabled._){
-//    		pm.registerEvents(this.announcelistener, this);
-//        }
-//        if(Config._banning.enabled._) {
-//        	pm.registerEvents(this.banlistener, this);
-//        }
-//        if(Config._jails.enabled._) {
-//        	pm.registerEvents(this.jaillistener, this);
-//        }
-//        
-//        
-//        if(Config._peaceful.enablePeacefulBoosts._) {
-//        	pm.registerEvents(this.peacefullistener, this);
-//        }
-//        
-//        if(Config._extras.crossBorderLiquidFlowBlock._) {
-//        	pm.registerEvents(this.liquidflowlistener, this);
-//        }
-
-        
-        if(1<2) {        //Temporary Always True Until a Config Option is Created 
-        	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
-        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-        		FactionsPlusPlugin.info("Hooked into WorldEdit!");
-        		isWorldEditEnabled = true;
-        	}
-            if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-            	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-            	FactionsPlusPlugin.info("Hooked into WorldGuard!");
-            	isWorldGuardEnabled = true;
-            }
-        }
-        
-
-        
-        
-        version = getDescription().getVersion();
-        
-        
-        
-		FactionsPlusPlugin.info("Ready.");
-		
+	public void onEnable() {
+		try {
+			super.onEnable(); // Be first
+			
+			Config.init();
+			Bridge.init();
+			
+			PluginManager pm = this.getServer().getPluginManager();
+			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
+			
+			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); // Before reload
+			
+			pm.registerEvents(new FPConfigLoadedListener(),this);
+			
+			Config.reload(); //be as soon as possible but after the above
+			
+			pm.registerEvents(this.corelistener, this);
+			
+			FactionsPlusJail.server = getServer();
+			
+			FactionsPlusCommandManager.setup();
+			
+	        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+	        if (permissionProvider != null) {
+	            permission = permissionProvider.getProvider();
+	        }
+	        
+	        if(1<2) {        //Temporary Always True Until a Config Option is Created 
+	        	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
+	        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+	        		FactionsPlusPlugin.info("Hooked into WorldEdit!");
+	        		isWorldEditEnabled = true;
+	        	}
+	            if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+	            	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
+	            	FactionsPlusPlugin.info("Hooked into WorldGuard!");
+	            	isWorldGuardEnabled = true;
+	            }
+	        }
+	        
+	        version = getDescription().getVersion();
+	        
+			FactionsPlusPlugin.info("Ready.");
+			
 			try {
 				metrics = new Metrics( this );
 				metrics.start();
 			} catch ( IOException e ) {
-				FactionsPlusPlugin.info("Waah! Couldn't metrics-up! :'( "+e.getMessage() );
+				FactionsPlusPlugin.info("Metrics could not start up: "+e.getMessage() );
 			}
-
-		
-		
-		//put your code above, let this be last:
-	}catch (Throwable t) {
-		FactionsPlus.severe( t);
-//		t.printStackTrace();//fixed: this makes each line have [SEVERE] which is unlike what happens when you just allow it to throw
-		if (isEnabled()) {
-			disableSelf();
-		}
-	}
+			
+			FactionsPlusPlugin.info("@MarkehMe: Hey you! I'm quite frankly pretty busy lately with running two businesses. I still love FactionsPlus, but if you can help out please do @ https://github.com/MarkehMe/FactionsPlus");
+			
+		}catch (Throwable t) {
+			FactionsPlus.severe( t);
+			if (isEnabled()) {
+				disableSelf();
+			}
+		} //try
 	}//onEnable
 	
 	
