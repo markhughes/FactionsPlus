@@ -1,3 +1,6 @@
+# FactionsPlus version 0.4.9
+* Pocketkid2: Fix for RECRUIT not existing in class
+
 # FactionsPlus version 0.4.8
 
 * fixed economy was trying to charge for warp creation/removal even when the setting for economy was false
