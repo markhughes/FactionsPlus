@@ -3,6 +3,7 @@
 * Metrics Update
 * Small Cleanup in code
 * Important notice added!
+* Built with 1.5.2-R0.1
 
 # FactionsPlus version 0.4.8
 
