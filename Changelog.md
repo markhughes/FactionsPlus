@@ -1,5 +1,8 @@
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
+* Metrics Update
+* Small Cleanup in code
+* Important notice added!
 
 # FactionsPlus version 0.4.8
 
