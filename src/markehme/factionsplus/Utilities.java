@@ -316,6 +316,13 @@ public abstract class Utilities {
 	{
 		return faction.getId().equals(ID_WILDERNESS);
 	}
+	
+	public static String getLocType(Location loc) {
+		
+		
+		return null;
+		
+	}
 
 	/**
 	 * aka non-safezone and non-warzone and not wilderness
