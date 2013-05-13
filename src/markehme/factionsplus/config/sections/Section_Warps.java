@@ -117,6 +117,11 @@ public final class Section_Warps{
 	}, realAlias_inNonDottedFormat = "smokeEffectOnWarp" )
 	public  final _boolean smokeEffectOnWarp=new _boolean(true);
 	
+	@Option(oldAliases_alwaysDotted={
+//			"warps.removeWarpIfDeniedAccess"
+			"removeWarpIfDeniedAccess"
+		}, realAlias_inNonDottedFormat = "removeWarpIfDeniedAccess" )
+		public  final _boolean removeWarpIfDeniedAccess=new _boolean(true);
 	
 	
 	public static final boolean canSetOrRemoveWarps(FPlayer fplayer) {
