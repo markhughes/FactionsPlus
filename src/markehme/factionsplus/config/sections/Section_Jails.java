@@ -72,6 +72,10 @@ public final class Section_Jails {
 	}, realAlias_inNonDottedFormat = "canJailOnlyIfIssuerIsInOwnTerritory" )
 	public  final _boolean canJailOnlyIfIssuerIsInOwnTerritory=new _boolean(true);
 	
+	@Option(oldAliases_alwaysDotted={
+			"tellPlayerWhoBannedThem"
+			}, realAlias_inNonDottedFormat = "tellPlayerWhoBannedThem" )
+		public  final _boolean tellPlayerWhoBannedThem=new _boolean(true);
 	
 	public final static String permissionNodeNameForCanJailUnjail="factionsplus.jailunjail";
 	
