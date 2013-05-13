@@ -1,3 +1,6 @@
+# FactionsPlus version 0.4.10
+* Added warps.removeWarpIfDeniedAccess
+
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
 * Metrics Update
