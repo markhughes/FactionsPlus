@@ -4,13 +4,18 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import markehme.factionsplus.EssentialsIntegration;
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
@@ -97,6 +102,7 @@ public class CmdWarp extends FPCommand {
 		// Check for enemies nearby
 		// if player is not in a safe zone or their own faction territory, only allow teleport if no enemies are nearby
 		Location loc = player.getLocation().clone();
+		
 		if
 		(
 				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(Board.getFactionAt(new FLocation(loc))) 
@@ -180,8 +186,10 @@ public class CmdWarp extends FPCommand {
 
 					Location newTel = new Location(world, x, y, z, Y, playa);
 					
-					int count = 0;
 					String ownfid = fplayer.getFactionId();
+					
+					int count = 0;
+					
 					do {
 						FLocation warpFLocation = new FLocation( newTel );
 						String warpatFID = Board.getIdAt( warpFLocation );
@@ -193,6 +201,50 @@ public class CmdWarp extends FPCommand {
 								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
 									+ ( 0 < count ? "will make you land outside of" : "is not in" )
 									+ " your faction territory."+(0<count?" <i>(because it's obstructed)":"") );
+									if( Config._warps.removeWarpIfDeniedAccess._ ) {
+										File currentWarpFileTMP = new File(Config.folderWarps,  currentFaction.getId() + ".tmp");
+										PrintWriter wrt=null;
+										BufferedReader rdr=null;
+										try {
+											wrt = new PrintWriter( new FileWriter( currentWarpFileTMP ) );
+											rdr = new BufferedReader( new FileReader( currentWarpFile ) );
+											
+											String line;
+											
+											while ( ( line = rdr.readLine() ) != null ) {
+												String[] warp = line.split( ":" );
+												if ( ( warp.length >= 1 ) && ( warp[0].equalsIgnoreCase( warpname ) ) ) {
+													continue;
+												}
+													
+												wrt.println( line );
+											}
+										} finally {
+											if ( null != rdr ) {
+												try {
+													rdr.close();
+												} catch ( IOException e ) {
+													e.printStackTrace();
+												}
+											}
+											if ( null != wrt ) {
+												wrt.close();
+											}
+										}
+										
+										if (!currentWarpFile.delete()) {
+										   	System.out.println("[FactionsPlus] Cannot delete " + currentWarpFile.getName());
+										    return;
+										}
+										    
+										 if (!currentWarpFileTMP.renameTo(currentWarpFile)) {
+											 System.out.println("[FactionsPlus] Cannot rename " + currentWarpFileTMP.getName() + " to " + currentWarpFile.getName());
+											 return;
+										 }
+										 
+										 fplayer.msg( "The warp " + ChatColor.WHITE + warpname + " was removed." );
+									}
+										
 								return;
 							} else {// you can land anywhere if the 3 config options allows it below:
 								Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(), Board.getFactionAt( warpFLocation ) );
@@ -221,14 +273,13 @@ public class CmdWarp extends FPCommand {
 					}
 
 					player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);
-
 					
-
 					//XXX: this will fail (in Factions not FP) when Essentials is unloaded then loaded again via plugman, also /f home
 					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
 
 					//we still don't try to tp to the safe location. I better not be sorry for this
 					newTel=new Location(world, x, y, z, Y, playa);
+										
 					// Create a smoke effect
 					if (Config._warps.smokeEffectOnWarp._) {
 						List<Location> smokeLocations = new ArrayList<Location>();
