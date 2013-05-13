@@ -27,7 +27,7 @@ public class BanListener implements Listener{
 			} else {
 				event.getFPlayer().msg("You can't join this Faction as you have been banned!");
 				event.setCancelled(true);
-				event.getFPlayer().leave(false);//XXX: this doesn't seem to be needed, I guess unless that faction was deleted and 
+				event.getFPlayer().leave(false);
 			}
 
 			return;
