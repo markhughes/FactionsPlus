@@ -145,8 +145,13 @@ public class CmdBan extends FPCommand {
 //		} else {
 		try {
 			banFile.createNewFile();
+			
 			if ( null != playerBanThisPlayer ) {// ie. he's online
-				playerBanThisPlayer.sendMessage( "You were banned from the faction "+fme.getFaction().getTag()+" by " + fme.getName() );
+				if(Config._jails.tellPlayerWhoBannedThem._) {
+					playerBanThisPlayer.sendMessage( "You were banned from the faction "+fme.getFaction().getTag()+" by " + fme.getName() );
+				} else {
+					playerBanThisPlayer.sendMessage( "You were banned from the faction "+fme.getFaction().getTag()+".");
+				}
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
