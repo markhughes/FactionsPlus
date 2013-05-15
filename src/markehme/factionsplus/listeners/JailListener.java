@@ -162,10 +162,14 @@ public class JailListener implements Listener{
 			return;
 		}
 		
-		File jailDataFile = new File(Config.folderJails,"jaildata." + event.getFPlayer().getFactionId() + "." + event.getFPlayer().getName());
-		
-		if(jailDataFile.exists()) {
-			jailDataFile.delete();
+		if(Config._jails.removeOwnJailDataWhenLeavingFaction._) {
+			
+			File jailDataFile = new File(Config.folderJails,"jaildata." + event.getFPlayer().getFactionId() + "." + event.getFPlayer().getName());
+			
+			if(jailDataFile.exists()) {
+				jailDataFile.delete();
+			}
+			
 		}
 		
 		return;
