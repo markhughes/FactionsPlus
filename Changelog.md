@@ -6,6 +6,7 @@
 * Added jails.removeOwnJailDataWhenLeavingFaction
 * If jails.removeOwnJailDataWhenLeavingFaction is true than the user is also unjailed. 
 * Added permission factionsplus.keepItemsOnDeathInWarZone, if player has this permission and dies in a WarZone they keep their inventory.
+* Fixed a bug in the templates when only one argument is passed
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
