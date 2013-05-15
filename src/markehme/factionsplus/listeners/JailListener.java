@@ -169,7 +169,7 @@ public class JailListener implements Listener{
 			if(jailDataFile.exists()) {
 				FactionsPlusJail.removeFromJail( event.getFPlayer().getName(), event.getFPlayer(), true);
 				
-				jailDataFile.delete();
+				//jailDataFile.delete();
 			}
 			
 		}
