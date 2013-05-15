@@ -33,7 +33,7 @@ public class CmdUnJail extends FPCommand {
 		if (Config._jails.canJailUnjail( fme ))
 		{
 			
-			FactionsPlusJail.removeFromJail( playerToUnjail, fme);
+			FactionsPlusJail.removeFromJail( playerToUnjail, fme, true);
 			
 			return;
 		}
