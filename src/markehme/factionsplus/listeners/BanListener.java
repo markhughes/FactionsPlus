@@ -10,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.event.FPlayerJoinEvent;
+import com.massivecraft.factions.event.FPlayerLeaveEvent;
 
-public class BanListener implements Listener{
+public class BanListener implements Listener {
+	
 	@EventHandler
 	public void onFPlayerJoinEvent(FPlayerJoinEvent event) {
 		if(event.isCancelled()) {
@@ -34,5 +36,20 @@ public class BanListener implements Listener{
 		}
 
 
+	}
+	
+	@EventHandler
+	public void onFPlayerLeaveEvent(FPlayerLeaveEvent event) {
+		if(event.isCancelled()) {
+			return;
+		}
+		
+		File banFile = new File(Config.folderFBans, event.getFaction().getId() + "." + event.getFPlayer().getName().toLowerCase());
+		
+		if(banFile.exists()) {
+			banFile.delete();
+		}
+		
+		return;
 	}
 }
