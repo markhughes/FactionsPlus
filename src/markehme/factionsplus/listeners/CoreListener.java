@@ -5,17 +5,26 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
@@ -99,6 +108,64 @@ public class CoreListener implements Listener{
 		removeFPData(faction);
 	}
 	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		
+		final Player currentPlayer = event.getEntity();
+		
+		FPlayer currentFPlayer = FPlayers.i.get(currentPlayer);
+		
+		if(Utilities.isWarZone(Board.getFactionAt(currentPlayer.getLocation()))) {
+			
+			if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeathInWarZone")) {
+				return;
+			} else {
+				currentPlayer.sendMessage(ChatColor.RED + "You died in the WarZone, so you get to keep your items.");
+			}
+			
+			final ItemStack[] playersArmor = currentPlayer.getInventory().getArmorContents();
+			final ItemStack[] playersInventory = currentPlayer.getInventory().getContents();
+			
+			// EntityDamageEvent damangeEvent = currentPlayer.getLastDamageCause();
+			
+			// In the future - maybe only specific death events? e.g. maybe only by mobs/players
+			// not from fall damage or sucide. -- configurable of course 
+			
+			// Players current armor 
+	
+			Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable(){
+				@Override
+				public void run() {
+					currentPlayer.getInventory().setArmorContents(playersArmor);
+				}
+	
+			});
+	
+			for (ItemStack is : playersArmor) {
+				event.getDrops().remove(is);
+			}
+			
+			// Players Experience
+			event.setDroppedExp(0);
+	
+			for (int i = 0; i < playersInventory.length; i++) {
+				// drop nothing!
+				event.getDrops().remove(playersInventory[i]);
+	
+			}
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable() {
+	
+				@Override
+				public void run() {
+					currentPlayer.getInventory().setContents(playersInventory);
+				}
+	
+			});
+		}
+
+	}
+	
 	
 	private final void removeFPData( Faction forFaction ) {
 		// Annoucements
@@ -146,5 +213,6 @@ public class CoreListener implements Listener{
 		}
 		tempFile = null;
 	}
+	
 
 }
