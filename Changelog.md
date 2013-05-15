@@ -4,6 +4,7 @@
 * BugFix: If creating a Faction that was a previous Faction, that was removed, that you where also banned from, you would be kicked. This fixes this.
 * BugFix: If a jail file exists when leaving a Faction, it is removed (accordingly to removeOwnJailDataWhenLeavingFaction) 
 * Added jails.removeOwnJailDataWhenLeavingFaction
+* If jails.removeOwnJailDataWhenLeavingFaction is true then the user is also unjailed. 
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
