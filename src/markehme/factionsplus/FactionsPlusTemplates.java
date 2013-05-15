@@ -11,7 +11,6 @@ public class FactionsPlusTemplates {
 		
 		if(templateOption == "announcement_message") {
 			workingstring = Config.templates.getString("announcement_message");
-
 		}
 		
 		if(templateOption == "warp_created") {
@@ -31,42 +30,52 @@ public class FactionsPlusTemplates {
 			workingstring = Config.templates.getString("warp_non_existant");
 		}
 		
-
+		if(templateOption == "warped_to") {
+			workingstring = Config.templates.getString("warped_to");
+		}
+		
+		if(templateOption == "warped_removed") {
+			workingstring = Config.templates.getString("warped_removed");
+		}
+		
+		if(templateOption == "warp_incorrect_password") {
+			workingstring = Config.templates.getString("warp_incorrect_password");
+		}
+		
 		workingstring = colorFormat(workingstring);
 		
-		
-		if(args.length == 2) {
-			workingstring = workingstring.replace("!1", args[1]);
-
-			return(workingstring);
-		}
-		
-		if(args.length == 3) {
-			workingstring = workingstring.replace("!1", args[1]);
-			workingstring = workingstring.replace("!2", args[2]);
-			return(workingstring);
-		}
-		
-		if(args.length == 4) {
-			workingstring = workingstring.replaceAll("!1", args[1]);
-			workingstring = workingstring.replaceAll("!2", args[2]);
-			workingstring = workingstring.replaceAll("!3", args[3]);
-
-			return(workingstring);
-		}
-		
-		if(args.length == 5) {
-			workingstring = workingstring.replace("!1", args[1]);
-			workingstring = workingstring.replace("!2", args[2]);
-			workingstring = workingstring.replace("!3", args[3]);
-			workingstring = workingstring.replace("!4", args[4]);
-
-			return(workingstring);		
+		if(args != null) {
+			if(args.length == 2) {
+				workingstring = workingstring.replace("!1", args[1]);
+	
+				return(workingstring);
+			}
+			
+			if(args.length == 3) {
+				workingstring = workingstring.replace("!1", args[1]);
+				workingstring = workingstring.replace("!2", args[2]);
+				return(workingstring);
+			}
+			
+			if(args.length == 4) {
+				workingstring = workingstring.replaceAll("!1", args[1]);
+				workingstring = workingstring.replaceAll("!2", args[2]);
+				workingstring = workingstring.replaceAll("!3", args[3]);
+	
+				return(workingstring);
+			}
+			
+			if(args.length == 5) {
+				workingstring = workingstring.replace("!1", args[1]);
+				workingstring = workingstring.replace("!2", args[2]);
+				workingstring = workingstring.replace("!3", args[3]);
+				workingstring = workingstring.replace("!4", args[4]);
+	
+				return(workingstring);		
+			}
 		}
 
 		return workingstring;
-
-		
 		
 	}
 	
@@ -103,6 +112,10 @@ public class FactionsPlusTemplates {
 			// For warps 
 			Config.templates.set("warp_created", "<green>Warp <white>!1 <green>set for your Faction!");
 			Config.templates.set("notify_warp_created", "!1 created a warp in your faction called !2");
+			Config.templates.set("warp_non_existant", "That warp does not exist");
+			Config.templates.set("warped_to", "<red>Warped to <white>!1");
+			Config.templates.set("warped_removed", "<green>The warp <white>!1<green> was removed.");
+			Config.templates.set("warp_incorrect_password", "<red>Incorrect password, please use /f warp [warp] <password>");
 			
 			// For jail
 			Config.templates.set("jailed_message", "<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
