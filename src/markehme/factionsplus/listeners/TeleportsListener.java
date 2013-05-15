@@ -161,8 +161,8 @@ public class TeleportsListener implements Listener {
 						safeTo = EssentialsIntegration.getSafeDestination(whereTo);
 					} catch ( Exception e ) {
 						e.printStackTrace();
-						playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
-							+ "Internal error occurred calling Essentials, command ignored. Check console." );
+						playerInGame.sendMessage( ChatColor.RED
+							+ "[FactionsPlus] Internal error occurred calling Essentials, command ignored. Check console." );
 						event.setCancelled( true );
 						assert null == safeTo;
 						return;
@@ -282,8 +282,8 @@ public class TeleportsListener implements Listener {
 						targetLocation = EssentialsIntegration.getHomeForPlayer( playerInGame, homeName );
 					} catch ( Exception e ) {
 						e.printStackTrace();
-						playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
-							+ "Internal error occurred calling Essentials, command ignored. Check console." );
+						playerInGame.sendMessage( ChatColor.RED
+							+ "[FactionsPlus] Internal error occurred calling Essentials, command ignored. Check console." );
 						assert null == targetLocation;
 					}
 					
@@ -322,8 +322,8 @@ public class TeleportsListener implements Listener {
 					potentiallyModifiedTarget = EssentialsIntegration.getSafeDestination(targetLocation);
 				} catch ( Exception e ) {
 					e.printStackTrace();
-					playerInGame.sendMessage( ChatColor.RED + FactionsPlus.FP_TAG_IN_LOGS
-						+ "Internal error occurred calling Essentials, command ignored. Check console." );
+					playerInGame.sendMessage( ChatColor.RED 
+						+ "[FactionsPlus] Internal error occurred calling Essentials, command ignored. Check console." );
 					event.setCancelled( true );
 					assert null == potentiallyModifiedTarget;
 					return;

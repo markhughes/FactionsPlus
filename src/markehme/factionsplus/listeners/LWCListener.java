@@ -41,7 +41,7 @@ public class LWCListener implements Listener {
 			} catch ( Exception cause ) {
 				event.setCancelled( true );// disallow claim
 				FactionsPlusPlugin.severe(cause, msg );
-				fPlayer.sendMessage( FactionsPlus.FP_TAG_IN_LOGS + msg );
+				fPlayer.sendMessage( "[FactionsPlus] " + msg );
 			}
 		}
 	}
