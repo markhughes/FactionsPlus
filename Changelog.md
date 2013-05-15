@@ -8,6 +8,8 @@
 * Added permission factionsplus.keepItemsOnDeathInWarZone, if player has this permission and dies in a WarZone they keep their inventory.
 * Fixed a bug in the templates when only one argument is passed
 * Added new template options: warp_non_existant, warped_to, warped_removed, warp_incorrect_password
+* Introduced permission factionsplus.useanyportal
+* Added configuration options mustBeInOwnTerritoryToUsePortals and alliesCanUseEachOthersPortals to integrate with Multiverse-portals 
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
