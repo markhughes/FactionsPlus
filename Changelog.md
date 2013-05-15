@@ -5,6 +5,7 @@
 * BugFix: If a jail file exists when leaving a Faction, it is removed (accordingly to removeOwnJailDataWhenLeavingFaction) 
 * Added jails.removeOwnJailDataWhenLeavingFaction
 * If jails.removeOwnJailDataWhenLeavingFaction is true than the user is also unjailed. 
+* Added permission factionsplus.keepItemsOnDeathInWarZone, if player has this permission and dies in a WarZone they keep their inventory.
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
