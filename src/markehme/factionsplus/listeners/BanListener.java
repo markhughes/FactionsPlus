@@ -38,18 +38,5 @@ public class BanListener implements Listener {
 
 	}
 	
-	@EventHandler
-	public void onFPlayerLeaveEvent(FPlayerLeaveEvent event) {
-		if(event.isCancelled()) {
-			return;
-		}
-		
-		File banFile = new File(Config.folderFBans, event.getFaction().getId() + "." + event.getFPlayer().getName().toLowerCase());
-		
-		if(banFile.exists()) {
-			banFile.delete();
-		}
-		
-		return;
-	}
+
 }
