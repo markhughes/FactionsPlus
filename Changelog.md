@@ -2,7 +2,7 @@
 * Added warps.removeWarpIfDeniedAccess
 * Added jails.tellPlayerWhoBannedThem
 * BugFix: If creating a Faction that was a previous Faction, that was removed, that you where also banned from, you would be kicked. This fixes this.
-* BugFix: If a ban file exists when leaving a Faction, it is removed. 
+* BugFix: If a jail file exists when leaving a Faction, it is removed. 
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
