@@ -47,6 +47,10 @@ public final class Section_Jails {
 		}, realAlias_inNonDottedFormat = "officersCanJail" )
 	public  final _boolean officersCanJail=new _boolean(true);
 	
+	@Option(oldAliases_alwaysDotted={
+			"removeOwnJailDataWhenLeavingFaction"
+			}, realAlias_inNonDottedFormat = "removeOwnJailDataWhenLeavingFaction" )
+		public  final _boolean removeOwnJailDataWhenLeavingFaction=new _boolean(true);
 	
 	@Option(oldAliases_alwaysDotted={
 		}, realAlias_inNonDottedFormat = "denyMovementWhileJailed" )
