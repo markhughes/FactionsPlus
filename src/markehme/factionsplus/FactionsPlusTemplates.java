@@ -26,11 +26,16 @@ public class FactionsPlusTemplates {
 		if(templateOption == "jailed_message") {
 			workingstring = Config.templates.getString("jailed_message");
 		}
+		
+		if(templateOption == "warp_non_existant") {
+			workingstring = Config.templates.getString("warp_non_existant");
+		}
+		
+
 		workingstring = colorFormat(workingstring);
 		
 		
 		if(args.length == 2) {
-			workingstring = workingstring.replace("$1", args[1]);
 			workingstring = workingstring.replace("!1", args[1]);
 
 			return(workingstring);
@@ -103,7 +108,7 @@ public class FactionsPlusTemplates {
 			Config.templates.set("jailed_message", "<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
 			
 			// Default value don't change
-			Config.templates.set("doNotChangeMe", 3);
+			Config.templates.set("doNotChangeMe", 4);
 			
 			Config.templates.save(Config.templatesFile);
 			
