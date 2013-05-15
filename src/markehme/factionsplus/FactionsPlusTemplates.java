@@ -31,6 +31,8 @@ public class FactionsPlusTemplates {
 		
 		if(args.length == 2) {
 			workingstring = workingstring.replace("$1", args[1]);
+			workingstring = workingstring.replace("!1", args[1]);
+
 			return(workingstring);
 		}
 		
