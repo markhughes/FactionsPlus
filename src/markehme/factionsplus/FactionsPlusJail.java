@@ -37,7 +37,7 @@ public class FactionsPlusJail {
 	 */
 	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
 	
-	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, FPlayer unjailer) {
+	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, FPlayer unjailer, boolean DontSayAnything) {
 
 		if ( !FPlayers.i.exists( nameOfPlayerToBeUnjailed ) ) {
 			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
@@ -51,7 +51,9 @@ public class FactionsPlusJail {
 		String factionId=fpToBeUnjailed.getFactionId();
 		
 		if ( !unjailer.getFactionId().equals( factionId ) ) {
-			unjailer.sendMessage( ChatColor.RED + "That player is not in your faction" );
+			if(!DontSayAnything) {
+				unjailer.sendMessage( ChatColor.RED + "That player is not in your faction" );
+			}
 			return false;
 		}
 		
@@ -78,6 +80,8 @@ public class FactionsPlusJail {
 					// inside the file if a flag is set (jailed=YES/NO; teleportedBack=YES/NO) and when both are YES then delete 
 					//the file, else keep it until both are YES, ie. when player comes online 
 					
+					// ^ A better way to do this, would be to add an additional argument to the Jail file. If it is set to UNJAIL
+					// then on login we will check this, and unjail the player.
 					
 					String worldName = bw.readLine();
 					if ( null != worldName ) {
@@ -152,11 +156,13 @@ public class FactionsPlusJail {
 			String unjailMsg = ChatColor.WHITE+nameOfPlayerToBeUnjailed + ChatColor.GREEN+" has been removed from jail by "+
 					ChatColor.WHITE+unjailer.getName()+ChatColor.GREEN+"."+
 			(!tpSuccess?ChatColor.RED+" But was not teleported to original location.":"");
-			if (!unjailer.getFactionId().equals(fpToBeUnjailed.getFactionId())) {
+			if (!unjailer.getFactionId().equals(fpToBeUnjailed.getFactionId()) && !DontSayAnything) {
 				unjailer.sendMessage( unjailMsg);
 			}
 			
-			fpToBeUnjailed.getFaction().sendMessage( unjailMsg );
+			if(!DontSayAnything) {
+				fpToBeUnjailed.getFaction().sendMessage( unjailMsg );
+			}
 			return true;
 		} else {
 			unjailer.sendMessage( nameOfPlayerToBeUnjailed + " is not jailed." );
