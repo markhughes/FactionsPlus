@@ -379,14 +379,11 @@ public class TeleportsListener implements Listener {
 				}// while
 				
 				assert null != rel;
-//				System.out.println("final: "+playerInGame+" "+rel+" current="+allowed);
 				if ( !allowed ) {
 					playerInGame.sendMessage( ChatColor.RED + "You are not allowed to teleport to your /home which is now in "
 						+ rel + " territory" );
 					event.setCancelled( true );
 					return;
-//				}else {
-//					System.out.println("allowed "+rel);
 				}
 			}
 		}
@@ -518,9 +515,8 @@ public class TeleportsListener implements Listener {
 						denyTeleport( event );
 						break;
 					}
-				} //else {
-					//not warzone/safezone then check:
-					
+				} 
+				
 				FactionsAny.Relation rel = getRelation( player, fac );
 				if ( !player.isOp() ) {// only deny teleports to non-op players
 					switch ( rel ) {
