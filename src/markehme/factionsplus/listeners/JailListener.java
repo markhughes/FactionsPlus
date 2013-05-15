@@ -1,5 +1,7 @@
 package markehme.factionsplus.listeners;
 
+import java.io.File;
+
 import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
@@ -19,6 +21,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.massivecraft.factions.event.FPlayerJoinEvent;
+import com.massivecraft.factions.event.FPlayerLeaveEvent;
 
 public class JailListener implements Listener{
 	@EventHandler
@@ -151,5 +154,20 @@ public class JailListener implements Listener{
 			}
 			
 		}
+	}
+	
+	@EventHandler
+	public void onFPlayerLeaveEvent(FPlayerLeaveEvent event) {
+		if(event.isCancelled()) {
+			return;
+		}
+		
+		File jailDataFile = new File(Config.folderJails,"jaildata." + event.getFPlayer().getFactionId() + "." + event.getFPlayer().getName());
+		
+		if(jailDataFile.exists()) {
+			jailDataFile.delete();
+		}
+		
+		return;
 	}
 }
