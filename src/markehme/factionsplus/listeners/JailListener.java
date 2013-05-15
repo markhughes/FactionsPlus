@@ -167,6 +167,8 @@ public class JailListener implements Listener{
 			File jailDataFile = new File(Config.folderJails,"jaildata." + event.getFPlayer().getFactionId() + "." + event.getFPlayer().getName());
 			
 			if(jailDataFile.exists()) {
+				FactionsPlusJail.removeFromJail( event.getFPlayer().getName(), event.getFPlayer(), true);
+				
 				jailDataFile.delete();
 			}
 			
