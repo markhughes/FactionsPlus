@@ -40,11 +40,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
     
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
+	public static boolean isMultiversePortalsEnabled = false;
 	
 	public final CoreListener corelistener = new CoreListener();
 
 	public static WorldEditPlugin worldEditPlugin = null;
 	public static WorldGuardPlugin worldGuardPlugin = null;
+	
 	
 	public static String version;
 	public static String FactionsVersion;
@@ -187,6 +189,11 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            	FactionsPlusPlugin.info("Hooked into WorldGuard!");
 	            	isWorldGuardEnabled = true;
 	            }
+	        }
+	        
+	        if(getServer().getPluginManager().isPluginEnabled("Multiverse-Portals")) { 
+	        	isMultiversePortalsEnabled = true;
+	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals!");
 	        }
 	        
 	        version = getDescription().getVersion();
