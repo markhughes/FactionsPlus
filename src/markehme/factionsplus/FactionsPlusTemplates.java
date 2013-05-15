@@ -64,18 +64,18 @@ public class FactionsPlusTemplates {
 	}
 	
 	public static String colorFormat(String a) {
-		a = a.replaceAll("<green>", ChatColor.GREEN + "");
-		a = a.replaceAll("<red>", ChatColor.RED + "");
-		a = a.replaceAll("<white>", ChatColor.WHITE + "");
-		a = a.replaceAll("<purple>", ChatColor.DARK_PURPLE + "");
-		a = a.replaceAll("<aqua>", ChatColor.AQUA + "");
-		a = a.replaceAll("<black>", ChatColor.BLACK + "");
-		a = a.replaceAll("<blue>", ChatColor.BLUE + "");
-		a = a.replaceAll("<yellow>", ChatColor.YELLOW + "");
-		a = a.replaceAll("<gray>", ChatColor.GRAY + "");
-		a = a.replaceAll("<grey>", ChatColor.GRAY + "");
+		String b = a.replaceAll("<green>", ChatColor.GREEN + "");
+		b = b.replaceAll("<red>", ChatColor.RED + "");
+		b = b.replaceAll("<white>", ChatColor.WHITE + "");
+		b = b.replaceAll("<purple>", ChatColor.DARK_PURPLE + "");
+		b = b.replaceAll("<aqua>", ChatColor.AQUA + "");
+		b = b.replaceAll("<black>", ChatColor.BLACK + "");
+		b = b.replaceAll("<blue>", ChatColor.BLUE + "");
+		b = b.replaceAll("<yellow>", ChatColor.YELLOW + "");
+		b = b.replaceAll("<gray>", ChatColor.GRAY + "");
+		b = b.replaceAll("<grey>", ChatColor.GRAY + "");
 		
-		return a;
+		return b;
 		
 	}
 	

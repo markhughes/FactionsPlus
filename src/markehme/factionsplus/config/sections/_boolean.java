@@ -16,11 +16,12 @@ public class _boolean extends _Base {
 	
 	@Override
 	public void setValue( String value ) {
-		value=value.trim().toLowerCase();
-		if ( (!value.isEmpty())&& ( value.equals( "true" ) || value.equals( "false" ) || value.equals("0") || value.equals("1")) ) {
-			_=Boolean.parseBoolean( value);
+		String nValue=value.trim().toLowerCase();
+		
+		if ( (!nValue.isEmpty())&& ( nValue.equals( "true" ) || nValue.equals( "false" ) || nValue.equals("0") || nValue.equals("1")) ) {
+			_=Boolean.parseBoolean( nValue);
 		}else{
-			throw new BooleanFormatException(value);
+			throw new BooleanFormatException(nValue);
 		}
 	}
 

@@ -122,7 +122,8 @@ public class Metrics {
      */
     private volatile BukkitTask task = null;
 
-    public Metrics(final Plugin plugin) throws IOException {
+    @SuppressWarnings("boxing")
+	public Metrics(final Plugin plugin) throws IOException {
         if (plugin == null) {
             throw new IllegalArgumentException("Plugin cannot be null");
         }
@@ -225,7 +226,8 @@ public class Metrics {
 
                 private boolean firstPost = true;
 
-                public void run() {
+                @SuppressWarnings("synthetic-access")
+				public void run() {
                     try {
                         // This has to be synchronized or it can collide with the disable method.
                         synchronized (optOutLock) {
@@ -290,7 +292,8 @@ public class Metrics {
      *
      * @throws java.io.IOException
      */
-    public void enable() throws IOException {
+    @SuppressWarnings("boxing")
+	public void enable() throws IOException {
         // This has to be synchronized or it can collide with the check in the task.
         synchronized (optOutLock) {
             // Check if the server owner has already set opt-out, if not, set it.
@@ -520,7 +523,8 @@ public class Metrics {
          */
         private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
 
-        public Graph(final String name) {
+        @SuppressWarnings("hiding")
+		public Graph(final String name) {
             this.name = name;
         }
 
@@ -604,7 +608,8 @@ public class Metrics {
          *
          * @param name the name of the plotter to use, which will show up on the website
          */
-        public Plotter(final String name) {
+        @SuppressWarnings("hiding")
+		public Plotter(final String name) {
             this.name = name;
         }
 
