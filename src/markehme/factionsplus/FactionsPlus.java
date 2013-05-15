@@ -38,20 +38,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	 
     public static Permission permission = null;
     
-    public static final String  FP_TAG_IN_LOGS="[FactionsPlus] ";
 	public static boolean isWorldEditEnabled = false;
 	public static boolean isWorldGuardEnabled = false;
 	
 	public final CoreListener corelistener = new CoreListener();
-
-//	public final AnnounceListener announcelistener = new AnnounceListener();
-//	public final BanListener banlistener = new BanListener();
-//	public final JailListener jaillistener = new JailListener();
-//	public final PeacefulListener peacefullistener = new PeacefulListener();
-//	public final LiquidFlowListener liquidflowlistener = new LiquidFlowListener();
-	
-
-	
 
 	public static WorldEditPlugin worldEditPlugin = null;
 	public static WorldGuardPlugin worldGuardPlugin = null;
@@ -59,10 +49,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static String version;
 	public static String FactionsVersion;
 	
-	private static Metrics metrics=null;
+	private static Metrics metrics = null;
 	
-	// XXX: if Factions gets reloaded (ie. via plugman) and it has different settings for these now, they will have new
-	// instances but we're still gonna be pointing to the old ones because of this
 	public static Set<String> ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
 	public static Set<String> noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
 	public static Set<String> noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
@@ -161,6 +149,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); // Be first
 			
+			this.ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
+			this.noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
+			this.noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
+
 			Config.init();
 			Bridge.init();
 			
