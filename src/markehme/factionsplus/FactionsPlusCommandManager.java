@@ -24,7 +24,8 @@ import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.CmdFactionsAccess;
 import com.massivecraft.factions.cmd.FCommand;
 
 
@@ -101,7 +102,10 @@ public class FactionsPlusCommandManager {
 	}
 
 	private static final void addSC(FCommand subCommand) {
-		Bridge.factions.addSubCommand(P.p.cmdBase, subCommand);
+		//void addSubCommand( FCommand base, FCommand subCommand );
+		FCommand base;
+				
+		(base)new FCommand().addSubCommand(P.p.cmdBase, subCommand);
 	}
 	
 }
