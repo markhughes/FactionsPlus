@@ -31,7 +31,7 @@ public interface FactionsAny {
 		LEADER, // only 1.7 has this 
 		OFFICER, // only 1.7 has this
 		TRUCE, // only 1.7 has this
-                RECRUIT, // only 1.7 has this
+		RECRUIT, // only 1.7 or 1.8 has this
 		MEMBER,//both 1.6 and 1.7 have this 
 		ALLY, //both 1.6 and 1.7 have this
 		NEUTRAL, //both 1.6 and 1.7 have this
