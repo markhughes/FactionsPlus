@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
+import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
@@ -158,8 +159,12 @@ public class CmdRemoveWarp extends FPCommand {
 			e.printStackTrace();
 		    return;
 		}
+		
+		String[] warped_removed_args = new String[2];
+		warped_removed_args[1] = warpname;
+		
 				
-		sender.sendMessage(ChatColor.GREEN + "Poof!");
+		sender.sendMessage(FactionsPlusTemplates.Go("warped_removed", warped_removed_args));
 		
 
 	}

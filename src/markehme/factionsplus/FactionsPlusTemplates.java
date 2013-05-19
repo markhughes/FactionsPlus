@@ -44,7 +44,8 @@ public class FactionsPlusTemplates {
 		
 		workingstring = colorFormat(workingstring);
 		
-		if(args != null) {
+		
+		if(args != null) {			
 			if(args.length == 2) {
 				workingstring = workingstring.replace("!1", args[1]);
 	
@@ -112,7 +113,7 @@ public class FactionsPlusTemplates {
 			// For warps 
 			Config.templates.set("warp_created", "<green>Warp <white>!1 <green>set for your Faction!");
 			Config.templates.set("notify_warp_created", "!1 created a warp in your faction called !2");
-			Config.templates.set("warp_non_existant", "That warp does not exist");
+			Config.templates.set("warp_non_existant", "That warp does not exist.");
 			Config.templates.set("warped_to", "<red>Warped to <white>!1");
 			Config.templates.set("warped_removed", "<green>The warp <white>!1<green> was removed.");
 			Config.templates.set("warp_incorrect_password", "<red>Incorrect password, please use /f warp [warp] <password>");

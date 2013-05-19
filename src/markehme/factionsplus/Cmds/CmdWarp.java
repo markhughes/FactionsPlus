@@ -278,8 +278,8 @@ public class CmdWarp extends FPCommand {
 						}
 					}
 					
-					String[] aargsa = new String[1];
-					aargsa[0] = warpname;
+					String[] aargsa = new String[2];
+					aargsa[1] = warpname;
 					
 					player.sendMessage(FactionsPlusTemplates.Go("warped_to", aargsa ));
 					//player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);

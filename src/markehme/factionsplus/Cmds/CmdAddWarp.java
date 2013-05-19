@@ -40,6 +40,7 @@ public class CmdAddWarp extends FPCommand {
 		senderMustBeMember = false;
 
 		this.setHelpShort("creates a faction warp, can be specified with a password");
+		
 
 	}
 
