@@ -7,9 +7,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Util;
-import com.earth2me.essentials.api.*;
-//import com.earth2me.essentials.IEssentials.*;
+import com.earth2me.essentials.IEssentials.*;
 
 /**
  * for this to compile, you'll have to either use the Essentials 2.9.2 jar in project or the 2.9 branch of Essentials 
@@ -147,7 +147,7 @@ public abstract class EssentialsIntegration {
 	
 	public final static int getHomesCount( Player player ) {
 		checkInvariants();
-		// TODO: Find alternative for API
+		
 		return getEssentialsInstance().getUser( player ).getHomes().size();
 	}
 	
