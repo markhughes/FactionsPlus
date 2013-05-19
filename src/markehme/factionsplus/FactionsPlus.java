@@ -20,11 +20,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitWorker;
 
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.factions.entity.MPlayer;
-import com.massivecraft.factions.entity.UPlayer;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -35,32 +33,29 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
 	
 	Factions factions;
+	FPlayers fplayers;
 	Faction faction;
+	 
+    public static Permission permission = null;
+    
+	public static boolean isWorldEditEnabled = false;
+	public static boolean isWorldGuardEnabled = false;
+	public static boolean isMultiversePortalsEnabled = false;
 	
-	MPlayer mPlayer;
-	UPlayer uPlayer;
+	public final CoreListener corelistener = new CoreListener();
+
+	public static WorldEditPlugin worldEditPlugin = null;
+	public static WorldGuardPlugin worldGuardPlugin = null;
+	
 	
 	public static String version;
 	public static String FactionsVersion;
 	
-    public static Permission permission					=	null;
-    
-	public static boolean isWorldEditEnabled 			=	false;
-	public static boolean isWorldGuardEnabled			=	false;
-	public static boolean isMultiversePortalsEnabled 	=	false;
+	private static Metrics metrics = null;
 	
-	public final CoreListener corelistener 				=	new CoreListener();
-
-	public static WorldEditPlugin worldEditPlugin 		=	null;
-	public static WorldGuardPlugin worldGuardPlugin 	=	null;
-	
-	
-	
-	private static Metrics metrics 						=	null;
-	
-	public static Set<String> ignoredPvPWorlds 			= 	MConf.get().worldsIgnorePvP;
-	public static Set<String> noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
-	public static Set<String> noPowerLossWorlds 		= 	MConf.get().worldsNoPowerLoss;
+	public static Set<String> ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
+	public static Set<String> noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
+	public static Set<String> noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
 	
 	public FactionsPlus() {//constructor
 		super();
@@ -156,10 +151,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); // Be first
 			
-			
-			this.ignoredPvPWorlds = MConf.get().worldsIgnorePvP;
-			this.noClaimingWorlds = MConf.get().worldsNoClaiming;
-			this.noPowerLossWorlds = MConf.get().worldsNoPowerLoss;
+			this.ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
+			this.noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
+			this.noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
 			
 			Config.init();
 			Bridge.init();
