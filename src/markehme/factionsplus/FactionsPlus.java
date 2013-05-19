@@ -154,7 +154,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			this.ignoredPvPWorlds = com.massivecraft.factions.Conf.worldsIgnorePvP;
 			this.noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
 			this.noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
-
+			
 			Config.init();
 			Bridge.init();
 			
@@ -165,7 +165,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			pm.registerEvents(new FPConfigLoadedListener(),this);
 			
-			Config.reload(); //be as soon as possible but after the above
+			Config.reload(); 
 			
 			pm.registerEvents(this.corelistener, this);
 			
@@ -179,21 +179,23 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        }
 	        
 	        if(1<2) {        //Temporary Always True Until a Config Option is Created 
-	        	if(getServer().getPluginManager().isPluginEnabled("WorldEdit")) {
+	        	if(pm.isPluginEnabled("WorldEdit")) {
 	        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-	        		FactionsPlusPlugin.info("Hooked into WorldEdit!");
+	        		FactionsPlusPlugin.info("Hooked into WorldEdit " + pm.getPlugin("WorldEdit").getDescription().getVersion());
 	        		isWorldEditEnabled = true;
+	        		
 	        	}
-	            if(getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
+	            if(pm.isPluginEnabled("WorldGuard")) {
 	            	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-	            	FactionsPlusPlugin.info("Hooked into WorldGuard!");
+	            	FactionsPlusPlugin.info("Hooked into WorldGuard " + pm.getPlugin("WorldGuard").getDescription().getVersion());
 	            	isWorldGuardEnabled = true;
+	            	
 	            }
 	        }
 	        
-	        if(getServer().getPluginManager().isPluginEnabled("Multiverse-Portals")) { 
+	        if(pm.isPluginEnabled("Multiverse-Portals")) { 
 	        	isMultiversePortalsEnabled = true;
-	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals!");
+	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
 	        
 	        version = getDescription().getVersion();
@@ -207,15 +209,15 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				FactionsPlusPlugin.info("Metrics could not start up: "+e.getMessage() );
 			}
 			
-			FactionsPlusPlugin.info("@MarkehMe: Hey you! I'm quite frankly pretty busy lately with running two businesses. I still love FactionsPlus, but if you can help out please do @ https://github.com/MarkehMe/FactionsPlus");
+			FactionsPlusPlugin.info("ARE YOU A DEVELOPER? Help out: https://github.com/MarkehMe/FactionsPlus");
 			
-		}catch (Throwable t) {
+		} catch (Throwable t) {
 			FactionsPlus.severe( t);
 			if (isEnabled()) {
 				disableSelf();
 			}
 		} //try
-	}//onEnable
+	} //onEnable
 	
 	
 }
