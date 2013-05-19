@@ -91,20 +91,20 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
 	
 	public static void warn( String logInfoMsg ) {
-		tellConsole( ChatColor.GOLD + "[FactionsPlus]" + ChatColor.DARK_RED + "[WARNING]:" + ChatColor.RESET
+		tellConsole( ChatColor.GOLD + "[FactionsPlus] " + ChatColor.DARK_RED + "[WARNING]:" + ChatColor.RESET
 			+ logInfoMsg );// they are logged with [INFO] level
 	}
 	
 	
 	public static void info( String logInfoMsg ) {
-		tellConsole( ChatColor.GOLD + "[FactionsPlus]" + ChatColor.RESET + logInfoMsg );// they are logged with
+		tellConsole( ChatColor.GOLD + "[FactionsPlus] " + ChatColor.RESET + logInfoMsg );// they are logged with
 																									// [INFO] level
 	}
 	
 	
 	public static void severe( String logInfoMsg ) {
-		FactionsPlus.log.severe( "[FactionsPlus]" + logInfoMsg );// allowed so that [SEVERE] appears
-		tellConsole( ChatColor.RED + "[FactionsPlus]" + ChatColor.DARK_PURPLE + logInfoMsg );
+		FactionsPlus.log.severe( "[FactionsPlus] " + logInfoMsg );// allowed so that [SEVERE] appears
+		tellConsole( ChatColor.RED + "[FactionsPlus] " + ChatColor.DARK_PURPLE + logInfoMsg );
 	}
 	
 	
@@ -122,13 +122,13 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		if ( null == logInfoMsg ) {
 			logInfoMsg = cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
 		}
-		String msg = "[FactionsPlus]" + logInfoMsg;
+		String msg = "[FactionsPlus] " + logInfoMsg;
 		if ( null == cause ) {
 			FactionsPlus.log.log( Level.SEVERE, msg);// allowed so that [SEVERE] appears
 		} else {
 			FactionsPlus.log.log( Level.SEVERE, msg, cause );// allowed so that [SEVERE] appears
 		}
-		tellConsole( ChatColor.RED + "[FactionsPlus]" + ChatColor.DARK_PURPLE + logInfoMsg );
+		tellConsole( ChatColor.RED + "[FactionsPlus] " + ChatColor.DARK_PURPLE + logInfoMsg );
 	}
 	
 	
