@@ -147,11 +147,11 @@ public abstract class Utilities {
 	 * @param fplayer
 	 * @return null if offline
 	 */
-	public final static Player getOnlinePlayerExact(FPlayer fplayer) {
-		if (null == fplayer) {
+	public final static Player getOnlinePlayerExact(UPlayer uPlayer) {
+		if (null == uPlayer) {
 			return null;
 		}
-		return Utilities.getOnlinePlayerExact( fplayer.getId() );
+		return Utilities.getOnlinePlayerExact( uPlayer.getId() );
 	}
 	
 	/**

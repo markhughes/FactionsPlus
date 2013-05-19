@@ -25,10 +25,10 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.MPlayer;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.entity.Faction;
 
 public class FactionsPlusJail {
 	public static Server server;
@@ -37,18 +37,16 @@ public class FactionsPlusJail {
 	 */
 	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
 	
-	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, FPlayer unjailer, boolean DontSayAnything) {
-
-		if ( !FPlayers.i.exists( nameOfPlayerToBeUnjailed ) ) {
+	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, UPlayer unjailer, boolean DontSayAnything) {
+		
+		if ( !UPlayer.get(nameOfPlayerToBeUnjailed).isPlayer()) {
 			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
 			return false;
 		}
 		
-		FPlayer fpToBeUnjailed = FPlayers.i.get( nameOfPlayerToBeUnjailed );// never null
-//		unjailer.sendMessage( "mapped "+nameOfPlayerToBeUnjailed+" to "+fpToBeUnjailed.getName() );
-//		unjailer.sendMessage( "mapped "+Bukkit.getPlayer( nameOfPlayerToBeUnjailed )+" to "+fpToBeUnjailed.getId() );
-
-		String factionId=fpToBeUnjailed.getFactionId();
+		UPlayer fpToBeUnjailed = UPlayer.get(nameOfPlayerToBeUnjailed);
+		
+		String factionId = fpToBeUnjailed.getFactionId();
 		
 		if ( !unjailer.getFactionId().equals( factionId ) ) {
 			if(!DontSayAnything) {
