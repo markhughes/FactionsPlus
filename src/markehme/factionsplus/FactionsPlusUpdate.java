@@ -34,11 +34,19 @@ public class FactionsPlusUpdate implements Runnable {
 	}
 	
 	static public void checkUpdates( FactionsPlus instance ) {
+		Bukkit.getScheduler().runTaskLaterAsynchronously(Bukkit.getServer().getPluginManager().getPlugin("FactionsPlus"), new Runnable() {
+		    @Override
+		    public void run() {
+		        //Your async code here
+		    }
+		}, 20*30);
+		
 		synchronized ( FactionsPlusUpdate.class ) {
 			if ( null == once ) {
 				once = new FactionsPlusUpdate();
 			}
-			taskId = Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask( instance, once, DELAY, PERIOD );
+			taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(instance, once, DELAY, PERIOD);
+			//taskId = Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask( instance, once, DELAY, PERIOD );
 			if ( taskId < 0 ) {// not possible
 				FactionsPlus.warn( "Failed to start the check-for-updates thread!" );
 			}
