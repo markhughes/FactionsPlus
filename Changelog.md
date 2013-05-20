@@ -1,4 +1,4 @@
-# FactionsPlus version 0.4.10
+# FactionsPlus version 0.5.0
 * Added warps.removeWarpIfDeniedAccess
 * Added jails.tellPlayerWhoBannedThem
 * BugFix: If creating a Faction that was a previous Faction, that was removed, that you where also banned from, you would be kicked. This fixes this.
@@ -10,6 +10,7 @@
 * Added new template options: warp_non_existant, warped_to, warped_removed, warp_incorrect_password
 * Introduced permission factionsplus.useanyportal
 * Added configuration options mustBeInOwnTerritoryToUsePortals and alliesCanUseEachOthersPortals to integrate with Multiverse-portals 
+* Several general cleanups, and stability fixes
 
 # FactionsPlus version 0.4.9
 * Pocketkid2: Fix for RECRUIT not existing in class
