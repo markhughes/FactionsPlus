@@ -128,12 +128,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			realAlias_neverDotted = "extras" )
 	public final static Section_Extras		_extras					= new Section_Extras();
 	
-//	@Option(
-//			realAlias_inNonDottedFormat = "DoNotChangeMe" )
-//	// this is now useless, done: remove this field, OR rename and increment it every time something changes in the config ie.
-//	// coder adds new options or removes or changes/renames config options but not when just changes their values (id: value)
-//	public static final _int				doNotChangeMe			= new _int( 12 );
-	
 	@Option(
 		autoComment={
 			"if true it will remove all auto comments which explain what each option does in the config file."
@@ -484,7 +478,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			bw = null;
 			try {
 				//for tests:
-//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2.yml" ) );//FIXME: for tests only
+//				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2-test-only.yml" ) );
 				fos = new FileOutputStream( Config.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
@@ -976,6 +970,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	}
 	
 	
+	@SuppressWarnings("null")
 	private static void parseSecondTime_and_sortOverrides( WYSection vroot ) {
 		synchronized ( mapFieldToID ) {
 			synchronized ( Typeo.lock1 ) {
@@ -1096,7 +1091,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 					
 					if (!dottedOverrider.equals(dottedRealAlias)) {
 						//IF the overrider is not the realAlias then we transform it to the real alias
-						@SuppressWarnings( "null" )
+						
 						String valueToCarry = overriderWID.getValue();
 						
 						WYIdentifier<COMetadata> old = overriderWID;
