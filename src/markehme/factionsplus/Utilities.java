@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
@@ -122,7 +123,9 @@ public abstract class Utilities {
 		}
 
 		String JailData = Utilities.readFileAsString(jailDataFile);
-
+		
+		// TODO: if last parm of file is "unjail" then run the unjail, and then remove the file
+		
 		if(JailData == "0") {
 			return false;
 		} else {
