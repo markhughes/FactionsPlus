@@ -16,6 +16,7 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitWorker;
@@ -23,6 +24,9 @@ import org.bukkit.scheduler.BukkitWorker;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiversePortals.MultiversePortals;
+import com.onarandombox.MultiversePortals.utils.PortalManager;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -47,6 +51,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static WorldEditPlugin worldEditPlugin = null;
 	public static WorldGuardPlugin worldGuardPlugin = null;
 	
+	public static MultiversePortals multiversePortalsPlugin = null;
 	
 	public static String version;
 	public static String FactionsVersion;
@@ -194,10 +199,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        }
 	        
 	        if(pm.isPluginEnabled("Multiverse-Portals")) { 
+	        	Plugin MVc = getServer().getPluginManager().getPlugin("Multiverse-Portals");
+	            
+	            if (MVc instanceof MultiversePortals) {
+	            	this.multiversePortalsPlugin = (MultiversePortals) MVc;
+	            }
+	            
 	        	isMultiversePortalsEnabled = true;
 	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
-	        
+	        	        
 	        version = getDescription().getVersion();
 	        
 			FactionsPlusPlugin.info("Ready.");
