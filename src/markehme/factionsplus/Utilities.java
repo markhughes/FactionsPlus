@@ -20,8 +20,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 
 
@@ -33,7 +34,6 @@ public abstract class Utilities {
 		DataInputStream in=null;
 		BufferedReader br=null;
 		InputStreamReader isr = null;
-		
 		try {
 			fstream = new FileInputStream(filePath);
 			in = new DataInputStream(fstream);
@@ -111,13 +111,11 @@ public abstract class Utilities {
 	/* ********** JAIL RELATED ********** */
 
 	public static boolean isJailed(Player thePlayer) {
-		UPlayer uPlayer = UPlayer.get(thePlayer);
+		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
 		
-		//FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
+		if(fplayer == null) return false;
 		
-		if(uPlayer == null) return false;
-		
-		File jailDataFile = new File(Config.folderJails,"jaildata." + uPlayer.getFactionId() + "." + thePlayer.getName());
+		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
@@ -134,8 +132,8 @@ public abstract class Utilities {
 	
 	/* ********** FACTIONS RELATED ********** */
 
-	public static boolean isOfficer(UPlayer uPlayer) {
-		return Bridge.factions.getRole( uPlayer).equals( FactionsAny.Relation.OFFICER );
+	public static boolean isOfficer(FPlayer fplayer) {
+		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.OFFICER );
 	}
 
 	public static boolean isLeader(FPlayer fplayer) {
