@@ -1,42 +1,53 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.FactionsBridge.FactionsAny.Relation;
 import markehme.factionsplus.config.Config;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
+import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
+import com.onarandombox.MultiverseCore.event.MVTeleportEvent;
+import com.onarandombox.MultiversePortals.event.MVPortalEvent;
 
 public class MVPListener implements Listener {
 	
+	public static boolean isMVPIntegrated = false;
+	public static MVPListener mvplistener;
+	
+
 	@EventHandler(priority=EventPriority.HIGH)
-	public void MVPortalEvent(com.onarandombox.MultiversePortals.event.MVPortalEvent e) {
-		
+	public void MVPlayerTouchedPortalEvent(MVPortalEvent e) {
+		// TODO: Put messages into template file
 		FPlayer fplayer = FPlayers.i.get( e.getTeleportee() );
-		Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(),  Board.getFactionAt( e.getFrom() ));
+			
+		Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(),  Board.getFactionAt( e.getTeleportee().getLocation() ));
 		
 		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || fplayer.isInOwnTerritory() ) {
 			return;
 		}
 		
 		// SafeZone / Wilderness / WarZone = not a faction, so rules do not apply
-		if(Utilities.isSafeZone(Board.getFactionAt( e.getFrom() )) || Utilities.isWilderness(Board.getFactionAt( e.getFrom() )) || Utilities.isWarZone(Board.getFactionAt( e.getFrom() )) ) {
+		if(Utilities.isSafeZone(Board.getFactionAt( e.getTeleportee().getLocation() )) || Utilities.isWilderness(Board.getFactionAt( e.getTeleportee().getLocation() )) || Utilities.isWarZone(Board.getFactionAt( e.getTeleportee().getLocation() )) ) {
 			return;
 		}
 		
 		if(Config._extras._MultiVerse.enemyCantUseEnemyPortals._) {
 			if(fplayer.isInEnemyTerritory()) {
 				
-				fplayer.msg("Enemies can not use share portals. ");
+				fplayer.msg(ChatColor.RED + "Enemies can not share portals. ");
 				e.setCancelled(true);
 				
 				return;
@@ -45,18 +56,46 @@ public class MVPListener implements Listener {
 				
 		if(Config._extras._MultiVerse.alliesCanUseEachOthersPortals._ && Config._extras._MultiVerse.mustBeInOwnTerritoryToUsePortals._) {
 			
-			if ( !FactionsAny.Relation.NEUTRAL.equals( rel ) ) {
-				
-				fplayer.msg("You can not use this portal as you are not an aly, and are not apart of this Faction. ");
+			if ( !FactionsAny.Relation.ALLY.equals( rel ) ) {
+				fplayer.msg(ChatColor.RED + "You can not use this portal as you are not an aly, and are not apart of this Faction. ");
 				e.setCancelled(true);
 				
 				return;
 				
 			} else {
-				return;
+				if(fplayer.getFactionId() == "0") {
+					fplayer.msg(ChatColor.RED + "You are not apart of a Faction, so we can not determine if you are enemies or not.");
+					e.setCancelled(true);
+					return;
+				} else {
+					return;
+				}
 			}
-		}
+		} else {
+			fplayer.msg(ChatColor.RED + "You must be apart of this Faction to use this portal.");
+			e.setCancelled(true);
+			return;
+		}		
 		
+	}
+	
+	public static final void enableOrDisable(FactionsPlus instance){
+ 		PluginManager pm = Bukkit.getServer().getPluginManager();
+			
+		boolean isMVPplugin = pm.isPluginEnabled("Multiverse-Portals");
 		
+		if ( isMVPplugin && !isMVPIntegrated ) {
+			assert ( null == mvplistener );
+			
+			mvplistener = new MVPListener();
+			pm.registerEvents( mvplistener, instance );
+			
+			if (null == mvplistener) {
+				mvplistener = new MVPListener();
+				Bukkit.getServer().getPluginManager().registerEvents(mvplistener, instance);
+			}
+			
+			FactionsPlusPlugin.info( "Hooked into Multiverse-portals." );
+		}	
 	}
 }
