@@ -10,6 +10,10 @@
 * Added new template options: warp_non_existant, warped_to, warped_removed, warp_incorrect_password
 * Introduced permission factionsplus.useanyportal
 * Added configuration options mustBeInOwnTerritoryToUsePortals and alliesCanUseEachOthersPortals to integrate with Multiverse-portals 
+* Added /f rules
+* Added /f removerule
+* Added /f addrule
+* Added permissions: factionsplus.removerule, factionsplus.setrules, factionsplus.viewrules
 * Several general cleanups, and stability fixes
 
 # FactionsPlus version 0.4.9
