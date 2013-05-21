@@ -131,16 +131,12 @@ public class TeleportsListener implements Listener {
 	// TODO: unsure here if it should be ConcurrentHashMap instead, i assume though they are not parallelizing events
 	
 	
-	@EventHandler(
-			priority = EventPriority.MONITOR )
-	// MONITOR means it will be called last, after ie. HIGHEST
-		public
-		void onCommand( PlayerCommandPreprocessEvent event ) {// XXX: doesn't trigger on console commands
-		// this hook will trigger on any command ie. only those chat messages preceded by "/"
-		Player playerInGame = event.getPlayer();
-		// System.out.println(sender+" "+sender.getClass());
+	@EventHandler(priority = EventPriority.MONITOR ) // MONITOR means it will be called last, after ie. HIGHEST
+		public void onCommand( PlayerCommandPreprocessEvent event ) {
+			Player playerInGame = event.getPlayer();
 		
-		String cmd = event.getMessage();
+			String cmd = event.getMessage();
+			
 		// TODO: think about having a list of commands here which when used to teleport into X territory
 		// would be denied; X is configurable too; actually we can only do whitelist of commands to be allowed to tp when COMMAND is cause
 		if (isReportingCommands()) {
