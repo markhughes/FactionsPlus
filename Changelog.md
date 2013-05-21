@@ -14,6 +14,7 @@
 * Added /f removerule
 * Added /f addrule
 * Added permissions: factionsplus.removerule, factionsplus.setrules, factionsplus.viewrules
+* Added configuration option onFirstJoinFactionShowRules (default: false)
 * Several general cleanups, and stability fixes
 
 # FactionsPlus version 0.4.9
