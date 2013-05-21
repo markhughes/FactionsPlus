@@ -2,6 +2,8 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
+import markehme.factionsplus.Utilities;
+import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
@@ -29,6 +31,18 @@ public class CmdRemoveRule extends FPCommand {
 		if(!FactionsPlus.permission.has(sender, "factionsplus.removerule")) {
 			fme.msg(ChatColor.RED + "No permission!");
 			return;
+		}
+		
+		if(!Utilities.isLeader(fme) && !Utilities.isOfficer(fme)) {
+			fme.msg("Your ranking is not high enough to modify rules.");
+		}
+		
+		if(Utilities.isOfficer(fme) && !Config._rules.officersCanSetRules._) {
+			fme.msg("Officers can not modify rules on this server.");
+		}
+		
+		if(Utilities.isLeader(fme) && !Config._rules.leadersCanSetRules._) {
+			fme.msg("Leaders can not modify rules on this server.");
 		}
 		
 		try {

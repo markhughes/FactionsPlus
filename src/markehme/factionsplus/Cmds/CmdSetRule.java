@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
+import markehme.factionsplus.Utilities;
 import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
 
@@ -43,11 +44,23 @@ public class CmdSetRule extends FPCommand{
 			return;
 		}
 		
-		String message = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
+		if(!Utilities.isLeader(fme) && !Utilities.isOfficer(fme)) {
+			fme.msg("Your ranking is not high enough to modify rules.");
+		}
 		
-		fme.msg("Adding rule: " + message);
+		if(Utilities.isOfficer(fme) && !Config._rules.officersCanSetRules._) {
+			fme.msg("Officers can not modify rules on this server.");
+		}
 		
-		FactionsPlusRules.setRuleForFaction(fme.getFaction(), fme, message);
+		if(Utilities.isLeader(fme) && !Config._rules.leadersCanSetRules._) {
+			fme.msg("Leaders can not modify rules on this server.");
+		}
+		
+		String newRule = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
+		
+		fme.msg("Adding rule: " + newRule);
+		
+		FactionsPlusRules.setRuleForFaction(fme.getFaction(), fme, newRule);
 		
 	}
 }
