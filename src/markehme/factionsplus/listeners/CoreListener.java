@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusRules;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 
@@ -26,6 +27,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.event.FPlayerJoinEvent;
 import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 
@@ -75,6 +77,15 @@ public class CoreListener implements Listener{
 		}
 	}
 	
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onFPlayerJoin(FPlayerJoinEvent event) {
+		if(Config._rules.onFirstJoinFactionShowRules._) {
+			if ( new File(Config.folderFRules+File.separator+event.getFPlayer().getFactionId()+".rules").exists() ) {
+				FactionsPlusRules.sendRulesToPlayer(event.getFPlayer());
+			}
+		}
+		
+	}
 	
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onFPlayerLeave(FPlayerLeaveEvent event){
