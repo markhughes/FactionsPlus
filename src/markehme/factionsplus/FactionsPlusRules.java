@@ -37,14 +37,17 @@ public class FactionsPlusRules {
 				return;
 			}
 			
+			if(Utilities.countLines(Config.folderFRules+File.separator+fplayer.getFactionId()+".rules") >= Config._rules.maxRulesPerFaction._) {
+				fplayer.msg(ChatColor.RED+"The max rules a faction can have is "+Config._rules.maxRulesPerFaction._+ ".");
+				return;
+			}
+			
 			String workingLine = null;
 			
 			int i = 0;
 			int c = 0;
 			BufferedReader br = new BufferedReader(new FileReader(readFile));
 			PrintWriter pw = new PrintWriter(new FileWriter(outFile));
-			
-
 			
 			if(!outFile.exists()) { outFile.createNewFile(); }
 			
@@ -92,7 +95,7 @@ public class FactionsPlusRules {
 			ex.printStackTrace();
 		}
 		
-		fplayer.msg(ChatColor.RED+"Rule removed, rules re-shuffled.");
+		fplayer.msg(ChatColor.GREEN+"Rule removed, rules re-shuffled.");
 	}
 	
 	public static void sendRulesToPlayer(FPlayer fplayer) {
@@ -100,11 +103,11 @@ public class FactionsPlusRules {
 		File fRF = new File(Config.folderFRules+File.separator+fplayer.getFactionId()+".rules");
 		
 		if ( !fRF.exists() ) {
-			fplayer.msg( "No rules have been set for your Faction." );
+			fplayer.msg(ChatColor.WHITE+"No rules have been set for your Faction." );
 			return;
 		}
 		
-		fplayer.msg( "Here are the rules for your Faction: " );
+		fplayer.msg(ChatColor.GREEN+"Here are the rules for your Faction: " );
 		
 		FileInputStream fstream 	= 		null;
 		DataInputStream in 			=		null;
@@ -126,7 +129,7 @@ public class FactionsPlusRules {
 				rCurrent = rCurrent + 1;
 				
 				if ( !strLine.isEmpty() || !strLine.trim().isEmpty() ) {
-					fplayer.msg( "Rule " + rCurrent + ": " + strLine );
+					fplayer.msg(ChatColor.AQUA+"Rule " + rCurrent + ": "+ChatColor.YELLOW + strLine );
 				}
 			}
 			
@@ -199,8 +202,10 @@ public class FactionsPlusRules {
 		    out.println(FPRule);
 		    out.close();
 		} catch (IOException e) {
-		    //oh noes!
+			setter.msg(ChatColor.RED+"Internal Error: Failed to append the rule.");
 		}
+		
+		setter.msg(ChatColor.GREEN+"Rule '"+FPRule+"' added!");
 		
 	}
 }

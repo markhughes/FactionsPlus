@@ -57,9 +57,7 @@ public class CmdSetRule extends FPCommand{
 		}
 		
 		String newRule = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
-		
-		fme.msg("Adding rule: " + newRule);
-		
+				
 		FactionsPlusRules.setRuleForFaction(fme.getFaction(), fme, newRule);
 		
 	}
