@@ -225,7 +225,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        	FVC = "2.0";
 	        } */
 	        
-			FactionsPlusPlugin.info("Ready. " + FVC + " = " + FactionsVersion.trim().substring(0, 3));
+			FactionsPlusPlugin.info("Ready. ");
 			
 			try {
 				metrics = new Metrics( this );
