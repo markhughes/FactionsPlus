@@ -12,6 +12,7 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +33,7 @@ import com.massivecraft.factions.event.FPlayerLeaveEvent;
 import com.massivecraft.factions.event.FactionDisbandEvent;
 
 public class CoreListener implements Listener{
+	public static Server fp;
 	
 	@EventHandler
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
@@ -143,8 +145,9 @@ public class CoreListener implements Listener{
 			// not from fall damage or sucide. -- configurable of course 
 			
 			// Players current armor 
-	
-			Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable(){
+			
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(fp.getPluginManager().getPlugin("FactionsPlus"), new Runnable() {
 				@Override
 				public void run() {
 					currentPlayer.getInventory().setArmorContents(playersArmor);
@@ -165,7 +168,7 @@ public class CoreListener implements Listener{
 	
 			}
 			
-			Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin) this, new Runnable() {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(fp.getPluginManager().getPlugin("FactionsPlus"), new Runnable() {
 	
 				@Override
 				public void run() {

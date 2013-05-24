@@ -62,7 +62,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Set<String> noClaimingWorlds = com.massivecraft.factions.Conf.worldsNoClaiming;
 	public static Set<String> noPowerLossWorlds = com.massivecraft.factions.Conf.worldsNoPowerLoss;
 	
-	public FactionsPlus() {//constructor
+	public FactionsPlus() {
 		super();
 		if (null != instance) {
 			throw bailOut("this was not expected, getting new-ed again without getting unloaded first.\n"
@@ -175,6 +175,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			pm.registerEvents(this.corelistener, this);
 			
 			FactionsPlusJail.server = getServer();
+			CoreListener.fp = FactionsPlusJail.server;
 			
 			FactionsPlusCommandManager.setup();
 			
