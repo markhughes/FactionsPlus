@@ -1,3 +1,6 @@
+# FactionsPlus version 0.5.1
+* A quick fix with scheduler related to PlayerDeathEvent 
+
 # FactionsPlus version 0.5.0
 * Added warps.removeWarpIfDeniedAccess
 * Added jails.tellPlayerWhoBannedThem
