@@ -41,8 +41,23 @@ public class FactionsPlusTemplates {
 			workingstring = Config._templates.warp_incorrect_password._;
 		}
 		
-		workingstring = colorFormat(workingstring);
+		if(templateOption == "create_warp_denied_badrank") {
+			workingstring = Config._templates.create_warp_denied_badrank._;
+		}
 		
+		if(templateOption == "create_warp_denied_badterritory") {
+			workingstring = Config._templates.create_warp_denied_badterritory._;
+		}
+		
+		if(templateOption == "warps_reached_max") {
+			workingstring = Config._templates.warps_reached_max._;
+		}
+		
+		if(templateOption == "warps_already_exists") {
+			workingstring = Config._templates.warps_already_exists._;
+		}
+		
+		workingstring = colorFormat(workingstring);
 		
 		if(args != null) {			
 			if(args.length == 2) {
