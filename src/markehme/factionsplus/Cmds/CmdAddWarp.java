@@ -64,26 +64,26 @@ public class CmdAddWarp extends FPCommand {
 
 
 		if(!Config._warps.canSetOrRemoveWarps(fplayer)) {
-			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to create warps!");
+			sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badrank", null));
 			return;
 		}
 
 		if(!fplayer.isInOwnTerritory()) {
 			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
-				sender.sendMessage(ChatColor.RED + "You must be in your own territory to create a warp!");
+				sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badterritory", null));
 				return;
 			}
 		}
-
+		
 		if(Config._economy.costToCreateWarp._ > 0.0d && Config._economy.isHooked()) {
 			if (!payForCommand(Config._economy.costToCreateWarp._, "to create this warp", "for creating this warp")) {
 				return;
 			}
 		}
-
+		
 		if(Config._warps.maxWarps._ != 0) {
 			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
-				sender.sendMessage(ChatColor.RED + "You have reached the max amount of warps.");
+				sender.sendMessage(FactionsPlusTemplates.Go("warps_reached_max", null));
 				return;
 			}
 		}
@@ -112,7 +112,7 @@ public class CmdAddWarp extends FPCommand {
 					String[] warp_data =  strLine.split(":");
 
 					if(warp_data[0].equalsIgnoreCase(warpname)) {
-						sender.sendMessage(ChatColor.RED + "A warp already exists with that name.");
+						sender.sendMessage(FactionsPlusTemplates.Go("warps_already_exists", null));
 						return;
 					}
 				}
@@ -180,8 +180,11 @@ public class CmdAddWarp extends FPCommand {
 			sender.sendMessage(ChatColor.RED + "An internal error occured (05)");
 			return;
 		}
-
-		player.sendMessage(ChatColor.GREEN + "Warp " + ChatColor.WHITE + warpname + ChatColor.GREEN + " set for your Faction!");
+		String[] argsb;
+		argsb = new String[2];
+		argsb[1] = warpname;
+				
+		player.sendMessage(FactionsPlusTemplates.Go("warp_created", argsb));
 
 		String[] argsa;
 
