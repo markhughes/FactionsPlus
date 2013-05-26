@@ -1,6 +1,8 @@
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
 * Now using Config File's Template Section. Fixes a lot of issues.
+* Fixes support for 1.6 branch in MVP - 1.6 support is being dropped in the future, please upgrade Factions 
+* Fixes support for 1.6 branc in PlayerDeathEvent - 1.6 support is being dropped in the future, please upgrade Factions 
 
 # FactionsPlus version 0.5.1
 * A quick fix with scheduler related to PlayerDeathEvent 
