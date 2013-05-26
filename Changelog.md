@@ -1,3 +1,7 @@
+# 0.5.2
+* Templates file is no longer used. It is removed on startup.
+* Now using Config File's Template Section. Fixes a lot of issues.
+
 # FactionsPlus version 0.5.1
 * A quick fix with scheduler related to PlayerDeathEvent 
 
