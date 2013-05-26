@@ -128,7 +128,7 @@ public class CoreListener implements Listener{
 		
 		FPlayer currentFPlayer = FPlayers.i.get(currentPlayer);
 		
-		if(Utilities.isWarZone(Board.getFactionAt(currentPlayer.getLocation()))) {
+		if(Utilities.isWarZone(Board.getFactionAt(new FLocation(currentPlayer.getLocation())))) {
 			
 			if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeathInWarZone")) {
 				return;
