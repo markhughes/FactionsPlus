@@ -23,6 +23,7 @@ import markehme.factionsplus.config.sections.Section_Peaceful;
 import markehme.factionsplus.config.sections.Section_PowerBoosts;
 import markehme.factionsplus.config.sections.Section_Rules;
 import markehme.factionsplus.config.sections.Section_Teleports;
+import markehme.factionsplus.config.sections.Section_Templates;
 import markehme.factionsplus.config.sections.Section_Warps;
 import markehme.factionsplus.config.sections._boolean;
 import markehme.factionsplus.config.yaml.WYComment;
@@ -127,6 +128,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	@Section(
 			realAlias_neverDotted = "extras" )
 	public final static Section_Extras		_extras					= new Section_Extras();
+	
+	@Section(
+			realAlias_neverDotted = "template" )
+	public final static Section_Templates		_templates					= new Section_Templates();
 	
 	@Option(
 		autoComment={
@@ -296,10 +301,10 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 				FactionsPlusPlugin.info( "Created file: " + Config.fileDisableInWarzone );
 			}
 			
-			if ( !Config.templatesFile.exists() ) {
+			if(Config.templatesFile.exists()) {
+				FactionsPlusPlugin.info( "Templates file is no longer used, removing. See Config > Template" );
 				
-				FactionsPlusTemplates.createTemplatesFile();
-				FactionsPlusPlugin.info( "Created file: " + Config.templatesFile );
+				Config.templatesFile.delete();
 			}
 			
 		} catch ( Exception e ) {
