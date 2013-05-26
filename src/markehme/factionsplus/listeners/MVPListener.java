@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
 import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
@@ -33,14 +34,15 @@ public class MVPListener implements Listener {
 		// TODO: Put messages into template file
 		FPlayer fplayer = FPlayers.i.get( e.getTeleportee() );
 			
-		Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(),  Board.getFactionAt( e.getTeleportee().getLocation() ));
+		Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(),  Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) ));
 		
 		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || fplayer.isInOwnTerritory() ) {
 			return;
 		}
 		
+		
 		// SafeZone / Wilderness / WarZone = not a faction, so rules do not apply
-		if(Utilities.isSafeZone(Board.getFactionAt( e.getTeleportee().getLocation() )) || Utilities.isWilderness(Board.getFactionAt( e.getTeleportee().getLocation() )) || Utilities.isWarZone(Board.getFactionAt( e.getTeleportee().getLocation() )) ) {
+		if(Utilities.isSafeZone(Board.getFactionAt( new FLocation(e.getTeleportee().getLocation() ))) || Utilities.isWilderness(Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) )) || Utilities.isWarZone(Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) )) ) {
 			return;
 		}
 		
