@@ -1,5 +1,6 @@
 package markehme.factionsplus;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -7,10 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.util.Q;
 
@@ -20,9 +21,11 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
 
 
 public abstract class Utilities {
@@ -33,7 +36,6 @@ public abstract class Utilities {
 		DataInputStream in=null;
 		BufferedReader br=null;
 		InputStreamReader isr = null;
-		
 		try {
 			fstream = new FileInputStream(filePath);
 			in = new DataInputStream(fstream);
@@ -107,24 +109,44 @@ public abstract class Utilities {
 			}
 		}
 	}
-
+	
+	public static int countLines(String filename) throws IOException {
+	    InputStream is = new BufferedInputStream(new FileInputStream(filename));
+	    try {
+	        byte[] c = new byte[1024];
+	        int count = 0;
+	        int readChars = 0;
+	        boolean empty = true;
+	        while ((readChars = is.read(c)) != -1) {
+	            empty = false;
+	            for (int i = 0; i < readChars; ++i) {
+	                if (c[i] == '\n') {
+	                    ++count;
+	                }
+	            }
+	        }
+	        return (count == 0 && !empty) ? 1 : count;
+	    } finally {
+	        is.close();
+	    }
+	}
 	/* ********** JAIL RELATED ********** */
 
 	public static boolean isJailed(Player thePlayer) {
-		UPlayer uPlayer = UPlayer.get(thePlayer);
+		UPlayer fplayer = UPlayer.get(thePlayer.getName());
 		
-		//FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
+		if(fplayer == null) return false;
 		
-		if(uPlayer == null) return false;
-		
-		File jailDataFile = new File(Config.folderJails,"jaildata." + uPlayer.getFactionId() + "." + thePlayer.getName());
+		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
 
 		if(!jailDataFile.exists()) {
 			return false;
 		}
 
 		String JailData = Utilities.readFileAsString(jailDataFile);
-
+		
+		// TODO: if last parm of file is "unjail" then run the unjail, and then remove the file
+		
 		if(JailData == "0") {
 			return false;
 		} else {
@@ -135,11 +157,11 @@ public abstract class Utilities {
 	/* ********** FACTIONS RELATED ********** */
 
 	public static boolean isOfficer(UPlayer uPlayer) {
-		return Bridge.factions.getRole( uPlayer).equals( FactionsAny.Relation.OFFICER );
+		return( uPlayer.getRole().equals( Rel.OFFICER ) );
 	}
 
-	public static boolean isLeader(FPlayer fplayer) {
-		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.LEADER );
+	public static boolean isLeader(UPlayer uPlayer) {
+		return( uPlayer.getRole().equals( Rel.LEADER ) );
 	}
 
 	
@@ -174,31 +196,31 @@ public abstract class Utilities {
 //	}
 
 	public static void addPower(Player player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() + amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
 	}
 
-	public static void addPower(FPlayer player, double amount) {
-		player.setPowerBoost(player.getPowerBoost() + amount);
+	public static void addPower(UPlayer uPlayer, double amount) {
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
 	}
 
 	public static void addPower(String player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() + amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
 	}
 
 	public static void removePower(Player player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() - amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
 	}
 
-	public static void removePower(FPlayer player, double amount) {
-		player.setPowerBoost(player.getPowerBoost() - amount);
+	public static void removePower(UPlayer uPlayer, double amount) {
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
 	}
 
 	public static void removePower(String player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() - amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
 	}
 
 	public static int getCountOfWarps(Faction faction) {
@@ -300,22 +322,19 @@ public abstract class Utilities {
 		return false;
 	}
 	
-	public static boolean isOp(FPlayer fplayer) {
-		return Utilities.getOnlinePlayerExact(fplayer).isOp();
+	public static boolean isOp(UPlayer uPlayer) {
+		return Utilities.getOnlinePlayerExact( uPlayer ).isOp();
 	}
 	
-	public static boolean isWarZone(Faction faction)
-	{
+	public static boolean isWarZone(Faction faction) {
 		return faction.getId().equals(ID_WARZONE);
 	}
 
-	public static boolean isSafeZone(Faction faction)
-	{
+	public static boolean isSafeZone(Faction faction) {
 		return faction.getId().equals(ID_SAFEZONE);
 	}
 
-	public static boolean isWilderness(Faction faction)
-	{
+	public static boolean isWilderness(Faction faction) {
 		return faction.getId().equals(ID_WILDERNESS);
 	}
 
@@ -328,9 +347,8 @@ public abstract class Utilities {
 		return !isWarZone( faction ) && !isSafeZone(faction) && !isWilderness( faction );
 	}
 	
-	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*
-	
-	//XXX:don't change the following 3 constants:
+	private static final int margin = 10;
+
 	public static final String	ID_WARZONE	= "-2";
 	public static final String	ID_SAFEZONE	= "-1";
 	public  static final String	ID_WILDERNESS	= "0";
@@ -429,11 +447,11 @@ public abstract class Utilities {
 
 	public static final void setPeaceful(Faction faction, Boolean state) {
 		assert Q.nn( faction );
-		Bridge.factions.setFlag( faction, FactionsAny.FFlag.PEACEFUL,  state );
+		faction.setFlag(FFlag.PEACEFUL, state);
 	}
 	
 	public static final boolean isPeaceful(Faction faction) {
-		return Bridge.factions.getFlag( faction, FactionsAny.FFlag.PEACEFUL );
+		return( faction.getFlag( FFlag.PEACEFUL ) );
 	}
 	
 	/**
@@ -441,8 +459,7 @@ public abstract class Utilities {
 	 * @return
 	 */
 	public static final boolean confIs_wildernessPowerLoss() {
-		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
-		return Bridge.factions.getFlag(Factions.i.getNone(), FactionsAny.FFlag.POWERLOSS);
+		return( Faction.get("0").getFlag(FFlag.POWERLOSS) );
 	}
 	
 	/**
@@ -451,7 +468,7 @@ public abstract class Utilities {
 	 */
 	public static final boolean confIs_warzonePowerLoss() {
 		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
-		return Bridge.factions.getFlag(Factions.i.get(ID_WARZONE), FactionsAny.FFlag.POWERLOSS);
+		return( Faction.get(ID_WARZONE).getFlag(FFlag.POWERLOSS) );
 	}
 	
 }
