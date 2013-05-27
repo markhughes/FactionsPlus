@@ -84,14 +84,11 @@ public class FactionsPlusCommandManager {
 			addSC(new CmdRules());
 		}
 		
-		addSC(new CmdFC());
-		addSC(new CmdGC());
-		
 		// Region based Commands
 		//addSC(new CmdPlot());
 
 		if (Config._economy.isHooked()){
-			Bridge.factions.addSubCommand(new CmdMoneyTop());
+			Factions.get().getOuterCmdFactions().cmdFactionsMoney.addSubCommand(new CmdMoneyTop());
 		}
 		
 		// New Admin commands 
@@ -109,13 +106,11 @@ public class FactionsPlusCommandManager {
 //		Bridge.factions.addSubCommand(P.p.cmdBase.cmdPower, new CmdPowPow());
 		addSC(new CmdPowSettings());
 		
-		//last:
 		// finalizeHelp() not required in 2.x 
 	}
 
 	private static final void addSC(FCommand subCommand) {
-		
-		Bridge.factions.addSubCommand(subCommand);
+		Factions.get().getOuterCmdFactions().addSubCommand(subCommand);
 	}
 	
 }
