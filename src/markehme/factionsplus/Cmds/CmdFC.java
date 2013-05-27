@@ -1,10 +1,14 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsBridge.FactionsAny;
-
+/**
+ * Will no longer do it's original intention. Obsolete. 
+ *
+ */
+@Deprecated 
 public class CmdFC extends BaseCmdChatMode  {
+	@Deprecated
 	public CmdFC() {
-		super(FactionsAny.ChatMode.FACTION,"factionsplus.factionchatcommand", "fc","cf" );
+		return;
 	}
 
 }
