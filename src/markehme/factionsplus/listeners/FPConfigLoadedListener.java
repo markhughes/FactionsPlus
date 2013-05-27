@@ -7,9 +7,13 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.LocketteBase;
+import markehme.factionsplus.extras.LocketteFunctions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 
 
 
@@ -25,9 +29,13 @@ public class FPConfigLoadedListener implements Listener {
         //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
         //and now the config may dictate that they are disabled (state changed) so we must properly handle that behaviour.
         TeleportsListener.initOrDeInit(FactionsPlus.instance);
-        
+       
+        PluginManager pm = Bukkit.getServer().getPluginManager();
         
         FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
+        
+       
+        
         
 //        LWCBase.refreshLWC();
         if ( LWCBase.isLWCPluginPresent() ) {// LWCFunctions.isLWC() also works here though
@@ -62,7 +70,10 @@ public class FPConfigLoadedListener implements Listener {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
+        // Lockette 
+        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
         
+        // Disguises 
         DisguiseListener.enableOrDisable(FactionsPlus.instance);
         
         // Multiverse-portals
@@ -77,5 +88,5 @@ public class FPConfigLoadedListener implements Listener {
 		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
         
-	}//onConfigLoaded method ends
+	} //onConfigLoaded method ends
 }
