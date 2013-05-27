@@ -28,4 +28,9 @@ public final class Section_Rules {
 		"maxRulesPerFaction"
 		}, realAlias_inNonDottedFormat = "maxRulesPerFaction" )
 	public  final _int maxRulesPerFaction=new _int(12);
+	
+	@Option(oldAliases_alwaysDotted={
+			"onFirstJoinFactionShowRules"
+			}, realAlias_inNonDottedFormat = "onFirstJoinFactionShowRules" )
+		public  final _boolean onFirstJoinFactionShowRules=new _boolean(false);
 }

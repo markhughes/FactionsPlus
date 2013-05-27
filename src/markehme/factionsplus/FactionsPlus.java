@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
@@ -16,15 +15,16 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitWorker;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.factions.entity.MPlayer;
-import com.massivecraft.factions.entity.UPlayer;
+import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.onarandombox.MultiversePortals.MultiversePortals;
+import com.onarandombox.MultiversePortals.utils.PortalManager;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -32,43 +32,41 @@ public class FactionsPlus extends FactionsPlusPlugin {
 
 	public static FactionsPlus instance;
 	
-	public static Logger log = Logger.getLogger("Minecraft");
+	public static Logger log 									= 	Logger.getLogger("Minecraft");
 	
 	Factions factions;
-	Faction faction;
 	
-	MPlayer mPlayer;
-	UPlayer uPlayer;
+    public static Permission permission 						= 	null;
+    
+	public static boolean isWorldEditEnabled 					= 	false;
+	public static boolean isWorldGuardEnabled 					= 	false;
+	public static boolean isMultiversePortalsEnabled 			= 	false;
+	
+	public final CoreListener corelistener 						=	new CoreListener();
+	
+	public static WorldEditPlugin worldEditPlugin 				= 	null;
+	public static WorldGuardPlugin worldGuardPlugin 			= 	null;
+	
+	public static MultiversePortals multiversePortalsPlugin 	= 	null;
 	
 	public static String version;
 	public static String FactionsVersion;
 	
-    public static Permission permission					=	null;
-    
-	public static boolean isWorldEditEnabled 			=	false;
-	public static boolean isWorldGuardEnabled			=	false;
-	public static boolean isMultiversePortalsEnabled 	=	false;
+	private static Metrics metrics 								= 	null;
 	
-	public final CoreListener corelistener 				=	new CoreListener();
-
-	public static WorldEditPlugin worldEditPlugin 		=	null;
-	public static WorldGuardPlugin worldGuardPlugin 	=	null;
+	public static Set<String> ignoredPvPWorlds 					= 	MConf.get().worldsIgnorePvP;
+	public static Set<String> noClaimingWorlds 					= 	MConf.get().worldsNoClaiming;
+	public static Set<String> noPowerLossWorlds 				= 	MConf.get().worldsNoPowerLoss;
 	
-	
-	
-	private static Metrics metrics 						=	null;
-	
-	public static Set<String> ignoredPvPWorlds 			= 	MConf.get().worldsIgnorePvP;
-	public static Set<String> noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
-	public static Set<String> noPowerLossWorlds 		= 	MConf.get().worldsNoPowerLoss;
-	
-	public FactionsPlus() {//constructor
+	public FactionsPlus() {
 		super();
-		if (null != instance) {
-			throw bailOut("this was not expected, getting new-ed again without getting unloaded first.\n"
+		
+		if ( null != instance ) {
+			throw bailOut("This was not expected, getting new-ed again without getting unloaded first.\n"
 				+"Safest way to reload is to stop and start the server!");
 		}
-		instance=this;
+		
+		instance = this;
 	}
 	
 	
@@ -76,7 +74,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public void onDisable() {
 		Throwable failed = null;// TODO: find a way to chain all thrown exception rather than overwrite all older
 		try {
-			
 			try {
 				EssentialsIntegration.onDisable();
 			} catch ( Throwable t ) {
@@ -121,7 +118,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			try {
 				//this will deInit metrics, but it will be enabled again onEnable
-				getServer().getScheduler().cancelTasks( this);
+				getServer().getScheduler().cancelTasks( this );
 			} catch ( Throwable t ) {
 				failed = t;
 			}
@@ -136,7 +133,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 //					+", "+bukkitWorker.getThread().getName());			
 //			}
 			
-			if (null == failed) {
+			if ( null == failed ) {
 				FactionsPlusPlugin.info( "Disabled successfuly." );
 			}
 			
@@ -154,20 +151,19 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	@Override
 	public void onEnable() {
 		try {
-			super.onEnable(); // Be first
+			super.onEnable(); 
 			
-			
-			this.ignoredPvPWorlds = MConf.get().worldsIgnorePvP;
-			this.noClaimingWorlds = MConf.get().worldsNoClaiming;
-			this.noPowerLossWorlds = MConf.get().worldsNoPowerLoss;
+			this.ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
+			this.noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
+			this.noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
 			
 			Config.init();
-			Bridge.init();
 			
 			PluginManager pm = this.getServer().getPluginManager();
 			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 			
-			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); // Before reload
+			FactionsPlusPlugin.info("GitHub: https://github.com/MarkehMe/FactionsPlus");
+			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); 
 			
 			pm.registerEvents(new FPConfigLoadedListener(),this);
 			
@@ -176,6 +172,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			pm.registerEvents(this.corelistener, this);
 			
 			FactionsPlusJail.server = getServer();
+			CoreListener.fp = FactionsPlusJail.server;
 			
 			FactionsPlusCommandManager.setup();
 			
@@ -200,23 +197,38 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        }
 	        
 	        if(pm.isPluginEnabled("Multiverse-Portals")) { 
+	        	Plugin MVc = getServer().getPluginManager().getPlugin("Multiverse-Portals");
+	            
+	            if (MVc instanceof MultiversePortals) {
+	            	this.multiversePortalsPlugin = (MultiversePortals) MVc;
+	            }
+	            
 	        	isMultiversePortalsEnabled = true;
 	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
-	        
 	        version = getDescription().getVersion();
 	        
-			FactionsPlusPlugin.info("Ready.");
+			FactionsPlusPlugin.info("Ready. ");
 			
 			try {
 				metrics = new Metrics( this );
+
+				// Version of Factions
+			    /*metrics.addCustomData(new Metrics.Plotter("Factions 1.x") {
+
+			        @Override
+			        public int getValue() {
+			        	int FVC = 0;
+			            return FVC;
+			        }
+
+			    });*/
+			    
 				metrics.start();
 			} catch ( IOException e ) {
 				FactionsPlusPlugin.info("Metrics could not start up: "+e.getMessage() );
 			}
-			
-			FactionsPlusPlugin.info("ARE YOU A DEVELOPER? Help out: https://github.com/MarkehMe/FactionsPlus");
-			
+						
 		} catch (Throwable t) {
 			FactionsPlus.severe( t);
 			if (isEnabled()) {

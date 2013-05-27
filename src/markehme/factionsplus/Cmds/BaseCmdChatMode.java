@@ -12,10 +12,10 @@ import com.massivecraft.factions.cmd.FCommand;
  * @deprecated No longer required in 1.7+, use HeroChat or FactionChat instead. 
  */
 @Deprecated
-public abstract class BaseCmdChatMode extends FCommand {
+public abstract class BaseCmdChatMode extends FPCommand {
 	
 	@Override
-	public final void perform() {
+	public final void performfp() {
 		return;
 	}
 	

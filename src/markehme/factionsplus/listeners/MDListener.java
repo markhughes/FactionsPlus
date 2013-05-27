@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.config.Config;
+
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
 
@@ -9,17 +10,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.entity.UPlayer;
 
-public class MDListener implements Listener  {//http://dev.bukkit.org/server-mods/mobdisguise/
+/**
+ * MobDisguise
+ * http://dev.bukkit.org/server-mods/mobdisguise/
+ *
+ */
+public class MDListener implements Listener  {
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onDisguiseEvent(DisguiseEvent e) {
 		if (e.isCancelled()){
 			return;
 		}
 		
-		FPlayer fplayer = FPlayers.i.get(e.getPlayer());
+		UPlayer fplayer = UPlayer.get(e.getPlayer());
 		if (!fplayer.hasFaction()){
     		return;
     	}

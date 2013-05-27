@@ -1,8 +1,6 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.World;
@@ -15,10 +13,11 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.mcore.ps.PS;
 
 public class PowerboostListener implements Listener{
 	
@@ -26,10 +25,7 @@ public class PowerboostListener implements Listener{
 
 	
 	@EventHandler(priority=EventPriority.MONITOR)
-	public void onEntityDeath(EntityDeathEvent event)
-	{
-//		FactionsPlus.info( "inside PB listener");//temp, tested to work with /f reloadfp (and Factions 1.7.x)
-		//1of2
+	public void onEntityDeath(EntityDeathEvent event) {
 		if ((event.getEntity() instanceof Player)) {
 			Player p = (Player)event.getEntity();
 			
@@ -128,19 +124,19 @@ public class PowerboostListener implements Listener{
 
 	
 	public static final boolean canLosePowerWherePlayerIsAt( Player player ) {
-		Faction factionAtFeet = Board.getFactionAt( new FLocation( player.getLocation() ) );
+		Faction factionAtFeet = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 		return canLosePowerInThisFaction(factionAtFeet, player.getWorld());
 	}
 	
 	public static final boolean canLosePowerInThisFaction(Faction faction, World worldName) {
-		if ( !Bridge.factions.getFlag( faction, FactionsAny.FFlag.POWERLOSS ) ) {//this handles safezone too
+		if ( ! faction.getFlag(FFlag.POWERLOSS) ) { //this handles safezone too
 			return false;
 		} else {
 			// safezone check is not needed here because both 1.6 bridge and 1.7 powerloss are false for safezone,
 			// except that 1.7 can set it to true if wanted but it's false by default in factions.json
 			
 			// warzone will always lose power regardless of worldsNoPowerLoss setting, Factions plugin does this too.
-			if ( !Utilities.isWarZone( faction ) && null != worldName && Conf.worldsNoPowerLoss.contains( worldName.getName() ) )
+			if ( !Utilities.isWarZone( faction ) && null != worldName && MConf.get().worldsNoPowerLoss.contains( worldName.getName() ) )
 			{
 				return false;
 			}

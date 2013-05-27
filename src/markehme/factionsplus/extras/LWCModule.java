@@ -22,11 +22,10 @@ import com.griefcraft.scripting.event.LWCProtectionRemovePostEvent;
 import com.griefcraft.scripting.event.LWCRedstoneEvent;
 import com.griefcraft.scripting.event.LWCReloadEvent;
 import com.griefcraft.scripting.event.LWCSendLocaleEvent;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
 
 
 /**
@@ -78,10 +77,13 @@ public class LWCModule extends JavaModule {//to fix
 	@Override
 	public void onProtectionInteract( LWCProtectionInteractEvent event ) {
 		if(Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ ) {
-			FLocation floc = new FLocation(event.getProtection().getBlock().getLocation());
+			
+			PS floc = PS.valueOf(event.getProtection().getBlock().getLocation());
 			Player p = event.getPlayer();
-			Faction owner = Board.getFactionAt(floc);
-			FPlayer fp = FPlayers.i.get(p);
+			
+			Faction owner = BoardColls.get().getFactionAt(floc);
+			UPlayer fp = UPlayer.get(p);
+			
 			if(fp.getFaction() != owner && !Utilities.isWilderness(owner)) {
 				event.setResult(CANCEL);
 				return;
@@ -103,13 +105,13 @@ public class LWCModule extends JavaModule {//to fix
 		}
 		
 		
-		Player p = event.getPlayer();//it wouldn't be null
+		Player p = event.getPlayer();
+		
 		Block b = event.getBlock();
-		FPlayer fp = FPlayers.i.get(p);
-		FLocation floc = new FLocation(b.getLocation());
-		Faction owner = Board.getFactionAt(floc);
+		UPlayer fp = UPlayer.get(p);
+		PS floc = PS.valueOf(b.getLocation());
+		Faction owner = BoardColls.get().getFactionAt(floc);
 
-//		if(!LWCFunctions.checkInTerritory(p,b)) {
 		if (Utilities.isWilderness(owner) || Utilities.hasPermissionOrIsOp( p, permForDontPreventLWCLocking ) || owner.equals( fp.getFaction() )) {
 			//allow locks if it's in wilderness, or is op or has perm, or is in own faction land
 			return;//the 'if' is easier to read this way

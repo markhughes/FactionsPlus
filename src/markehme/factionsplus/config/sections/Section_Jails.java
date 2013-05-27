@@ -1,11 +1,11 @@
 package markehme.factionsplus.config.sections;
 
+import com.massivecraft.factions.entity.UPlayer;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.config.Option;
-
-import com.massivecraft.factions.FPlayer;
 
 
 public final class Section_Jails {
@@ -83,7 +83,7 @@ public final class Section_Jails {
 	
 	public final static String permissionNodeNameForCanJailUnjail="factionsplus.jailunjail";
 	
-	public final static boolean canJailUnjail(FPlayer whoCan) {
+	public final static boolean canJailUnjail(UPlayer whoCan) {
 		return ( 
 				( Utilities.isOp( whoCan ) )
 				||

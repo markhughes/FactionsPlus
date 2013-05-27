@@ -38,7 +38,8 @@ public class FactionsPlusUpdate implements Runnable {
 			if ( null == once ) {
 				once = new FactionsPlusUpdate();
 			}
-			taskId = Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask( instance, once, DELAY, PERIOD );
+			taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(instance, once, DELAY, PERIOD);
+			//taskId = Bukkit.getServer().getScheduler().scheduleAsyncRepeatingTask( instance, once, DELAY, PERIOD );
 			if ( taskId < 0 ) {// not possible
 				FactionsPlus.warn( "Failed to start the check-for-updates thread!" );
 			}

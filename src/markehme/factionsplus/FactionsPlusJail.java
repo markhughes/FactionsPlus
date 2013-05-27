@@ -6,9 +6,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
@@ -26,27 +28,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.MPlayer;
-import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
 
 public class FactionsPlusJail {
 	public static Server server;
 	/**
 	 * caches mappings between faction id (as String) and its jail Location 
 	 */
-	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
+	private static CacheMap<String, Location>	cachedJailLocations = new CacheMap<String, Location>(30);
 	
 	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, UPlayer unjailer, boolean DontSayAnything) {
-		
-		if ( !UPlayer.get(nameOfPlayerToBeUnjailed).isPlayer()) {
+
+		if ( UPlayer.get(nameOfPlayerToBeUnjailed) != null ) {
 			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
 			return false;
 		}
 		
-		UPlayer fpToBeUnjailed = UPlayer.get(nameOfPlayerToBeUnjailed);
+		UPlayer fpToBeUnjailed = UPlayer.get( nameOfPlayerToBeUnjailed );
 		
-		String factionId = fpToBeUnjailed.getFactionId();
+		String factionId=fpToBeUnjailed.getFactionId();
 		
 		if ( !unjailer.getFactionId().equals( factionId ) ) {
 			if(!DontSayAnything) {
@@ -72,15 +73,7 @@ public class FactionsPlusJail {
 					bw = new BufferedReader( osw );
 					
 					bw.readLine();// ignore the `time` line
-					
-					// XXX: if player isn't online when unjailed, it won't be sent back to original location
-					// I don't feel like keeping track of this in the file, it would require changing the isJailed to check
-					// inside the file if a flag is set (jailed=YES/NO; teleportedBack=YES/NO) and when both are YES then delete 
-					//the file, else keep it until both are YES, ie. when player comes online 
-					
-					// ^ A better way to do this, would be to add an additional argument to the Jail file. If it is set to UNJAIL
-					// then on login we will check this, and unjail the player.
-					
+										
 					String worldName = bw.readLine();
 					if ( null != worldName ) {
 						World world = server.getWorld( worldName );
@@ -122,7 +115,7 @@ public class FactionsPlusJail {
 				}
 			}
 			
-			jailingFile.delete();
+			
 			
 			
 			
@@ -132,7 +125,7 @@ public class FactionsPlusJail {
 					// however we should teleport the player somewhere other than remain inside jail
 					Faction f = fpToBeUnjailed.getFaction();
 					if ( null != f ) {
-						originalLocation = f.getHome();
+						originalLocation = f.getHome().asBukkitLocation();
 						if ( null == originalLocation ) {
 							originalLocation = onlinejplayer.getBedSpawnLocation();
 							if ( null == originalLocation ) {
@@ -144,8 +137,29 @@ public class FactionsPlusJail {
 				
 				if ( null != originalLocation ) {
 					tpSuccess = onlinejplayer.teleport( originalLocation );
-//					unjailer.sendMessage( "teleported "+onlinejplayer.getName()+" to orig location" );wow if jailer is 's2' and jailed one is 's' then the former gets teleported
 				}
+			}
+			
+			if(tpSuccess) {
+				// Online, so remove all data.
+				jailingFile.delete();
+			} else {
+				// Offline, so write 'unjail'. On login this should be checked. 
+				
+				/*
+				 * try {
+				    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter( Config.folderJails + "jaildata." + fpToBeUnjailed.getFactionId() + "." + fpToBeUnjailed.getName(), true)));
+				    out.println();
+				    out.println("unjail");
+				    out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				*/
+				
+				// TODO: We're still going to delete it until the above is in-action.
+				jailingFile.delete();
+				
 			}
 			
 //			cachedJailLocations.remove(id);could or could not have existed, hmm maybe not remove this due to possibility that
@@ -172,20 +186,20 @@ public class FactionsPlusJail {
 	
 	
 	public static Location getJailLocation(Player player) {
-		FPlayer fplayer = FPlayers.i.get( player );//considering Factions' implementation of this, this is never null
-		assert (null != fplayer)&&(FPlayers.i.isCreative());//if is creative, even if player didn't exist it will be instance-created
-		//thing is, it's always creative, on both 1.6 and 1.7 (for players, not for factions)
-		String fid = fplayer.getFactionId().trim();//just in case
+		UPlayer fplayer = UPlayer.get( player ); 
+		assert (null != fplayer); 
 		
-		Location jailLocation=cachedJailLocations.get(fid);
+		String fid = fplayer.getFactionId().trim(); 
+		
+		Location jailLocation = cachedJailLocations.get(fid);
+		
 		if (null != jailLocation) {
-//			System.out.println("found in cache: "+fid+"->"+jailLocation);
 			return jailLocation;
 		}
-//		System.out.println("not in cache: "+fid+"->"+jailLocation);
 		
-		Faction CWFaction = Factions.i.get(fid);
-		assert null != CWFaction:"player wasn't in a faction ? like not even wilderness? this should basically not be null";
+		Faction CWFaction = Faction.get(fid);
+		
+		assert null != CWFaction:"player wasn't in a faction? like not even wilderness? this should basically not be null";
 		assert fid.equals(CWFaction.getId());
 		
 		World world;
@@ -226,95 +240,25 @@ public class FactionsPlusJail {
 		return null;
 	}
 	
-//	@Deprecated
-//	public static void OrganiseJail(Player player) {
-//		// creates jail file for a certain player TODO: Implant timed jails 
-//		// 0 	=	Not jailed, so remove the file
-//		// -1	=	Permentaly Jailed
-//		// 1	=	Any number larger than 1 stands for minutes 
-//		FPlayer fplayer = FPlayers.i.get(player.getName());
-//		
-//		File jailingFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + player.getName());
-//		
-//		if(!jailingFile.exists()) {
-//			try {
-//				jailingFile.createNewFile();
-//				
-//				FileWriter filewrite = new FileWriter(jailingFile, true);
-//				filewrite.write("0");
-//				
-//				filewrite.close();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
-//	
-//	@Deprecated
-//	public static boolean doJailPlayer(Player player, String name, int time) {
-//		if(!FactionsPlus.permission.has(player, "factionsplus.jail")) {
-//			player.sendMessage(ChatColor.RED + "No permission!");
-//			return false;
-//		}
-//		
-//		String args[] = null;
-//		
-//		Player jplayer = server.getPlayer(name);
-//		
-//		FPlayer fjplayer = FPlayers.i.get(jplayer.getName());
-//		String jcurrentID = fjplayer.getFaction().getId();
-//		
-//		FPlayer fplayer = FPlayers.i.get(player.getName());
-//		String PcurrentID = fplayer.getFaction().getId();
-//		
-//		if(jcurrentID != PcurrentID) {
-//			player.sendMessage("You can only jail players in your Faction!");
-//			return false;
-//		}
-//		
-//		OrganiseJail(jplayer);
-//		
-//		name = jplayer == null ? name.toLowerCase() : jplayer.getName().toLowerCase();
-//		
-//		File jailingFile = new File(Config.folderJails, "jaildata." + PcurrentID + "." + player.getName());
-//		
-//		if(!jailingFile.exists()) {
-//			try {
-//				jailingFile.createNewFile();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		
-//		if (name != null) {
-//			jplayer.sendMessage(FactionsPlusTemplates.Go("jailed_message", args));
-//			return sendToJail(name, player, time);
-//		}
-//		
-//		return false;
-//
-//	}
-	
 	public static boolean sendToJail(String nameOfPlayerToBeJailed, CommandSender sender, int argTime) {
 		Player player = (Player)sender;
 		
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
+		UPlayer fplayer = UPlayer.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
 		World world;
-		//online or offline at the time of the jailing
-		//TODO: investigate if getOfflinePlayer acts as  getPlayerExact or as getPlayer    for offline players. It'd better act as Exact ffs
+		
 		OfflinePlayer playerToBeJailed = server.getOfflinePlayer( nameOfPlayerToBeJailed);
 		
 		
-		if (!FPlayers.i.exists( nameOfPlayerToBeJailed )) {
+		if (UPlayer.get( nameOfPlayerToBeJailed ) != null) {
 			fplayer.msg("Cannot jail inexisting player '"+nameOfPlayerToBeJailed+"'");
 			return false;
 		}
 		
-		FPlayer fjplayer = FPlayers.i.get(nameOfPlayerToBeJailed);//this is never null, an instance is always created if didn't previously exist
-//		fplayer.msg(jailingplayer+" "+fjplayer.getFactionId()+" "+fplayer.getFactionId());
-		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {//they are numbers in String
+		UPlayer fjplayer = UPlayer.get(nameOfPlayerToBeJailed);
+		
+		if( !fjplayer.getFactionId().equals( fplayer.getFactionId() ) ) { 
 			fplayer.msg("You can only Jail players that are in your Faction!");
 			return false;
 		}
@@ -326,25 +270,7 @@ public class FactionsPlusJail {
 		
 		Location jailLoc = getJailLocation( player );
 		
-//		File currentJailFile = new File(Config.folderJails, "loc." + currentFaction.getId());
-		
-//		if(currentJailFile.exists()) {
 		if ( null != jailLoc ) {
-			// Scanner scanner=null;
-			// try {
-			// scanner=new Scanner(currentJailFile);
-			// String JailData = scanner.useDelimiter("\\A").next();//'teh ?
-			//
-			// String[] jail_data = JailData.split(":");
-			//
-			// double x = Double.parseDouble(jail_data[0]);
-			// double y = Double.parseDouble(jail_data[1]); // y axis
-			// double z = Double.parseDouble(jail_data[2]);
-			//
-			// float yo = Float.parseFloat(jail_data[3]); // yaw
-			// float peach = Float.parseFloat(jail_data[4]);
-			//
-			// world = server.getWorld(jail_data[5]);
 			
 			File jailingFile =
 				new File( Config.folderJails, "jaildata." + currentFaction.getId() + "." + playerToBeJailed.getName() );
@@ -379,6 +305,8 @@ public class FactionsPlusJail {
 						bw.write( Float.toString( originalLocation.getYaw() ));
 						bw.newLine();
 						bw.write( Float.toString( originalLocation.getPitch() ));
+						bw.newLine();
+						bw.write(  "injail" );
 						bw.newLine();
 						
 						tpSuccess=onlinejplayer.teleport( jailLoc );
@@ -424,15 +352,6 @@ public class FactionsPlusJail {
 				sender.sendMessage( ChatColor.RED + fjplayer.getName() + " is already jailed!" );
 			}
 			
-			// } catch (Exception e) {
-			// e.printStackTrace();
-			// sender.sendMessage(ChatColor.RED + "Can not read the jail data, is a jail set?");
-			// }finally {
-			// if (null != scanner) {
-			// scanner.close();
-			// }
-			// }
-			
 		} else {
 			sender.sendMessage( ChatColor.RED + "There is no jail currently set." );
 		}
@@ -446,7 +365,7 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
+		UPlayer fplayer = UPlayer.get(sender.getName());
 		Faction currentFaction = fplayer.getFaction();
 		
 		boolean authallow = ((Config._jails.leadersCanSetJails._) && (Utilities.isLeader( fplayer ))) 
@@ -468,7 +387,7 @@ public class FactionsPlusJail {
 		
 		if(Config._economy.isHooked()) {
 			if(Config._economy.costToSetJail._ > 0.0d) {//TODO: fill those empty strings
-				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
+				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", UPlayer.get(Bukkit.getPlayer(sender.getName())))) {
 					return false;
 				}
 			}
@@ -481,11 +400,13 @@ public class FactionsPlusJail {
 		
 		Location loc = player.getLocation();
 		
-		String jailData = loc.getX() + ":" + 
-        loc.getY() + ":" + 
-        loc.getZ() + ":" + 
-        loc.getYaw() + ":" + 
-        loc.getPitch() + ":" + loc.getWorld().getName();
+		String jailData =
+				loc.getX() + ":" + 
+				loc.getY() + ":" + 
+				loc.getZ() + ":" + 
+				loc.getYaw() + ":" + 
+				loc.getPitch() + ":" +
+				loc.getWorld().getName();
 		
 		DataOutputStream jailWrite=null;
 		FileOutputStream fos = null;
@@ -515,7 +436,7 @@ public class FactionsPlusJail {
 			}
 			if (null != fos) {
 				try {
-					fos.close();//likely already closed by jailWrite
+					fos.close();
 				} catch ( IOException e ) {
 					e.printStackTrace();
 				}
@@ -523,15 +444,4 @@ public class FactionsPlusJail {
 		}
 		
 	}
-
-//	@Deprecated
-//	public static void unjailPlayer(String name, int id) {
-//		new File(Config.folderJails, "jaildata." + id + "." + name).delete();
-//	}
-//
-//	@Deprecated
-//	public static double getTempJailTime(Player p) {
-//		// TODO: getTempJailTime Function
-//		return 0;
-//	}
 }

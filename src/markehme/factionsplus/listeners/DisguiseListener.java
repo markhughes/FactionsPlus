@@ -12,11 +12,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.PluginManager;
 
+import com.massivecraft.factions.entity.UPlayer;
+
 import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 
 public class DisguiseListener implements Listener {
 	private static final String	MOB_DISGUISE	= "MobDisguise";
@@ -28,8 +28,8 @@ public class DisguiseListener implements Listener {
 			return;
 		}
 
-		FPlayer fplayer = FPlayers.i.get(event.getPlayer());
-		if (!fplayer.hasFaction()){
+		UPlayer fplayer = UPlayer.get(event.getPlayer());
+		if(!fplayer.hasFaction()) {
     		return;
     	}
 		
@@ -102,7 +102,6 @@ public class DisguiseListener implements Listener {
 	
 	
 	private final static void disintegrateMD() {
-//		assert null != mdlistener : "bad call: MD was not already integrated";
 		if (null != mdlistener) {
 			HandlerList.unregisterAll( mdlistener );
 			mdlistener = null;
@@ -114,7 +113,6 @@ public class DisguiseListener implements Listener {
 	}
 	
 	private static void disintegrateCommon() {
-//		assert null != disguiselistener : "bad call: the MD/DC common code  was not already integrated";
 		if (null != disguiselistener) {
 			HandlerList.unregisterAll( disguiselistener );
 			disguiselistener=null;

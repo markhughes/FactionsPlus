@@ -10,40 +10,54 @@ public class FactionsPlusTemplates {
 		String workingstring = "Invalid Template File for " + templateOption;
 		
 		if(templateOption == "announcement_message") {
-			workingstring = Config.templates.getString("announcement_message");
+			workingstring = Config._templates.announcement_message._;
 		}
 		
 		if(templateOption == "warp_created") {
-			workingstring = Config.templates.getString("warp_created");
+			workingstring = Config._templates.warp_created._;
 		}
 		
 		if(templateOption == "notify_warp_created") {
-			workingstring = Config.templates.getString("notify_warp_created");
+			workingstring = Config._templates.notify_warp_created._;
 		}
-
 		
 		if(templateOption == "jailed_message") {
-			workingstring = Config.templates.getString("jailed_message");
+			workingstring = Config._templates.jailed_message._;
 		}
 		
 		if(templateOption == "warp_non_existant") {
-			workingstring = Config.templates.getString("warp_non_existant");
+			workingstring = Config._templates.warp_non_existant._;
 		}
 		
 		if(templateOption == "warped_to") {
-			workingstring = Config.templates.getString("warped_to");
+			workingstring = Config._templates.warped_to._;
 		}
 		
 		if(templateOption == "warped_removed") {
-			workingstring = Config.templates.getString("warped_removed");
+			workingstring = Config._templates.warped_removed._;
 		}
 		
 		if(templateOption == "warp_incorrect_password") {
-			workingstring = Config.templates.getString("warp_incorrect_password");
+			workingstring = Config._templates.warp_incorrect_password._;
+		}
+		
+		if(templateOption == "create_warp_denied_badrank") {
+			workingstring = Config._templates.create_warp_denied_badrank._;
+		}
+		
+		if(templateOption == "create_warp_denied_badterritory") {
+			workingstring = Config._templates.create_warp_denied_badterritory._;
+		}
+		
+		if(templateOption == "warps_reached_max") {
+			workingstring = Config._templates.warps_reached_max._;
+		}
+		
+		if(templateOption == "warps_already_exists") {
+			workingstring = Config._templates.warps_already_exists._;
 		}
 		
 		workingstring = colorFormat(workingstring);
-		
 		
 		if(args != null) {			
 			if(args.length == 2) {
@@ -96,40 +110,10 @@ public class FactionsPlusTemplates {
 		
 	}
 	
-	@SuppressWarnings("boxing")
+	@Deprecated
 	public static void createTemplatesFile() {
-		try { 
-			if(Config.templatesFile.exists()) {
-				Config.templatesFile.delete();
-			}
-			
-			Config.templatesFile.createNewFile();
-			
-			Config.templates = YamlConfiguration.loadConfiguration(Config.templatesFile);
-			
-			// For announcements 
-			Config.templates.set("announcement_message", "<red>!1 <white>announced: !2");
-			
-			// For warps 
-			Config.templates.set("warp_created", "<green>Warp <white>!1 <green>set for your Faction!");
-			Config.templates.set("notify_warp_created", "!1 created a warp in your faction called !2");
-			Config.templates.set("warp_non_existant", "That warp does not exist.");
-			Config.templates.set("warped_to", "<red>Warped to <white>!1");
-			Config.templates.set("warped_removed", "<green>The warp <white>!1<green> was removed.");
-			Config.templates.set("warp_incorrect_password", "<red>Incorrect password, please use /f warp [warp] <password>");
-			
-			// For jail
-			Config.templates.set("jailed_message", "<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
-			
-			// Default value don't change
-			Config.templates.set("doNotChangeMe", 4);
-			
-			Config.templates.save(Config.templatesFile);
-			
-		} catch (Exception e) {
-	    	e.printStackTrace();
-	    	FactionsPlusPlugin.info("ERROR: Couldn't create templates file.");
-	    	return; 
-	    }
+		if(Config.templatesFile.exists()) {
+			Config.templatesFile.delete();
+		}
 	}
 }

@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.event.LandClaimEvent;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.event.FactionsEventChunkChange;
 
 
 
@@ -22,18 +22,18 @@ public class LWCListener implements Listener {
 	
 	@EventHandler(
 			priority = EventPriority.MONITOR )
-	public void onLandClaim( LandClaimEvent event ) {
+	public void onLandClaim( FactionsEventChunkChange event ) {
 		if ( event.isCancelled() ) {
 			return;
 		} else {
-			FPlayer fPlayer = event.getFPlayer();
+			UPlayer fPlayer = event.getUSender();
 			try {
 				if (!LWCBase.isLWCPluginPresent()) {//ie. run this on server: plugman unload lwc
 					//... but if you then also run /f reloadfp  then this listener will be unloaded
 					fPlayer.sendMessage( ChatColor.RED+"LWC plugin is not active." );
 					return;
 				}
-				int removedProtections = LWCFunctions.clearLocks( event.getLocation(), fPlayer );
+				int removedProtections = LWCFunctions.clearLocks( event.getChunk().getLocation(), fPlayer );
 				if ( removedProtections > 0 ) {
 					fPlayer.sendMessage( ChatColor.GOLD + "Automatically removed " + removedProtections
 						+ " LWC protections in the claimed chunk." );

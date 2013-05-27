@@ -7,9 +7,16 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.LocketteBase;
+import markehme.factionsplus.extras.LocketteFunctions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
+
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.MConf;
 
 
 
@@ -25,13 +32,14 @@ public class FPConfigLoadedListener implements Listener {
         //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
         //and now the config may dictate that they are disabled (state changed) so we must properly handle that behaviour.
         TeleportsListener.initOrDeInit(FactionsPlus.instance);
-        
+       
+        PluginManager pm = Bukkit.getServer().getPluginManager();
         
         FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
         
-//        LWCBase.refreshLWC();
-        if ( LWCBase.isLWCPluginPresent() ) {// LWCFunctions.isLWC() also works here though
-			
+        if ( LWCBase.isLWCPluginPresent() ) { 
+			// TODO: is this still used ? - can't find in Factions config 
+        	/*
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
 				// if Faction plugin has setting to reset locks (which only resets for chests)
 				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
@@ -44,11 +52,15 @@ public class FPConfigLoadedListener implements Listener {
 				}
 				
 			}
+			*/
 
-			//this after the above setting
-			LWCFunctions.hookLWCIfNeeded();//XXX: this must be inside an if, else NoClassDefFoundError if LWC is not on
+			try { 
+				LWCFunctions.hookLWCIfNeeded();
+			} catch(NoClassDefFoundError e) {
+				FactionsPlusPlugin.info( "Couldn't hook LWC.. ignoring." );
+			}
 			
-		} else {//no LWC
+		} else { //no LWC
 			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
 				|| Config._extras._protection._lwc.removeAllLocksOnClaim._ ) 
 			{
@@ -62,10 +74,15 @@ public class FPConfigLoadedListener implements Listener {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
+        // Lockette 
+        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
         
+        // Disguises 
         DisguiseListener.enableOrDisable(FactionsPlus.instance);
         
-        
+        // Multiverse-portals
+        MVPListener.enableOrDisable(FactionsPlus.instance);
+
 		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
 		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._announce.enabled._, AnnounceListener.class );
@@ -75,5 +92,5 @@ public class FPConfigLoadedListener implements Listener {
 		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
         
-	}//onConfigLoaded method ends
+	} //onConfigLoaded method ends
 }

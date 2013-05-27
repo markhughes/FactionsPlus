@@ -5,33 +5,36 @@ import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FPlayer;
+import com.massivecraft.factions.EconomyParticipator;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UConf;
+import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.struct.Permission;
 
-public class CmdSetJail extends FPCommand {
+public class CmdSetJail extends FCommand {
 	public CmdSetJail() {
 		this.aliases.add("setjail");
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.setHelp("sets the Faction's jail");
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = false;
-		
-		this.setHelpShort("sets the Faction's jail");
+		this.setDesc( "sets a Faction jail for a Faction" );
 	}
 	
 	@Override
-	public void performfp() {
+	public void perform() {
 		FactionsPlusJail.setJail(Utilities.getOnlinePlayerExact(fme));
 	}
 	
-	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, FPlayer player) {
-		if ( !Config._economy.isHooked() || ! Econ.shouldBeUsed() || Utilities.getOnlinePlayerExact( player ) == null || cost == 0.0) return true;
-
-		if(Conf.bankEnabled && Conf.bankFactionPaysCosts && player.hasFaction())
+	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, UPlayer player) {
+		if ( !Config._economy.isHooked() || ! UConf.get(player).econEnabled || Utilities.getOnlinePlayerExact( player ) == null || cost == 0.0) return true;
+		
+		MConf Conf = MConf.get();
+		
+		
+		
+		if(UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction())
 			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);
 		else
 			return Econ.modifyMoney(player, -cost, toDoThis, forDoingThis);

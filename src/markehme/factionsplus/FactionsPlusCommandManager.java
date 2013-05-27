@@ -13,18 +13,21 @@ import markehme.factionsplus.Cmds.CmdListWarps;
 import markehme.factionsplus.Cmds.CmdMoneyTop;
 import markehme.factionsplus.Cmds.CmdPowSettings;
 import markehme.factionsplus.Cmds.CmdReloadFP;
+import markehme.factionsplus.Cmds.CmdRemoveRule;
 import markehme.factionsplus.Cmds.CmdRemoveWarp;
+import markehme.factionsplus.Cmds.CmdRules;
 import markehme.factionsplus.Cmds.CmdSetJail;
+import markehme.factionsplus.Cmds.CmdSetRule;
 import markehme.factionsplus.Cmds.CmdToggleState;
 import markehme.factionsplus.Cmds.CmdUnJail;
 import markehme.factionsplus.Cmds.CmdUnban;
 import markehme.factionsplus.Cmds.CmdUnsetJail;
 import markehme.factionsplus.Cmds.CmdWarp;
-import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.CmdFactionsMoney;
 import com.massivecraft.factions.cmd.FCommand;
 
 
@@ -63,22 +66,32 @@ public class FactionsPlusCommandManager {
 		if(Config._announce.enabled._) {
 			addSC(new CmdAnnounce());
 		}
+		
+		if(Config._peaceful.officersCanToggleState._ || Config._peaceful.membersCanToggleState._ || Config._peaceful.leadersCanToggleState._) {
+			addSC(new CmdToggleState());
+		}
+		
+		// Faction Bans
 		if(Config._banning.enabled._) {
 			addSC(new CmdBan());
 			addSC(new CmdUnban());
 		}
-		if(Config._peaceful.officersCanToggleState._ || Config._peaceful.membersCanToggleState._ || Config._peaceful.leadersCanToggleState._) {
-			addSC(new CmdToggleState());
+
+		// Faction Rules
+		if(Config._rules.enabled._) {
+			addSC(new CmdSetRule());
+			addSC(new CmdRemoveRule());
+			addSC(new CmdRules());
 		}
+		
 		addSC(new CmdFC());
 		addSC(new CmdGC());
 		
 		// Region based Commands
 		//addSC(new CmdPlot());
-		
-		
+
 		if (Config._economy.isHooked()){
-			Bridge.factions.addSubCommand(P.p.cmdBase.cmdMoney, new CmdMoneyTop());
+			Bridge.factions.addSubCommand(new CmdMoneyTop());
 		}
 		
 		// New Admin commands 
@@ -97,11 +110,12 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdPowSettings());
 		
 		//last:
-		Bridge.factions.finalizeHelp(); 
+		// finalizeHelp() not required in 2.x 
 	}
 
 	private static final void addSC(FCommand subCommand) {
-		Bridge.factions.addSubCommand(P.p.cmdBase, subCommand);
+		
+		Bridge.factions.addSubCommand(subCommand);
 	}
 	
 }
