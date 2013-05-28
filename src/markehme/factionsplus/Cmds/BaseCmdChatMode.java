@@ -14,7 +14,6 @@ import com.massivecraft.factions.cmd.FCommand;
 @Deprecated
 public abstract class BaseCmdChatMode extends FPCommand {
 	
-	@Override
 	public final void performfp() {
 		return;
 	}
