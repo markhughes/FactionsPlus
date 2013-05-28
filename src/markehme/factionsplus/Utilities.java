@@ -25,7 +25,9 @@ import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.integration.Econ;
 
 
 public abstract class Utilities {
@@ -469,6 +471,26 @@ public abstract class Utilities {
 	public static final boolean confIs_warzonePowerLoss() {
 		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
 		return( Faction.get(ID_WARZONE).getFlag(FFlag.POWERLOSS) );
+		
+	}
+	
+	/**
+	 * 
+	 * @param Cost of action
+	 * @param because Mark did x
+	 * @param UPlayer
+	 * @return boolean
+	 */
+	public static boolean doFinanceCrap(double cost, String sinceDidX, UPlayer player) {
+		if ( !Config._economy.isHooked() || ! UConf.get(player).econEnabled || Utilities.getOnlinePlayerExact(player) == null || cost == 0.0) {
+			return true;
+		}
+		
+		if( UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction() ) {
+			return Econ.modifyMoney(player.getFaction(), -cost, sinceDidX);
+		} else {
+			return Econ.modifyMoney(player, -cost, sinceDidX);
+		}
 	}
 	
 }
