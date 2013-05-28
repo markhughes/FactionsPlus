@@ -19,8 +19,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdAddWarp extends FPCommand {
 	public CmdAddWarp() {
@@ -29,10 +32,12 @@ public class CmdAddWarp extends FPCommand {
 		this.aliases.add( "setwarp" );
 		
 		this.requiredArgs.add( "name" );
-		
 		this.errorOnToManyArgs = false;
-		this.setHelp( "creates a faction warp, can be specified with a password" );
 		
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		
+		this.setHelp( "creates a faction warp, can be specified with a password" );
 		this.setDesc( "From FactionsPlus, used to create a Faction Warp." );
 
 	}
@@ -41,10 +46,10 @@ public class CmdAddWarp extends FPCommand {
 	public void performfp() {
 		String warpname = this.arg(0);
 
-		String pass = null;
+		String warpPassword = null;
 
 		if(this.arg(1) != null) {
-			pass = this.arg(1);
+			warpPassword = this.arg(1);
 		}
 
 		if(!FactionsPlus.permission.has(sender, "factionsplus.createwarp")) {
@@ -67,16 +72,15 @@ public class CmdAddWarp extends FPCommand {
 				return;
 			}
 		}
-		
 		if(Config._economy.costToCreateWarp._ > 0.0d && Config._economy.isHooked()) {
-			if (!payForCommand(Config._economy.costToCreateWarp._, "to create this warp", "for creating this warp")) {
+			if (!Utilities.doFinanceCrap(Config._economy.costToCreateWarp._, "create a warp", usender)) {
 				return;
 			}
 		}
 		
 		if(Config._warps.maxWarps._ != 0) {
 			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
-				sender.sendMessage(FactionsPlusTemplates.Go("warps_reached_max", null));
+				usender.msg( FactionsPlusTemplates.Go( "warps_reached_max", null ) );
 				return;
 			}
 		}
@@ -144,8 +148,8 @@ public class CmdAddWarp extends FPCommand {
 			FileWriter filewrite = new FileWriter(currentWarpFile, true);
 			String dataAddition;
 
-			if(pass != null) {
-				dataAddition = ":" + pass;
+			if(warpPassword != null) {
+				dataAddition = ":" + warpPassword;
 			} else {
 				dataAddition = ":nullvalue";
 			}
@@ -165,19 +169,14 @@ public class CmdAddWarp extends FPCommand {
 			sender.sendMessage(ChatColor.RED + "An internal error occured (05)");
 			return;
 		}
-		String[] argsb;
-		argsb 		= new String[2];
-		argsb[1] 	= warpname;
-				
+		
+		String[] argsb = { null, warpname, null };
+		
 		player.sendMessage(FactionsPlusTemplates.Go("warp_created", argsb));
 
-		String[] argsa;
-
-		argsa = new String[3];
-		argsa[1] = sender.getName();
-		argsa[2] = warpname;
+		String[] argsa = { null, sender.getName(), warpname, null };
 		
-		currentFaction.sendMessage( FactionsPlusTemplates.Go("notify_warp_created", argsa) ); //this would work too, same thing
+		currentFaction.sendMessage( FactionsPlusTemplates.Go("notify_warp_created", argsa) );
 		
 	}
 }

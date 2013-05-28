@@ -46,8 +46,6 @@ public class CmdWarp extends FPCommand {
 		this.optionalArgs.put("password", "string");
 		this.optionalArgs.put("faction", "string");
 
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
 		this.errorOnToManyArgs = false;
 
 		senderMustBePlayer = true;

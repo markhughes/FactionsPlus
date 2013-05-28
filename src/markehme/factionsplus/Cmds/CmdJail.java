@@ -7,39 +7,42 @@ import markehme.factionsplus.config.sections.Section_Jails;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdJail extends FPCommand {
 	public CmdJail() {
-		this.aliases.add("jail");
+		this.aliases.add( "jail" );
 		
-		this.requiredArgs.add("player");
-		
+		this.requiredArgs.add( "player" );
 		this.errorOnToManyArgs = false;
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
-		
-		this.setHelpShort("send a player to jail!");
+		this.setHelp( "send a player to jail" );
+		this.setDesc( "From FactionsPlus, this command locks a player to a Faction jail location." );
 	}
 
 	@Override
 	public void performfp() {
-		String playerToJail = this.argAsString(0);
+		String playerToJail = this.arg(0);
 
-		if (Section_Jails.canJailUnjail( fme ))
-		{
-			if ( ( !Config._jails.canJailOnlyIfIssuerIsInOwnTerritory._ ) || ( fme.isInOwnTerritory() ) ) {
-				FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact( fme ), -1 );
+		if ( Section_Jails.canJailUnjail( usender )) {
+			
+			if ( ( !Config._jails.canJailOnlyIfIssuerIsInOwnTerritory._ ) || ( usender.isInOwnTerritory() ) ) {
+				
+				FactionsPlusJail.sendToJail( playerToJail, Utilities.getOnlinePlayerExact( usender ), -1 );
+				
 			} else {
-				fme.sendMessage( ChatColor.RED + "You must be in your own faction territory to jail someone." );
+				
+				msg( ChatColor.RED + "You must be in your own faction territory to jail someone." );
+				
 			}
 			return;
 		}
-		fme.sendMessage(ChatColor.RED+ "No permission to jail!" );
+		
+		msg( ChatColor.RED+ "No permission to jail!" );
 	}
 	
 	

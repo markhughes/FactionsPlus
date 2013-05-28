@@ -11,12 +11,14 @@ import markehme.factionsplus.listeners.PowerboostListener;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.struct.Permission;
-
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UConf;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdPowSettings extends FPCommand {
 	
@@ -24,34 +26,33 @@ public class CmdPowSettings extends FPCommand {
 		this.aliases.add( "powsets" );
 		this.aliases.add( "powsettings" );
 		this.aliases.add( "powersettings" );
-
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
-		this.errorOnToManyArgs = true;
 		this.optionalArgs.put("page", "1");
+		this.errorOnToManyArgs = true;
 		
-		this.setHelpShort( "show the settings for power loss or gains" );
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
-		senderMustBePlayer = false;
-		senderMustBeMember = false;
+		this.setHelp( "show the settings for power loss or gains" );
+		
+
 	}
 	
-	private static final ChatColor msgColor1 = ChatColor.YELLOW;
-	private static final ChatColor goodColor=ChatColor.GREEN;
-	private static final ChatColor badColor=ChatColor.RED;
-	private static final ChatColor numColor=ChatColor.AQUA;
+	private static final ChatColor msgColor1 		= ChatColor.YELLOW;
+	private static final ChatColor goodColor		= ChatColor.GREEN;
+	private static final ChatColor badColor			= ChatColor.RED;
+	private static final ChatColor numColor			= ChatColor.AQUA;
 	private static final ChatColor	deathByColor	= ChatColor.DARK_PURPLE;
 	
-	private static final String _do_colorless="do"+msgColor1;
-	private static final String _dont_colorless="do not"+msgColor1;
-	private static final String _goodDO=ChatColor.GREEN+_do_colorless;
-	private static final String _badDO=ChatColor.RED+_do_colorless;
-	private static final String _goodDONT=ChatColor.GREEN+_dont_colorless;
-	private static final String _badDONT=ChatColor.RED+_dont_colorless;
+	private static final String _do_colorless		= "do"+msgColor1;
+	private static final String _dont_colorless		= "do not"+msgColor1;
+	private static final String _goodDO				= ChatColor.GREEN+_do_colorless;
+	private static final String _badDO				= ChatColor.RED+_do_colorless;
+	private static final String _goodDONT			= ChatColor.GREEN+_dont_colorless;
+	private static final String _badDONT			= ChatColor.RED+_dont_colorless;
 	
 	
-	private List<String> allLines=new ArrayList<String>();
+	private List<String> allLines					= new ArrayList<String>();
 	
 	@Override
 	public void performfp() {
@@ -59,12 +60,13 @@ public class CmdPowSettings extends FPCommand {
 		//done: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
 		
 //		sm(ChatColor.GRAY,"---Factions+FactionsPlus power settings/stats---");
-		sm("Factions "+(Conf.powerFactionMax>0.0?badColor+"are limited to "+msgColor1+Conf.powerFactionMax:
+		
+		sm("Factions "+(UConf.get(usender).factionPowerMax>0.0?badColor+"are limited to "+msgColor1+UConf.get(usender).factionPowerMax:
 			_goodDONT+" have a limit on")+" max power.");
 
-		sm("Player power min/starting/max: "+num(Conf.powerPlayerMin)+"/"+num(Conf.powerPlayerStarting)+"/"+num(Conf.powerPlayerMax));
+		sm("Player power min/starting/max: "+num(UConf.get(usender).powerMin)+"/"+num(UConf.get(usender).defaultPlayerPower)+"/"+num(UConf.get(usender).powerMax));
 
-		sm("Players lose "+num(Conf.powerPerDeath)+" power per death."+(Config._powerboosts.enabled._?" Add to this the extra loss from below:":" Extra losses/gains are not enabled."));
+		sm("Players lose "+num(UConf.get(usender).powerPerDeath)+" power per death."+(Config._powerboosts.enabled._?" Add to this the extra loss from below:":" Extra losses/gains are not enabled."));
 		// done: show how much power will be lost in all cases (consider Factions+FactionsPlus settings)
 		if ( Config._powerboosts.enabled._ ) {
 			showExtraLoss( Config._powerboosts.extraPowerLossIfDeathBySuicide._, "suicide" );
@@ -79,8 +81,9 @@ public class CmdPowSettings extends FPCommand {
 			showExtraGain( Config._powerboosts.extraPowerWhenKillPlayer._, "PVP/player" );
 		}
 
-		sm("Player regenerates "+num(Conf.powerPerMinute)+" power per minute.");
-
+		sm("Player regenerates "+num(UConf.get(usender).powerPerHour)+" power per hour.");
+		
+		/*
 		sm( "While offline, players " + ( Conf.powerRegenOffline ? _goodDO : _badDONT )
 			+ " regenerate and they "+
 				(Conf.powerOfflineLossPerDay>0.0?badColor+
@@ -88,8 +91,10 @@ public class CmdPowSettings extends FPCommand {
 				" but only if their power is above "+num(Conf.powerOfflineLossLimit)
 				:_goodDONT+" lose any power.")
 				);
+		*/
 		
-		sm("Players "+(Conf.canLeaveWithNegativePower?goodColor+"can":badColor+"cannot")+
+				
+		sm("Players "+(UConf.get(usender).canLeaveWithNegativePower?goodColor+"can":badColor+"cannot")+
 			msgColor1+" join/leave or be kicked from factions if their power is negative.");
 		
 		boolean canLosePowerInWarZone = Utilities.confIs_warzonePowerLoss();//this means any warzone of even nopowerloss worlds
@@ -97,8 +102,8 @@ public class CmdPowSettings extends FPCommand {
 		
 		//TODO: maybe not: show how much power will be lost in all cases (consider Factions+FactionsPlus settings) if player were to die in current spot- tough
 		if (sender instanceof Player) {
-			Player player = (Player)sender;
-			FPlayer fplayer=FPlayers.i.get( player );
+			Player player 		= (Player)sender;
+			UPlayer fplayer 	= UPlayer.get( player );
 			if (Utilities.isJailed( player )) {
 				sm(ChatColor.RED+"You are currently in jail.");
 			}
@@ -112,7 +117,7 @@ public class CmdPowSettings extends FPCommand {
 						(noLossWorld?"(not even in WarZone)":"(including in its WarZone)"))+".");
 			
 			sm("Players "+(Utilities.confIs_wildernessPowerLoss()?_badDO:_goodDONT)+" lose power if they died in any world's "+
-					Factions.i.getNone().getTag()+
+					Faction.get("0").getName()+
 					(noLossWorld?msgColor1+"("+goodColor+"except"+msgColor1+" in the world that you are currenrly in"+worldName+")"
 						:msgColor1+"(including the world you're in"+worldName+")"));
 
@@ -127,7 +132,7 @@ public class CmdPowSettings extends FPCommand {
 		sm("Players & faction-warps "+(Config._warps.mustBeInOwnTerritoryToCreate._?goodColor+"have to":badColor+"don't have to")+
 			msgColor1+" be in the player's own faction's territory for create/teleport-to.");
 		
-		sendMessage(p.txt.getPage(allLines, this.argAsInt(0, 1), "Power settings&stats, page: "));
+		sendMessage(Txt.getPage(allLines, this.getArgs().size(), "Power settings&stats, page: "));
 	}
 	
 	private void showExtraLoss( double extraLoss,String deathBy ) {

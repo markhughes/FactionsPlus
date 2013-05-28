@@ -11,153 +11,145 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.P;
-import com.massivecraft.factions.event.FPlayerLeaveEvent;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.FactionColls;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UConf;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.event.FactionsEventMembershipChange;
+import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdBan extends FPCommand {
 	public CmdBan() {
-		this.aliases.add("ban");
-
-		this.requiredArgs.add("player");
-
-		//this.optionalArgs.put("on/off", "flip");
-
+		this.aliases.add( "ban" );
+		
+		this.requiredArgs.add( "player" );
 		this.errorOnToManyArgs = true;
-
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
-
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
-
-		this.setHelpShort("kicks a player out of your Faction, and stops them from re-joining");
+		
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		
+		this.setHelp( "kicks a player out of your Faction, and stops them from re-joining" );
+		this.setDesc( "From FactionsPlus, kicks a palyer out of a Faction, and disallows them from joining." );
+		
 	}
 
 	@Override
 	public void performfp() {
-		String banningThisPlayer = this.argAsString(0);
-		Faction pFaction = fme.getFaction();
+		String banningThisPlayer = this.arg(0);
+		
+		Faction pFaction = usender.getFaction();
+		
 		assert null != pFaction;
 
-		if ((Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._)
-				&&(!FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName))) {
-			sender.sendMessage(ChatColor.RED + "You don't have the required permission node!");
+		if( ( Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._ )
+				&&( ! FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName ) ) ) {
+			
+			usender.msg( ChatColor.RED + "You don't have the required permission node!" );
+			
 			return;
 		}
 		
 		if (! 
-				( (Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(fme)) 
-				||(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(fme)) ) 
+				( (Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(usender)) 
+				||(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(usender)) ) 
 		  ) {
-			fme.msg(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
-			return;
-		}
-
-		
-		
-		Player playerBanThisPlayer = Utilities.getOnlinePlayerExact(banningThisPlayer);
-
-		if (!FPlayers.i.exists( banningThisPlayer )) {
-			me.sendMessage(ChatColor.RED+"That player was never on the server");
-			return;
-		}
-		
-		FPlayer fPlayerBanThisPlayer = FPlayers.i.get(banningThisPlayer);//online or offline, doesn't matter
-
-
-		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase());
-
 			
-		boolean isInFaction = fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(fme.getFactionId());
-		if(!isInFaction) {
-			if(banFile.exists()) {
+			usender.msg( ChatColor.RED + "Sorry, your ranking is not high enough to do that!" );
+			
+			return;
+		}
+		
+		Player playerBanThisPlayer = Utilities.getOnlinePlayerExact( banningThisPlayer );
+
+		if ( UPlayer.get( banningThisPlayer ) == null ) {
+			
+			me.sendMessage( ChatColor.RED + "That player was never on the server" );
+			
+			return;
+		}
+		
+		UPlayer fPlayerBanThisPlayer = UPlayer.get(banningThisPlayer); // online or offline, doesn't matter
+
+		File banFile = new File( Config.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase() );
+	
+		// are we dealing with the same faction ? 
+		if( ! fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase( usender.getFactionId() ) ) {
+			if( banFile.exists() ) {
 				me.sendMessage("This user is already banned from the Faction!");
+				
 				return;
 			}
-			if (!Config._banning.canBanToPreventFutureJoins._) {
+			
+			// Only allow banning if this is true
+			if ( ! Config._banning.canBanToPreventFutureJoins._ ) {
+				
 				me.sendMessage("You can only ban players that exist in your faction");
 				return;
 			}
 		} else {
 			// user is in faction, cause it to leave first
-			if(Utilities.isLeader(fPlayerBanThisPlayer)) {
+			if(Utilities.isLeader(fPlayerBanThisPlayer) || fPlayerBanThisPlayer.isUsingAdminMode() ) {
 				me.sendMessage("You can't ban the leader of the Faction!");
+				
 				return;
 			}
 			
-			if ( !Conf.canLeaveWithNegativePower && fPlayerBanThisPlayer.getPower() < 0 ) {
+			if ( !UConf.get( usender ).canLeaveWithNegativePower && fPlayerBanThisPlayer.getPower() < 0 ) {
 				msg( "<b>You cannot ban that player until their power is positive." );
 				return;
 			}
 			
-			// fPlayerBanThisPlayer.leave(false);//false to not charge money, this call isn't good enough...
 			
-			// shamelessly copy/pasted some code from Factions' kick command below:
-			// trigger the leave event (cancellable) [reason:kicked]
-			FPlayerLeaveEvent event =
-				new FPlayerLeaveEvent( fPlayerBanThisPlayer, fPlayerBanThisPlayer.getFaction(),
-					FPlayerLeaveEvent.PlayerLeaveReason.KICKED );// but this may be denied by whoever wants to deny kick but not
-																	// necessarily ban
-			Bukkit.getServer().getPluginManager().callEvent( event );
-			if ( event.isCancelled() )
-				return;
+			FactionsEventMembershipChange event = new FactionsEventMembershipChange(sender, fPlayerBanThisPlayer, FactionColls.get().get(fPlayerBanThisPlayer).getNone(), MembershipChangeReason.KICK);
+			event.run();
+			
+			if (event.isCancelled()) return;
+			
+			// Uninvite the player from the Faction if they're still invited 
+			if(usender.getFaction().isInvited(fPlayerBanThisPlayer)) {
+				usender.getFaction().setInvited(fPlayerBanThisPlayer, false);
+			}
 			
 		}
-			// this is still bugged when two players exist in the factions named like "s" and "s2" and "s" is offline, "s2" will
-			// receive two msgs
-			// due to Factions using getPlayer() instead of getPlayerExact()
-		pFaction.msg( "%s<i> banned %s<i> from "+(isInFaction?"":"future joining")+" the faction! :O", fme.describeTo( pFaction, true ),
-			fPlayerBanThisPlayer.describeTo( pFaction, true ) );
-			// playerBanThisPlayer.sendMessage( "%s<i> banned you from %s<i>! :O", fme.describeTo( fPlayerBanThisPlayer, true ),
-			// pFaction.describeTo( fPlayerBanThisPlayer ) );
-			// if ( pFaction != myFaction )// FIXME: allow admin bypass or OP to f ban anyone in any faction (much to be
-			// considered on this)
-			// {
-			// fme.msg( "<i>You banned %s<i> from the faction %s<i>!", fPlayerBanThisPlayer.describeTo( fme ),
-			// pFaction.describeTo( fme ) );
-			// }
 		
-		if ( Conf.logFactionKick )
-			P.p.log( ( senderIsConsole ? "A console command" : fme.getName() ) + " banned " + fPlayerBanThisPlayer.getName()
-				+ " from "+(isInFaction?"the":"future joining the")+" faction: " + pFaction.getTag() );
+		boolean isInFaction = fPlayerBanThisPlayer.getFactionId().equalsIgnoreCase(usender.getFactionId());
 		
-		//this is reached if console or op (from other faction) caused the ban (situation is not yet implemented/allowed though, see fixme above)
-//		if ( FactionsAny.Relation.LEADER.equals(Bridge.factions.getRole( fPlayerBanThisPlayer)) )
-//			pFaction.promoteNewLeader();
+		pFaction.msg( "%s<i> banned %s<i> from "+(isInFaction?"":"future joining")+" the faction! :O", usender.describeTo( pFaction, true ),
 		
-		pFaction.deinvite( fPlayerBanThisPlayer );
+		fPlayerBanThisPlayer.describeTo( pFaction, true ) );
+		
+		if ( MConf.get().logFactionKick ) {
+			
+			Factions.get().log( ( senderIsConsole ? "A console command" : usender.getName() ) + " banned " + fPlayerBanThisPlayer.getName()
+				+ " from "+(isInFaction?"the":"future joining the")+" faction: " + pFaction.getName() );
+		
+		}
+		
+		
 		if (isInFaction) {
 			fPlayerBanThisPlayer.resetFactionData();
 		}
 		
-//		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + banningThisPlayer.toLowerCase());
-
-//		if(banFile.exists()) {
-//			//this will happen if, the ban file existed due to being manually created, or by ban command failing to cause player 
-//			//to leave above or simply factions.conf being restored from backup
-//			me.sendMessage("This user is already banned from the Faction!");
-//			return;
-//		} else {
 		try {
 			banFile.createNewFile();
 			
-			if ( null != playerBanThisPlayer ) {// ie. he's online
+			if ( null != playerBanThisPlayer ) {
+				
 				if(Config._jails.tellPlayerWhoBannedThem._) {
-					playerBanThisPlayer.sendMessage( "You were banned from the faction "+fme.getFaction().getTag()+" by " + fme.getName() );
+					playerBanThisPlayer.sendMessage( "You were banned from the faction "+usender.getFaction().getName()+" by " + usender.getName() + "." );
 				} else {
-					playerBanThisPlayer.sendMessage( "You were banned from the faction "+fme.getFaction().getTag()+".");
+					playerBanThisPlayer.sendMessage( "You were banned from the faction "+usender.getFaction().getName()+".");
 				}
+				
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
-			me.sendMessage( ChatColor.RED + "Internal error, probably failed to ban the player " + banningThisPlayer );
+			msg( ChatColor.RED + "Internal error, probably failed to ban the player " + banningThisPlayer );
 		}
-//		}
 
 	}
 }

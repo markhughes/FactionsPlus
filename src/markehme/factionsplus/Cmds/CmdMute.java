@@ -1,11 +1,10 @@
 package markehme.factionsplus.Cmds;
 
-import com.massivecraft.factions.cmd.FCommand;
 
-public class CmdMute extends FCommand{
+public class CmdMute extends FPCommand{
 	//TODO: mute
 	@Override
-	public void perform() {
+	public void performfp() {
 		// TODO Auto-generated method stub
 		throw null;
 		

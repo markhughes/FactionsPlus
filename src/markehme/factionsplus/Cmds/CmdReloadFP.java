@@ -4,7 +4,7 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 
 
 
@@ -14,17 +14,13 @@ public class CmdReloadFP extends FPCommand {
 		super();
 		this.aliases.add( "reloadfp" );
 		
-		this.optionalArgs.put( "all|conf|templates", "all");
-		//XXX: only people that have factions.reload  permission can use /f reloadfp
-		this.permission = Permission.RELOAD.node;
-		this.disableOnLock = false;
+		//this.optionalArgs.put( "all|conf|templates", "all");
+		this.errorOnToManyArgs = false;
 		
-		senderMustBePlayer = false;
-		senderMustBeMember = false;
-		this.errorOnToManyArgs = true;
+		this.addRequirements( ReqFactionsEnabled.get() );
 		
-		this.setHelpShort( "Reloads FactionPlus config" );
-		// TODO: maybe add optional params to also reload jails or what now, just in case they were edited manually
+		this.setHelp( "Reloads FactionPlus config" );
+		this.setDesc( "Reloads the FactionsPlus config.yml file." );
 	}
 	
 	
@@ -32,10 +28,13 @@ public class CmdReloadFP extends FPCommand {
 	@Override
 	public void performfp() {
 		long startTime = System.nanoTime();
-		String what = this.argAsString( 0, "all" ).toLowerCase();
-		String fileWhat = null;
 		boolean ret = false;
 		try {
+			// Templates have been moved into the config
+			// (in the future, templates should work off the same system as config
+			//  but in a seperate file)
+			
+			/*
 			if ( what.startsWith( "conf" ) ) {
 				fileWhat=Config.fileConfig.getName();
 				ret = Config.reloadConfig();
@@ -44,23 +43,24 @@ public class CmdReloadFP extends FPCommand {
 					fileWhat=Config.templatesFile.getName();
 					ret = Config.reloadTemplates();
 				} else
-					if ( what.equals( "all" ) ) {
-						fileWhat=what;
+					if ( what.equals( "all" ) ) {*/
+						
 						Config.reload();
-						ret = true;//else it would just throw
-					} else {
+						ret = true; // otherwise it would just throw
+						
+					/*} else {
 						msg( "<b>Invalid file specified. <i>Valid files: all, conf, templates" );
 						return;
-					}
+					}*/
 		} catch ( Throwable t ) {
 			t.printStackTrace();
 			ret = false;
 		} finally {
 			long endTime = System.nanoTime() - startTime;
 			if ( ret ) {
-				msg( "<i>Reloaded FactionPlus <h>%s <i>from disk, took <h>%,2dms<i>.", fileWhat, endTime / 1000000);//ns to ms
+				msg( "<i>Reloaded FactionPlus <i>from disk, took <h>%,2dms<i>.", endTime / 1000000 );//ns to ms
 			} else {
-				msg( ChatColor.RED+"Errors occurred while loading %s. See console for details.", fileWhat);
+				msg( ChatColor.RED+"Errors occurred while reloading. See console for details." );
 			}
 		}
 		

@@ -13,66 +13,69 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdListWarps extends FPCommand  {
 	public CmdListWarps() {
-		this.aliases.add("listwarps");
-
-		//this.requiredArgs.add("name");
-		this.optionalArgs.put("faction", "string");
-
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.aliases.add( "listwarps" );
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
+		this.optionalArgs.put( "faction", "string" );
+		this.errorOnToManyArgs = true;
 		
-		this.setHelpShort("list warps in a Faction");
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
+		this.setHelp( "list warps in a Faction" );
+		this.setDesc( "From FactionsPlus, lists warps in a Faction (by default, their own)" );
 	}
 	
 	@Override
 	public void performfp() {
-		Faction currentFaction = myFaction;
+		Faction currentFaction = usender.getFaction();
 		
-		if(this.argAsString(0) != null) {
-			if(!FactionsPlus.permission.has(Utilities.getOnlinePlayerExact(fme), "factionsplus.listwarps")) {
-				fme.msg("No permission!");
+		if( this.arg(0) != null ) {
+			if( ! FactionsPlus.permission.has( Utilities.getOnlinePlayerExact( usender ), "factionsplus.listwarps" ) ) {
+				msg( "No permission!" );
+				
 				return;
 			}
 			
-			currentFaction = Factions.i.get(argAsString(0));
+			currentFaction = Faction.get( arg( 0 )  );
 		}
 		
-		if(Utilities.isWilderness(currentFaction)) {
-			fme.msg("This Faction does not exist.");
-			return;
+		if( Utilities.isWilderness( currentFaction ) ) {
+			msg( "This Faction does not exist." );
 			
+			return;
 		}
-		File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
 		
-	    if (!currentWarpFile.exists()) {
-	    	sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
+		File currentWarpFile = new File( Config.folderWarps, currentFaction.getId() );
+		
+	    if ( ! currentWarpFile.exists() ) {
+	    	msg( ChatColor.RED + "Your faction has no warps!" );
+	    	
 	        return;
 	    }
 	    
-	    FileInputStream fis=null;
+	    FileInputStream fis = null;
+	    
 	    try {
-	    	fis = new FileInputStream(new File(Config.folderWarps, currentFaction.getId()));
+	    	fis = new FileInputStream( new File( Config.folderWarps, currentFaction.getId() ) );
 	    	int b = fis.read();
 	    	
-	    	if (b == -1) {
-	    		sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
+	    	if ( b == -1 ) {
+	    		msg( ChatColor.RED + "Your faction has no warps!" );
 	    		return;
 	    	}
-	    } catch (Exception e) {
-	    	fme.msg("Internal error (-90571)");
+	    } catch ( Exception e ) {
+	    	msg( "Internal error (LW:01)" );
+	    	
 	    	return;
-	    }finally{
-	    	if (null != fis) {
+	    } finally {
+	    	if ( null != fis ) {
 	    		try {
 					fis.close();
 				} catch ( IOException e ) {
@@ -81,46 +84,61 @@ public class CmdListWarps extends FPCommand  {
 	    	}
 	    }
 	    
-	    Scanner scanner=null;
+	    Scanner scanner = null;
 	    FileReader fr = null;
+	    
 	    try {
-	    	fr=new FileReader(currentWarpFile);
+	    	fr = new FileReader(currentWarpFile);
 	    	scanner = new Scanner(fr);
-	        String buffer = ChatColor.RED + "Your Factions warps: " + ChatColor.WHITE;
+	        
+	    	String buffer = ChatColor.RED + "Your Factions warps: " + ChatColor.WHITE;
+	        
 	        boolean warps = false;
-	        while (scanner.hasNextLine()) {
+	        
+	        while( scanner.hasNextLine() ) {
 	        	String item = scanner.nextLine();
-	        	if(!item.trim().isEmpty()) {
-	        		String[] items = item.split(":");
-	        		if (items.length > 0) {
-	        			if (buffer.length() + items[0].length() + 2 >= 256) {
-	        				sender.sendMessage(buffer);
+	        	
+	        	if( ! item.trim().isEmpty() ) {
+	        		String[] items = item.split( ":" );
+	        		
+	        		if ( items.length > 0 ) {
+	        			if ( buffer.length() + items[0].length() + 2 >= 256 ) {
+	        				
+	        				msg( buffer );
+	        				
 	        				buffer = items[0] + ", ";
+	        				
 	        			} else {
+	        				
 	        				buffer = buffer + items[0] + ", ";
+	        				
 	        				warps = true;
 	        			}
 	        		}
 	        	}
 	        	
 	        }
-	        if(warps){
-	        	buffer = buffer.substring(0, buffer.length() - 2);
+	        
+	        if( warps ){
+	        	buffer = buffer.substring( 0, buffer.length() - 2 );
 	        	buffer += ". ";
 	        }
-	        sender.sendMessage(buffer);
-//	        scanner.close();
-	    } catch (Exception e) {
-	    	FactionsPlusPlugin.info("Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
+	        
+	        msg(buffer);
+	        
+	    } catch ( Exception e ) {
+	    	FactionsPlusPlugin.info( "Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage() );
 	    	
-	        sender.sendMessage(ChatColor.RED + "An internal error occured (03)");
+	        msg( ChatColor.RED + "An internal error occured (LW:02)" );
 	        
 	        e.printStackTrace();
-	    }finally{
-	    	if (null != scanner) {
-	    		scanner.close();//technically this would also close fr, but I can't really suppress warnings on the entire method
+	    } finally {
+	    	
+	    	if ( null != scanner ) {
+	    		scanner.close();
 	    	}
-	    	if (null != fr) {
+	    	
+	    	if ( null != fr ) {
 	    		try {
 					fr.close();
 				} catch ( IOException e ) {
@@ -128,7 +146,5 @@ public class CmdListWarps extends FPCommand  {
 				}
 	    	}
 	    }
-
 	}
-
 }
