@@ -47,11 +47,18 @@ public class CmdAddWarp extends FPCommand {
 	@Override
 	public void performfp() {
 		String warpname = this.argAsString(0);
+		
 
 		String pass = null;
 
 		if(this.argAsString(1) != null) {
 			pass = this.argAsString(1);
+			
+			if(pass.length() < 2) {
+				msg("Your warp password must be at least 2 characters or more. ");
+				
+				return;
+			}
 		}
 
 		if(!FactionsPlus.permission.has(sender, "factionsplus.createwarp")) {

@@ -34,6 +34,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.integration.EssentialsFeatures;
 import com.massivecraft.factions.struct.Permission;
 import com.massivecraft.factions.zcore.util.SmokeUtil;
@@ -63,10 +64,13 @@ public class CmdWarp extends FPCommand {
 		String setPassword = null;
 
 		if(this.argAsString(1) != null) {
-			setPassword = this.argAsString(1);
+			if(this.argAsString(1) != "-") {
+				setPassword = this.argAsString(1);
+			}
 		} else {
 			setPassword = "nullvalue";
 		}
+		
 
 		if(!FactionsPlus.permission.has(sender, "factionsplus.warp")) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
@@ -78,8 +82,21 @@ public class CmdWarp extends FPCommand {
 
 		FPlayer fplayer = FPlayers.i.get(player);
 
-		Faction currentFaction = fplayer.getFaction();
-
+		Faction currentFaction;
+		
+		if(this.argAsString(2) != null) {
+			currentFaction = Factions.i.getByTag(this.argAsString(2));
+			
+			if( currentFaction.getId() != fme.getFactionId() && !fme.hasAdminMode() ) {
+				if(!FactionsPlus.permission.has(sender, "factionsplus.warpotherfactions" ) ) {
+					msg( "You do not have permission to use other Factions warps. (factionsplus.warpotherfactions)" );
+					return;
+				}
+			}
+		} else {
+			currentFaction = fme.getFaction();
+		}
+		
 		File currentWarpFile = new File(Config.folderWarps,  currentFaction.getId());
 
 		World world;
