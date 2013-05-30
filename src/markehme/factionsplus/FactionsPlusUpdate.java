@@ -7,6 +7,8 @@ import java.util.Scanner;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
@@ -16,7 +18,7 @@ public class FactionsPlusUpdate implements Runnable {
 	
 	private static final long	DELAY	= 5*20;//5 sec delay on startup before checking for updates
 
-	private static final long	PERIOD	= 24*60*60*20;//20 ticks per sec, check every 24 hours
+	private static final long	PERIOD	= 4*60*60*20;//20 ticks per sec, check every 4 hours
 
 	private static FactionsPlusUpdate	once	= null;
 
@@ -146,6 +148,13 @@ public class FactionsPlusUpdate implements Runnable {
 						FactionsPlus.log.warning( "can upgrade to version " + content.trim() + " via" );
 						FactionsPlus.log.warning( "http://dev.bukkit.org/server-mods/factionsplus/" );
 						FactionsPlus.log.warning( "! -=====================================- !" );
+						
+						for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+							if (player.isOp()) {
+								player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
+							}
+						}
+						
 					} else {
 						FactionsPlusPlugin.info( "Up to date!" );
 					}
@@ -156,6 +165,13 @@ public class FactionsPlusUpdate implements Runnable {
 					FactionsPlus.log.warning( "can upgrade to version " + content.trim() + " via" );
 					FactionsPlus.log.warning( "http://dev.bukkit.org/server-mods/factionsplus/" );
 					FactionsPlus.log.warning( "! -=====================================- !" );
+					
+					for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+						if (player.isOp()) {
+							player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
+						}
+					}
+					
 				}
 			} else {
 				FactionsPlusPlugin.info( "Up to date!" );
