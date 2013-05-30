@@ -153,7 +153,7 @@ public class CmdRemoveWarp extends FPCommand {
 		    return;
 		}
 		
-		String[] warped_removed_args = { null, warpname, null };
+		String[] warped_removed_args = { warpname };
 		
 				
 		msg( FactionsPlusTemplates.Go("warped_removed", warped_removed_args) );

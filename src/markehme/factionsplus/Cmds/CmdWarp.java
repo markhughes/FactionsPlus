@@ -171,7 +171,7 @@ public class CmdWarp extends FPCommand {
 					if(warp_data.length == 8) {
 						if(warp_data[7] != "nullvalue") {
 							if(!setPassword.trim().equals(warp_data[7].trim())) {
-								sender.sendMessage(FactionsPlusTemplates.Go("warp_incorrect_password", null ));
+								msg(FactionsPlusTemplates.Go("warp_incorrect_password", null ));
 								
 								return;
 							}
@@ -235,10 +235,9 @@ public class CmdWarp extends FPCommand {
 											 System.out.println("[FactionsPlus] Cannot rename " + currentWarpFileTMP.getName() + " to " + currentWarpFile.getName());
 											 return;
 										 }
-										String[] aargsa = new String[1];
-										aargsa[0] = warpname;
+										String[] aargsa = { warpname };
 											
-										player.sendMessage(FactionsPlusTemplates.Go("warped_removed", aargsa ));
+										msg(FactionsPlusTemplates.Go("warped_removed", aargsa ));
 										
 										 //fplayer.msg( "The warp " + ChatColor.WHITE + warpname + " was removed." );
 									}
@@ -270,10 +269,9 @@ public class CmdWarp extends FPCommand {
 						}
 					}
 					
-					String[] aargsa = new String[2];
-					aargsa[1] = warpname;
+					String[] aargsa = { warpname };
 					
-					player.sendMessage(FactionsPlusTemplates.Go("warped_to", aargsa ));
+					msg(FactionsPlusTemplates.Go("warped_to", aargsa ));
 					//player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);
 					
 					//XXX: this will fail (in Factions not FP) when Essentials is unloaded then loaded again via plugman, also /f home
