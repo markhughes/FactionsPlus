@@ -64,7 +64,6 @@ public class CmdAnnounce extends FPCommand {
 			}
 		}
 		
-		// TODO: Validate this works ... 
 		String[] argsa = { sender.getName(), message };
 			
 		String formatedAnnouncement = FactionsPlusTemplates.Go("announcement_message", argsa);
