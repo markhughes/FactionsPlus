@@ -32,16 +32,4 @@ public class CmdSetJail extends FCommand {
 		FactionsPlusJail.setJail(Utilities.getOnlinePlayerExact(usender));
 	}
 	
-	public static boolean doFinanceCrap(double cost, String toDoThis, String forDoingThis, UPlayer player) {
-		if ( !Config._economy.isHooked() || ! UConf.get(player).econEnabled || Utilities.getOnlinePlayerExact( player ) == null || cost == 0.0) return true;
-		
-		MConf Conf = MConf.get();
-		
-		
-		
-		if(UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction())
-			return Econ.modifyMoney(player.getFaction(), -cost, toDoThis, forDoingThis);
-		else
-			return Econ.modifyMoney(player, -cost, toDoThis, forDoingThis);
-	}
 }

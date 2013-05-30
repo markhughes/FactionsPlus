@@ -11,11 +11,11 @@ import org.bukkit.ChatColor;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.util.TextUtil;
 
-import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdSetRule extends FPCommand{
 	
@@ -23,18 +23,14 @@ public class CmdSetRule extends FPCommand{
 		this.aliases.add("setrule");
 		this.aliases.add("addrule");
 		
+		this.requiredArgs.add("rule");
 		this.errorOnToManyArgs = false;
 		
-		this.requiredArgs.add("rule");
-		//this.optionalArgs.put("on/off", "flip");
-
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = false;
-		
-		this.setHelpShort("manage Faction rules");
+		this.setHelp("set Faction rules");
+		this.setDesc("From FactionsPlus, allows a Faction to set rules.");
 	}
 	
 	@Override
@@ -44,21 +40,21 @@ public class CmdSetRule extends FPCommand{
 			return;
 		}
 		
-		if(!Utilities.isLeader(fme) && !Utilities.isOfficer(fme)) {
-			fme.msg("Your ranking is not high enough to modify rules.");
+		if(!Utilities.isLeader(usender) && !Utilities.isOfficer(usender)) {
+			msg("Your ranking is not high enough to modify rules.");
 		}
 		
-		if(Utilities.isOfficer(fme) && !Config._rules.officersCanSetRules._) {
-			fme.msg("Officers can not modify rules on this server.");
+		if(Utilities.isOfficer(usender) && !Config._rules.officersCanSetRules._) {
+			msg("Officers can not modify rules on this server.");
 		}
 		
-		if(Utilities.isLeader(fme) && !Config._rules.leadersCanSetRules._) {
-			fme.msg("Leaders can not modify rules on this server.");
+		if(Utilities.isLeader(usender) && !Config._rules.leadersCanSetRules._) {
+			msg("Leaders can not modify rules on this server.");
 		}
 		
 		String newRule = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
 				
-		FactionsPlusRules.setRuleForFaction(fme.getFaction(), fme, newRule);
+		FactionsPlusRules.setRuleForFaction(usender.getFaction(), usender, newRule);
 		
 	}
 }

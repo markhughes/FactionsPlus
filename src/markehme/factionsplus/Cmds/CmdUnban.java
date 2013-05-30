@@ -9,58 +9,55 @@ import markehme.factionsplus.config.sections.Section_Banning;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+
 
 public class CmdUnban extends FPCommand {
 	public CmdUnban() {
 		this.aliases.add("unban");
 		
 		this.requiredArgs.add("player");
-		
 		this.errorOnToManyArgs = false;
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
-		
-		this.setHelpShort("unbans a player allowing them to re-join the faction");
+		this.setHelp( "unbans a player allowing them to re-join the faction" );
+		this.setDesc( "From FactionsPlus, allows unbanning a player from a Faction." );
 	}
 	
 	@Override
 	public void performfp(){
 		if ((Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._)
 				&&(!FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName))) {
-			sender.sendMessage(ChatColor.RED + "You don't have the required permission node!");
+			msg(ChatColor.RED + "You don't have the required permission node!");
 			return;
 		}
 		
-		String unbanningThisPlayer = this.argAsString(0);
-		Faction pFaction = fme.getFaction();
+		String unbanningThisPlayer = this.arg(0);
 		
 		boolean authallow = false;
 		
-		if(Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(fme)){
+		if(Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(usender)){
 			authallow = true;
-		} else if(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(fme)){
+		} else if(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(usender)){
 			authallow = true;
 		}
 		
 		if(!authallow){
-			fme.msg(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+			msg(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
 			return;
 		}
 		
 		
-		File banFile = new File(Config.folderFBans, pFaction.getId() + "." + unbanningThisPlayer.toLowerCase());
+		File banFile = new File(Config.folderFBans, usender.getFactionId() + "." + unbanningThisPlayer.toLowerCase());
 		
-		if(banFile.exists()){
-			boolean deleted=banFile.delete();
-			me.sendMessage(unbanningThisPlayer + " has "+(deleted?"":"not")+" been unbanned from the Faction!");
+		if(banFile.exists()) {
+			boolean deleted = banFile.delete();
+			msg(unbanningThisPlayer + " has "+(deleted?"":"not")+" been unbanned from the Faction!");
 		} else {
-			me.sendMessage("This user isn't banned from the Faction!");
+			msg("This user isn't banned from the Faction!");
 		}
 		
 		
