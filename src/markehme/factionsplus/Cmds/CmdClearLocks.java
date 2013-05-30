@@ -20,8 +20,8 @@ public class CmdClearLocks extends FPCommand {
 		this.addRequirements(ReqFactionsEnabled.get());
 		this.addRequirements(ReqIsPlayer.get());
 		
-		this.setHelp("Clears all LWC or Lockette protections not owned by a faction member of the user's faction");
-		this.setDesc("From FactionsPlus, Clears all LWC protections not owned by a faction member of the user's faction");
+		this.setHelp("clears LWC and Lockette locks not owned by a Faction member in your land");
+		this.setDesc("clears LWC and Lockette locks not owned by a Faction member in your land");
 		
 	}
 	

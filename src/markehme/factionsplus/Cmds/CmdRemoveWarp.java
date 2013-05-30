@@ -34,7 +34,7 @@ public class CmdRemoveWarp extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "remove a warp" );
-		this.setDesc( "From Factions plus, removes a Faction specific warp" );
+		this.setDesc( "remove a warp" );
 		
 	}
 	

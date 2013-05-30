@@ -26,7 +26,7 @@ public class CmdFactionHome extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("teleport to another Factions home");
-		this.setDesc("From FactionsPlus, allows players with permission `otherfactionshome` to teleport to another Faction home.");
+		this.setDesc("teleport to another Factions home");
 	}
 	
 	@Override

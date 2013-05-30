@@ -19,7 +19,7 @@ public class CmdPlot extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "plot management for Factions" );
-		this.setDesc( "From FactionsPlus, plot management for Factions." );
+		this.setDesc( "plot management for Factions" );
 	}
 
 	@Override

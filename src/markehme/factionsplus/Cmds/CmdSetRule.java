@@ -30,7 +30,7 @@ public class CmdSetRule extends FPCommand{
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("set Faction rules");
-		this.setDesc("From FactionsPlus, allows a Faction to set rules.");
+		this.setDesc("set Faction rules");
 	}
 	
 	@Override

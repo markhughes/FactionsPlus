@@ -23,7 +23,7 @@ public class CmdUnJail extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp( "removes a player from jail" );
-		this.setDesc( "From FactionsPlus, it sends a player to jail" );
+		this.setDesc( "removes a player from jail" );
 		
 	}
 	

@@ -29,7 +29,7 @@ public class CmdDebug extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("used to debug FactionsPlus");
-		this.setDesc("From FactionsPlus, a debug command only used by ops.");
+		this.setDesc("used to debug FactionsPlus");
 		
 	}
 	@Override

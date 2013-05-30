@@ -34,7 +34,7 @@ public class CmdPowSettings extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "show the settings for power loss or gains" );
-		
+		this.setDesc( "show the settings for power loss or gains" );
 
 	}
 	

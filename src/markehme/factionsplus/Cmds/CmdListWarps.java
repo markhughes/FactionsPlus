@@ -29,7 +29,7 @@ public class CmdListWarps extends FPCommand  {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "list warps in a Faction" );
-		this.setDesc( "From FactionsPlus, lists warps in a Faction (by default, their own)" );
+		this.setDesc( "list warps in a Faction" );
 	}
 	
 	@Override

@@ -27,7 +27,7 @@ public class CmdToggleState extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("changes the Faction between peaceful and normal");
-		this.setDesc("From FactionsPlus, this allows changing a Faction between peaceful and normal.");
+		this.setDesc("changes the Faction between peaceful and normal");
 		
 	}
 	

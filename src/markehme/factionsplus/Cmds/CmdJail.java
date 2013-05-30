@@ -21,7 +21,7 @@ public class CmdJail extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "send a player to jail" );
-		this.setDesc( "From FactionsPlus, this command locks a player to a Faction jail location." );
+		this.setDesc( "send a player to jail" );
 	}
 
 	@Override

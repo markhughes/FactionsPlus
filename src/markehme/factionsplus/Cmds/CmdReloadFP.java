@@ -19,8 +19,8 @@ public class CmdReloadFP extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		
-		this.setHelp( "Reloads FactionPlus config" );
-		this.setDesc( "Reloads the FactionsPlus config.yml file." );
+		this.setHelp( "reloads FactionPlus config" );
+		this.setDesc( "reloads FactionPlus config" );
 	}
 	
 	

@@ -29,7 +29,7 @@ public class CmdRules extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "view Faction rules" );
-		this.setDesc( "From FactionsPlus, this allows a Faction to view their own Factions rules." );
+		this.setDesc( "view Faction rules" );
 		
 	}
 	

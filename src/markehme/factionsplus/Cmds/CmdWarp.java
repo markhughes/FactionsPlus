@@ -49,7 +49,7 @@ public class CmdWarp extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 
 		this.setHelp("warps to a specific warp");
-		this.setDesc("From FactionsPlus, warps to a sepcific warp.");
+		this.setDesc("warps to a specific warp");
 
 	}
 

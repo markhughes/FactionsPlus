@@ -37,8 +37,8 @@ public class CmdAddWarp extends FPCommand {
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
 		
-		this.setHelp( "creates a faction warp, can be specified with a password" );
-		this.setDesc( "From FactionsPlus, used to create a Faction Warp." );
+		this.setHelp( "create a faction warp, can be specified with a password" );
+		this.setHelp( "create a faction warp, can be specified with a password" );
 
 	}
 
@@ -170,13 +170,13 @@ public class CmdAddWarp extends FPCommand {
 			return;
 		}
 		
-		String[] argsb = { null, warpname, null };
+		String[] argsb = { warpname };
 		
-		player.sendMessage(FactionsPlusTemplates.Go("warp_created", argsb));
+		msg(FactionsPlusTemplates.Go("warp_created", argsb));
 
-		String[] argsa = { null, sender.getName(), warpname, null };
+		String[] argsa = { sender.getName(), warpname };
 		
-		currentFaction.sendMessage( FactionsPlusTemplates.Go("notify_warp_created", argsa) );
+		msg( FactionsPlusTemplates.Go("notify_warp_created", argsa) );
 		
 	}
 }

@@ -20,7 +20,7 @@ public class CmdUnsetJail extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("removes the Jail location");
-		this.setDesc("From FactionsPlus, removes a Faction jail location.");
+		this.setDesc("removes the Jail location");
 	}
 	
 	@Override

@@ -22,9 +22,8 @@ public class CmdSetJail extends FCommand {
 		this.addRequirements(ReqFactionsEnabled.get());
 		this.addRequirements(ReqIsPlayer.get());
 		
-		this.setHelp("sets the Faction's jail");
-		
-		this.setDesc( "sets a Faction jail for a Faction" );
+		this.setHelp( "sets the Faction's jail" );
+		this.setDesc( "sets the Faction's jail" );
 	}
 	
 	@Override

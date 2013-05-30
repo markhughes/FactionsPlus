@@ -33,7 +33,7 @@ public class CmdBan extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "kicks a player out of your Faction, and stops them from re-joining" );
-		this.setDesc( "From FactionsPlus, kicks a palyer out of a Faction, and disallows them from joining." );
+		this.setDesc( "kicks a player out of your Faction, and stops them from re-joining" );
 		
 	}
 

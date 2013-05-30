@@ -24,7 +24,7 @@ public class CmdUnban extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp( "unbans a player allowing them to re-join the faction" );
-		this.setDesc( "From FactionsPlus, allows unbanning a player from a Faction." );
+		this.setDesc( "unbans a player allowing them to re-join the faction" );
 	}
 	
 	@Override

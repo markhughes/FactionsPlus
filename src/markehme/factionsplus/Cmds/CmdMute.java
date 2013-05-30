@@ -2,7 +2,7 @@ package markehme.factionsplus.Cmds;
 
 
 public class CmdMute extends FPCommand{
-	//TODO: mute
+	// TODO: mute
 	@Override
 	public void performfp() {
 		// TODO Auto-generated method stub

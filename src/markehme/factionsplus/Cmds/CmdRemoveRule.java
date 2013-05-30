@@ -20,7 +20,7 @@ public class CmdRemoveRule extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "remove a Faction rule" );
-		this.setDesc( "used to remove a Faction rule" );
+		this.setDesc( "remove a Faction rule" );
 		
 	}
 	

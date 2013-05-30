@@ -113,7 +113,7 @@ public class CmdMoneyTop extends FPCommand {
 		this.addRequirements( ReqIsPlayer.get() );
 		
 		this.setHelp( "show the highest ranked Factions by money" );
-		this.setDesc( "From factionsPlus, shows the highest ranked Factions by money." );
+		this.setDesc( "show the highest ranked Factions by money" );
 	
 	}
 	

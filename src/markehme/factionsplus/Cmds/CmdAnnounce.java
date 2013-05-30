@@ -35,7 +35,7 @@ public class CmdAnnounce extends FPCommand {
 		this.addRequirements(ReqIsPlayer.get());
 		
 		this.setHelp("sends an announcment to your Faction");
-		this.setDesc("From FactionsPlus, allows setting an announcmenet for the players Faction.");
+		this.setDesc("sends an announcment to your Faction");
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class CmdAnnounce extends FPCommand {
 		}
 		
 		// TODO: Validate this works ... 
-		String[] argsa = { null , sender.getName(), message };
+		String[] argsa = { sender.getName(), message };
 			
 		String formatedAnnouncement = FactionsPlusTemplates.Go("announcement_message", argsa);
 		
