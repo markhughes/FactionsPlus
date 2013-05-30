@@ -59,9 +59,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				 * As far as I believe we're moving away from ConfServer, and
 				 * I'm pretty sure I don't know what I'm doing here. 
 				 */
-	public static Set<String> ignoredPvPWorlds 					= 	MConf.get().worldsIgnorePvP;
-	public static Set<String> noClaimingWorlds 					= 	MConf.get().worldsNoClaiming;
-	public static Set<String> noPowerLossWorlds 				= 	MConf.get().worldsNoPowerLoss;
+	public static Set<String> ignoredPvPWorlds 					= 	null;
+	public static Set<String> noClaimingWorlds 					= 	null;
+	public static Set<String> noPowerLossWorlds 				= 	null;
 	
 	
 	public FactionsPlus() {
