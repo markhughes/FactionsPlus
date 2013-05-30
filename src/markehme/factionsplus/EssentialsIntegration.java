@@ -3,13 +3,18 @@ package markehme.factionsplus;
 import java.lang.ref.Reference;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Util;
 import com.earth2me.essentials.IEssentials.*;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UConf;
 
 /**
  * for this to compile, you'll have to either use the Essentials 2.9.2 jar in project or the 2.9 branch of Essentials 
@@ -176,4 +181,24 @@ public abstract class EssentialsIntegration {
 			return targetLocation;
 		}
 	}
+	
+	@SuppressWarnings("cast")
+	public static boolean handleTeleport(Player player, Location loc) {
+		if( ! isHooked() ) {
+			return false;
+		}
+		
+		try {
+			Teleport teleport = (Teleport) getEssentialsInstance().getUser(player).getTeleport();
+			Trade trade = new Trade(UConf.get(player).econCostHome, getEssentialsInstance());
+
+			teleport.teleport(loc, trade);
+		} catch (Exception e) {
+			player.sendMessage(ChatColor.RED.toString()+e.getMessage());
+			
+			return false;
+		}
+		return true;
+	}
+	
 }
