@@ -109,16 +109,26 @@ public class FactionsPlusUpdate implements Runnable {
 			
 			Scanner scanner = null;
 			try {
-				//TODO: find a way to kill blocking scanner when plugin needs to disable/shutdown, currently it delays shutdown
+				
 				connection = new URL( "http://www.markeh.me/factionsplus.php?v=" + v ).openConnection();
+				
+				//TODO: validate these timeouts
+				
+				connection.setReadTimeout(15 * 1000); // Read time out after 15 seconds. 
+				connection.setConnectTimeout(15 * 1000); // Connect time out after 15 seconds
+				
 				scanner = new Scanner( connection.getInputStream() );
 				scanner.useDelimiter( "\\Z" );
 				content = scanner.next();
 			}catch (java.net.UnknownHostException uhe) {
 				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
 				return;
+				
 			}catch (java.net.ConnectException ce) {
 				FactionsPlusPlugin.info( "Failed to check for updates. "+ce.getMessage() );
+				return;
+			}catch( java.net.SocketTimeoutException ste ) {
+				FactionsPlusPlugin.info( "Failed to check for updates, the connection timed out (15 seconds): "+ste.getMessage() );
 				return;
 			}catch ( Exception ex ) {
 				ex.printStackTrace();
