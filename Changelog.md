@@ -2,6 +2,10 @@
 * Updates changed to every 4 hours
 * Ops now notified of updates 
 * Socket time outs added for update check of 15 seconds for read and connect
+* Added permission: factionsplus.warpotherfactions
+* Added support for /f warp <warpname> - <faction>  (password must be -)
+* Passwords for warps must now be 2 characters or longer
+* Several performance and stability increases 
 
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
