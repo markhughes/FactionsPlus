@@ -7,6 +7,8 @@ import java.util.Scanner;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 
@@ -16,7 +18,7 @@ public class FactionsPlusUpdate implements Runnable {
 	
 	private static final long	DELAY	= 5*20;//5 sec delay on startup before checking for updates
 
-	private static final long	PERIOD	= 24*60*60*20;//20 ticks per sec, check every 24 hours
+	private static final long	PERIOD	= 4*60*60*20;//20 ticks per sec, check every 24 hours
 
 	private static FactionsPlusUpdate	once	= null;
 
@@ -107,16 +109,27 @@ public class FactionsPlusUpdate implements Runnable {
 			
 			Scanner scanner = null;
 			try {
-				//TODO: find a way to kill blocking scanner when plugin needs to disable/shutdown, currently it delays shutdown
+				
 				connection = new URL( "http://www.markeh.me/factionsplus.php?v=" + v ).openConnection();
+				
+				//TODO: validate these timeouts
+				
+				connection.setReadTimeout(15 * 1000); // Read time out after 15 seconds. 
+				connection.setConnectTimeout(15 * 1000); // Connect time out after 15 seconds
+				
 				scanner = new Scanner( connection.getInputStream() );
 				scanner.useDelimiter( "\\Z" );
 				content = scanner.next();
+				
+				
 			}catch (java.net.UnknownHostException uhe) {
 				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
 				return;
 			}catch (java.net.ConnectException ce) {
 				FactionsPlusPlugin.info( "Failed to check for updates. "+ce.getMessage() );
+				return;
+			}catch( java.net.SocketTimeoutException ste ) {
+				FactionsPlusPlugin.info( "Failed to check for updates, the connection timed out (15 seconds): "+ste.getMessage() );
 				return;
 			}catch ( Exception ex ) {
 				ex.printStackTrace();
@@ -146,6 +159,13 @@ public class FactionsPlusUpdate implements Runnable {
 						FactionsPlus.log.warning( "can upgrade to version " + content.trim() + " via" );
 						FactionsPlus.log.warning( "http://dev.bukkit.org/server-mods/factionsplus/" );
 						FactionsPlus.log.warning( "! -=====================================- !" );
+						
+						for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+							if (player.isOp()) {
+								player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
+							}
+						}
+						
 					} else {
 						FactionsPlusPlugin.info( "Up to date!" );
 					}
@@ -156,6 +176,13 @@ public class FactionsPlusUpdate implements Runnable {
 					FactionsPlus.log.warning( "can upgrade to version " + content.trim() + " via" );
 					FactionsPlus.log.warning( "http://dev.bukkit.org/server-mods/factionsplus/" );
 					FactionsPlus.log.warning( "! -=====================================- !" );
+					
+					for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+						if (player.isOp()) {
+							player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
+						}
+					}
+					
 				}
 			} else {
 				FactionsPlusPlugin.info( "Up to date!" );
