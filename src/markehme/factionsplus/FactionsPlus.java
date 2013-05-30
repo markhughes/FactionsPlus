@@ -20,8 +20,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitWorker;
 
+import com.massivecraft.factions.ConfServer;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.MConfColl;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiversePortals.MultiversePortals;
 import com.onarandombox.MultiversePortals.utils.PortalManager;
@@ -53,10 +55,14 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static String FactionsVersion;
 	
 	private static Metrics metrics 								= 	null;
-	
+				/*
+				 * As far as I believe we're moving away from ConfServer, and
+				 * I'm pretty sure I don't know what I'm doing here. 
+				 */
 	public static Set<String> ignoredPvPWorlds 					= 	MConf.get().worldsIgnorePvP;
 	public static Set<String> noClaimingWorlds 					= 	MConf.get().worldsNoClaiming;
 	public static Set<String> noPowerLossWorlds 				= 	MConf.get().worldsNoPowerLoss;
+	
 	
 	public FactionsPlus() {
 		super();
