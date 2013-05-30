@@ -1,3 +1,8 @@
+# 0.5.3
+* Updates changed to every 4 hours
+* Ops now notified of updates 
+* Socket time outs added for update check of 15 seconds for read and connect
+
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
 * Now using Config File's Template Section. Fixes a lot of issues.
