@@ -7,9 +7,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
+import markehme.factionsplus.Cmds.req.ReqAtLeastOneWarp;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
 
@@ -53,13 +54,13 @@ public class CmdListWarps extends FPCommand  {
 		}
 		
 		File currentWarpFile = new File( Config.folderWarps, currentFaction.getId() );
-		
-	    if ( ! currentWarpFile.exists() ) {
-	    	msg( ChatColor.RED + "Your faction has no warps!" );
-	    	
-	        return;
-	    }
 	    
+		if( !currentWarpFile.exists() ) {
+			msg( ChatColor.RED + "Your Faction has no warps!" );
+			
+			return;
+		}
+		
 	    FileInputStream fis = null;
 	    
 	    try {
@@ -127,7 +128,7 @@ public class CmdListWarps extends FPCommand  {
 	        msg(buffer);
 	        
 	    } catch ( Exception e ) {
-	    	FactionsPlusPlugin.info( "Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage() );
+	    	FPP.info( "Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage() );
 	    	
 	        msg( ChatColor.RED + "An internal error occured (LW:02)" );
 	        
