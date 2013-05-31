@@ -1,10 +1,10 @@
 package markehme.factionsplus.extras;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.listeners.LocketteListener;
 import markehme.factionsplus.listeners.MVPListener;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -107,11 +107,11 @@ public class LocketteFunctions {
 					Bukkit.getServer().getPluginManager().registerEvents(lockettelisten, instance);
 				}
 				
-				FactionsPlusPlugin.info( "Hooked into Lockette." );
+				FPP.info( "Hooked into Lockette." );
 				
 				return;
  			} else {
- 				FactionsPlusPlugin.warn("extras.protection.removeSignProtectionOnClaim is enabled but Lockette was not found.");
+ 				FPP.warn("extras.protection.removeSignProtectionOnClaim is enabled but Lockette was not found.");
  			}
 		}
  		

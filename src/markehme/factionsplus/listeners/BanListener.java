@@ -2,9 +2,9 @@ package markehme.factionsplus.listeners;
 
 import java.io.File;
 
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +27,7 @@ public class BanListener implements Listener {
 			if(banFile.exists()) {
 				if(Utilities.isLeader(event.getUPlayer())) {
 					if(banFile.delete()) {
-						FactionsPlusPlugin.info("Removed old ban file from previous faction for user " +event.getUPlayer().getName()+ " of Faction id " + event.getUPlayer().getFactionId());
+						FPP.info("Removed old ban file from previous faction for user " +event.getUPlayer().getName()+ " of Faction id " + event.getUPlayer().getFactionId());
 					}
 				} else {
 					event.getUPlayer().msg("You can't join this Faction as you have been banned!");

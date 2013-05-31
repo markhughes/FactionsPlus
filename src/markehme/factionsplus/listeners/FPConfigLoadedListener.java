@@ -1,7 +1,5 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.FactionsPlusUpdate;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
@@ -9,6 +7,8 @@ import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.LocketteBase;
 import markehme.factionsplus.extras.LocketteFunctions;
+import markehme.factionsplus.references.FP;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,7 @@ public class FPConfigLoadedListener implements Listener {
         //TODO: add more here and make sure they can change states between on/off just like they would by a server 'reload' command
         //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
         //and now the config may dictate that they are disabled (state changed) so we must properly handle that behaviour.
-        TeleportsListener.initOrDeInit(FactionsPlus.instance);
+        TeleportsListener.initOrDeInit(FP.instance);
        
         PluginManager pm = Bukkit.getServer().getPluginManager();
         
@@ -57,14 +57,14 @@ public class FPConfigLoadedListener implements Listener {
 			try { 
 				LWCFunctions.hookLWCIfNeeded();
 			} catch(NoClassDefFoundError e) {
-				FactionsPlusPlugin.info( "Couldn't hook LWC.. ignoring." );
+				FPP.info( "Couldn't hook LWC.. ignoring." );
 			}
 			
 		} else { //no LWC
 			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
 				|| Config._extras._protection._lwc.removeAllLocksOnClaim._ ) 
 			{
-				FactionsPlusPlugin
+				FPP
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
 						+ " This means those settings will be ignored & have no effect" );
 			}
@@ -75,13 +75,13 @@ public class FPConfigLoadedListener implements Listener {
 		}
         
         // Lockette 
-        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
+        LocketteFunctions.enableOrDisable(FP.instance);
         
         // Disguises 
-        DisguiseListener.enableOrDisable(FactionsPlus.instance);
+        DisguiseListener.enableOrDisable(FP.instance);
         
         // Multiverse-portals
-        MVPListener.enableOrDisable(FactionsPlus.instance);
+        MVPListener.enableOrDisable(FP.instance);
 
 		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
 		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );

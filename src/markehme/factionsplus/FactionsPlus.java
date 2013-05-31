@@ -58,6 +58,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				/*
 				 * As far as I believe we're moving away from ConfServer, and
 				 * I'm pretty sure I don't know what I'm doing here. 
+				 * TODO: Load these from config 
 				 */
 	public static Set<String> ignoredPvPWorlds 					= 	null;
 	public static Set<String> noClaimingWorlds 					= 	null;
@@ -84,7 +85,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				EssentialsIntegration.onDisable();
 			} catch ( Throwable t ) {
 				failed = t;
-			}
+			} 
 			
 			try {
 				Config.deInit();
@@ -168,7 +169,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			PluginManager pm = this.getServer().getPluginManager();
 			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
 			
-			FactionsPlusPlugin.info("GitHub: https://github.com/MarkehMe/FactionsPlus");
 			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); 
 			
 			pm.registerEvents(new FPConfigLoadedListener(),this);
@@ -212,9 +212,12 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        	isMultiversePortalsEnabled = true;
 	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
+	        
 	        version = getDescription().getVersion();
 	        
 			FactionsPlusPlugin.info("Ready. ");
+			FactionsPlusPlugin.info("Help develop on GitHub: https://github.com/MarkehMe/FactionsPlus");
+			
 			
 			try {
 				metrics = new Metrics( this );

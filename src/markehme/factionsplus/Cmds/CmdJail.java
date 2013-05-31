@@ -22,6 +22,7 @@ public class CmdJail extends FPCommand {
 		
 		this.setHelp( "send a player to jail" );
 		this.setDesc( "send a player to jail" );
+		
 	}
 
 	@Override

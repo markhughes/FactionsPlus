@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.config.sections.Section_Announce;
 import markehme.factionsplus.config.sections.Section_Banning;
@@ -34,6 +32,8 @@ import markehme.factionsplus.config.yaml.WYSection;
 import markehme.factionsplus.config.yaml.WY_IDBased;
 import markehme.factionsplus.config.yaml.WannabeYaml;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
+import markehme.factionsplus.references.FP;
+import markehme.factionsplus.references.FPP;
 import markehme.factionsplus.util.Q;
 import markehme.factionsplus.util.RethrownException;
 
@@ -165,12 +165,12 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		boolean failed = false;
 		// try {
 		if ( Q.isInconsistencyFileBug() ) {
-			throw FactionsPlusPlugin.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+			throw FPP.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
 				+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
 		}
 		
 		if ( hasFileFieldsTrap() ) {
-			throw FactionsPlusPlugin.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+			throw FPP.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
 				+ "in places that use files, tell plugin author to fix" );
 		}
 		
@@ -181,7 +181,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		//this header will be included at the top of the config.yml
 		fpConfigHeaderArray	= new String[]{
-			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
+			FP.instance.getDescription().getFullName()+" configuration file"
 			,""
 			,""
 			,"All comments starting with `### ` (3 # and a space)(aka auto comments) will be automatically updated, " 
@@ -201,7 +201,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		for ( int i = 0; i < fpConfigHeaderArray.length; i++ ) {
 			if (fpConfigHeaderArray[i].contains("\n") || fpConfigHeaderArray[i].contains( "\r" ) ) {
-				throw FactionsPlus.bailOut( "Do not use newlines inside the header, " +
+				throw FP.bailOut( "Do not use newlines inside the header, " +
 						"but instead add a new element line in the array. Problematic line #"+i+"\n`"+fpConfigHeaderArray[i]+"`" );
 			}
 		}
@@ -270,7 +270,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			Q.rethrow( t );
 		} finally {
 			if ( failed ) {
-				FactionsPlus.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
+				FP.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
 													// show us green
 				// but mostly, for consistency's sake and stuff we couldn't think of/anticipate now
 			}
@@ -281,9 +281,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 
 	
 	protected static void ensureFoldersExist() {
-		File dataF = FactionsPlus.instance.getDataFolder();
+		File dataF = FP.instance.getDataFolder();
 		if ( !dataF.equals( folderBase ) ) {
-			throw FactionsPlusPlugin
+			throw FPP
 				.bailOut( "Base folder and dataFolder differ, this may not be intended and it may just be a possible bug in the code;"
 					+ "folderBase=" + folderBase + " dataFolder=" + dataF );
 		}
@@ -298,17 +298,17 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 			if ( !Config.fileDisableInWarzone.exists() ) {
 				Config.fileDisableInWarzone.createNewFile();
-				FactionsPlusPlugin.info( "Created file: " + Config.fileDisableInWarzone );
+				FPP.info( "Created file: " + Config.fileDisableInWarzone );
 			}
 			
 			if(Config.templatesFile.exists()) {
-				FactionsPlusPlugin.info( "Templates file is no longer used, removing. See Config > Template" );
+				FPP.info( "Templates file is no longer used, removing. See Config > Template" );
 				
 				Config.templatesFile.delete();
 			}
 			
 		} catch ( Exception e ) {
-			throw FactionsPlusPlugin.bailOut(e, "something failed when ensuring the folders exist" );
+			throw FPP.bailOut(e, "something failed when ensuring the folders exist" );
 		}
 	}
 	
@@ -316,9 +316,9 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	private static final void addDir( File dir ) {
 		if ( !dir.exists() ) {
 			if ( dir.getPath().isEmpty() ) {
-				throw FactionsPlusPlugin.bailOut( "bad coding, this should usually not trigger here, but earlier" );
+				throw FPP.bailOut( "bad coding, this should usually not trigger here, but earlier" );
 			}
-			FactionsPlusPlugin.info( "Added directory: " + dir );
+			FPP.info( "Added directory: " + dir );
 			dir.mkdirs();
 		}
 	}
@@ -375,7 +375,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			} else {
 				
 				if ( !( currentItem instanceof WY_IDBased ) ) {
-					throw FactionsPlus.bailOut( "impossible, coding bug detected" );
+					throw FPP.bailOut( "impossible, coding bug detected" );
 				}
 				
 				
@@ -393,7 +393,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 						bw.newLine();
 						appendSection( level + 1, cs );// recurse
 					} else {
-						throw FactionsPlus.bailOut( "impossible, coding bug detected" );
+						throw FP.bailOut( "impossible, coding bug detected" );
 					}
 				}
 			}
@@ -544,7 +544,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			// getConfig().save( Config.fileConfig );
 		} catch ( RethrownException e ) {
 			e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
+			throw FPP.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
 		}
 	}
 	
@@ -560,7 +560,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		if ( Config.fileConfig.exists() ) {
 			if ( !Config.fileConfig.isFile() ) {
-				throw FactionsPlusPlugin.bailOut( "While '" + Config.fileConfig.getAbsolutePath()
+				throw FPP.bailOut( "While '" + Config.fileConfig.getAbsolutePath()
 					+ "' exists, it is not a file!" );
 			}
 		}else {
@@ -572,7 +572,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			try {
 				Config.fileConfig.createNewFile();
 			} catch ( IOException e ) {
-				FactionsPlus.bailOut(e, "Cannot create config file "+Config.fileConfig.getAbsolutePath() );
+				FP.bailOut(e, "Cannot create config file "+Config.fileConfig.getAbsolutePath() );
 			}
 			
 //			virtualRoot=createWYRootFromFields();
@@ -623,7 +623,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			
 		} catch ( IOException e ) {
 			// e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut( e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
+			throw FPP.bailOut( e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
 				+ "'" );
 		}
 			
@@ -652,7 +652,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		
 		//last:
 		if (encountered>SKIP_AFTER_ENCOUNTERED) {
-			FactionsPlus.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
+			FP.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
 				+" more messages due to being over the limit of "+SKIP_AFTER_ENCOUNTERED );
 		}
 		encountered=0;
@@ -1011,7 +1011,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 //							x.getParent().insertBefore( getAsAutoComment( comments[i] ), x );
 //						}
 						//these should always be shown, mainly because they cannot be THAT many to be requiring skipping
-						FactionsPlus.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
+						FP.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
 						continue;
 					}
 					// else, the option was defined, so
@@ -1298,7 +1298,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	protected static void info(String msg) {
 		encountered++;
 		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
-			FactionsPlus.info( msg );
+			FP.info( msg );
 		}
 	}
 	
@@ -1306,7 +1306,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	protected static void warn(String msg) {
 		encountered++;
 		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
-			FactionsPlus.warn(msg);
+			FP.warn(msg);
 		}
 	}
 }

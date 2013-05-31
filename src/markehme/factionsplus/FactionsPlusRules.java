@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -75,13 +76,13 @@ public class FactionsPlusRules {
 				outFile.delete();
 			} else {
 				if (!readFile.delete()) {
-					FactionsPlusPlugin.info("Could not remove the current rules file for Faction #" + faction.getId());
+					FPP.info("Could not remove the current rules file for Faction #" + faction.getId());
 					fplayer.msg(ChatColor.RED+"Could not remove rule (internal error).");
 					return;
 				}
 				
 				if (!outFile.renameTo(readFile)) {
-					FactionsPlusPlugin.info("Could not rename tmp file to current rules file for Faction #" + faction.getId());
+					FPP.info("Could not rename tmp file to current rules file for Faction #" + faction.getId());
 					fplayer.msg(ChatColor.RED+"Could not remove rule (internal error).");
 					return;
 				}

@@ -17,7 +17,6 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	// private boolean allowPluginToEnable=true;
 	private boolean	didNotOverrideOnLoad	= false;
 	
-	
 	// public boolean isAllowPluginToEnable() {
 	// return allowPluginToEnable;
 	// }

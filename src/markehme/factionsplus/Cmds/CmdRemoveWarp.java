@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
 
@@ -42,7 +42,7 @@ public class CmdRemoveWarp extends FPCommand {
 	public void performfp() {
 		String warpname = this.arg( 0 );
 		
-		if( ! FactionsPlus.permission.has( sender, "factionsplus.deletewarp" ) ) {
+		if( ! FP.permission.has( sender, "factionsplus.deletewarp" ) ) {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;
 		}
@@ -138,17 +138,17 @@ public class CmdRemoveWarp extends FPCommand {
 			}
 		
 		    if ( !currentWarpFile.delete() ) {
-		    	FactionsPlusPlugin.severe( "[FactionsPlus] Cannot delete " + currentWarpFile.getName() );
+		    	FPP.severe( "[FactionsPlus] Cannot delete " + currentWarpFile.getName() );
 		        return;
 		    }
 		    
 		    if ( ! currentWarpFileTMP.renameTo( currentWarpFile ) ) {
-		    	FactionsPlusPlugin.severe( "[FactionsPlus] Cannot rename " + currentWarpFileTMP.getName() + " to " + currentWarpFile.getName() );
+		    	FPP.severe( "[FactionsPlus] Cannot rename " + currentWarpFileTMP.getName() + " to " + currentWarpFile.getName() );
 		        return;
 		    }
 		    
 		} catch ( Exception e ) {
-			FactionsPlusPlugin.info( "Unexpected error " + e.getMessage() );
+			FPP.info( "Unexpected error " + e.getMessage() );
 			e.printStackTrace();
 		    return;
 		}

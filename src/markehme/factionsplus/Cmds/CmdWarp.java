@@ -14,11 +14,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import markehme.factionsplus.EssentialsIntegration;
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -59,21 +58,34 @@ public class CmdWarp extends FPCommand {
 		String setPassword = null;
 
 		if(this.arg(1) != null) {
-			setPassword = this.arg(1);
+			if(this.arg(1) != "-") {
+				setPassword = this.arg(1);
+			}
 		} else {
 			setPassword = "nullvalue";
 		}
 
-		if(!FactionsPlus.permission.has(sender, "factionsplus.warp")) {
+		if(!FP.permission.has(sender, "factionsplus.warp")) {
 			msg(ChatColor.RED + "No permission!");
 			return;
 		}
-
-
-		Player player = (Player)sender;
 		
-		Faction currentFaction = usender.getFaction();
-
+		Faction currentFaction;
+		
+		if(this.arg(2) != null) {
+			currentFaction = Faction.get(this.arg(2));
+			
+			if( currentFaction.getId() != usender.getFactionId() && !usender.isUsingAdminMode() ) {
+				if(!FP.permission.has(sender, "factionsplus.warpotherfactions" ) ) {
+					msg( "You do not have permission to use other Factions warps. (factionsplus.warpotherfactions)" );
+					return;
+				}
+			}
+		} else {
+			currentFaction = usender.getFaction();
+		}
+		
+		
 		File currentWarpFile = new File(Config.folderWarps,  currentFaction.getId());
 
 		World world;
@@ -96,7 +108,7 @@ public class CmdWarp extends FPCommand {
 
 		// Check for enemies nearby
 		// if player is not in a safe zone or their own faction territory, only allow teleport if no enemies are nearby
-		Location loc = player.getLocation().clone();
+		Location loc = me.getLocation().clone();
 		
 		if(
 				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(BoardColls.get().getFactionAt(PS.valueOf(loc))) 
@@ -277,7 +289,7 @@ public class CmdWarp extends FPCommand {
 					//XXX: this will fail (in Factions not FP) when Essentials is unloaded then loaded again via plugman, also /f home
 					
 					
-					if (EssentialsIntegration.handleTeleport(player, newTel)) return;
+					if (EssentialsIntegration.handleTeleport(me, newTel)) return;
 
 					//we still don't try to tp to the safe location. I better not be sorry for this
 					newTel = new Location(world, x, y, z, Y, playa);
@@ -285,14 +297,14 @@ public class CmdWarp extends FPCommand {
 					// Create a smoke effect
 					if ( Config._warps.smokeEffectOnWarp._ ) {
 						List<Location> smokeLocations = new ArrayList<Location>();
-						smokeLocations.add(player.getLocation());
-						smokeLocations.add(player.getLocation().add(0, 1, 0));
+						smokeLocations.add(me.getLocation());
+						smokeLocations.add(me.getLocation().add(0, 1, 0));
 						smokeLocations.add(newTel);
 						smokeLocations.add(newTel.clone().add(0, 1, 0));
 						SmokeUtil.spawnCloudRandom(smokeLocations, 3f);
 					}
 
-					player.teleport(newTel);
+					me.teleport(newTel);
 					
 					return;
 				}	

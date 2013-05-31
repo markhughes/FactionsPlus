@@ -5,6 +5,7 @@ import java.net.URLConnection;
 import java.util.Scanner;
 
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -105,7 +106,7 @@ public class FactionsPlusUpdate implements Runnable {
 			URLConnection connection = null;
 			String v = FactionsPlus.version;
 			
-			FactionsPlusPlugin.info( "Checking for updates ... " );
+			FPP.info( "Checking for updates ... " );
 			
 			Scanner scanner = null;
 			try {
@@ -121,18 +122,18 @@ public class FactionsPlusUpdate implements Runnable {
 				scanner.useDelimiter( "\\Z" );
 				content = scanner.next();
 			}catch (java.net.UnknownHostException uhe) {
-				FactionsPlusPlugin.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
+				FPP.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
 				return;
 				
 			}catch (java.net.ConnectException ce) {
-				FactionsPlusPlugin.info( "Failed to check for updates. "+ce.getMessage() );
+				FPP.info( "Failed to check for updates. "+ce.getMessage() );
 				return;
 			}catch( java.net.SocketTimeoutException ste ) {
-				FactionsPlusPlugin.info( "Failed to check for updates, the connection timed out (15 seconds): "+ste.getMessage() );
+				FPP.info( "Failed to check for updates, the connection timed out (15 seconds): "+ste.getMessage() );
 				return;
 			}catch ( Exception ex ) {
 				ex.printStackTrace();
-				FactionsPlusPlugin.info( "Failed to check for updates." );
+				FPP.info( "Failed to check for updates." );
 				return;
 			} finally {
 				if ( null != scanner ) {
@@ -166,7 +167,7 @@ public class FactionsPlusUpdate implements Runnable {
 						}
 						
 					} else {
-						FactionsPlusPlugin.info( "Up to date!" );
+						FPP.info( "Up to date!" );
 					}
 				} else {
 					// Version lengths different, unable to advance compare
@@ -184,7 +185,7 @@ public class FactionsPlusUpdate implements Runnable {
 					
 				}
 			} else {
-				FactionsPlusPlugin.info( "Up to date!" );
+				FPP.info( "Up to date!" );
 			}
 		}
 	}
