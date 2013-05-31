@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
@@ -13,10 +14,11 @@ import org.bukkit.event.Listener;
 import com.massivecraft.factions.entity.UPlayer;
 
 /**
- * MobDisguise
- * http://dev.bukkit.org/server-mods/mobdisguise/
+ * It appears MobDisguise is inactive and no longer functioning.
+ * DisguiseCraft should be used instead. 
  *
  */
+@Deprecated
 public class MDListener implements Listener  {
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onDisguiseEvent(DisguiseEvent e) {
@@ -24,6 +26,19 @@ public class MDListener implements Listener  {
 			return;
 		}
 		
+		e.getPlayer().sendMessage(ChatColor.RED+"MobDisguise is deprecated from FactionsPlus.");
+		e.getPlayer().sendMessage(ChatColor.RED+"Request that the server use DisguiseCraft instead.");
+		
+		// Send some annoying messages - they'll get the picture. 
+		FPP.severe("MobDisguise DisguiseEvent detected");
+		FPP.warn("Warning: MobDisguise is deprecated from FactionsPlus.");
+		FPP.warn("MobDisguise is deprecated from FactionsPlus, and DisguiseCraft should be used instead.");
+		
+		FPP.info("If MobDisguise is back in development, notify FactionsPlus developers ASAP.");
+		
+		return;
+		
+		/*
 		UPlayer fplayer = UPlayer.get(e.getPlayer());
 		if (!fplayer.hasFaction()){
     		return;
@@ -46,6 +61,6 @@ public class MDListener implements Listener  {
         			e.setCancelled(true);
         		}
         	}
-        
+        */
 	}
 }
