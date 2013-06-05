@@ -6,6 +6,7 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Typeo;
 import markehme.factionsplus.config.sections.Section_Jails;
+import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -63,24 +64,27 @@ public class CmdDebug extends FPCommand {
 			return;
 		}
 		
-		sender.sendMessage("--- START ---");
-		sender.sendMessage("Bukkit Version: " + Bukkit.getBukkitVersion());
-		sender.sendMessage("Bukkit Version: " + Bukkit.getServer().getVersion());
+		msg( "--- START ---");
+		msg( "FactionsPlus Version: " + FP.version);
+		msg( "Bukkit Version: " + Bukkit.getBukkitVersion());
+		msg( "Bukkit Version: " + Bukkit.getServer().getVersion());
 		List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
-		sender.sendMessage("Active Workers: "+workers.size());
+		msg( "Active Workers: "+workers.size());
 		
 		for ( BukkitWorker bukkitWorker : workers ) {
-			sender.sendMessage("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId()
+			msg("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId()
 				+", "+bukkitWorker.getThread().getName());			
 		}
-		sender.sendMessage("Permissions: " + FactionsPlus.permission.getClass().getName());
+		
+		msg("Permissions: " + FactionsPlus.permission.getClass().getName());
+		
 		if (null != usender) {
 			Faction f=usender.getFaction();
 			if (null != f) {
-				sender.sendMessage(Utilities.getCountOfWarps(f) + " warps for faction "+f.getName());
+				msg(Utilities.getCountOfWarps(f) + " warps for faction "+f.getName());
 			}
 		}
-		sender.sendMessage("--- END ---");
+		msg("--- END ---");
 		
 	
 		

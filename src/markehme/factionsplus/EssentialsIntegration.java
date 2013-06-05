@@ -16,13 +16,11 @@ import com.earth2me.essentials.IEssentials.*;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
 
-/**
- * for this to compile, you'll have to either use the Essentials 2.9.2 jar in project or the 2.9 branch of Essentials 
- * project from github, thanks KHobbits
- */
+
 public abstract class EssentialsIntegration {
 	private static final String	pluginName	= "Essentials";
 	
+	// TODO: Deprecated? Alternative maybe?
 	private static IEssentials		ess							= null;
 //	public static ESS_HAVE			haveEssentials				= ESS_HAVE.NOT_INITED;			// since last Plugin.onEnable()
 	private static boolean	isLoadedButNotEnabled=false;

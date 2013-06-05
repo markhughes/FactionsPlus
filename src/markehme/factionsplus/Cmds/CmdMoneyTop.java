@@ -242,7 +242,8 @@ public class CmdMoneyTop extends FPCommand {
 		}//sync
 	}
 	@SuppressWarnings( "boxing" )
-	public static final void showPage(CommandSender sender, int page) {
+	public static final void showPage(CommandSender sender, int thePage) {
+		int page = thePage;
 		assert null != scoreBoard;
 		assert null != sender;
 		assert page>=1:page;

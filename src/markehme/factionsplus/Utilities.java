@@ -199,29 +199,34 @@ public abstract class Utilities {
 //		}
 //	}
 
+	
 	public static void addPower(Player player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
-		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
+		uPlayer.setPowerBoost(Double.valueOf(uPlayer.getPowerBoost() + amount));
 	}
 
 	public static void addPower(UPlayer uPlayer, double amount) {
-		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
+		uPlayer.setPowerBoost(Double.valueOf(uPlayer.getPowerBoost() + amount));
 	}
 
+	@SuppressWarnings("boxing")
 	public static void addPower(String player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPowerBoost(uPlayer.getPowerBoost() + amount);
 	}
 
+	@SuppressWarnings("boxing")
 	public static void removePower(Player player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
 	}
 
+	@SuppressWarnings("boxing")
 	public static void removePower(UPlayer uPlayer, double amount) {
 		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
 	}
 
+	@SuppressWarnings("boxing")
 	public static void removePower(String player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPowerBoost(uPlayer.getPowerBoost() - amount);
@@ -446,10 +451,10 @@ public abstract class Utilities {
 	}
 	
 	public static final void setPeaceful(Faction faction) {
-		setPeaceful(faction, Boolean.TRUE);
+		setPeaceful(faction, true);
 	}
 
-	public static final void setPeaceful(Faction faction, Boolean state) {
+	public static final void setPeaceful(Faction faction, boolean state) {
 		assert Q.nn( faction );
 		faction.setFlag(FFlag.PEACEFUL, state);
 	}

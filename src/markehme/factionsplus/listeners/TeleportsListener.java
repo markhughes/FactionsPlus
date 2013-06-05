@@ -244,18 +244,17 @@ public class TeleportsListener implements Listener {
 						// them
 						return;
 					}
+				} else if ( ar.length == 2 ) {
+					// just one parameter
+					homeName = ar[1];
 				} else {
-					if ( ar.length == 2 ) {
-						// just one parameter
-						homeName = ar[1];
-					} else {
-						if ( ar.length > 2 ) {
-							// too many params
-							playerInGame.sendMessage( "You specified more than one parameter to command `" + ar[0] + "`" );
-							event.setCancelled( true );
-							return;
-						}
+					if ( ar.length > 2 ) {
+						// too many params
+						playerInGame.sendMessage( "You specified more than one parameter to command `" + ar[0] + "`" );
+						event.setCancelled( true );
+						return;
 					}
+					
 				}
 				
 				assert null != homeName;

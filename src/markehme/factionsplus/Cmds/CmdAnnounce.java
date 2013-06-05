@@ -11,7 +11,6 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
-import markehme.factionsplus.util.TextUtil;
 
 import org.bukkit.ChatColor;
 
@@ -23,6 +22,7 @@ import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdAnnounce extends FPCommand {
 	public CmdAnnounce() {
@@ -45,7 +45,7 @@ public class CmdAnnounce extends FPCommand {
 			return;
 		}
 		
-		String message 				= TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
+		String message 				= Txt.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
 		
 		Faction currentFaction 		= usender.getFaction();
 

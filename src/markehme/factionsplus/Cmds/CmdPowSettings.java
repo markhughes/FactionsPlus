@@ -148,6 +148,10 @@ public class CmdPowSettings extends FPCommand {
 	}
 
 	private static final String num(double d) {
+		return num(Double.valueOf(d));
+	}
+	
+	private static final String num(Double d) {
 		return numColor+String.format(Locale.ENGLISH, "%1$,.2f", d)+ msgColor1;
 	}
 	

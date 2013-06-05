@@ -12,10 +12,10 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
-import markehme.factionsplus.util.TextUtil;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdSetRule extends FPCommand{
 	
@@ -52,7 +52,7 @@ public class CmdSetRule extends FPCommand{
 			msg("Leaders can not modify rules on this server.");
 		}
 		
-		String newRule = TextUtil.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
+		String newRule = Txt.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
 				
 		FactionsPlusRules.setRuleForFaction(usender.getFaction(), usender, newRule);
 		

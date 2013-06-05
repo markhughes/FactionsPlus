@@ -55,14 +55,12 @@ public class CmdWarp extends FPCommand {
 	@Override
 	public void performfp() {
 		String warpname = this.arg(0);
-		String setPassword = null;
+		String setPassword = "nullvalue";
 
 		if(this.arg(1) != null) {
 			if(this.arg(1) != "-") {
 				setPassword = this.arg(1);
 			}
-		} else {
-			setPassword = "nullvalue";
 		}
 
 		if(!FP.permission.has(sender, "factionsplus.warp")) {

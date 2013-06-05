@@ -164,6 +164,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			this.noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
 			this.noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
 			
+			version = getDescription().getVersion();
+			
 			Config.init();
 			
 			PluginManager pm = this.getServer().getPluginManager();
@@ -213,38 +215,29 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
 	        
-	        version = getDescription().getVersion();
 	        
-			FactionsPlusPlugin.info("Ready. ");
-			FactionsPlusPlugin.info("Help develop on GitHub: https://github.com/MarkehMe/FactionsPlus");
+	        
+			FactionsPlusPlugin.info( "Ready. ");
 			
 			
 			try {
+				
 				metrics = new Metrics( this );
-
-				// Version of Factions
-			    /*metrics.addCustomData(new Metrics.Plotter("Factions 1.x") {
-
-			        @Override
-			        public int getValue() {
-			        	int FVC = 0;
-			            return FVC;
-			        }
-
-			    });*/
-			    
 				metrics.start();
+				
 			} catch ( IOException e ) {
-				FactionsPlusPlugin.info("Metrics could not start up: "+e.getMessage() );
+				
+				FactionsPlusPlugin.info( "Metrics could not start up: "+e.getMessage() );
+				
 			}
 						
 		} catch (Throwable t) {
-			FactionsPlus.severe( t);
-			if (isEnabled()) {
+			FactionsPlus.severe( t );
+			if ( isEnabled() ) {
 				disableSelf();
 			}
-		} //try
-	} //onEnable
+		} // try
+	} // onEnable
 	
 	
 }

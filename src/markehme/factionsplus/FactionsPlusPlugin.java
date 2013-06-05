@@ -117,17 +117,21 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 *            if null => ignored
 	 * @param logInfoMsg
 	 */
-	public static void severe( Throwable cause, String logInfoMsg ) {
-		if ( null == logInfoMsg ) {
-			logInfoMsg = cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
-		}
-		String msg = "[FactionsPlus] " + logInfoMsg;
-		if ( null == cause ) {
-			FactionsPlus.log.log( Level.SEVERE, msg);// allowed so that [SEVERE] appears
+	public static void severe( Throwable cause, String msg ) {
+		String sevLog;
+		
+		if ( null == msg ) {
+			sevLog = cause.getMessage() == null ? cause.getClass().getSimpleName() : cause.getMessage();
 		} else {
-			FactionsPlus.log.log( Level.SEVERE, msg, cause );// allowed so that [SEVERE] appears
+			sevLog = msg;
 		}
-		tellConsole( ChatColor.RED + "[FactionsPlus] " + ChatColor.DARK_PURPLE + logInfoMsg );
+		String finmsg = "[FactionsPlus] " + sevLog;
+		if ( null == cause ) {
+			FactionsPlus.log.log( Level.SEVERE, finmsg); // allowed so that [SEVERE] appears
+		} else {
+			FactionsPlus.log.log( Level.SEVERE, finmsg, cause ); // allowed so that [SEVERE] appears
+		}
+		tellConsole( ChatColor.RED + "[FactionsPlus] " + ChatColor.DARK_PURPLE + sevLog );
 	}
 	
 	
