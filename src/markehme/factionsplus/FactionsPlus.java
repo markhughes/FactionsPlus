@@ -236,16 +236,14 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 				// Version of Factions
                 Graph factionsVersionGraph = metrics.createGraph("Factions Version");
-
                 factionsVersionGraph.addPlotter(new Metrics.Plotter(FVC) {
-                        @Override
-                        public int getValue() {
-                            return 1;
-                        }
-                    });
 
-
-			    
+                    @Override
+                    public int getValue() {
+                        return 1;
+                    }
+                });
+                
 				metrics.start();
 			} catch ( IOException e ) {
 				FactionsPlusPlugin.info("Metrics could not start up: "+e.getMessage() );

@@ -17,6 +17,8 @@ public class CmdToggleState extends FPCommand {
 	public CmdToggleState() {
 		super();
 		
+
+		
 		this.aliases.add("toggle");
 		this.aliases.add("togglestate");
 		
