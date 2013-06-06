@@ -10,6 +10,7 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.extras.Metrics.Graph;
 import markehme.factionsplus.listeners.CoreListener;
 import markehme.factionsplus.listeners.FPConfigLoadedListener;
 import net.milkbowl.vault.permission.Permission;
@@ -210,37 +211,40 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
 	        }
 	        version = getDescription().getVersion();
-	        /*
-	        String FVC = "0";
-	        if(FactionsVersion.trim().substring(0, 3) == "1.5") {
+	        
+	        String FVC;
+	        if(FactionsVersion.startsWith("1.5")) {
 	        	FVC = "1.5";
-	        } else if(FactionsVersion.trim().substring(0, 3) == "1.6") {
+	        } else if(FactionsVersion.startsWith("1.6")) {
 	        	FVC = "1.6";
-	        } else if(FactionsVersion.trim().substring(0, 3) == "1.7") {
+	        } else if(FactionsVersion.startsWith("1.7")) {
 	        	FVC = "1.7";
-	        } else if(FactionsVersion.trim().substring(0, 3) == "1.8") {
+	        } else if(FactionsVersion.startsWith("1.8")) {
 	        	FVC = "1.8";
-	        } else if(FactionsVersion.trim().substring(0, 3) == "1.9") {
+	        } else if(FactionsVersion.startsWith("1.9")) {
 	        	FVC = "1.9";
-	        } else if(FactionsVersion.trim().substring(0, 2) == "2.") {
-	        	FVC = "2.0";
-	        } */
+	        } else if(FactionsVersion.startsWith("2.")) {
+	        	FVC = "2.x";
+	        } else {
+	        	FVC = "Unknown";
+	        }
 	        
 			FactionsPlusPlugin.info("Ready. ");
 			
 			try {
 				metrics = new Metrics( this );
-
+			
 				// Version of Factions
-			    /*metrics.addCustomData(new Metrics.Plotter("Factions 1.6") {
+                Graph factionsVersionGraph = metrics.createGraph("Factions Version");
 
-			        @Override
-			        public int getValue() {
-			        	int FVC = 0;
-			            return FVC;
-			        }
+                factionsVersionGraph.addPlotter(new Metrics.Plotter(FVC) {
+                        @Override
+                        public int getValue() {
+                            return 1;
+                        }
+                    });
 
-			    });*/
+
 			    
 				metrics.start();
 			} catch ( IOException e ) {
