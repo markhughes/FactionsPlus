@@ -64,22 +64,109 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Set<String> noClaimingWorlds 					= 	null;
 	public static Set<String> noPowerLossWorlds 				= 	null;
 	
-	
 	public FactionsPlus() {
 		super();
 		
 		if ( null != instance ) {
-			throw bailOut("This was not expected, getting new-ed again without getting unloaded first.\n"
-				+"Safest way to reload is to stop and start the server!");
+			throw bailOut( "This was not expected, getting new-ed again without getting unloaded first.\n" +
+							"Safest way to reload is to stop and start the server!" );
 		}
 		
 		instance = this;
 	}
 	
+	@Override
+	public void onEnable() {
+		try {
+			super.onEnable(); 
+			
+			this.ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
+			this.noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
+			this.noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
+			
+			version = getDescription().getVersion();
+			
+			Config.init();
+			
+			PluginManager pm = this.getServer().getPluginManager();
+			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
+			
+			info("Factions version " + FactionsVersion ); 
+			
+			pm.registerEvents(new FPConfigLoadedListener(),this);
+			
+			Config.reload(); 
+			
+			pm.registerEvents(this.corelistener, this);
+			
+			FactionsPlusJail.server = getServer();
+			CoreListener.fp = FactionsPlusJail.server;
+			
+			FactionsPlusCommandManager.setup();
+			
+	        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
+	        if ( permissionProvider != null ) {
+	            permission = permissionProvider.getProvider();
+	        }
+	        
+	        if( 1<2 ) {        //Temporary Always True Until a Config Option is Created 
+	        	if( pm.isPluginEnabled( "WorldEdit" ) ) {
+	        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+	        		info("Hooked into WorldEdit " + pm.getPlugin("WorldEdit").getDescription().getVersion());
+	        		isWorldEditEnabled = true;
+	        		
+	        	}
+	            if( pm.isPluginEnabled( "WorldGuard" ) ) {
+	            	worldGuardPlugin = ( WorldGuardPlugin ) getServer().getPluginManager().getPlugin( "WorldGuard" );
+	            	info( "Hooked into WorldGuard " + pm.getPlugin( "WorldGuard" ).getDescription().getVersion() );
+	            	
+	            	isWorldGuardEnabled = true;
+	            	
+	            }
+	        }
+	        
+	        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
+	        	Plugin MVc = getServer().getPluginManager().getPlugin( "Multiverse-Portals" );
+	            
+	            if (MVc instanceof MultiversePortals) {
+	            	this.multiversePortalsPlugin = ( MultiversePortals ) MVc;
+	            	
+		        	isMultiversePortalsEnabled = true;
+		        	
+		        	info( "Hooked into Multiverse-Portals " + pm.getPlugin( "Multiverse-Portals" ).getDescription().getVersion() );
+	            }
+	            
+	        }
+	        
+	        
+	        
+			info( "Ready. ");
+			
+			
+			try {
+				
+				metrics = new Metrics( this );
+				metrics.start();
+				
+			} catch ( IOException e ) {
+				
+				info( "Metrics could not start up: "+e.getMessage() );
+				
+			}
+						
+		} catch (Throwable t) {
+			FactionsPlus.severe( t );
+			if ( isEnabled() ) {
+				disableSelf();
+			}
+		} // try
+	} // onEnable
+	
 	
 	@Override
 	public void onDisable() {
-		Throwable failed = null;// TODO: find a way to chain all thrown exception rather than overwrite all older
+		Throwable failed = null; // TODO: find a way to chain all thrown exception rather than overwrite all older
+		
 		try {
 			try {
 				EssentialsIntegration.onDisable();
@@ -111,8 +198,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 			try {
-				getServer().getServicesManager().unregisterAll( this );// not really needed at this point, only for when using
-																		// .register(..)
+				getServer().getServicesManager().unregisterAll( this );
 			} catch ( Throwable t ) {
 				failed = t;
 			}
@@ -124,7 +210,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 			try {
-				//this will deInit metrics, but it will be enabled again onEnable
+				// This will deInit metrics, but it will be enabled again onEnable.
 				getServer().getScheduler().cancelTasks( this );
 			} catch ( Throwable t ) {
 				failed = t;
@@ -141,103 +227,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 //			}
 			
 			if ( null == failed ) {
-				FactionsPlusPlugin.info( "Disabled successfuly." );
+				info( "Disabled successfuly." );
 			}
 			
 		} catch ( Throwable t ) {
 			failed = t;
 		} finally {
 			if ( null != failed ) {
-				FactionsPlusPlugin.info( "Did not disable successfuly." );
-				FactionsPlus.severe( failed, "This is the last seen exception:" );
+				info( "Did not disable successfuly." );
+				severe( failed, "This is the last seen exception:" );
 			}
 		}
-	}
-	
-	
-	@Override
-	public void onEnable() {
-		try {
-			super.onEnable(); 
-			
-			this.ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
-			this.noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
-			this.noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
-			
-			version = getDescription().getVersion();
-			
-			Config.init();
-			
-			PluginManager pm = this.getServer().getPluginManager();
-			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
-			
-			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); 
-			
-			pm.registerEvents(new FPConfigLoadedListener(),this);
-			
-			Config.reload(); 
-			
-			pm.registerEvents(this.corelistener, this);
-			
-			FactionsPlusJail.server = getServer();
-			CoreListener.fp = FactionsPlusJail.server;
-			
-			FactionsPlusCommandManager.setup();
-			
-	        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-	        if (permissionProvider != null) {
-	            permission = permissionProvider.getProvider();
-	        }
-	        
-	        if(1<2) {        //Temporary Always True Until a Config Option is Created 
-	        	if(pm.isPluginEnabled("WorldEdit")) {
-	        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
-	        		FactionsPlusPlugin.info("Hooked into WorldEdit " + pm.getPlugin("WorldEdit").getDescription().getVersion());
-	        		isWorldEditEnabled = true;
-	        		
-	        	}
-	            if(pm.isPluginEnabled("WorldGuard")) {
-	            	worldGuardPlugin = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-	            	FactionsPlusPlugin.info("Hooked into WorldGuard " + pm.getPlugin("WorldGuard").getDescription().getVersion());
-	            	isWorldGuardEnabled = true;
-	            	
-	            }
-	        }
-	        
-	        if(pm.isPluginEnabled("Multiverse-Portals")) { 
-	        	Plugin MVc = getServer().getPluginManager().getPlugin("Multiverse-Portals");
-	            
-	            if (MVc instanceof MultiversePortals) {
-	            	this.multiversePortalsPlugin = (MultiversePortals) MVc;
-	            }
-	            
-	        	isMultiversePortalsEnabled = true;
-	        	FactionsPlusPlugin.info("Hooked into Multiverse-Portals " + pm.getPlugin("Multiverse-Portals").getDescription().getVersion());
-	        }
-	        
-	        
-	        
-			FactionsPlusPlugin.info( "Ready. ");
-			
-			
-			try {
-				
-				metrics = new Metrics( this );
-				metrics.start();
-				
-			} catch ( IOException e ) {
-				
-				FactionsPlusPlugin.info( "Metrics could not start up: "+e.getMessage() );
-				
-			}
-						
-		} catch (Throwable t) {
-			FactionsPlus.severe( t );
-			if ( isEnabled() ) {
-				disableSelf();
-			}
-		} // try
-	} // onEnable
-	
-	
+	} // onDisable
 }
