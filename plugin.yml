@@ -5,7 +5,7 @@ website: http://markeh.me
 version: 0.5.3
 depend: [ Factions, Vault ]
 soft-depend: [DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals]
-dev-url: http://dev.bukkit.org/server-mods/factionsplus/
+dev-url: http://dev.bukkit.org/bukkit-mods/factionsplus/
 permissions:
   factionsplus.kit.jails:
     default: false
