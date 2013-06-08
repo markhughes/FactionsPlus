@@ -212,23 +212,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        }
 	        version = getDescription().getVersion();
 	        
-	        String FVC;
-	        if(FactionsVersion.startsWith("1.5")) {
-	        	FVC = "1.5";
-	        } else if(FactionsVersion.startsWith("1.6")) {
-	        	FVC = "1.6";
-	        } else if(FactionsVersion.startsWith("1.7")) {
-	        	FVC = "1.7";
-	        } else if(FactionsVersion.startsWith("1.8")) {
-	        	FVC = "1.8";
-	        } else if(FactionsVersion.startsWith("1.9")) {
-	        	FVC = "1.9";
-	        } else if(FactionsVersion.startsWith("2.")) {
-	        	FVC = "2.x";
-	        } else {
-	        	FVC = "Unknown";
-	        }
-	        
+
 			FactionsPlusPlugin.info("Ready. ");
 			
 			try {
@@ -236,7 +220,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 				// Version of Factions
                 Graph factionsVersionGraph = metrics.createGraph("Factions Version");
-                factionsVersionGraph.addPlotter(new Metrics.Plotter(FVC) {
+    	        
+                factionsVersionGraph.addPlotter(new Metrics.Plotter(FactionsVersion) {
 
                     @Override
                     public int getValue() {
