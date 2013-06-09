@@ -109,11 +109,4 @@ public class FactionsPlusTemplates {
 		return b;
 		
 	}
-	
-	@Deprecated
-	public static void createTemplatesFile() {
-		if(Config.templatesFile.exists()) {
-			Config.templatesFile.delete();
-		}
-	}
 }
