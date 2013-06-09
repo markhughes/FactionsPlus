@@ -14,8 +14,7 @@ public class CmdReloadFP extends FPCommand {
 		super();
 		this.aliases.add( "reloadfp" );
 		
-		this.optionalArgs.put( "all|conf|templates", "all");
-		//XXX: only people that have factions.reload  permission can use /f reloadfp
+		//this.optionalArgs.put( "all|conf|templates", "all");
 		this.permission = Permission.RELOAD.node;
 		this.disableOnLock = false;
 		
@@ -24,43 +23,28 @@ public class CmdReloadFP extends FPCommand {
 		this.errorOnToManyArgs = true;
 		
 		this.setHelpShort( "Reloads FactionPlus config" );
-		// TODO: maybe add optional params to also reload jails or what now, just in case they were edited manually
 	}
 	
 	
-	@SuppressWarnings( "boxing" )
 	@Override
 	public void performfp() {
 		long startTime = System.nanoTime();
-		String what = this.argAsString( 0, "all" ).toLowerCase();
-		String fileWhat = null;
-		boolean ret = false;
+		
+		boolean success = false;
+		
 		try {
-			if ( what.startsWith( "conf" ) ) {
-				fileWhat=Config.fileConfig.getName();
-				ret = Config.reloadConfig();
-			} else
-				if ( what.startsWith( "templ" ) ) {
-					fileWhat=Config.templatesFile.getName();
-					ret = Config.reloadTemplates();
-				} else
-					if ( what.equals( "all" ) ) {
-						fileWhat=what;
-						Config.reload();
-						ret = true;//else it would just throw
-					} else {
-						msg( "<b>Invalid file specified. <i>Valid files: all, conf, templates" );
-						return;
-					}
+			Config.reload();
+			success = true;
 		} catch ( Throwable t ) {
 			t.printStackTrace();
-			ret = false;
+			success = false;
 		} finally {
-			long endTime = System.nanoTime() - startTime;
-			if ( ret ) {
-				msg( "<i>Reloaded FactionPlus <h>%s <i>from disk, took <h>%,2dms<i>.", fileWhat, endTime / 1000000);//ns to ms
+			long endTime = (System.nanoTime() - startTime) / 1000000;
+			
+			if ( success ) {
+				msg( "<i>Reloaded FactionPlus <h>config.yml <i>from disk, took <h>%,2dms<i>.", String.valueOf( endTime) );
 			} else {
-				msg( ChatColor.RED+"Errors occurred while loading %s. See console for details.", fileWhat);
+				msg( ChatColor.RED+"Errors occurred while loading config.yml. See console for details.");
 			}
 		}
 		

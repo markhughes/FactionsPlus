@@ -12,7 +12,7 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.struct.Permission;
 
 
-public abstract class BaseCmdChatMode extends FPCommand{
+public abstract class BaseCmdChatMode extends FPCommand {
 	protected final FactionsAny.ChatMode cMode;
 	private final String strPermission;
 
