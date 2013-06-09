@@ -165,7 +165,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			Bridge.init();
 			
 			PluginManager pm = this.getServer().getPluginManager();
-			FactionsVersion = (pm.getPlugin("Factions").getDescription().getVersion());
+			FactionsVersion = pm.getPlugin("Factions").getDescription().getVersion().toLowerCase();
 			
 			FactionsPlusPlugin.info("Factions version " + FactionsVersion ); // Before reload
 			
