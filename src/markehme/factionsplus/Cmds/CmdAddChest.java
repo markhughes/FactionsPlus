@@ -2,8 +2,8 @@ package markehme.factionsplus.Cmds;
 
 import org.bukkit.ChatColor;
 
-import markehme.factionsplus.FactionPlusChests;
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusChests;
 import markehme.factionsplus.util.Q;
 
 import com.massivecraft.factions.struct.Permission;
@@ -50,7 +50,7 @@ public class CmdAddChest extends FPCommand {
 			
 		}
 		
-		FactionPlusChests.createChest(fme.getFaction(), fme, chestName, permission);
+		FactionsPlusChests.createChest(fme.getFaction(), fme, chestName, permission);
 		
 
 
