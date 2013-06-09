@@ -6,6 +6,7 @@
 * Added support for /f warp <warpname> - <faction>  (password must be -)
 * Passwords for warps must now be 2 characters or longer
 * Several performance and stability increases 
+* Basic support for the new cannons API
 
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
