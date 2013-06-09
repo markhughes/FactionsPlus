@@ -56,10 +56,7 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public static final File				folderFRules			= new File( folderBase, "frules" );
 	public static final File				folderFBans				= new File( folderBase, "fbans" );
 	public static final File				fileDisableInWarzone	= new File( folderBase, "disabled_in_warzone.txt" );
-	
-	public static File						templatesFile			= new File( folderBase, "templates.yml" );
-	public static FileConfiguration			templates;
-	
+		
 	// and it contains the defaults, so that they are no longer hardcoded in java code
 	public final static File						fileConfig				= new File( Config.folderBase, "config.yml" );
 	
@@ -247,16 +244,13 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 	public synchronized final static void reload() {
 		
 		Config.setLoaded( false );// must be here to cause config to reload on every plugin(s) reload from console
-		Config.templates = null;
 		boolean failed = false;
 		try {
 			
 			Config.ensureFoldersExist();
 			
 			reloadConfig();
-			
-			reloadTemplates();
-			
+						
 			// last:
 			Config.setLoaded( true );
 			// Create the event here
@@ -299,12 +293,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 			if ( !Config.fileDisableInWarzone.exists() ) {
 				Config.fileDisableInWarzone.createNewFile();
 				FactionsPlusPlugin.info( "Created file: " + Config.fileDisableInWarzone );
-			}
-			
-			if(Config.templatesFile.exists()) {
-				FactionsPlusPlugin.info( "Templates file is no longer used, removing. See Config > Template" );
-				
-				Config.templatesFile.delete();
 			}
 			
 		} catch ( Exception e ) {
@@ -1274,14 +1262,6 @@ public abstract class Config {// not named Conf so to avoid conflicts with com.m
 		return loaded;
 	}
 	
-	public final synchronized static boolean reloadTemplates() {
-		if (!Config.isInited()) {
-			return false;
-		}else {
-			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
-			return null != Config.templates;
-		}
-	}
 
 	public static void deInit() {
 		if (isInited()) {
