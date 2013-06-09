@@ -78,6 +78,9 @@ public class FPConfigLoadedListener implements Listener {
         
         // Multiverse-portals
         MVPListener.enableOrDisable(FactionsPlus.instance);
+        
+        // Cannons
+        CannonsListener.enableOrDisable(FactionsPlus.instance);
 
 		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
 		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );
