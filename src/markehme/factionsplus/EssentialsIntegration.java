@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.IEssentials.*;
 
 /**
@@ -170,7 +170,8 @@ public abstract class EssentialsIntegration {
 
 	public static Location getSafeDestination( Location targetLocation ) throws Exception {
 		if (isHooked()){
-			return Util.getSafeDestination( targetLocation );
+			
+			return LocationUtil.getSafeDestination( targetLocation );
 		}else{
 			//not running Essentials on server? return same location
 			return targetLocation;
