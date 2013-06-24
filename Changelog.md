@@ -7,6 +7,7 @@
 * Passwords for warps must now be 2 characters or longer
 * Several performance and stability increases 
 * Basic support for the new cannons API
+* Fixed Essentials error with getSafeDestination (Util for getSafeDestination is now LocationUtil)
 
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
