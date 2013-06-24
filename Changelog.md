@@ -3,7 +3,7 @@
 * Ops now notified of updates 
 * Socket time outs added for update check of 15 seconds for read and connect
 * Added permission: factionsplus.warpotherfactions
-* Added support for /f warp <warpname> - <faction>  (password must be -)
+* Added support for /f warp <warpname> - <faction>  (password must be -), req. factionsplus.warpotherfactions
 * Passwords for warps must now be 2 characters or longer
 * Several performance and stability increases 
 * Basic support for the new cannons API
