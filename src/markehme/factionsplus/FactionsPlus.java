@@ -236,6 +236,24 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			FactionsPlusPlugin.info("ARE YOU A DEVELOPER? Help out: https://github.com/MarkehMe/FactionsPlus");
 			
+			FactionsPlusPlugin.warn( "" );
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( "" );
+			FactionsPlusPlugin.warn( " This version of FactionsPlus is from out 0.5 branch." );
+			FactionsPlusPlugin.warn( " This version of FactionsPlus is no longer being updated." );
+			FactionsPlusPlugin.warn( " Please follow upgrade instructions from 1.6->1.8->2.0 of Factions." );
+			FactionsPlusPlugin.warn( " Factions 1.6.x contains obsolete code, and will break." );
+			FactionsPlusPlugin.warn( "" );
+			FactionsPlusPlugin.warn( " ... just bloody upgrade" );
+			FactionsPlusPlugin.warn( "" );
+
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( " ****** WARNING ******" );
+			FactionsPlusPlugin.warn( "" );
+			
 		} catch (Throwable t) {
 			FactionsPlus.severe( t);
 			if (isEnabled()) {
