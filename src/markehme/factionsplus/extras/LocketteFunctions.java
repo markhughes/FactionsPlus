@@ -1,5 +1,7 @@
 package markehme.factionsplus.extras;
 
+import java.lang.reflect.Method;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.Config;
@@ -12,9 +14,10 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
+import org.yi.acru.bukkit.PluginCore;
 import org.yi.acru.bukkit.Lockette.Lockette;
 
 import com.griefcraft.model.Protection;
@@ -55,32 +58,34 @@ public class LocketteFunctions {
 					
 					// Is the block protected?
 					// isProtected() checks the block type, we don't need to check the block type
-					if(Lockette.isProtected(block)) {
+					if( Lockette.isProtected( block ) ) {
 						
 						String ownerN = Lockette.getProtectedOwner(block);
 						FPlayer fOwner = FPlayers.i.get(ownerN);
 						
 						// Validate they're not in the same Faction. 
-						if(fOwner.getFactionId() != fPlayer.getFactionId()) {
+						if( fOwner.getFactionId() != fPlayer.getFactionId() ) {
 							
-							Block attachBlock = Lockette.getSignAttachedBlock(block);
+							Block northBlock = block.getRelative(BlockFace.NORTH);
+							Block southBlock = block.getRelative(BlockFace.SOUTH);
+							Block eastBlock = block.getRelative(BlockFace.EAST);
+							Block westBlock = block.getRelative(BlockFace.WEST);
 							
-							Sign aSign = (Sign) attachBlock.getState();
-							Sign		sign = (Sign) attachBlock.getState();
-							aSign.setLine(1, "[Rem Private]"); // this isn't phased like [Private]
-							aSign.setLine(2, "Removed Private");
-							aSign.setLine(3, "on claim.");
-							aSign.setLine(4, "");
+							if( northBlock.getType().equals(Material.WALL_SIGN))  {
+						    	northBlock.breakNaturally();
+						    }
+							if( southBlock.getType().equals(Material.WALL_SIGN))  {
+								southBlock.breakNaturally();
+						    }
+							if( eastBlock.getType().equals(Material.WALL_SIGN))  {
+								eastBlock.breakNaturally();
+						    }
+							if( westBlock.getType().equals(Material.WALL_SIGN))  {
+								westBlock.breakNaturally();
+						    }
+						    
 							
-							// Update the sign
-							aSign.update(true);
-							
-							// Notify the user
-							// TODO: 	This would get annoying if multiple protections have been removed in the one chunk
-							//			so this needs to be made so that only one message is sent to the player, and change
-							//			item to items. 
-							
-							fOwner.msg(ChatColor.RED + "You had a protected item at x: " + aSign.getX() +", y:" + aSign.getY() + " that has been claimed over.");
+							fOwner.msg(ChatColor.RED + "You had a protected item at x: " + block.getX() +", y:" + block.getY() + " that has been claimed over.");
 							
 							numberOfRemovedProtections++;
 						}
@@ -90,6 +95,7 @@ public class LocketteFunctions {
 				}
 			}
 		}
+		
 		return numberOfRemovedProtections;
 	}
 	
