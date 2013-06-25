@@ -77,27 +77,28 @@ public class FactionsPlusUpdate implements Runnable {
 		}
 	}
 	
-	
+	/**
+	 * This version of FactionsPlus runs an annoyance notice to make everyone upgrade.
+	 */
 	public static void enableOrDisableCheckingForUpdates() {
 		synchronized ( FactionsPlusUpdate.class ) {
-			if ( Config._extras.disableUpdateCheck._ ) {
-				FactionsPlusUpdate.ensureNotRunning();
-				FactionsPlus.info("Never checking for updates");
-			} else {
-				// enable
-				if ( !isRunning() ) {
-					FactionsPlus.info("Will now check for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
-					FactionsPlusUpdate.checkUpdates( FactionsPlus.instance );
-				}else{
-					//still running
-					FactionsPlus.info("Still checking for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
-//					next check is in "
-//						Bukkit.getServer().getScheduler().);
-				}
+
+			// enable
+			if ( !isRunning() ) {
+				FactionsPlus.info("Will now check for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
+				FactionsPlusUpdate.checkUpdates( FactionsPlus.instance );
+			}else{
+				//still running
+				FactionsPlus.info("Still checking for updates every "+(PERIOD/20/60/60)+" hours (and on startup)");
+//				next check is in "
+//					Bukkit.getServer().getScheduler().);
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public void run() {
 		synchronized ( FactionsPlusUpdate.class ) {
@@ -105,8 +106,20 @@ public class FactionsPlusUpdate implements Runnable {
 			URLConnection connection = null;
 			String v = FactionsPlus.version;
 			
-			FactionsPlusPlugin.info( "Checking for updates ... " );
+			FactionsPlus.log.warning( "! -=====================================- !" );
+			FactionsPlus.log.warning( "FactionsPlus has an update, because you're" );
+			FactionsPlus.log.warning( "too bloody lazy to upgrade to 2.0." );
+			FactionsPlus.log.warning( "You can upgrade to version 0.6.x via:" );
+			FactionsPlus.log.warning( "http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
+			FactionsPlus.log.warning( "! -=====================================- !" );
 			
+			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+				if (player.isOp()) {
+					player.sendMessage(ChatColor.RED + " [Warning] " + ChatColor.WHITE + "This version of FactionsPlus is outdated. See console.");
+				}
+			}
+			
+			/*
 			Scanner scanner = null;
 			try {
 				
@@ -187,6 +200,7 @@ public class FactionsPlusUpdate implements Runnable {
 			} else {
 				FactionsPlusPlugin.info( "Up to date!" );
 			}
+			*/
 		}
 	}
 }
