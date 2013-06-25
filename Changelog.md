@@ -8,6 +8,8 @@
 * Several performance and stability increases 
 * Basic support for the new cannons API
 * Fixed Essentials error with getSafeDestination (Util for getSafeDestination is now LocationUtil)
+* Added annoyances for you lazy peple
+* Added Lockette support 
 
 # 0.5.2
 * Templates file is no longer used. It is removed on startup.
