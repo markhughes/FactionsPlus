@@ -2,59 +2,51 @@ package markehme.factionsplus.Cmds;
 
 import org.bukkit.ChatColor;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusChests;
-import markehme.factionsplus.util.Q;
-
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdAddChest extends FPCommand {
 	public CmdAddChest() {
-		this.aliases.add("addchest");
+		this.aliases.add( "addchest" );
+		
+		this.requiredArgs.add( "name" );
+
 		this.errorOnToManyArgs = false;
 		
-		this.requiredArgs.add("name");
-		this.optionalArgs.put("permission", "string");
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
-		
-		senderMustBePlayer = true;
-		senderMustBeMember = false;
-		
-		this.setHelpShort("creates a virtual Faction chest");
+		this.setHelp( "create a faction chest, can be set up with permissions access" );
+
 	}
-	
+
 	@Override
-	protected void performfp() {
+	public void performfp() {
+		String chestName = this.arg(0);
 		
-		// Ensure they have permission to use this command.
-		if( ! FactionsPlus.permission.has(sender, "factionsplus.managechests")) {
-			msg( ChatColor.RED + "No permission!" );
-			return;
-		}
-		
-		String chestPerm = "S"; // Default is "S"
-		String chestName = this.argAsString( 0 );
-		
-		// Check if they want open permissions 
-		if( this.argAsString( 1 ) != null ) {
-			
-			// Ensure the correct permissions are being used
-			if( this.argAsString( 1 ) != "S" && this.argAsString( 1 ) != "M") {
-				msg( ChatColor.RED + "Chest not created: The only permissions allowed are S or M." );
+		if( this.arg(1) != null ) {
+			if( this.arg(1) == "O" ) {
+				
+				String chestPermission = "O";
+				
+			} else if( this.arg(1) == "A" ) {
+				
+				String chestPermission = "A";
+				
+			} else if( this.arg(1).trim() == "") {
+				
+				String chestPermission = "A";
+				
+			} else {
+				
+				msender.msg( ChatColor.RED + "It appears that the permission you set was not O (officer and above) or A (all)." );
+				
 				return;
+				
 			}
-			
-			permission = this.argAsString( 1 );
-			
+		} else {
+			String chestPermission = "A";
 		}
-		
-		FactionsPlusChests.createChest(fme.getFaction(), fme, chestName, permission);
-		
-
-
 		
 	}
-
 }

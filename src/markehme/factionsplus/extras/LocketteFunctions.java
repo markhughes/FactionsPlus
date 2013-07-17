@@ -1,12 +1,10 @@
 package markehme.factionsplus.extras;
 
-import java.lang.reflect.Method;
-
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.listeners.LocketteListener;
 import markehme.factionsplus.listeners.MVPListener;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,32 +13,34 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.yi.acru.bukkit.PluginCore;
 import org.yi.acru.bukkit.Lockette.Lockette;
 
 import com.griefcraft.model.Protection;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
 
 public class LocketteFunctions {
 	static LocketteListener lockettelisten = null;
 	
-	public static int removeLocketteLocks( FLocation facLocation, FPlayer fPlayer ) throws Exception {
-		// This is based off LWCFunctions.clearLocks
+	public static int removeLocketteLocks( PS facLocation, UPlayer uPlayer ) throws Exception {
 		
-		World world = facLocation.getWorld();
+		World world = facLocation.getChunk().asBukkitWorld();
 		
 		if ( null == world ) {
 			throw new Exception( "World is undenified." );
 		}
 		
-		Chunk chunk = facLocation.getWorld().getChunkAt( (int)facLocation.getX(), (int)facLocation.getZ() );
-		
+		Chunk chunk = world.getChunkAt( 
+				(uPlayer.getPlayer().getLocation().getBlockX()), 
+				(uPlayer.getPlayer().getLocation().getBlockZ())
+			);
+
 		if ( !world.isChunkLoaded( chunk ) ) {
 			world.loadChunk( chunk );
+			
 			if ( !chunk.isLoaded() ) {
 				throw new Exception( "Failed to force load chunk at x: " + chunk.getX() + ", z:" + chunk.getZ() );
 			}
@@ -60,32 +60,44 @@ public class LocketteFunctions {
 					// isProtected() checks the block type, we don't need to check the block type
 					if( Lockette.isProtected( block ) ) {
 						
-						String ownerN = Lockette.getProtectedOwner(block);
-						FPlayer fOwner = FPlayers.i.get(ownerN);
+						// Lockettes build-in function saves us time
+						String ownerN = Lockette.getProtectedOwner( block );
+						UPlayer blockOwner = UPlayer.get( ownerN );
 						
 						// Validate they're not in the same Faction. 
-						if( fOwner.getFactionId() != fPlayer.getFactionId() ) {
+						if( blockOwner.getFactionId() != uPlayer.getFactionId() ) {
 							
-							Block northBlock = block.getRelative(BlockFace.NORTH);
-							Block southBlock = block.getRelative(BlockFace.SOUTH);
-							Block eastBlock = block.getRelative(BlockFace.EAST);
-							Block westBlock = block.getRelative(BlockFace.WEST);
+							// No Lockette internal functions where helpful, this works though.
 							
-							if( northBlock.getType().equals(Material.WALL_SIGN))  {
+							Block northBlock 	= block.getRelative( BlockFace.NORTH );
+							Block southBlock 	= block.getRelative( BlockFace.SOUTH );
+							Block eastBlock 	= block.getRelative( BlockFace.EAST );
+							Block westBlock 	= block.getRelative( BlockFace.WEST );
+							
+							if( northBlock.getType().equals( Material.WALL_SIGN ) ) {
+								
 						    	northBlock.breakNaturally();
-						    }
-							if( southBlock.getType().equals(Material.WALL_SIGN))  {
+						    	
+						    } else if( southBlock.getType().equals( Material.WALL_SIGN ) ) {
+						    	
 								southBlock.breakNaturally();
-						    }
-							if( eastBlock.getType().equals(Material.WALL_SIGN))  {
+								
+						    } else if( eastBlock.getType().equals( Material.WALL_SIGN ) ) {
+						    	
 								eastBlock.breakNaturally();
-						    }
-							if( westBlock.getType().equals(Material.WALL_SIGN))  {
+								
+						    } else if( westBlock.getType().equals( Material.WALL_SIGN ) ) {
+						    	
 								westBlock.breakNaturally();
+								
+						    } else {
+						    	
+						    	uPlayer.msg( "Error: Couldn't remove lockette protection." );
+						    	
 						    }
 						    
 							
-							fOwner.msg(ChatColor.RED + "You had a protected item at x: " + block.getX() +", y:" + block.getY() + " that has been claimed over.");
+							blockOwner.msg( ChatColor.RED + "You had a protected item at x: " + block.getX() +", y:" + block.getY() + " that has been claimed over." );
 							
 							numberOfRemovedProtections++;
 						}
@@ -95,7 +107,6 @@ public class LocketteFunctions {
 				}
 			}
 		}
-		
 		return numberOfRemovedProtections;
 	}
 	
@@ -114,11 +125,11 @@ public class LocketteFunctions {
 					Bukkit.getServer().getPluginManager().registerEvents(lockettelisten, instance);
 				}
 				
-				FactionsPlusPlugin.info( "Hooked into Lockette." );
+				FPP.info( "Hooked into Lockette." );
 				
 				return;
  			} else {
- 				FactionsPlusPlugin.warn("extras.protection.removeSignProtectionOnClaim is enabled but Lockette was not found.");
+ 				FPP.warn("extras.protection.removeSignProtectionOnClaim is enabled but Lockette was not found.");
  			}
 		}
  		

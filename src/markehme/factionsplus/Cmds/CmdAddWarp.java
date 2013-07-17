@@ -18,44 +18,41 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdAddWarp extends FPCommand {
 	public CmdAddWarp() {
-		this.aliases.add("createwarp");
-		this.aliases.add("addwarp");
-		this.aliases.add("setwarp");
-
-		this.requiredArgs.add("name");
-		//this.optionalArgs.put("on/off", "flip");
-
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
-		this.errorOnToManyArgs = false;
-
-		senderMustBePlayer = true;
-		senderMustBeMember = false;
-
-		this.setHelpShort("creates a faction warp, can be specified with a password");
+		this.aliases.add( "createwarp" );
+		this.aliases.add( "addwarp" );
+		this.aliases.add( "setwarp" );
 		
+		this.requiredArgs.add( "name" );
+		this.errorOnToManyArgs = false;
+		
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		
+		this.setHelp( "create a faction warp, can be specified with a password" );
+		this.setHelp( "create a faction warp, can be specified with a password" );
 
 	}
 
 	@Override
 	public void performfp() {
-		String warpname = this.argAsString(0);
-		
+		String warpname = this.arg(0);
 
-		String pass = null;
+		String warpPassword = null;
 
-		if(this.argAsString(1) != null) {
-			pass = this.argAsString(1);
+		if(this.arg(1) != null) {
+			warpPassword = this.arg(1);
 			
-			if(pass.length() < 2) {
-				msg("Your warp password must be at least 2 characters or more. ");
+			if(warpPassword.length() < 1) {
+				msg("Your warp password must be at least 2 characters or more.");
 				
 				return;
 			}
@@ -66,31 +63,30 @@ public class CmdAddWarp extends FPCommand {
 			return;
 		}
 
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
-		Faction currentFaction = myFaction;
+		UPlayer uPlayer = UPlayer.get(sender.getName());
+		Faction currentFaction = uPlayer.getFaction();
 
 
-		if(!Config._warps.canSetOrRemoveWarps(fplayer)) {
+		if(!Config._warps.canSetOrRemoveWarps(uPlayer)) {
 			sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badrank", null));
 			return;
 		}
 
-		if(!fplayer.isInOwnTerritory()) {
+		if(!uPlayer.isInOwnTerritory()) {
 			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
 				sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badterritory", null));
 				return;
 			}
 		}
-		
 		if(Config._economy.costToCreateWarp._ > 0.0d && Config._economy.isHooked()) {
-			if (!payForCommand(Config._economy.costToCreateWarp._, "to create this warp", "for creating this warp")) {
+			if (!Utilities.doFinanceCrap(Config._economy.costToCreateWarp._, "create a warp", usender)) {
 				return;
 			}
 		}
 		
 		if(Config._warps.maxWarps._ != 0) {
 			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
-				sender.sendMessage(FactionsPlusTemplates.Go("warps_reached_max", null));
+				usender.msg( FactionsPlusTemplates.Go( "warps_reached_max", null ) );
 				return;
 			}
 		}
@@ -106,13 +102,13 @@ public class CmdAddWarp extends FPCommand {
 				return;
 			}
 		} else {
-			DataInputStream in =null;
-			BufferedReader br=null;
-			FileInputStream fstream=null;
+			DataInputStream in 			= null;
+			BufferedReader br			= null;
+			FileInputStream fstream		= null;
 			try {
-				fstream = new FileInputStream(currentWarpFile);
-				in = new DataInputStream(fstream);
-				br = new BufferedReader(new InputStreamReader(in));
+				fstream 					= new FileInputStream(currentWarpFile);
+				in							= new DataInputStream(fstream);
+				br 							= new BufferedReader(new InputStreamReader(in));
 				String strLine;
 
 				while ((strLine = br.readLine()) != null) {
@@ -125,7 +121,7 @@ public class CmdAddWarp extends FPCommand {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				if (null != br) {
 					try {
 						br.close();
@@ -148,26 +144,18 @@ public class CmdAddWarp extends FPCommand {
 					}
 				}
 			}
-			/*
-			currentWarpFile.delete();
-			try {
-				currentWarpFile.createNewFile();
-			} catch (Exception e) {
-		        System.out.println("[FactionPlus] Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage());
-				e.printStackTrace();
-			}
-			 */
+
 		}
 
-		Player player = (Player)sender;
+		Player player = (Player) sender;
 
 		Location loc = player.getLocation();
 		try {
 			FileWriter filewrite = new FileWriter(currentWarpFile, true);
 			String dataAddition;
 
-			if(pass != null) {
-				dataAddition = ":" + pass;
+			if(warpPassword != null) {
+				dataAddition = ":" + warpPassword;
 			} else {
 				dataAddition = ":nullvalue";
 			}
@@ -182,29 +170,19 @@ public class CmdAddWarp extends FPCommand {
 
 			filewrite.close();
 		} catch (Exception e) {
-			FactionsPlus.warn("Unexpected error:");// + e.getMessage());
+			FactionsPlus.warn("Unexpected error:");
 			e.printStackTrace();
 			sender.sendMessage(ChatColor.RED + "An internal error occured (05)");
 			return;
 		}
-		String[] argsb;
-		argsb = new String[2];
-		argsb[1] = warpname;
-				
-		player.sendMessage(FactionsPlusTemplates.Go("warp_created", argsb));
+		
+		String[] argsb = { warpname };
+		
+		msg(FactionsPlusTemplates.Go("warp_created", argsb));
 
-		String[] argsa;
-
-		argsa = new String[3];
-		argsa[1] = sender.getName();
-		argsa[2] = warpname;
-
-		String announcemsg = FactionsPlusTemplates.Go("notify_warp_created", argsa);
-		// notify all the players in the faction
-//		currentFaction.sendMessage( announcemsg ); //this would work too, same thing
-		for (FPlayer fplayerlisting : currentFaction.getFPlayersWhereOnline(true)){
-			fplayerlisting.msg(announcemsg);
-		}
-
+		String[] argsa = { sender.getName(), warpname };
+		
+		msg( FactionsPlusTemplates.Go("notify_warp_created", argsa) );
+		
 	}
 }

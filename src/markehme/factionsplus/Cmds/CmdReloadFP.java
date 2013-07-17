@@ -4,7 +4,7 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 
 
 
@@ -15,36 +15,52 @@ public class CmdReloadFP extends FPCommand {
 		this.aliases.add( "reloadfp" );
 		
 		//this.optionalArgs.put( "all|conf|templates", "all");
-		this.permission = Permission.RELOAD.node;
-		this.disableOnLock = false;
+		this.errorOnToManyArgs = false;
 		
-		senderMustBePlayer = false;
-		senderMustBeMember = false;
-		this.errorOnToManyArgs = true;
+		this.addRequirements( ReqFactionsEnabled.get() );
 		
-		this.setHelpShort( "Reloads FactionPlus config" );
+		this.setHelp( "reloads FactionPlus config" );
+		this.setDesc( "reloads FactionPlus config" );
 	}
 	
 	
+	@SuppressWarnings( "boxing" )
 	@Override
 	public void performfp() {
 		long startTime = System.nanoTime();
-		
-		boolean success = false;
-		
+		boolean ret = false;
 		try {
-			Config.reload();
-			success = true;
+			// Templates have been moved into the config
+			// (in the future, templates should work off the same system as config
+			//  but in a seperate file)
+			
+			/*
+			if ( what.startsWith( "conf" ) ) {
+				fileWhat=Config.fileConfig.getName();
+				ret = Config.reloadConfig();
+			} else
+				if ( what.startsWith( "templ" ) ) {
+					fileWhat=Config.templatesFile.getName();
+					ret = Config.reloadTemplates();
+				} else
+					if ( what.equals( "all" ) ) {*/
+						
+						Config.reload();
+						ret = true; // otherwise it would just throw
+						
+					/*} else {
+						msg( "<b>Invalid file specified. <i>Valid files: all, conf, templates" );
+						return;
+					}*/
 		} catch ( Throwable t ) {
 			t.printStackTrace();
-			success = false;
+			ret = false;
 		} finally {
-			long endTime = (System.nanoTime() - startTime) / 1000000;
-			
-			if ( success ) {
-				msg( "<i>Reloaded FactionPlus <h>config.yml <i>from disk, took <h>%,2dms<i>.", String.valueOf( endTime) );
+			long endTime = System.nanoTime() - startTime;
+			if ( ret ) {
+				msg( "<i>Reloaded FactionPlus <i>from disk, took <h>%,2dms<i>.", endTime / 1000000 );//ns to ms
 			} else {
-				msg( ChatColor.RED+"Errors occurred while loading config.yml. See console for details.");
+				msg( ChatColor.RED+"Errors occurred while reloading. See console for details." );
 			}
 		}
 		

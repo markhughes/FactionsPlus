@@ -1,5 +1,7 @@
 package markehme.factionsplus.config.sections;
 
+import org.bukkit.ChatColor;
+
 import markehme.factionsplus.config.Option;
 
 public final class Section_Templates {
@@ -61,7 +63,11 @@ public final class Section_Templates {
 	@Option(	autoComment={"Sent to a player when they have been jailed."},
 			realAlias_inNonDottedFormat = "jailed_message"
 		)
-	public  final _string jailed_message=new _string("<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
+	public  final _string jailed_message = new _string("<red>You have been Jailed! If you are unhappy with this faction, you can leave the Faction.");
 	
+	@Option(	autoComment={"Sent to Faction leaders and officers when /f need is called."},
+			realAlias_inNonDottedFormat = "faction_need"
+		)
+	public  final _string faction_need = new _string("<white>The player $1 is looking for a Faction! You can invite them with <green>/f inv $1");
 
 }

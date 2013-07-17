@@ -3,18 +3,20 @@ package markehme.factionsplus;
 import java.lang.ref.Reference;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.utils.LocationUtil;
-import com.earth2me.essentials.IEssentials.*;
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.Util;
+import com.earth2me.essentials.api.ITeleport;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UConf;
 
-/**
- * for this to compile, you'll have to either use the Essentials 2.9.2 jar in project or the 2.9 branch of Essentials 
- * project from github, thanks KHobbits
- */
+
 public abstract class EssentialsIntegration {
 	private static final String	pluginName	= "Essentials";
 	
@@ -171,10 +173,30 @@ public abstract class EssentialsIntegration {
 	public static Location getSafeDestination( Location targetLocation ) throws Exception {
 		if (isHooked()){
 			
-			return LocationUtil.getSafeDestination( targetLocation );
+			return Util.getSafeDestination( targetLocation );
 		}else{
 			//not running Essentials on server? return same location
 			return targetLocation;
 		}
 	}
+	
+	@SuppressWarnings("cast")
+	public static boolean handleTeleport(Player player, Location loc) {
+		if( ! isHooked() ) {
+			return false;
+		}
+		
+		try {
+			Teleport teleport = (Teleport) getEssentialsInstance().getUser(player).getTeleport();
+			Trade trade = new Trade(UConf.get(player).econCostHome, getEssentialsInstance());
+
+			teleport.teleport(loc, trade);
+		} catch (Exception e) {
+			player.sendMessage(ChatColor.RED.toString()+e.getMessage());
+			
+			return false;
+		}
+		return true;
+	}
+	
 }

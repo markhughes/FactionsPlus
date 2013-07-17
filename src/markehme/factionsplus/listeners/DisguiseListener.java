@@ -1,8 +1,9 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
+import markehme.factionsplus.references.FPP;
 import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 
 import org.bukkit.Bukkit;
@@ -12,11 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.PluginManager;
 
+import com.massivecraft.factions.entity.UPlayer;
+
 import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
 
 public class DisguiseListener implements Listener {
 	private static final String	MOB_DISGUISE	= "MobDisguise";
@@ -28,8 +29,8 @@ public class DisguiseListener implements Listener {
 			return;
 		}
 
-		FPlayer fplayer = FPlayers.i.get(event.getPlayer());
-		if (!fplayer.hasFaction()){
+		UPlayer fplayer = UPlayer.get(event.getPlayer());
+		if(!fplayer.hasFaction()) {
     		return;
     	}
 		
@@ -93,7 +94,7 @@ public class DisguiseListener implements Listener {
 		if ( null != dclistener ) {
 			HandlerList.unregisterAll( dclistener );
 			dclistener = null;
-			FactionsPlus.info( "DC is disintegrated" );
+			FP.info( "DC is disintegrated" );
 			if (!isMobDisguiseIntegrated()) {
 				disintegrateCommon();
 			}
@@ -102,11 +103,10 @@ public class DisguiseListener implements Listener {
 	
 	
 	private final static void disintegrateMD() {
-//		assert null != mdlistener : "bad call: MD was not already integrated";
 		if (null != mdlistener) {
 			HandlerList.unregisterAll( mdlistener );
 			mdlistener = null;
-			FactionsPlus.info( "MD is disintegrated" );
+			FP.info( "MD is disintegrated" );
 			if (!isDisguiseCraftIntegrated()) {
 				disintegrateCommon();
 			}
@@ -114,7 +114,6 @@ public class DisguiseListener implements Listener {
 	}
 	
 	private static void disintegrateCommon() {
-//		assert null != disguiselistener : "bad call: the MD/DC common code  was not already integrated";
 		if (null != disguiselistener) {
 			HandlerList.unregisterAll( disguiselistener );
 			disguiselistener=null;
@@ -147,7 +146,7 @@ public class DisguiseListener implements Listener {
 				dclistener = new DCListener();
 				pm.registerEvents( dclistener, instance );
 				ensureCommonIsAllocated( instance );
-				FactionsPlusPlugin.info( "Hooked into "+DISGUISE_CRAFT+"!" );
+				FPP.info( "Hooked into "+DISGUISE_CRAFT+"!" );
 			} else
 				if ( !isDCplugin && isDisguiseCraftIntegrated() ) {
 					// either the plugin went offline or the configs changed, we need to disable integration:
@@ -160,14 +159,14 @@ public class DisguiseListener implements Listener {
 				mdlistener = new MDListener();
 				pm.registerEvents( mdlistener, instance );
 				ensureCommonIsAllocated( instance );
-				FactionsPlusPlugin.info( "Hooked into "+MOB_DISGUISE+"!" );
+				FPP.info( "Hooked into "+MOB_DISGUISE+"!" );
 			} else
 				if ( !isMDplugin && isMobDisguiseIntegrated() ) {
 					disintegrateMD();
 				}
 
         	if (!isDCplugin && !isMDplugin) {//if neither plugin exists (we know the options exists though)
-        		FactionsPlusPlugin.warn("MobDisguise or DisguiseCraft integration enabled in config, but " +
+        		FPP.warn("MobDisguise or DisguiseCraft integration enabled in config, but " +
         				"none of these plugins are installed!");
         	}
         }else{

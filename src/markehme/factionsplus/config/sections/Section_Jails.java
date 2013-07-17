@@ -1,11 +1,11 @@
 package markehme.factionsplus.config.sections;
 
+import com.massivecraft.factions.entity.UPlayer;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.config.Option;
-
-import com.massivecraft.factions.FPlayer;
 
 
 public final class Section_Jails {
@@ -18,7 +18,6 @@ public final class Section_Jails {
 	
 	
 	@Option(oldAliases_alwaysDotted={
-//		"jails.leadersCanSetJails"
 		"leadersCanSetJails"
 		}, realAlias_inNonDottedFormat = "leadersCanSetJails" )
 	public  final _boolean leadersCanSetJails=new _boolean(true);
@@ -57,6 +56,13 @@ public final class Section_Jails {
 	public  final _boolean denyMovementWhileJailed=new _boolean(true);
 	
 	@Option(
+			autoComment={"the delay (in seconds) before a player is sent to jail",
+					"This is to help stop players jailing their own players while in combat."},
+			oldAliases_alwaysDotted={},
+			realAlias_inNonDottedFormat = "delayBeforeSentToJail" )
+		public  final _int delayBeforeSentToJail = new _int(0);
+
+	@Option(
 		autoComment={"if true, it'll require leaders/officers to also have "+permissionNodeNameForCanJailUnjail+" permission node"
 		,"before they will be allowed to jail/unjail"	
 		},
@@ -83,7 +89,7 @@ public final class Section_Jails {
 	
 	public final static String permissionNodeNameForCanJailUnjail="factionsplus.jailunjail";
 	
-	public final static boolean canJailUnjail(FPlayer whoCan) {
+	public final static boolean canJailUnjail(UPlayer whoCan) {
 		return ( 
 				( Utilities.isOp( whoCan ) )
 				||

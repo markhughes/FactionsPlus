@@ -13,38 +13,34 @@ import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdRules extends FPCommand {
 
 	
 	public CmdRules() {
-		this.aliases.add("rules");
+		
+		this.aliases.add( "rules" );
 		
 		this.errorOnToManyArgs = false;
 		
-		this.permission = Permission.HELP.node;
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
-		this.disableOnLock = false;
-		
-		senderMustBePlayer = true;
-		senderMustBeMember = false;
-		
-		this.setHelpShort("view Faction rules");
+		this.setHelp( "view Faction rules" );
+		this.setDesc( "view Faction rules" );
 		
 	}
 	
 	@Override
 	public void performfp() {
-		if(!FactionsPlus.permission.has(sender, "factionsplus.viewrules")) {
-			fme.msg(ChatColor.RED + "No permission!");
+		if( ! FactionsPlus.permission.has( sender, "factionsplus.viewrules" ) ) {
+			msg( ChatColor.RED + "No permission!" );
 			return;
 		}
 		
-		FactionsPlusRules.sendRulesToPlayer(fme);
+		FactionsPlusRules.sendRulesToPlayer(usender);
 
 	}
 

@@ -9,48 +9,243 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.FType;
+import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.MushroomCow;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.event.FPlayerJoinEvent;
-import com.massivecraft.factions.event.FPlayerLeaveEvent;
-import com.massivecraft.factions.event.FactionDisbandEvent;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.event.FactionsEventCreate;
+import com.massivecraft.factions.event.FactionsEventMembershipChange;
+import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.mcore.ps.PS;
 
 public class CoreListener implements Listener{
 	public static Server fp;
 	
+	@EventHandler(ignoreCancelled=true)
+	public void onVillagerTrade( InventoryClickEvent event ) {
+		
+		// is a player, ya?
+		if( event.getWhoClicked() instanceof Player ) {
+			
+			UPlayer uPlayer = UPlayer.get( event.getWhoClicked() );
+			
+			// detects villager trade with player
+			if( event.getInventory().getType() == InventoryType.MERCHANT && !uPlayer.isUsingAdminMode() ) {
+				
+				Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) );
+				
+				if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+					
+					event.setCancelled( true );
+					uPlayer.msg( ChatColor.RED + "You can not do that in another Factions territory." );
+					
+					return; // No further checks required 
+					
+				}
+			}
+		}
+		
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerCreateFaction( FactionsEventCreate event ) {
+		
+		if(Config._factions.factionNameFirstLetterForceUpperCase._ ) {
+			
+			String upperFactionName = Character.toUpperCase(event.getFactionName().charAt(0)) + event.getFactionName().substring(1);
+			
+			Faction wFaction = Faction.get( event.getFactionId() );
+			
+			wFaction.setName( upperFactionName );
+			
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerFish( PlayerFishEvent event ) {
+		
+		if( Config._extras._protection.stricterFarmingProtection._ ) {
+			
+			Player player = event.getPlayer();
+			UPlayer uPlayer = UPlayer.get( player );
+			
+			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
+			
+			// Are they in their own Faction land, or in wilderness
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+				
+				event.setCancelled( true );
+				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+				
+				return; // No further checks required 
+				
+			}
+	        
+			// Check location of hook (hook could be in, player could be out) 
+			
+			Faction factionAtHook = BoardColls.get().getFactionAt( PS.valueOf( event.getHook().getLocation() ) ); 
+			
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+				
+				event.setCancelled( true );
+				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+				
+			}
+		}
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerInteractEntity( PlayerInteractEntityEvent event ) {
+		
+	    Player player = event.getPlayer();
+	    
+	    Entity currentEntity = event.getRightClicked();
+	    // disable animal stealing of horses (with a leash) / pigs (also stops inventory stealing - I think)
+	    if ( 
+	    		( event.getRightClicked() instanceof Horse && player.getItemInHand().getType().equals( Material.LEASH ) ) ||
+	    		event.getRightClicked() instanceof Pig || 
+	    		event.getRightClicked() instanceof Horse 
+
+	    ) {
+	    	
+	    	Faction entityAt = BoardColls.get().getFactionAt( PS.valueOf( currentEntity.getLocation() ));
+	    	
+	    	if( entityAt != UPlayer.get( player).getFaction() ) {
+	    		
+	    		player.sendMessage( "You can not interact with that animal in this Factions land." );
+	    		player.updateInventory();
+	    		
+	    	}
+	    	
+	    }
+
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerMilkEvent( PlayerInteractEntityEvent event ) {
+		Player player = event.getPlayer();
+		
+		if( ( 
+			(event.getRightClicked() instanceof Cow && player.getItemInHand().getType().equals( Material.BUCKET ) || ( event.getRightClicked() instanceof MushroomCow && player.getItemInHand().getType().equals( Material.BOWL ) ) ) )
+			&& Config._extras._protection.stricterFarmingProtection._
+		) {
+			
+			UPlayer uPlayer = UPlayer.get( player );
+			
+			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
+			
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+				
+				event.setCancelled( true );
+				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+				
+				return; // No further checks required 
+			}
+			
+			// Also check location of cow (player could be outside area, but cow inside / using hacks)
+			
+			Faction factionAtCow = BoardColls.get().getFactionAt( PS.valueOf( event.getRightClicked().getLocation() ) );
+			
+			if( factionAtCow != uPlayer.getFaction() && !factionAtCow.isNone() && !Utilities.isSafeZone( factionAtCow ) ) {
+				
+				event.setCancelled( true );
+				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+				
+				return;
+				
+			}
+		}
+	}
+    
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerShearEntityEvent(PlayerShearEntityEvent event) {
+		
+	    if ( event.getEntity() instanceof Sheep && Config._extras._protection.stricterFarmingProtection._) {
+	    	
+	        Player player = event.getPlayer();
+	        UPlayer uPlayer = UPlayer.get( player );
+	        
+	        Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
+	        
+	        // Are they in their own Faction land, or in wilderness
+	        if( factionAt != uPlayer.getFaction() && !factionAt.isNone() ) {
+	        	
+	        	event.setCancelled( true );
+	        	player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+	        	
+	        	return; // No further checks required
+	        }
+	        
+	        // Check location of sheep (sheep could be inside, player could be outside / using hacks)
+			
+			Faction factionAtSheep = BoardColls.get().getFactionAt( PS.valueOf( event.getEntity().getLocation() ) );
+			
+			if( factionAtSheep != uPlayer.getFaction() && !factionAtSheep.isNone() && !Utilities.isSafeZone( factionAtSheep ) ) {
+		        
+				event.setCancelled( true );
+				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
+				
+			}
+	    }
+		
+	}
+		
+	@EventHandler
+	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		if( event.getPlayer().isOp() ) {
+			
+			if( FP.update_avab ) {
+				
+				event.getPlayer().sendMessage( ChatColor.GOLD + "[FactionsPlus] " + ChatColor.WHITE + "Attention op: There is an update available for FactionsPlus! Please upgrade ASAP." );
+			
+			}
+			
+		}
+		
+	}
+		
 	@EventHandler
 	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-		if(event.isCancelled()) {
+		if( event.isCancelled() ) {
 			return;
 		}
 
 		Player player = event.getPlayer();
-
-		//FPlayer fplayer = FPlayers.i.get(player.getName());
-
-//		if ((event.getMessage().equalsIgnoreCase("/f reload")) || (event.getMessage().toLowerCase().startsWith("/f reload"))) {
-//			event.getPlayer().sendMessage("Yo yo, lets reload FactionsPlus? ;)");
-//		}this had no effect
-		Faction factionHere = Board.getFactionAt(new FLocation(player.getLocation()));
-//FIXME: lots to be fixed here: ie. cache those commands from file instead of open/close on every command, and test timestamp to know when to reload for changes, or only when /f reloadfp
-		if(Utilities.isWarZone( factionHere)) {
+		
+		Faction factionHere = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
+		
+		// TODO: Cache commands, refresh them on reload/restart
+		
+		if( Utilities.isWarZone( factionHere ) ) {
 
 			if (!player.isOp()) {
 				BufferedReader buff=null;
@@ -78,47 +273,40 @@ public class CoreListener implements Listener{
 			}
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onFPlayerJoin(FPlayerJoinEvent event) {
-		if(Config._rules.onFirstJoinFactionShowRules._) {
-			if ( new File(Config.folderFRules+File.separator+event.getFPlayer().getFactionId()+".rules").exists() ) {
-				FactionsPlusRules.sendRulesToPlayer(event.getFPlayer());
-			}
-		}
 		
-	}
-	
 	@EventHandler(priority=EventPriority.MONITOR)
-	public void onFPlayerLeave(FPlayerLeaveEvent event){
-		if (event.isCancelled()){
+	public void onFactionsMembershipChange(FactionsEventMembershipChange event) {
+		
+		// Show rules on join 
+		if( event.getReason() == MembershipChangeReason.JOIN ) {
+			if(Config._rules.onFirstJoinFactionShowRules._) {
+				if ( new File(Config.folderFRules+File.separator+event.getUPlayer().getFactionId()+".rules").exists() ) {
+					FactionsPlusRules.sendRulesToPlayer( event.getUPlayer() );
+				}
+			}
+			
 			return;
 		}
-		//this is called on /f disband for every player, or on player /f leave  or on autoLeaveOnInactivityRoutine
-		//but FPlayer.leave() method is not called on /f disband
 		
-		Faction faction = event.getFaction();
-//		faction.sendMessage( "players: "+faction.getFPlayers().size() );
-		if (faction.getFPlayers().size() == 1) {
-			//then the last player is about to leave which means faction will get disbanded
-			//we then remove all FP data for it
-			//NOTE: this won't trigged on /f disband  aka FactionDisbandEvent
-			removeFPData(faction);
+		// Remove data on leave
+		if( event.getReason() == MembershipChangeReason.LEAVE ) { 
+			Faction faction = event.getUPlayer().getFaction();
+			if (faction.getUPlayers().size() == 1) {
+				// Last player, so remove all data
+				removeFPData(faction);
+			}
+			
+			return;
 		}
-	}
-	
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onFactionDisband(FactionDisbandEvent event){
-		//XXX: Factions doesn't call this event on autodisband faction(ie. when all players auto leave after a time) the data below remains
-		//actually this is a good thing, if they want to recreate the faction next time; but a bad thing if someone else recreates it, they
-		//can then use the warps (if any)
-		//XXX: Factions doesn't call this event when the last person(aka faction admin) leaves the faction via /f leave
 		
-		// Clean up old files used by faction
-		// Announcements, bans, rules, jails, warps, etc
-		Faction faction = event.getFaction();
+		// Remove data on disband 
+		if( event.getReason() == MembershipChangeReason.DISBAND ) {
+			
+			removeFPData( event.getUPlayer().getFaction() );
+			
+			return;
+		}
 		
-		removeFPData(faction);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -126,9 +314,9 @@ public class CoreListener implements Listener{
 		
 		final Player currentPlayer = event.getEntity();
 		
-		FPlayer currentFPlayer = FPlayers.i.get(currentPlayer);
+		UPlayer currentFPlayer = UPlayer.get(currentPlayer);
 		
-		if(Utilities.isWarZone(Board.getFactionAt(new FLocation(currentPlayer.getLocation())))) {
+		if(Utilities.isWarZone(BoardColls.get().getFactionAt(PS.valueOf(currentPlayer.getLocation())))) {
 			
 			if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeathInWarZone")) {
 				return;

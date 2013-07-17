@@ -2,36 +2,32 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Factions;
-//import com.massivecraft.factions.struct;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdToggleState extends FPCommand {
 	
 	public CmdToggleState() {
 		super();
 		
-
-		
 		this.aliases.add("toggle");
 		this.aliases.add("togglestate");
 		
-		//this.requiredArgs.add("state");
 		this.optionalArgs.put("faction", "yours");
+		this.errorOnToManyArgs = false;
 		
-		this.permission = "factionsplus.togglestate.use";//Permission.HELP.node;//
-		this.disableOnLock = false;
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
 		
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
-		
-		this.setHelpShort("changes the Faction between peaceful and normal");
+		this.setHelp("changes the Faction between peaceful and normal");
+		this.setDesc("changes the Faction between peaceful and normal");
 		
 	}
 	
@@ -41,81 +37,64 @@ public class CmdToggleState extends FPCommand {
 	@Override
 	public void performfp() {
 		
-		String factionToggling = this.argAsString(0);
+		String factionToggling = this.arg(0);
 		Faction factiont;
-//		boolean authallow=false;
-		//nvm seems fixed in Essentials-2.9.2 : groupmanager bug, once you set the  "factionsplus.togglestate.others" permission for Default group, reload then
-		//you remove and reload, it's still seen as set/active
 		
-//		System.out.println(""+Utilities.hasPermissionOrIsOp( (Player)sender, new org.bukkit.permissions.Permission("factionsplus.togglestate.others"))
-//			+" vs "+FactionsPlus.permission.has(sender,"factionsplus.togglestate.others"));
-//		if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.use")) {unneeded because this.permission already handles this
-//			sender.sendMessage(ChatColor.RED + "No permission!");
-//			return;
-//		}else {//here if either has that perm or is Op
-//			authallow|=sender.isOp();
-//		}
 		boolean authallow=sender.isOp();
-		factiont = fme.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
+		factiont = usender.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
 
-		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getTag())) ) {
+		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getName())) ) {
 			if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.others")) {
 				sender.sendMessage(ChatColor.RED + "No permission to toggle peaceful for other factions!");
 				return;
-			}else {//here if either has that perm or is Op
+			} else {//here if either has that perm or is Op
 				authallow|=sender.isOp();
 			}
-			//kinda done: investigate what's the desired behaviour here, seems odd...
-			factiont = Factions.i.getByTag( factionToggling);//done: this will NPE later if inexistent faction			
+			
+			factiont = Faction.get( factionToggling );	
+			
 			if (null == factiont) {
-				sender.sendMessage(ChatColor.RED + "The faction `"+factionToggling+"` doesn't exist!");
+				msg(ChatColor.RED + "The faction `"+factionToggling+"` doesn't exist!");
+				
 				return;
-			}else {
-				if ( (!sender.isOp()) && (!Utilities.isNormalFaction(factiont )) ) {
-					sender.sendMessage( ChatColor.RED +"You may not change the state of WarZone/SafeZone/Wilderness" );
+				
+			} else {
+				if ( ( ! sender.isOp()) && ( ! Utilities.isNormalFaction( factiont ) ) ) {
+					msg( ChatColor.RED +"You may not change the state of WarZone/SafeZone/Wilderness" );
+					
 					return;
+					
 				}
 			}
 		}
 		
 		authallow|=
 			( ( Config._peaceful.membersCanToggleState._ )
-				|| ( ( Config._peaceful.leadersCanToggleState._ ) && ( Utilities.isLeader( fme ) ) ) 
-				|| ( ( Config._peaceful.officersCanToggleState._ ) && ( Utilities.isOfficer( fme ) ) ) );
+				|| ( ( Config._peaceful.leadersCanToggleState._ ) && ( Utilities.isLeader( usender ) ) ) 
+				|| ( ( Config._peaceful.officersCanToggleState._ ) && ( Utilities.isOfficer( usender ) ) ) );
 		
 		if ( !authallow ) {
-			sender.sendMessage( ChatColor.RED + "Sorry, you do not have the allowed ranking(in your faction) to do that!" );
+			msg( ChatColor.RED + "Sorry, you do not have the allowed ranking(in your faction) to do that!" );
 			return;
 		}
 
-		
-		
-		//done(presumably /f peaceful uses a specific permission node which is unset by default):
-		//using "/f peaceful factiontag" from Factions will bypass the payment employed for "/f togglestate" here
-		//see if we're considering peaceful and togglestate the same thing, or they use different permissions ?
-		//ie. maybe only admins can use peaceful but any others can use togglestate (if different permissions are in effect)
-		
-		
-		if(!Utilities.isPeaceful(factiont)) {//done: is economy enabled ?!
-			//if faction wasn't already peaceful, then we set it
+		if( ! Utilities.isPeaceful( factiont ) ) {
 			if ( (!Config._economy.isHooked())
-					|| (payForCommand(Config._economy.costToToggleUpPeaceful._, "to set faction to peaceful", 
-						"for setting faction `"+factiont.getTag()+"` to peaceful")) ) {
+					|| (Utilities.doFinanceCrap(Config._economy.costToToggleUpPeaceful._, "adding peaceful flag to " + factiont.getName(), usender)) ) {
 				
-//				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.TRUE );
 				Utilities.setPeaceful(factiont);
 				
-				sender.sendMessage("You have toggled the faction `"+factiont.getTag()+"` to Peaceful!");
+				msg("You have toggled the faction `"+factiont.getName()+"` to Peaceful!");
 			}
 		} else {
-			//faction was peaceful, we now remove this flag
 			if ( (!Config._economy.isHooked()) 
-					|| (payForCommand(Config._economy.costToToggleDownPeaceful._, "to remove the peaceful status", 
-						"for removing the peaceful flag from faction `"+factiont.getTag()+"`")) ) {
-				Bridge.factions.setFlag( factiont, FactionsAny.FFlag.PEACEFUL,  Boolean.FALSE );
-				sender.sendMessage("You have removed peaceful status from faction `"+factiont.getTag()+"` !");
+					|| ( Utilities.doFinanceCrap(Config._economy.costToToggleDownPeaceful._, "removed peaceful flag from " + factiont.getName(), usender ) ) ) {
+			
+				factiont.setFlag(FFlag.PEACEFUL, false);
+				
+				msg("You have removed peaceful status from faction `"+factiont.getName()+"` !");
 			}
 		}
 		
-	}//perform
+	} 
 }

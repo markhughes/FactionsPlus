@@ -12,21 +12,31 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.FType;
+import markehme.factionsplus.references.FP;
 import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.Trade;
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.FPerm;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.TerritoryAccess;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UConf;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.integration.Econ;
+import com.massivecraft.mcore.MCoreConfColl;
 
 
 public abstract class Utilities {
@@ -134,7 +144,7 @@ public abstract class Utilities {
 	/* ********** JAIL RELATED ********** */
 
 	public static boolean isJailed(Player thePlayer) {
-		FPlayer fplayer = FPlayers.i.get(thePlayer.getName());
+		UPlayer fplayer = UPlayer.get(thePlayer.getName());
 		
 		if(fplayer == null) return false;
 		
@@ -157,12 +167,12 @@ public abstract class Utilities {
 	
 	/* ********** FACTIONS RELATED ********** */
 
-	public static boolean isOfficer(FPlayer fplayer) {
-		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.OFFICER );
+	public static boolean isOfficer(UPlayer uPlayer) {
+		return( uPlayer.getRole().equals( Rel.OFFICER ) );
 	}
 
-	public static boolean isLeader(FPlayer fplayer) {
-		return Bridge.factions.getRole( fplayer).equals( FactionsAny.Relation.LEADER );
+	public static boolean isLeader(UPlayer uPlayer) {
+		return( uPlayer.getRole().equals( Rel.LEADER ) );
 	}
 
 	
@@ -170,11 +180,11 @@ public abstract class Utilities {
 	 * @param fplayer
 	 * @return null if offline
 	 */
-	public final static Player getOnlinePlayerExact(FPlayer fplayer) {
-		if (null == fplayer) {
+	public final static Player getOnlinePlayerExact(UPlayer uPlayer) {
+		if (null == uPlayer) {
 			return null;
 		}
-		return Utilities.getOnlinePlayerExact( fplayer.getId() );
+		return Utilities.getOnlinePlayerExact( uPlayer.getId() );
 	}
 	
 	/**
@@ -196,32 +206,37 @@ public abstract class Utilities {
 //		}
 //	}
 
+	
 	public static void addPower(Player player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() + amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPower(Double.valueOf(uPlayer.getPower() + amount));
 	}
 
-	public static void addPower(FPlayer player, double amount) {
-		player.setPowerBoost(player.getPowerBoost() + amount);
+	public static void addPower(UPlayer uPlayer, double amount) {
+		uPlayer.setPower(Double.valueOf(uPlayer.getPower() + amount));
 	}
 
+	@SuppressWarnings("boxing")
 	public static void addPower(String player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() + amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPower(uPlayer.getPower() + amount);
 	}
 
+	@SuppressWarnings("boxing")
 	public static void removePower(Player player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() - amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPower(uPlayer.getPower() - amount);
 	}
 
-	public static void removePower(FPlayer player, double amount) {
-		player.setPowerBoost(player.getPowerBoost() - amount);
+	@SuppressWarnings("boxing")
+	public static void removePower(UPlayer uPlayer, double amount) {
+		uPlayer.setPower(uPlayer.getPower() - amount);
 	}
 
+	@SuppressWarnings("boxing")
 	public static void removePower(String player, double amount) {
-		FPlayer fplayer = FPlayers.i.get(player);
-		fplayer.setPowerBoost(fplayer.getPowerBoost() - amount);
+		UPlayer uPlayer = UPlayer.get(player);
+		uPlayer.setPower(uPlayer.getPower() - amount);
 	}
 
 	public static int getCountOfWarps(Faction faction) {
@@ -323,23 +338,53 @@ public abstract class Utilities {
 		return false;
 	}
 	
-	public static boolean isOp(FPlayer fplayer) {
-		return Utilities.getOnlinePlayerExact(fplayer).isOp();
+	public static boolean isOp(UPlayer uPlayer) {
+		return Utilities.getOnlinePlayerExact( uPlayer ).isOp();
 	}
 	
-	public static boolean isWarZone(Faction faction)
-	{
-		return faction.getId().equals(ID_WARZONE);
+	
+	public static boolean isWarZone( Faction faction ) {
+		
+		if( FType.valueOf( faction ) == FType.WARZONE ) {
+			
+			return true;
+			
+		}
+		
+		return false;
+		
 	}
 
-	public static boolean isSafeZone(Faction faction)
-	{
-		return faction.getId().equals(ID_SAFEZONE);
-	}
+	public static boolean isSafeZone( Faction faction ) {
+		
+		if( FType.valueOf( faction ) == FType.SAFEZONE ) {
+			
+			return true;
+			
+		}
+		
+		return false;	}
 
-	public static boolean isWilderness(Faction faction)
-	{
-		return faction.getId().equals(ID_WILDERNESS);
+	public static boolean isWilderness( Faction faction ) {
+		
+		if( FType.valueOf( faction ) == FType.WILDERNESS ) {
+			
+			return true;
+			
+		}
+		
+		return false;		
+	}
+	
+	public static final boolean isPlayerFaction( Faction faction ) {
+		
+		if( FType.valueOf( faction ) == FType.FACTION ) {
+			
+			return true;
+			
+		}
+		
+		return false;			
 	}
 
 	/**
@@ -351,13 +396,9 @@ public abstract class Utilities {
 		return !isWarZone( faction ) && !isSafeZone(faction) && !isWilderness( faction );
 	}
 	
-	private static final int margin=10;//ie. 12.345 => 123 if margin is 10 or 1234 if margin is 100 ie. multiply by margin & truncate .*
+	private static final int margin = 10;
 	
-	//XXX:don't change the following 3 constants:
-	public static final String	ID_WARZONE	= "-2";
-	public static final String	ID_SAFEZONE	= "-1";
-	public  static final String	ID_WILDERNESS	= "0";
-	
+
 	public static boolean isJustLookingAround(Location from, Location to) {
 		assert Q.nn( from );
 		assert Q.nn( to );
@@ -447,25 +488,25 @@ public abstract class Utilities {
 	}
 	
 	public static final void setPeaceful(Faction faction) {
-		setPeaceful(faction, Boolean.TRUE);
+		setPeaceful(faction, true);
 	}
 
-	public static final void setPeaceful(Faction faction, Boolean state) {
+	public static final void setPeaceful(Faction faction, boolean state) {
 		assert Q.nn( faction );
-		Bridge.factions.setFlag( faction, FactionsAny.FFlag.PEACEFUL,  state );
+		faction.setFlag(FFlag.PEACEFUL, state);
 	}
 	
 	public static final boolean isPeaceful(Faction faction) {
-		return Bridge.factions.getFlag( faction, FactionsAny.FFlag.PEACEFUL );
+		return( faction.getFlag( FFlag.PEACEFUL ) );
 	}
+	
 	
 	/**
 	 * use this method instead of Conf.wildernessPowerLoss
 	 * @return
 	 */
 	public static final boolean confIs_wildernessPowerLoss() {
-		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
-		return Bridge.factions.getFlag(Factions.i.getNone(), FactionsAny.FFlag.POWERLOSS);
+		return( Faction.get("0").getFlag(FFlag.POWERLOSS) );
 	}
 	
 	/**
@@ -473,8 +514,33 @@ public abstract class Utilities {
 	 * @return
 	 */
 	public static final boolean confIs_warzonePowerLoss() {
+		// TODO: Re-instate this
+		return false;
 		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
-		return Bridge.factions.getFlag(Factions.i.get(ID_WARZONE), FactionsAny.FFlag.POWERLOSS);
+		//return( Faction.get( "WarZone" ).getFlag(FFlag.POWERLOSS) );
+		
+	}
+	
+	/**
+	 * 
+	 * @param Cost of action
+	 * @param because Mark did x
+	 * @param UPlayer
+	 * @return boolean
+	 */
+	public static boolean doFinanceCrap(double cost, String sinceDidX, UPlayer player) {
+		if ( !Config._economy.isHooked() || ! UConf.get(player).econEnabled || Utilities.getOnlinePlayerExact(player) == null || cost == 0.0) {
+			return true;
+		}
+		
+		if( UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction() ) {
+			return Econ.modifyMoney(player.getFaction(), -cost, sinceDidX);
+		} else {
+			return Econ.modifyMoney(player, -cost, sinceDidX);
+		}
 	}
 	
 }
+
+
+

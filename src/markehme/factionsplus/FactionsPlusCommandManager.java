@@ -5,9 +5,8 @@ import markehme.factionsplus.Cmds.CmdAnnounce;
 import markehme.factionsplus.Cmds.CmdBan;
 import markehme.factionsplus.Cmds.CmdClearLocks;
 import markehme.factionsplus.Cmds.CmdDebug;
-import markehme.factionsplus.Cmds.CmdFC;
 import markehme.factionsplus.Cmds.CmdFactionHome;
-import markehme.factionsplus.Cmds.CmdGC;
+import markehme.factionsplus.Cmds.CmdFactionNeed;
 import markehme.factionsplus.Cmds.CmdJail;
 import markehme.factionsplus.Cmds.CmdListWarps;
 import markehme.factionsplus.Cmds.CmdMoneyTop;
@@ -23,11 +22,11 @@ import markehme.factionsplus.Cmds.CmdUnJail;
 import markehme.factionsplus.Cmds.CmdUnban;
 import markehme.factionsplus.Cmds.CmdUnsetJail;
 import markehme.factionsplus.Cmds.CmdWarp;
-import markehme.factionsplus.FactionsBridge.Bridge;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 
-import com.massivecraft.factions.P;
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.CmdFactionsMoney;
 import com.massivecraft.factions.cmd.FCommand;
 
 
@@ -84,19 +83,18 @@ public class FactionsPlusCommandManager {
 			addSC(new CmdRules());
 		}
 		
-		addSC(new CmdFC());
-		addSC(new CmdGC());
-		
 		// Region based Commands
 		//addSC(new CmdPlot());
-		
-		
+
 		if (Config._economy.isHooked()){
-			Bridge.factions.addSubCommand(P.p.cmdBase.cmdMoney, new CmdMoneyTop());
+			Factions.get().getOuterCmdFactions().cmdFactionsMoney.addSubCommand(new CmdMoneyTop());
 		}
 		
 		// New Admin commands 
 		addSC(new CmdFactionHome());
+		
+		// General Additional Commands
+		addSC(new CmdFactionNeed());
 		
 		addSC(new CmdDebug());
 		
@@ -110,12 +108,11 @@ public class FactionsPlusCommandManager {
 //		Bridge.factions.addSubCommand(P.p.cmdBase.cmdPower, new CmdPowPow());
 		addSC(new CmdPowSettings());
 		
-		//last:
-		Bridge.factions.finalizeHelp(); 
+		// finalizeHelp() not required in 2.x 
 	}
 
 	private static final void addSC(FCommand subCommand) {
-		Bridge.factions.addSubCommand(P.p.cmdBase, subCommand);
+		Factions.get().getOuterCmdFactions().addSubCommand(subCommand);
 	}
 	
 }

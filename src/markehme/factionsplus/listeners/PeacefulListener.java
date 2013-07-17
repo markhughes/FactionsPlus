@@ -6,18 +6,21 @@ import markehme.factionsplus.config.Config;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.event.FPlayerJoinEvent;
+import com.massivecraft.factions.event.FactionsEventMembershipChange;
+import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
 
 public class PeacefulListener implements Listener{
 	@EventHandler
-	public void onFPlayerJoinEvent(FPlayerJoinEvent event) {
-		if(event.isCancelled()) {
+	public void onFPlayerJoinEvent(FactionsEventMembershipChange event) {
+		if(event.isCancelled() || event.getReason() != MembershipChangeReason.JOIN) {
 			return;
 		}
+		
 		int boostValue = Config._peaceful.powerBoostIfPeaceful._ ;
+		
 		if(boostValue> 0) {
-			if(Utilities.isPeaceful( event.getFaction() )) { // done: Prepare for 1.7.x and the removal of isPeaceful()
-				Utilities.addPower(event.getFPlayer(),boostValue);
+			if(Utilities.isPeaceful( event.getUSender().getFaction() )) {
+				Utilities.addPower(event.getUSender(),boostValue);
 			}
 		}
 	}

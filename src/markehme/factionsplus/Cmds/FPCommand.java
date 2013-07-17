@@ -14,7 +14,7 @@ public abstract class FPCommand extends FCommand{
 	@Override
 	public final void perform() {//XXX: final to avoid overriding the wrong one
 		if (!FactionsPlus.instance.isEnabled()) {
-			sender.sendMessage( ChatColor.RED+"This command is unavailable while FactionsPlus is not enabled." );
+			sender.sendMessage( ChatColor.RED + "This command is unavailable while FactionsPlus is not enabled." );
 			return;
 		}
 		performfp();

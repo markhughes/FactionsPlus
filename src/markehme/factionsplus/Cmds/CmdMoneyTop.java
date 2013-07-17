@@ -17,10 +17,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.FactionColl;
+import com.massivecraft.factions.entity.FactionColls;
+import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.factions.struct.Permission;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.money.Money;
 
 
 
@@ -100,19 +105,20 @@ public class CmdMoneyTop extends FPCommand {
 	
 	public CmdMoneyTop() {
 		this.aliases.add( "top" );
+		
 		this.optionalArgs.put( "page", "1" );
+		this.errorOnToManyArgs = true;
 		
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
 		
-		this.setHelpShort( "show the highest ranked Factions by money" );
-		
-		senderMustBePlayer = false;
-		senderMustBeMember = false;
+		this.setHelp( "show the highest ranked Factions by money" );
+		this.setDesc( "show the highest ranked Factions by money" );
+	
 	}
 	
-	private static boolean	alreadyIn	= false;
-	private static boolean	sorted=false;
+	private static boolean	alreadyIn		= false;
+	private static boolean	sorted			= false;
 	
 	private static final RunnableWithParams<CommandSender,  Integer>  sortingCode=
 			new RunnableWithParams<CommandSender,Integer>(null){
@@ -129,8 +135,7 @@ public class CmdMoneyTop extends FPCommand {
 			// by predicting how long this sort will take. and presuming that this command can be called again while we're
 			// already in it
 			mayNOTClean();
-				
-				Collection<Faction> all = Factions.i.get();
+				Collection<FactionColl> all = FactionColls.get().getColls();
 				setStatus(all.size());
 				sender.sendMessage( "Sorting " + all.size() + " factions..." );
 				scoreBoard = Arrays.copyOf( all.toArray(), all.size() );
@@ -139,9 +144,11 @@ public class CmdMoneyTop extends FPCommand {
 //				} catch ( InterruptedException e ) {
 //					e.printStackTrace();
 //				}
+				
+				
 				for ( int i = 0; i < scoreBoard.length; i++ ) {
 					Faction f = (Faction)scoreBoard[i];
-					double bal = Config._economy.getBalance( f.getAccountId() );
+					double bal = Money.get(f);
 					scoreBoard[i] = new DualPack<Faction, Double>( f, bal );
 				}
 			
@@ -183,7 +190,7 @@ public class CmdMoneyTop extends FPCommand {
 				sender.sendMessage( "Economy is unavailable or disabled in FactionsPlus configs" );
 				return;
 			}else {
-				if (!Econ.shouldBeUsed()) {
+				if (!Econ.isEnabled(usender)) {
 					//XXX: even though we can still show the top without it!! at this point
 					sender.sendMessage( "Economy is disabled in Factions plugin" );
 					return;
@@ -191,7 +198,7 @@ public class CmdMoneyTop extends FPCommand {
 			}
 			
 			//get the page number requested
-			String pageStr = this.argAsString( 0 );
+			String pageStr = this.arg( 0 );
 			int page = 1;
 			try {
 				page = Integer.parseInt( pageStr );
@@ -235,7 +242,8 @@ public class CmdMoneyTop extends FPCommand {
 		}//sync
 	}
 	@SuppressWarnings( "boxing" )
-	public static final void showPage(CommandSender sender, int page) {
+	public static final void showPage(CommandSender sender, int thePage) {
+		int page = thePage;
 		assert null != scoreBoard;
 		assert null != sender;
 		assert page>=1:page;
@@ -257,7 +265,7 @@ public class CmdMoneyTop extends FPCommand {
 		for ( int i = startAt; i < endAt; i++ ) {
 			DualPack<Faction, Double> d = (DualPack<Faction, Double>)scoreBoard[i];
 			Faction f = d.getFirst();
-			maxSeenTagLength=Math.max(maxSeenTagLength, ChatColor.stripColor( f.getTag() ).length());
+			maxSeenTagLength=Math.max(maxSeenTagLength, ChatColor.stripColor( f.getName() ).length());
 			maxSeenIdLength=Math.max(maxSeenIdLength, f.getId().length());
 			maxSeenMoneyLength=Math.max(maxSeenMoneyLength, Config._economy.getFormatted( d.getSecond().doubleValue()).length() );
 			maxSeenPositionLen=Math.max(maxSeenPositionLen, Integer.toString( i+1).length() );
@@ -271,7 +279,7 @@ public class CmdMoneyTop extends FPCommand {
 			sender.sendMessage(
 				String.format("%s%s%"+maxSeenPositionLen+"d. %s%"+maxSeenTagLength+"s%s [%"+maxSeenIdLength+"s] %s: %s%"+
 			maxSeenMoneyLength+"s", 
-					prefixing, ChatColor.AQUA, i+1, ChatColor.RESET, f.getTag(), ChatColor.DARK_BLUE, f.getId(),
+					prefixing, ChatColor.AQUA, i+1, ChatColor.RESET, f.getName(), ChatColor.DARK_BLUE, f.getId(),
 					ChatColor.RESET, ChatColor.YELLOW, Config._economy.getFormatted( d.getSecond().doubleValue()))
 			);
 		}

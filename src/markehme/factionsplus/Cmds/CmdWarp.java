@@ -14,14 +14,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import markehme.factionsplus.EssentialsIntegration;
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
-import markehme.factionsplus.FactionsBridge.FactionsAny.Relation;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,15 +26,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.integration.EssentialsFeatures;
-import com.massivecraft.factions.struct.Permission;
-import com.massivecraft.factions.zcore.util.SmokeUtil;
+import com.earth2me.essentials.EssentialsPlayerListener;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.mcore.util.SmokeUtil;
 
 public class CmdWarp extends FPCommand {
 	public CmdWarp() {
@@ -46,64 +43,67 @@ public class CmdWarp extends FPCommand {
 		this.requiredArgs.add("name");
 		this.optionalArgs.put("password", "string");
 		this.optionalArgs.put("faction", "string");
-
-		this.permission = Permission.HELP.node;
-		this.disableOnLock = false;
 		this.errorOnToManyArgs = false;
 
-		senderMustBePlayer = true;
-		senderMustBeMember = true;
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
 
-		this.setHelpShort("warps to a specific warp");
+		this.setHelp("warps to a specific warp");
+		this.setDesc("warps to a specific warp");
 
 	}
 
 	@Override
 	public void performfp() {
-		String warpname = this.argAsString(0);
-		String setPassword = null;
+		String warpname = this.arg(0);
+		String setPassword = "nullvalue";
 
-		if(this.argAsString(1) != null) {
-			if(this.argAsString(1) != "-") {
-				setPassword = this.argAsString(1);
+		if(this.arg(1) != null) {
+			if(this.arg(1) != "-") {
+				setPassword = this.arg(1);
 			}
-		} else {
-			setPassword = "nullvalue";
 		}
-		
 
-		if(!FactionsPlus.permission.has(sender, "factionsplus.warp")) {
-			sender.sendMessage(ChatColor.RED + "No permission!");
+		if(!FP.permission.has(sender, "factionsplus.warp")) {
+			msg(ChatColor.RED + "No permission!");
 			return;
 		}
-
-
-		Player player = (Player)sender;
-
-		FPlayer fplayer = FPlayers.i.get(player);
-
-		Faction currentFaction;
 		
-		if(this.argAsString(2) != null) {
-			currentFaction = Factions.i.getByTag(this.argAsString(2));
+		Faction currentFaction;
+				
+		if(this.arg(2) != null) {
+			currentFaction = Faction.get(this.arg(2));
 			
-			if( currentFaction.getId() != fme.getFactionId() && !fme.hasAdminMode() ) {
-				if(!FactionsPlus.permission.has(sender, "factionsplus.warpotherfactions" ) ) {
+			if(currentFaction == null ) {
+				msg( "The faction " + this.arg(2) + " could not be found." );
+				return; 
+			}
+			
+			if( currentFaction.getId() != usender.getFactionId() && !usender.isUsingAdminMode() ) {
+				if(!FP.permission.has(sender, "factionsplus.warpotherfactions" ) ) {
 					msg( "You do not have permission to use other Factions warps. (factionsplus.warpotherfactions)" );
 					return;
 				}
 			}
 		} else {
-			currentFaction = fme.getFaction();
+			currentFaction = usender.getFaction();
 		}
+		
+		if( (! usender.hasFaction() && currentFaction != usender.getFaction() ) || currentFaction.isNone() ) {
+			
+			msg( ChatColor.WHITE + "You are currently not in a Faction." );
+			
+		}
+
+		
 		
 		File currentWarpFile = new File(Config.folderWarps,  currentFaction.getId());
 
 		World world;
 
 		// Check if player can teleport from enemy territory
-		if(!Config._warps.warpTeleportAllowedFromEnemyTerritory._ && fplayer.isInEnemyTerritory() ){
-			fplayer.msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
+		if(!Config._warps.warpTeleportAllowedFromEnemyTerritory._ && usender.isInEnemyTerritory() ){
+			msg("<b>You cannot teleport to your faction warp while in the territory of an enemy faction.");
 			return;
 		}
 
@@ -119,32 +119,30 @@ public class CmdWarp extends FPCommand {
 
 		// Check for enemies nearby
 		// if player is not in a safe zone or their own faction territory, only allow teleport if no enemies are nearby
-		Location loc = player.getLocation().clone();
+		Location loc = me.getLocation().clone();
 		
-		if
-		(
-				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(Board.getFactionAt(new FLocation(loc))) 
-				&& ( ! fplayer.isInOwnTerritory()
-						|| ( fplayer.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory._))){
+		if(
+				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(BoardColls.get().getFactionAt(PS.valueOf(loc))) 
+				&& ( ! usender.isInOwnTerritory()
+						|| ( usender.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory._))){
 			World w = loc.getWorld();
 			double x = loc.getX();
 			double y = loc.getY();
 			double z = loc.getZ();
 
-			for (Player playa : me.getServer().getOnlinePlayers())
-			{
+			for (Player playa : me.getServer().getOnlinePlayers()) {
 				if (playa == null || !playa.isOnline() || playa.isDead() || playa.getWorld() != w)
 					continue;
 
-				FPlayer fp = FPlayers.i.get(playa);
-				if (fp.equals(fme)) {
+				UPlayer fp = UPlayer.get(playa);
+				
+				if (fp.equals(usender)) {
 					continue;
 				}
 				
-				if ( ! FactionsAny.Relation.ENEMY.equals( 
-					Bridge.factions.getRelationBetween( fplayer, fp ) 
-					)) {
-					continue;//if not enemies, continue
+				
+				if ( ! fp.getRelationTo(usender).equals (Rel.ENEMY ) ) {
+					continue;
 				}
 
 				Location l = playa.getLocation();
@@ -157,14 +155,21 @@ public class CmdWarp extends FPCommand {
 				if (dx > max || dy > max || dz > max)
 					continue;
 
-				fplayer.msg("<b>You cannot teleport to your faction warp while an enemy is within " + max+ " blocks of you.");
+				msg("<b>You cannot teleport to your faction warp while an enemy is within " + max+ " blocks of you.");
 				return;
 			}
 		}
 
 		if (!currentWarpFile.exists()) {
-			sender.sendMessage(ChatColor.RED + "Your faction has no warps!");
-
+			if(currentFaction != usender.getFaction() ) {
+				
+				msg( ChatColor.RED + currentFaction.getName() + " has no warps!" );
+				
+			} else {
+				
+				msg( ChatColor.RED + "Your faction has no warps!" );
+				
+			}
 			return;
 		}
 		
@@ -196,7 +201,7 @@ public class CmdWarp extends FPCommand {
 					if(warp_data.length == 8) {
 						if(warp_data[7] != "nullvalue") {
 							if(!setPassword.trim().equals(warp_data[7].trim())) {
-								sender.sendMessage(FactionsPlusTemplates.Go("warp_incorrect_password", null ));
+								msg(FactionsPlusTemplates.Go("warp_incorrect_password", null ));
 								
 								return;
 							}
@@ -205,19 +210,19 @@ public class CmdWarp extends FPCommand {
 
 					Location newTel = new Location(world, x, y, z, Y, playa);
 					
-					String ownfid = fplayer.getFactionId();
+					String ownfid = usender.getFactionId();
 					
 					int count = 0;
 					
 					do {
-						FLocation warpFLocation = new FLocation( newTel );
-						String warpatFID = Board.getIdAt( warpFLocation );
+						PS warpFLocation = PS.valueOf( newTel );
+						String warpatFID = BoardColls.get().getFactionAt( warpFLocation ).getId();
 						if ( !ownfid.equalsIgnoreCase( warpatFID ) ) {
 							if ( Config._warps.mustBeInOwnTerritoryToCreate._ ) {
 								// the the destination warp should be in player's own faction's territory, else deny tp-ing to it
 								// XXX: this is a workaround for 1. not removing warps that violate this constraint(assuming it changed)...
 								// 2. disbanding faction or unclaiming land won't remove the warp
-								fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
+								usender.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
 									+ ( 0 < count ? "will make you land outside of" : "is not in" )
 									+ " your faction territory."+(0<count?" <i>(because it's obstructed)":"") );
 									if( Config._warps.removeWarpIfDeniedAccess._ ) {
@@ -260,83 +265,94 @@ public class CmdWarp extends FPCommand {
 											 System.out.println("[FactionsPlus] Cannot rename " + currentWarpFileTMP.getName() + " to " + currentWarpFile.getName());
 											 return;
 										 }
-										String[] aargsa = new String[1];
-										aargsa[0] = warpname;
+										String[] aargsa = { warpname };
 											
-										player.sendMessage(FactionsPlusTemplates.Go("warped_removed", aargsa ));
+										msg(FactionsPlusTemplates.Go("warped_removed", aargsa ));
 										
 										 //fplayer.msg( "The warp " + ChatColor.WHITE + warpname + " was removed." );
 									}
 										
 								return;
 							} else {// you can land anywhere if the 3 config options allows it below:
-								Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(), Board.getFactionAt( warpFLocation ) );
+								Rel rel = usender.getFaction().getRelationTo(BoardColls.get().getFactionAt( warpFLocation ) );
 								if (
-										((Config._warps.denyWarpToEnemyLand._) && (FactionsAny.Relation.ENEMY.equals( rel )))
-										||((Config._warps.denyWarpToAllyLand._) && (FactionsAny.Relation.ALLY.equals( rel )))
+										((Config._warps.denyWarpToEnemyLand._) && (Rel.ENEMY.equals( rel )))
+										||((Config._warps.denyWarpToAllyLand._) && (Rel.ALLY.equals( rel )))
 										||((Config._warps.denyWarpToNeutralOrTruceLand._) && 
-												(FactionsAny.Relation.NEUTRAL.equals( rel )
-												|| FactionsAny.Relation.NEUTRAL.equals( rel )) )
-									){
-									fplayer.msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
+												(Rel.NEUTRAL.equals( rel )
+												|| Rel.NEUTRAL.equals( rel )) )
+									) {
+									msg( "<b>You cannot teleport to warp " + ChatColor.WHITE + warpname + " <b>because it "
 											+ ( 0 < count ? "will make you land inside of" : "is in" )
 											+ " "+ChatColor.WHITE+rel+"<b> faction territory."+(0<count?" <i>(because it's obstructed)":"") );
 										return;
 								}
 							}
 						}
-						newTel = EssentialsIntegration.getSafeDestination( newTel );
+						try {
+							
+							newTel = EssentialsIntegration.getSafeDestination( newTel );
+							
+						} catch(NoClassDefFoundError e) {
+							
+							msg(ChatColor.RED + "Error: Essentials is out of date. Inform server admin to upgrade.");
+							FP.severe("Essentials is out of date. Can not get safe location.");
+							
+						}
 					} while ( ++count < 2 );// XXX:make this 1 to not check for safedestination, or 2 to do check
 					
 					if(Config._economy.costToWarp._ > 0.0d) {
-						if (!payForCommand(Config._economy.costToWarp._, "to teleport to warp "+warpname, 
-							"for teleporting to faction warp "+warpname)) {
+						if (!Utilities.doFinanceCrap(Config._economy.costToWarp._, "teleport to warp "+warpname, 
+							usender)) {
 							return;
 						}
 					}
 					
-					String[] aargsa = new String[2];
-					aargsa[1] = warpname;
+					String[] aargsa = { warpname };
 					
-					player.sendMessage(FactionsPlusTemplates.Go("warped_to", aargsa ));
+					msg(FactionsPlusTemplates.Go("warped_to", aargsa ));
 					//player.sendMessage(ChatColor.RED + "Warped to " + ChatColor.WHITE + warpname);
 					
 					//XXX: this will fail (in Factions not FP) when Essentials is unloaded then loaded again via plugman, also /f home
-					if (EssentialsFeatures.handleTeleport(player, newTel)) return;
+					
+					try {
+						
+						if (EssentialsIntegration.handleTeleport(me, newTel)) return;
+						
+					} catch( Exception e) {
+						
+						msg(ChatColor.RED + "Error: Error thrown on Essentials handling teleport.");
+						FP.severe("Essentials is out of date. Can not handle teleport.");
 
+						
+					}
 					//we still don't try to tp to the safe location. I better not be sorry for this
-					newTel=new Location(world, x, y, z, Y, playa);
+					newTel = new Location(world, x, y, z, Y, playa);
 										
 					// Create a smoke effect
-					if (Config._warps.smokeEffectOnWarp._) {
+					if ( Config._warps.smokeEffectOnWarp._ ) {
 						List<Location> smokeLocations = new ArrayList<Location>();
-						smokeLocations.add(player.getLocation());
-						smokeLocations.add(player.getLocation().add(0, 1, 0));
+						smokeLocations.add(me.getLocation());
+						smokeLocations.add(me.getLocation().add(0, 1, 0));
 						smokeLocations.add(newTel);
 						smokeLocations.add(newTel.clone().add(0, 1, 0));
 						SmokeUtil.spawnCloudRandom(smokeLocations, 3f);
 					}
 
-					player.teleport(newTel);
-					//done: investigate if ie. Essentials or something will change the actual tp location if obstructed 
-					//and thus it will land you somewhere else possible a chunk that you don't own
-
-//					in.close();
-
+					me.teleport(newTel);
+					
 					return;
 				}	
 			}
 			
-			player.sendMessage(FactionsPlusTemplates.Go("warp_non_existant", null));
+			msg(FactionsPlusTemplates.Go("warp_non_existant", null));
 			
-
-//			in.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
 			sender.sendMessage(ChatColor.RED + "An internal error occured (02)");
-		}finally{
+		} finally {
 			if (null != br) {
 				try {
 					br.close();

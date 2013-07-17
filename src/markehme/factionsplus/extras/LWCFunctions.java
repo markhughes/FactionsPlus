@@ -17,22 +17,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 
 import com.griefcraft.model.Protection;
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
 
 /**
  * call these methods only when LWC plugin is loaded in bukkit, else NoClassDefFoundError<br>
  * to avoid that, call LWCBase.isLWCPluginPresent() first
  */
-public abstract class LWCFunctions extends LWCBase {//extends so we don't have to prefix each call with LWCBase ie. LWCBase.isLWC() below 
+public abstract class LWCFunctions extends LWCBase {
 	
+	private static final LWCModule lwcModule	=	new LWCModule();
 	
-	private static final LWCModule lwcModule=new LWCModule();
-	
-	private static boolean hooked=false;
+	private static boolean hooked				=	false;
 	
 	
 	/**
@@ -111,47 +109,51 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	 * @throws Exception
 	 *             if something failed (typically this won't happen)
 	 */
-	public static int clearLocks( FLocation facLocation, FPlayer fPlayer ) throws Exception {
-		World world = facLocation.getWorld();
+	public static int clearLocks( PS facLocation, UPlayer fPlayer ) throws Exception {
+		
+		World world = facLocation.asBukkitWorld();
+		
 		if ( null == world ) {
-			// for some reason if world wasn't loaded (if it can ever happen, unsure)
-			throw new Exception( "world wasn't loaded or something ?" );
+			throw new Exception( "World is null (Not loaded, or not found)" );
 		}
-		Chunk chunk = facLocation.getWorld().getChunkAt( (int)facLocation.getX(), (int)facLocation.getZ() );
-		// done: make sure chunk is loaded if not load if fail abort claim
+		
+		Chunk chunk = world.getChunkAt( facLocation.getBlockX().intValue(), facLocation.getBlockZ().intValue() );
+		
 		if ( !world.isChunkLoaded( chunk ) ) {
 			world.loadChunk( chunk );
+			
 			if ( !chunk.isLoaded() ) {
-				// still not loaded?
-				throw new Exception( "failed to forceload chunk" );
+				throw new Exception( "Could not force load chunk." );
 			}
 		}
-		// chunk should be loaded if we're here, but supposedly some other thread could unload it though (? unsure) ignoring
-		// this possibility
 		
-		// ---------------
+		
 		int numberOfRemovedProtections = 0;
 		// parse each block(in the chunk) and if it's of protectionsTypesToRemove then remove the protection from it
+		
 		for ( int x = 0; x < 16; x++ ) {
 			for ( int z = 0; z < 16; z++ ) {
 				for ( int y = 0; y < 256; y++ ) {
+					
 					Block block = chunk.getBlock( x, y, z );
+					
 					Material type = block.getType();
+					
 					if ( type == Material.AIR ) {
 						continue;// ignore all air blocks
 					}
+					
 					if ( isProtectionTypeToRemove( type ) ) {
-						// if the chunk contents never get lost somehow then we don't need to cache(in a list) all protected
-						// blocks
-						// so we can thus remove the protection here while parsing every block of the chunk
+						// If it is possibly protected ... 
+						
 						Protection protectedBlock = getLWC().findProtection( block );
 						if ( null != protectedBlock ) {
-							// there is a lock for that block ie. it's a chest
-							FPlayer fpOwner = FPlayers.i.get( protectedBlock.getOwner() );
-							if ( !fPlayer.getFaction().getFPlayers().contains( fpOwner ) ) {
-								// protection owner is not in the faction? then clear the lock
-								// only if the owner of the protected block is not in the same faction as fPlayer
-								// only then remove the lwc protection from that block (ie. chest)
+							// Protected block, so continue.
+							
+							UPlayer fpOwner = UPlayer.get( protectedBlock.getOwner() );
+							if ( !fPlayer.getFaction().getUPlayers().contains( fpOwner ) ) {
+								// Not in Faction, so remove protection. 
+								
 								protectedBlock.remove();
 								numberOfRemovedProtections++;
 							}
@@ -160,6 +162,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 				}
 			}
 		}
+		
 		return numberOfRemovedProtections;
 	}
 	
@@ -169,12 +172,13 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 	}
 
 
-	public static boolean checkInTerritory(Player p, Block b) {//hmm, unused?
-		FPlayer fp = FPlayers.i.get(p);
-		FLocation floc = new FLocation(b.getLocation());
-		Faction owner = Board.getFactionAt(floc);
+	public static boolean checkInTerritory(Player p, Block b) {
+		
+		UPlayer fp = UPlayer.get(p);
+		PS floc = PS.valueOf(b.getLocation());
+		Faction owner = BoardColls.get().getFactionAt(floc);
 
-		if(!Utilities.isWilderness( owner) && owner != fp.getFaction()){
+		if( !Utilities.isWilderness( owner) && owner != fp.getFaction() ){
 			fp.sendMessage("You can only create locks in your own territory!");
 			return false;
 		}
@@ -187,34 +191,40 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 			name.sendMessage( ChatColor.RED+"LWC plugin is not active." );
 			return -1;
 		}
-		FPlayer fp = FPlayers.i.get(name);
-//		if(!FactionsPlus.permission.has(name, "factionsplus.clearlwclocks")) {
-//			name.sendMessage(ChatColor.RED + "No Permission!");
-//			return -1; //-1 return signifies lack of permissions.
-//		}
+		
+		UPlayer fp = UPlayer.get(name);
+		
 		Chunk chunk = loc.getChunk();
-		FLocation floc = new FLocation(loc);
-		Faction owner = Board.getFactionAt(floc);
+		
+		PS floc = PS.valueOf(loc);
+		
+		Faction owner = BoardColls.get().getFactionAt(floc);
 
-		if(owner != fp.getFaction()){
+		if( owner != fp.getFaction() ) {
 			fp.sendMessage("You can only clear locks in your own territory!");
 			return -1;
 		}
+		
 		int numberOfRemovedProtections = 0;
 		for ( int x = 0; x < 16; x++ ) {
 			for ( int z = 0; z < 16; z++ ) {
 				for ( int y = 0; y < 256; y++ ) {
+					
 					Block block = chunk.getBlock( x, y, z );
 					Material type = block.getType();
+					
 					if ( type == Material.AIR ) {
 						continue;
 					}
+					
 					if ( isProtectionTypeToRemove( type ) ) {
 
 						Protection protectedBlock = getLWC().findProtection( block );
+						
 						if ( null != protectedBlock ) {
-							FPlayer fpOwner = FPlayers.i.get( protectedBlock.getOwner() );
-							if ( !fp.getFaction().getFPlayers().contains( fpOwner ) ) {
+							UPlayer fpOwner = UPlayer.get( protectedBlock.getOwner() );
+							
+							if ( !fp.getFaction().getUPlayers().contains( fpOwner ) ) {
 								protectedBlock.remove();
 								numberOfRemovedProtections ++;
 							}
@@ -223,6 +233,7 @@ public abstract class LWCFunctions extends LWCBase {//extends so we don't have t
 				}
 			}
 		}
+		
 		return numberOfRemovedProtections;
 	}
 

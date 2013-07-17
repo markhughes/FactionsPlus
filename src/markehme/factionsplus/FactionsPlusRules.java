@@ -14,20 +14,17 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
-import com.massivecraft.factions.zcore.util.TextUtil;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
 
-public class FactionsPlusRules {
-	public static Server server;
-	
-	public static void removeRule(Faction faction, int ruleNo, FPlayer fplayer) {
+public class FactionsPlusRules {	
+	public static void removeRule(Faction faction, int ruleNo, UPlayer fplayer) {
 		try {
 			File readFile 	= 	new File(Config.folderFRules+File.separator+fplayer.getFactionId()+".rules");
 			File outFile 	= 	new File(Config.folderFRules+File.separator+fplayer.getFactionId()+".new_rulesTMP");
@@ -77,13 +74,13 @@ public class FactionsPlusRules {
 				outFile.delete();
 			} else {
 				if (!readFile.delete()) {
-					FactionsPlusPlugin.info("Could not remove the current rules file for Faction #" + faction.getId());
+					FPP.info("Could not remove the current rules file for Faction #" + faction.getId());
 					fplayer.msg(ChatColor.RED+"Could not remove rule (internal error).");
 					return;
 				}
 				
 				if (!outFile.renameTo(readFile)) {
-					FactionsPlusPlugin.info("Could not rename tmp file to current rules file for Faction #" + faction.getId());
+					FPP.info("Could not rename tmp file to current rules file for Faction #" + faction.getId());
 					fplayer.msg(ChatColor.RED+"Could not remove rule (internal error).");
 					return;
 				}
@@ -98,7 +95,7 @@ public class FactionsPlusRules {
 		fplayer.msg(ChatColor.GREEN+"Rule removed, rules re-shuffled.");
 	}
 	
-	public static void sendRulesToPlayer(FPlayer fplayer) {
+	public static void sendRulesToPlayer(UPlayer fplayer) {
 		
 		File fRF = new File(Config.folderFRules+File.separator+fplayer.getFactionId()+".rules");
 		
@@ -173,7 +170,7 @@ public class FactionsPlusRules {
 		
 	}
 	
-	public static void setRuleForFaction(Faction faction, FPlayer setter, String FPRule) {
+	public static void setRuleForFaction(Faction faction, UPlayer setter, String FPRule) {
 		
 		Player sender = setter.getPlayer();
 		

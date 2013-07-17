@@ -1,8 +1,6 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.World;
@@ -15,52 +13,57 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.Conf;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.mcore.ps.PS;
 
 public class PowerboostListener implements Listener{
 	
 	private static PowerboostListener powerboostlistener = null;
-
 	
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onEntityDeath(EntityDeathEvent event)
-	{
-//		FactionsPlus.info( "inside PB listener");//temp, tested to work with /f reloadfp (and Factions 1.7.x)
-		//1of2
-		if ((event.getEntity() instanceof Player)) {
+	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntityDeath( EntityDeathEvent event ) {
+		
+		if( ( event.getEntity() instanceof Player ) ) {
+			
 			Player p = (Player)event.getEntity();
 			
-			if (!canLosePowerWherePlayerIsAt(p)) {
-				// this check is supposed to be for Player only, maybe move the call for this method below
-				//we don't want this check to happen on every entity death on the server
-//				FactionsPlus.info( "no power loss");
-				return;//this will deny extra gain or loss from below
-			}
-//			FactionsPlus.info( "would lose power");
-			
-			
-			EntityDamageEvent ldc = event.getEntity().getLastDamageCause();//it can be null, see issue 60
-			if (null == ldc) {
-				//"null if hitherto unharmed"
-				//how odd that it died and yet the last damage event is null, did it dot die via prev damage event ? 
-				//and last one got cancelled?
-				if(Config._powerboosts.extraPowerLossIfDeathByOther._ > 0) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
-				}
+			if( ! canLosePowerWherePlayerIsAt( p ) ) {
+				
 				return;
+				
 			}
-			DamageCause causeOfDeath = ldc.getCause();
-			if (p.getKiller() == null) {
-				if ((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE 
-						|| causeOfDeath == DamageCause.ENTITY_EXPLOSION) &&
-						(Config._powerboosts.extraPowerLossIfDeathByMob._ > 0.0D)) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByMob._);
-					return;
+			
+			EntityDamageEvent ldc = event.getEntity().getLastDamageCause();
+			
+			if( null == ldc ) {
+			
+				if( Config._powerboosts.extraPowerLossIfDeathByOther._ > 0 ) {
+					Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByOther._ );
 				}
-				if ((causeOfDeath == DamageCause.CONTACT) && 
+				
+				return;
+				
+			}
+			
+			DamageCause causeOfDeath = ldc.getCause();
+			
+			if( p.getKiller() == null ) {
+				
+				if(
+					( causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE || causeOfDeath == DamageCause.ENTITY_EXPLOSION )
+					&& Config._powerboosts.extraPowerLossIfDeathByMob._ > 0.0D
+				) {
+					
+					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByMob._);
+					
+					return;
+					
+				}
+				
+				if( ( causeOfDeath == DamageCause.CONTACT ) && 
 						(Config._powerboosts.extraPowerLossIfDeathByCactus._ > 0.0D)) {
 					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByCactus._);
 					return;
@@ -128,19 +131,19 @@ public class PowerboostListener implements Listener{
 
 	
 	public static final boolean canLosePowerWherePlayerIsAt( Player player ) {
-		Faction factionAtFeet = Board.getFactionAt( new FLocation( player.getLocation() ) );
+		Faction factionAtFeet = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 		return canLosePowerInThisFaction(factionAtFeet, player.getWorld());
 	}
 	
 	public static final boolean canLosePowerInThisFaction(Faction faction, World worldName) {
-		if ( !Bridge.factions.getFlag( faction, FactionsAny.FFlag.POWERLOSS ) ) {//this handles safezone too
+		if ( ! faction.getFlag(FFlag.POWERLOSS) ) { //this handles safezone too
 			return false;
 		} else {
 			// safezone check is not needed here because both 1.6 bridge and 1.7 powerloss are false for safezone,
 			// except that 1.7 can set it to true if wanted but it's false by default in factions.json
 			
 			// warzone will always lose power regardless of worldsNoPowerLoss setting, Factions plugin does this too.
-			if ( !Utilities.isWarZone( faction ) && null != worldName && Conf.worldsNoPowerLoss.contains( worldName.getName() ) )
+			if ( !Utilities.isWarZone( faction ) && null != worldName && MConf.get().worldsNoPowerLoss.contains( worldName.getName() ) )
 			{
 				return false;
 			}

@@ -12,17 +12,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.entity.Board;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.mcore.ps.PSBuilder;
+import com.massivecraft.mcore.ps.PSFormat;
 
-public class AnnounceListener implements Listener{
+
+public class AnnounceListener implements Listener {
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-		FPlayer me = FPlayers.i.get(player);
+		UPlayer me = UPlayer.get(player);
 
 		if(Config._announce.showLastAnnounceOnLogin._) {
 			File fAF = new File(Config.folderAnnouncements, me.getFactionId());
@@ -42,12 +45,13 @@ public class AnnounceListener implements Listener{
 		}
 		if(Config._announce.showLastAnnounceOnLandEnter._) {
 			if (event.getFrom().equals(event.getTo())) return;
-
+			
 			Player player = event.getPlayer();
-			FPlayer me = FPlayers.i.get(player);
-			Faction factionHere = Board.getFactionAt(new FLocation(event.getTo()));
-
-			if (Board.getFactionAt(new FLocation(event.getFrom())) != Board.getFactionAt(new FLocation(event.getTo()))) {
+			UPlayer me = UPlayer.get(player);
+			
+				Faction factionHere = BoardColls.get().getFactionAt(PS.valueOf(event.getTo()));
+			
+			if ( BoardColls.get().getFactionAt(PS.valueOf(event.getFrom())) != BoardColls.get().getFactionAt(PS.valueOf(event.getTo())) ) {
 				if(factionHere.getId().equals(me.getFactionId())) {
 					File fAF=new File(Config.folderAnnouncements, me.getFactionId());
 					if(fAF.exists()) {

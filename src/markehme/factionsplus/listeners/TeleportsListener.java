@@ -7,8 +7,6 @@ import markehme.factionsplus.EssentialsIntegration;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
@@ -25,11 +23,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
 
 
 
@@ -46,10 +44,7 @@ public class TeleportsListener implements Listener {
 	private static final String			backCMD						= "/back";							// lowercase pls
 	private static TeleportsListener	preventTeleports			= new TeleportsListener();
 	private static boolean				tpInited					= false;
-	
-	
-	// XXX: this might bite if we add a /f reload config option, it won't be updated unless we call .init() [as it is now]
-	
+		
 	
 	public synchronized static void initOrDeInit( Plugin plugin ) {
 		if ( !plugin.isEnabled() ) {
@@ -65,20 +60,18 @@ public class TeleportsListener implements Listener {
 				deInit();
 			}
 			return;
-		}else{
-			//set or still set
+		} else {
+			// set or still set
 			if (isInited()) {
-				return;//keep listening, since we're already listening
+				return;// keep listening, since we're already listening
 			}
 		}
 		
-		// if ( !EssentialsIntegration.isHooked() ) {
-		// FactionsPlus.warn( "Due to failing to hook into Essentials plugin" + " the following enabled config option "
-		// + ( EssentialsIntegration.isLoadedButNotEnabled() ? "MAY" : "WILL" ) + " has no effect: "
-		// + Config._teleports._disallowInto.enemyViaHome._dottedName_asString);
-		// // + "\nHowever you may try /f reloadfp to cause this recheck" );// FIXME:
-		// }
-		
+		/*
+		if ( !EssentialsIntegration.isHooked() ) {
+			FactionsPlus.warn( "Essentials appears to have not hooked." );
+		}
+		*/
 		
 		preventTeleports.registerSelf( plugin );
 		tpInited = true;
@@ -167,9 +160,10 @@ public class TeleportsListener implements Listener {
 					
 					boolean allowed = false;
 					int count = 2;
-					FactionsAny.Relation rel = null;
+					Rel rel = null;
 					Location locToCheck = whereTo;
 					while ( count > 0 ) {
+						
 						rel = getRelation( playerInGame, locToCheck );
 						switch ( rel ) {
 						case ALLY:
@@ -239,6 +233,7 @@ public class TeleportsListener implements Listener {
 					return;
 				}
 				String homeName = null;
+				
 				if ( ar.length == 1 ) {
 					// no params, 2 cases: 1. it will list all homes, 2. it will do /home home if only default home is set
 					if ( EssentialsIntegration.getHomesCount( playerInGame ) <= 1 ) {
@@ -249,18 +244,17 @@ public class TeleportsListener implements Listener {
 						// them
 						return;
 					}
+				} else if ( ar.length == 2 ) {
+					// just one parameter
+					homeName = ar[1];
 				} else {
-					if ( ar.length == 2 ) {
-						// just one parameter
-						homeName = ar[1];
-					} else {
-						if ( ar.length > 2 ) {
-							// too many params
-							playerInGame.sendMessage( "You specified more than one parameter to command `" + ar[0] + "`" );
-							event.setCancelled( true );
-							return;
-						}
+					if ( ar.length > 2 ) {
+						// too many params
+						playerInGame.sendMessage( "You specified more than one parameter to command `" + ar[0] + "`" );
+						event.setCancelled( true );
+						return;
 					}
+					
 				}
 				
 				assert null != homeName;
@@ -329,7 +323,7 @@ public class TeleportsListener implements Listener {
 				
 				boolean allowed = false;
 				count = 2;
-				FactionsAny.Relation rel = null;
+				Rel rel = null;
 				Location locToCheck = targetLocation;
 				while ( count > 0 ) {
 					rel = getRelation( playerInGame, locToCheck );
@@ -453,9 +447,12 @@ public class TeleportsListener implements Listener {
 				if ( ( Config._teleports.shouldReportCommands() ) && ( !event.isCancelled() ) ) {
 					// yeah report even if player had bypass permission but only if it will be a successful teleport
 					Location targetLocation = event.getTo();
-					Faction fac = getFactionAt( targetLocation );
-					FactionsAny.Relation rel = getRelation( player, fac );
+					Faction fac = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
+					
+					Rel rel = getRelation( player, fac );
+					
 					boolean report = true;
+					
 					switch ( rel ) {
 					case ALLY:
 						if ( !Config._teleports._into._allyTerritory._report.viaCommand._ ) {
@@ -484,7 +481,7 @@ public class TeleportsListener implements Listener {
 					if ( report ) {
 						FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
 							+ constOneColor + "'"+(player.isOp()?"(op)":"")+" teleported into " + rel + " land faction '" + ChatColor.DARK_AQUA
-							+ fac.getTag() + constOneColor + "'. Their last typed command: '" + ChatColor.AQUA
+							+ fac.getName() + constOneColor + "'. Their last typed command: '" + ChatColor.AQUA
 							+ lastExecutedCommandByPlayer + constOneColor + "'."+ChatColor.RESET+
 							"\n(doesn't mean this command was the cause of the teleport!)" );
 					}
@@ -496,7 +493,7 @@ public class TeleportsListener implements Listener {
 		case ENDER_PEARL:
 			if ( isEnderPearling() ) {
 				Location targetLocation = event.getTo();
-				Faction fac = getFactionAt( targetLocation );
+				Faction fac = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
 				boolean allowed = false;
 				boolean report=true;
 				if (
@@ -506,14 +503,14 @@ public class TeleportsListener implements Listener {
 					allowed=false;
 					report=false;
 					if ( !allowed ) {
-						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + fac.getTag()
+						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + fac.getName()
 							+ " territory" );
 						denyTeleport( event );
 						break;
 					}
 				} 
 				
-				FactionsAny.Relation rel = getRelation( player, fac );
+				Rel rel = getRelation( player, fac );
 				if ( !player.isOp() ) {// only deny teleports to non-op players
 					switch ( rel ) {
 					case ALLY:
@@ -577,7 +574,7 @@ public class TeleportsListener implements Listener {
 				if ( ( report ) && ( !event.isCancelled() ) ) {
 					FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
 						+ constOneColor + "'" + ( player.isOp() ? "(op)" : "" ) + " teleported into " + rel + " land faction '"
-						+ ChatColor.DARK_AQUA + fac.getTag() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
+						+ ChatColor.DARK_AQUA + fac.getName() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
 				}
 //				}
 				
@@ -635,25 +632,23 @@ public class TeleportsListener implements Listener {
 	// }
 	// }
 	
-	private final FactionsAny.Relation getRelation( Player player, Location targetLocation ) {
+	private final Rel getRelation( Player player, Location targetLocation ) {
 		assert null != player;
 		assert null != targetLocation;
-		Faction factionAtTarget = getFactionAt( targetLocation );
+		Faction factionAtTarget = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
 		assert null != factionAtTarget;
 		return getRelation( player, factionAtTarget );
 	}
 	
 	
-	private final FactionsAny.Relation getRelation( Player player, Faction fac ) {
+	private final Rel getRelation( Player player, Faction fac ) {
 		assert null != player;
 		assert null != fac;
-		FPlayer fp = FPlayers.i.get( player );// it will never be null
+		
+		UPlayer fp = UPlayer.get( player ); // it will never be null
+		
 		assert null != fp;
-		return Bridge.factions.getRelationBetween( fac, fp );
-	}
-	
-	
-	private Faction getFactionAt( Location targetLocation ) {
-		return Board.getFactionAt( new FLocation( targetLocation ) );
+		
+		return fac.getRelationTo(fp);
 	}
 }

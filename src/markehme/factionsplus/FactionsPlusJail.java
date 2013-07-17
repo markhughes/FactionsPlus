@@ -15,6 +15,7 @@ import java.util.Scanner;
 
 import markehme.factionsplus.Cmds.CmdSetJail;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
 import markehme.factionsplus.util.CacheMap;
 import markehme.factionsplus.util.Q;
 
@@ -27,30 +28,26 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
 
 public class FactionsPlusJail {
-	public static Server server;
 	/**
 	 * caches mappings between faction id (as String) and its jail Location 
 	 */
-	private static CacheMap<String, Location>	cachedJailLocations=new CacheMap<String, Location>(30);
+	private static CacheMap<String, Location>	cachedJailLocations = new CacheMap<String, Location>(30);
 	
-	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, FPlayer unjailer, boolean DontSayAnything) {
+	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, UPlayer unjailer, boolean DontSayAnything) {
 
-		if ( !FPlayers.i.exists( nameOfPlayerToBeUnjailed ) ) {
+		if ( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeUnjailed ) ) != null ) {
 			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
 			return false;
 		}
 		
-		FPlayer fpToBeUnjailed = FPlayers.i.get( nameOfPlayerToBeUnjailed );// never null
-//		unjailer.sendMessage( "mapped "+nameOfPlayerToBeUnjailed+" to "+fpToBeUnjailed.getName() );
-//		unjailer.sendMessage( "mapped "+Bukkit.getPlayer( nameOfPlayerToBeUnjailed )+" to "+fpToBeUnjailed.getId() );
-
-		String factionId=fpToBeUnjailed.getFactionId();
+		UPlayer fpToBeUnjailed = UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeUnjailed ) );
+		
+		String factionId = fpToBeUnjailed.getFactionId();
 		
 		if ( !unjailer.getFactionId().equals( factionId ) ) {
 			if(!DontSayAnything) {
@@ -79,7 +76,7 @@ public class FactionsPlusJail {
 										
 					String worldName = bw.readLine();
 					if ( null != worldName ) {
-						World world = server.getWorld( worldName );
+						World world = FP.server.getWorld( worldName );
 						double x = Double.parseDouble( bw.readLine() );
 						double y = Double.parseDouble( bw.readLine() );
 						double z = Double.parseDouble( bw.readLine() );
@@ -128,7 +125,7 @@ public class FactionsPlusJail {
 					// however we should teleport the player somewhere other than remain inside jail
 					Faction f = fpToBeUnjailed.getFaction();
 					if ( null != f ) {
-						originalLocation = f.getHome();
+						originalLocation = f.getHome().asBukkitLocation();
 						if ( null == originalLocation ) {
 							originalLocation = onlinejplayer.getBedSpawnLocation();
 							if ( null == originalLocation ) {
@@ -140,7 +137,6 @@ public class FactionsPlusJail {
 				
 				if ( null != originalLocation ) {
 					tpSuccess = onlinejplayer.teleport( originalLocation );
-//					unjailer.sendMessage( "teleported "+onlinejplayer.getName()+" to orig location" );wow if jailer is 's2' and jailed one is 's' then the former gets teleported
 				}
 			}
 			
@@ -190,20 +186,20 @@ public class FactionsPlusJail {
 	
 	
 	public static Location getJailLocation(Player player) {
-		FPlayer fplayer = FPlayers.i.get( player );//considering Factions' implementation of this, this is never null
-		assert (null != fplayer)&&(FPlayers.i.isCreative());//if is creative, even if player didn't exist it will be instance-created
-		//thing is, it's always creative, on both 1.6 and 1.7 (for players, not for factions)
-		String fid = fplayer.getFactionId().trim();//just in case
+		UPlayer fplayer = UPlayer.get( player ); 
+		assert (null != fplayer); 
 		
-		Location jailLocation=cachedJailLocations.get(fid);
+		String fid = fplayer.getFactionId().trim(); 
+		
+		Location jailLocation = cachedJailLocations.get(fid);
+		
 		if (null != jailLocation) {
-//			System.out.println("found in cache: "+fid+"->"+jailLocation);
 			return jailLocation;
 		}
-//		System.out.println("not in cache: "+fid+"->"+jailLocation);
 		
-		Faction CWFaction = Factions.i.get(fid);
-		assert null != CWFaction:"player wasn't in a faction ? like not even wilderness? this should basically not be null";
+		Faction CWFaction = Faction.get(fid);
+		
+		assert null != CWFaction:"player wasn't in a faction? like not even wilderness? this should basically not be null";
 		assert fid.equals(CWFaction.getId());
 		
 		World world;
@@ -225,7 +221,7 @@ public class FactionsPlusJail {
 			    float Y = Float.parseFloat(jail_data[3]); // Yaw
 			    float p = Float.parseFloat(jail_data[4]);
 			        	
-			    world = server.getWorld(jail_data[5]);
+			    world = FP.server.getWorld(jail_data[5]);
 			    
 			    jailLocation=new Location(world, x, y, z, Y, p);
 			    Location existed = cachedJailLocations.put( fid, jailLocation );
@@ -247,23 +243,22 @@ public class FactionsPlusJail {
 	public static boolean sendToJail(String nameOfPlayerToBeJailed, CommandSender sender, int argTime) {
 		Player player = (Player)sender;
 		
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
+		UPlayer fplayer = UPlayer.get( Bukkit.getPlayer( sender.getName() ) );
 		Faction currentFaction = fplayer.getFaction();
 		
 		World world;
-		//online or offline at the time of the jailing
-		//TODO: investigate if getOfflinePlayer acts as  getPlayerExact or as getPlayer    for offline players. It'd better act as Exact ffs
-		OfflinePlayer playerToBeJailed = server.getOfflinePlayer( nameOfPlayerToBeJailed);
+		
+		OfflinePlayer playerToBeJailed = FP.server.getOfflinePlayer( nameOfPlayerToBeJailed);
 		
 		
-		if (!FPlayers.i.exists( nameOfPlayerToBeJailed )) {
-			fplayer.msg("Cannot jail inexisting player '"+nameOfPlayerToBeJailed+"'");
+		if( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeJailed ) ) != null ) {
+			fplayer.msg("Cannot jail non-existant player '"+nameOfPlayerToBeJailed+"'");
 			return false;
 		}
 		
-		FPlayer fjplayer = FPlayers.i.get(nameOfPlayerToBeJailed);//this is never null, an instance is always created if didn't previously exist
-//		fplayer.msg(jailingplayer+" "+fjplayer.getFactionId()+" "+fplayer.getFactionId());
-		if(!fjplayer.getFactionId().equals(fplayer.getFactionId())) {//they are numbers in String
+		UPlayer fjplayer = UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeJailed ) );
+		
+		if( !fjplayer.getFactionId().equals( fplayer.getFactionId() ) ) { 
 			fplayer.msg("You can only Jail players that are in your Faction!");
 			return false;
 		}
@@ -293,7 +288,7 @@ public class FactionsPlusJail {
 					bw.write( Integer.toString( argTime ));
 					bw.newLine();
 					
-					Player onlinejplayer = playerToBeJailed.getPlayer();
+					final Player onlinejplayer = playerToBeJailed.getPlayer();
 					boolean tpSuccess=false;
 					if ( null != onlinejplayer ) {
 						// done inform: what if it returns false aka teleport was not successful?
@@ -314,17 +309,59 @@ public class FactionsPlusJail {
 						bw.write(  "injail" );
 						bw.newLine();
 						
-						tpSuccess=onlinejplayer.teleport( jailLoc );
+						if( Config._jails.delayBeforeSentToJail._ == 0 ) {
+							
+							tpSuccess=onlinejplayer.teleport( jailLoc );
+							
+							Faction fjpfaction = fjplayer.getFaction();
+							
+							String jailedMsg = ChatColor.WHITE + fjplayer.getName()+ChatColor.GREEN + " has been jailed by "+
+									ChatColor.WHITE+fplayer.getName()+ ChatColor.GREEN+"!"+(null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
+										(tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!") );
+							
+							if (fjpfaction != fplayer.getFaction()) {
+								fplayer.sendMessage( jailedMsg);
+							}
+							
+							fjplayer.getFaction().sendMessage( jailedMsg );
+							
+						} else {
+							
+							onlinejplayer.sendMessage( "You are going to be sent to jail in " + Config._jails.delayBeforeSentToJail._ + " seconds." );
+							
+							final Location thGLC = jailLoc;
+							final UPlayer a_fjplayer = fjplayer;
+							final UPlayer B_fplayer = fplayer;
+							
+							new java.util.Timer().schedule( 
+							        new java.util.TimerTask() {
+							            @Override
+							            public void run() {
+							            	boolean _tpSuccess = false;
+							            	
+							            	_tpSuccess = onlinejplayer.teleport( thGLC );
+							            
+											Faction fjpfaction = a_fjplayer.getFaction();
+											
+											String jailedMsg = ChatColor.WHITE + a_fjplayer.getName()+ChatColor.GREEN + " has been jailed by "+
+													ChatColor.WHITE+B_fplayer.getName()+ ChatColor.GREEN+"!"+(null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
+														(_tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!") );
+											
+											if (fjpfaction != B_fplayer.getFaction()) {
+												B_fplayer.sendMessage( jailedMsg);
+											}
+											
+											B_fplayer.getFaction().sendMessage( jailedMsg );
+											
+											this.cancel();
+							            }
+							        }, 
+							        (Config._jails.delayBeforeSentToJail._ * 1000)
+							);
+
+							fjplayer.msg( onlinejplayer.getName() + " will be sent to jail in " + Config._jails.delayBeforeSentToJail._ + " seconds." );
+						}
 					}
-					
-					Faction fjpfaction = fjplayer.getFaction();
-					String jailedMsg = ChatColor.WHITE + fjplayer.getName()+ChatColor.GREEN + " has been jailed by "+
-							ChatColor.WHITE+fplayer.getName()+ ChatColor.GREEN+"!"+(null == onlinejplayer? ChatColor.WHITE+" We'll tp them to jail when they login.":
-								(tpSuccess?"":ChatColor.RED+" But we couldn't teleport them to jail!") );
-					if (fjpfaction != fplayer.getFaction()) {
-						fplayer.sendMessage( jailedMsg);
-					}
-					fjplayer.getFaction().sendMessage( jailedMsg );
 					
 				} catch ( IOException e ) {
 					e.printStackTrace();
@@ -370,7 +407,7 @@ public class FactionsPlusJail {
 			return false;
 		}
 		
-		FPlayer fplayer = FPlayers.i.get(sender.getName());
+		UPlayer fplayer = UPlayer.get(Bukkit.getPlayer( sender.getName() ) );
 		Faction currentFaction = fplayer.getFaction();
 		
 		boolean authallow = ((Config._jails.leadersCanSetJails._) && (Utilities.isLeader( fplayer ))) 
@@ -392,7 +429,7 @@ public class FactionsPlusJail {
 		
 		if(Config._economy.isHooked()) {
 			if(Config._economy.costToSetJail._ > 0.0d) {//TODO: fill those empty strings
-				if(!CmdSetJail.doFinanceCrap(Config._economy.costToSetJail._, "", "", FPlayers.i.get(Bukkit.getPlayer(sender.getName())))) {
+				if(!Utilities.doFinanceCrap(Config._economy.costToSetJail._, "set a jail", fplayer)) {
 					return false;
 				}
 			}
@@ -441,7 +478,7 @@ public class FactionsPlusJail {
 			}
 			if (null != fos) {
 				try {
-					fos.close();//likely already closed by jailWrite
+					fos.close();
 				} catch ( IOException e ) {
 					e.printStackTrace();
 				}

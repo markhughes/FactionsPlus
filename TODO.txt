@@ -7,17 +7,7 @@ the following are obsolete TODOs that are not moved to trello:
 - we really need to a good way to use wildcard permissions, if they're defined they won't always be seen as set
   more info here: https://github.com/MilkBowl/Vault/issues/223
 
-- maybe don't add /f gc and /f fc commands if Factions is 1.7 (easy to do but then the player might wonder why these 
-commands aren't there, thus by allowing them to exist in 1.7 also they are showing the message that 1.7 actually doesn't
-support chat modes)
-  Actually 1.7 can still do these commands but only if we tell the chats (which could be 3: EssentialsChat, HeroChat, CAPI)
-  to switch channels somehow, seems tough... more info in this pkg(s): com.massivecraft.factions.integration.*
-
-
 - look into setting permissions or groups of perms inside plugins.yml  with their description
-
-- make bridging methods call-able from Utilities instead via Bridge.factions similar to existing ones like isLeader()
-  so to make them seamless
 
 - teleporting to /home could be bypassed if /home has a warmup and another command is executed right after but before
   teleport actually happens
@@ -32,9 +22,6 @@ support chat modes)
   seems like a good compromise ... worst case the user can deny himself the teleport action, but at least they can't 
   tp to home
   
-  
-- update .settings.eclipse and .classpath etc.
-
 - make sure empty sections from existing config are removed, ie. mainly after their children which were obsolete/old aliases 
   were removed - hmm maybe at the exact same time when removing those, can detect if parent is empty and kill it, and then when
   config save happens, they are already gone

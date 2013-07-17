@@ -20,19 +20,20 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import com.massivecraft.factions.event.FPlayerJoinEvent;
-import com.massivecraft.factions.event.FPlayerLeaveEvent;
+import com.massivecraft.factions.event.FactionsEventMembershipChange;
+import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
 
 public class JailListener implements Listener{
 	@EventHandler
-	public void onFPlayerJoinEvent(FPlayerJoinEvent event) {
+	public void onFPlayerJoinEvent(FactionsEventMembershipChange event) {
 		if(event.isCancelled()) {
 			return;
 		}
-		// If player is still jailed, SEND THEM TO THE BRIG!
-		Player player = Utilities.getOnlinePlayerExact( event.getFPlayer() );
-		if(Utilities.isJailed(player)){
-			player.teleport(FactionsPlusJail.getJailLocation(player));
+		
+		if( event.getReason() == MembershipChangeReason.JOIN && Utilities.isJailed( event.getUPlayer().getPlayer() ) ) {
+			
+			// If player is still jailed, SEND THEM TO THE BRIG!
+			event.getUPlayer().getPlayer().teleport(FactionsPlusJail.getJailLocation(event.getUPlayer().getPlayer()));
 		}
 	}
 	@EventHandler
@@ -49,7 +50,6 @@ public class JailListener implements Listener{
 		Player player = event.getPlayer();
 		if (Utilities.isJailed(player)) {
 			player.teleport(FactionsPlusJail.getJailLocation(player));
-			//event.setRespawnLocation(FactionsPlusJail.getJailLocation(player));
 		}
 	}
 
@@ -114,20 +114,9 @@ public class JailListener implements Listener{
 				event.setTo(jailLocation);
 				event.setCancelled( true );
 			}
-////				event.getPlayer().teleport(jailLocation);
-//			}
-//			event.setTo(Utilities.setLocationExceptEye(event.getTo(), FactionsPlusJail.getJailLocation(playa)));
-//			event.setTo( event.getFrom() );//too bad that doing setTo() actually spams teleport events
-			
-//			Utilities.setLocationExceptEye(jailLocation,event.getFrom());
-//			if (!event.getFrom().equals( jailLocation )) { too easy and causes too many tp events!
-//				playa.sendMessage( "You are teleported back to jail. Nice try though!" );//aka this will spam
-//				event.getPlayer().teleport(jailLocation);
-//			}
-//			event.setCancelled(false);
-			
+		
 			return;
-		}//is jailed
+		}
 		
 	}
 
@@ -156,20 +145,19 @@ public class JailListener implements Listener{
 		}
 	}
 	
+	
 	@EventHandler
-	public void onFPlayerLeaveEvent(FPlayerLeaveEvent event) {
-		if(event.isCancelled()) {
+	public void onFPlayerLeaveEvent(FactionsEventMembershipChange event) {
+		if( event.isCancelled() || event.getReason() != MembershipChangeReason.LEAVE ) {
 			return;
 		}
 		
 		if(Config._jails.removeOwnJailDataWhenLeavingFaction._) {
 			
-			File jailDataFile = new File(Config.folderJails,"jaildata." + event.getFPlayer().getFactionId() + "." + event.getFPlayer().getName());
+			File jailDataFile = new File(Config.folderJails,"jaildata." + event.getUPlayer().getFactionId() + "." + event.getUPlayer().getName());
 			
-			if(jailDataFile.exists()) {
-				FactionsPlusJail.removeFromJail( event.getFPlayer().getName(), event.getFPlayer(), true);
-				
-				//jailDataFile.delete();
+			if( jailDataFile.exists() ) {
+				FactionsPlusJail.removeFromJail( event.getUPlayer().getName(), event.getUPlayer(), true);
 			}
 			
 		}

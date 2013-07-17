@@ -3,9 +3,6 @@ package markehme.factionsplus.listeners;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.FactionsBridge.Bridge;
-import markehme.factionsplus.FactionsBridge.FactionsAny;
-import markehme.factionsplus.FactionsBridge.FactionsAny.Relation;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.Bukkit;
@@ -15,10 +12,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.ps.PS;
 import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
 import com.onarandombox.MultiverseCore.event.MVTeleportEvent;
 import com.onarandombox.MultiversePortals.event.MVPortalEvent;
@@ -31,10 +28,10 @@ public class MVPListener implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGH)
 	public void MVPlayerTouchedPortalEvent(MVPortalEvent e) {
-		// TODO: Put messages into template file
-		FPlayer fplayer = FPlayers.i.get( e.getTeleportee() );
+		// TODO: Put messages into template config
+		UPlayer fplayer = UPlayer.get( e.getTeleportee() );
 			
-		Relation rel = Bridge.factions.getRelationBetween( fplayer.getFaction(),  Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) ));
+		Rel rel = fplayer.getFaction().getRelationTo(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) ));
 		
 		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || fplayer.isInOwnTerritory() ) {
 			return;
@@ -42,7 +39,7 @@ public class MVPListener implements Listener {
 		
 		
 		// SafeZone / Wilderness / WarZone = not a faction, so rules do not apply
-		if(Utilities.isSafeZone(Board.getFactionAt( new FLocation(e.getTeleportee().getLocation() ))) || Utilities.isWilderness(Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) )) || Utilities.isWarZone(Board.getFactionAt( new FLocation( e.getTeleportee().getLocation() ) )) ) {
+		if(Utilities.isSafeZone(BoardColls.get().getFactionAt( PS.valueOf(e.getTeleportee().getLocation() ))) || Utilities.isWilderness(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) )) || Utilities.isWarZone(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) )) ) {
 			return;
 		}
 		
@@ -58,7 +55,7 @@ public class MVPListener implements Listener {
 				
 		if(Config._extras._MultiVerse.alliesCanUseEachOthersPortals._ && Config._extras._MultiVerse.mustBeInOwnTerritoryToUsePortals._) {
 			
-			if ( !FactionsAny.Relation.ALLY.equals( rel ) ) {
+			if ( !Rel.ALLY.equals( rel ) ) {
 				fplayer.msg(ChatColor.RED + "You can not use this portal as you are not an aly, and are not apart of this Faction. ");
 				e.setCancelled(true);
 				
