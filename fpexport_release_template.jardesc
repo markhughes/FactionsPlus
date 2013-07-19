@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="FactionsPlus\built.jar\FactionsPlus.jar"/>
+    <jar path="FactionsPlus\Output\FactionsPlus.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/FactionsPlus/fpexport_personalized.jardesc" exportErrors="false" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="false" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
@@ -11,7 +11,6 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
-        <file path="/FactionsPlus/THANKS.txt"/>
         <javaElement handleIdentifier="=FactionsPlus/src"/>
         <file path="/FactionsPlus/plugin.yml"/>
     </selectedElements>
