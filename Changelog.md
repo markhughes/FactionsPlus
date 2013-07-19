@@ -3,6 +3,9 @@
 - allowFactionKillNeutralMobs no longer affects Wilderness (woo!) 
 - FType improvements - more productive 
 - New 2.0.0 addPower means instead of power boosts, we assign power! 
+- I've attempted to install a system to use both new and old version of Essentials. I suggest using Essentials-2.11.1
+- Damage checks with allowFactionKill*Mobs now includes fishing hooks
+- Fixed an issue with people in the wilderness/none faction can create announcements, and use some FactionsPlus commands
 
 # FactionsPlus version 0.6.3
 - Further advancements on FType (turns out pernament factions can have leaders if setup that way)
