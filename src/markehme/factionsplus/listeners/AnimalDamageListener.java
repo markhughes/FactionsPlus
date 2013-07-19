@@ -1,6 +1,5 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
@@ -19,21 +18,53 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.potion.Potion;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.store.Entity;
 
 public class AnimalDamageListener implements Listener {
 
 	private static AnimalDamageListener		ADL			= null;
 
 	@EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
-	public void onEntityAttacked( EntityDamageByEntityEvent event ) {
+	public void onFishingHook( PlayerFishEvent event ) {
+		
+		// This will check for damage via a fishing hook
+		
+		// is it possible that it couldn't be ..?
+		if( event.getPlayer() instanceof Player ) {
+			
+			if( event.getCaught() != null ) {
 				
+				Player damagingPlayer = (Player) event.getPlayer();
+				
+				UPlayer UDamagingPlayer = UPlayer.get( damagingPlayer );
+				
+				EntityType entity = event.getCaught().getType();
+				if(
+						protectEntity( entity )
+						&& ( !UDamagingPlayer.isUsingAdminMode() )
+						&& ( !FP.permission.has( damagingPlayer, "factionsplus.cankillallmobs") )
+						&& ( ! canKillCheck( UDamagingPlayer ) )
+					) {
+						
+						damagingPlayer.sendMessage( ChatColor.RED + "You can't damage this mob type in this Faction land." );
+						event.setCancelled( true ) ;
+							
+					}
+			}
+		}
+	}
+	
+	@EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
+	public void onEntityAttacked( EntityDamageByEntityEvent event ) {
+		
+		// This is to check if the player is damaging an animal
+		
 		// is the "damager" a player? 
 		if( ( event.getDamager() instanceof Player ) ) {
 			
@@ -43,7 +74,6 @@ public class AnimalDamageListener implements Listener {
 			
 			EntityType entity = event.getEntityType();
 			
-			// Check if they're a Chicken, Cow, Mushroom Cow, Ocelot, Wolf, Pig, Iron Golem, Bat, Snowman, Villager, Horse, or Squid ;)
 			if(
 				protectEntity( entity )
 				&& ( !UDamagingPlayer.isUsingAdminMode() )
@@ -65,6 +95,7 @@ public class AnimalDamageListener implements Listener {
 	public void onEntityAttackThing( EntityDamageByEntityEvent event ) {
 		
 		
+		// this is to check if the player is attacking with an arrow, etc
 		Projectile projectile = null;
 		
 		if( ( event.getDamager() instanceof Arrow ) ) {
@@ -137,9 +168,7 @@ public class AnimalDamageListener implements Listener {
 				return;
 				
 			}
-			
-
-		}
+		} 
 		
 		if( projectile != null ) {
 			
