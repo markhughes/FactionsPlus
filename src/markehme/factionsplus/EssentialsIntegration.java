@@ -11,10 +11,12 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.Util;
 import com.earth2me.essentials.api.ITeleport;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
+
+import java.lang.reflect.Method;
 
 
 public abstract class EssentialsIntegration {
@@ -171,9 +173,19 @@ public abstract class EssentialsIntegration {
 	}
 
 	public static Location getSafeDestination( Location targetLocation ) throws Exception {
-		if (isHooked()){
-			
-			return Util.getSafeDestination( targetLocation );
+		if ( isHooked() ) {
+			// TODO: Validate this actually works 
+			try { 
+				
+				return LocationUtil.getSafeDestination( targetLocation );
+				
+			} catch( Exception e) {
+				
+				Class OLD_Util = Class.forName( "com.earth2me.essentials.Util" );
+				
+				Method OLD_getSafeDestination = OLD_Util.getMethod( "getSafeDestination", Location.class );
+				return (Location)OLD_getSafeDestination.invoke( OLD_Util , targetLocation);
+			}
 		}else{
 			//not running Essentials on server? return same location
 			return targetLocation;
