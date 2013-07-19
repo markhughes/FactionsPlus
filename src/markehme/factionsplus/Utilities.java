@@ -41,7 +41,7 @@ import com.massivecraft.mcore.MCoreConfColl;
 
 public abstract class Utilities {
 	/* ********** FILE RELATED ********** */
-	
+
 	public static String readFileAsString(File filePath) {
 		FileInputStream fstream=null;
 		DataInputStream in=null;
