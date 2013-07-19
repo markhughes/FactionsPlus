@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
@@ -36,6 +37,7 @@ public class CmdAddWarp extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "create a faction warp, can be specified with a password" );
 		this.setHelp( "create a faction warp, can be specified with a password" );
