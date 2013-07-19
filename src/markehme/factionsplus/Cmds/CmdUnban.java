@@ -10,6 +10,7 @@ import markehme.factionsplus.config.sections.Section_Banning;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 
@@ -20,8 +21,9 @@ public class CmdUnban extends FPCommand {
 		this.requiredArgs.add("player");
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "unbans a player allowing them to re-join the faction" );
 		this.setDesc( "unbans a player allowing them to re-join the faction" );

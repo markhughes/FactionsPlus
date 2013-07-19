@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.arg.ARFaction;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 import com.massivecraft.mcore.ps.PS;
@@ -23,8 +24,9 @@ public class CmdFactionHome extends FPCommand {
 		this.requiredArgs.add("faction");
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp("teleport to another Factions home");
 		this.setDesc("teleport to another Factions home");

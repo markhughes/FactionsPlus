@@ -134,7 +134,6 @@ public class CoreListener implements Listener{
 	    		( event.getRightClicked() instanceof Horse && player.getItemInHand().getType().equals( Material.LEASH ) ) ||
 	    		event.getRightClicked() instanceof Pig || 
 	    		event.getRightClicked() instanceof Horse 
-
 	    ) {
 	    	
 	    	Faction entityAt = BoardColls.get().getFactionAt( PS.valueOf( currentEntity.getLocation() ));

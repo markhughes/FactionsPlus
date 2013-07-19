@@ -18,6 +18,7 @@ import markehme.factionsplus.references.FPP;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdRemoveWarp extends FPCommand {
@@ -32,6 +33,7 @@ public class CmdRemoveWarp extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "remove a warp" );
 		this.setDesc( "remove a warp" );

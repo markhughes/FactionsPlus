@@ -9,6 +9,7 @@ import markehme.factionsplus.config.Config;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
@@ -16,8 +17,9 @@ public class CmdUnsetJail extends FPCommand {
 	public CmdUnsetJail() {
 		this.aliases.add( "unsetjail" );
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp("removes the Jail location");
 		this.setDesc("removes the Jail location");

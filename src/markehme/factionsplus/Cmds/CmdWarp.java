@@ -29,6 +29,7 @@ import org.bukkit.entity.Player;
 import com.earth2me.essentials.EssentialsPlayerListener;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
@@ -45,9 +46,10 @@ public class CmdWarp extends FPCommand {
 		this.optionalArgs.put("faction", "string");
 		this.errorOnToManyArgs = false;
 
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
-
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
+		
 		this.setHelp("warps to a specific warp");
 		this.setDesc("warps to a specific warp");
 

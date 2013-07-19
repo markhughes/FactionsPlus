@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdClearLocks extends FPCommand {
@@ -17,8 +18,8 @@ public class CmdClearLocks extends FPCommand {
 		
 		this.errorOnToManyArgs = true;
 				
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get());
+		this.addRequirements( ReqIsPlayer.get());
 		
 		this.setHelp("clears LWC and Lockette locks not owned by a Faction member in your land");
 		this.setDesc("clears LWC and Lockette locks not owned by a Faction member in your land");

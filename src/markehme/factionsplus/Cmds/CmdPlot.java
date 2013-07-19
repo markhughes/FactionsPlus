@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 import com.massivecraft.mcore.ps.PS;
 
@@ -19,6 +20,7 @@ public class CmdPlot extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "plot management for Factions" );
 		this.setDesc( "plot management for Factions" );

@@ -3,6 +3,7 @@ package markehme.factionsplus.Cmds;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdAddChest extends FPCommand {
@@ -15,6 +16,7 @@ public class CmdAddChest extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "create a faction chest, can be set up with permissions access" );
 

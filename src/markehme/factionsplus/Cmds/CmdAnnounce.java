@@ -15,6 +15,7 @@ import markehme.factionsplus.config.Config;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
@@ -26,13 +27,14 @@ import com.massivecraft.mcore.util.Txt;
 
 public class CmdAnnounce extends FPCommand {
 	public CmdAnnounce() {
-		this.aliases.add("announce");
+		this.aliases.add( "announce" );
 		
-		this.requiredArgs.add("message");
+		this.requiredArgs.add( "message" );
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp("sends an announcment to your Faction");
 		this.setDesc("sends an announcment to your Faction");

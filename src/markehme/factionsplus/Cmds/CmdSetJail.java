@@ -9,6 +9,7 @@ import com.massivecraft.factions.EconomyParticipator;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
@@ -19,8 +20,9 @@ public class CmdSetJail extends FCommand {
 	public CmdSetJail() {
 		this.aliases.add("setjail");
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "sets the Faction's jail" );
 		this.setDesc( "sets the Faction's jail" );

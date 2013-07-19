@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.MConf;
@@ -31,6 +32,7 @@ public class CmdBan extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "kicks a player out of your Faction, and stops them from re-joining" );
 		this.setDesc( "kicks a player out of your Faction, and stops them from re-joining" );

@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
@@ -111,6 +112,7 @@ public class CmdMoneyTop extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "show the highest ranked Factions by money" );
 		this.setDesc( "show the highest ranked Factions by money" );

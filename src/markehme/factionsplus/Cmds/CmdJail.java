@@ -8,6 +8,7 @@ import markehme.factionsplus.config.sections.Section_Jails;
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdJail extends FPCommand {
@@ -19,6 +20,7 @@ public class CmdJail extends FPCommand {
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "send a player to jail" );
 		this.setDesc( "send a player to jail" );

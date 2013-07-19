@@ -14,6 +14,7 @@ import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
+import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 import com.massivecraft.mcore.util.Txt;
 
@@ -26,8 +27,9 @@ public class CmdSetRule extends FPCommand{
 		this.requiredArgs.add("rule");
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements(ReqFactionsEnabled.get());
-		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements( ReqFactionsEnabled.get() );
+		this.addRequirements( ReqIsPlayer.get() );
+		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp("set Faction rules");
 		this.setDesc("set Faction rules");
