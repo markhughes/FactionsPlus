@@ -297,7 +297,6 @@ public class CmdWarp extends FPCommand {
 							
 						} catch(NoClassDefFoundError e) {
 							
-							msg(ChatColor.RED + "Error: Essentials is out of date. Inform server admin to upgrade.");
 							FP.severe("Essentials is out of date. Can not get safe location.");
 							
 						}
