@@ -230,6 +230,16 @@ public class AnimalDamageListener implements Listener {
 			
 		}
 		
+		if ( Config._extras._protection.protectSafeAnimalsInSafeZone._ ) {
+			
+			if ( FType.valueOf( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) ) ) == FType.SAFEZONE ) {
+
+				return false;
+				
+			}
+
+		}
+		
 		if( ! Config._extras._protection.allowFactionKillAlliesMobs._ ) {
 			
 			if ( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) ).getRelationTo( uPlayer ).equals( Rel.ALLY ) ) {
