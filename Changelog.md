@@ -9,6 +9,9 @@
 - Scoreboards now include Power Boost, and Land Power 
 - Scoreboards are now sent to players when they login 
 - Fixed scoreboards to support up to 999999 power (wa-hoo!)
+- allowShopsInWilderness is now in use (ChestShop)
+- allowShopsInTerritory is now in use (ChestShop)
+- New configuration option protectSafeAnimalsInSafeZone, which will do the same as allowFactionKill*Mobs but in SafeZones 
 
 # FactionsPlus version 0.6.3
 - Further advancements on FType (turns out pernament factions can have leaders if setup that way)
