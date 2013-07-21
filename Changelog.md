@@ -6,6 +6,9 @@
 - I've attempted to install a system to use both new and old version of Essentials. I suggest using Essentials-2.11.1
 - Damage checks with allowFactionKill*Mobs now includes fishing hooks
 - Fixed an issue with people in the wilderness/none faction can create announcements, and use some FactionsPlus commands
+- Scoreboards now include Power Boost, and Land Power 
+- Scoreboards are now sent to players when they login 
+- Fixed scoreboards to support up to 999999 power (wa-hoo!)
 
 # FactionsPlus version 0.6.3
 - Further advancements on FType (turns out pernament factions can have leaders if setup that way)
