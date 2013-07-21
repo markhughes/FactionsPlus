@@ -104,7 +104,13 @@ public class FPConfigLoadedListener implements Listener {
 		Listen.startOrStopListenerAsNeeded( Config._peaceful.enablePeacefulBoosts._, PeacefulListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
 		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
-        
+		
+		// ChestShop
+		if( Bukkit.getPluginManager().getPlugin( "ChestShop" ) != null ) {
+			
+			Listen.startOrStopListenerAsNeeded( (Config._extras._protection.allowShopsInTerritory._ || Config._extras._protection.allowShopsInWilderness._), ChestShopListener.class );
+			
+		}
 		// Animal Damager Listener
 		
 		if(
