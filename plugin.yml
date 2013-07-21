@@ -4,7 +4,7 @@ authors: ['MarkehMe', 'unv_annihilator', 'andrew2060', 'basicsensei']
 website: http://markeh.me
 version: 0.6.3
 depend: [ Factions, Vault ]
-soft-depend: [ DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette ]
+soft-depend: [ DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette, ChestShop ]
 dev-url: http://dev.bukkit.org/bukkit-plugins/factionsplus/
 permissions:
   factionsplus.kit.jails:
