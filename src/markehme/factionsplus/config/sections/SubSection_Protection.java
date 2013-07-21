@@ -30,18 +30,22 @@ public class SubSection_Protection {
 	@Option(autoComment={"Allow factions to kill enemy factions mobs"},
 			realAlias_inNonDottedFormat = "allowFactionKillEnemyMobs" )
 	public final _boolean		allowFactionKillEnemyMobs		= new _boolean( false );
+
+	@Option(autoComment={"Protects some safe mobs in SafeZone"},
+			realAlias_inNonDottedFormat = "protectSafeAnimalsInSafeZone" )
+	public final _boolean		protectSafeAnimalsInSafeZone		= new _boolean( false );
 	
 	@Option(autoComment={"Enabling this will disallow shearing, milking, and fishing",
 						 "outside your Faction land. But allows it in wilderness/factionless land."},
 			realAlias_inNonDottedFormat = "stricterFarmingProtection" )
 	public final _boolean		stricterFarmingProtection		= new _boolean( true );
 
-	@Option(autoComment={"unused"},
+	@Option(autoComment={"Change to false to disallow creating shops in the wilderness"},
 		realAlias_inNonDottedFormat = "allowShopsInWilderness" )
 	public final _boolean		allowShopsInWilderness			= new _boolean( true );
 	
 	
-	@Option(autoComment={"unused"},
+	@Option(autoComment={"Change to false to disallow creating shops in their own territory"},
 		realAlias_inNonDottedFormat = "allowShopsInTerritory" )
 	public final _boolean		allowShopsInTerritory			= new _boolean( true );
 	
