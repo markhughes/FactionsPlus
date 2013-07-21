@@ -116,7 +116,8 @@ public class FPConfigLoadedListener implements Listener {
 		if(
 				! Config._extras._protection.allowFactionKillAlliesMobs._ ||
 				! Config._extras._protection.allowFactionKillEnemyMobs._ ||
-				! Config._extras._protection.allowFactionKillNeutralMobs._ 
+				! Config._extras._protection.allowFactionKillNeutralMobs._ ||
+				Config._extras._protection.protectSafeAnimalsInSafeZone._
 		) {
 			
 			Listen.startOrStopListenerAsNeeded( true, AnimalDamageListener.class );
