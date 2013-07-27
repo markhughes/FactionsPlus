@@ -11,15 +11,6 @@ public final class Section_Banning {
 	}, realAlias_inNonDottedFormat = "enabled" )
 	public  final _boolean enabled=new _boolean(true);
 	
-	
-	@Option(
-		autoComment={"unused, but acts like it's always true"},
-		oldAliases_alwaysDotted={
-		"leaderCanNotBeBanned"
-	}, realAlias_inNonDottedFormat = "leaderCanNotBeBanned" )
-	public  final _boolean leaderCanNotBeBanned=new _boolean(true);
-	
-	
 	@Option(oldAliases_alwaysDotted={
 		"leadersCanFactionBan"
 		,"banning.leadersCanFactionBan"
