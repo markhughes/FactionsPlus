@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -48,6 +49,24 @@ import com.massivecraft.mcore.ps.PS;
 
 public class CoreListener implements Listener{
 	public static Server fp;
+	
+	@EventHandler(ignoreCancelled=true)
+	public void onEntityDamage(EntityDamageEvent event) {
+		
+		if (event.getEntity() instanceof Player) {
+			
+			Player p = (Player) event.getEntity();
+			
+			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( p.getLocation() ) );
+			
+			if( FType.valueOf( factionAt ) == FType.SAFEZONE && Config._extras._protection.safeZonesExtraSafe._ ) {
+				
+				event.setCancelled( true );
+				
+			}
+				
+		}
+	}
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onVillagerTrade( InventoryClickEvent event ) {

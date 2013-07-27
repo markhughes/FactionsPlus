@@ -63,5 +63,10 @@ public class SubSection_Protection {
 			realAlias_inNonDottedFormat = "onlyPeacefulCreateLWCProtections"
 	)
 	public final _boolean		onlyPeacefulCreateLWCProtections = new _boolean( false );
+	
+	@Option(autoComment={"Enabling this will deny any damage to a player in a SafeZone."},
+			realAlias_inNonDottedFormat = "safeZonesExtraSafe"
+	)
+	public final _boolean		safeZonesExtraSafe = new _boolean( false );
 
 }
