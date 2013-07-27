@@ -208,7 +208,7 @@ public class AnimalDamageListener implements Listener {
 			entity == EntityType.VILLAGER ||
 			entity == EntityType.HORSE ||
 			entity == EntityType.SQUID ||
-			entity == EntityType.SHEEP
+			entity == EntityType.SHEEP 
 		) {
 			
 			return true;
