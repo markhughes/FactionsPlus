@@ -40,7 +40,7 @@ public class FactionsPlusJail {
 	
 	public static boolean removeFromJail(String nameOfPlayerToBeUnjailed, UPlayer unjailer, boolean DontSayAnything) {
 
-		if ( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeUnjailed ) ) != null ) {
+		if ( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeUnjailed ) ) == null ) {
 			unjailer.sendMessage( ChatColor.RED + "That player does not exist on this server" );
 			return false;
 		}
@@ -251,7 +251,7 @@ public class FactionsPlusJail {
 		OfflinePlayer playerToBeJailed = FP.server.getOfflinePlayer( nameOfPlayerToBeJailed);
 		
 		
-		if( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeJailed ) ) != null ) {
+		if( UPlayer.get( Bukkit.getPlayer( nameOfPlayerToBeJailed ) ) == null ) {
 			fplayer.msg("Cannot jail non-existant player '"+nameOfPlayerToBeJailed+"'");
 			return false;
 		}
