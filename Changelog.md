@@ -1,3 +1,7 @@
+# FactionsPlus 0.6.5
+- Fixes a bug where you can't interact with any animals
+
+
 # FactionsPlus version 0.6.4
 - Fixed a bug where the client would think you're getting mushroom stew from mooshroom cow - but you really didn't ;) 
 - allowFactionKillNeutralMobs no longer affects Wilderness (woo!) 
@@ -12,6 +16,8 @@
 - allowShopsInWilderness is now in use (ChestShop)
 - allowShopsInTerritory is now in use (ChestShop)
 - New configuration option protectSafeAnimalsInSafeZone, which will do the same as allowFactionKill*Mobs but in SafeZones 
+- Removal of leaderCanNotBeBanned, not needed. Leaders should never be banned from their own Faction. 
+- allowShopsInWilderness / allowShopsInTerritory also supports ShowCaseStandalone 
 
 # FactionsPlus version 0.6.3
 - Further advancements on FType (turns out pernament factions can have leaders if setup that way)
