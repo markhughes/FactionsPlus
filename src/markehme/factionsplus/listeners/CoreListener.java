@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusRules;
+import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
@@ -38,7 +39,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
@@ -136,9 +142,11 @@ public class CoreListener implements Listener{
 	    		event.getRightClicked() instanceof Horse 
 	    ) {
 	    	
+	    	
+	    	
 	    	Faction entityAt = BoardColls.get().getFactionAt( PS.valueOf( currentEntity.getLocation() ));
 	    	
-	    	if( entityAt != UPlayer.get( player).getFaction() ) {
+	    	if( entityAt != UPlayer.get( player).getFaction() && FType.valueOf( entityAt ) != FType.WILDERNESS ) {
 	    		
 	    		player.sendMessage( "You can not interact with that animal in this Factions land." );
 	    		player.updateInventory();
@@ -228,6 +236,15 @@ public class CoreListener implements Listener{
 			
 			}
 			
+		}
+		
+		if( Config._extras._scoreboards.sendScoreboardOnJoin._ && Config._extras._scoreboards.showScoreboardOfFactions._ ) {
+			
+			
+			if( FactionsPlusScoreboard.scoreBoard != null ) {
+				event.getPlayer().setScoreboard( FactionsPlusScoreboard.scoreBoard );
+			}
+				
 		}
 		
 	}
