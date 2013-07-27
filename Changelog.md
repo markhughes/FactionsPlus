@@ -1,6 +1,6 @@
 # FactionsPlus 0.6.5
 - Fixes a bug where you can't interact with any animals
-
+- Added configuration option `safeZonesExtraSafe`. (Resolves issue #52)
 
 # FactionsPlus version 0.6.4
 - Fixed a bug where the client would think you're getting mushroom stew from mooshroom cow - but you really didn't ;) 
