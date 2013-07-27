@@ -37,8 +37,11 @@ import com.massivecraft.mcore.store.Coll;
 import com.sk89q.worldedit.WorldEdit;
 
 public class FactionsPlusScoreboard {
+	
 	public static String objective_name = "FP_Top_Factions";
-
+	public static ArrayList<String> sFactions;
+	public static Scoreboard scoreBoard = null;
+	
 	public static void setup() {
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask( FP.instance, new Runnable() {
@@ -52,7 +55,7 @@ public class FactionsPlusScoreboard {
 				}
 				
 				ScoreboardManager manager	= Bukkit.getScoreboardManager();
-				Scoreboard scoreBoard		= manager.getMainScoreboard(); // don't make a new one or we'll overwrite them all!
+				scoreBoard		= manager.getMainScoreboard(); // don't make a new one or we'll overwrite them all!
 				
 				if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
 					
@@ -75,7 +78,7 @@ public class FactionsPlusScoreboard {
 						
 					}				
 					
-					ArrayList<String> sFactions = new ArrayList<String>();
+					sFactions = new ArrayList<String>(); // clear it, and start again. 
 					
 					int i = 0;
 					
@@ -88,7 +91,6 @@ public class FactionsPlusScoreboard {
 					    	// We want normal factions
 					    	if( FType.valueOf( sFaction ) == FType.FACTION ) {
 					    		some_number = Math.floor( sFaction.getLandCount() + sFaction.getPowerBoost() + sFaction.getPowerMaxRounded() ) + "";
-					    		
 					    		if(some_number.length() == 1 ) { // changes power looking like "9" to "000009"
 					    			some_number = "00000"+some_number;
 					    			
