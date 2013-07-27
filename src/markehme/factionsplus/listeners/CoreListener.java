@@ -19,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
@@ -28,7 +27,7 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -38,13 +37,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Score;
-import org.bukkit.scoreboard.Scoreboard;
 
-import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
@@ -120,7 +113,7 @@ public class CoreListener implements Listener{
 			
 			Faction factionAtHook = BoardColls.get().getFactionAt( PS.valueOf( event.getHook().getLocation() ) ); 
 			
-			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+			if( factionAtHook != uPlayer.getFaction() && !factionAtHook.isNone() && !Utilities.isSafeZone( factionAt ) ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
