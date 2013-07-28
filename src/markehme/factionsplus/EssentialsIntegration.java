@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import com.earth2me.essentials.IEssentials;
@@ -150,7 +151,8 @@ public abstract class EssentialsIntegration {
 			Trade trade = new Trade( (int) UConf.get(player).econCostHome, (net.ess3.api.IEssentials) getEssentialsInstance() );
 			new Trade(0, null);
 			
-			teleport.teleport(loc, trade);
+			teleport.teleport( loc, trade, TeleportCause.PLUGIN );
+			
 		} catch (Exception e) {
 			player.sendMessage(ChatColor.RED.toString()+e.getMessage());
 			
