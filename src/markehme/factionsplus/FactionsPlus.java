@@ -1,7 +1,6 @@
 package markehme.factionsplus;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -16,21 +15,15 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.scheduler.BukkitWorker;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.factions.entity.MConfColl;
-import com.massivecraft.factions.entity.UConf;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiversePortals.MultiversePortals;
-import com.onarandombox.MultiversePortals.utils.PortalManager;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
