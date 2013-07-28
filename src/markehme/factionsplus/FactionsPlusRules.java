@@ -11,14 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.List;
 
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
@@ -171,9 +168,7 @@ public class FactionsPlusRules {
 	}
 	
 	public static void setRuleForFaction(Faction faction, UPlayer setter, String FPRule) {
-		
-		Player sender = setter.getPlayer();
-		
+				
 		String[] argsa = new String[3];
 		argsa[1] = setter.getName();
 		argsa[2] = FPRule;

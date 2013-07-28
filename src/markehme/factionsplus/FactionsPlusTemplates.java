@@ -3,7 +3,6 @@ package markehme.factionsplus;
 import markehme.factionsplus.config.Config;
 
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class FactionsPlusTemplates {
 	public static String Go(String templateOption, String args[]) {
@@ -125,12 +124,5 @@ public class FactionsPlusTemplates {
 		
 		return b;
 		
-	}
-	
-	@Deprecated
-	public static void createTemplatesFile() {
-		if(Config.templatesFile.exists()) {
-			Config.templatesFile.delete();
-		}
 	}
 }

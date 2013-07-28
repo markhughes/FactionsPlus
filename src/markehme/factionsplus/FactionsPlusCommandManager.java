@@ -26,7 +26,6 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.CmdFactionsMoney;
 import com.massivecraft.factions.cmd.FCommand;
 
 

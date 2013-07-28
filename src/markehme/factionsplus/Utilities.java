@@ -10,33 +10,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.references.FP;
 import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 
-import com.earth2me.essentials.Teleport;
-import com.earth2me.essentials.Trade;
 import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.FPerm;
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.TerritoryAccess;
-import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.mcore.MCoreConfColl;
 
 
 public abstract class Utilities {

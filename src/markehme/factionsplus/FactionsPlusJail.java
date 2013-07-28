@@ -6,14 +6,11 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
-import markehme.factionsplus.Cmds.CmdSetJail;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.references.FP;
 import markehme.factionsplus.util.CacheMap;
@@ -23,12 +20,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 
@@ -245,9 +240,7 @@ public class FactionsPlusJail {
 		
 		UPlayer fplayer = UPlayer.get( Bukkit.getPlayer( sender.getName() ) );
 		Faction currentFaction = fplayer.getFaction();
-		
-		World world;
-		
+				
 		OfflinePlayer playerToBeJailed = FP.server.getOfflinePlayer( nameOfPlayerToBeJailed);
 		
 		

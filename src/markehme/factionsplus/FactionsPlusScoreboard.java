@@ -1,40 +1,25 @@
 package markehme.factionsplus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
-import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
 
-import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.FactionListComparator;
-import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
-import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.factions.entity.UConf;
-import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.MCore;
-import com.massivecraft.mcore.MultiverseColl;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.store.Coll;
-import com.sk89q.worldedit.WorldEdit;
+
 
 public class FactionsPlusScoreboard {
 	
@@ -208,12 +193,8 @@ public class FactionsPlusScoreboard {
 					
 				}
 				
-				Objective ofaction_map;
-				Score faction_map;
-				UPlayer up;
-				
+
 				for ( Player p : Bukkit.getOnlinePlayers() ) {
-					up = UPlayer.get( p.getPlayer().getName() );
 										
 					if( !( FP.permission.has( p, "factionsplus.hidesb." + p.getWorld().getName() ) && ! FP.permission.has( p, "factionsplus.hidesb" ) ) 
 							|| FP.permission.has( p, "factionsplus.forcesb") ) {
@@ -224,6 +205,7 @@ public class FactionsPlusScoreboard {
 							// e.g. not have any names of the Factions. No colours.. 
 							
 							// this map is 16x16
+							/*
 							String mapLine_1	= "----------------";
 							String mapLine_2	= "-------\\-------";
 							String mapLine_3	= "-------\\-------";
@@ -240,7 +222,7 @@ public class FactionsPlusScoreboard {
 							String mapLine_14	= "----------------";
 							String mapLine_15	= "----------------";
 							String mapLine_16	= "----------------";
-
+							*/
 						}
 								
 						p.setScoreboard( scoreBoard );
