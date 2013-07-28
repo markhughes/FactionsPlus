@@ -105,7 +105,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			pm.registerEvents( this.corelistener, this );
 			
-			this.server = getServer();
+			server = getServer();
 			
 			FactionsPlusCommandManager.setup();
 			
@@ -130,7 +130,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        	Plugin MVc = getServer().getPluginManager().getPlugin( "Multiverse-Portals" );
 	            
 	            if (MVc instanceof MultiversePortals) {
-	            	this.multiversePortalsPlugin = ( MultiversePortals ) MVc;
+	            	multiversePortalsPlugin = ( MultiversePortals ) MVc;
 	            	
 		        	isMultiversePortalsEnabled = true;
 	            }
