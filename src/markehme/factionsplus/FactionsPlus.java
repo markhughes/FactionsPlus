@@ -86,9 +86,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); 
 			
-			this.ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
-			this.noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
-			this.noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
+			ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
+			noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
+			noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
 						
 			version = getDescription().getVersion();
 			
