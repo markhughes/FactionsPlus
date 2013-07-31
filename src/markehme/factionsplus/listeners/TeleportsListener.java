@@ -302,7 +302,7 @@ public class TeleportsListener implements Listener {
 					// this means player could've used "/home bed" even without any homes set or just "/home" without homes set
 					// would also do that equivalent of "/home bed"
 					// targetLocation=playerInGame.getBedSpawnLocation();
-					playerInGame.sendMessage( ChatColor.RED + "You have no homes/bed set. Command ignored." );
+					playerInGame.sendMessage( ChatColor.RED + "You have no home(s)/bed set. Command ignored." );
 					event.setCancelled( true );
 					return;
 				}
