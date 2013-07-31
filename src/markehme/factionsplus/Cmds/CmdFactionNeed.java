@@ -55,7 +55,7 @@ public class CmdFactionNeed extends FPCommand {
         		
         		if( FP.permission.has( p, "factionsplus.ignoreneeds" ) ) {
         			
-        			p.sendMessage( FactionsPlusTemplates.Go( "faction_need", argsa ) );
+        			p.sendMessage( FactionsPlusTemplates.Go( "faction_need", argsa ).replace("!1", sender.getName() ) );
         			
         		}
         	}
