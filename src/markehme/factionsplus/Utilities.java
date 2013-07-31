@@ -206,24 +206,20 @@ public abstract class Utilities {
 		uPlayer.setPower(Double.valueOf(uPlayer.getPower() + amount));
 	}
 
-	@SuppressWarnings("boxing")
 	public static void addPower(String player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPower(uPlayer.getPower() + amount);
 	}
 
-	@SuppressWarnings("boxing")
 	public static void removePower(Player player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPower(uPlayer.getPower() - amount);
 	}
 
-	@SuppressWarnings("boxing")
 	public static void removePower(UPlayer uPlayer, double amount) {
 		uPlayer.setPower(uPlayer.getPower() - amount);
 	}
 
-	@SuppressWarnings("boxing")
 	public static void removePower(String player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPower(uPlayer.getPower() - amount);
