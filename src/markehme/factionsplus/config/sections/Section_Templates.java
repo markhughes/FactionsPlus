@@ -68,6 +68,6 @@ public final class Section_Templates {
 	@Option(	autoComment={"Sent to Faction leaders and officers when /f need is called."},
 			realAlias_inNonDottedFormat = "faction_need"
 		)
-	public  final _string faction_need = new _string("<white>The player $1 is looking for a Faction! You can invite them with <green>/f inv $1");
+	public  final _string faction_need = new _string("<white>The player !1 is looking for a Faction! You can invite them with <green>/f inv !1");
 
 }
