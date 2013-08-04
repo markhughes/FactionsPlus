@@ -227,6 +227,18 @@ public class FactionsPlusScoreboard {
 								
 						p.setScoreboard( scoreBoard );
 						
+					} else {
+						
+						try {
+							
+							p.getScoreboard().getObjective( objective_name ).unregister();
+							
+						} catch( Exception e ) {
+							
+							// Not sure if it'll throw an Exception on a non-existant scoreboard
+							// so put it in a try catch 
+							
+						}
 					}
 				}
 			}
