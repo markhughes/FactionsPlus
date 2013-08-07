@@ -329,6 +329,8 @@ public abstract class Utilities {
 	}
 	
 	
+	@Deprecated
+	// Use FType from now on
 	public static boolean isWarZone( Faction faction ) {
 		
 		if( FType.valueOf( faction ) == FType.WARZONE ) {
@@ -341,6 +343,8 @@ public abstract class Utilities {
 		
 	}
 
+	@Deprecated
+	// Use FType from now on
 	public static boolean isSafeZone( Faction faction ) {
 		
 		if( FType.valueOf( faction ) == FType.SAFEZONE ) {
@@ -351,6 +355,8 @@ public abstract class Utilities {
 		
 		return false;	}
 
+	@Deprecated
+	// Use FType from now on
 	public static boolean isWilderness( Faction faction ) {
 		
 		if( FType.valueOf( faction ) == FType.WILDERNESS ) {
@@ -362,6 +368,8 @@ public abstract class Utilities {
 		return false;		
 	}
 	
+	@Deprecated
+	// Use FType from now on
 	public static final boolean isPlayerFaction( Faction faction ) {
 		
 		if( FType.valueOf( faction ) == FType.FACTION ) {
@@ -378,6 +386,8 @@ public abstract class Utilities {
 	 * @param faction
 	 * @return true is so
 	 */
+	@Deprecated
+	// Use FType from now on
 	public static boolean isNormalFaction(Faction faction) {
 		return !isWarZone( faction ) && !isSafeZone(faction) && !isWilderness( faction );
 	}
