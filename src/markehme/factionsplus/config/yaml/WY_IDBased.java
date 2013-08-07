@@ -27,7 +27,7 @@ public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	}
 	
 	
-	@Deprecated
+	// @Deprecated // Why is this deprecated? No documentation of WHY
 	public String getInAbsoluteDottedForm() {
 		return getID_InAbsoluteDottedForm( null );
 	}
@@ -38,7 +38,7 @@ public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	 *            can be null
 	 * @return ie. extras.lwc.disableSomething
 	 */
-	@Deprecated
+	// @Deprecated // Why is this deprecated? No documentation of WHY
 	public String getID_InAbsoluteDottedForm( WYSection upToAndExcluding ) {
 		String df = "";
 		WYSection p = getParent();
