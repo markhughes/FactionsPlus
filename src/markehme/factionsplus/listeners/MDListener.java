@@ -1,17 +1,13 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.config.Config;
 import markehme.factionsplus.references.FPP;
 
-import me.desmin88.mobdisguise.api.MobDisguiseAPI;
 import me.desmin88.mobdisguise.api.event.DisguiseEvent;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import com.massivecraft.factions.entity.UPlayer;
 
 /**
  * It appears MobDisguise is inactive and no longer functioning.

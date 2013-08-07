@@ -1,13 +1,11 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.FactionsPlusUpdate;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
-import markehme.factionsplus.extras.LocketteBase;
 import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.references.FP;
 import markehme.factionsplus.references.FPP;
@@ -16,19 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.bukkit.scoreboard.Team;
-
-import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.entity.BoardColls;
-import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.mcore.ps.PS;
-
-
 
 public class FPConfigLoadedListener implements Listener {
 	
@@ -36,7 +21,7 @@ public class FPConfigLoadedListener implements Listener {
 	 * called after the config is (re)loaded, which is typically when plugin is enabled and when /f reloadfp  is issued<br>
 	 */
 	@EventHandler
-	public void onConfigLoaded( @SuppressWarnings( "unused" ) FPConfigLoadedEvent event ) {
+	public void onConfigLoaded( FPConfigLoadedEvent event ) {
         Config._economy.enableOrDisableEconomy();
         //TODO: add more here and make sure they can change states between on/off just like they would by a server 'reload' command
         //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
