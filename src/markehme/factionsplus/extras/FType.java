@@ -5,7 +5,7 @@ import com.massivecraft.factions.entity.Faction;
 
 /**
  * Anyone is free to use this FType enum as long as credit is 
- * give where credit is due. :-)
+ * given where credit is due. :-)
  * 
  * @author MarkehMe
  *
