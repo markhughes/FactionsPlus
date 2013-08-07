@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 
 public class CO_Invalid extends COMetadata {
 	
-	public static final String				commentPrefixForINVALIDs	= "INVALID #";
+	public static final String				commentPrefixForINVALIDs	= "Invalid / Removed #";
 	public static final ChatColor			colorOnINVALID				= ChatColor.YELLOW;
 	
 	
