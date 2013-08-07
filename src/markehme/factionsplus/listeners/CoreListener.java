@@ -158,7 +158,7 @@ public class CoreListener implements Listener{
 	    	
 	    	Faction entityAt = BoardColls.get().getFactionAt( PS.valueOf( currentEntity.getLocation() ));
 	    	
-	    	if( entityAt != UPlayer.get( player).getFaction() && FType.valueOf( entityAt ) != FType.WILDERNESS ) {
+	    	if( entityAt.getId() != UPlayer.get( player).getFaction().getId() && FType.valueOf( entityAt ) == FType.FACTION ) {
 	    		
 	    		player.sendMessage( "You can not interact with that animal in this Factions land." );
 	    		player.updateInventory();
