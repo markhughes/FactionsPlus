@@ -4,6 +4,8 @@
 - Code cleanup and general enhancements 
 - Fixed faction_need template 
 - Now runs unregister on SB if they aren't supposed to have it
+- Added new configuration option worldguardCanBuildCheck
+- LWC Protection removal for Hoppers added
 
 # FactionsPlus version 0.6.4
 - Fixed a bug where the client would think you're getting mushroom stew from mooshroom cow - but you really didn't ;) 
