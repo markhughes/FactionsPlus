@@ -68,5 +68,11 @@ public class SubSection_Protection {
 			realAlias_inNonDottedFormat = "safeZonesExtraSafe"
 	)
 	public final _boolean		safeZonesExtraSafe = new _boolean( false );
+	
+	@Option(autoComment={"If enabled, when claiming this will check world guard regions for can build",
+						 "they will otherwise be denied."},
+			realAlias_inNonDottedFormat = "worldguardCanBuildCheck"
+	)
+	public final _boolean		worldguardCanBuildCheck = new _boolean( true );
 
 }

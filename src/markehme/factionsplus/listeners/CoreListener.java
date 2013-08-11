@@ -15,8 +15,10 @@ import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
@@ -39,9 +41,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.griefcraft.model.Protection;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.factions.event.FactionsEventCreate;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
@@ -49,6 +53,50 @@ import com.massivecraft.mcore.ps.PS;
 
 public class CoreListener implements Listener{
 	public static Server fp;
+	
+	@EventHandler(ignoreCancelled=true)
+	public void onLandClaim(FactionsEventChunkChange event) {
+		
+		if(Config._extras._protection.worldguardCanBuildCheck._) {
+			
+			if( !event.getNewFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp()) {
+				
+				if( Bukkit.getServer().getPluginManager().isPluginEnabled( "WorldGuard" ) ) {
+					
+					if(FactionsPlus.worldGuardPlugin != null) {
+						
+						Chunk chunk = event.getChunk().asBukkitChunk();
+						
+						// Check the entire chunk
+						for ( int x = 0; x < 16; x++ ) {
+							for ( int z = 0; z < 16; z++ ) {
+								for ( int y = 0; y < 256; y++ ) {
+									
+									Block block = chunk.getBlock( x, y, z );
+									
+									// Check if the player can build 
+									if ( ! FactionsPlus.worldGuardPlugin.canBuild(event.getUSender().getPlayer(), block)) {
+										
+										// Apparently not, so cancel and send a notice 
+										event.setCancelled( true );
+										event.getUSender().msg( ChatColor.RED + "You can not claim this land, as you do not have build permissions in this region." );
+	
+									}
+									
+									// TODO: Check custom flags 
+									// XXX: To do this, we need to wait for WorldGuard to release native custom flags 
+								}
+							}
+						}
+						
+					}
+					
+				}
+				
+		}
+		}
+		
+	}
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onEntityDamage(EntityDamageEvent event) {
