@@ -79,13 +79,14 @@ public abstract class LWCFunctions extends LWCBase {
 	
 	
 	
-	private final static Material[] protectionsTypesToRemove={
+	private final static Material[] protectionsTypesToRemove = {
 		 Material.CHEST //is TileEntity
 		,Material.FURNACE //is TileEntity
 		,Material.BURNING_FURNACE // unsure if it's TileEntity
 		,Material.WALL_SIGN //is TileEntity
 		,Material.SIGN_POST //is TileEntity
 		,Material.DISPENSER //is TileEntity
+		,Material.HOPPER
 		
 		,Material.WOODEN_DOOR //is NOT TileEntity
 		,Material.IRON_DOOR_BLOCK //is NOT TileEntity
@@ -117,19 +118,23 @@ public abstract class LWCFunctions extends LWCBase {
 			throw new Exception( "World is null (Not loaded, or not found)" );
 		}
 		
-		Chunk chunk = world.getChunkAt( facLocation.getBlockX().intValue(), facLocation.getBlockZ().intValue() );
+		Chunk chunk = world.getChunkAt( facLocation.getBlock().asBukkitBlock().getX(), facLocation.getBlock().asBukkitBlock().getZ() );
 		
+		// Ensure the chunk is loaded
 		if ( !world.isChunkLoaded( chunk ) ) {
-			world.loadChunk( chunk );
 			
+			world.loadChunk( chunk ); // attempt to load the chunk 
+			
+			// Check again
 			if ( !chunk.isLoaded() ) {
 				throw new Exception( "Could not force load chunk." );
 			}
+			
 		}
 		
-		
 		int numberOfRemovedProtections = 0;
-		// parse each block(in the chunk) and if it's of protectionsTypesToRemove then remove the protection from it
+		
+		// parse each block (of the chunk) and if it's one of protectionsTypesToRemove then remove the protection from it
 		
 		for ( int x = 0; x < 16; x++ ) {
 			for ( int z = 0; z < 16; z++ ) {
@@ -140,7 +145,7 @@ public abstract class LWCFunctions extends LWCBase {
 					Material type = block.getType();
 					
 					if ( type == Material.AIR ) {
-						continue;// ignore all air blocks
+						continue; // ignore all air blocks
 					}
 					
 					if ( isProtectionTypeToRemove( type ) ) {
