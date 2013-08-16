@@ -6,6 +6,7 @@
 - Now runs unregister on SB if they aren't supposed to have it
 - Added new configuration option worldguardCanBuildCheck
 - LWC Protection removal for Hoppers added
+- Removed /f powsets
 
 # FactionsPlus version 0.6.4
 - Fixed a bug where the client would think you're getting mushroom stew from mooshroom cow - but you really didn't ;) 
