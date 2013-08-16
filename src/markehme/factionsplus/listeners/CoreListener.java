@@ -13,6 +13,7 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
 
+import org.bouncycastle.crypto.prng.RandomGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -50,6 +51,17 @@ import com.massivecraft.factions.event.FactionsEventCreate;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
 import com.massivecraft.mcore.ps.PS;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.LocalWorld;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.Vector2D;
+import com.sk89q.worldedit.data.ChunkStore;
+import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+
+import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
 
 public class CoreListener implements Listener{
 	public static Server fp;
@@ -61,39 +73,34 @@ public class CoreListener implements Listener{
 			
 			if( !event.getNewFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp()) {
 				
+				// Ensure WorldGuard exists! 
 				if( Bukkit.getServer().getPluginManager().isPluginEnabled( "WorldGuard" ) ) {
 					
-					if(FactionsPlus.worldGuardPlugin != null) {
+					if( FP.worldGuardPlugin != null ) {
 						
-						Chunk chunk = event.getChunk().asBukkitChunk();
-						
-						// Check the entire chunk
-						for ( int x = 0; x < 16; x++ ) {
-							for ( int z = 0; z < 16; z++ ) {
-								for ( int y = 0; y < 256; y++ ) {
-									
-									Block block = chunk.getBlock( x, y, z );
-									
-									// Check if the player can build 
-									if ( ! FactionsPlus.worldGuardPlugin.canBuild(event.getUSender().getPlayer(), block)) {
-										
-										// Apparently not, so cancel and send a notice 
-										event.setCancelled( true );
-										event.getUSender().msg( ChatColor.RED + "You can not claim this land, as you do not have build permissions in this region." );
-	
-									}
-									
-									// TODO: Check custom flags 
-									// XXX: To do this, we need to wait for WorldGuard to release native custom flags 
-								}
-							}
+						// Check for chunks
+						if( Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation()) ) {
+							
+							// TODO: 	Check region flags - this can be done by instead returning an array
+							//			of the regions in the chunk, checking the size of the array and then
+							//			loop through if we're supporting checkForWorldGuardRegionFlags
+							
+							// The flag will be "faction" /region flag SomeRegion faction MyFactionName
+							// and thus, that Faction can build. 
+							
+							event.setCancelled(true);
+							
+							event.getUSender().msg(ChatColor.RED + "There is a WorldGuard region in the way here!");
+							
+							
 						}
+
 						
 					}
 					
 				}
 				
-		}
+			}
 		}
 		
 	}

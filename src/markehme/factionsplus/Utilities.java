@@ -10,12 +10,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
+import markehme.factionsplus.references.FP;
 import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -27,11 +33,17 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 
 public abstract class Utilities {
 	/* ********** FILE RELATED ********** */
-
+	
+	public static Random randomG = new Random();
+	
 	public static String readFileAsString(File filePath) {
 		FileInputStream fstream=null;
 		DataInputStream in=null;
@@ -535,6 +547,63 @@ public abstract class Utilities {
 			return Econ.modifyMoney(player, -cost, sinceDidX);
 		}
 	}
+	
+	/**
+	 * Returns true or false. Based on the previous Factions source.
+	 * @param loc
+	 * @return
+	 */
+	public static boolean checkForRegionsInChunk(Location currentLocation) {
+		
+		// This is pretty much the exact same as Factions 1.6.x source's method
+		// except it's inside FactionsPlus!
+		
+		World world = currentLocation.getWorld();
+		Chunk chunk = world.getChunkAt( currentLocation );
+		
+		int minChunkX = chunk.getX() << 4;
+		int minChunkZ = chunk.getZ() << 4;
+		int maxChunkX = minChunkX + 15;
+		int maxChunkZ = minChunkZ + 15;
+
+		int worldHeight = world.getMaxHeight();
+
+		BlockVector minChunk = new BlockVector( minChunkX, 0, minChunkZ );
+		BlockVector maxChunk = new BlockVector( maxChunkX, worldHeight, maxChunkZ );
+
+		RegionManager regionManager = FP.worldGuardPlugin.getRegionManager( world );
+		
+		ProtectedCuboidRegion region = new ProtectedCuboidRegion( "factionsplus_tempoverlapcheck", minChunk, maxChunk );
+		
+		Map<String, ProtectedRegion> allregions = regionManager.getRegions(); 
+		
+		List<ProtectedRegion> allregionslist = new ArrayList<ProtectedRegion>( allregions.values() );
+		
+		List<ProtectedRegion> overlaps;
+		
+		boolean foundregions = false;
+
+		try {
+			overlaps = region.getIntersectingRegions( allregionslist );
+			if( overlaps == null || overlaps.isEmpty() ) {
+				foundregions = false;
+			} else {
+				foundregions = true;
+			}
+		} catch ( Exception e ) {
+			
+			e.printStackTrace();
+			
+		}
+
+		region = null;
+		allregionslist = null;
+		overlaps = null;
+
+		return( foundregions );
+		
+	}
+
 	
 }
 
