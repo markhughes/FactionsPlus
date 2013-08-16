@@ -56,6 +56,11 @@ public class CmdPowSettings extends FPCommand {
 	
 	@Override
 	public void performfp() {
+		
+		msg("This has been broken in Factions 2.0.");
+		
+		return;
+		/*
 		allLines.clear();
 		//done: split into pages? to avoid many msgs sent at once, maybe some plugins will prevent those msgs to ever be sent
 		
@@ -83,7 +88,7 @@ public class CmdPowSettings extends FPCommand {
 
 		sm("Player regenerates "+num(UConf.get(usender).powerPerHour)+" power per hour.");
 		
-		/*
+		
 		sm( "While offline, players " + ( Conf.powerRegenOffline ? _goodDO : _badDONT )
 			+ " regenerate and they "+
 				(Conf.powerOfflineLossPerDay>0.0?badColor+
@@ -91,7 +96,7 @@ public class CmdPowSettings extends FPCommand {
 				" but only if their power is above "+num(Conf.powerOfflineLossLimit)
 				:_goodDONT+" lose any power.")
 				);
-		*/
+		
 		
 				
 		sm("Players "+(UConf.get(usender).canLeaveWithNegativePower?goodColor+"can":badColor+"cannot")+
@@ -136,6 +141,7 @@ public class CmdPowSettings extends FPCommand {
 			msgColor1+" be in the player's own faction's territory for create/teleport-to.");
 		
 		sendMessage(Txt.getPage(allLines, this.getArgs().size(), "Power settings&stats, page: "));
+		*/
 	}
 	
 	private void showExtraLoss( double extraLoss,String deathBy ) {
