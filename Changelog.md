@@ -1,3 +1,7 @@
+# FactionsPlus 0.6.6
+- Add permission factionsplus.bypassregioncheck to allow bypassing worldguardCanBuildCheck
+- Added support for essentials /eback in /back denying 
+
 # FactionsPlus 0.6.5
 - Fixes a bug where you can't interact with any animals
 - Added configuration option `safeZonesExtraSafe`. (Resolves issue #52)
