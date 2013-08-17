@@ -42,6 +42,8 @@ public class TeleportsListener implements Listener {
 	private static final String			defaultHardCodedHomeName	= "home";							// ie. /home does /home
 																										// home
 	private static final String			backCMD						= "/back";							// lowercase pls
+	private static final String			ebackCMD					= "/eback";
+	
 	private static TeleportsListener	preventTeleports			= new TeleportsListener();
 	private static boolean				tpInited					= false;
 		
@@ -140,8 +142,9 @@ public class TeleportsListener implements Listener {
 		
 		if ( (Config._teleports.shouldPreventBackTelepors())  && ( EssentialsIntegration.isHooked() ) && ( !playerInGame.isOp())){
 			// /back is allowed for OPs and checked only if essentials exists/hooked
-			if ( realCmd.startsWith( backCMD )  ) {
-				if ( (realCmd.length() == backCMD.length()) || realCmd.split( "\\s+" )[0].equals( backCMD )) {
+			if ( realCmd.startsWith( backCMD ) || realCmd.startsWith( ebackCMD )  ) {
+				if ( (realCmd.length() == backCMD.length()) || realCmd.split( "\\s+" )[0].equals( backCMD )
+						|| (realCmd.length() == ebackCMD.length()) || realCmd.split( "\\s+" )[0].equals( ebackCMD )) {
 					//ok we got "/back" or "/back something"
 //					FactionsPlus.info("triggered "+EssentialsIntegration.getLastLocation( playerInGame ));
 					Location whereTo = EssentialsIntegration.getLastLocation( playerInGame );
@@ -206,7 +209,7 @@ public class TeleportsListener implements Listener {
 					assert null != rel;
 //					System.out.println("final: "+playerInGame+" "+rel+" current="+allowed);
 					if ( !allowed ) {
-						playerInGame.sendMessage( ChatColor.RED + "You are not allowed to go /back in "
+						playerInGame.sendMessage( ChatColor.RED + "You are not allowed to go use back commands in "
 							+ rel + " territory" );
 						event.setCancelled( true );
 						return;
