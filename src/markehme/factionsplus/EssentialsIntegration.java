@@ -2,6 +2,7 @@ package markehme.factionsplus;
 
 
 import markehme.factionsplus.references.FP;
+import net.ess3.api.InvalidWorldException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -83,8 +84,13 @@ public abstract class EssentialsIntegration {
 	public final static Location getHomeForPlayer( Player player, String homeName ) throws Exception {
 		
 		checkInvariants();
-		
-		return( getEssentialsInstance().getUser( player ).getHome( homeName ) );
+		try {
+			return( getEssentialsInstance().getUser( player ).getHome( homeName ) );
+		} catch (InvalidWorldException e) {
+			
+			player.sendMessage(ChatColor.RED + "The home " + homeName + " was in the world "+e.getWorld()+", but that world is no longer existant..");
+			return( null );
+		}
 		
 	}
 	
