@@ -306,6 +306,11 @@ public class TeleportsListener implements Listener {
 					// would also do that equivalent of "/home bed"
 					// targetLocation=playerInGame.getBedSpawnLocation();
 					playerInGame.sendMessage( ChatColor.RED + "You have no home(s)/bed set. Command ignored." );
+					
+					if( playerInGame.isOp() || UPlayer.get( playerInGame ).isUsingAdminMode() ) {
+						playerInGame.sendMessage(ChatColor.GRAY + "If you're attempting to view someone elses home, please use /ehome.");
+					}
+					
 					event.setCancelled( true );
 					return;
 				}
