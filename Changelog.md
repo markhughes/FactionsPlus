@@ -1,6 +1,8 @@
 # FactionsPlus 0.6.6
 - Add permission factionsplus.bypassregioncheck to allow bypassing worldguardCanBuildCheck
 - Added support for essentials /eback in /back denying 
+- Fixed a bug with Essentials and teleporting to a home without an existing world
+
 
 # FactionsPlus 0.6.5
 - Fixes a bug where you can't interact with any animals
