@@ -31,6 +31,8 @@ public class CmdAddWarp extends FPCommand {
 		this.aliases.add( "setwarp" );
 		
 		this.requiredArgs.add( "name" );
+		this.optionalArgs.put( "password", "string" );
+		
 		this.errorOnToManyArgs = false;
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
@@ -38,7 +40,7 @@ public class CmdAddWarp extends FPCommand {
 		this.addRequirements( ReqHasFaction.get() );
 		
 		this.setHelp( "create a faction warp, can be specified with a password" );
-		this.setHelp( "create a faction warp, can be specified with a password" );
+		this.setDesc( "create a faction warp, can be specified with a password" );
 
 	}
 
