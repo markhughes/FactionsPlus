@@ -170,12 +170,14 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				EssentialsIntegration.onDisable();
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on unhooking Essentials:" );
 			} 
 			
 			try {
 				Config.deInit();
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on disabling Config:" );
 			}
 			
 			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
@@ -187,6 +189,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				}
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on unhooking LWC:" );
 			}
 			
 			update_avab = false; // reset this here
@@ -195,18 +198,21 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				FactionsPlusUpdate.ensureNotRunning();
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on disabling Updates:" );
 			}
 			
 			try {
 				getServer().getServicesManager().unregisterAll( this );
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on unregistering services:" );
 			}
 			
 			try {
 				HandlerList.unregisterAll( FactionsPlus.instance );
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception on unregistering from HandlerList:" );
 			}
 			
 			try {
@@ -214,14 +220,17 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				getServer().getScheduler().cancelTasks( this );
 			} catch ( Throwable t ) {
 				failed = t;
+				severe( t, "Exception when canceling schedule tasks:" );
 			}
 			
 			try {
+				if(Config._extras._scoreboards.showScoreboardOfFactions._ || Config._extras._scoreboards.showScoreboardOfMap._ ) {
+					Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ).unregister();
+				}
 				
-				Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ).unregister();
-				
-			} catch( Exception e ) {
-				// This could possibly error - not even sure
+			} catch( Exception t ) {
+				failed = t;
+				severe( t, "Exception when removing scoreboard:" );
 			}
 			
 			//TODO: investigate why nag author happens ... even though we seem to be shuttind down task correctly
@@ -242,8 +251,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			failed = t;
 		} finally {
 			if ( null != failed ) {
-				info( "Did not disable successfuly." );
-				severe( failed, "This is the last seen exception:" );
+				info( "Did not disable successfuly! Please check over exceptions." );
+				
 			}
 		}
 	} // onDisable
