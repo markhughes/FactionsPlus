@@ -13,7 +13,7 @@ import com.massivecraft.mcore.cmd.req.ReqAbstract;
 
 /**
  * ReqAtLeastOneWarp isn't actually applicable in commands as all commands 
- * can sepcify alternative Factions that aren't of the command sender. So
+ * can specify alternative Factions that aren't of the command sender. So
  * this is just here as a test, and reference. 
  * 
  * @author markhughes
