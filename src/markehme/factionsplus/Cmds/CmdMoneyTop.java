@@ -123,9 +123,7 @@ public class CmdMoneyTop extends FPCommand {
 	private static final RunnableWithParams<CommandSender,  Integer>  sortingCode=
 			new RunnableWithParams<CommandSender,Integer>(null){
 
-		@SuppressWarnings( {
-			"synthetic-access", "boxing"
-		} )
+
 		@Override
 		public void run2( CommandSender sender) {
 				
