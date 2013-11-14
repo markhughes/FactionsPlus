@@ -328,7 +328,8 @@ public class CoreListener implements Listener{
 		
 		// TODO: Cache commands, refresh them on reload/restart
 		
-		if( Utilities.isWarZone( factionHere ) ) {
+		
+		if( FType.valueOf( factionHere) == FType.WARZONE ) {
 
 			if (!player.isOp()) {
 				BufferedReader buff=null;
