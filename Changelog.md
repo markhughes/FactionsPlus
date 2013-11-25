@@ -7,6 +7,7 @@
 * Changelog format changed
 * Internal code cleanups 
 * Scoreboard error management fixed 
+* Fixed potential NPE, check with issue #81
 
 # FactionsPlus 0.6.5
 - Fixes a bug where you can't interact with any animals
