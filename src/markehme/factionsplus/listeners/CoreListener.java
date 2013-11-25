@@ -126,17 +126,25 @@ public class CoreListener implements Listener{
 	@EventHandler(ignoreCancelled=true)
 	public void onVillagerTrade( InventoryClickEvent event ) {
 		
+		if( event.getWhoClicked() == null ){
+			return; // NPE issue possibly? 
+		}
+		
 		// is a player, ya?
 		if( event.getWhoClicked() instanceof Player ) {
 			
 			UPlayer uPlayer = UPlayer.get( event.getWhoClicked() );
+			
+			if( uPlayer == null ) {
+				return; // NPE issue possibly? 
+			}
 			
 			// detects villager trade with player
 			if( event.getInventory().getType() == InventoryType.MERCHANT && !uPlayer.isUsingAdminMode() ) {
 				
 				Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) );
 				
-				if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+				if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && FType.valueOf( factionAt) != FType.SAFEZONE ) {
 					
 					event.setCancelled( true );
 					uPlayer.msg( ChatColor.RED + "You can not do that in another Factions territory." );
@@ -174,7 +182,7 @@ public class CoreListener implements Listener{
 			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 			
 			// Are they in their own Faction land, or in wilderness
-			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && FType.valueOf( factionAt) != FType.SAFEZONE /* !Utilities.isSafeZone( factionAt ) */ ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
