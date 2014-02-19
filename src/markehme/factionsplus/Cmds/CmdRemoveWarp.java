@@ -50,7 +50,7 @@ public class CmdRemoveWarp extends FPCommand {
 		}
 		
 		
-		if( ! Config._warps.canSetOrRemoveWarps( usender ) ) {
+		if( Config._warps.canSetOrRemoveWarps( usender ) ) {
 			msg( ChatColor.RED + "Sorry, your ranking is not high enough to remove warps!" );
 			return;
 		}

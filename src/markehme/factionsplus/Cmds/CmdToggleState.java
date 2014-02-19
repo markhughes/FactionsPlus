@@ -3,11 +3,11 @@ package markehme.factionsplus.Cmds;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.FType;
 
 import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
@@ -59,7 +59,7 @@ public class CmdToggleState extends FPCommand {
 				return;
 				
 			} else {
-				if ( ( ! sender.isOp()) && ( ! Utilities.isNormalFaction( factiont ) ) ) {
+				if ( ( ! sender.isOp()) && ( ( FType.valueOf( factiont ) != FType.FACTION ) ) ) {
 					msg( ChatColor.RED +"You may not change the state of WarZone/SafeZone/Wilderness" );
 					
 					return;

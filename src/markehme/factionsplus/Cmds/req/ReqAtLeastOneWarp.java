@@ -4,7 +4,6 @@ import java.io.File;
 
 import markehme.factionsplus.config.Config;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import com.massivecraft.factions.entity.Faction;
