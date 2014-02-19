@@ -12,6 +12,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 
 
@@ -110,13 +113,16 @@ public class FactionsPlusUpdate implements Runnable {
 			URLConnection connection = null;
 			String v = FactionsPlus.version;
 			
+			FPP.info( "FactionsPlus is not currently checking for updates, please check http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
+			
+			/*
 			FPP.info( "Checking for updates ... " );
 			
 			Scanner scanner = null;
 			try {
 				
-				connection = new URL( "http://www.markeh.me/factionsplus.php?v=" + v ).openConnection();
-								
+				connection = new URL( "https://api.curseforge.com/servermods/files?projectIds=38249" ).openConnection();
+				
 				connection.setReadTimeout(15 * 1000); // Read time out after 15 seconds. 
 				connection.setConnectTimeout(15 * 1000); // Connect time out after 15 seconds
 				
@@ -142,6 +148,16 @@ public class FactionsPlusUpdate implements Runnable {
 					scanner.close();
 				}
 			}
+			
+			JSONArray jContentArray = ( JSONArray ) JSONValue.parse( content );
+			
+			JSONObject latest = ( JSONObject ) jContentArray.get( jContentArray.size() - 1 );
+			
+			String versionName = ( String ) latest.get( "name" );
+			FP.log.info("yay");
+			FP.log.info(versionName);
+			
+			content = versionName; // we do this so I don't have to change ALL the code 
 			
 			// advanced checking
 			if ( !content.trim().equalsIgnoreCase( v.trim() ) ) {
@@ -200,6 +216,7 @@ public class FactionsPlusUpdate implements Runnable {
 				FPP.info( "FactionsPlus is up to date." );
 				
 			}
+			*/
 		}
 	}
 }
