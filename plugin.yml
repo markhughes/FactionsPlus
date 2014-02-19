@@ -2,7 +2,7 @@ name: FactionsPlus
 main: markehme.factionsplus.FactionsPlus
 authors: ['MarkehMe', 'unv_annihilator', 'andrew2060', 'basicsensei']
 website: http://markeh.me
-version: 0.6.5
+version: 0.6.6
 depend: [ Factions, Vault ]
 soft-depend: [ DisguiseCraft, MobDisguise, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette, ChestShop ]
 dev-url: http://dev.bukkit.org/bukkit-plugins/factionsplus/
@@ -64,9 +64,9 @@ permissions:
   factionsplus.moneytop:
     default: true
     description: if not given, disallows the use of /f money top  which shows a list of richest factions
-#  factions.reload:
-#    default: false
-#    description: if not given, disallows the use of /f reloadfp
+  factions.reload:
+    default: false
+    description: if not given, disallows the use of /f reloadfp
   factionsplus.viewrules:
     default: true
     description: if not given, disallows the use of /f rules
