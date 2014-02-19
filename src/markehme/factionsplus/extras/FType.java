@@ -95,7 +95,7 @@ public enum FType {
 			
 		}
 		
-		// If there is PvP, and it's not wilderness, and its pernament .. then it must be a warzone
+		// If there is PvP, and it's not wilderness, and its permanent .. then it must be a warzone
 		if( faction.getFlag( FFlag.PVP ) && faction.getFlag( FFlag.PERMANENT ) ) {
 			
 			return FType.WARZONE;
