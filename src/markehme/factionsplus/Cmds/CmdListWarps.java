@@ -8,13 +8,12 @@ import java.util.Scanner;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.Cmds.req.ReqAtLeastOneWarp;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FPP;
 
 import org.bukkit.ChatColor;
 
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
@@ -49,7 +48,7 @@ public class CmdListWarps extends FPCommand  {
 			currentFaction = Faction.get( arg( 0 )  );
 		}
 		
-		if( Utilities.isWilderness( currentFaction ) ) {
+		if( FType.valueOf( currentFaction) == FType.WILDERNESS ) {
 			msg( "This Faction does not exist." );
 			
 			return;
