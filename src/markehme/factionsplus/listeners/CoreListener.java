@@ -182,7 +182,7 @@ public class CoreListener implements Listener{
 			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 			
 			// Are they in their own Faction land, or in wilderness
-			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && FType.valueOf( factionAt) != FType.SAFEZONE /* !Utilities.isSafeZone( factionAt ) */ ) {
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && FType.valueOf( factionAt) != FType.SAFEZONE  ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
@@ -195,7 +195,7 @@ public class CoreListener implements Listener{
 			
 			Faction factionAtHook = BoardColls.get().getFactionAt( PS.valueOf( event.getHook().getLocation() ) ); 
 			
-			if( factionAtHook != uPlayer.getFaction() && !factionAtHook.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+			if( factionAtHook != uPlayer.getFaction() && !factionAtHook.isNone() &&  FType.valueOf( factionAt) != FType.SAFEZONE  ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
@@ -245,7 +245,7 @@ public class CoreListener implements Listener{
 			
 			Faction factionAt = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 			
-			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && !Utilities.isSafeZone( factionAt ) ) {
+			if( factionAt != uPlayer.getFaction() && !factionAt.isNone() && FType.valueOf( factionAt) != FType.SAFEZONE  ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
@@ -257,7 +257,7 @@ public class CoreListener implements Listener{
 			
 			Faction factionAtCow = BoardColls.get().getFactionAt( PS.valueOf( event.getRightClicked().getLocation() ) );
 			
-			if( factionAtCow != uPlayer.getFaction() && !factionAtCow.isNone() && !Utilities.isSafeZone( factionAtCow ) ) {
+			if( factionAtCow != uPlayer.getFaction() && !factionAtCow.isNone() &&  FType.valueOf( factionAtCow) != FType.SAFEZONE  ) {
 				
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
@@ -291,7 +291,7 @@ public class CoreListener implements Listener{
 			
 			Faction factionAtSheep = BoardColls.get().getFactionAt( PS.valueOf( event.getEntity().getLocation() ) );
 			
-			if( factionAtSheep != uPlayer.getFaction() && !factionAtSheep.isNone() && !Utilities.isSafeZone( factionAtSheep ) ) {
+			if( factionAtSheep != uPlayer.getFaction() && !factionAtSheep.isNone() &&  FType.valueOf( factionAtSheep) != FType.SAFEZONE  ) {
 		        
 				event.setCancelled( true );
 				player.sendMessage( ChatColor.RED + "You can not do that in another Factions territory." );
