@@ -1,6 +1,8 @@
 package markehme.factionsplus.Cmds;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.references.FP;
 
 import org.bukkit.ChatColor;
 
@@ -27,6 +29,11 @@ public class CmdReloadFP extends FPCommand {
 	@SuppressWarnings( "boxing" )
 	@Override
 	public void performfp() {
+		
+		if(!FactionsPlus.permission.has(sender, "factionsplus.reload")) {
+			msg(ChatColor.RED + "No permission!");
+			return;
+		}
 		long startTime = System.nanoTime();
 		boolean ret = false;
 		try {
