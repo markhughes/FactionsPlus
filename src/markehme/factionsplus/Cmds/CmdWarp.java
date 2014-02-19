@@ -11,14 +11,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import markehme.factionsplus.EssentialsIntegration;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
-import markehme.factionsplus.references.FPP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,7 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.earth2me.essentials.EssentialsPlayerListener;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
@@ -124,7 +122,7 @@ public class CmdWarp extends FPCommand {
 		Location loc = me.getLocation().clone();
 		
 		if(
-				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && ! Utilities.isSafeZone(BoardColls.get().getFactionAt(PS.valueOf(loc))) 
+				Config._warps.warpTeleportAllowedEnemyDistance._ > 0 && FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(loc))) != FType.SAFEZONE 
 				&& ( ! usender.isInOwnTerritory()
 						|| ( usender.isInOwnTerritory() && ! Config._warps.warpTeleportIgnoreEnemiesIfInOwnTerritory._))){
 			World w = loc.getWorld();
