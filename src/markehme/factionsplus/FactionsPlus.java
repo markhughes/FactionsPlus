@@ -151,7 +151,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				info( "Metrics could not start up: "+e.getMessage() );
 				
 			}
-						
+									
 		} catch (Throwable t) {
 			FactionsPlus.severe( t );
 			if ( isEnabled() ) {
@@ -167,17 +167,19 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		try {
 			try {
-				EssentialsIntegration.onDisable();
+				if(EssentialsIntegration.isHooked()) {
+					EssentialsIntegration.onDisable();
+				}
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unhooking Essentials:" );
+				severe( t, "Exception on unhooking Essentials" );
 			} 
 			
 			try {
 				Config.deInit();
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on disabling Config:" );
+				severe( t, "Exception on disabling Config" );
 			}
 			
 			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
@@ -189,30 +191,30 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				}
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unhooking LWC:" );
+				severe( t, "Exception on unhooking LWC" );
 			}
 			
 			update_avab = false; // reset this here
 			
 			try {
-				FactionsPlusUpdate.ensureNotRunning();
+				//FactionsPlusUpdate.ensureNotRunning();
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on disabling Updates:" );
+				severe( t, "Exception on disabling Updates" );
 			}
 			
 			try {
 				getServer().getServicesManager().unregisterAll( this );
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unregistering services:" );
+				severe( t, "Exception on unregistering services" );
 			}
 			
 			try {
 				HandlerList.unregisterAll( FactionsPlus.instance );
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unregistering from HandlerList:" );
+				severe( t, "Exception on unregistering from HandlerList" );
 			}
 			
 			try {
@@ -220,17 +222,19 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				getServer().getScheduler().cancelTasks( this );
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception when canceling schedule tasks:" );
+				severe( t, "Exception when canceling schedule tasks" );
 			}
 			
 			try {
-				if(Config._extras._scoreboards.showScoreboardOfFactions._ || Config._extras._scoreboards.showScoreboardOfMap._ ) {
+				if(Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ) != null &&
+						(Config._extras._scoreboards.showScoreboardOfFactions._ || Config._extras._scoreboards.showScoreboardOfMap._ )) {
+					
 					Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ).unregister();
 				}
 				
 			} catch( Exception t ) {
 				failed = t;
-				severe( t, "Exception when removing scoreboard:" );
+				severe( t, "Exception when removing scoreboard" );
 			}
 			
 			//TODO: investigate why nag author happens ... even though we seem to be shuttind down task correctly
