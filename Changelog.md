@@ -1,13 +1,33 @@
 # FactionsPlus 0.6.6
-+ Added permission factionsplus.bypassregioncheck to allow bypassing worldguardCanBuildCheck
-+ Added support for essentials /eback in /back denying 
-+ Added better error management on plugin disable
-* Fixed a bug with Essentials and teleporting to a home without an existing world
-* Fixed addwarps /f help, added its description, and optional argument (password)
-* Changelog format changed
-* Internal code cleanups 
-* Scoreboard error management fixed 
-* Fixed potential NPE, check with issue #81
+
+ + Added permission factionsplus.bypassregioncheck to allow bypassing worldguardCanBuildCheck
+
+ + Added support for essentials /eback in /back denying 
+
+ + Added better error management on plugin disable
+
+ - Removed Update Checker 
+
+ * Fixed a bug with Essentials and teleporting to a home without an existing world
+
+ * Fixed addwarps /f help, added its description, and optional argument (password)
+
+ * Changelog format changed
+
+ * Internal code cleanups 
+
+ * Scoreboard error management fixed 
+
+ * Fixed potential NPE, check with issue #81
+
+ * Fixed permission issues with the reload command
+
+ * Fixed an error on disable if Essentials is not in use
+
+ * Fixed FType Errors
+
+ * Fixed issue when any rank (with permission) can edit rules
+
 
 # FactionsPlus 0.6.5
 - Fixes a bug where you can't interact with any animals
