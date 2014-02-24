@@ -71,7 +71,7 @@ public class CoreListener implements Listener{
 		
 		if(Config._extras._protection.worldguardCanBuildCheck._) {
 			
-			if( !event.getNewFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FP.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
+			if( !event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FP.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
 				
 				// Ensure WorldGuard exists! 
 				if( Bukkit.getServer().getPluginManager().isPluginEnabled( "WorldGuard" ) ) {
