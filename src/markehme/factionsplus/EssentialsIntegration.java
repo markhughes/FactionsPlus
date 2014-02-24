@@ -2,7 +2,7 @@ package markehme.factionsplus;
 
 
 import markehme.factionsplus.references.FP;
-import net.ess3.api.InvalidWorldException;
+
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +14,8 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.Util;
+
 import com.massivecraft.factions.entity.UConf;
 
 public abstract class EssentialsIntegration {
@@ -86,9 +87,9 @@ public abstract class EssentialsIntegration {
 		checkInvariants();
 		try {
 			return( getEssentialsInstance().getUser( player ).getHome( homeName ) );
-		} catch (InvalidWorldException e) {
+		} catch (Exception e) {
 			
-			player.sendMessage(ChatColor.RED + "The home " + homeName + " was in the world "+e.getWorld()+", but that world is no longer existant..");
+			player.sendMessage(ChatColor.RED + "The home " + homeName + " was in the world "+player.getWorld()+", but that world is no longer existant..");
 			return( null );
 		}
 		
@@ -129,8 +130,7 @@ public abstract class EssentialsIntegration {
 	public static Location getSafeDestination( Location targetLocation ) {
 		if ( isHooked() ) {
 			try { 
-				
-				return LocationUtil.getSafeDestination( targetLocation );
+				return Util.getSafeDestination( targetLocation );
 				
 			} catch( Exception e) {
 				
@@ -154,7 +154,7 @@ public abstract class EssentialsIntegration {
 		try {
 			Teleport teleport = (Teleport) getEssentialsInstance().getUser(player).getTeleport();
 			
-			Trade trade = new Trade( (int) UConf.get(player).econCostHome, (net.ess3.api.IEssentials) getEssentialsInstance() );
+			Trade trade = new Trade( (int) UConf.get(player).econCostHome, (IEssentials) getEssentialsInstance() );
 			new Trade(0, null);
 			
 			teleport.teleport( loc, trade, TeleportCause.PLUGIN );
