@@ -1,3 +1,13 @@
+# FactionsPlus 0.6.7
+
+ + Added support for Lib's Disguises
+ 
+ + Added support for iDisguise
+ 
+ * Fixes a disturbing amount of issues with Essentials (I'm sorry this took forever!) 
+ 
+ * Fixes a small bug relating to WorldGuard regions
+ 
 # FactionsPlus 0.6.6
 
  + Added permission factionsplus.bypassregioncheck to allow bypassing worldguardCanBuildCheck
