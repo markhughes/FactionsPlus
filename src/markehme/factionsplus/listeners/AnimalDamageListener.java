@@ -98,6 +98,10 @@ public class AnimalDamageListener implements Listener {
 		// this is to check if the player is attacking with an arrow, etc
 		Projectile projectile = null;
 		
+		if( event.getDamager() == null ) {
+			return;
+		}
+		
 		if( ( event.getDamager() instanceof Arrow ) ) {
 			
 			projectile = (Arrow) event.getDamager();
