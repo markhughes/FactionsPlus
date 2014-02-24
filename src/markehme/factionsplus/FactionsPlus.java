@@ -163,7 +163,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	@Override
 	public void onDisable() {
-		Throwable failed = null; // TODO: find a way to chain all thrown exception rather than overwrite all older
+		Throwable failed = null; 
 		
 		try {
 			try {
