@@ -107,16 +107,15 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            permission = permissionProvider.getProvider();
 	        }
 	        
-	        if( 1<2 ) {
-	        	if( pm.isPluginEnabled( "WorldEdit" ) ) {
-	        		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin( "WorldEdit" );
-	        		isWorldEditEnabled = true;
-	        		
-	        	}
-	            if( pm.isPluginEnabled( "WorldGuard" ) ) {
-	            	worldGuardPlugin = ( WorldGuardPlugin ) getServer().getPluginManager().getPlugin( "WorldGuard" );	            	
-	            	isWorldGuardEnabled = true;
-	            }
+	        if( pm.isPluginEnabled( "WorldEdit" ) ) {
+	       		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin( "WorldEdit" );
+	       		isWorldEditEnabled = true;
+	       		
+	       	}
+	        
+	        if( pm.isPluginEnabled( "WorldGuard" ) ) {
+	        	worldGuardPlugin = ( WorldGuardPlugin ) getServer().getPluginManager().getPlugin( "WorldGuard" );	            	
+	        	isWorldGuardEnabled = true;
 	        }
 	        
 	        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
@@ -129,7 +128,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            }
 	            
 	        }
-	        			
+		
 			try {
 				
 				metrics = new Metrics( this );
