@@ -22,6 +22,7 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
@@ -31,18 +32,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.griefcraft.model.Protection;
+import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
@@ -65,6 +72,77 @@ import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
 
 public class CoreListener implements Listener{
 	public static Server fp;
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {
+		
+		if ((event.getEntityType() == EntityType.SPLASH_POTION) &&
+				(((Player)event.getEntity().getShooter()).isFlying()) &&
+					!Config._extras._Flight.allowSplashPotionsWhileFlying._) {
+			
+			// So it is a splash potion, the player is flying, and the config disallows it
+			((Player)event.getEntity().getShooter()).sendMessage(ChatColor.RED + "You can't throw potions while flying!");
+			event.setCancelled(true);
+		}
+	}
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	public void onPlayerBowShoot(EntityShootBowEvent event) {
+		// Flying Player can't damage others
+		if(!Config._extras._Flight.allowAttackingWhileFlying._ ) {
+			
+			// Confirm it is a player
+			if( ( event.getEntity() instanceof Player ) ) {
+				Player player = (Player) event.getEntity();
+				
+				// Is the player flying?
+				if( player.isFlying() ) {
+					
+					player.sendMessage(ChatColor.RED + "You can't attack while flying!");
+					event.setCancelled(true);
+					
+				}
+					
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerAttack(final EntityDamageByEntityEvent event) {
+		Entity e = event.getEntity();
+		
+		// Flying Player can't damage others 
+		if(!Config._extras._Flight.allowAttackingWhileFlying._) {
+			// Confirm it is PvP
+			if(e instanceof Player && event.getDamager() instanceof Player) {
+				Player damager = (Player) event.getDamager();
+				
+				// Confirm the flying player is attacking
+				if(damager.isFlying()) {
+					
+					damager.sendMessage(ChatColor.RED + "You can't attack while flying!");
+					event.setCancelled(true);
+					
+				}
+				
+			}
+		}
+		
+		// .. 
+	}
+	
+	@EventHandler(ignoreCancelled=true)
+	public void onPlayerMove(PlayerMoveEvent event) {
+				
+		// Check for permission factionsplus.flightinterritory
+		if(FP.permission.has(event.getPlayer(), "factionsplus.flightinownterritory")) {
+			if(BoardColls.get().getFactionAt(PS.valueOf(event.getPlayer().getLocation())).getId() == UPlayer.get(event.getPlayer()).getFactionId()) {
+				event.getPlayer().setAllowFlight(true);
+			} else {
+				event.getPlayer().setAllowFlight(false);
+			}
+		}
+		
+	}
 	
 	@EventHandler(ignoreCancelled=true)
 	public void onLandClaim(FactionsEventChunkChange event) {
