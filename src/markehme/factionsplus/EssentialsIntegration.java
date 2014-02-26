@@ -14,7 +14,7 @@ import org.bukkit.plugin.Plugin;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
-import com.earth2me.essentials.Util;
+import com.earth2me.essentials.utils.LocationUtil;
 
 import com.massivecraft.factions.entity.UConf;
 
@@ -130,7 +130,7 @@ public abstract class EssentialsIntegration {
 	public static Location getSafeDestination( Location targetLocation ) {
 		if ( isHooked() ) {
 			try { 
-				return Util.getSafeDestination( targetLocation );
+				return LocationUtil.getSafeDestination( targetLocation );
 				
 			} catch( Exception e) {
 				
