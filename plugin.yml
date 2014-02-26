@@ -79,6 +79,9 @@ permissions:
   factionsplus.dontPreventLWCLocking:
     default: false
     description: if not given, will allow you to LWC lock only in wilderness or your own faction; if given(or you're OP), you could in theory lock anywhere  
+  factionsplus.flightinownterritory:
+    default: false
+    description: if given, it allows a player to fly in their own territory
 #  factionsplus.xyz:
 #    default: false 
 #    description: something
