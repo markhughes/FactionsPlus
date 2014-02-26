@@ -1,3 +1,11 @@
+# FactionsPlus 0.6.8
+
+ + Added new permission factionsplus.flightinownterritory
+ 
+ + Added new configuration option allowAttackingWhileFlying
+ 
+ + Added new configuration option allowSplashPotionsWhileFlying
+ 
 # FactionsPlus 0.6.7
 
  + Added support for Lib's Disguises
