@@ -78,6 +78,9 @@ public class FPConfigLoadedListener implements Listener {
         // Multiverse-portals
         MVPListener.enableOrDisable(FP.instance);
         
+        // CreativeGates
+        CreativeGatesListener.enableOrDisable(FP.instance);
+        
         // Cannons
         CannonsListener.enableOrDisable(FP.instance);
         

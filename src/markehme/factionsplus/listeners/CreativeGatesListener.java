@@ -1,7 +1,10 @@
 package markehme.factionsplus.listeners;
 
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.Config;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.PluginManager;
 
 import com.griefcraft.model.Protection;
 import com.massivecraft.creativegates.CreativeGates;
@@ -29,7 +33,27 @@ public class CreativeGatesListener implements Listener {
 	
 	public static boolean isCreativeGatesIntegrated = false;
 	public static CreativeGatesListener creativegateslistener;
-	
+
+	public static final void enableOrDisable(FactionsPlus instance) {
+ 		PluginManager pm = Bukkit.getServer().getPluginManager();
+			
+		boolean isMVPplugin = pm.isPluginEnabled("CreativeGates");
+		
+		if ( isMVPplugin && !isCreativeGatesIntegrated ) {
+			assert ( null == creativegateslistener );
+			
+			creativegateslistener = new CreativeGatesListener();
+			pm.registerEvents( creativegateslistener, instance );
+			
+			if (null == creativegateslistener) {
+				creativegateslistener = new CreativeGatesListener();
+				Bukkit.getServer().getPluginManager().registerEvents(creativegateslistener, instance);
+			}
+			
+			FactionsPlusPlugin.info( "Hooked into CreativeGates." );
+		}	
+	}
+
 	/*
 	 * Ok, so what're we're trying to do here is replicate the event that is done inside
 	 * CreativeGates - with a higher priority, but change it so it cancels if required.
