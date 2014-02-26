@@ -6,6 +6,15 @@
  
  + Added new configuration option allowSplashPotionsWhileFlying
  
+ + Added new configuration option destroyCreativeGatesOnClaimUnclaim
+ 
+ + Added new configuration option allowCreativeGatesInOwnTerritories
+ 
+ + Added new configuration option allowCreativeGatesInWilderness
+ 
+ + Added new configuration option allowUsingCreativeGatesInEnemyTerritory
+ 
+ 
 # FactionsPlus 0.6.7
 
  + Added support for Lib's Disguises
