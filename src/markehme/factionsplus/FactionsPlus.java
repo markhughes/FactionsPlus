@@ -79,6 +79,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); 
 			
+			
+			try {
+				Class.forName("com.massivecraft.factions.entity.MConf");
+			} catch (ClassNotFoundException ex) {
+				warn("Could not find Factions 2.x - please update to Factions 2.x.");
+				info("You are required to use 0.5.x for Factions 1.x");
+				disableSelf();
+				return;
+			}
+			
 			ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
 			noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
 			noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
