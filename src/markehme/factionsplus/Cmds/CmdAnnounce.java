@@ -46,12 +46,13 @@ public class CmdAnnounce extends FPCommand {
 		
 		Faction currentFaction 		= usender.getFaction();
 
-
-		if(!Config._announce.leadersCanAnnounce._ && Utilities.isLeader(usender) ) {
-			if( !Config._announce.officersCanAnnounce._ && Utilities.isOfficer(usender) ) {
-				sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
-				return;
-			}
+		if (! 
+				( (Config._announce.leadersCanAnnounce._ && Utilities.isLeader(usender)) 
+				||(Config._announce.officersCanAnnounce._ && Utilities.isOfficer(usender)) ) 
+		) {
+			sender.sendMessage(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
+			return;
+			
 		} 
 		
 		if(Config._economy.costToAnnounce._ > 0.0d) {
