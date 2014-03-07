@@ -14,6 +14,7 @@
  
  + Added new configuration option allowUsingCreativeGatesInEnemyTerritory
  
+ - Add default value of factionsplus.keepItemsOnDeathInWarZone to plugin.yml
  
 # FactionsPlus 0.6.7
 
