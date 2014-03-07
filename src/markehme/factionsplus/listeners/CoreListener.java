@@ -76,6 +76,10 @@ public class CoreListener implements Listener{
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
 	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {
 		
+		if(!(event.getEntity() instanceof Player)) {
+			return;
+		}
+		
 		if ((event.getEntityType() == EntityType.SPLASH_POTION) &&
 				(((Player)event.getEntity().getShooter()).isFlying()) &&
 					!Config._extras._Flight.allowSplashPotionsWhileFlying._) {
@@ -85,6 +89,7 @@ public class CoreListener implements Listener{
 			event.setCancelled(true);
 		}
 	}
+	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
 	public void onPlayerBowShoot(EntityShootBowEvent event) {
 		// Flying Player can't damage others
@@ -523,6 +528,7 @@ public class CoreListener implements Listener{
 				event.getDrops().remove(playersInventory[i]);
 	
 			}
+			
 			
 			Bukkit.getScheduler().scheduleSyncDelayedTask(fp.getPluginManager().getPlugin("FactionsPlus"), new Runnable() {
 	
