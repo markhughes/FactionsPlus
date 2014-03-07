@@ -13,13 +13,10 @@ import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
 
-import org.bouncycastle.crypto.prng.RandomGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -34,7 +31,6 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -48,30 +44,82 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.griefcraft.model.Protection;
-import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.factions.event.FactionsEventCreate;
+import com.massivecraft.factions.event.FactionsEventDisband;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.FactionsEventNameChange;
 import com.massivecraft.mcore.ps.PS;
-import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldedit.LocalWorld;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.Vector2D;
-import com.sk89q.worldedit.data.ChunkStore;
-import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
-import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
 
 public class CoreListener implements Listener{
 	public static Server fp;
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	public void onFactionDisband(FactionsEventDisband e) {
+		
+		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
+			
+			if( FactionsPlusScoreboard.scoreBoard.getObjective( FactionsPlusScoreboard.objective_name ) == null) {
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("00000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("0000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("00" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("0" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+			}		
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	public void onFactionNameChange(FactionsEventNameChange e) {
+		
+		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
+			
+			if( FactionsPlusScoreboard.scoreBoard.getObjective( FactionsPlusScoreboard.objective_name ) == null) {
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("00000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("0000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("000" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("00" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+				try {
+					FactionsPlusScoreboard.sFactions.remove("0" + "mooISplitStringsLuls123" + e.getFaction().getName());
+				} catch (Exception exc) {}
+				
+			}		
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
 	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {
