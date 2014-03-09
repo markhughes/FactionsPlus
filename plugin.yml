@@ -82,7 +82,7 @@ permissions:
   factionsplus.flightinownterritory:
     default: false
     description: if given, it allows a player to fly in their own territory
-  factionsplus.keepItemsOnDeathInWarZone
+  factionsplus.keepItemsOnDeathInWarZone:
     default: false
     description: if given, a player can keep their items on death when in a WarZone
 #  factionsplus.xyz:
