@@ -121,6 +121,7 @@ public class FactionsPlusTemplates {
 		b = b.replaceAll("<yellow>", ChatColor.YELLOW + "");
 		b = b.replaceAll("<gray>", ChatColor.GRAY + "");
 		b = b.replaceAll("<grey>", ChatColor.GRAY + "");
+		b = b.replaceAll("<bold>", ChatColor.BOLD + "");
 		
 		return b;
 		
