@@ -39,7 +39,6 @@ public class CmdUnsetJail extends FPCommand {
 				|| ((Config._jails.officersCanSetJails._) && (Utilities.isOfficer( usender )))
 				|| (Config._jails.membersCanSetJails._);
 				
-				
 		if (!authallow) {
 			msg(ChatColor.RED + "Sorry, your faction rank is not allowed to do that!");
 			return;
