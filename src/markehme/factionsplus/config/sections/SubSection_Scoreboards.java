@@ -6,7 +6,12 @@ public class SubSection_Scoreboards {
 	@Option(
 			realAlias_inNonDottedFormat = "showScoreboardOfMap" )
 	public  final _boolean showScoreboardOfMap = new _boolean(false);
+	
+	@Option(
+			realAlias_inNonDottedFormat = "topFactionsTitle" )
+	public  final _string topFactionsTitle = new _string("<white><bold>Top Factions");
 
+	
 	@Option(
 			realAlias_inNonDottedFormat = "showScoreboardOfFactions" )
 	public  final _boolean showScoreboardOfFactions = new _boolean(true);
