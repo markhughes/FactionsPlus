@@ -8,7 +8,6 @@ import markehme.factionsplus.extras.FType;
 import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -54,7 +53,7 @@ public class FactionsPlusScoreboard {
 						
 						objective			= scoreBoard.registerNewObjective( objective_name, "dummy" );
 						
-						objective.setDisplayName( ChatColor.WHITE + "" + ChatColor.BOLD + "Top Factions" );
+						objective.setDisplayName( FactionsPlusTemplates.colorFormat(Config._extras._scoreboards.topFactionsTitle._ ));
 						objective.setDisplaySlot( DisplaySlot.SIDEBAR );
 						
 					} else {
