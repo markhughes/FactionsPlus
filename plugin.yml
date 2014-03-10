@@ -1,6 +1,6 @@
 name: FactionsPlus
 main: markehme.factionsplus.FactionsPlus
-authors: ['MarkehMe', 'unv_annihilator', 'andrew2060', 'basicsensei']
+author: MarkehMe
 website: http://markeh.me
 version: 0.6.8
 depend: [ Factions, Vault ]
