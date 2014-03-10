@@ -14,7 +14,11 @@
  
  + Added new configuration option allowUsingCreativeGatesInEnemyTerritory
  
- - Add default value of factionsplus.keepItemsOnDeathInWarZone to plugin.yml
+ + Add default value of factionsplus.keepItemsOnDeathInWarZone to plugin.yml
+ 
+ + Added <bold> to colour templates 
+ 
+ * Fixed a bug with warp-removing checking 
  
 # FactionsPlus 0.6.7
 
