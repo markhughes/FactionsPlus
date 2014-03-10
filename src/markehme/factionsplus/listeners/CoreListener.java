@@ -59,7 +59,7 @@ import com.massivecraft.mcore.ps.PS;
 public class CoreListener implements Listener{
 	public static Server fp;
 	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onFactionDisband(FactionsEventDisband e) {
 		
 		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
@@ -90,7 +90,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	@EventHandler(priority = EventPriority.NORMAL )
 	public void onFactionNameChange(FactionsEventNameChange e) {
 		
 		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
@@ -121,7 +121,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	@EventHandler(priority = EventPriority.NORMAL )
 	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {
 		
 		if(!(event.getEntity() instanceof Player)) {
@@ -138,7 +138,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true )
+	@EventHandler(priority = EventPriority.NORMAL )
 	public void onPlayerBowShoot(EntityShootBowEvent event) {
 		// Flying Player can't damage others
 		if(!Config._extras._Flight.allowAttackingWhileFlying._ ) {
@@ -183,7 +183,7 @@ public class CoreListener implements Listener{
 		// .. 
 	}
 	
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMove(PlayerMoveEvent event) {
 				
 		// Check for permission factionsplus.flightinterritory
@@ -197,12 +197,15 @@ public class CoreListener implements Listener{
 		
 	}
 	
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLandClaim(FactionsEventChunkChange event) {
 		
 		if(Config._extras._protection.worldguardCanBuildCheck._) {
 			
-			if( !event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FP.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
+			
+			if(event.getUSender() == null) return;
+			
+			if( !event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && FactionsPlus.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
 				
 				// Ensure WorldGuard exists! 
 				if( Bukkit.getServer().getPluginManager().isPluginEnabled( "WorldGuard" ) ) {
@@ -236,7 +239,7 @@ public class CoreListener implements Listener{
 				
 	}
 	
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEntityDamage(EntityDamageEvent event) {
 		
 		if (event.getEntity() instanceof Player) {
@@ -254,7 +257,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onVillagerTrade( InventoryClickEvent event ) {
 		
 		if( event.getWhoClicked() == null ){
@@ -288,7 +291,7 @@ public class CoreListener implements Listener{
 		
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerCreateFaction( FactionsEventCreate event ) {
 		
 		if(Config._factions.factionNameFirstLetterForceUpperCase._ ) {
@@ -302,7 +305,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerFish( PlayerFishEvent event ) {
 		
 		if( Config._extras._protection.stricterFarmingProtection._ ) {
@@ -335,7 +338,7 @@ public class CoreListener implements Listener{
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerInteractEntity( PlayerInteractEntityEvent event ) {
 		
 	    Player player = event.getPlayer();
@@ -363,7 +366,7 @@ public class CoreListener implements Listener{
 
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerMilkEvent( PlayerInteractEntityEvent event ) {
 		Player player = event.getPlayer();
 		
@@ -399,7 +402,7 @@ public class CoreListener implements Listener{
 		}
 	}
     
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerShearEntityEvent(PlayerShearEntityEvent event) {
 		
 	    if ( event.getEntity() instanceof Sheep && Config._extras._protection.stricterFarmingProtection._) {

@@ -12,6 +12,7 @@ import java.util.Scanner;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.sections.Section_Warps;
 import markehme.factionsplus.references.FP;
 import markehme.factionsplus.references.FPP;
 
@@ -50,7 +51,20 @@ public class CmdRemoveWarp extends FPCommand {
 		}
 		
 		
-		if( Config._warps.canSetOrRemoveWarps( usender ) ) {
+		if( ! Section_Warps.canSetOrRemoveWarps( usender ) ) {
+			/*if( FP.permission.has( sender, "factionsplus.debug" ) ) {
+				msg("Config Says: leadersCanSetWarps:          " + Config._warps.leadersCanSetWarps._);
+				msg("Factions Says: (you) isLeader:            " + Utilities.isLeader(usender));
+				msg("-- ");
+				msg("Config Says: officersCanSetWarps:         " + Config._warps.officersCanSetWarps._);
+				msg("Factions Says: (you) isOfficer:           " + Utilities.isOfficer(usender));
+				msg("-- ");
+				msg("Config Says: membersCanSetWarps:          " + Config._warps.membersCanSetWarps._);
+				msg("Factions Says: (you) FactionID != null:   " + (usender.getFactionId() != null));
+				msg("-- ");
+				
+				return;
+			}*/
 			msg( ChatColor.RED + "Sorry, your ranking is not high enough to remove warps!" );
 			return;
 		}
