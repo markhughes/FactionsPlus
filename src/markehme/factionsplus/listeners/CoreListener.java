@@ -49,77 +49,14 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.factions.event.FactionsEventCreate;
-import com.massivecraft.factions.event.FactionsEventDisband;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.factions.event.FactionsEventNameChange;
 import com.massivecraft.mcore.ps.PS;
 
 
 public class CoreListener implements Listener{
 	public static Server fp;
 	
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onFactionDisband(FactionsEventDisband e) {
-		
-		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
-			
-			if( FactionsPlusScoreboard.scoreBoard.getObjective( FactionsPlusScoreboard.objective_name ) == null) {
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("00000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("0000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("00" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("0" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-			}		
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.NORMAL )
-	public void onFactionNameChange(FactionsEventNameChange e) {
-		
-		if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
-			
-			if( FactionsPlusScoreboard.scoreBoard.getObjective( FactionsPlusScoreboard.objective_name ) == null) {
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("00000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("0000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("000" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("00" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-				try {
-					FactionsPlusScoreboard.sFactions.remove("0" + "mooISplitStringsLuls123" + e.getFaction().getName());
-				} catch (Exception exc) {}
-				
-			}		
-		}
-	}
 	
 	@EventHandler(priority = EventPriority.NORMAL )
 	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {

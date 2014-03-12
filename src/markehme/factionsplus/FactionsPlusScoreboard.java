@@ -23,7 +23,6 @@ import com.massivecraft.factions.entity.FactionColls;
 public class FactionsPlusScoreboard {
 	
 	public static String objective_name = "FP_Top_Factions";
-	public static ArrayList<String> sFactions;
 	public static Scoreboard scoreBoard = null;
 	
 	public static void setup() {
@@ -49,20 +48,17 @@ public class FactionsPlusScoreboard {
 					
 					// Check if `objective_name` exists in the objectives. 
 					
-					if( scoreBoard.getObjective( objective_name ) == null) {
-						
-						objective			= scoreBoard.registerNewObjective( objective_name, "dummy" );
-						
-						objective.setDisplayName( FactionsPlusTemplates.colorFormat(Config._extras._scoreboards.topFactionsTitle._ ));
-						objective.setDisplaySlot( DisplaySlot.SIDEBAR );
-						
-					} else {
-						
-						objective			= scoreBoard.getObjective( objective_name );
-						
-					}				
+					if( scoreBoard.getObjective( objective_name ) != null) {
+						scoreBoard.getObjective( objective_name ).unregister();
+					}
 					
-					sFactions = new ArrayList<String>(); // clear it, and start again. 
+					objective			= scoreBoard.registerNewObjective( objective_name, "dummy" );
+					
+					objective.setDisplayName( FactionsPlusTemplates.colorFormat(Config._extras._scoreboards.topFactionsTitle._ ));
+					objective.setDisplaySlot( DisplaySlot.SIDEBAR );
+										
+					ArrayList<String> sFactions = new ArrayList<String>(); 
+					sFactions.clear();
 					
 					int i = 0;
 					
