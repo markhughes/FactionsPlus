@@ -148,7 +148,7 @@ public class CoreListener implements Listener{
 				Player player = (Player) event.getEntity();
 				
 				// Is the player flying?
-				if( player.isFlying() ) {
+				if( player.isFlying() && !player.isOp()) {
 					
 					player.sendMessage(ChatColor.RED + "You can't attack while flying!");
 					event.setCancelled(true);
@@ -170,7 +170,7 @@ public class CoreListener implements Listener{
 				Player damager = (Player) event.getDamager();
 				
 				// Confirm the flying player is attacking
-				if(damager.isFlying()) {
+				if(damager.isFlying() && !damager.isOp()) {
 					
 					damager.sendMessage(ChatColor.RED + "You can't attack while flying!");
 					event.setCancelled(true);
@@ -187,7 +187,7 @@ public class CoreListener implements Listener{
 	public void onPlayerMove(PlayerMoveEvent event) {
 				
 		// Check for permission factionsplus.flightinterritory
-		if(FP.permission.has(event.getPlayer(), "factionsplus.flightinownterritory")) {
+		if(FP.permission.has(event.getPlayer(), "factionsplus.flightinownterritory") && !event.getPlayer().isOp()) {
 			if(BoardColls.get().getFactionAt(PS.valueOf(event.getPlayer().getLocation())).getId() == UPlayer.get(event.getPlayer()).getFactionId()) {
 				event.getPlayer().setAllowFlight(true);
 			} else {
