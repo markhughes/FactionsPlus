@@ -2,7 +2,7 @@ name: FactionsPlus
 main: markehme.factionsplus.FactionsPlus
 author: MarkehMe
 website: http://markeh.me
-version: 0.6.8
+version: 0.6.9
 depend: [ Factions, Vault ]
 soft-depend: [ DisguiseCraft, iDisguise, LibsDisguises, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette, ChestShop ]
 dev-url: http://dev.bukkit.org/bukkit-plugins/factionsplus/
@@ -76,6 +76,9 @@ permissions:
   factionsplus.togglestate.others:
     default: false
     description: if not given, disallows /f togglestate from toggling peaceful for other factions
+  factionsplus.need:
+    default: false
+    description: if not given, disallows /f need
   factionsplus.dontPreventLWCLocking:
     default: false
     description: if not given, will allow you to LWC lock only in wilderness or your own faction; if given(or you're OP), you could in theory lock anywhere  
@@ -85,6 +88,9 @@ permissions:
   factionsplus.keepItemsOnDeathInWarZone:
     default: false
     description: if given, a player can keep their items on death when in a WarZone
+  factionsplus.ignoreneeds:
+    default: false
+    description: lets a player ignore messages from /f need
 #  factionsplus.xyz:
 #    default: false 
 #    description: something
