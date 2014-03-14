@@ -2,6 +2,7 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
+import markehme.factionsplus.config.Config;
 import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
@@ -58,9 +59,11 @@ public class CmdFactionNeed extends FPCommand {
         			p.sendMessage( FactionsPlusTemplates.Go( "faction_need", argsa ).replace("!1", sender.getName() ) );
         			
         		}
-        	}
-        		
+        	}	
 
         }
+        
+        // Notify player that they recieved the need request! 
+        msg(Config._templates.factions_notified_need._);
 	}
 }

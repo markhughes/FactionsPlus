@@ -70,4 +70,9 @@ public final class Section_Templates {
 		)
 	public  final _string faction_need = new _string("<white>The player !1 is looking for a Faction! You can invite them with <green>/f inv !1");
 
+	@Option(	autoComment={"Sent to player when they run /f need"},
+			realAlias_inNonDottedFormat = "factions_notified_need"
+		)
+	public  final _string factions_notified_need = new _string("<white>Factions have been notified!");
+
 }
