@@ -1,5 +1,8 @@
 package markehme.factionsplus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import markehme.factionsplus.Cmds.CmdAddWarp;
 import markehme.factionsplus.Cmds.CmdAnnounce;
 import markehme.factionsplus.Cmds.CmdBan;
@@ -22,11 +25,14 @@ import markehme.factionsplus.Cmds.CmdUnJail;
 import markehme.factionsplus.Cmds.CmdUnban;
 import markehme.factionsplus.Cmds.CmdUnsetJail;
 import markehme.factionsplus.Cmds.CmdWarp;
+import markehme.factionsplus.Cmds.FPCommand;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
+import markehme.factionsplus.references.FP;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.mcore.cmd.MCommand;
 
 
 
@@ -43,6 +49,7 @@ import com.massivecraft.factions.cmd.FCommand;
 
 public class FactionsPlusCommandManager {
 	FactionsPlusCommandManager FactionsPlusCommandManager;
+	public static ArrayList<String> addedCommands = new ArrayList<String>();
 	
 	public static void setup() {
 		// Warp Commands 
@@ -107,11 +114,39 @@ public class FactionsPlusCommandManager {
 //		Bridge.factions.addSubCommand(P.p.cmdBase.cmdPower, new CmdPowPow());
 		addSC(new CmdPowSettings());
 		
-		// finalizeHelp() not required in 2.x 
 	}
-
-	private static final void addSC(FCommand subCommand) {
-		Factions.get().getOuterCmdFactions().addSubCommand(subCommand);
+	
+	private static final void addSC(FPCommand subCommand) {
+		Factions.get().getOuterCmdFactions().addSubCommand((FCommand) subCommand);
+		String Cc;
+		
+		for (int i=0; i < subCommand.getAliases().size(); i++)  {
+			Cc = subCommand.getIdentifier().toString();
+			addedCommands.add(Cc);
+		}
+		
+	}
+	
+	public static void disableSubCommands() throws Exception {
+		// Fetch all the sub commands
+		List<MCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+				
+		// Go through each command 
+		for (int i=0; i < commands.size(); i++) {
+			// Loop through all our known added alias
+			for (String a: addedCommands) {
+				// Compare each alias to the current command
+				try {
+					if(commands.get(i).getAliases().contains(a)) {
+						// They match, so remove it. 
+						commands.remove(i);
+					}
+				} catch(Exception e) {
+					// .. normal 
+				}
+			}
+			
+		}
 	}
 	
 }
