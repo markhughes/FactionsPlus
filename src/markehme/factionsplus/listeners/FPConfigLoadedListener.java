@@ -1,5 +1,6 @@
 package markehme.factionsplus.listeners;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.FactionsPlusUpdate;
 import markehme.factionsplus.config.Config;
@@ -7,6 +8,7 @@ import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.LocketteFunctions;
+import markehme.factionsplus.extras.Updater;
 import markehme.factionsplus.references.FP;
 import markehme.factionsplus.references.FPP;
 
@@ -29,9 +31,7 @@ public class FPConfigLoadedListener implements Listener {
         TeleportsListener.initOrDeInit(FP.instance);
        
         PluginManager pm = Bukkit.getServer().getPluginManager();
-        
-        FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
-        
+                
         if ( LWCBase.isLWCPluginPresent() ) { 
 			// TODO: is this still used ? - can't find in Factions config 
         	/*
