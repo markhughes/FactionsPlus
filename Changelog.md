@@ -1,3 +1,11 @@
+# FactionsPlus 0.6.9
+ 
+ + Added new template factions_notified_need
+ 
+ + Added factionsplus.ignoreneeds to plugin.yml
+ 
+ * When the plugin is disabled, it now removes commands from Factions  
+ 
 # FactionsPlus 0.6.8
 
  + Added new permission factionsplus.flightinownterritory
@@ -19,6 +27,10 @@
  + Added <bold> to colour templates 
  
  * Fixed a bug with warp-removing checking 
+ 
+ * (really) Fixed Scoreboard Duplication Bug 
+ 
+ * Fixed a serious bug with permission checking
  
 # FactionsPlus 0.6.7
 
