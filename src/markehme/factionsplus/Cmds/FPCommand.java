@@ -10,6 +10,11 @@ import com.massivecraft.factions.cmd.FCommand;
 public abstract class FPCommand extends FCommand{
 
 	protected abstract void performfp();
+	protected String fpidentifier;
+	
+	public final String getIdentifier() {
+		return this.fpidentifier;
+	}
 	
 	@Override
 	public final void perform() {//XXX: final to avoid overriding the wrong one
