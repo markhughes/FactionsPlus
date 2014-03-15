@@ -61,8 +61,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Server server;
 		
 	public static boolean update_avab;
-	
-	
+		
 	public FactionsPlus() {
 		super();
 		
@@ -78,7 +77,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public void onEnable() {
 		try {
 			super.onEnable(); 
-			
 			
 			try {
 				Class.forName("com.massivecraft.factions.entity.MConf");
@@ -138,7 +136,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            }
 	            
 	        }
-		
+	        
 			try {
 				
 				metrics = new Metrics( this );
@@ -191,9 +189,12 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				severe( t, "Exception on disabling Config" );
 			}
 			
-			// TODO: unhook Factions registered commands on disabling self else they'll still call our code and possibly NPE
-			// since we deinited some of our parts; can add an if for each command and check if we're enabled and make it in a base class
-			
+			try {
+				FactionsPlusCommandManager.disableSubCommands();
+			} catch(Throwable t) {
+				failed = t;
+				severe( t, "Exception on removing FactionsPlus commands" );
+			}
 			try {
 				if ( LWCBase.isLWCPluginPresent() ) {
 					LWCFunctions.unhookLWC();
