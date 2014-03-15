@@ -15,6 +15,8 @@ public class CmdJail extends FPCommand {
 	public CmdJail() {
 		this.aliases.add( "jail" );
 		
+		this.fpidentifier = "jail";
+		
 		this.requiredArgs.add( "player" );
 		this.errorOnToManyArgs = false;
 		

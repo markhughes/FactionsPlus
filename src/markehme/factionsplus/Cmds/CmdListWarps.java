@@ -23,6 +23,8 @@ public class CmdListWarps extends FPCommand  {
 	public CmdListWarps() {
 		this.aliases.add( "listwarps" );
 		
+		this.fpidentifier = "listwarps";
+		
 		this.optionalArgs.put( "faction", "string" );
 		this.errorOnToManyArgs = true;
 		

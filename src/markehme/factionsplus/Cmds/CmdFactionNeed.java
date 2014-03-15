@@ -19,6 +19,8 @@ public class CmdFactionNeed extends FPCommand {
 	public CmdFactionNeed() { 
 		this.aliases.add("need");
 		
+		this.fpidentifier = "need";
+		
 		this.errorOnToManyArgs = false;
 		
 		this.addRequirements(ReqFactionsEnabled.get());
@@ -30,7 +32,7 @@ public class CmdFactionNeed extends FPCommand {
 	
 	@Override
 	public void performfp() {
-		if( ! FactionsPlus.permission.has( sender, "factionsplus.need" ) ) {
+		if( ! FactionsPlus.permission.has( usender.getPlayer(), "factionsplus.need" ) ) {
 			
 			sender.sendMessage( ChatColor.RED + "No permission!" );
 			

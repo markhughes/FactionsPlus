@@ -21,6 +21,8 @@ public class CmdFactionHome extends FPCommand {
 	public CmdFactionHome() {
 		this.aliases.add("factionhome");
 		
+		this.fpidentifier = "factionhome";
+		
 		this.requiredArgs.add("faction");
 		this.errorOnToManyArgs = false;
 		

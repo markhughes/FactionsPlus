@@ -27,6 +27,8 @@ public class CmdPowSettings extends FPCommand {
 		this.aliases.add( "powsettings" );
 		this.aliases.add( "powersettings" );
 		
+		this.fpidentifier = "powersettings";
+		
 		this.optionalArgs.put("page", "1");
 		this.errorOnToManyArgs = true;
 		

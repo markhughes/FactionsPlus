@@ -27,6 +27,8 @@ public class CmdBan extends FPCommand {
 	public CmdBan() {
 		this.aliases.add( "ban" );
 		
+		this.fpidentifier = "ban";
+		
 		this.requiredArgs.add( "player" );
 		this.errorOnToManyArgs = true;
 		

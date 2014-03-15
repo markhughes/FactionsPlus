@@ -15,6 +15,8 @@ public class CmdRemoveRule extends FPCommand {
 	public CmdRemoveRule() {
 		this.aliases.add("removerule");
 		
+		this.fpidentifier = "removerule";
+		
 		this.errorOnToManyArgs = false;
 		
 		this.addRequirements( ReqFactionsEnabled.get() );

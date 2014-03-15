@@ -10,8 +10,10 @@ public class CmdAddChest extends FPCommand {
 	public CmdAddChest() {
 		this.aliases.add( "addchest" );
 		
+		this.fpidentifier = "addchest";
+		
 		this.requiredArgs.add( "name" );
-
+		
 		this.errorOnToManyArgs = false;
 		
 		this.addRequirements( ReqFactionsEnabled.get() );

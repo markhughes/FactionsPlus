@@ -28,7 +28,9 @@ public class CmdRemoveWarp extends FPCommand {
 		this.aliases.add( "removewarp" );
 		this.aliases.add( "deletewarp" );
 		this.aliases.add( "unsetwarp" );
-
+		
+		this.fpidentifier = "removewarp";
+		
 		this.requiredArgs.add( "name" );
 		this.errorOnToManyArgs = true;
 		

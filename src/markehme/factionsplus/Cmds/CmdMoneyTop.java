@@ -105,6 +105,8 @@ public class CmdMoneyTop extends FPCommand {
 	public CmdMoneyTop() {
 		this.aliases.add( "top" );
 		
+		this.fpidentifier = "top";
+		
 		this.optionalArgs.put( "page", "1" );
 		this.errorOnToManyArgs = true;
 		

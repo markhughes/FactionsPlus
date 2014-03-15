@@ -18,6 +18,8 @@ public class CmdUnban extends FPCommand {
 	public CmdUnban() {
 		this.aliases.add("unban");
 		
+		this.fpidentifier = "unban";
+		
 		this.requiredArgs.add("player");
 		this.errorOnToManyArgs = false;
 		

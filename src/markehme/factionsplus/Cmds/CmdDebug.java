@@ -7,12 +7,9 @@ import java.util.List;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Typeo;
-import markehme.factionsplus.config.sections.Section_Jails;
 import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitWorker;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
@@ -25,6 +22,8 @@ import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 public class CmdDebug extends FPCommand {
 	public CmdDebug() {
 		this.aliases.add("debug");
+		
+		this.fpidentifier = "debug";
 		
 		this.optionalArgs.put("configdiff", "");
 		this.errorOnToManyArgs = true;

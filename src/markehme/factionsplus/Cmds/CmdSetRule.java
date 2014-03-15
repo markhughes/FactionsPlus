@@ -18,6 +18,8 @@ public class CmdSetRule extends FPCommand{
 		this.aliases.add("setrule");
 		this.aliases.add("addrule");
 		
+		this.fpidentifier = "setrule";
+		
 		this.requiredArgs.add("rule");
 		this.errorOnToManyArgs = false;
 		

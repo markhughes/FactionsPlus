@@ -17,6 +17,8 @@ public class CmdUnsetJail extends FPCommand {
 	public CmdUnsetJail() {
 		this.aliases.add( "unsetjail" );
 		
+		this.fpidentifier = "unsetjail";
+		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
 		this.addRequirements( ReqHasFaction.get() );

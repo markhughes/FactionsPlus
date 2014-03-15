@@ -2,7 +2,6 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.config.Config;
-import markehme.factionsplus.references.FP;
 
 import org.bukkit.ChatColor;
 
@@ -15,6 +14,8 @@ public class CmdReloadFP extends FPCommand {
 	public CmdReloadFP() {
 		super();
 		this.aliases.add( "reloadfp" );
+		
+		this.fpidentifier = "reloadfp";
 		
 		//this.optionalArgs.put( "all|conf|templates", "all");
 		this.errorOnToManyArgs = false;
@@ -30,7 +31,7 @@ public class CmdReloadFP extends FPCommand {
 	@Override
 	public void performfp() {
 		
-		if(!FactionsPlus.permission.has(sender, "factionsplus.reload")) {
+		if(!FactionsPlus.permission.has(sender, "factionsplus.reload") || sender.isOp()) {
 			msg(ChatColor.RED + "No permission!");
 			return;
 		}

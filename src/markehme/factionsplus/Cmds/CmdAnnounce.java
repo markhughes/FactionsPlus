@@ -24,6 +24,8 @@ public class CmdAnnounce extends FPCommand {
 	public CmdAnnounce() {
 		this.aliases.add( "announce" );
 		
+		this.fpidentifier = "announce";
+		
 		this.requiredArgs.add( "message" );
 		this.errorOnToManyArgs = false;
 		

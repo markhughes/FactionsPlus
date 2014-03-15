@@ -1,7 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlusJail;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.sections.Section_Jails;
 
 import org.bukkit.ChatColor;
 
@@ -16,6 +16,8 @@ public class CmdUnJail extends FPCommand {
 	public CmdUnJail() {
 		
 		this.aliases.add( "unjail" );
+		
+		this.fpidentifier = "unjail";
 		
 		this.requiredArgs.add( "player" );
 		this.errorOnToManyArgs = false;
@@ -35,7 +37,7 @@ public class CmdUnJail extends FPCommand {
 			
 		String playerToUnjail = this.arg( 0 );
 		
-		if (Config._jails.canJailUnjail( usender )) {
+		if (Section_Jails.canJailUnjail( usender )) {
 			
 			FactionsPlusJail.removeFromJail( playerToUnjail, usender, true);
 			

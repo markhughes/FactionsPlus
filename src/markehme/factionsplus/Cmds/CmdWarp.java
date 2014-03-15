@@ -38,7 +38,9 @@ import com.massivecraft.mcore.util.SmokeUtil;
 public class CmdWarp extends FPCommand {
 	public CmdWarp() {
 		this.aliases.add("warp");
-
+		
+		this.fpidentifier = "warp";
+		
 		this.requiredArgs.add("name");
 		this.optionalArgs.put("password", "string");
 		this.optionalArgs.put("faction", "string");

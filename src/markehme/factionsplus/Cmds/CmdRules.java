@@ -16,6 +16,8 @@ public class CmdRules extends FPCommand {
 		
 		this.aliases.add( "rules" );
 		
+		this.fpidentifier = "rules";
+		
 		this.errorOnToManyArgs = false;
 		
 		this.addRequirements( ReqFactionsEnabled.get() );

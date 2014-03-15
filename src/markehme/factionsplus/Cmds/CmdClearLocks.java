@@ -9,12 +9,13 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
-import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdClearLocks extends FPCommand {
 	public CmdClearLocks() {
 		this.aliases.add("clearlocks");
+		
+		this.fpidentifier = "clearlocks";
 		
 		this.errorOnToManyArgs = true;
 				

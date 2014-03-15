@@ -13,6 +13,7 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.sections.Section_Warps;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -29,6 +30,8 @@ public class CmdAddWarp extends FPCommand {
 		this.aliases.add( "createwarp" );
 		this.aliases.add( "addwarp" );
 		this.aliases.add( "setwarp" );
+		
+		this.fpidentifier = "addwarp";
 		
 		this.requiredArgs.add( "name" );
 		this.optionalArgs.put( "password", "string" );
@@ -69,7 +72,7 @@ public class CmdAddWarp extends FPCommand {
 		Faction currentFaction = uPlayer.getFaction();
 
 
-		if(!Config._warps.canSetOrRemoveWarps(uPlayer)) {
+		if(!Section_Warps.canSetOrRemoveWarps(uPlayer)) {
 			sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badrank", null));
 			return;
 		}

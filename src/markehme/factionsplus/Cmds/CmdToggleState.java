@@ -20,6 +20,8 @@ public class CmdToggleState extends FPCommand {
 		this.aliases.add("toggle");
 		this.aliases.add("togglestate");
 		
+		this.fpidentifier = "togglestate";
+		
 		this.optionalArgs.put("faction", "yours");
 		this.errorOnToManyArgs = false;
 		

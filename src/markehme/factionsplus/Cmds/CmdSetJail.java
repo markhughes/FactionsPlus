@@ -3,14 +3,15 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
-import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
-public class CmdSetJail extends FCommand {
+public class CmdSetJail extends FPCommand {
 	public CmdSetJail() {
 		this.aliases.add("setjail");
+		
+		this.fpidentifier = "setjail";
 		
 		this.addRequirements( ReqFactionsEnabled.get() );
 		this.addRequirements( ReqIsPlayer.get() );
@@ -21,7 +22,7 @@ public class CmdSetJail extends FCommand {
 	}
 	
 	@Override
-	public void perform() {
+	public void performfp() {
 		FactionsPlusJail.setJail(Utilities.getOnlinePlayerExact(usender));
 	}
 	
