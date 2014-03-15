@@ -14,32 +14,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
-	// private boolean allowPluginToEnable=true;
 	private boolean	didNotOverrideOnLoad	= false;
 	
-	// public boolean isAllowPluginToEnable() {
-	// return allowPluginToEnable;
-	// }
-	//
-	// public void setDisAllowPluginToEnable() {
-	// allowPluginToEnable = false;
-	// }
+	/**
+	 * Disallow using onLoad
+	 */
 	@Override
 	public void onLoad() {
-		/*
-		 * don't use things like Bukkit.getConsoleSender() they will NPE here<br>
-		 * XXX: best to avoid using onLoad()!! due to bukkit stuff not being inited
-		 */
-		
-		// usually when you override onLoad on subclass, you don't call super(), we're counting on this to detect if coder tried
-		// to do this and is unaware of the potential problems this may imply
 		didNotOverrideOnLoad = true;
-		// PlugMan actually never calls super.onLoad() which means we never get this variable to true, and thus plugman can
-		// never enable us
-//		System.out.println("---------- onLoad() ---------");//yep not even called by PlugMan
 	}
 	
-	
+	/**
+	 * Plugin will not work if onLoad is called 
+	 */
 	@Override
 	public void onEnable() {
 		if ( !didNotOverrideOnLoad ) {
@@ -171,10 +158,6 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 */
 	public void disableSelf() {
 		setEnabled( false );// it will call onDisable() if it was enabled
-		// Bukkit.getPluginManager().disablePlugin( this );
-		// it won't deregister commands ie. /f fc will still work apparently, likely cause Factions plugin won't be disabled and
-		// it is
-		// it that handles those commands that we potentially already registered to it (assuming this was called after)
 	}
 	
 	
