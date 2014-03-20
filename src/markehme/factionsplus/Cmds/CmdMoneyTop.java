@@ -147,7 +147,7 @@ public class CmdMoneyTop extends FPCommand {
 				
 				
 				for ( int i = 0; i < scoreBoard.length; i++ ) {
-					Faction f = (Faction)scoreBoard[i];
+					Faction f = (Faction) scoreBoard[i];
 					double bal = Money.get(f);
 					scoreBoard[i] = new DualPack<Faction, Double>( f, bal );
 				}

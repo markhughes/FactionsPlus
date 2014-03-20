@@ -28,7 +28,6 @@ import markehme.factionsplus.Cmds.CmdWarp;
 import markehme.factionsplus.Cmds.FPCommand;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
-import markehme.factionsplus.references.FP;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
