@@ -51,12 +51,43 @@ import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.factions.event.FactionsEventCreate;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.FactionsEventRelationChange;
 import com.massivecraft.mcore.ps.PS;
 
 
 public class CoreListener implements Listener{
 	public static Server fp;
 	
+	/**
+	 * Fixes issues with changing relationship between wilderness/safezone/warzone
+	 * @param event
+	 */
+	@EventHandler
+	public void onFactionsEventRelationChange(FactionsEventRelationChange event) {
+		if(FType.valueOf(event.getFaction()) == FType.WILDERNESS || FType.valueOf(event.getOtherFaction()) == FType.WILDERNESS) {
+			if(Config._extras._Fixes.disallowChangingRelationshipToWilderness._) {
+				event.getUSender().msg(ChatColor.RED + "You can't change the relationship towards the wilderness!");
+				event.setCancelled(true);
+				return;
+			}
+		}
+		
+		if(FType.valueOf(event.getFaction()) == FType.SAFEZONE || FType.valueOf(event.getOtherFaction()) == FType.SAFEZONE) {
+			if(Config._extras._Fixes.disallowChangingRelationshipToSafezone._) {
+				event.getUSender().msg(ChatColor.RED + "You can't change the relationship towards a safezone!");
+				event.setCancelled(true);
+				return;
+			}
+		}
+		
+		if(FType.valueOf(event.getFaction()) == FType.WARZONE || FType.valueOf(event.getOtherFaction()) == FType.WARZONE) {
+			if(Config._extras._Fixes.disallowChangingRelationshipToWarzone._) {
+				event.getUSender().msg(ChatColor.RED + "You can't change the relationship towards a warzone!");
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
 	
 	@EventHandler(priority = EventPriority.NORMAL )
 	public void onPlayerThrowPotion(ProjectileLaunchEvent event) {
@@ -124,7 +155,7 @@ public class CoreListener implements Listener{
 	public void onPlayerMove(PlayerMoveEvent event) {
 				
 		// Check for permission factionsplus.flightinterritory
-		if(FP.permission.has(event.getPlayer(), "factionsplus.flightinownterritory") && !event.getPlayer().isOp()) {
+		if(FP.permission.has(event.getPlayer(), "factionsplus.flightinownterritory") && !event.getPlayer().isOp() && !UPlayer.get(event.getPlayer()).isUsingAdminMode()) {
 			if(BoardColls.get().getFactionAt(PS.valueOf(event.getPlayer().getLocation())).getId() == UPlayer.get(event.getPlayer()).getFactionId()) {
 				event.getPlayer().setAllowFlight(true);
 			} else {
@@ -142,7 +173,7 @@ public class CoreListener implements Listener{
 			
 			if(event.getUSender() == null) return;
 			
-			if( !event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && FactionsPlus.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
+			if( !event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FactionsPlus.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
 				
 				// Ensure WorldGuard exists! 
 				if( Bukkit.getServer().getPluginManager().isPluginEnabled( "WorldGuard" ) ) {
@@ -165,15 +196,15 @@ public class CoreListener implements Listener{
 							
 							
 						}
-
-						
-					}
 					
+					}
+				
 				}
-				
+			
 			}
+			
 		}
-				
+			
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -190,7 +221,7 @@ public class CoreListener implements Listener{
 				event.setCancelled( true );
 				
 			}
-				
+			
 		}
 	}
 	
