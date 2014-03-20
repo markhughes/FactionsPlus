@@ -39,6 +39,10 @@ public final class Section_Extras {
 			realAlias_neverDotted = "CreativeGates" )
 	public final SubSection_CreativeGates _CreativeGates = new SubSection_CreativeGates();  
 	
+	@Section(
+			realAlias_neverDotted = "Fixes" )
+	public final SubSection_Fixes _Fixes = new SubSection_Fixes();  
+	
 	@Option(autoComment={"Warning: High Intensity/Resource Hog Check, prevents stuff like cobblestone grief using lava/water"},
 			realAlias_inNonDottedFormat = "crossBorderLiquidFlowBlock" )
 		public final _boolean		crossBorderLiquidFlowBlock	= new _boolean( false );
