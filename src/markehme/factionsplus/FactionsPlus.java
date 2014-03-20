@@ -1,5 +1,6 @@
 package markehme.factionsplus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -62,6 +63,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 	public static boolean update_avab;
 		
+	public static File thefile;
+	
 	public FactionsPlus() {
 		super();
 		
@@ -86,6 +89,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				disableSelf();
 				return;
 			}
+			
+			thefile = getFile();
 			
 			ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
 			noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
