@@ -5,6 +5,8 @@ import java.net.URLConnection;
 import java.util.Scanner;
 
 import markehme.factionsplus.config.Config;
+import markehme.factionsplus.extras.Updater;
+import markehme.factionsplus.extras.Updater.UpdateResult;
 import markehme.factionsplus.references.FP;
 import markehme.factionsplus.references.FPP;
 
@@ -113,110 +115,25 @@ public class FactionsPlusUpdate implements Runnable {
 			URLConnection connection = null;
 			String v = FactionsPlus.version;
 			
-			FPP.info( "FactionsPlus is not currently checking for updates, please check http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
-			
-			/*
 			FPP.info( "Checking for updates ... " );
 			
-			Scanner scanner = null;
-			try {
+			Updater updater = new Updater(FactionsPlus.instance, 38249, FP.thefile, Updater.UpdateType.NO_DOWNLOAD, false);
+			
+			if(updater.getResult().equals(UpdateResult.SUCCESS)) {
+				FactionsPlus.log.warning( "! -=====================================- !" );
+				FactionsPlus.log.warning( "FactionsPlus has an update, you can " );
+				FactionsPlus.log.warning( "upgrade to version " + updater.getLatestGameVersion() + " via" );
+				FactionsPlus.log.warning( "http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
+				FactionsPlus.log.warning( "! -=====================================- !" );
 				
-				connection = new URL( "https://api.curseforge.com/servermods/files?projectIds=38249" ).openConnection();
+				FactionsPlus.update_avab = true;
 				
-				connection.setReadTimeout(15 * 1000); // Read time out after 15 seconds. 
-				connection.setConnectTimeout(15 * 1000); // Connect time out after 15 seconds
-				
-				scanner = new Scanner( connection.getInputStream() );
-				scanner.useDelimiter( "\\Z" );
-				content = scanner.next();
-			} catch (java.net.UnknownHostException uhe) {
-				FPP.info( "Failed to check for updates. Cannot resolve host "+uhe.getMessage() );
-				return;
-				
-			} catch (java.net.ConnectException ce) {
-				FPP.info( "Failed to check for updates. "+ce.getMessage() );
-				return;
-			} catch( java.net.SocketTimeoutException ste ) {
-				FPP.info( "Failed to check for updates, the connection timed out (15 seconds): "+ste.getMessage() );
-				return;
-			} catch ( Exception ex ) {
-				ex.printStackTrace();
-				FPP.info( "Failed to check for updates." );
-				return;
-			} finally {
-				if ( null != scanner ) {
-					scanner.close();
+				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+					if (player.isOp()) {
+						player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + updater.getLatestGameVersion() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
+					}
 				}
 			}
-			
-			JSONArray jContentArray = ( JSONArray ) JSONValue.parse( content );
-			
-			JSONObject latest = ( JSONObject ) jContentArray.get( jContentArray.size() - 1 );
-			
-			String versionName = ( String ) latest.get( "name" );
-			FP.log.info("yay");
-			FP.log.info(versionName);
-			
-			content = versionName; // we do this so I don't have to change ALL the code 
-			
-			// advanced checking
-			if ( !content.trim().equalsIgnoreCase( v.trim() ) ) {
-				int web, current;
-				String tempWeb = content.trim().replace( ".", "" );
-				String tempThis = v.trim().replace( ".", "" );
-				
-				web = Integer.parseInt( tempWeb );
-				current = Integer.parseInt( tempThis );
-				
-				// Check if version lengths are the same
-				if ( tempWeb.length() == tempThis.length() ) {
-					if ( web > current ) {
-						// Version lengths different, unable to advance compare
-						FactionsPlus.log.warning( "! -=====================================- !" );
-						FactionsPlus.log.warning( "FactionsPlus has an update, you can " );
-						FactionsPlus.log.warning( "upgrade to version " + content.trim() + " via" );
-						FactionsPlus.log.warning( "http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
-						FactionsPlus.log.warning( "! -=====================================- !" );
-						
-						FactionsPlus.update_avab = true;
-						
-						for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-							if (player.isOp()) {
-								player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
-							}
-						}
-						
-					} else {
-						FPP.info( "Up to date!" );
-					}
-				} else {
-					// Version lengths different, unable to advance compare
-					FactionsPlus.log.warning( "! -=====================================- !" );
-					FactionsPlus.log.warning( "FactionsPlus has an update, you can " );
-					FactionsPlus.log.warning( "upgrade to version " + content.trim() + " via" );
-					FactionsPlus.log.warning( "http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
-					FactionsPlus.log.warning( "! -=====================================- !" );
-					
-					FactionsPlus.update_avab = true;
-					
-					// Doesn't need seperate thread as it's already in one
-					for ( Player player : Bukkit.getServer().getOnlinePlayers() ) {
-						
-						if ( player.isOp() ) {
-							
-							player.sendMessage( ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + content.trim() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
-							
-						}
-						
-					}
-					
-				}
-			} else {
-				
-				FPP.info( "FactionsPlus is up to date." );
-				
-			}
-			*/
 		}
 	}
 }

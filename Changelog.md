@@ -4,7 +4,20 @@
  
  + Added factionsplus.ignoreneeds to plugin.yml
  
- * When the plugin is disabled, it now removes commands from Factions  
+ + New fixes to fix issues in relation to changing relationships 
+ 
+ + Added Config._extras._Fixes.disallowChangingRelationshipToWilderness
+ 
+ + Added Config._extras._Fixes.disallowChangingRelationshipToSafezone
+ 
+ + Added Config._extras._Fixes.disallowChangingRelationshipToWarzone
+ 
+ * When the plugin is disabled, it now removes commands from Factions 
+ 
+ * Fixed an issue with WorldGuard region bypass check
+ 
+ * factionsplus.flightinownterritory now also checks for admin mode as well as op
+  
  
 # FactionsPlus 0.6.8
 
