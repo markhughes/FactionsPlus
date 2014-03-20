@@ -56,9 +56,9 @@ public class CmdFactionNeed extends FPCommand {
         	
         	if( UPlayer.get(p).getRole() == Rel.LEADER || UPlayer.get(p).getRole() == Rel.OFFICER ) {
         		
-        		if( FP.permission.has( p, "factionsplus.ignoreneeds" ) ) {
+        		if( ! FP.permission.has( p, "factionsplus.ignoreneeds" ) ) {
         			
-        			p.sendMessage( FactionsPlusTemplates.Go( "faction_need", argsa ).replace("!1", sender.getName() ) );
+        			p.sendMessage(  FactionsPlusTemplates.Go( "faction_need", argsa ).replace("!1", sender.getName() ) );
         			
         		}
         	}	
