@@ -553,7 +553,7 @@ public abstract class Utilities {
 	 * @param loc
 	 * @return
 	 */
-	public static boolean checkForRegionsInChunk(Location currentLocation) {
+	public static boolean checkForRegionsInChunk(Location currentLocation, Player player) {
 		
 		// This is pretty much the exact same as Factions 1.6.x source's method
 		// except it's inside FactionsPlus!
@@ -588,7 +588,15 @@ public abstract class Utilities {
 			if( overlaps == null || overlaps.isEmpty() ) {
 				foundregions = false;
 			} else {
-				foundregions = true;
+				if(Config._extras._protection.worldguardCanBuildCheckIfMemberOfRegion._) {
+					for(ProtectedRegion currentRegion : overlaps) {
+						if(!currentRegion.getMembers().contains(player.getName())) {
+							foundregions = true;
+						}
+					}
+				} else {
+					foundregions = true;
+				}
 			}
 		} catch ( Exception e ) {
 			
