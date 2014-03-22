@@ -74,5 +74,11 @@ public class SubSection_Protection {
 			realAlias_inNonDottedFormat = "worldguardCanBuildCheck"
 	)
 	public final _boolean		worldguardCanBuildCheck = new _boolean( true );
+	
+	@Option(autoComment={"If worldguardCanBuildCheck is enabled, then this will enable checking if",
+						 "if they're a member of the region too, and if they are - allow build/claim."},
+	 realAlias_inNonDottedFormat = "worldguardCanBuildCheck"
+	)
+	public final _boolean		worldguardCanBuildCheckIfMemberOfRegion = new _boolean( true );
 
 }
