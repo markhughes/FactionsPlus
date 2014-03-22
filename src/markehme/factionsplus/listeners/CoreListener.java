@@ -181,7 +181,7 @@ public class CoreListener implements Listener{
 					if( FP.worldGuardPlugin != null ) {
 						
 						// Check for chunks
-						if( Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation()) ) {
+						if( Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation(), event.getUSender().getPlayer()) ) {
 							
 							// TODO: 	Check region flags - this can be done by instead returning an array
 							//			of the regions in the chunk, checking the size of the array and then
@@ -436,33 +436,12 @@ public class CoreListener implements Listener{
 		
 		Faction factionHere = BoardColls.get().getFactionAt( PS.valueOf( player.getLocation() ) );
 		
-		// TODO: Cache commands, refresh them on reload/restart
-		
-		
 		if( FType.valueOf( factionHere) == FType.WARZONE ) {
-
-			if (!player.isOp()) {
-				BufferedReader buff=null;
-				try {
-					buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
-
-					String filterRow = null;
-					while ((filterRow = buff.readLine()) != null) {
-						if ((event.getMessage().equalsIgnoreCase(filterRow)) || (event.getMessage().toLowerCase().startsWith(filterRow + " "))) {
-							event.setCancelled(true);
-							player.sendMessage("You can't use that command in a WarZone!");
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}finally{
-					if (null != buff) {
-						try {
-							buff.close();
-						} catch ( IOException e ) {
-							e.printStackTrace();
-						}
-					}
+			
+			if (!player.isOp() && !UPlayer.get(player).isUsingAdminMode()) {
+				if(FactionsPlus.commandsDisabledInWarzone.contains(event.getMessage().toLowerCase().split(" ")[0].replace("/" , ""))) {
+					event.setCancelled(true);
+					player.sendMessage("You can't use that command in a WarZone!");
 				}
 			}
 		}
