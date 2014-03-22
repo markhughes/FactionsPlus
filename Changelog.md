@@ -6,17 +6,23 @@
  
  + New fixes to fix issues in relation to changing relationships 
  
- + Added Config._extras._Fixes.disallowChangingRelationshipToWilderness
+ + Added Config.extras.Fixes.disallowChangingRelationshipToWilderness
  
- + Added Config._extras._Fixes.disallowChangingRelationshipToSafezone
+ + Added Config.extras.Fixes.disallowChangingRelationshipToSafezone
  
- + Added Config._extras._Fixes.disallowChangingRelationshipToWarzone
+ + Added Config.extras.Fixes.disallowChangingRelationshipToWarzone
  
  * When the plugin is disabled, it now removes commands from Factions 
  
  * Fixed an issue with WorldGuard region bypass check
  
  * factionsplus.flightinownterritory now also checks for admin mode as well as op
+ 
+ * WorldGuard region checks now checks if player is a member of that region before denying
+ 
+ * Disabled in warzone commands are now stored in memory 
+ 
+ * When checking for a warzone denied command, we validate the player is not using admin bypass mode too 
   
  
 # FactionsPlus 0.6.8
