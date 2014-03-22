@@ -59,6 +59,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Set<String> noClaimingWorlds 					= 	null;
 	public static Set<String> noPowerLossWorlds 				= 	null;
 	
+	public static Set<String> commandsDisabledInWarzone			= 	null;
+	
 	public static Server server;
 		
 	public static boolean update_avab;
