@@ -1,5 +1,10 @@
 package markehme.factionsplus.listeners;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Set;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.FactionsPlusUpdate;
@@ -131,5 +136,33 @@ public class FPConfigLoadedListener implements Listener {
 			FactionsPlusScoreboard.setup();
 		}
 		
-	} //onConfigLoaded method ends
+		// Load values from disabled_in_warzone.txt
+		FactionsPlus.commandsDisabledInWarzone.clear();
+		
+		BufferedReader buff = null;
+		String filterRow = null;
+		
+		try {
+			
+			buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
+			
+			while((filterRow = buff.readLine()) != null) {
+				
+				FactionsPlus.commandsDisabledInWarzone.add(filterRow);
+				
+			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(null != buff) {
+				try {
+					buff.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	} // onConfigLoaded method ends
 }
