@@ -2,6 +2,9 @@ package markehme.factionsplus;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -59,7 +62,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Set<String> noClaimingWorlds 					= 	null;
 	public static Set<String> noPowerLossWorlds 				= 	null;
 	
-	public static Set<String> commandsDisabledInWarzone			= 	null;
+	public static HashMap<String, String> commandsDisabledInWarzone 	= new HashMap<String, String>();
 	
 	public static Server server;
 		

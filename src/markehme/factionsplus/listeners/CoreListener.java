@@ -439,7 +439,7 @@ public class CoreListener implements Listener{
 		if( FType.valueOf( factionHere) == FType.WARZONE ) {
 			
 			if (!player.isOp() && !UPlayer.get(player).isUsingAdminMode()) {
-				if(FactionsPlus.commandsDisabledInWarzone.contains(event.getMessage().toLowerCase().split(" ")[0].replace("/" , ""))) {
+				if(FactionsPlus.commandsDisabledInWarzone.containsKey(event.getMessage().toLowerCase().split(" ")[0].replace("/" , ""))) {
 					event.setCancelled(true);
 					player.sendMessage("You can't use that command in a WarZone!");
 				}
