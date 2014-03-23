@@ -119,10 +119,10 @@ public class FactionsPlusUpdate implements Runnable {
 			
 			Updater updater = new Updater(FactionsPlus.instance, 38249, FP.thefile, Updater.UpdateType.NO_DOWNLOAD, false);
 			
-			if(updater.getResult().equals(UpdateResult.SUCCESS)) {
+			if(updater.getResult().equals(UpdateResult.UPDATE_AVAILABLE)) {
 				FactionsPlus.log.warning( "! -=====================================- !" );
 				FactionsPlus.log.warning( "FactionsPlus has an update, you can " );
-				FactionsPlus.log.warning( "upgrade to version " + updater.getLatestGameVersion() + " via" );
+				FactionsPlus.log.warning( "upgrade to " + updater.getLatestName() + " via" );
 				FactionsPlus.log.warning( "http://dev.bukkit.org/bukkit-plugins/factionsplus/" );
 				FactionsPlus.log.warning( "! -=====================================- !" );
 				
@@ -133,6 +133,8 @@ public class FactionsPlusUpdate implements Runnable {
 						player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + updater.getLatestGameVersion() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and deprecated code. (+ new features, come on!) " );
 					}
 				}
+			} else {
+				FPP.info( "No updates found. " );
 			}
 		}
 	}
