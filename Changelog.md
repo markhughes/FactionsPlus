@@ -12,6 +12,8 @@
  
  + Added Config.extras.Fixes.disallowChangingRelationshipToWarzone
  
+ + Added updater checker 
+ 
  * When the plugin is disabled, it now removes commands from Factions 
  
  * Fixed an issue with WorldGuard region bypass check
