@@ -31,7 +31,7 @@ public class CmdReloadFP extends FPCommand {
 	@Override
 	public void performfp() {
 		
-		if(!FactionsPlus.permission.has(sender, "factionsplus.reload") || sender.isOp()) {
+		if(!FactionsPlus.permission.has(sender, "factionsplus.reload") || !sender.isOp()) {
 			msg(ChatColor.RED + "No permission!");
 			return;
 		}
