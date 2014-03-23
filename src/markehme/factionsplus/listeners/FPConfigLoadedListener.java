@@ -146,10 +146,13 @@ public class FPConfigLoadedListener implements Listener {
 			
 			buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
 			
+			String currentCommand;
+			
 			while((filterRow = buff.readLine()) != null) {
+				currentCommand = filterRow.split(" ")[0].replace("/", "");
 				
-				FactionsPlus.commandsDisabledInWarzone.add(filterRow);
-				
+				FactionsPlus.commandsDisabledInWarzone.put(currentCommand, currentCommand);
+				FP.info("Baring command " + currentCommand + " in warzones");
 			}
 			
 		} catch(Exception e) {
@@ -163,6 +166,9 @@ public class FPConfigLoadedListener implements Listener {
 				}
 			}
 		}
+		
+		// Updates
+		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
 		
 	} // onConfigLoaded method ends
 }
