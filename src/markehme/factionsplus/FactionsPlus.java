@@ -125,16 +125,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            permission = permissionProvider.getProvider();
 	        }
 	        
-	        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
-	        	Plugin MVc = getServer().getPluginManager().getPlugin( "Multiverse-Portals" );
-	            
-	            if (MVc instanceof MultiversePortals) {
-	            	multiversePortalsPlugin = ( MultiversePortals ) MVc;
-	            	
-		        	isMultiversePortalsEnabled = true;
-	            }
-	            
-	        }
 	        
 			try {
 				

@@ -20,8 +20,10 @@ import markehme.factionsplus.references.FPP;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import com.onarandombox.MultiversePortals.MultiversePortals;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
@@ -49,6 +51,17 @@ public class FPConfigLoadedListener implements Listener {
         if( pm.isPluginEnabled( "WorldGuard" ) ) {
         	FactionsPlus.worldGuardPlugin = ( WorldGuardPlugin ) pm.getPlugin( "WorldGuard" );	            	
         	FactionsPlus.isWorldGuardEnabled = true;
+        }
+        
+        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
+        	Plugin MVc = pm.getPlugin( "Multiverse-Portals" );
+            
+            if (MVc instanceof MultiversePortals) {
+            	FactionsPlus.multiversePortalsPlugin = ( MultiversePortals ) MVc;
+            	
+            	FactionsPlus.isMultiversePortalsEnabled = true;
+            }
+            
         }
         
         if ( LWCBase.isLWCPluginPresent() ) { 
