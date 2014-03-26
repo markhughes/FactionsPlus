@@ -125,7 +125,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            permission = permissionProvider.getProvider();
 	        }
 	        
-	        
 			try {
 				
 				metrics = new Metrics( this );
@@ -196,7 +195,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			update_avab = false; // reset this here
 			
 			try {
-				//FactionsPlusUpdate.ensureNotRunning();
+				FactionsPlusUpdate.ensureNotRunning();
 			} catch ( Throwable t ) {
 				failed = t;
 				severe( t, "Exception on disabling Updates" );
