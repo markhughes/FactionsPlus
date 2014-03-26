@@ -22,6 +22,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 public class FPConfigLoadedListener implements Listener {
 	
 	/**
@@ -36,7 +39,18 @@ public class FPConfigLoadedListener implements Listener {
         TeleportsListener.initOrDeInit(FP.instance);
        
         PluginManager pm = Bukkit.getServer().getPluginManager();
-                
+        
+        
+        if( pm.isPluginEnabled( "WorldEdit" ) ) {
+       		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin( "WorldEdit" );
+       		FactionsPlus.isWorldEditEnabled = true;
+       	}
+        
+        if( pm.isPluginEnabled( "WorldGuard" ) ) {
+        	FactionsPlus.worldGuardPlugin = ( WorldGuardPlugin ) pm.getPlugin( "WorldGuard" );	            	
+        	FactionsPlus.isWorldGuardEnabled = true;
+        }
+        
         if ( LWCBase.isLWCPluginPresent() ) { 
 			// TODO: is this still used ? - can't find in Factions config 
         	/*
