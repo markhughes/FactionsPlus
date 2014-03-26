@@ -68,7 +68,7 @@ public class CmdDebug extends FPCommand {
 		}
 		
 		msg( "--- START ---");
-		msg( "FactionsPlus Version: " + FP.version);
+		msg( "FactionsPlus Version: " + FP.pluginVersion);
 		msg( "Bukkit Version: " + Bukkit.getBukkitVersion());
 		msg( "Bukkit Version: " + Bukkit.getServer().getVersion());
 		List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();

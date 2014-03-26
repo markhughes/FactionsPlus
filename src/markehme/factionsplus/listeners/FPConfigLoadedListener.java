@@ -23,6 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import com.massivecraft.mcore.MCore;
 import com.onarandombox.MultiversePortals.MultiversePortals;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -42,17 +43,19 @@ public class FPConfigLoadedListener implements Listener {
        
         PluginManager pm = Bukkit.getServer().getPluginManager();
         
-        
+        // Fetch world edit 
         if( pm.isPluginEnabled( "WorldEdit" ) ) {
        		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin( "WorldEdit" );
        		FactionsPlus.isWorldEditEnabled = true;
        	}
         
+        // fetch world guard
         if( pm.isPluginEnabled( "WorldGuard" ) ) {
         	FactionsPlus.worldGuardPlugin = ( WorldGuardPlugin ) pm.getPlugin( "WorldGuard" );	            	
         	FactionsPlus.isWorldGuardEnabled = true;
         }
         
+        // fetch mvp
         if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
         	Plugin MVc = pm.getPlugin( "Multiverse-Portals" );
             
@@ -64,7 +67,8 @@ public class FPConfigLoadedListener implements Listener {
             
         }
         
-        if ( LWCBase.isLWCPluginPresent() ) { 
+        if ( LWCBase.isLWCPluginPresent() ) {
+        	
 			// TODO: is this still used ? - can't find in Factions config 
         	/*
 			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {

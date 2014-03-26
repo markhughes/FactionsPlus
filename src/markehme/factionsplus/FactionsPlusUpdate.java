@@ -113,7 +113,6 @@ public class FactionsPlusUpdate implements Runnable {
 		synchronized ( FactionsPlusUpdate.class ) {
 			String content = null;
 			URLConnection connection = null;
-			String v = FactionsPlus.version;
 			
 			FPP.info( "Checking for updates ... " );
 			
