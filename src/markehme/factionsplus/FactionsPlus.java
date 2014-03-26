@@ -125,17 +125,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	            permission = permissionProvider.getProvider();
 	        }
 	        
-	        if( pm.isPluginEnabled( "WorldEdit" ) ) {
-	       		worldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin( "WorldEdit" );
-	       		isWorldEditEnabled = true;
-	       		
-	       	}
-	        
-	        if( pm.isPluginEnabled( "WorldGuard" ) ) {
-	        	worldGuardPlugin = ( WorldGuardPlugin ) getServer().getPluginManager().getPlugin( "WorldGuard" );	            	
-	        	isWorldGuardEnabled = true;
-	        }
-	        
 	        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
 	        	Plugin MVc = getServer().getPluginManager().getPlugin( "Multiverse-Portals" );
 	            
