@@ -188,10 +188,9 @@ public class Metrics {
      */
     public boolean start() {
         synchronized (optOutLock) {
-            // Did we opt out?
-            if (isOptOut()) {
-                return false;
-            }
+            // We don't use Metrics configuration option
+        	// we have our own configuration option to 
+        	// disable metrics. 
 
             // Is metrics already running?
             if (task != null) {
