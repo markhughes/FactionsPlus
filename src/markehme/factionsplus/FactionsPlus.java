@@ -1,31 +1,35 @@
 package markehme.factionsplus;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.Const;
+import markehme.factionsplus.MCore.MConf;
+import markehme.factionsplus.MCore.MConfColl;
+import markehme.factionsplus.MCore.UConfColl;
+import markehme.factionsplus.MCore.UConfColls;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
-import markehme.factionsplus.extras.Metrics.Graph;
 import markehme.factionsplus.listeners.CoreListener;
 import markehme.factionsplus.listeners.FPConfigLoadedListener;
+import markehme.factionsplus.util.DataConvert;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.mcore.Aspect;
+import com.massivecraft.mcore.AspectColl;
+import com.massivecraft.mcore.Multiverse;
 
 import com.onarandombox.MultiversePortals.MultiversePortals;
 
@@ -84,15 +88,17 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	// Server reference
 	public static Server server;
-		
-	// If this is true, then there is an updated
-	public static boolean update_avab;
 	
 	// Had to put this here, so that Updater can access it
 	public static File thefile;
 	
 	// The plugin manager
 	public static PluginManager pm;
+	
+	// Aspect Stuff
+	private Aspect aspect;
+	public Aspect getAspect() { return this.aspect; }
+	public Multiverse getMultiverse() { return this.getAspect().getMultiverse(); }
 	
 	public FactionsPlus() {
 		super();
@@ -109,10 +115,21 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	@Override
 	public void onEnable() {
-		
 		try {
-			// Let the super start off
 			super.onEnable(); 
+			
+			// MCore is a go
+			
+			this.aspect = AspectColl.get().get(Const.ASPECT, true);
+			this.aspect.register();
+			this.aspect.setDesc(
+				"<i>If the FactionsPlus system even is enabled and how it's configured.",
+				"<i>What Factions exists and what players belong to them."
+			);
+			
+			// Init MStore 
+			MConfColl.get().init();
+			UConfColls.get().init();
 			
 			// Store some useful data for later
 			thefile = getFile();
@@ -120,17 +137,24 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			pm = server.getPluginManager();	
 			pluginVersion = getDescription().getVersion(); 
 			
-			// Init some Factions stuff (that doesn't uses the config)
-			initFactions();
+			if(OldConfig.fileConfig.exists()) {
+				info(ChatColor.GOLD + "Converting database and config, please wait ..");
+				OldConfig.init();
+				OldConfig.reload();
+				
+				DataConvert.doConvert();
+				
+			}
 			
-			// Init the config
-			Config.init();
+			
+			initFactions();
+
 			
 			// Publicise that the config has been loaded
 			pm.registerEvents(new FPConfigLoadedListener(), this);
 			
 			// Reload the configuration 
-			Config.reload(); 
+			
 			
 			// Add our core listener
 			pm.registerEvents(this.corelistener, this);
@@ -139,34 +163,25 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			FactionsPlusCommandManager.setup();
 			
 			// Hook into vault for permissions
-	        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
+			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
 	        if(permissionProvider != null) {
 	            permission = permissionProvider.getProvider();
 	        }
 	        
 	        // Provide useful metrics information 
-			try {
-				
-				metrics = new Metrics(this);
-				
-				// Also provide which version of Factions
-                Graph factionsVersionGraph = metrics.createGraph("Factions Version");
-    	        
-                factionsVersionGraph.addPlotter(new Metrics.Plotter(FactionsVersion) {
-
-                    @Override
-                    public int getValue() {
-                        return 1;
-                    }
-                });
-                
-				metrics.start();
-				
-			} catch (IOException e) {
-				
-				info("Metrics could not start up: "+e.getMessage());
-				
-			}
+	        if(MConf.get().metrics.booleanValue()) {
+				try {
+					metrics = new Metrics(this);
+	                metrics.createGraph("Factions Version").addPlotter(new Metrics.Plotter(FactionsVersion) {
+	                    @Override
+	                    public int getValue() { return 1; }
+	                });
+					metrics.start();
+					
+				} catch (Exception e) {
+					info("Metrics could not start up "+e.getMessage());					
+				}
+	        }
 									
 		} catch (Throwable t) {
 			// Error management at its best..
@@ -195,7 +210,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			} 
 			
 			try {
-				Config.deInit();
+				OldConfig.deInit();
 			} catch ( Throwable t ) {
 				failed = t;
 				severe( t, "Exception on disabling Config" );
@@ -215,9 +230,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				failed = t;
 				severe( t, "Exception on unhooking LWC" );
 			}
-			
-			update_avab = false; // reset this here
-			
+					
 			try {
 				FactionsPlusUpdate.ensureNotRunning();
 			} catch ( Throwable t ) {
@@ -249,7 +262,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			try {
 				if(Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ) != null &&
-						(Config._extras._scoreboards.showScoreboardOfFactions._ || Config._extras._scoreboards.showScoreboardOfMap._ )) {
+						(OldConfig._extras._scoreboards.showScoreboardOfFactions._ || OldConfig._extras._scoreboards.showScoreboardOfMap._ )) {
 					
 					Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ).unregister();
 				}
@@ -304,10 +317,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		// Some debug output - can be helpful when debugging errors 
 		info("Factions v" + FactionsVersion ); 
 		
-		// Get world-specific settings from Factions 
-		ignoredPvPWorlds			= 	MConf.get().worldsIgnorePvP;
-		noClaimingWorlds 			= 	MConf.get().worldsNoClaiming;
-		noPowerLossWorlds 			= 	MConf.get().worldsNoPowerLoss;
 
 	}
 }
