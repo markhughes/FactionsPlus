@@ -12,92 +12,151 @@ import java.io.InputStreamReader;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
-import markehme.factionsplus.config.sections.Section_Warps;
+import markehme.factionsplus.Cmds.req.ReqFactionsPlusEnabled;
+import markehme.factionsplus.Cmds.req.ReqWarpsEnabled;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.UConf;
+import markehme.factionsplus.extras.FType;
+import markehme.factionsplus.util.FPPerm;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdAddWarp extends FPCommand {
 	public CmdAddWarp() {
-		this.aliases.add( "createwarp" );
-		this.aliases.add( "addwarp" );
-		this.aliases.add( "setwarp" );
+		this.aliases.add("createwarp");
+		this.aliases.add("addwarp");
+		this.aliases.add("setwarp");
 		
+		// Unique identifier for this command 
 		this.fpidentifier = "addwarp";
 		
-		this.requiredArgs.add( "name" );
-		this.optionalArgs.put( "password", "string" );
+		this.requiredArgs.add("name" );
+		this.optionalArgs.put("password", "");
 		
-		this.errorOnToManyArgs = false;
+		this.addRequirements(ReqFactionsEnabled.get());
 		
-		this.addRequirements( ReqFactionsEnabled.get() );
-		this.addRequirements( ReqIsPlayer.get() );
-		this.addRequirements( ReqHasFaction.get() );
+		// Ensure FactionsPlus is enabled
+		this.addRequirements(ReqFactionsPlusEnabled.get());
 		
-		this.setHelp( "create a faction warp, can be specified with a password" );
-		this.setDesc( "create a faction warp, can be specified with a password" );
+		// Ensure Warps are enabled
+		this.addRequirements(ReqWarpsEnabled.get());
+		
+		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasFaction.get());
+		
+		this.addRequirements(ReqHasPerm.get(FPPerm.CREATEWARP.node));
+		
+		this.setHelp( LConf.get().cmdDescAddWarp );
+		this.setDesc( LConf.get().cmdDescAddWarp );
 
 	}
 
 	@Override
 	public void performfp() {
-		String warpname = this.arg(0);
-
-		String warpPassword = null;
+				
+		String warpName 	= this.arg(0);
+		String warpPass		= null;
 
 		if(this.arg(1) != null) {
-			warpPassword = this.arg(1);
+			warpPass = this.arg(1);
 			
-			if(warpPassword.length() < 1) {
-				msg("Your warp password must be at least 2 characters or more.");
-				
-				return;
-			}
-		}
-
-		if(!FactionsPlus.permission.has(sender, "factionsplus.createwarp")) {
-			sender.sendMessage(ChatColor.RED + "No permission!");
-			return;
-		}
-
-		UPlayer uPlayer = UPlayer.get(sender.getName());
-		Faction currentFaction = uPlayer.getFaction();
-
-
-		if(!Section_Warps.canSetOrRemoveWarps(uPlayer)) {
-			sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badrank", null));
-			return;
-		}
-
-		if(!uPlayer.isInOwnTerritory()) {
-			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
-				sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badterritory", null));
-				return;
-			}
-		}
-		if(Config._economy.costToCreateWarp._ > 0.0d && Config._economy.isHooked()) {
-			if (!Utilities.doFinanceCrap(Config._economy.costToCreateWarp._, "create a warp", usender)) {
+			if(warpPass.length() < 1) {
+				msg(LConf.get().warpsPasswordTooSmall);
 				return;
 			}
 		}
 		
-		if(Config._warps.maxWarps._ != 0) {
-			if(Utilities.getCountOfWarps(currentFaction) >= Config._warps.maxWarps._) {
-				usender.msg( FactionsPlusTemplates.Go( "warps_reached_max", null ) );
+		UPlayer uPlayer = UPlayer.get(sender.getName());
+		
+		Faction currentFaction = uPlayer.getFaction();
+		
+		// Ensure that this role can set warps 
+		if(!UConf.get(uPlayer).whoCanSetWarps.get(uPlayer.getRole())) {
+			sender.sendMessage(Txt.parse(LConf.get().warpsNotHighEnoughRankingToSet));
+			return;
+		}
+		
+		// Ensure they can create warps here 
+		// TODO: Less-code way to do this? 
+		Faction landIN = BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation()));
+		Boolean canCreateHere = false;
+		
+		if(!uPlayer.isInOwnTerritory()) {
+			if(landIN.getRelationTo(uPlayer) == Rel.ENEMY && !UConf.get(uPlayer).allowWarpsIn.get("enemy") ) {
+				canCreateHere = false;
+			}
+			
+			if(landIN.getRelationTo(uPlayer) == Rel.ALLY && !UConf.get(uPlayer).allowWarpsIn.get("ally") ) {
+				canCreateHere = false;
+			}
+			
+			if(landIN.getRelationTo(uPlayer) == Rel.NEUTRAL && !UConf.get(uPlayer).allowWarpsIn.get("neutral") ) {
+				canCreateHere = false;
+			}
+			
+			if(landIN.getRelationTo(uPlayer) == Rel.TRUCE && !UConf.get(uPlayer).allowWarpsIn.get("true") ) {
+				canCreateHere = false;
+			}
+			
+			if((
+				landIN.getRelationTo(uPlayer) == Rel.MEMBER ||
+				landIN.getRelationTo(uPlayer) == Rel.LEADER ||
+				landIN.getRelationTo(uPlayer) == Rel.OFFICER ||
+				landIN.getRelationTo(uPlayer) == Rel.RECRUIT
+			) && !UConf.get(uPlayer).allowWarpsIn.get("owned") ) {
+				canCreateHere = false;
+			}
+		}
+		
+		if(FType.valueOf(landIN) == FType.WILDERNESS && !UConf.get(uPlayer).allowWarpsIn.get("wilderness")) {
+			canCreateHere = false;
+		}
+		
+		if(FType.valueOf(landIN) == FType.WARZONE && !UConf.get(uPlayer).allowWarpsIn.get("warzone")) {
+			canCreateHere = false;
+		}
+		
+		if(FType.valueOf(landIN) == FType.SAFEZONE && !UConf.get(uPlayer).allowWarpsIn.get("safezone")) {
+			canCreateHere = false;
+		}
+		
+		if(!canCreateHere) {
+			msg(Txt.parse(LConf.get().warpsNotInCorrectTerritory));
+			return;
+		}
+		
+		if(UConf.get(uPlayer).economyCost.get("createwarp") > 0.0d) {
+			// TODO: Remake economy related features 	
+			
+			/*
+			if (!Utilities.doFinanceCrap(OldConfig._economy.costToCreateWarp._, "create a warp", usender)) {
+				return;
+			}
+			*/
+		}
+		
+		if(UConf.get(uPlayer).maxWarps != 0) {
+			if(Utilities.getCountOfWarps(currentFaction) >= UConf.get(uPlayer).maxWarps) {
+				msg(Txt.parse(LConf.get().warpsReachedMax));
 				return;
 			}
 		}
-
-		File currentWarpFile = new File(Config.folderWarps, currentFaction.getId());
-
+		
+		File currentWarpFile = new File(OldConfig.folderWarps, currentFaction.getId());
+		
 		if (!currentWarpFile.exists()) {
 			try {
 				currentWarpFile.createNewFile();
@@ -119,7 +178,7 @@ public class CmdAddWarp extends FPCommand {
 				while ((strLine = br.readLine()) != null) {
 					String[] warp_data =  strLine.split(":");
 
-					if(warp_data[0].equalsIgnoreCase(warpname)) {
+					if(warp_data[0].equalsIgnoreCase(warpName)) {
 						sender.sendMessage(FactionsPlusTemplates.Go("warps_already_exists", null));
 						return;
 					}
@@ -155,17 +214,18 @@ public class CmdAddWarp extends FPCommand {
 		Player player = (Player) sender;
 
 		Location loc = player.getLocation();
+		
 		try {
 			FileWriter filewrite = new FileWriter(currentWarpFile, true);
 			String dataAddition;
 
-			if(warpPassword != null) {
-				dataAddition = ":" + warpPassword;
+			if(warpPass != null) {
+				dataAddition = ":" + warpPass;
 			} else {
 				dataAddition = ":nullvalue";
 			}
 
-			filewrite.write(warpname + ":" +
+			filewrite.write(warpName + ":" +
 					loc.getX() + ":" +
 					loc.getY() + ":" +
 					loc.getZ() + ":" +
@@ -181,11 +241,11 @@ public class CmdAddWarp extends FPCommand {
 			return;
 		}
 		
-		String[] argsb = { warpname };
+		String[] argsb = { warpName };
 		
 		msg(FactionsPlusTemplates.Go("warp_created", argsb));
 
-		String[] argsa = { sender.getName(), warpname };
+		String[] argsa = { sender.getName(), warpName };
 		
 		msg( FactionsPlusTemplates.Go("notify_warp_created", argsa) );
 		
