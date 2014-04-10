@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import markehme.factionsplus.FactionsPlusTemplates;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.config.sections.Section_Announce;
 import markehme.factionsplus.config.sections.Section_Banning;
 import markehme.factionsplus.config.sections.Section_Economy;
@@ -33,8 +34,6 @@ import markehme.factionsplus.config.yaml.WYSection;
 import markehme.factionsplus.config.yaml.WY_IDBased;
 import markehme.factionsplus.config.yaml.WannabeYaml;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
-import markehme.factionsplus.references.FP;
-import markehme.factionsplus.references.FPP;
 import markehme.factionsplus.util.Q;
 import markehme.factionsplus.util.RethrownException;
 
@@ -47,7 +46,7 @@ import org.bukkit.event.Event;
 
 
 
-public abstract class Config {
+public abstract class OldConfig {
 
 	// do not use Plugin.getDataFolder() here, it will NPE, unless you call it in/after onEnable()
 	public static final File				folderBase				= new File( "plugins" + File.separator + "FactionsPlus" );
@@ -62,7 +61,7 @@ public abstract class Config {
 	public static FileConfiguration			templates;
 	
 	// and it contains the defaults, so that they are no longer hardcoded in java code
-	public final static File						fileConfig				= new File( Config.folderBase, "config.yml" );
+	public final static File						fileConfig				= new File( OldConfig.folderBase, "config.yml" );
 	
 	// never change this, it's yaml compatible:
 	public static final char				DOT						= '.';
@@ -146,7 +145,7 @@ public abstract class Config {
 	public static final _boolean disableAutoCommentsInConfig=new _boolean(false);
 	
 	// the root class that contains the @Section and @Options to scan for
-	private static final Class				configClass				= Config.class;
+	private static final Class				configClass				= OldConfig.class;
 	// End Config
 	
 	
@@ -168,12 +167,12 @@ public abstract class Config {
 		boolean failed = false;
 		// try {
 		if ( Q.isInconsistencyFileBug() ) {
-			throw FPP.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+			throw FactionsPlusPlugin.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
 				+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
 		}
 		
 		if ( hasFileFieldsTrap() ) {
-			throw FPP.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+			throw FactionsPlusPlugin.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
 				+ "in places that use files, tell plugin author to fix" );
 		}
 		
@@ -184,27 +183,17 @@ public abstract class Config {
 		
 		//this header will be included at the top of the config.yml
 		fpConfigHeaderArray	= new String[]{
-			FP.instance.getDescription().getFullName()+" configuration file"
+			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
 			,""
 			,""
-			,"All comments starting with `### ` (3 # and a space)(aka auto comments) will be automatically updated, " 
-			," please refrain from making any changes inside those lines because they will be lost upon save"
-			,"Comments with just one `#` will remain, though they will be moved before/after the auto comments"
-			,""
-			,"You may not use `.` aka dot in config options names even though we are referring to them like that"
-			,"  ie. jails.enabled becomes `jails:<hit enter and 2 spaces>enabled`"
-			," Each level is indented by exactly 2 spaces"
-			,""
-			,"You may use `/f debug configdiff` to see the config options that you've changed from their default (OPs/console only)"
-			,""
-			,""
+			," This file is deprecated, and will be remvoed."
 			,""
 			,""
 		};
 		
 		for ( int i = 0; i < fpConfigHeaderArray.length; i++ ) {
 			if (fpConfigHeaderArray[i].contains("\n") || fpConfigHeaderArray[i].contains( "\r" ) ) {
-				throw FP.bailOut( "Do not use newlines inside the header, " +
+				throw FactionsPlus.bailOut( "Do not use newlines inside the header, " +
 						"but instead add a new element line in the array. Problematic line #"+i+"\n`"+fpConfigHeaderArray[i]+"`" );
 			}
 		}
@@ -219,7 +208,7 @@ public abstract class Config {
 	 * this would cause some evil inconsistencies if any of those fields would resolve to empty paths<br>
 	 */
 	private static boolean hasFileFieldsTrap() {
-		Class classToCheckFor_FileFields = Config.class;
+		Class classToCheckFor_FileFields = OldConfig.class;
 		Field[] allFields = classToCheckFor_FileFields.getFields();
 		for ( Field field : allFields ) {
 			if ( File.class.equals( field.getType() ) ) {
@@ -249,19 +238,19 @@ public abstract class Config {
 	 */
 	public synchronized final static void reload() {
 		
-		Config.setLoaded( false );// must be here to cause config to reload on every plugin(s) reload from console
-		Config.templates = null;
+		OldConfig.setLoaded( false );// must be here to cause config to reload on every plugin(s) reload from console
+		OldConfig.templates = null;
 		boolean failed = false;
 		try {
 			
-			Config.ensureFoldersExist();
+			OldConfig.ensureFoldersExist();
 			
 			reloadConfig();
 			
 			reloadTemplates();
 			
 			// last:
-			Config.setLoaded( true );
+			OldConfig.setLoaded( true );
 			// Create the event here
 			Event event = new FPConfigLoadedEvent();
 			// Call the event
@@ -273,7 +262,7 @@ public abstract class Config {
 			Q.rethrow( t );
 		} finally {
 			if ( failed ) {
-				FP.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
+				FactionsPlus.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
 													// show us green
 				// but mostly, for consistency's sake and stuff we couldn't think of/anticipate now
 			}
@@ -284,34 +273,34 @@ public abstract class Config {
 
 	
 	protected static void ensureFoldersExist() {
-		File dataF = FP.instance.getDataFolder();
+		File dataF = FactionsPlus.instance.getDataFolder();
 		if ( !dataF.equals( folderBase ) ) {
-			throw FPP
+			throw FactionsPlusPlugin
 				.bailOut( "Base folder and dataFolder differ, this may not be intended and it may just be a possible bug in the code;"
 					+ "folderBase=" + folderBase + " dataFolder=" + dataF );
 		}
 		
 		try {
-			addDir( Config.folderBase );
-			addDir( Config.folderWarps );
-			addDir( Config.folderJails );
-			addDir( Config.folderAnnouncements );
-			addDir( Config.folderFRules );
-			addDir( Config.folderFBans );
+			addDir( OldConfig.folderBase );
+			addDir( OldConfig.folderWarps );
+			addDir( OldConfig.folderJails );
+			addDir( OldConfig.folderAnnouncements );
+			addDir( OldConfig.folderFRules );
+			addDir( OldConfig.folderFBans );
 			
-			if ( !Config.fileDisableInWarzone.exists() ) {
-				Config.fileDisableInWarzone.createNewFile();
-				FPP.info( "Created file: " + Config.fileDisableInWarzone );
+			if ( !OldConfig.fileDisableInWarzone.exists() ) {
+				OldConfig.fileDisableInWarzone.createNewFile();
+				FactionsPlusPlugin.info( "Created file: " + OldConfig.fileDisableInWarzone );
 			}
 			
-			if(Config.templatesFile.exists()) {
-				FPP.info( "Templates file is no longer used, removing. See Config > Template" );
+			if(OldConfig.templatesFile.exists()) {
+				FactionsPlusPlugin.info( "Templates file is no longer used, removing. See Config > Template" );
 				
-				Config.templatesFile.delete();
+				OldConfig.templatesFile.delete();
 			}
 			
 		} catch ( Exception e ) {
-			throw FPP.bailOut(e, "something failed when ensuring the folders exist" );
+			throw FactionsPlusPlugin.bailOut(e, "something failed when ensuring the folders exist" );
 		}
 	}
 	
@@ -319,9 +308,9 @@ public abstract class Config {
 	private static final void addDir( File dir ) {
 		if ( !dir.exists() ) {
 			if ( dir.getPath().isEmpty() ) {
-				throw FPP.bailOut( "bad coding, this should usually not trigger here, but earlier" );
+				throw FactionsPlusPlugin.bailOut( "bad coding, this should usually not trigger here, but earlier" );
 			}
-			FPP.info( "Added directory: " + dir );
+			FactionsPlusPlugin.info( "Added directory: " + dir );
 			dir.mkdirs();
 		}
 	}
@@ -378,7 +367,7 @@ public abstract class Config {
 			} else {
 				
 				if ( !( currentItem instanceof WY_IDBased ) ) {
-					throw FPP.bailOut( "impossible, coding bug detected" );
+					throw FactionsPlusPlugin.bailOut( "impossible, coding bug detected" );
 				}
 				
 				
@@ -396,7 +385,7 @@ public abstract class Config {
 						bw.newLine();
 						appendSection( level + 1, cs );// recurse
 					} else {
-						throw FP.bailOut( "impossible, coding bug detected" );
+						throw FactionsPlus.bailOut( "impossible, coding bug detected" );
 					}
 				}
 			}
@@ -426,13 +415,13 @@ public abstract class Config {
 				// sections are not checked for having oldaliases mainly since they are part of the dotted form of a config
 				// options and thus
 				// are indirectly checked when config options(aka ids) are checked
-				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + OldConfig.DOT + cs.getId() );
 				
 				parseOneTime_and_CheckForValids( cs, dotted );// recurse
 			} else {
 				if ( WYIdentifier.class == cls ) {
 					WYIdentifier<COMetadata> wid = ( (WYIdentifier)currentItem );
-					String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+					String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + OldConfig.DOT + wid.getId() );
 					// String dotted = wid.getID_InAbsoluteDottedForm( virtualRoot );
 					// System.out.println( dotted );
 					Field foundAsField = Typeo.getField_correspondingTo_DottedFormat( dotted );
@@ -487,7 +476,7 @@ public abstract class Config {
 			try {
 				//for tests:
 //				fos=new FileOutputStream( new File( Config.fileConfig.getParent(), "config2-test-only.yml" ) );
-				fos = new FileOutputStream( Config.fileConfig);
+				fos = new FileOutputStream( OldConfig.fileConfig);
 				osw = new OutputStreamWriter( fos, Q.UTF8 );
 				bw = new BufferedWriter( osw );
 				// parseWrite( 0, config.getValues( false ) );
@@ -547,7 +536,7 @@ public abstract class Config {
 			// getConfig().save( Config.fileConfig );
 		} catch ( RethrownException e ) {
 			e.printStackTrace();
-			throw FPP.bailOut( "could not save config file: " + Config.fileConfig.getAbsolutePath() );
+			throw FactionsPlusPlugin.bailOut( "could not save config file: " + OldConfig.fileConfig.getAbsolutePath() );
 		}
 	}
 	
@@ -561,9 +550,9 @@ public abstract class Config {
 	
 	public synchronized final static boolean reloadConfig() {
 		
-		if ( Config.fileConfig.exists() ) {
-			if ( !Config.fileConfig.isFile() ) {
-				throw FPP.bailOut( "While '" + Config.fileConfig.getAbsolutePath()
+		if( OldConfig.fileConfig.exists()) {
+			if ( !OldConfig.fileConfig.isFile() ) {
+				throw FactionsPlusPlugin.bailOut( "While '" + OldConfig.fileConfig.getAbsolutePath()
 					+ "' exists, it is not a file!" );
 			}
 		}else {
@@ -573,9 +562,9 @@ public abstract class Config {
 			
 //			throw FactionsPlus.bailOut( "inexistent config" );
 			try {
-				Config.fileConfig.createNewFile();
+				OldConfig.fileConfig.createNewFile();
 			} catch ( IOException e ) {
-				FP.bailOut(e, "Cannot create config file "+Config.fileConfig.getAbsolutePath() );
+				FactionsPlus.bailOut(e, "Cannot create config file "+OldConfig.fileConfig.getAbsolutePath() );
 			}
 			
 //			virtualRoot=createWYRootFromFields();
@@ -626,7 +615,7 @@ public abstract class Config {
 			
 		} catch ( IOException e ) {
 			// e.printStackTrace();
-			throw FPP.bailOut( e, "failed to load existing config file '" + Config.fileConfig.getAbsolutePath()
+			throw FactionsPlusPlugin.bailOut( e, "failed to load existing config file '" + OldConfig.fileConfig.getAbsolutePath()
 				+ "'" );
 		}
 			
@@ -639,7 +628,7 @@ public abstract class Config {
 		setFieldValuesToThoseFromConfig();
 		
 		//2.put or not autocomments
-		if (!Config.disableAutoCommentsInConfig._){
+		if (!OldConfig.disableAutoCommentsInConfig._){
 			addAutoCommentsInConfig();
 		}
 		
@@ -655,7 +644,7 @@ public abstract class Config {
 		
 		//last:
 		if (encountered>SKIP_AFTER_ENCOUNTERED) {
-			FP.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
+			FactionsPlus.warn( "Skipped "+ChatColor.RED+(encountered-SKIP_AFTER_ENCOUNTERED)+ChatColor.RESET
 				+" more messages due to being over the limit of "+SKIP_AFTER_ENCOUNTERED );
 		}
 		encountered=0;
@@ -689,7 +678,7 @@ public abstract class Config {
 			
 			if ( WYSection.class == cls ) {
 				WYSection cs = (WYSection)currentItem;
-				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + OldConfig.DOT + cs.getId() );
 //				assert null == cs.getMetadata() : "this should not have metadata, unless we missed something";
 				
 				parseAndAddAutoComments( cs , dotted );// recurse
@@ -700,7 +689,7 @@ public abstract class Config {
 					if ( ( null != meta ) && ( meta.getClass().equals(CO_FieldPointer.class) ) ) {
 						howManyWeSet++;
 						//then it's a valid field ie. not dup/invalid/overridden/upgraded but rather real
-						String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + Config.DOT + wid.getId() );
+						String dotted = ( isTopLevelSection ? wid.getId() : dottedParentSection + OldConfig.DOT + wid.getId() );
 						Field field = Typeo.getField_correspondingTo_DottedFormat( dotted );
 						assert null != field:"something went wrong somewhere else field not found for: "+dotted;
 						String[] comments = Typeo.getComments( field );
@@ -823,7 +812,7 @@ public abstract class Config {
 			
 			if ( WYSection.class == cls ) {
 				WYSection cs = (WYSection)currentItem;
-				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + Config.DOT + cs.getId() );
+				String dotted = ( isTopLevelSection ? cs.getId() : dottedParentSection + OldConfig.DOT + cs.getId() );
 				
 				cleanAutoComments( cs, dotted );// recurse
 				
@@ -891,7 +880,7 @@ public abstract class Config {
 								metaDup.appliesToWID.getParent().replaceAndTransformInto_WYComment( metaDup.appliesToWID,
 									metaDup.commentPrefixForDUPs );
 								
-								Config
+								OldConfig
 									.warn( "Duplicate config option encountered at line "
 										+ metaDup.colorLineNumOnDuplicate
 										+ metaDup.appliesToWID.getLineNumber()
@@ -910,7 +899,7 @@ public abstract class Config {
 								CO_Invalid metaInvalid = (CO_Invalid)meta;
 								metaInvalid.appliesToWID.getParent().replaceAndTransformInto_WYComment(
 									metaInvalid.appliesToWID, metaInvalid.commentPrefixForINVALIDs );
-								Config.warn( "Invalid config option\n" + metaInvalid.colorOnINVALID
+								OldConfig.warn( "Invalid config option\n" + metaInvalid.colorOnINVALID
 									+ metaInvalid.thePassedDottedFormatForThisWID + ChatColor.RESET
 									+ " was auto commented at line "
 									// // + fileConfig
@@ -933,7 +922,7 @@ public abstract class Config {
 											metaOverridden.dottedOverriddenByThis,
 											metaOverridden.overriddenByThis.getLineNumber() ) );
 								
-								Config.warn( "Config option " + ChatColor.AQUA + metaOverridden.dottedOverriddenByThis
+								OldConfig.warn( "Config option " + ChatColor.AQUA + metaOverridden.dottedOverriddenByThis
 									+ ChatColor.RESET + " at line " + ChatColor.AQUA
 									+ metaOverridden.overriddenByThis.getLineNumber() + ChatColor.RESET
 									+ " overrides the old alias for it `" + ChatColor.DARK_AQUA + metaOverridden.dottedLostOne
@@ -951,7 +940,7 @@ public abstract class Config {
 									String.format( metaUpgraded.commentPrefixForUPGRADEDones, metaUpgraded.theNewUpgradeDotted,
 										metaUpgraded.wid.getLineNumber() ) );
 								
-								Config.info( "Upgraded `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedDotted + ChatColor.RESET
+								OldConfig.info( "Upgraded `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedDotted + ChatColor.RESET
 									+ "` of line `" + ChatColor.DARK_AQUA + metaUpgraded.upgradedWID.getLineNumber()
 									+ ChatColor.RESET + "` to the new config name of `"
 									+ metaUpgraded.COLOR_FOR_NEW_OPTIONS_ADDED + metaUpgraded.theNewUpgradeDotted
@@ -1014,7 +1003,7 @@ public abstract class Config {
 //							x.getParent().insertBefore( getAsAutoComment( comments[i] ), x );
 //						}
 						//these should always be shown, mainly because they cannot be THAT many to be requiring skipping
-						FP.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
+						FactionsPlus.info( "Adding new config option\n`" +COMetadata.COLOR_FOR_NEW_OPTIONS_ADDED+ dottedRealAlias + ChatColor.RESET+"`" );
 						continue;
 					}
 					// else, the option was defined, so
@@ -1156,7 +1145,7 @@ public abstract class Config {
 //		FactionsPlus.info( "putFieldValueInTheRightWYPlace " + dottedRealAlias );
 		WYSection foundParentSection = parseCreateAndReturnParentSectionFor( vroot,  dottedRealAlias );
 		assert null != foundParentSection : "impossible, it should've created and returned a parent even if it didn't exist";
-		int index = dottedRealAlias.lastIndexOf( Config.DOT );
+		int index = dottedRealAlias.lastIndexOf( OldConfig.DOT );
 		String lastPartOfRealAlias;
 		if ( index >= 0 ) {// well not really 0
 			lastPartOfRealAlias = dottedRealAlias.substring( 1 + index );
@@ -1218,7 +1207,7 @@ public abstract class Config {
 		
 		
 		WYItem<COMetadata> currentItem = root.getFirst();
-		int index = dottedID.indexOf( Config.DOT );
+		int index = dottedID.indexOf( OldConfig.DOT );
 		if ( index < 0 ) {
 			// we're just at the id
 			return root;
@@ -1278,11 +1267,11 @@ public abstract class Config {
 	}
 	
 	public final synchronized static boolean reloadTemplates() {
-		if (!Config.isInited()) {
+		if (!OldConfig.isInited()) {
 			return false;
 		}else {
-			Config.templates = YamlConfiguration.loadConfiguration( Config.templatesFile );
-			return null != Config.templates;
+			OldConfig.templates = YamlConfiguration.loadConfiguration( OldConfig.templatesFile );
+			return null != OldConfig.templates;
 		}
 	}
 
@@ -1301,7 +1290,7 @@ public abstract class Config {
 	protected static void info(String msg) {
 		encountered++;
 		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
-			FP.info( msg );
+			FactionsPlus.info( msg );
 		}
 	}
 	
@@ -1309,7 +1298,7 @@ public abstract class Config {
 	protected static void warn(String msg) {
 		encountered++;
 		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
-			FP.warn(msg);
+			FactionsPlus.warn(msg);
 		}
 	}
 }
