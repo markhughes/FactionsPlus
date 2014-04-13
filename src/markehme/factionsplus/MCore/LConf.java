@@ -30,5 +30,10 @@ public class LConf extends Entity<LConf> {
 	public String warpsNotHighEnoughRankingToSet = "<red>Your ranking is not high enough to create warps.";
 	public String warpsNotInCorrectTerritory = "<red>You can not make warps in this territory.";
 	public String warpsReachedMax = "<red>You have reach the maximum amount of warps.";
+	public String warpsAlreadyExists = "<red>This warp already exists.";
+	public String warpsCreateSuccess = "<green>You have succesfuly created the warp %s";
+	public String warpsCreateSuccessWithPassword = "<green>You have succesfuly created the warp %s with the password %s";
+	public String warpsCreateNotify = "<gray>%s has created the warp %s for your faction.";
+	
 	
 }
