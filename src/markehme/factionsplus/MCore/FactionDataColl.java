@@ -2,18 +2,18 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.ps.PS;
 import com.massivecraft.mcore.store.Coll;
 import com.massivecraft.mcore.store.MStore;
 
-public class FactionDataColl extends Coll<Faction> {
+public class FactionDataColl extends Coll<FactionData> {
 	
 	// -------------------------------------------- //
 	// CONSTRUCT
 	// -------------------------------------------- //
 
 	public FactionDataColl(String name) {
-		super(name, Faction.class, MStore.getDb(), FactionsPlus.instance);
+		super(name, FactionData.class, MStore.getDb(), FactionsPlus.instance);
 	}
 
 	// -------------------------------------------- //
@@ -26,11 +26,12 @@ public class FactionDataColl extends Coll<Faction> {
 	}
 
 	@Override
-	public Faction get(Object oid) {
-		Faction ret = super.get(oid);
+	public FactionData get(Object oid) {
+		FactionData ret = super.get(oid);
 
 		return ret;
 	}
+	
 
 
 }

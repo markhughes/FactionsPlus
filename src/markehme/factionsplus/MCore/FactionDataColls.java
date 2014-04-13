@@ -6,7 +6,7 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.Aspect;
 
 
-public class FactionDataColls extends XColls<FactionDataColl, Faction> {
+public class FactionDataColls extends XColls<FactionDataColl, FactionData> {
 	// -------------------------------------------- //
 	// INSTANCE & CONSTRUCT
 	// -------------------------------------------- //
