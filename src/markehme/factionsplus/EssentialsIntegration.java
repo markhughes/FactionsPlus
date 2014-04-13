@@ -1,8 +1,6 @@
 package markehme.factionsplus;
 
 
-import markehme.factionsplus.references.FP;
-
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -134,7 +132,7 @@ public abstract class EssentialsIntegration {
 				
 			} catch( Exception e) {
 				
-				FP.severe( "Can't get Safe Destination using Essentials." );
+				FactionsPlus.severe( "Can't get Safe Destination using Essentials." );
 				
 				return( targetLocation );
 				
@@ -145,9 +143,8 @@ public abstract class EssentialsIntegration {
 		}
 	}
 	
-	@SuppressWarnings("cast")
 	public static boolean handleTeleport(Player player, Location loc) {
-		if( ! isHooked() ) {
+		if(!isHooked()) {
 			return false;
 		}
 		
