@@ -3,7 +3,7 @@ package markehme.factionsplus.config.sections;
 import com.massivecraft.factions.entity.UPlayer;
 
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.config.Option;
 
 public final class Section_Warps{
@@ -124,12 +124,12 @@ public final class Section_Warps{
 	
 	
 	public static final boolean canSetOrRemoveWarps(UPlayer uPlayer) {
-		if(Config._warps.membersCanSetWarps._) {
+		if(OldConfig._warps.membersCanSetWarps._) {
 			return true;
 		} else {
-			if(Config._warps.officersCanSetWarps._ && Utilities.isOfficer(uPlayer) ) {
+			if(OldConfig._warps.officersCanSetWarps._ && Utilities.isOfficer(uPlayer) ) {
 				return true;
-			} else if(Config._warps.leadersCanSetWarps._ && Utilities.isLeader(uPlayer) ) {
+			} else if(OldConfig._warps.leadersCanSetWarps._ && Utilities.isLeader(uPlayer) ) {
 				return true;
 			}
 		}

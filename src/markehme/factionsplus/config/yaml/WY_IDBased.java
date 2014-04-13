@@ -1,6 +1,6 @@
 package markehme.factionsplus.config.yaml;
 
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.util.Q;
 
 
@@ -43,7 +43,7 @@ public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 		String df = "";
 		WYSection p = getParent();
 		if ( ( null != p ) && ( !p.equals( upToAndExcluding ) ) ) {
-			df = p.getID_InAbsoluteDottedForm( upToAndExcluding ) + Config.DOT;
+			df = p.getID_InAbsoluteDottedForm( upToAndExcluding ) + OldConfig.DOT;
 		}
 		return df + this.getId();
 	}

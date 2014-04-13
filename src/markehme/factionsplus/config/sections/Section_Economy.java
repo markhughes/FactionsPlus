@@ -1,7 +1,7 @@
 package markehme.factionsplus.config.sections;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.config.Option;
 import net.milkbowl.vault.economy.Economy;
 
@@ -151,7 +151,7 @@ public final class Section_Economy {
 	 *         false if it's disabled (ie. was disabled in config or was enabled by not found)
 	 */
 	public final synchronized boolean enableOrDisableEconomy() {
-		boolean wanted = Config._economy.enabled._;
+		boolean wanted = OldConfig._economy.enabled._;
 		// check is the state differs from the current state
 		if ( wanted && !isHooked() ) {
 			return turnOnEconomy();

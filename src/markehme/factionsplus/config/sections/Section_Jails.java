@@ -4,7 +4,7 @@ import com.massivecraft.factions.entity.UPlayer;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.config.Option;
 
 
@@ -94,12 +94,12 @@ public final class Section_Jails {
 				( Utilities.isOp( whoCan ) )
 				||
 				( 
-					Config._jails.officersCanJail._ && Utilities.isOfficer( whoCan ) 
-					|| Config._jails.leadersCanJail._ && Utilities.isLeader( whoCan ) 
+					OldConfig._jails.officersCanJail._ && Utilities.isOfficer( whoCan ) 
+					|| OldConfig._jails.leadersCanJail._ && Utilities.isLeader( whoCan ) 
 				) 
 			    && 
 				( 
-				  (!Config._jails.furtherRestrictJailUnjailToThoseThatHavePermission._) || 
+				  (!OldConfig._jails.furtherRestrictJailUnjailToThoseThatHavePermission._) || 
 						FactionsPlus.permission.playerHas( Utilities.getOnlinePlayerExact(whoCan), permissionNodeNameForCanJailUnjail ) 
 				)
 			   );

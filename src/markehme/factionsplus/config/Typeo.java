@@ -163,8 +163,8 @@ public abstract class Typeo {
 	
 	
 	protected static final boolean isValidAliasFormat( String testAlias ) {
-		if ( ( null != testAlias ) && ( !testAlias.isEmpty() ) && ( testAlias.charAt( 0 ) != Config.DOT )
-			&& ( testAlias.charAt( testAlias.length() - 1 ) != Config.DOT ) )
+		if ( ( null != testAlias ) && ( !testAlias.isEmpty() ) && ( testAlias.charAt( 0 ) != OldConfig.DOT )
+			&& ( testAlias.charAt( testAlias.length() - 1 ) != OldConfig.DOT ) )
 		{
 			return true;
 		}
@@ -173,7 +173,7 @@ public abstract class Typeo {
 	
 	
 	protected static final boolean isNONdottedAlias( String testAlias ) {
-		if ( ( null != testAlias ) && ( !testAlias.isEmpty() ) && ( testAlias.indexOf( Config.DOT ) < 0 ) ) {
+		if ( ( null != testAlias ) && ( !testAlias.isEmpty() ) && ( testAlias.indexOf( OldConfig.DOT ) < 0 ) ) {
 			return true;
 		}
 		return false;
@@ -288,8 +288,8 @@ public abstract class Typeo {
 					if ( Section.class == annotationType ) {
 						
 						String realAlias = ( (Section)fieldAnnotation ).realAlias_neverDotted();
-						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
-						String dotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						assert realAlias.indexOf( OldConfig.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "`";
+						String dotted = ( isTopLevelSection ? realAlias : dottedParentSection + OldConfig.DOT + realAlias );
 						
 						if ( !field.getName().startsWith( SECTION_PREFIX ) ) {
 							throw FactionsPlus.bailOut( "bad coding: by convention any @" + annotationType.getSimpleName()
@@ -315,9 +315,9 @@ public abstract class Typeo {
 						
 						String realAlias = ( (Option)fieldAnnotation ).realAlias_inNonDottedFormat();
 						assert Typeo.isValidAliasFormat( realAlias ) : realAlias;
-						assert realAlias.indexOf( Config.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "` in field `"+field+"`";
+						assert realAlias.indexOf( OldConfig.DOT ) < 0 : "realAlias should never be dotted: `" + realAlias + "` in field `"+field+"`";
 						
-						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + Config.DOT + realAlias );
+						String currentDotted = ( isTopLevelSection ? realAlias : dottedParentSection + OldConfig.DOT + realAlias );
 						
 						
 						fieldToInstanceOfIt.put( field, parentInstance );
