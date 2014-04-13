@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import markehme.factionsplus.MCore.Const;
 import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.MCore.MConfColl;
-import markehme.factionsplus.MCore.UConfColl;
 import markehme.factionsplus.MCore.UConfColls;
 import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.extras.LWCBase;
@@ -272,18 +271,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				severe( t, "Exception when removing scoreboard" );
 			}
 			
-			//TODO: investigate why nag author happens ... even though we seem to be shuttind down task correctly
-			//some tasks still remain from both FP and Vault at this point if doing a server `reload` as soon as you see "[FactionsPlus] Ready." 
-//			List<BukkitWorker> workers = Bukkit.getScheduler().getActiveWorkers();
-//			info("Active Workers: "+workers.size());
-//			
-//			for ( BukkitWorker bukkitWorker : workers ) {
-//				info("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId()
-//					+", "+bukkitWorker.getThread().getName());			
-//			}
-			
-			if ( null == failed ) {
-				info( "Disabled successfuly." );
+			if(null == failed) {
+				info("Disabled successfuly.");
 			}
 			
 		} catch ( Throwable t ) {
