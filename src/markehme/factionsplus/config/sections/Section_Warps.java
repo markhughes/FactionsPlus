@@ -1,5 +1,6 @@
 package markehme.factionsplus.config.sections;
 
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.UPlayer;
 
 import markehme.factionsplus.Utilities;
@@ -123,13 +124,13 @@ public final class Section_Warps{
 		public  final _boolean removeWarpIfDeniedAccess=new _boolean(true);
 	
 	
-	public static final boolean canSetOrRemoveWarps(UPlayer uPlayer) {
+	public static final boolean canSetOrRemoveWarps(UPlayer uPlayer) {		
 		if(Config._warps.membersCanSetWarps._) {
 			return true;
 		} else {
-			if(Config._warps.officersCanSetWarps._ && Utilities.isOfficer(uPlayer) ) {
+			if(Config._warps.officersCanSetWarps._ && uPlayer.getRole().equals(Rel.OFFICER )) {
 				return true;
-			} else if(Config._warps.leadersCanSetWarps._ && Utilities.isLeader(uPlayer) ) {
+			} else if(Config._warps.leadersCanSetWarps._ && uPlayer.getRole().equals(Rel.LEADER) ) {
 				return true;
 			}
 		}

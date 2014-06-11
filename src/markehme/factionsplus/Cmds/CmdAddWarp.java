@@ -1,6 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -22,7 +21,6 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 
 public class CmdAddWarp extends FPCommand {
@@ -67,17 +65,15 @@ public class CmdAddWarp extends FPCommand {
 			sender.sendMessage(ChatColor.RED + "No permission!");
 			return;
 		}
-
-		UPlayer uPlayer = UPlayer.get(sender.getName());
-		Faction currentFaction = uPlayer.getFaction();
+		Faction currentFaction = usender.getFaction();
 
 
-		if(!Section_Warps.canSetOrRemoveWarps(uPlayer)) {
+		if(!Section_Warps.canSetOrRemoveWarps(usender)) {
 			sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badrank", null));
 			return;
 		}
 
-		if(!uPlayer.isInOwnTerritory()) {
+		if(!usender.isInOwnTerritory()) {
 			if(Config._warps.mustBeInOwnTerritoryToCreate._) {
 				sender.sendMessage(FactionsPlusTemplates.Go("create_warp_denied_badterritory", null));
 				return;
