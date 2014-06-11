@@ -104,14 +104,7 @@ public class FPConfigLoadedListener implements Listener {
 			Listen.startOrStopListenerAsNeeded( (Config._extras._protection.allowShopsInTerritory._ || Config._extras._protection.allowShopsInWilderness._), ChestShopListener.class );
 			
 		}
-		
-		// ChestShop
-		if( Bukkit.getPluginManager().getPlugin( "ShowCaseStandalone" ) != null ) {
-			
-			Listen.startOrStopListenerAsNeeded( (Config._extras._protection.allowShopsInTerritory._ || Config._extras._protection.allowShopsInWilderness._), ShowCaseStandaloneListener.class );
-			
-		}
-		
+				
 
 		// Animal Damager Listener
 		
