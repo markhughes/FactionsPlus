@@ -105,7 +105,8 @@ public class DisguiseListener implements Listener {
 		
 		if(isLibsDisguiseIntegrated()) {
 			
-			if(DisguiseUtilities.getDisguise(event.getPlayer(), event.getPlayer().getEntityId()) != null) {
+			if(DisguiseUtilities.getDisguise(event.getPlayer(), event.getPlayer()) != null) {
+			//if(DisguiseUtilities.getDisguise(event.getPlayer(), event.getPlayer().getEntityId()) != null) {
 
 				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
 					if(fplayer.isInEnemyTerritory()) {
