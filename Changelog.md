@@ -1,3 +1,9 @@
+# FactionsPlus 0.6.9.2
+This is an emergency update. The AddWarp command was broken due to a change in
+the Factions project. 
+
+ * Fixed in CmdFactionHome
+ 
 # FactionsPlus 0.6.9.1
 This is an emergency update. The AddWarp command was broken due to a change in
 the Factions project. 
