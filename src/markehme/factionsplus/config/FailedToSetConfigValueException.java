@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class FailedToSetConfigValueException extends RuntimeException {
 	
 	public FailedToSetConfigValueException( WYIdentifier<COMetadata> wID, Field field, Throwable t ) {

@@ -3,7 +3,7 @@ package markehme.factionsplus.config.yaml;
 import markehme.factionsplus.util.Q;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	
 	private WYItem	firstChild, lastChild;
@@ -164,7 +164,7 @@ public class WYSection<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 		wid.setParent( null );
 		wid.setPrev( null );
 		wid.setNext( null );
-		//XXX: best to not destroy it, else we might have to cache it
+		// best to not destroy it, else we might have to cache it
 //		wid.setId( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getId() + "###" );
 //		wid.setValue( "###destroyed by WYSection.replaceAndTransformSelfInto_WYComment()###" + wid.getValue() + "###" );
 		// we leave only setLine()

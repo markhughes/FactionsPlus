@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class InvalidConfigValueTypeException extends RuntimeException {
 	
 	public InvalidConfigValueTypeException( WYIdentifier<COMetadata> wID, Field field, Throwable t ) {

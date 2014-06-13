@@ -5,7 +5,7 @@ import markehme.factionsplus.config.yaml.WYIdentifier;
 import org.bukkit.ChatColor;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class CO_Duplicate extends COMetadata {
 	
 	public static final String				commentPrefixForDUPs	= "DUPLICATE #";

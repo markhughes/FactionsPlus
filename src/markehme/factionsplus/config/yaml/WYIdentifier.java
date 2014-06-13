@@ -7,6 +7,7 @@ import markehme.factionsplus.util.Q;
 /**
  * two of these are .equals() if their ids .equals(), regardless of their value; used for HashMap<br>
  */
+@SuppressWarnings({ "all" }) 
 public class WYIdentifier<METADATA_TYPE> extends WY_IDBased<METADATA_TYPE> {
 	
 	public static final WYIdentifier	NULL	= new WYIdentifier(-1,WYIdentifier.class.getName(),"NULL");

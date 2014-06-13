@@ -8,9 +8,7 @@ import markehme.factionsplus.util.Q;
 
 
 
-/**
- * one to many
- */
+@SuppressWarnings({ "all" }) 
 public class HM1 extends HashMap<Field, SetOfIDs>{
 
 	/**

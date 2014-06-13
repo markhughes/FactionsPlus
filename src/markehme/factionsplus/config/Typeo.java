@@ -13,7 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 
-
+@SuppressWarnings({ "all" }) 
 public abstract class Typeo {
 	
 	/**
@@ -233,7 +233,7 @@ public abstract class Typeo {
 				if ( ( Section.class.equals( annotationType ) ) || ( Option.class.equals( annotationType ) ) ) {
 					
 					
-					// XXX: @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
+					// @ConfigOption fields must not be static(or private), they would bypass the chain tree ie.
 					// Section_Jails.enabled instead of Config.jails.enabled
 					// the non-private constraint is mostly because we couldn't access it via Config.jails.enabled if
 					// enabled is private

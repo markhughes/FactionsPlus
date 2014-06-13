@@ -11,7 +11,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import com.massivecraft.factions.entity.Faction;
 
 
-
+@SuppressWarnings({ "all" }) 
 public final class Section_Economy {
 	
 	@Option(

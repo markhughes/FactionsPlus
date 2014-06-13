@@ -5,9 +5,7 @@ import java.util.HashMap;
 import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
-/**
- * dottedWid -> wid
- */
+@SuppressWarnings({ "all" }) 
 public class SetOfIDs extends HashMap<String, WYIdentifier<COMetadata>> {
 	//
 }

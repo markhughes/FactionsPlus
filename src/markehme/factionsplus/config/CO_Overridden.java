@@ -3,7 +3,7 @@ package markehme.factionsplus.config;
 import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class CO_Overridden extends COMetadata {
 	
 	public static final String	commentPrefixForOVERRIDDENones	= "OVERRIDDEN by %s at line %d #";

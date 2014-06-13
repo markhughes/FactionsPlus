@@ -4,7 +4,7 @@ import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.util.Q;
 
 
-
+@SuppressWarnings({ "all" }) 
 public abstract class WY_IDBased<METADATA_TYPE> extends WYItem<METADATA_TYPE> {
 	
 	private String	id;

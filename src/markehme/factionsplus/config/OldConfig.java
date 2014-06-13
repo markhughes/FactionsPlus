@@ -44,8 +44,19 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 
+import com.massivecraft.factions.entity.Faction;
 
 
+/**
+ * This older Config was used pre 0.7.x. 
+ * Although it was a fantastic configuration system - 0.7 now uses Factions MCore System, and this will be removed in
+ * the 1.x stable release of FactionsPlus. This allows us to support universes, and other awesome MCore features. 
+ * 
+ * To upgraded from pre 0.7.x to any newer version (with 0.8, 1.x, 2.x) they MUST first upgrade using 0.7.x. 
+ * 
+ */
+@Deprecated
+@SuppressWarnings({ "all" }) // Suppress all warnings, they're irrelevant now! 
 public abstract class OldConfig {
 
 	// do not use Plugin.getDataFolder() here, it will NPE, unless you call it in/after onEnable()
@@ -167,12 +178,16 @@ public abstract class OldConfig {
 		boolean failed = false;
 		// try {
 		if ( Q.isInconsistencyFileBug() ) {
-			throw FactionsPlusPlugin.bailOut( "Please do not have `user.dir` property set, it will mess up so many things"
+			newEscape();
+			
+			FactionsPlus.severe( "Please do not have `user.dir` property set, it will mess up so many things"
 				+ "(or did you use native functions to change current folder from the one that was on jvm startup?!)" );
 		}
 		
 		if ( hasFileFieldsTrap() ) {
-			throw FactionsPlusPlugin.bailOut( "there is a coding trap which will likely cause unexpected behaviour "
+			newEscape();
+			
+			FactionsPlus.severe( "there is a coding trap which will likely cause unexpected behaviour "
 				+ "in places that use files, tell plugin author to fix" );
 		}
 		
@@ -193,7 +208,9 @@ public abstract class OldConfig {
 		
 		for ( int i = 0; i < fpConfigHeaderArray.length; i++ ) {
 			if (fpConfigHeaderArray[i].contains("\n") || fpConfigHeaderArray[i].contains( "\r" ) ) {
-				throw FactionsPlus.bailOut( "Do not use newlines inside the header, " +
+				newEscape();
+				
+				FactionsPlus.severe( "Do not use newlines inside the header, " +
 						"but instead add a new element line in the array. Problematic line #"+i+"\n`"+fpConfigHeaderArray[i]+"`" );
 			}
 		}
@@ -262,21 +279,37 @@ public abstract class OldConfig {
 			Q.rethrow( t );
 		} finally {
 			if ( failed ) {
-				FactionsPlus.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
+				newEscape();
+				
+				//FactionsPlus.instance.disableSelf();// must make sure we're disabled if something failed if not /plugins would
 													// show us green
 				// but mostly, for consistency's sake and stuff we couldn't think of/anticipate now
 			}
 		}
 	}
 	
-	
+	/**
+	 * As of 0.7.x we have a new configuration system.
+	 * 
+	 * So, on oldconfig file instead of disabling FactionsPlus / being annoying we
+	 * now just disable the config and present warning.
+	 * 
+	 */
+	private static void newEscape() {
+		FactionsPlus.warn("There was an error with the Old Config system.");
+		FactionsPlus.warn("If you think this is an error please remove the config.yml file for the FactionsPlus directory");
+		FactionsPlus.warn("Attempting to run deInit ... ");
+		
+		deInit();
+	}
 
 	
 	protected static void ensureFoldersExist() {
 		File dataF = FactionsPlus.instance.getDataFolder();
 		if ( !dataF.equals( folderBase ) ) {
-			throw FactionsPlusPlugin
-				.bailOut( "Base folder and dataFolder differ, this may not be intended and it may just be a possible bug in the code;"
+			newEscape();
+			
+			FactionsPlus.severe( "Base folder and dataFolder differ, this may not be intended and it may just be a possible bug in the code;"
 					+ "folderBase=" + folderBase + " dataFolder=" + dataF );
 		}
 		
@@ -300,7 +333,9 @@ public abstract class OldConfig {
 			}
 			
 		} catch ( Exception e ) {
-			throw FactionsPlusPlugin.bailOut(e, "something failed when ensuring the folders exist" );
+			newEscape();
+			
+			FactionsPlus.severe(e, "something failed when ensuring the folders exist" );
 		}
 	}
 	
@@ -540,7 +575,7 @@ public abstract class OldConfig {
 		}
 	}
 	
-	protected static WYSection	virtualRoot		= null;
+	public static WYSection	virtualRoot		= null;
 	
 	// one to many
 	private static final HM1	mapFieldToID	= new HM1();//store all except newly added fields
@@ -552,7 +587,9 @@ public abstract class OldConfig {
 		
 		if( OldConfig.fileConfig.exists()) {
 			if ( !OldConfig.fileConfig.isFile() ) {
-				throw FactionsPlusPlugin.bailOut( "While '" + OldConfig.fileConfig.getAbsolutePath()
+				newEscape();
+				
+				FactionsPlus.severe( "While '" + OldConfig.fileConfig.getAbsolutePath()
 					+ "' exists, it is not a file!" );
 			}
 		}else {
@@ -564,7 +601,9 @@ public abstract class OldConfig {
 			try {
 				OldConfig.fileConfig.createNewFile();
 			} catch ( IOException e ) {
-				FactionsPlus.bailOut(e, "Cannot create config file "+OldConfig.fileConfig.getAbsolutePath() );
+				newEscape();
+				
+				FactionsPlus.severe(e, "Cannot create config file "+OldConfig.fileConfig.getAbsolutePath() );
 			}
 			
 //			virtualRoot=createWYRootFromFields();
@@ -615,7 +654,10 @@ public abstract class OldConfig {
 			
 		} catch ( IOException e ) {
 			// e.printStackTrace();
-			throw FactionsPlusPlugin.bailOut( e, "failed to load existing config file '" + OldConfig.fileConfig.getAbsolutePath()
+			
+			newEscape();
+			
+			FactionsPlus.severe( e, "failed to load existing config file '" + OldConfig.fileConfig.getAbsolutePath()
 				+ "'" );
 		}
 			
@@ -1155,8 +1197,6 @@ public abstract class OldConfig {
 		assert Typeo.isValidAliasFormat( lastPartOfRealAlias ) : lastPartOfRealAlias;
 		WYIdentifier leaf = new WYIdentifier<COMetadata>( 0, lastPartOfRealAlias, value );
 		// leaf.setMetadata( metadata )
-		// XXX: new(unencountered) config options (in config.yml) are added as last in the subsection where the `id: value` is
-		// for now, ideally TODO: add new config options in the right place in the Fields order
 		foundParentSection.append( leaf );
 		// System.out.println( foundParentSection.getInAbsoluteDottedForm() );
 		
@@ -1276,11 +1316,14 @@ public abstract class OldConfig {
 	}
 
 	public static void deInit() {
-		if (isInited()) {
-			if (isLoaded()) {
-				setLoaded( false );
+		if(isInited()) {
+			if(isLoaded()) {
+				setLoaded(false);
 			}
-			setInited( false );
+			
+			virtualRoot = null;
+			
+			setInited(false);
 		}
 	}
 	
@@ -1300,5 +1343,56 @@ public abstract class OldConfig {
 		if ( encountered <= SKIP_AFTER_ENCOUNTERED ) {
 			FactionsPlus.warn(msg);
 		}
+	}
+	
+	/**
+	 * This was moved from CoreListener (Why was it even in CoreListener?) and should only be accessed from OldMigrate.
+	 * @param forFaction
+	 */
+	private final void removeFPData( Faction forFaction ) {
+		// Annoucements
+		File tempFile = new File( markehme.factionsplus.config.OldConfig.folderAnnouncements, forFaction.getId() );
+		if ( tempFile.exists() ) {
+			tempFile.delete();
+		}
+		tempFile = null;
+		
+		// Bans
+		File tempDir =  markehme.factionsplus.config.OldConfig.folderFBans;
+		if ( tempDir.isDirectory() ) {
+			for ( File file : tempDir.listFiles() ) {
+				if ( file.getName().startsWith( forFaction.getId() + "." ) ) {
+					file.delete();
+				}
+			}
+		}
+		tempDir = null;
+		
+		// Rules
+		tempFile = new File(  markehme.factionsplus.config.OldConfig.folderFRules, forFaction.getId() );
+		if ( tempFile.exists() ) {
+			tempFile.delete();
+		}
+		tempFile = null;
+		
+		// Jailed Players and Jail locations
+		tempDir =  markehme.factionsplus.config.OldConfig.folderJails;
+		if ( tempDir.isDirectory() ) {
+			for ( File file : tempDir.listFiles() ) {
+				if ( file.getName().startsWith( "jaildata." + forFaction.getId() + "." ) ) {
+					file.delete();
+				} else
+					if ( file.getName().equals( "loc." + forFaction.getId() ) ) {
+						file.delete();
+					}
+			}
+		}
+		
+		// Warps
+		tempFile = new File(  markehme.factionsplus.config.OldConfig.folderWarps, forFaction.getId() );
+		if ( tempFile.exists() ) {
+			tempFile.delete();
+		}
+		tempFile = null;
 	}
 }

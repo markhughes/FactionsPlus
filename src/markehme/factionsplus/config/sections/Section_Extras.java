@@ -5,8 +5,7 @@ import markehme.factionsplus.config.Section;
 
 
 public final class Section_Extras {
-	//XXX: I may use the terms ID, key, alias, config option   interchangeably to mean the same thing.
-	
+
 	@Option(oldAliases_alwaysDotted={
 		"disableUpdateCheck"
 	}, realAlias_inNonDottedFormat = "disableUpdateCheck" )

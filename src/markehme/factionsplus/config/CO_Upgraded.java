@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import markehme.factionsplus.config.yaml.WYIdentifier;
 
 
-
+@SuppressWarnings({ "all" }) 
 public class CO_Upgraded extends CO_FieldPointer {
 	
 	public static final String	commentPrefixForUPGRADEDones	= "UPGRADED to %s at line %d #";

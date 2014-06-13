@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import markehme.factionsplus.util.Q;
 
 
-
+@SuppressWarnings({ "all" }) 
 public abstract class WannabeYaml {
 	
 	public static final char	space				= ' ';
@@ -319,7 +319,6 @@ public abstract class WannabeYaml {
 					// 1
 					if ( pos0based > 0 ) {
 						// line filled with spaces
-						// XXX: IF the line is less than the level, it is auto leveled up !!! because it is stored as empty
 						// string
 						// and the config writing auto levels everything written...
 						// and since we don't store the entire line, for good reasons...

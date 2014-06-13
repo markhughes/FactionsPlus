@@ -1,11 +1,13 @@
 package markehme.factionsplus.config.sections;
 
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.UPlayer;
 
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.config.Option;
 
+@SuppressWarnings({ "all" }) 
 public final class Section_Warps{
 	
 	@Option(oldAliases_alwaysDotted={
@@ -127,9 +129,9 @@ public final class Section_Warps{
 		if(OldConfig._warps.membersCanSetWarps._) {
 			return true;
 		} else {
-			if(OldConfig._warps.officersCanSetWarps._ && Utilities.isOfficer(uPlayer) ) {
+			if(OldConfig._warps.officersCanSetWarps._ && (uPlayer.getRole() == Rel.OFFICER) ) {
 				return true;
-			} else if(OldConfig._warps.leadersCanSetWarps._ && Utilities.isLeader(uPlayer) ) {
+			} else if(OldConfig._warps.leadersCanSetWarps._ && (uPlayer.getRole() == Rel.LEADER) ) {
 				return true;
 			}
 		}

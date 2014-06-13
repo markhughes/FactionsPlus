@@ -1,7 +1,5 @@
 package markehme.factionsplus.config.sections;
 
-import org.bukkit.ChatColor;
-
 import markehme.factionsplus.config.Option;
 
 public final class Section_Templates {

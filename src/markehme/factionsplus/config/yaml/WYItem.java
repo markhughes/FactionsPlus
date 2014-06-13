@@ -15,6 +15,7 @@ package markehme.factionsplus.config.yaml;
  *            the base class for the accepted metadata objects, this type is only so it could help with compile time typing,
  *            it's erased to Object type at runtime
  */
+@SuppressWarnings({ "all" }) 
 public abstract class WYItem<METADATA_TYPE> implements Cloneable {
 	
 	private WYItem			prev;

@@ -1,5 +1,6 @@
 package markehme.factionsplus.config.sections;
 
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.UPlayer;
 
 import markehme.factionsplus.FactionsPlus;
@@ -7,7 +8,7 @@ import markehme.factionsplus.Utilities;
 import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.config.Option;
 
-
+@SuppressWarnings({ "all" }) 
 public final class Section_Jails {
 	
 	@Option(oldAliases_alwaysDotted={
@@ -91,11 +92,11 @@ public final class Section_Jails {
 	
 	public final static boolean canJailUnjail(UPlayer whoCan) {
 		return ( 
-				( Utilities.isOp( whoCan ) )
+				( whoCan.getPlayer().isOp() )
 				||
 				( 
-					OldConfig._jails.officersCanJail._ && Utilities.isOfficer( whoCan ) 
-					|| OldConfig._jails.leadersCanJail._ && Utilities.isLeader( whoCan ) 
+					OldConfig._jails.officersCanJail._ && ( whoCan.getRole() == Rel.OFFICER ) 
+					|| OldConfig._jails.leadersCanJail._ && ( whoCan.getRole() == Rel.LEADER ) 
 				) 
 			    && 
 				( 
