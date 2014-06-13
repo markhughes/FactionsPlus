@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import markehme.factionsplus.config.Config;
-import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.references.FP;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
@@ -25,10 +25,8 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 
 import com.massivecraft.factions.FFlag;
-import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
@@ -143,39 +141,6 @@ public abstract class Utilities {
 	        is.close();
 	    }
 	}
-	/* ********** JAIL RELATED ********** */
-
-	public static boolean isJailed(Player thePlayer) {
-		UPlayer fplayer = UPlayer.get(thePlayer.getName());
-		
-		if(fplayer == null) return false;
-		
-		File jailDataFile = new File(Config.folderJails,"jaildata." + fplayer.getFactionId() + "." + thePlayer.getName());
-
-		if(!jailDataFile.exists()) {
-			return false;
-		}
-
-		String JailData = Utilities.readFileAsString(jailDataFile);
-		
-		// TODO: if last parm of file is "unjail" then run the unjail, and then remove the file
-		
-		if(JailData == "0") {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	/* ********** FACTIONS RELATED ********** */
-
-	public static boolean isOfficer(UPlayer uPlayer) {
-		return( uPlayer.getRole().equals( Rel.OFFICER ) );
-	}
-
-	public static boolean isLeader(UPlayer uPlayer) {
-		return( uPlayer.getRole().equals( Rel.LEADER ) );
-	}
 
 	
 	/**
@@ -238,51 +203,10 @@ public abstract class Utilities {
 	}
 
 	public static int getCountOfWarps(Faction faction) {
-		File currentWarpFile = new File(Config.folderWarps, faction.getId());
+		
+		FactionData fData = FactionDataColls.get().getForUniverse(faction.getUniverse()).get(faction.getId());
 
-		int c = 0;
-		if (currentWarpFile.exists()) {	
-			FileInputStream fstream=null;
-			DataInputStream in=null;
-			BufferedReader br =null;
-			try {
-				fstream = new FileInputStream(currentWarpFile);
-				in = new DataInputStream(fstream);
-				br= new BufferedReader(new InputStreamReader(in));
-				String strLine;
-
-				while ((strLine = br.readLine()) != null) {
-					if(strLine.contains(":")) {
-						c++;
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();			
-			} finally {
-				if ( null != br ) {
-					try {
-						br.close();
-					} catch ( IOException e ) {
-						e.printStackTrace();
-					}
-				}
-				if ( null != in ) {
-					try {
-						in.close();
-					} catch ( IOException e ) {
-						e.printStackTrace();
-					}
-				}
-				if ( null != fstream ) {
-					try {
-						fstream.close();
-					} catch ( IOException e ) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		return c;
+		return fData.warpLocation.size();
 	}
 	
 	
@@ -329,80 +253,6 @@ public abstract class Utilities {
 	 * @param perm
 	 * @return
 	 */
-	public static boolean hasPermissionOrIsOp(Player p, Permission perm) {
-		if (null != p) {
-			return p.isOp() || p.hasPermission( perm );
-		}
-		return false;
-	}
-	
-	public static boolean isOp(UPlayer uPlayer) {
-		return Utilities.getOnlinePlayerExact( uPlayer ).isOp();
-	}
-	
-	
-	@Deprecated
-	// Use FType from now on
-	public static boolean isWarZone( Faction faction ) {
-		
-		if( FType.valueOf( faction ) == FType.WARZONE ) {
-			
-			return true;
-			
-		}
-		
-		return false;
-		
-	}
-
-	@Deprecated
-	// Use FType from now on
-	public static boolean isSafeZone( Faction faction ) {
-		
-		if( FType.valueOf( faction ) == FType.SAFEZONE ) {
-			
-			return true;
-			
-		}
-		
-		return false;	}
-
-	@Deprecated
-	// Use FType from now on
-	public static boolean isWilderness( Faction faction ) {
-		
-		if( FType.valueOf( faction ) == FType.WILDERNESS ) {
-			
-			return true;
-			
-		}
-		
-		return false;		
-	}
-	
-	@Deprecated
-	// Use FType from now on
-	public static final boolean isPlayerFaction( Faction faction ) {
-		
-		if( FType.valueOf( faction ) == FType.FACTION ) {
-			
-			return true;
-			
-		}
-		
-		return false;			
-	}
-
-	/**
-	 * aka non-safezone and non-warzone and not wilderness
-	 * @param faction
-	 * @return true is so
-	 */
-	@Deprecated
-	// Use FType from now on
-	public static boolean isNormalFaction(Faction faction) {
-		return !isWarZone( faction ) && !isSafeZone(faction) && !isWilderness( faction );
-	}
 	
 	private static final int margin = 10;
 	
@@ -427,10 +277,11 @@ public abstract class Utilities {
 	        return true;
 	}
 	
+	@Deprecated
 	public static final int getIntegerPartMultipliedBy(double d, int multipliedByThis) {
 		assert multipliedByThis>0;
 		String asString = Double.toString( d*multipliedByThis );
-		int dotAt = asString.indexOf( Config.DOT );
+		int dotAt = asString.indexOf( markehme.factionsplus.config.OldConfig.DOT );
 		if (dotAt<0) {//assumed it's fully integer
 			dotAt=asString.length(); 
 		}
@@ -513,53 +364,48 @@ public abstract class Utilities {
 	 * use this method instead of Conf.wildernessPowerLoss
 	 * @return
 	 */
-	public static final boolean confIs_wildernessPowerLoss() {
-		return( Faction.get("0").getFlag(FFlag.POWERLOSS) );
+	public static final boolean confIs_wildernessPowerLoss(World world) {
+		return(Faction.get(UConf.get(world).factionIdNone).getFlag(FFlag.POWERLOSS));
 	}
 	
 	/**
 	 * use this method instead of Conf.warZonePowerLoss
 	 * @return
 	 */
-	public static final boolean confIs_warzonePowerLoss() {
-		// TODO: Re-instate this
-		return false;
-		//technically, you don't need the faction for 1.6.x, but you do for 1.7.x version of Factions
-		//return( Faction.get( "WarZone" ).getFlag(FFlag.POWERLOSS) );
+	public static final boolean confIs_warzonePowerLoss(World world) {
+		return(Faction.get(UConf.get(world).factionIdWarzone).getFlag(FFlag.POWERLOSS));
 		
 	}
 	
 	/**
-	 * 
-	 * @param Cost of action
-	 * @param because Mark did x
-	 * @param UPlayer
-	 * @return boolean
+	 * Charge a player (or their faction - if as per configuration) 
+	 * @param cost
+	 * @param player
+	 * @return
 	 */
-	public static boolean doFinanceCrap(double cost, String sinceDidX, UPlayer player) {
-		if ( !Config._economy.isHooked() || ! UConf.get(player).econEnabled || Utilities.getOnlinePlayerExact(player) == null || cost == 0.0) {
+	public static boolean doCharge(double cost, UPlayer player) {
+		// Is this a worthless transaction, the console, or is economy disabled? 
+		if(!UConf.get(player).econEnabled || cost == 0.0 || player.isConsole()) {
 			return true;
 		}
 		
-		if( UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction() ) {
-			return Econ.modifyMoney(player.getFaction(), -cost, sinceDidX);
+		// If bank is enabled, charge the Faction not the player! 
+		if(UConf.get(player).bankEnabled && UConf.get(player).bankFactionPaysCosts && player.hasFaction()) {
+			return Econ.modifyMoney(player.getFaction(), -cost, null);
 		} else {
-			return Econ.modifyMoney(player, -cost, sinceDidX);
+			return Econ.modifyMoney(player, -cost, null);
 		}
 	}
 	
 	/**
-	 * Returns true or false. Based on the previous Factions source.
-	 * @param loc
+	 * Determine if there is a region for a player in a chunk.
+	 * @param currentLocation
+	 * @param player
 	 * @return
 	 */
-	public static boolean checkForRegionsInChunk(Location currentLocation, Player player) {
-		
-		// This is pretty much the exact same as Factions 1.6.x source's method
-		// except it's inside FactionsPlus!
-		
+	public static boolean checkForRegionsInChunk(Location currentLocation, Player player) {		
 		World world = currentLocation.getWorld();
-		Chunk chunk = world.getChunkAt( currentLocation );
+		Chunk chunk = world.getChunkAt(currentLocation);
 		
 		int minChunkX = chunk.getX() << 4;
 		int minChunkZ = chunk.getZ() << 4;
@@ -568,12 +414,12 @@ public abstract class Utilities {
 
 		int worldHeight = world.getMaxHeight();
 
-		BlockVector minChunk = new BlockVector( minChunkX, 0, minChunkZ );
-		BlockVector maxChunk = new BlockVector( maxChunkX, worldHeight, maxChunkZ );
+		BlockVector minChunk = new BlockVector(minChunkX, 0, minChunkZ);
+		BlockVector maxChunk = new BlockVector(maxChunkX, worldHeight, maxChunkZ);
 
-		RegionManager regionManager = FP.worldGuardPlugin.getRegionManager( world );
+		RegionManager regionManager = FactionsPlus.worldGuardPlugin.getRegionManager(world);
 		
-		ProtectedCuboidRegion region = new ProtectedCuboidRegion( "factionsplus_tempoverlapcheck", minChunk, maxChunk );
+		ProtectedCuboidRegion region = new ProtectedCuboidRegion("FactionsPlus_TempRegion", minChunk, maxChunk);
 		
 		Map<String, ProtectedRegion> allregions = regionManager.getRegions(); 
 		
@@ -585,35 +431,36 @@ public abstract class Utilities {
 
 		try {
 			overlaps = region.getIntersectingRegions( allregionslist );
-			if( overlaps == null || overlaps.isEmpty() ) {
+			if(overlaps == null || overlaps.isEmpty()) {
+				// No regions
 				foundregions = false;
 			} else {
-				if(Config._extras._protection.worldguardCanBuildCheckIfMemberOfRegion._) {
-					for(ProtectedRegion currentRegion : overlaps) {
-						if(!currentRegion.getMembers().contains(player.getName())) {
+				// Check through each region 
+				for(ProtectedRegion currentRegion : overlaps) {
+					// Check we don't have the permission
+					if(!FactionsPlus.permission.has(player, "factionsplus.allowregionclaim."+currentRegion.getId())) {
+						if(FPUConf.get(UPlayer.get(player)).allowBuildingInRegionIfMember) {
+							// If we're checking to see if a member/owner, do this
+							if(!currentRegion.getMembers().contains(player.getName()) && !currentRegion.getOwners().contains(player.getName())) {
+								foundregions = true;
+							}
+						} else {
+							// We're not checking for members, so we found a region
 							foundregions = true;
 						}
 					}
-				} else {
-					foundregions = true;
 				}
 			}
-		} catch ( Exception e ) {
 			
+			overlaps.clear();
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			
 		}
 
-		region = null;
-		allregionslist = null;
-		overlaps = null;
-
-		return( foundregions );
+		allregionslist.clear();
+		
+		return(foundregions);
 		
 	}
-
-	
 }
-
-
-
