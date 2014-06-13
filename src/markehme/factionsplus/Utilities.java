@@ -437,34 +437,15 @@ public abstract class Utilities {
 				// No regions
 				foundregions = false;
 			} else {
-				// Check through each region 
+				TreeSet<ProtectedRegion> appRegions = new TreeSet<ProtectedRegion>();
 				for(ProtectedRegion currentRegion : overlaps) {
-					// Check we don't have the permission
-					if(!FactionsPlus.permission.has(player, "factionsplus.allowregionclaim."+currentRegion.getId())) {
-						if(FPUConf.get(UPlayer.get(player)).allowBuildingInRegionIfMember) {
-							// If we're checking to see if a member/owner, do this
-							if(!currentRegion.getMembers().contains(player.getName()) && !currentRegion.getOwners().contains(player.getName())) {
-								foundregions = true;
-							}
-						} else {
-							// We're not checking for members, so we found a region
-							foundregions = true;
-						}
-					}
-<<<<<<< HEAD
-=======
-				} else {
-					TreeSet<ProtectedRegion> appRegions = new TreeSet();
-					for(ProtectedRegion currentRegion : overlaps) {
-						appRegions.add(currentRegion);
-					}
-					
-					ApplicableRegionSet set = new ApplicableRegionSet(appRegions, regionManager.getRegion("__global__"));
-					
-					if(!set.canBuild(FP.worldGuardPlugin.wrapPlayer(player))) {
-						foundregions = true;
-					}
->>>>>>> cedcf4b5573963e3ddf0ef8b5303b652cbbdd591
+					appRegions.add(currentRegion);
+				}
+				
+				ApplicableRegionSet set = new ApplicableRegionSet(appRegions, regionManager.getRegion("__global__"));
+				
+				if(!set.canBuild(FactionsPlus.worldGuardPlugin.wrapPlayer(player))) {
+					foundregions = true;
 				}
 			}
 			
