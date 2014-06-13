@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.TreeSet;
 
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.FactionData;
@@ -32,6 +33,7 @@ import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.integration.Econ;
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -449,6 +451,20 @@ public abstract class Utilities {
 							foundregions = true;
 						}
 					}
+<<<<<<< HEAD
+=======
+				} else {
+					TreeSet<ProtectedRegion> appRegions = new TreeSet();
+					for(ProtectedRegion currentRegion : overlaps) {
+						appRegions.add(currentRegion);
+					}
+					
+					ApplicableRegionSet set = new ApplicableRegionSet(appRegions, regionManager.getRegion("__global__"));
+					
+					if(!set.canBuild(FP.worldGuardPlugin.wrapPlayer(player))) {
+						foundregions = true;
+					}
+>>>>>>> cedcf4b5573963e3ddf0ef8b5303b652cbbdd591
 				}
 			}
 			
