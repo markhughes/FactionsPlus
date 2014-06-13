@@ -1,21 +1,14 @@
 package markehme.factionsplus.listeners;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Set;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.FactionsPlusUpdate;
-import markehme.factionsplus.config.Config;
 import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.LocketteFunctions;
-import markehme.factionsplus.extras.Updater;
-import markehme.factionsplus.references.FP;
-import markehme.factionsplus.references.FPP;
+import markehme.factionsplus.extras.WGFlagIntegration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -23,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.massivecraft.mcore.MCore;
 import com.onarandombox.MultiversePortals.MultiversePortals;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -31,40 +23,42 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 public class FPConfigLoadedListener implements Listener {
 	
 	/**
-	 * called after the config is (re)loaded, which is typically when plugin is enabled and when /f reloadfp  is issued<br>
+	 * called after the config is loaded, which is typically when plugin is enabled
 	 */
 	@EventHandler
-	public void onConfigLoaded( FPConfigLoadedEvent event ) {
-        Config._economy.enableOrDisableEconomy();
-        //TODO: add more here and make sure they can change states between on/off just like they would by a server 'reload' command
-        //because this hook is called every time the config is reloaded, which means some things could have been previously enabled
-        //and now the config may dictate that they are disabled (state changed) so we must properly handle that behaviour.
-        TeleportsListener.initOrDeInit(FP.instance);
+	public void onConfigLoaded(FPConfigLoadedEvent event) {
+        TeleportsListener.initOrDeInit(FactionsPlus.instance);
        
         PluginManager pm = Bukkit.getServer().getPluginManager();
         
         // Fetch world edit 
-        if( pm.isPluginEnabled( "WorldEdit" ) ) {
-       		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin( "WorldEdit" );
+        if(pm.isPluginEnabled("WorldEdit")) {
+       		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
        		FactionsPlus.isWorldEditEnabled = true;
        	}
         
         // fetch world guard
-        if( pm.isPluginEnabled( "WorldGuard" ) ) {
-        	FactionsPlus.worldGuardPlugin = ( WorldGuardPlugin ) pm.getPlugin( "WorldGuard" );	            	
+        if(pm.isPluginEnabled("WorldGuard")) {
+        	FactionsPlus.worldGuardPlugin = (WorldGuardPlugin) pm.getPlugin("WorldGuard");	            	
         	FactionsPlus.isWorldGuardEnabled = true;
         }
         
         // fetch mvp
-        if( pm.isPluginEnabled( "Multiverse-Portals" ) ) { 
-        	Plugin MVc = pm.getPlugin( "Multiverse-Portals" );
+        if(pm.isPluginEnabled("Multiverse-Portals")) { 
+        	Plugin MVc = pm.getPlugin("Multiverse-Portals");
             
-            if (MVc instanceof MultiversePortals) {
-            	FactionsPlus.multiversePortalsPlugin = ( MultiversePortals ) MVc;
+            if(MVc instanceof MultiversePortals) {
+            	FactionsPlus.multiversePortalsPlugin = (MultiversePortals) MVc;
             	
             	FactionsPlus.isMultiversePortalsEnabled = true;
             }
             
+        }
+        
+        // WorldGuard Custom Flags integration
+        if(pm.isPluginEnabled("WGCustomFlags")) {
+        	WGFlagIntegration WGFi = new WGFlagIntegration();
+        	WGFi.addFlags();
         }
         
         if ( LWCBase.isLWCPluginPresent() ) {
@@ -88,17 +82,19 @@ public class FPConfigLoadedListener implements Listener {
 			try { 
 				LWCFunctions.hookLWCIfNeeded();
 			} catch(NoClassDefFoundError e) {
-				FPP.info( "Couldn't hook LWC.. ignoring." );
+				FactionsPlus.debug( "Couldn't hook LWC.. ignoring." );
 			}
 			
 		} else { //no LWC
-			if ( Config._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
-				|| Config._extras._protection._lwc.removeAllLocksOnClaim._ ) 
+			/*
+			if ( OldConfig._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
+				|| OldConfig._extras._protection._lwc.removeAllLocksOnClaim._ ) 
 			{
 				FPP
 					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
 						+ " This means those settings will be ignored & have no effect" );
 			}
+			*/
 			
 			//if there is no LWC anymore ie. plugman unload lwc
 			//then we might still have hooks into LWC from before, and we kinda take care of unlinking those here
@@ -106,100 +102,52 @@ public class FPConfigLoadedListener implements Listener {
 		}
         
         // Lockette 
-        LocketteFunctions.enableOrDisable(FP.instance);
+        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
         
         // Disguises 
-        DisguiseListener.enableOrDisable(FP.instance);
+        DisguiseListener.enableOrDisable(FactionsPlus.instance);
         
         // Multiverse-portals
-        MVPListener.enableOrDisable(FP.instance);
+        MVPListener.enableOrDisable(FactionsPlus.instance);
         
         // CreativeGates
-        CreativeGatesListener.enableOrDisable(FP.instance);
+        CreativeGatesListener.enableOrDisable(FactionsPlus.instance);
         
         // Cannons
-        CannonsListener.enableOrDisable(FP.instance);
+        CannonsListener.enableOrDisable(FactionsPlus.instance);
         
-		// PowerboostListener.startOrStopPowerBoostsListenerAsNeeded();
-		Listen.startOrStopListenerAsNeeded( Config._powerboosts.enabled._, PowerboostListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._announce.enabled._, AnnounceListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._banning.enabled._, BanListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._jails.enabled._, JailListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._peaceful.enablePeacefulBoosts._, PeacefulListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._extras.crossBorderLiquidFlowBlock._, LiquidFlowListener.class );
-		Listen.startOrStopListenerAsNeeded( Config._extras._protection._pvp.shouldInstallDenyClaimListener(), DenyClaimListener.class );
+		// TODO: look through usage UConf and see if these should be enabled (inc. ChestShop, ShowCaseStandalone
+		Listen.startOrStopListenerAsNeeded( true, PowerboostListener.class );
+		Listen.startOrStopListenerAsNeeded( true, AnnounceListener.class );
+		Listen.startOrStopListenerAsNeeded( true, BanListener.class );
+		Listen.startOrStopListenerAsNeeded( true, JailListener.class );
+		Listen.startOrStopListenerAsNeeded( true, PeacefulListener.class );
+		Listen.startOrStopListenerAsNeeded( true, LiquidFlowListener.class );
+		Listen.startOrStopListenerAsNeeded( true, DenyClaimListener.class );
 		
 		// ChestShop
 		if( Bukkit.getPluginManager().getPlugin( "ChestShop" ) != null ) {
 			
-			Listen.startOrStopListenerAsNeeded( (Config._extras._protection.allowShopsInTerritory._ || Config._extras._protection.allowShopsInWilderness._), ChestShopListener.class );
+			Listen.startOrStopListenerAsNeeded( true, ChestShopListener.class );
 			
 		}
 		
 		// ChestShop
 		if( Bukkit.getPluginManager().getPlugin( "ShowCaseStandalone" ) != null ) {
 			
-			Listen.startOrStopListenerAsNeeded( (Config._extras._protection.allowShopsInTerritory._ || Config._extras._protection.allowShopsInWilderness._), ShowCaseStandaloneListener.class );
+			Listen.startOrStopListenerAsNeeded( true, ShowCaseStandaloneListener.class );
 			
 		}
 		
 
 		// Animal Damager Listener
+		Listen.startOrStopListenerAsNeeded( true, AnimalDamageListener.class );
 		
-		if(
-				! Config._extras._protection.allowFactionKillAlliesMobs._ ||
-				! Config._extras._protection.allowFactionKillEnemyMobs._ ||
-				! Config._extras._protection.allowFactionKillNeutralMobs._ ||
-				Config._extras._protection.protectSafeAnimalsInSafeZone._
-		) {
-			
-			Listen.startOrStopListenerAsNeeded( true, AnimalDamageListener.class );
-			
-		}
-		
-		
-		
-		// Enabled a Score Board of Map and/or Factions
-		if( Config._extras._scoreboards.showScoreboardOfMap._ || Config._extras._scoreboards.showScoreboardOfFactions._ ) {
-			
-			FPP.info( "Enabling scoreboards" );
-			
-			FactionsPlusScoreboard.setup();
-		}
-		
-		// Load values from disabled_in_warzone.txt
-		FactionsPlus.commandsDisabledInWarzone.clear();
-		
-		BufferedReader buff = null;
-		String filterRow = null;
-		
-		try {
-			
-			buff = new BufferedReader(new FileReader(Config.fileDisableInWarzone));
-			
-			String currentCommand;
-			
-			while((filterRow = buff.readLine()) != null) {
-				currentCommand = filterRow.split(" ")[0].replace("/", "");
-				
-				FactionsPlus.commandsDisabledInWarzone.put(currentCommand, currentCommand);
-				FP.info("Baring command " + currentCommand + " in warzones");
-			}
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			if(null != buff) {
-				try {
-					buff.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		// Scoreboard Setup
+		FactionsPlusScoreboard.setup();
 		
 		// Updates
 		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
 		
-	} // onConfigLoaded method ends
+	}
 }
