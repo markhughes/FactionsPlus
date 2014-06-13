@@ -1,43 +1,49 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusRules;
-
-import org.bukkit.ChatColor;
+import markehme.factionsplus.Cmds.req.ReqRulesEnabled;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdRules extends FPCommand {
 
-	
 	public CmdRules() {
 		
-		this.aliases.add( "rules" );
+		this.aliases.add("rules");
+		this.aliases.add("viewrules");
+		this.aliases.add("listrules");
 		
 		this.fpidentifier = "rules";
 		
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements( ReqFactionsEnabled.get() );
-		this.addRequirements( ReqIsPlayer.get() );
-		this.addRequirements( ReqHasFaction.get() );
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasFaction.get());
+		this.addRequirements(ReqRulesEnabled.get());
 		
-		this.setHelp( "view Faction rules" );
-		this.setDesc( "view Faction rules" );
+		this.addRequirements(ReqHasPerm.get(FPPerm.RULES.node));
+		
+		this.setHelp(LConf.get().cmdDescListRules);
+		this.setDesc(LConf.get().cmdDescListRules);
 		
 	}
 	
 	@Override
 	public void performfp() {
-		if( ! FactionsPlus.permission.has( sender, "factionsplus.viewrules" ) ) {
-			msg( ChatColor.RED + "No permission!" );
-			return;
+		int i = 0;
+		
+		msg(Txt.parse(LConf.get().rulesListingStart));
+		
+		for(String rule : fData.rules) {
+			i++;
+			msg(i+". " + rule);
 		}
 		
-		FactionsPlusRules.sendRulesToPlayer(usender);
-
 	}
-
 }

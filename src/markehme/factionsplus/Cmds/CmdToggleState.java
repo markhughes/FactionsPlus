@@ -1,16 +1,17 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
-
-import org.bukkit.ChatColor;
+import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdToggleState extends FPCommand {
 	
@@ -19,6 +20,7 @@ public class CmdToggleState extends FPCommand {
 		
 		this.aliases.add("toggle");
 		this.aliases.add("togglestate");
+		this.aliases.add("tog");
 		
 		this.fpidentifier = "togglestate";
 		
@@ -27,76 +29,57 @@ public class CmdToggleState extends FPCommand {
 		
 		this.addRequirements(ReqFactionsEnabled.get());
 		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasPerm.get(FPPerm.TOGGLESTATE.node));
 		
-		this.setHelp("changes the Faction between peaceful and normal");
-		this.setDesc("changes the Faction between peaceful and normal");
+		this.setHelp(LConf.get().cmdDescToggleState);
+		this.setDesc(LConf.get().cmdDescToggleState);
 		
 	}
-	
-	// /f togglestate <faction>
-	
 	
 	@Override
 	public void performfp() {
 		
-		String factionToggling = this.arg(0);
-		Faction factiont;
+		Faction togglingFaction = usenderFaction;
 		
-		boolean authallow=sender.isOp();
-		factiont = usender.getFaction();//if this is reached, faction will exist, cause fme is member of it senderMustBeMember = true;
-
-		if ( (factionToggling != null) && (!factionToggling.equals( factiont.getName())) ) {
-			if(!FactionsPlus.permission.has(sender, "factionsplus.togglestate.others")) {
-				sender.sendMessage(ChatColor.RED + "No permission to toggle peaceful for other factions!");
+		if(this.arg(0) != null && usenderFaction.getName().equalsIgnoreCase(this.arg(0))) {
+			if(!FPPerm.TOGGLESTATEOTHERS.has(sender)) {
+				msg(Txt.parse(LConf.get().toggleStateNotOthers));
 				return;
-			} else {//here if either has that perm or is Op
-				authallow|=sender.isOp();
 			}
 			
-			factiont = Faction.get( factionToggling );	
-			
-			if (null == factiont) {
-				msg(ChatColor.RED + "The faction `"+factionToggling+"` doesn't exist!");
-				
-				return;
-				
-			} else {
-				if ( ( ! sender.isOp()) && ( ( FType.valueOf( factiont ) != FType.FACTION ) ) ) {
-					msg( ChatColor.RED +"You may not change the state of WarZone/SafeZone/Wilderness" );
-					
-					return;
-					
-				}
-			}
+			togglingFaction = Faction.get(this.arg(0));
 		}
 		
-		authallow|=
-			( ( Config._peaceful.membersCanToggleState._ )
-				|| ( ( Config._peaceful.leadersCanToggleState._ ) && ( Utilities.isLeader( usender ) ) ) 
-				|| ( ( Config._peaceful.officersCanToggleState._ ) && ( Utilities.isOfficer( usender ) ) ) );
-		
-		if ( !authallow ) {
-			msg( ChatColor.RED + "Sorry, you do not have the allowed ranking(in your faction) to do that!" );
+		if(togglingFaction == null || FType.valueOf(togglingFaction) == FType.WILDERNESS) {
+			msg(Txt.parse(LConf.get().toggleStateNonExistant));
 			return;
 		}
-
-		if( ! Utilities.isPeaceful( factiont ) ) {
-			if ( (!Config._economy.isHooked())
-					|| (Utilities.doFinanceCrap(Config._economy.costToToggleUpPeaceful._, "adding peaceful flag to " + factiont.getName(), usender)) ) {
-				
-				Utilities.setPeaceful(factiont);
-				
-				msg("You have toggled the faction `"+factiont.getName()+"` to Peaceful!");
-			}
-		} else {
-			if ( (!Config._economy.isHooked()) 
-					|| ( Utilities.doFinanceCrap(Config._economy.costToToggleDownPeaceful._, "removed peaceful flag from " + factiont.getName(), usender ) ) ) {
-			
-				factiont.setFlag(FFlag.PEACEFUL, false);
-				
-				msg("You have removed peaceful status from faction `"+factiont.getName()+"` !");
-			}
+		
+		if(!FPUConf.get(usender.getUniverse()).whoCanTogglePeacefulState.get(usender.getRole())) {
+			msg(Txt.parse(LConf.get().toggleStateNotHighEnoughRankingToModify));
+			return;
 		}
 		
+		if(togglingFaction.getFlag(FFlag.PEACEFUL)) {
+			if(FPUConf.get(usender.getUniverse()).economyCost.get("toggleUpPeaceful") > 0) {
+				if(!Utilities.doCharge(FPUConf.get(usender.getUniverse()).economyCost.get("toggleUpPeaceful"), usender)) {
+					msg(Txt.parse(LConf.get().toggleStateCanAffordUp));
+					return;
+				}
+			}
+			
+			togglingFaction.setFlag(FFlag.PEACEFUL, false);
+			msg(Txt.parse(LConf.get().toggleStatePeacefulRemove), togglingFaction.getName());
+		} else {
+			if(FPUConf.get(usender.getUniverse()).economyCost.get("toggleDownPeaceful") > 0) {
+				if(!Utilities.doCharge(FPUConf.get(usender.getUniverse()).economyCost.get("toggleDownPeaceful"), usender)) {
+					msg(Txt.parse(LConf.get().toggleStateCanAffordDown));
+					return;
+				}
+			}
+			
+			togglingFaction.setFlag(FFlag.PEACEFUL, true);
+			msg(Txt.parse(LConf.get().toggleStatePeacefulAdd), togglingFaction.getName());
+		}
 	} 
 }

@@ -1,18 +1,19 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.File;
+import org.bukkit.Bukkit;
 
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
-import markehme.factionsplus.config.sections.Section_Banning;
-
-import org.bukkit.ChatColor;
+import markehme.factionsplus.Cmds.req.ReqBansEnabled;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdUnban extends FPCommand {
 	public CmdUnban() {
@@ -21,49 +22,40 @@ public class CmdUnban extends FPCommand {
 		this.fpidentifier = "unban";
 		
 		this.requiredArgs.add("player");
+		
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements( ReqFactionsEnabled.get() );
-		this.addRequirements( ReqIsPlayer.get() );
-		this.addRequirements( ReqHasFaction.get() );
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasFaction.get());
+		this.addRequirements(ReqBansEnabled.get());
 		
-		this.setHelp( "unbans a player allowing them to re-join the faction" );
-		this.setDesc( "unbans a player allowing them to re-join the faction" );
+		this.addRequirements(ReqHasPerm.get(FPPerm.BAN.node));
+
+		this.setHelp(LConf.get().cmdDescUnBan);
+		this.setDesc(LConf.get().cmdDescUnBan);
 	}
 	
 	@Override
 	public void performfp(){
-		if ((Config._banning.furtherRestrictBanUnBanToThoseThatHavePermission._)
-				&&(!FactionsPlus.permission.has(sender, Section_Banning.banUnBanPermissionNodeName))) {
-			msg(ChatColor.RED + "You don't have the required permission node!");
+		
+		if(!FPUConf.get(usender.getUniverse()).whoCanBan.get(usender.getRole())) {
+			msg(Txt.parse(LConf.get().banNotHighEnoughRanking));
 			return;
 		}
 		
-		String unbanningThisPlayer = this.arg(0);
+		FactionData fdata = FactionDataColls.get().getForUniverse(usender.getUniverse()).get(usender.getFactionId());
 		
-		boolean authallow = false;
+		String id = null;
 		
-		if(Config._banning.leadersCanFactionBanAndUnban._ && Utilities.isLeader(usender)){
-			authallow = true;
-		} else if(Config._banning.officersCanFactionBanAndUnban._ && Utilities.isOfficer(usender)){
-			authallow = true;
-		}
-		
-		if(!authallow){
-			msg(ChatColor.RED + "Sorry, your ranking is not high enough to do that!");
-			return;
-		}
-		
-		
-		File banFile = new File(Config.folderFBans, usender.getFactionId() + "." + unbanningThisPlayer.toLowerCase());
-		
-		if(banFile.exists()) {
-			boolean deleted = banFile.delete();
-			msg(unbanningThisPlayer + " has "+(deleted?"":"not")+" been unbanned from the Faction!");
+		if(Bukkit.getPlayer(args.get(0)) != null) {
+			id = Bukkit.getPlayer(args.get(0)).getUniqueId().toString();
 		} else {
-			msg("This user isn't banned from the Faction!");
+			// TODO: get ID from Mojang API
 		}
 		
+		// Remove that ID from the ban list
+		fdata.bannedPlayerIDs.remove(id);
 		
 	}
 }

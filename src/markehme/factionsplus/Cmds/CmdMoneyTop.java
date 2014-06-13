@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.util.DualPack;
 import markehme.factionsplus.util.RunnableWithParams;
 
@@ -26,7 +26,7 @@ import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 import com.massivecraft.mcore.money.Money;
 
-
+// TODO: REDO THIS ENTIRE DISGUSTING THING 
 
 public class CmdMoneyTop extends FPCommand {
 	private static final int	shownPerPage	= 10;
@@ -186,12 +186,11 @@ public class CmdMoneyTop extends FPCommand {
 				sender.sendMessage(ChatColor.RED + "No permission!");
 				return;
 			}
-			if ( !Config._economy.isHooked() ) {
+			if ( !OldConfig._economy.isHooked() ) {
 				sender.sendMessage( "Economy is unavailable or disabled in FactionsPlus configs" );
 				return;
 			}else {
 				if (!Econ.isEnabled(usender)) {
-					//XXX: even though we can still show the top without it!! at this point
 					sender.sendMessage( "Economy is disabled in Factions plugin" );
 					return;
 				}
@@ -267,7 +266,7 @@ public class CmdMoneyTop extends FPCommand {
 			Faction f = d.getFirst();
 			maxSeenTagLength=Math.max(maxSeenTagLength, ChatColor.stripColor( f.getName() ).length());
 			maxSeenIdLength=Math.max(maxSeenIdLength, f.getId().length());
-			maxSeenMoneyLength=Math.max(maxSeenMoneyLength, Config._economy.getFormatted( d.getSecond().doubleValue()).length() );
+			maxSeenMoneyLength=Math.max(maxSeenMoneyLength, OldConfig._economy.getFormatted( d.getSecond().doubleValue()).length() );
 			maxSeenPositionLen=Math.max(maxSeenPositionLen, Integer.toString( i+1).length() );
 		}
 		
@@ -280,7 +279,7 @@ public class CmdMoneyTop extends FPCommand {
 				String.format("%s%s%"+maxSeenPositionLen+"d. %s%"+maxSeenTagLength+"s%s [%"+maxSeenIdLength+"s] %s: %s%"+
 			maxSeenMoneyLength+"s", 
 					prefixing, ChatColor.AQUA, i+1, ChatColor.RESET, f.getName(), ChatColor.DARK_BLUE, f.getId(),
-					ChatColor.RESET, ChatColor.YELLOW, Config._economy.getFormatted( d.getSecond().doubleValue()))
+					ChatColor.RESET, ChatColor.YELLOW, OldConfig._economy.getFormatted( d.getSecond().doubleValue()))
 			);
 		}
 	}

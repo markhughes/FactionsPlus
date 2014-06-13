@@ -1,14 +1,13 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.ChatColor;
-
-import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusRules;
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.Cmds.req.ReqRulesEnabled;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
 import com.massivecraft.mcore.util.Txt;
 
@@ -23,39 +22,38 @@ public class CmdSetRule extends FPCommand{
 		this.requiredArgs.add("rule");
 		this.errorOnToManyArgs = false;
 		
-		this.addRequirements( ReqFactionsEnabled.get() );
-		this.addRequirements( ReqIsPlayer.get() );
-		this.addRequirements( ReqHasFaction.get() );
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasFaction.get());
+		this.addRequirements(ReqRulesEnabled.get());
 		
-		this.setHelp("set Faction rules");
-		this.setDesc("set Faction rules");
+		this.addRequirements(ReqHasPerm.get(FPPerm.MODIFYRULES.node));
+
+		this.setHelp(LConf.get().cmdDescSetRule);
+		this.setDesc(LConf.get().cmdDescSetRule);
 	}
 	
 	@Override
 	public void performfp() {
-		if(!FactionsPlus.permission.has(sender, "factionsplus.setrules")) {
-			sender.sendMessage(ChatColor.RED + "No permission!");
+		
+		if(!FPUConf.get(usender.getUniverse()).whoCanSetJails.get(usender.getRole())) {
+			msg(Txt.parse(LConf.get().rulesNotHighEnoughRankingToModify));
 			return;
 		}
 		
-		if(!Utilities.isLeader(usender) && !Utilities.isOfficer(usender)) {
-			msg("Your ranking is not high enough to modify rules.");
-			return;
-		}
-		
-		if(Utilities.isOfficer(usender) && !Config._rules.officersCanSetRules._) {
-			msg("Officers can not modify rules on this server.");
-			return;
-		}
-		
-		if(Utilities.isLeader(usender) && !Config._rules.leadersCanSetRules._) {
-			msg("Leaders can not modify rules on this server.");
+		if(usenderFaction.isNone()) {
+			msg(Txt.parse(LConf.get().rulesNotInFaction));
 			return;
 		}
 		
 		String newRule = Txt.implode(args, " ").replaceAll("(&([a-f0-9]))", "& $2");
-				
-		FactionsPlusRules.setRuleForFaction(usender.getFaction(), usender, newRule);
+		
+		if(fData.rules.size() >= FPUConf.get(usender.getUniverse()).maxRulesPerFaction) {
+			msg(Txt.parse(LConf.get().rulesHitMax), FPUConf.get(usender.getUniverse()).maxRulesPerFaction);
+			return;
+		}
+		
+		fData.rules.add(newRule);
 		
 	}
 }

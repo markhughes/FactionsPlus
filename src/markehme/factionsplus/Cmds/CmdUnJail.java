@@ -1,13 +1,17 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlusJail;
-import markehme.factionsplus.config.sections.Section_Jails;
+import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.util.FPPerm;
 
-import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 
 
@@ -24,28 +28,25 @@ public class CmdUnJail extends FPCommand {
 		
 		this.addRequirements(ReqFactionsEnabled.get());
 		this.addRequirements(ReqIsPlayer.get());
-		this.addRequirements( ReqHasFaction.get() );
+		this.addRequirements(ReqHasFaction.get());
+		this.addRequirements(ReqJailsEnabled.get());
 		
-		this.setHelp( "removes a player from jail" );
-		this.setDesc( "removes a player from jail" );
+		this.addRequirements(ReqHasPerm.get(FPPerm.JAIL.node));
+		
+		this.setHelp(LConf.get().cmdDescUnJail);
+		this.setDesc(LConf.get().cmdDescUnJail);
 		
 	}
 	
 	
 	@Override
 	public void performfp() {
-			
-		String playerToUnjail = this.arg( 0 );
 		
-		if (Section_Jails.canJailUnjail( usender )) {
-			
-			FactionsPlusJail.removeFromJail( playerToUnjail, usender, true);
-			
+		if(!FPUConf.get(usender.getUniverse()).whoCanJail.get(usender.getRole())) {
+			msg(Txt.parse(LConf.get().jailsNotHighEnoughRanking));
 			return;
-			
 		}
 		
-		msg(ChatColor.RED+ "No permission to unjail!" );
-		
+		FactionsPlusJail.removeFromJail(this.arg(0), usender, true);
 	}
 }

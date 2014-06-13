@@ -31,10 +31,6 @@ public class CmdPlot extends FPCommand {
 			return;
 		}*/
 		
-		Player p = usender.getPlayer();
-		
-		PS currentLocation = PS.valueOf( p.getLocation().getChunk() );
-		
-		msg( currentLocation.getChunk().getBlockX() + " " + currentLocation.getChunk().getBlockY() );
+
 	}
 }

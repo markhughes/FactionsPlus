@@ -1,154 +1,106 @@
 package markehme.factionsplus.Cmds;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
-
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.Cmds.req.ReqWarpsEnabled;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
+import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.references.FPP;
+import markehme.factionsplus.util.FPPerm;
 
-import org.bukkit.ChatColor;
-
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 public class CmdListWarps extends FPCommand  {
 	public CmdListWarps() {
-		this.aliases.add( "listwarps" );
+		this.aliases.add("listwarps");
 		
 		this.fpidentifier = "listwarps";
 		
-		this.optionalArgs.put( "faction", "string" );
+		this.optionalArgs.put("faction", "string");
 		this.errorOnToManyArgs = true;
 		
-		this.addRequirements( ReqFactionsEnabled.get() );
-		this.addRequirements( ReqIsPlayer.get() );
-		this.addRequirements( ReqHasFaction.get() );
+		this.addRequirements(ReqFactionsEnabled.get());
+		this.addRequirements(ReqIsPlayer.get());
+		this.addRequirements(ReqHasFaction.get());
+		this.addRequirements(ReqWarpsEnabled.get());
 		
-		this.setHelp( "list warps in a Faction" );
-		this.setDesc( "list warps in a Faction" );
+		this.addRequirements(ReqHasPerm.get(FPPerm.LISTWARPS.node));
+		
+		this.setHelp(LConf.get().cmdDescListWarps);
+		this.setDesc(LConf.get().cmdDescListWarps);
 	}
 	
 	@Override
 	public void performfp() {
-		Faction currentFaction = usender.getFaction();
+		Faction currentFaction = usenderFaction;
 		
-		if( this.arg(0) != null ) {
-			if( ! FactionsPlus.permission.has( Utilities.getOnlinePlayerExact( usender ), "factionsplus.listwarps" ) ) {
-				msg( "No permission!" );
-				
+		// If there is an argument, update the currentFaction
+		if(this.arg(0) != null) {
+
+			currentFaction = Faction.get(arg(0));
+			
+			// If the Faction doesn't exist, ensure we give the correct response 
+			if(currentFaction == null && FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+				msg(Txt.parse(LConf.get().warpsCantViewListNonExistant));
+				return;
+			} else if(currentFaction == null && !FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+				msg(Txt.parse(LConf.get().warpsCantViewOthersWarps));
 				return;
 			}
 			
-			currentFaction = Faction.get( arg( 0 )  );
+			// If the Factions is not the users original, ensure we have permission to do this
+			if(currentFaction.getId() != usenderFaction.getId()) { 
+				if(!FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+					msg(Txt.parse(LConf.get().warpsCantViewOthersWarps));
+					return;
+				}
+			}
 		}
 		
-		if( FType.valueOf( currentFaction) == FType.WILDERNESS ) {
-			msg( "This Faction does not exist." );
-			
+		// Do not view Wilderness warps, and ensure we're using a valid Faction
+		if(FType.valueOf(currentFaction) == FType.WILDERNESS || currentFaction == null) {
+			msg(Txt.parse(LConf.get().warpsCantViewListNonExistant));
 			return;
 		}
 		
-		File currentWarpFile = new File( Config.folderWarps, currentFaction.getId() );
-	    
-		if( !currentWarpFile.exists() ) {
-			msg( ChatColor.RED + "Your Faction has no warps!" );
-			
+		// Fetch the FactionData for this Faction
+		FactionData fData = FactionDataColls.get().getForUniverse(usender.getUniverse()).get(currentFaction.getId());
+		
+		// Ensure there are warps
+		if(fData.warpLocation.size() == 0) {
+			msg(Txt.parse(LConf.get().warpsFactionHasNone));
 			return;
 		}
 		
-	    FileInputStream fis = null;
-	    
-	    try {
-	    	fis = new FileInputStream( new File( Config.folderWarps, currentFaction.getId() ) );
-	    	int b = fis.read();
-	    	
-	    	if ( b == -1 ) {
-	    		msg( ChatColor.RED + "Your faction has no warps!" );
-	    		return;
-	    	}
-	    } catch ( Exception e ) {
-	    	msg( "Internal error (LW:01)" );
-	    	
-	    	return;
-	    } finally {
-	    	if ( null != fis ) {
-	    		try {
-					fis.close();
-				} catch ( IOException e ) {
-					e.printStackTrace();
-				}
-	    	}
-	    }
-	    
-	    Scanner scanner = null;
-	    FileReader fr = null;
-	    
-	    try {
-	    	fr = new FileReader(currentWarpFile);
-	    	scanner = new Scanner(fr);
-	        
-	    	String buffer = ChatColor.RED + "Your Factions warps: " + ChatColor.WHITE;
-	        
-	        boolean warps = false;
-	        
-	        while( scanner.hasNextLine() ) {
-	        	String item = scanner.nextLine();
-	        	
-	        	if( ! item.trim().isEmpty() ) {
-	        		String[] items = item.split( ":" );
-	        		
-	        		if ( items.length > 0 ) {
-	        			if ( buffer.length() + items[0].length() + 2 >= 256 ) {
-	        				
-	        				msg( buffer );
-	        				
-	        				buffer = items[0] + ", ";
-	        				
-	        			} else {
-	        				
-	        				buffer = buffer + items[0] + ", ";
-	        				
-	        				warps = true;
-	        			}
-	        		}
-	        	}
-	        	
-	        }
-	        
-	        if( warps ){
-	        	buffer = buffer.substring( 0, buffer.length() - 2 );
-	        	buffer += ". ";
-	        }
-	        
-	        msg(buffer);
-	        
-	    } catch ( Exception e ) {
-	    	FPP.info( "Cannot create file " + currentWarpFile.getName() + " - " + e.getMessage() );
-	    	
-	        msg( ChatColor.RED + "An internal error occured (LW:02)" );
-	        
-	        e.printStackTrace();
-	    } finally {
-	    	
-	    	if ( null != scanner ) {
-	    		scanner.close();
-	    	}
-	    	
-	    	if ( null != fr ) {
-	    		try {
-					fr.close();
-				} catch ( IOException e ) {
-					e.printStackTrace();
-				}
-	    	}
-	    }
+		// Loop through each of the values and build a list 
+		String warpList = "";
+		int i = 0;
+		
+		for(String warpName : fData.warpLocation.keySet()) {
+			i++;
+			
+			// Disclose passwords to the leader
+			String addition = "";
+			
+			if(usender.getRole() == Rel.LEADER) {
+				addition = " (" + fData.warpPasswords.get(warpName) + ")";
+			}
+			
+			// Make it into a displayable list 
+			if(i != 1) {
+				warpList = warpList + ", " + warpName + addition;
+			} else {
+				warpList = warpName + addition;
+			}
+		}
+		
+		// Send the message back 
+		msg(Txt.parse(LConf.get().warpsListPrefix, warpList));
 	}
 }
