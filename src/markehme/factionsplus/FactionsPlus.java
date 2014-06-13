@@ -1,21 +1,19 @@
 package markehme.factionsplus;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.MCore.Const;
 import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.MCore.MConfColl;
-import markehme.factionsplus.MCore.UConfColls;
-import markehme.factionsplus.config.OldConfig;
+import markehme.factionsplus.MCore.FPUConfColls;
+import markehme.factionsplus.config.OldMigrate;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
 import markehme.factionsplus.listeners.CoreListener;
 import markehme.factionsplus.listeners.FPConfigLoadedListener;
-import markehme.factionsplus.util.DataConvert;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
@@ -81,10 +79,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Set<String> ignoredPvPWorlds 					= 	null;
 	public static Set<String> noClaimingWorlds 					= 	null;
 	public static Set<String> noPowerLossWorlds 				= 	null;
-	
-	// Which commands are disabled in warzone
-	public static HashMap<String, String> commandsDisabledInWarzone 	= new HashMap<String, String>();
-	
+		
 	// Server reference
 	public static Server server;
 	
@@ -117,7 +112,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); 
 			
-			// MCore is a go
+			// MCore is a go!
 			
 			this.aspect = AspectColl.get().get(Const.ASPECT, true);
 			this.aspect.register();
@@ -128,7 +123,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			// Init MStore 
 			MConfColl.get().init();
-			UConfColls.get().init();
+			FPUConfColls.get().init();
 			
 			// Store some useful data for later
 			thefile = getFile();
@@ -136,30 +131,25 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			pm = server.getPluginManager();	
 			pluginVersion = getDescription().getVersion(); 
 			
-			if(OldConfig.fileConfig.exists()) {
+			OldMigrate om = new OldMigrate();
+			
+			if(om.shouldMigrate()) {
 				info(ChatColor.GOLD + "Converting database and config, please wait ..");
-				OldConfig.init();
-				OldConfig.reload();
 				
-				DataConvert.doConvert();
-				
+				om.migrateDatabase();
 			}
 			
-			
 			initFactions();
-
 			
 			// Publicise that the config has been loaded
 			pm.registerEvents(new FPConfigLoadedListener(), this);
-			
-			// Reload the configuration 
-			
 			
 			// Add our core listener
 			pm.registerEvents(this.corelistener, this);
 			
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
+
 			
 			// Hook into vault for permissions
 			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
@@ -194,6 +184,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	}
 	
 	
+	/**
+	 * Plugin disable, we ensure everything that FactionsPlus is
+	 * doing or using is turned off.
+	 */
 	@Override
 	public void onDisable() {
 		Throwable failed = null; 
@@ -207,13 +201,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				failed = t;
 				severe( t, "Exception on unhooking Essentials" );
 			} 
-			
-			try {
-				OldConfig.deInit();
-			} catch ( Throwable t ) {
-				failed = t;
-				severe( t, "Exception on disabling Config" );
-			}
 			
 			try {
 				FactionsPlusCommandManager.disableSubCommands();
@@ -252,20 +239,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			}
 			
 			try {
-				// This will deInit metrics, but it will be enabled again onEnable.
-				getServer().getScheduler().cancelTasks( this );
+				getServer().getScheduler().cancelTasks(this);
 			} catch ( Throwable t ) {
 				failed = t;
 				severe( t, "Exception when canceling schedule tasks" );
 			}
 			
 			try {
-				if(Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ) != null &&
-						(OldConfig._extras._scoreboards.showScoreboardOfFactions._ || OldConfig._extras._scoreboards.showScoreboardOfMap._ )) {
-					
-					Bukkit.getScoreboardManager().getMainScoreboard().getObjective( FactionsPlusScoreboard.objective_name ).unregister();
+				if(Bukkit.getScoreboardManager().getMainScoreboard().getObjective(FactionsPlusScoreboard.objective_name) != null) {
+					Bukkit.getScoreboardManager().getMainScoreboard().getObjective(FactionsPlusScoreboard.objective_name).unregister();
 				}
-				
 			} catch( Exception t ) {
 				failed = t;
 				severe( t, "Exception when removing scoreboard" );
@@ -283,7 +266,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				
 			}
 		}
-	} // onDisable
+	}
 	
 	/**
 	 * Used to initialise Factions-based stuff
@@ -295,17 +278,18 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			Class.forName("com.massivecraft.factions.entity.MConf");
 		} catch (ClassNotFoundException ex) {
 			warn("Could not find Factions 2.x - please update to Factions 2.x.");
+			warn("(or not compaitable)");
 			info("You are required to use 0.5.x for Factions 1.x");
+			
 			disableSelf();
 			return;
 		}
 		
 		// Store the FactionsVersion
-		FactionsVersion = pm.getPlugin( "Factions" ).getDescription().getVersion();
+		FactionsVersion = pm.getPlugin("Factions").getDescription().getVersion();
 		
 		// Some debug output - can be helpful when debugging errors 
-		info("Factions v" + FactionsVersion ); 
-		
+		debug("Factions v" + FactionsVersion ); 
 
 	}
 }
