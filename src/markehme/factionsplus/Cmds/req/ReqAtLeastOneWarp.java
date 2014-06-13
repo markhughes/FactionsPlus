@@ -1,12 +1,11 @@
 package markehme.factionsplus.Cmds.req;
 
-import java.io.File;
-
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
 
 import org.bukkit.command.CommandSender;
 
-import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.cmd.MCommand;
 import com.massivecraft.mcore.cmd.req.ReqAbstract;
 
@@ -15,7 +14,7 @@ import com.massivecraft.mcore.cmd.req.ReqAbstract;
  * can specify alternative Factions that aren't of the command sender. So
  * this is just here as a test, and reference. 
  * 
- * @author markhughes
+ * @author MarkehMe <mark@markeh.me>
  * 
  */
 public class ReqAtLeastOneWarp extends ReqAbstract {
@@ -34,18 +33,19 @@ public class ReqAtLeastOneWarp extends ReqAbstract {
 
 	@Override
 	public boolean apply(CommandSender sender, MCommand command) {
-		File currentWarpFile = new File( Config.folderWarps, Faction.get(sender).getId() );
+		FactionData fData = FactionDataColls.get().getForUniverse(UPlayer.get(sender).getUniverse()).get(UPlayer.get(sender).getFaction().getId());
 		
-	    if ( ! currentWarpFile.exists() ) {
-	    	return false;
-	    } else {
-	    	return true;
-	    }
+		if(fData.warpLocation.size() > 0) {
+			return true;
+		}
+		
+		return false;
+		
 	}
 
 	@Override
 	public String createErrorMessage(CommandSender sender, MCommand command) {
-		return "Your Faction has no warps!";
+		return "This Faction has no warps.";
 	}
 
 }
