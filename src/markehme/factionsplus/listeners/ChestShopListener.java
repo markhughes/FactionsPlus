@@ -1,10 +1,10 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.FactionsPlusPlugin;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -17,120 +17,127 @@ import org.bukkit.event.Listener;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome;
 import com.massivecraft.factions.entity.BoardColls;
-import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.mcore.util.Txt;
 
 public class ChestShopListener implements Listener {
-
-	@EventHandler(ignoreCancelled=true)
+	
+	/**
+	 * Detect if there is a ChestShop allowed in the area they're creating the
+	 * shop in. 
+	 * @param event
+	 */
+	@EventHandler
 	public void onChestShopCreate(PreShopCreationEvent event) {
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return;
 		
-		Faction factionAtSign = BoardColls.get().getFactionAt(PS.valueOf(event.getSign().getLocation()));
-		FType factionType = FType.valueOf(factionAtSign);
+		FType factionType	= FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(event.getSign().getLocation())));
+		String universe		= UPlayer.get(event.getPlayer()).getUniverse();
 		
-		if(factionType == FType.WILDERNESS && !Config._extras._protection.allowShopsInWilderness._) {
-			
-			event.setOutcome( CreationOutcome.NO_PERMISSION_FOR_TERRAIN ) ;
-			
+		if(factionType == FType.WILDERNESS && !FPUConf.get(universe).allowShopsInWilderness) {
+			event.setOutcome(CreationOutcome.NO_PERMISSION_FOR_TERRAIN);
 			return;
 		}
 		
-		if( factionType == FType.FACTION && !Config._extras._protection.allowShopsInTerritory._ ) {
-			
-			event.setOutcome( CreationOutcome.NO_PERMISSION_FOR_TERRAIN );
-			
+		if(factionType == FType.FACTION && !FPUConf.get(universe).allowShopsInTerritory) {
+			event.setOutcome(CreationOutcome.NO_PERMISSION_FOR_TERRAIN);
 			return;
 		}
-		
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR )
-	public void onLandClaim( FactionsEventChunkChange event ) {
-		if ( event.isCancelled() ) {
+	/**
+	 * Detect if there is a ChestShop created by someone outside of the Faction on land
+	 * claim. 
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOW)
+	public void onLandClaim(FactionsEventChunkChange event) {
+		if(event.isCancelled()) {
 			return;
 		} else {
+			
 			UPlayer uPlayer = event.getUSender();
 			
 			try {
-				
 				World world = event.getChunk().asBukkitWorld();
 				
-				if ( null == world ) {
-					throw new Exception( "World is undenified." );
+				// Ensure the world is loaded
+				if(world == null) {
+					throw new Exception("World is null");
 				}
 				
 				Chunk chunk = world.getChunkAt( 
 						(uPlayer.getPlayer().getLocation().getBlockX()), 
 						(uPlayer.getPlayer().getLocation().getBlockZ())
 					);
-
-				if ( !world.isChunkLoaded( chunk ) ) {
-					world.loadChunk( chunk );
+				
+				// Ensure the chunk is loaded
+				if(!world.isChunkLoaded(chunk)) {
+					world.loadChunk(chunk);
 					
-					if ( !chunk.isLoaded() ) {
-						throw new Exception( "Failed to force load chunk at x: " + chunk.getX() + ", z:" + chunk.getZ() );
+					if (!chunk.isLoaded()) {
+						throw new Exception("Failed to force load chunk at x: " + chunk.getX() + ", z: " + chunk.getZ());
 					}
 				}
 				
 				int numberOfRemovedProtections = 0;
 				
-				// parse each block(in the chunk) and if it's a sign 
-				for ( int x = 0; x < 16; x++ ) {
-					for ( int z = 0; z < 16; z++ ) {
-						for ( int y = 0; y < 256; y++ ) {
-							
-							Block block = chunk.getBlock( x, y, z );
+				// TODO: move into alternative thread? 
+				
+				// Check all the blocks in the chunk for a sign
+				for(int x = 0; x < 16; x++) {
+					for(int z = 0; z < 16; z++) {
+						for(int y = 0; y < 256; y++) {
+							Block block = chunk.getBlock(x, y, z);
 							Material type = block.getType();
 							
-							// is it a sign?
-							if( type == Material.SIGN ) {
+							// We're looking for signs 
+							if(type == Material.SIGN) {
 								
-								// get a connected chest
-								Chest connectedChest = com.Acrobot.ChestShop.Utils.uBlock.findConnectedChest( block );
+								// Grab the chest
+								Chest connectedChest = com.Acrobot.ChestShop.Utils.uBlock.findConnectedChest(block);
 								
-								// is it actually connected ? 
-								if( connectedChest != null ) {
+								// Ensure it is actually there
+								if(connectedChest != null) {	
 									
-									if( ( FType.valueOf( BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()))) == FType.WILDERNESS ) && !Config._extras._protection.allowShopsInWilderness._
-											&& !com.Acrobot.ChestShop.Signs.ChestShopSign.isAdminShop((org.bukkit.block.Sign) block)) {
-										
-										// Break it! 
-										
-										block.breakNaturally();
-										
+									org.bukkit.block.Sign theSign = (org.bukkit.block.Sign) block;
+									
+									// If they're a member of their Faction, don't do anything. 
+									if(UPlayer.get(theSign.getLine(0).trim()).getFactionId() == uPlayer.getFactionId()) {
+										return;
 									}
 									
-									if( ( FType.valueOf( BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()))) == FType.FACTION ) && !Config._extras._protection.allowShopsInTerritory._
-											&& !com.Acrobot.ChestShop.Signs.ChestShopSign.isAdminShop((org.bukkit.block.Sign) block)) {
+									if((FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()))) == FType.WILDERNESS) && !FPUConf.get(uPlayer.getUniverse()).allowShopsInWilderness
+											&& !com.Acrobot.ChestShop.Signs.ChestShopSign.isAdminShop(theSign)) {
 										
-										// Break it! 
-										
+										// Break it
 										block.breakNaturally();
-										
 									}
 									
-									
-									
+									if((FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(block.getLocation()))) == FType.FACTION) && !FPUConf.get(uPlayer.getUniverse()).allowShopsInTerritory
+											&& !com.Acrobot.ChestShop.Signs.ChestShopSign.isAdminShop((org.bukkit.block.Sign) block)) {
+										
+										// Break it
+										block.breakNaturally();
+									}
 								}
-								
 							}
-
 						}
 					}
 				}
-
-				if ( numberOfRemovedProtections > 0 ) {
-					uPlayer.sendMessage( ChatColor.GOLD + "Automatically removed " + numberOfRemovedProtections
-						+ " ChestShops protections in the claimed chunk." );
+				
+				// If there are protections that have been removed, notify the player 
+				if(numberOfRemovedProtections > 0) {
+					uPlayer.msg(Txt.parse(LConf.get().chestShopAutoRemoveNotice, numberOfRemovedProtections));
 				}
-			} catch ( Exception cause ) {
-				event.setCancelled( true ); 
-				FactionsPlusPlugin.severe(cause, "Internal error clearing Lockette locks on land claim, inform admin to check console." );
-				uPlayer.msg("Internal error clearing Lockette locks on land claim, inform admin to check console.");
+				
+			} catch (Exception cause) {
+				event.setCancelled(true); 
+				FactionsPlus.severe(cause, "Could not remove ChestShop shops on land claim (internal error)");
+				uPlayer.msg(Txt.parse(LConf.get().chestShopErrorRemoving));
 			}
 		}
 	}
-
 }

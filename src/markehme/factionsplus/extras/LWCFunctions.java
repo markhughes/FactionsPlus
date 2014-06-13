@@ -3,7 +3,7 @@ package markehme.factionsplus.extras;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.listeners.LWCListener;
 
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public abstract class LWCFunctions extends LWCBase {
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		assert LWCBase.isLWCPluginPresent();
 		
-		if ( Config._extras._protection._lwc.removeAllLocksOnClaim._ )  {
+		if ( OldConfig._extras._protection._lwc.removeAllLocksOnClaim._ )  {
 			// register after we integrate
 			if ( !alreadyRegistered ) {
 				try {
@@ -182,8 +182,8 @@ public abstract class LWCFunctions extends LWCBase {
 		UPlayer fp = UPlayer.get(p);
 		PS floc = PS.valueOf(b.getLocation());
 		Faction owner = BoardColls.get().getFactionAt(floc);
-
-		if( !Utilities.isWilderness( owner) && owner != fp.getFaction() ){
+		
+		if( !FType.valueOf(owner).equals(FType.WILDERNESS) && owner != fp.getFaction() ){
 			fp.sendMessage("You can only create locks in your own territory!");
 			return false;
 		}

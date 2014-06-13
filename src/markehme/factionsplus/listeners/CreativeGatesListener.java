@@ -1,8 +1,8 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -15,8 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.PluginManager;
 
-import com.griefcraft.model.Protection;
-import com.massivecraft.creativegates.CreativeGates;
 import com.massivecraft.creativegates.MainListener;
 import com.massivecraft.creativegates.Perm;
 import com.massivecraft.creativegates.entity.UConf;
@@ -27,7 +25,6 @@ import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
 import com.massivecraft.mcore.ps.PS;
 import com.massivecraft.mcore.util.MUtil;
-import com.massivecraft.mcore.util.Txt;
 
 public class CreativeGatesListener implements Listener {
 	
@@ -36,21 +33,19 @@ public class CreativeGatesListener implements Listener {
 
 	public static final void enableOrDisable(FactionsPlus instance) {
  		PluginManager pm = Bukkit.getServer().getPluginManager();
-			
+		
 		boolean isMVPplugin = pm.isPluginEnabled("CreativeGates");
 		
-		if ( isMVPplugin && !isCreativeGatesIntegrated ) {
-			assert ( null == creativegateslistener );
-			
+		if(isMVPplugin && !isCreativeGatesIntegrated ) {			
 			creativegateslistener = new CreativeGatesListener();
-			pm.registerEvents( creativegateslistener, instance );
+			pm.registerEvents(creativegateslistener, instance);
 			
-			if (null == creativegateslistener) {
+			if(null == creativegateslistener) {
 				creativegateslistener = new CreativeGatesListener();
 				Bukkit.getServer().getPluginManager().registerEvents(creativegateslistener, instance);
 			}
 			
-			FactionsPlusPlugin.info( "Hooked into CreativeGates." );
+			FactionsPlus.debug("Hooked into CreativeGates.");
 		}	
 	}
 
@@ -60,6 +55,7 @@ public class CreativeGatesListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void useGateCheck(PlayerMoveEvent event) {
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return;
 		
 		// BEGIN: Original code 
 		
@@ -71,12 +67,8 @@ public class CreativeGatesListener implements Listener {
 		if (ugate == null) return;
 
 		// ... and if the gate is intact ...
-		if (!ugate.isIntact())
-		{
-			// We try to detect that a gate was destroyed once it happens by listening to a few events.
-			// However there will always be cases we miss and by checking at use we catch those as well.
-			// Examples could be map corruption or use of WorldEdit.
-			ugate.destroy();
+		if (!ugate.isIntact()) {
+			// Don't destroy, let their plugin take control 
 			return;
 		}
 
@@ -86,13 +78,11 @@ public class CreativeGatesListener implements Listener {
 
 		// ... and we have permission to use gates ...
 		Player player = event.getPlayer();
-		if (!Perm.USE.has(player, true)) return;
+		if(!Perm.USE.has(player, true)) return;
 
 		// ... and the gate has enter enabled ...
-		if (!ugate.isEnterEnabled())
-		{
-			String message = Txt.parse("<i>This gate has enter disabled.");
-			player.sendMessage(message);
+		if (!ugate.isEnterEnabled()) {
+			// Don't send messages, let their plugin handle this
 			return;
 		}
 
@@ -100,14 +90,32 @@ public class CreativeGatesListener implements Listener {
 		if (player.isDead()) return;
 		
 		// END: original code
-		// XXX: Do NOT transport the player, leave it to the other plugin still! 
 		
-		if(!Config._extras._CreativeGates.allowUsingCreativeGatesInEnemyTerritory._) {
-			if(BoardColls.get().getFactionAt(PS.valueOf(player.getLocation())).getRelationTo(UPlayer.get(player).getFaction()).equals(Rel.ENEMY) ) {
-				// XXX: Maybe better to push the player a bit back too? 
-				event.setCancelled(true);
-			}
+		if(!FPUConf.get(UPlayer.get(player)).creativegates.get("useCreativeGatesInEnemy") && BoardColls.get().getFactionAt(PS.valueOf(player.getLocation())).getRelationTo(UPlayer.get(player).getFaction()).equals(Rel.ENEMY)) {
+			pushPlayerBack(player); 
+			event.setCancelled(true);
 		}
+		
+		if(!FPUConf.get(UPlayer.get(player)).creativegates.get("useCreativeGatesInAlly") && BoardColls.get().getFactionAt(PS.valueOf(player.getLocation())).getRelationTo(UPlayer.get(player).getFaction()).equals(Rel.ALLY)) {
+			pushPlayerBack(player);
+			event.setCancelled(true);
+		}
+		
+		if(!FPUConf.get(UPlayer.get(player)).creativegates.get("useCreativeGatesInTruce") && BoardColls.get().getFactionAt(PS.valueOf(player.getLocation())).getRelationTo(UPlayer.get(player).getFaction()).equals(Rel.TRUCE)) {
+			pushPlayerBack(player);
+			event.setCancelled(true);
+		}
+		
+		if(!FPUConf.get(UPlayer.get(player)).creativegates.get("useCreativeGatesInNeutral") && BoardColls.get().getFactionAt(PS.valueOf(player.getLocation())).getRelationTo(UPlayer.get(player).getFaction()).equals(Rel.NEUTRAL)) {
+			pushPlayerBack(player);
+			event.setCancelled(true);
+		}
+		
+		if(!FPUConf.get(UPlayer.get(player)).creativegates.get("useCreativeGatesInWilderness") && FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(player.getLocation()))).equals(FType.WILDERNESS)) {
+			pushPlayerBack(player);
+			event.setCancelled(true);
+		}
+		
 	}
 	
 	/**
@@ -115,35 +123,48 @@ public class CreativeGatesListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true )
-	public void onLandClaim( FactionsEventChunkChange event ) {
+	public void onLandClaim(FactionsEventChunkChange event) {
 		
 		// Confirm this is still enabled 
-		if(!Config._extras._CreativeGates.destroyCreativeGatesOnClaimUnclaim._) {
-			return;
-		}
-		// Grab the bukkit chunk 
-		Chunk chunk = event.getChunk().asBukkitChunk(); 
+		if(!FPUConf.get(UPlayer.get(event.getSender())).creativegates.get("destroyOnClaimUnclaim")) return;
 		
-		// Here begins the loop
-		for ( int x = 0; x < 16; x++ ) {
-			for ( int z = 0; z < 16; z++ ) {
-				for ( int y = 0; y < 256; y++ ) {
-					
-					// Fetch the block
-					Block block = chunk.getBlock( x, y, z );
-					
-					// Ignore air blocks (too many of them)
-					if(block.getType() == Material.AIR) {
-						continue; 
-					}
-					
-					// Confirm there is a gate nearby 
-					if(MainListener.isGateNearby(block)) {
-						// Destroy the gate nearby
-						MainListener.destroyGate(block);
+		// Grab the bukkit chunk and the chunk location
+		final Chunk chunk = event.getChunk().asBukkitChunk(); 
+		final PS chunkLoc = event.getChunk().getLocation(); 
+		
+		// Here begins the loop (in a thread)
+		// TODO: confirm this is ok
+		Bukkit.getScheduler().scheduleSyncDelayedTask(FactionsPlus.instance, new Runnable() {
+			@Override
+			public void run() {
+				for(int x = 0; x < 16; x++) {
+					for(int z = 0; z < 16; z++) {
+						for(int y = 0; y < chunkLoc.asBukkitWorld().getMaxHeight(); y++) {
+							
+							// Fetch the block
+							Block block = chunk.getBlock(x, y, z);
+							
+							// Ignore air blocks (too many of them)
+							if(block.getType() == Material.AIR) continue; 
+							
+							// Confirm there is a gate nearby 
+							if(MainListener.isGateNearby(block)) {
+								FactionsPlus.debug("A CreativeGate was found at x: " + x + ", y: " + y + ", z: " + z);
+								// Destroy the gate nearby
+								MainListener.destroyGate(block);
+							}
+						}
 					}
 				}
 			}
-		}
-	}	
+		});	
+	}
+	
+	/**
+	 * Pushes a player back from their current location
+	 * @param p
+	 */
+	private void pushPlayerBack(Player p) {
+		// TODO: push player back
+	}
 }

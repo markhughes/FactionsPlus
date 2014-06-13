@@ -1,46 +1,45 @@
 package markehme.factionsplus.listeners;
 
-import java.io.File;
-
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
-import markehme.factionsplus.references.FPP;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
+import markehme.factionsplus.MCore.LConf;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
 
 public class BanListener implements Listener {
 	
+	/**
+	 * Restricts a player from joining a Faction when they attempt to join.
+	 * @param event
+	 */
 	@EventHandler
 	public void onFactionsMembershipChangeEvent(FactionsEventMembershipChange event) {
-		if(event.isCancelled()) {
-			return;
-		}
+		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return;
 		
+		// Only check if they're actually joining
 		if(event.getReason() == MembershipChangeReason.JOIN) {
 			
-			File banFile = new File(Config.folderFBans, event.getUPlayer().getFactionId() + "." + event.getUPlayer().getName().toLowerCase());
+			// Fetch the Faction Data 
+			FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
 			
-			if(banFile.exists()) {
-				if(Utilities.isLeader(event.getUPlayer())) {
-					if(banFile.delete()) {
-						FPP.info("Removed old ban file from previous faction for user " +event.getUPlayer().getName()+ " of Faction id " + event.getUPlayer().getFactionId());
-					}
+			// Check if they're in the list of bannedPlayerIDs
+			if(fData.bannedPlayerIDs.containsKey(event.getUPlayer().getPlayer().getUniqueId())) {
+				if(event.getUPlayer().getRole() == Rel.LEADER) {
+					// If you're joining, but banned, but are a leader - then there is an issue. Remove them from the ban list.
+					fData.bannedPlayerIDs.remove(event.getUPlayer().getPlayer().getUniqueId());
 				} else {
-					event.getUPlayer().msg("You can't join this Faction as you have been banned!");
+					// They're banned - let them know, and cancel the join
+					event.getUPlayer().msg(LConf.get().banYouAreBanned);
 					event.setCancelled(true);
 					event.getUPlayer().leave();
 				}
-	
-				return;
 			}
 		}
-
-
 	}
-	
-
 }

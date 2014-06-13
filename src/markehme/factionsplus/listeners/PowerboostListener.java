@@ -1,7 +1,8 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FType;
 
 import org.bukkit.World;
 import org.bukkit.entity.Monster;
@@ -14,19 +15,22 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.massivecraft.factions.FFlag;
+import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.ps.PS;
 
 public class PowerboostListener implements Listener{
-	
-	private static PowerboostListener powerboostlistener = null;
-	
-	@EventHandler(priority=EventPriority.MONITOR, ignoreCancelled = true)
-	public void onEntityDeath( EntityDeathEvent event ) {
 		
-		if( ( event.getEntity() instanceof Player ) ) {
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onEntityDeath( EntityDeathEvent event ) {
+		FPUConf fpUConf = FPUConf.get(UPlayer.get((Player) event.getEntity()));
+		
+		if(!fpUConf.enabled) return;
+		
+		if((event.getEntity() instanceof Player ) ) {
 			
 			Player p = (Player)event.getEntity();
 			
@@ -39,9 +43,11 @@ public class PowerboostListener implements Listener{
 			EntityDamageEvent ldc = event.getEntity().getLastDamageCause();
 			
 			if( null == ldc ) {
-			
-				if( Config._powerboosts.extraPowerLossIfDeathByOther._ > 0 ) {
-					Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByOther._ );
+				if(fpUConf.extraPowerLoss.containsKey("whenDeathByOther")) {
+					if(fpUConf.extraPowerLoss.get("whenDeathByOther") > 0) {
+						Utilities.removePower( p, fpUConf.extraPowerLoss.get("whenDathByOther"));
+
+					}
 				}
 				
 				return;
@@ -52,62 +58,106 @@ public class PowerboostListener implements Listener{
 			
 			if( p.getKiller() == null ) {
 				
-				if(
-					( causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE || causeOfDeath == DamageCause.ENTITY_EXPLOSION )
-					&& Config._powerboosts.extraPowerLossIfDeathByMob._ > 0.0D
-				) {
-					
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByMob._);
+				if((causeOfDeath == DamageCause.ENTITY_ATTACK || causeOfDeath == DamageCause.PROJECTILE || causeOfDeath == DamageCause.ENTITY_EXPLOSION)) {
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByMob")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByMob") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByMob"));
+						}
+					}
 					
 					return;
 					
 				}
 				
-				if( ( causeOfDeath == DamageCause.CONTACT ) && 
-						(Config._powerboosts.extraPowerLossIfDeathByCactus._ > 0.0D)) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByCactus._);
+				if((causeOfDeath == DamageCause.CONTACT)) {
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByCactus")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByCactus") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByCactus"));
+						}
+					}
+					
 					return;
 				}
 
-				if ((causeOfDeath == DamageCause.BLOCK_EXPLOSION) && 
-						(Config._powerboosts.extraPowerLossIfDeathByTNT._ > 0.0D)) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByTNT._);
+				if((causeOfDeath == DamageCause.BLOCK_EXPLOSION)) {
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByTNT")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByTNT") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByTNT"));
+						}
+					}
+					
 					return;
 				}
 
-				if (((causeOfDeath == DamageCause.FIRE) || (causeOfDeath == DamageCause.FIRE_TICK)) && 
-						(Config._powerboosts.extraPowerLossIfDeathByFire._ > 0.0D)) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByFire._);
+				if(causeOfDeath == DamageCause.FIRE || causeOfDeath == DamageCause.FIRE_TICK) {
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByFire")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByFire") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByFire"));
+						}
+					}
+					
 					return;
 				}
 
-				if ((causeOfDeath == DamageCause.MAGIC) && 
-						(Config._powerboosts.extraPowerLossIfDeathByPotion._ > 0.0D)) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByPotion._);
+				if(causeOfDeath == DamageCause.MAGIC) {
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByPotion")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByPotion") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByPotion"));
+						}
+					}
+					
 					return;
 				}
 				
-				if ((causeOfDeath == DamageCause.SUICIDE)
-						&& ( Config._powerboosts.extraPowerLossIfDeathBySuicide._ > 0.0D ) )
-				{
-					Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathBySuicide._  );
+				if (causeOfDeath == DamageCause.SUICIDE){
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathBySuicide")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathBySuicide") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathBySuicide"));
+						}
+					}
+
 					return;
 				}
 				
-				if(Config._powerboosts.extraPowerLossIfDeathByOther._ > 0) {
-					Utilities.removePower(p, Config._powerboosts.extraPowerLossIfDeathByOther._);
-					return;
+				if(fpUConf.extraPowerLoss.containsKey("whenDeathByOther")) {
+					if(fpUConf.extraPowerLoss.get("whenDeathByOther") > 0) {
+						Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByOther"));
+					}
 				}
 			} else {
 				if ( ( causeOfDeath == DamageCause.ENTITY_ATTACK ) || ( causeOfDeath == DamageCause.PROJECTILE ) ) {
-					if ( Config._powerboosts.extraPowerLossIfDeathByPVP._ > 0.0D ) {
-						Utilities.removePower( p, Config._powerboosts.extraPowerLossIfDeathByPVP._ );
+					if(fpUConf.extraPowerLoss.containsKey("whenDeathByPVP")) {
+						if(fpUConf.extraPowerLoss.get("whenDeathByPVP") > 0) {
+							Utilities.removePower(p, fpUConf.extraPowerLoss.get("whenDeathByPVP"));
+						}
+					}
+					Player k = p.getKiller();
+					
+					UPlayer uP = UPlayer.get(p);
+					UPlayer uK = UPlayer.get(k);
+					
+					if(fpUConf.extraPowerBoosts.containsKey("whenKillEnemyPlayer") && uP.getRelationTo(uK).equals(Rel.ENEMY)) {
+						if(fpUConf.extraPowerLoss.get("whenKillEnemyPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillEnemyPlayer"));
+						}
+					}
+					if(fpUConf.extraPowerBoosts.containsKey("whenKillAllyPlayer") && uP.getRelationTo(uK).equals(Rel.ALLY)) {
+						if(fpUConf.extraPowerLoss.get("whenKillAllyPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillAllyPlayer"));
+						}
+					}
+					if(fpUConf.extraPowerBoosts.containsKey("whenKillTrucePlayer") && uP.getRelationTo(uK).equals(Rel.TRUCE)) {
+						if(fpUConf.extraPowerLoss.get("whenKillTrucePlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillTrucePlayer"));
+						}
 					}
 					
-					if ( Config._powerboosts.extraPowerWhenKillPlayer._ > 0.0D ) {
-						Player k = p.getKiller();
-						Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillPlayer._) ;
+					if(fpUConf.extraPowerBoosts.containsKey("whenKillNeutralPlayer") && uP.getRelationTo(uK).equals(Rel.NEUTRAL)) {
+						if(fpUConf.extraPowerLoss.get("whenKillNeutralPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillNeutralPlayer"));
+						}
 					}
+
 					return;
 				}
 			}
@@ -119,11 +169,10 @@ public class PowerboostListener implements Listener{
 			if (k == null) {
 				return;
 			}
-			if ( Config._powerboosts.extraPowerWhenKillMonster._ > 0.0D) {
-				// done: Block power GAINS in powerloss disabled regions as well: this is gonna be tricky
-				if (canLosePowerWherePlayerIsAt(k)) {//this IF is here to save some CPU cycles since likely the 0 value is above
-					//allow increase only if player can also lose ie. disallow gain in worldsNoPowerLoss worlds 
-					Utilities.addPower( k, Config._powerboosts.extraPowerWhenKillMonster._);
+						
+			if(fpUConf.extraPowerBoosts.containsKey("whenKillAnotherMonster")) {
+				if(fpUConf.extraPowerLoss.get("whenKillAnotherMonster") > 0 && canLosePowerWherePlayerIsAt(k)) {
+					Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillAnotherMonster"));
 				}
 			}
 		}
@@ -136,15 +185,14 @@ public class PowerboostListener implements Listener{
 	}
 	
 	public static final boolean canLosePowerInThisFaction(Faction faction, World worldName) {
-		if ( ! faction.getFlag(FFlag.POWERLOSS) ) { //this handles safezone too
+		if (!faction.getFlag(FFlag.POWERLOSS)) { //this handles safezone too
 			return false;
 		} else {
 			// safezone check is not needed here because both 1.6 bridge and 1.7 powerloss are false for safezone,
 			// except that 1.7 can set it to true if wanted but it's false by default in factions.json
 			
 			// warzone will always lose power regardless of worldsNoPowerLoss setting, Factions plugin does this too.
-			if ( !Utilities.isWarZone( faction ) && null != worldName && MConf.get().worldsNoPowerLoss.contains( worldName.getName() ) )
-			{
+			if (!FType.valueOf(faction).equals(FType.WARZONE) && null != worldName && MConf.get().worldsNoPowerLoss.contains( worldName.getName() ) ) {
 				return false;
 			}
 		}

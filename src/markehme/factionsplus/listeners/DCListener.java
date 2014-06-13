@@ -1,18 +1,20 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.LConf;
 
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 
 /**
- * disguisecraft
+ * DisguiseCraft Listener
+ * 
  * http://dev.bukkit.org/server-mods/disguisecraft/
  *
  */
@@ -24,24 +26,25 @@ public class DCListener implements Listener  {
 		}
 		
     	UPlayer uPlayer = UPlayer.get( e.getPlayer() );
+    	
+		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return;
+
     	if (!uPlayer.hasFaction()){
     		return;
     	}
-    	
-    		if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
-    			if(uPlayer.isInEnemyTerritory()) {
-    				e.getPlayer().sendMessage(ChatColor.RED+"You may not disguise in enemy territory!");
-    				e.setCancelled(true);
-    			}
-    		}
-    		
-    		if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
-    			if(uPlayer.isInOwnTerritory()) {
-       				e.getPlayer().sendMessage(ChatColor.RED+"You may not disguise in your own territory!");
-    				e.setCancelled(true);
-    			}
+		
+    	if(FPUConf.get(UPlayer.get(e.getPlayer()).getUniverse()).disguiseRemoveIfInEnemyTerritory) {
+    		if(uPlayer.isInEnemyTerritory()) {
+    			uPlayer.msg(Txt.parse(LConf.get().disguisesCantDisguiseInEnemyTerritory));
+    			e.setCancelled(true);
     		}
     	}
-	
-	
+    		
+    	if(FPUConf.get(UPlayer.get(e.getPlayer()).getUniverse()).disguiseRemoveIfInOwnTerritory) {
+    		if(uPlayer.isInOwnTerritory()) {
+    			uPlayer.msg(Txt.parse(LConf.get().disguisesCantDisguiseInOwnTerritory));
+    			e.setCancelled(true);
+    		}
+    	}
+   	}
 }

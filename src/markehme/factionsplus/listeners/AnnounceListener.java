@@ -1,9 +1,9 @@
 package markehme.factionsplus.listeners;
 
-import java.io.File;
-
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColls;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,58 +12,66 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.massivecraft.factions.entity.Board;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.ps.PSBuilder;
-import com.massivecraft.mcore.ps.PSFormat;
+import com.massivecraft.mcore.util.Txt;
 
 
 public class AnnounceListener implements Listener {
+	
+	/**
+	 * Show the announcement (if they have a faction, and it exists) when a player
+	 * joins the server.
+	 * @param event
+	 */
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return;
+		
 		Player player = event.getPlayer();
-		UPlayer me = UPlayer.get(player);
-
-		if(Config._announce.showLastAnnounceOnLogin._) {
-			File fAF = new File(Config.folderAnnouncements, me.getFactionId());
-			if(fAF.exists()) {
-				try {
-					event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		UPlayer uPlayer = UPlayer.get(player);
+		
+		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFactionId());
+		
+		if(fData == null) return;
+		if(fData.announcement == null) return;
+		
+		
+		if(FPUConf.get(uPlayer.getUniverse()).showAnnouncement.get("onlogin")) {
+			uPlayer.msg(Txt.parse(LConf.get().announcementNotify, fData.announcement));
 		}
 	}
+	
+	/**
+	 * Show the announcement  (if they have a faction, and it exists) when a player
+	 * enters their faction land.
+	 * @param event
+	 */
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if(event.isCancelled()) {
-			return;
-		}
-		if(Config._announce.showLastAnnounceOnLandEnter._) {
-			if (event.getFrom().equals(event.getTo())) return;
+		if (event.getFrom().equals(event.getTo())) return;
+		
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return;
+		
+		Player player = event.getPlayer();
+		UPlayer me = UPlayer.get(player);
+		
+		// If the configuration wants to show it on territory enter
+		if(FPUConf.get(me.getUniverse()).showAnnouncement.get("onterritoryenter")) {
+			Faction factionHere = BoardColls.get().getFactionAt(PS.valueOf(event.getTo()));
 			
-			Player player = event.getPlayer();
-			UPlayer me = UPlayer.get(player);
-			
-				Faction factionHere = BoardColls.get().getFactionAt(PS.valueOf(event.getTo()));
-			
-			if ( BoardColls.get().getFactionAt(PS.valueOf(event.getFrom())) != BoardColls.get().getFactionAt(PS.valueOf(event.getTo())) ) {
+			if(BoardColls.get().getFactionAt(PS.valueOf(event.getFrom())) != BoardColls.get().getFactionAt(PS.valueOf(event.getTo())) ) {
+				
+				// Make sure it is our faction land, of course 
 				if(factionHere.getId().equals(me.getFactionId())) {
-					File fAF=new File(Config.folderAnnouncements, me.getFactionId());
-					if(fAF.exists()) {
-						try {
-							event.getPlayer().sendMessage(Utilities.readFileAsString(fAF));
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
+					FactionData fData = FactionDataColls.get().getForUniverse(me.getUniverse()).get(me.getFactionId());
+					
+					me.msg(Txt.parse(LConf.get().announcementNotify, fData.announcement));
 				}
 			}
 		}
 	}
-
 }

@@ -6,8 +6,8 @@ import java.util.Map;
 import markehme.factionsplus.EssentialsIntegration;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,13 +24,21 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
 import com.massivecraft.factions.Rel;
+import com.massivecraft.factions.entity.Board;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.ps.PS;
 
 
-
+/**
+ * The TeleportsListener is used for all teleportaion denying! 
+ * 
+ * TODO: integrate with more /home /back plugins BESIDES essentials? 
+ * TODO: extensive clean up of code (so messy and documented) 
+ * TODO: universe support 
+ *
+ */
 public class TeleportsListener implements Listener {
 	
 //	private static final Permission		permissionForHomeToEnemy	=
@@ -39,6 +47,7 @@ public class TeleportsListener implements Listener {
 //																			PermissionDefault.FALSE );
 	private static final ChatColor		constOneColor				= ChatColor.DARK_RED;
 	private static final String			homeCMD						= "/home";							// lowercase pls
+	private static final String			ehomeCMD					= "/ehome";							// lowercase pls
 	private static final String			defaultHardCodedHomeName	= "home";							// ie. /home does /home
 																										// home
 	private static final String			backCMD						= "/back";							// lowercase pls
@@ -48,43 +57,22 @@ public class TeleportsListener implements Listener {
 	private static boolean				tpInited					= false;
 		
 	
-	public synchronized static void initOrDeInit( Plugin plugin ) {
-		if ( !plugin.isEnabled() ) {
-			return;
-		}
-		if ( !Config.isLoaded() ) {
-			throw FactionsPlusPlugin.bailOut( "bad call order while java coding, call this after config is loaded" );
-		}
+	public synchronized static void initOrDeInit(Plugin plugin) {
+		if(!plugin.isEnabled() ) return;
+		if(isInited()) return;
 		
+		preventTeleports.registerSelf(plugin);
 		
-		if ( !Config._teleports.isAnySet() ) {
-			if ( isInited() ) {
-				deInit();
-			}
-			return;
-		} else {
-			// set or still set
-			if (isInited()) {
-				return;// keep listening, since we're already listening
-			}
-		}
-		
-		/*
-		if ( !EssentialsIntegration.isHooked() ) {
-			FactionsPlus.warn( "Essentials appears to have not hooked." );
-		}
-		*/
-		
-		preventTeleports.registerSelf( plugin );
 		tpInited = true;
-		FactionsPlus.info("Started listening for teleport events");
+		
+		FactionsPlus.debug("Started listening for teleport events");
 	}
 	
 	
 	private synchronized static void deInit() {
 		preventTeleports.unregisterSelf();
 		tpInited = false;
-		FactionsPlus.info("Stopped listening for teleport events");
+		FactionsPlus.debug("Stopped listening for teleport events");
 	}
 	
 	
@@ -103,128 +91,88 @@ public class TeleportsListener implements Listener {
 	}
 	
 	
-	private final static boolean isReportingCommands() {// private/final so it can be inlined by compiler, supposedly
-		return Config._teleports.shouldReportCommands();
+	public boolean doAction(UPlayer uPlayer, FPUConf fpUConf, Location checkLocation, String via) {
+		Faction faction = Board.get(uPlayer.getUniverse()).getFactionAt(PS.valueOf(checkLocation));
+		
+		Rel rel = faction.getRelationTo(uPlayer.getFaction());
+		
+		if(fpUConf.denyTeleportIntoAlly.get(via) && rel.equals(Rel.ALLY)) {
+			return true;
+		}
+		if(fpUConf.denyTeleportIntoEnemy.get(via) && rel.equals(Rel.ENEMY)) {
+			return true;
+		}
+		if(fpUConf.denyTeleportIntoNeutral.get(via) && rel.equals(Rel.NEUTRAL)) {
+			return true;
+		}
+		if(fpUConf.denyTeleportIntoSafeZone.get(via) && FType.valueOf(faction).equals(FType.SAFEZONE)) {
+			return true;
+		}
+		if(fpUConf.denyTeleportIntoWarZone.get(via) && FType.valueOf(faction).equals(FType.WARZONE)) {
+			return true;
+		}
+		
+		return false;
 	}
 	
-	
-	private final static boolean isEnderPearling() {
-		return Config._teleports.shouldPreventEnderPearlsTeleports();
-	}
-	
-	
-	
-	// done: investigate what happens on reload(from console) when the hooks here were loaded and now the flag says don't load
-	// them
-	// are the hooks still on ? since there's no deRegisterEvents... ? - ok, looks like they are gone on reload;
-	// I guess then only disablePlugin keeps them on still.
 	
 	// keeps track of the last executed command for each of the online players
-	private Map<Player, String>	mapLastExecutedCommand	= new HashMap<Player, String>();
-	
-	
-	// TODO: unsure here if it should be ConcurrentHashMap instead, i assume though they are not parallelizing events
+	private Map<Player, String>	mapLastExecutedCommand	= new HashMap<Player, String>();	
 	
 	
 	@EventHandler(priority = EventPriority.MONITOR ) // MONITOR means it will be called last, after ie. HIGHEST
-		public void onCommand( PlayerCommandPreprocessEvent event ) {
-			Player playerInGame = event.getPlayer();
+	public void onCommand(PlayerCommandPreprocessEvent event) {
 		
-			String cmd = event.getMessage();
+		Player playerInGame = event.getPlayer();
+		
+		UPlayer uPlayer = UPlayer.get(playerInGame);
+		FPUConf fpUConf = FPUConf.get(uPlayer.getUniverse());
+		
+		String cmd = event.getMessage();
+		
+		Location whereTo = EssentialsIntegration.getLastLocation( playerInGame );
+		Location safeTo = null;
+		
+		try {
+			safeTo = EssentialsIntegration.getSafeDestination(whereTo);
+		} catch(Exception e) {
+			e.printStackTrace();
 			
-		// TODO: think about having a list of commands here which when used to teleport into X territory
-		// would be denied; X is configurable too; actually we can only do whitelist of commands to be allowed to tp when COMMAND is cause
-		if (isReportingCommands()) {
-			mapLastExecutedCommand.put( playerInGame, cmd );
+			playerInGame.sendMessage(ChatColor.RED + "[FactionsPlus] Internal error occurred calling Essentials, command ignored. Ask administrator to check console.");
+			
+			event.setCancelled(true);
+			
+			return;
+		}	
+		
+		if(doAction(uPlayer, fpUConf, safeTo, "reportToConsole") || doAction(uPlayer, fpUConf, whereTo, "reportToConsole")) {
+			mapLastExecutedCommand.put(playerInGame, cmd);
 		}
 
 		String realCmd = cmd.trim().toLowerCase();
 		
-		if ( (Config._teleports.shouldPreventBackTelepors())  && ( EssentialsIntegration.isHooked() ) && ( !playerInGame.isOp())){
-			// /back is allowed for OPs and checked only if essentials exists/hooked
-			if ( realCmd.startsWith( backCMD ) || realCmd.startsWith( ebackCMD )  ) {
-				if ( (realCmd.length() == backCMD.length()) || realCmd.split( "\\s+" )[0].equals( backCMD )
-						|| (realCmd.length() == ebackCMD.length()) || realCmd.split( "\\s+" )[0].equals( ebackCMD )) {
-					//ok we got "/back" or "/back something"
-//					FactionsPlus.info("triggered "+EssentialsIntegration.getLastLocation( playerInGame ));
-					Location whereTo = EssentialsIntegration.getLastLocation( playerInGame );
-					Location safeTo=null;
-					try {
-						safeTo = EssentialsIntegration.getSafeDestination(whereTo);
-					} catch ( Exception e ) {
-						e.printStackTrace();
-						playerInGame.sendMessage( ChatColor.RED
-							+ "[FactionsPlus] Internal error occurred calling Essentials, command ignored. Check console." );
-						event.setCancelled( true );
-						assert null == safeTo;
-						return;
-					}
-					
-					
-					boolean allowed = false;
-					int count = 2;
-					Rel rel = null;
-					Location locToCheck = whereTo;
-					while ( count > 0 ) {
-						
-						rel = getRelation( playerInGame, locToCheck );
-						switch ( rel ) {
-						case ALLY:
-							if ( !Config._teleports._into._allyTerritory._deny.viaBack._ ) {
-								allowed = true;
-							}else {
-								allowed=false;//yes needed
-							}
-							break;
-						case ENEMY:
-							if ( !Config._teleports._into._enemyTerritory._deny.viaBack._ ) {
-								allowed = true;
-							}else {
-								allowed=false;//yes needed
-							}
-							break;
-						case NEUTRAL:
-						case TRUCE:
-							if ( !Config._teleports._into._neutralTerritory._deny.viaBack._ ) {
-								allowed = true;
-							}else {
-								allowed=false;//yes needed
-							}
-							break;
-						case MEMBER:
-							allowed=true;//auto allow /back-ing into own faction land
-							break;
-						default:
-							playerInGame.sendMessage( ChatColor.RED + "Internal error, thus command denied" );
-							event.setCancelled( true );
-							throw new RuntimeException( "will never happen: " + rel );
-						}
-						if ( !allowed ) {
-							break;
-						}// else check the getSafeLocation one too
-						count--;
-						locToCheck = safeTo;//now also check the safe location, we don't bother knowing that it's obstructed or not
-					}// while
-					
-					assert null != rel;
-//					System.out.println("final: "+playerInGame+" "+rel+" current="+allowed);
-					if ( !allowed ) {
-						playerInGame.sendMessage( ChatColor.RED + "You are not allowed to go use back commands in "
-							+ rel + " territory" );
-						event.setCancelled( true );
-						return;
-//					}else {
-//						System.out.println("allowed "+rel);
-					}
+		
+		// Check /back and /eback
+		if(EssentialsIntegration.isHooked()  && !playerInGame.isOp()) {
+			if(realCmd.toLowerCase().startsWith(backCMD) || realCmd.toLowerCase().startsWith(ebackCMD)) {
+				// We have a /back or /eback
+				
+				String[] ar = cmd.split( "\\s+" );// whitespace, one or more
+				
+				if(!ar[0].equalsIgnoreCase(backCMD)) return;
+				if(!ar[0].equalsIgnoreCase(ebackCMD)) return;
+				
+				if(doAction(uPlayer, fpUConf, safeTo, "viaBack") || doAction(uPlayer, fpUConf, whereTo, "viaBack")) {
+					uPlayer.msg(ChatColor.RED + "You are not allowed to go use back commands in that territory" );
+					event.setCancelled(true);
+					return;
 				}
 			}
 		}
 		
-		if ( ( Config._teleports.shouldPreventHomeTelepors() ) && ( EssentialsIntegration.isHooked() )
-		 && ( !playerInGame.isOp()))
-		{
-			// disallowed and no permission to bypass ? then check
-			if ( realCmd.startsWith( homeCMD ) ) {
+		// check /home and /ehome
+		if(EssentialsIntegration.isHooked()  && !playerInGame.isOp()) {
+			if ( realCmd.toLowerCase().startsWith(homeCMD) || realCmd.toLowerCase().startsWith(ehomeCMD) ) {
 				// playerInGame.sendMessage( "oh hi" );
 				
 				String[] ar = cmd.split( "\\s+" );// whitespace, one or more
@@ -305,13 +253,9 @@ public class TeleportsListener implements Listener {
 					// this means player could've used "/home bed" even without any homes set or just "/home" without homes set
 					// would also do that equivalent of "/home bed"
 					// targetLocation=playerInGame.getBedSpawnLocation();
-					playerInGame.sendMessage( ChatColor.RED + "You have no home(s)/bed set. Command ignored." );
 					
-					if( playerInGame.isOp() || UPlayer.get( playerInGame ).isUsingAdminMode() ) {
-						playerInGame.sendMessage(ChatColor.GRAY + "If you're attempting to view someone elses home, please use /ehome.");
-					}
-					
-					event.setCancelled( true );
+					// So, there was no location at all? So we don't need to cancel. As they'll get the default error message
+					// from another plugin anyway.
 					return;
 				}
 				
@@ -328,76 +272,20 @@ public class TeleportsListener implements Listener {
 				}
 				
 				// assert null != potentiallyModifiedTarget;
-				
-				boolean allowed = false;
-				count = 2;
-				Rel rel = null;
-				Location locToCheck = targetLocation;
-				while ( count > 0 ) {
-					rel = getRelation( playerInGame, locToCheck );
-//					System.out.println("check: "+playerInGame+" "+rel+" current="+allowed);
-					switch ( rel ) {
-					case ALLY:
-						if ( !Config._teleports._into._allyTerritory._deny.viaHome._ ) {
-							allowed = true;
-						}else {
-							allowed=false;//yes needed
-						}
-						break;
-					case ENEMY:
-						if ( !Config._teleports._into._enemyTerritory._deny.viaHome._ ) {
-//								|| actually no permissions yet
-//								(playerInGame.hasPermission( permissionForHomeToEnemy )) ) {
-							allowed = true;
-						}else {
-							allowed=false;//yes needed
-						}
-						break;
-					case NEUTRAL:
-					case TRUCE:
-						if ( !Config._teleports._into._neutralTerritory._deny.viaHome._ ) {
-							allowed = true;
-						}else {
-							allowed=false;//yes needed
-						}
-						break;
-					case MEMBER:
-						allowed=true;//auto allow /home-ing into own faction land
-						break;
-					default:
-						playerInGame.sendMessage( ChatColor.RED + "Internal error, thus command denied" );
-						event.setCancelled( true );
-						throw new RuntimeException( "will never happen: " + rel );
-					}
-					if ( !allowed ) {
-						break;
-					}// else check the getSafeLocation one too
-					count--;
-					locToCheck = potentiallyModifiedTarget;
-				}// while
-				
-				assert null != rel;
-				if ( !allowed ) {
-					playerInGame.sendMessage( ChatColor.RED + "You are not allowed to teleport to your /home which is now in "
-						+ rel + " territory" );
-					event.setCancelled( true );
+				if(doAction(uPlayer, fpUConf, targetLocation, "viaHome")) {
+					uPlayer.msg(ChatColor.RED + "You are not allowed to go use home commands in that territory" );
+					event.setCancelled(true);
 					return;
 				}
 			}
 		}
 	}
 	
-	
-	
-	@EventHandler(
-			priority = EventPriority.MONITOR )
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLogout( PlayerQuitEvent event ) {
-		if ( !isReportingCommands() ) {
-			return;
+		if(mapLastExecutedCommand.containsKey(event.getPlayer())) {
+			mapLastExecutedCommand.remove( event.getPlayer() );
 		}
-		// this hook will trigger whenever a player quits/disconnects
-		// this will prevent the map from getting too big by no longer keeping track of dc-ed players' last executed cmd
-		mapLastExecutedCommand.remove( event.getPlayer() );
 	}
 	
 	
@@ -432,7 +320,9 @@ public class TeleportsListener implements Listener {
 			return;
 		}
 		Player player = event.getPlayer();
-//		event.getPlayer().sendMessage(player.getName()+" "+FPlayers.i.get( player ).getFaction()+" "+getRelation( player, FPlayers.i.get( player ).getFaction()));
+		UPlayer uPlayer = UPlayer.get(player);
+		
+		FPUConf fpUConf = FPUConf.get(uPlayer.getUniverse());
 		
 		// FIXME: problem is if the player can execute another command before the teleport is issued such as if warmup delays
 		// are enabled for teleports, it will completely bypass this, because /home won't be the last seen command
@@ -441,179 +331,66 @@ public class TeleportsListener implements Listener {
 		// this will be fixed soon
 		
 		TeleportCause cause = event.getCause();
-		switch ( cause ) {
+		
+		Location targetLocation = null;
+		
+		switch (cause) {
 		case COMMAND:
-			if ( isReportingCommands() ) {
 				// possibly could be the /home command
 				// now we check if the last command the player executed was /home
+			
 				String lastExecutedCommandByPlayer = mapLastExecutedCommand.get( player );
-				//assert null != lastExecutedCommandByPlayer;//XXX: apparently this can be NULL see issue 60
+				
+				//assert null != lastExecutedCommandByPlayer; apparently this can be NULL see issue 60
 				// this actually shouldn't be null here if tp cause was COMMAND if it ever is, then we need to investigate
 				// ( null != lastExecutedCommandByPlayer ) && (
 				// checkIfHomeTeleportWouldLandInEnemyTerritory(event, lastExecutedCommandByPlayer);
 				
-				if ( ( Config._teleports.shouldReportCommands() ) && ( !event.isCancelled() ) ) {
-					// yeah report even if player had bypass permission but only if it will be a successful teleport
-					Location targetLocation = event.getTo();
+				// yeah report even if player had bypass permission but only if it will be a successful teleport
+				targetLocation = event.getTo();
+				
+				if(doAction(uPlayer, fpUConf, targetLocation, "reportToConsole")) {
+					// these values are created to provide information tot he console (if required)
 					Faction fac = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
-					
 					Rel rel = getRelation( player, fac );
 					
-					boolean report = true;
-					
-					switch ( rel ) {
-					case ALLY:
-						if ( !Config._teleports._into._allyTerritory._report.viaCommand._ ) {
-							report = false;
-						}
-						break;
-					case ENEMY:
-						if ( !Config._teleports._into._enemyTerritory._report.viaCommand._ ) {
-							report = false;
-						}
-						break;
-					case NEUTRAL:
-					case TRUCE:
-						if ( !Config._teleports._into._neutralTerritory._report.viaCommand._ ) {
-							report = false;
-						}
-						break;
-					case MEMBER:
-						report=false;
-						break;
-					default:
-						player.sendMessage( ChatColor.RED + "Internal error" );
-						// event.setCancelled( true );
-						throw new RuntimeException( "will never happen: " + rel );
-					}
-					if ( report ) {
-						FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
+					FactionsPlusPlugin.info(constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
 							+ constOneColor + "'"+(player.isOp()?"(op)":"")+" teleported into " + rel + " land faction '" + ChatColor.DARK_AQUA
 							+ fac.getName() + constOneColor + "'. Their last typed command: '" + ChatColor.AQUA
 							+ lastExecutedCommandByPlayer + constOneColor + "'."+ChatColor.RESET+
-							"\n(doesn't mean this command was the cause of the teleport!)" );
-					}
+							"\n(doesn't mean this command was the cause of the teleport!)");
+					
+					return;
 				}
-			}// homeTracking
 			
 			break;// cause COMMAND
 			
 		case ENDER_PEARL:
-			if ( isEnderPearling() ) {
-				Location targetLocation = event.getTo();
+				targetLocation = event.getTo();
 				Faction fac = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
-				boolean allowed = false;
-				boolean report=true;
-				if (
-						((Utilities.isSafeZone( fac ) && Config._teleports._into._safezone.denyIfViaPearls._))
-						||((Utilities.isWarZone( fac ) && Config._teleports._into._warzone.denyIfViaEnderPeals._))
-						) {
-					allowed=false;
-					report=false;
-					if ( !allowed ) {
-						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + fac.getName()
-							+ " territory" );
-						denyTeleport( event );
-						break;
-					}
-				} 
 				
 				Rel rel = getRelation( player, fac );
-				if ( !player.isOp() ) {// only deny teleports to non-op players
-					switch ( rel ) {
-					case ALLY:
-						if ( !Config._teleports._into._allyTerritory._deny.viaPearls._ ) {
-							allowed = true;
-						}
-						break;
-					case ENEMY:
-						if ( !Config._teleports._into._enemyTerritory._deny.viaPearls._ ) {
-							allowed = true;
-						}
-						break;
-					case NEUTRAL:
-					case TRUCE:
-						if ( !Config._teleports._into._neutralTerritory._deny.viaPearls._ ) {
-							allowed = true;
-						}
-						break;
-					case MEMBER:
-						allowed = true;// you may ender into your own territory
-						break;
-					default:
-						denyTeleport( event );
-						player.sendMessage( ChatColor.RED + "Internal error, thus teleporting denied" );
-						throw new RuntimeException( "will never happen: " + rel );
-					}
-					
-					if ( !allowed ) {
-						player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + rel
+				
+				if(doAction(uPlayer, fpUConf, targetLocation, "viaEnderPearls")) {
+					player.sendMessage( ChatColor.RED + "You are not allowed to ender pearl teleport inside " + fac.getName()
 							+ " territory" );
-						denyTeleport( event );
-						break;
+					
+					denyTeleport( event );
+					
+					if(doAction(uPlayer, fpUConf, targetLocation, "reportToConsole")) {
+						FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
+								+ constOneColor + "'" + ( player.isOp() ? "(op)" : "" ) + " teleported into " + rel + " land faction '"
+								+ ChatColor.DARK_AQUA + fac.getName() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
+
 					}
 				}
 				
-				//we report both normal and OP players
-				switch ( rel ) {
-				case ALLY:
-					if ( !Config._teleports._into._allyTerritory._report.viaPearls._ ) {
-						report = false;
-					}
-					break;
-				case ENEMY:
-					if ( !Config._teleports._into._enemyTerritory._report.viaPearls._ ) {
-						report = false;
-					}
-					break;
-				case NEUTRAL:
-				case TRUCE:
-					if ( !Config._teleports._into._neutralTerritory._report.viaPearls._ ) {
-						report = false;
-					}
-					break;
-				case MEMBER:
-					report = false;// and don't report this obviously
-					break;
-				default:
-					FactionsPlus.warn( "reportPearls fail, will never happen: " + rel );
-				}
-				
-				if ( ( report ) && ( !event.isCancelled() ) ) {
-					FactionsPlusPlugin.info( constOneColor + "Player '" + ChatColor.DARK_AQUA + player.getName()
-						+ constOneColor + "'" + ( player.isOp() ? "(op)" : "" ) + " teleported into " + rel + " land faction '"
-						+ ChatColor.DARK_AQUA + fac.getName() + constOneColor + "' using " + ChatColor.AQUA + "ender pearls" );
-				}
-//				}
-				
-			}
 			break;
 		default:
 			// unhandled cause ? do nothing
 		}
 	}
 	
-	
-	// private boolean isHomeTeleportLandingInEnemyTerritory( PlayerEvent event, Location targetLocation, String commandUsed ) {
-	// Player player = event.getPlayer();
-	// if ( ( Config._teleports.disallowTeleportingToEnemyLandViaHomeCommand._ )
-	// && ( !Utilities.hasPermissionOrIsOp( player, permissionForHomeToEnemy ) ) )
-	// {
-	// // disallowed and no permission to bypass ? then check
-	// if ( commandUsed.startsWith( "/home" ) ) {
-	// // TODO: think about having a list of commands here which when used to teleport into X territory
-	// // would be denied; X is configurable too
-	//
-	// // it is home, then let us check if his home is in enemy territory
-	// if ( isEnemyLandAt( player, targetLocation ) ) {
-	// player.sendMessage( ChatColor.RED
-	// + "You are not allowed to teleport to your /home which is now in enemy territory" );
-	// return true;
-	// denyTeleport( event );
-	// }
-	// }
-	// }
-	// }
 	
 	
 	private final void denyTeleport( PlayerTeleportEvent ptEvent ) {
@@ -623,31 +400,6 @@ public class TeleportsListener implements Listener {
 		Location from = ptEvent.getFrom();
 		ptEvent.setTo( from );
 	}
-	
-	
-	// private final boolean isEnemyLandAt( Player player, Location targetLocation ) {
-	// Faction factionAtTarget = getFactionAt( targetLocation );// Board.getFactionAt( new FLocation( targetLocation ) );
-	// return areEnemies( player, factionAtTarget );
-	// }
-	//
-	//
-	// private boolean areEnemies( Player player, Faction faction ) {
-	// FPlayer fp = FPlayers.i.get( player );// should be able to get offline players too, js
-	// if ( FactionsAny.Relation.ENEMY == Bridge.factions.getRelationBetween( faction, fp ) ) {
-	// return true;
-	// } else {
-	// return false;
-	// }
-	// }
-	
-	private final Rel getRelation( Player player, Location targetLocation ) {
-		assert null != player;
-		assert null != targetLocation;
-		Faction factionAtTarget = BoardColls.get().getFactionAt( PS.valueOf( targetLocation ) );
-		assert null != factionAtTarget;
-		return getRelation( player, factionAtTarget );
-	}
-	
 	
 	private final Rel getRelation( Player player, Faction fac ) {
 		assert null != player;

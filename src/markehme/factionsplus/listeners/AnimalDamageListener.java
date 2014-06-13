@@ -1,10 +1,10 @@
 package markehme.factionsplus.listeners;
 
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.references.FP;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EnderPearl;
@@ -25,48 +25,57 @@ import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.mcore.util.Txt;
 
+/**
+ * The AnimalDamagerListener adds protection for certain mobs 
+ * inside of Faction land.
+ *
+ */
 public class AnimalDamageListener implements Listener {
-
-	private static AnimalDamageListener		ADL			= null;
-
-	@EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
-	public void onFishingHook( PlayerFishEvent event ) {
+	
+	/**
+	 * Protects mobs from fishing hooks. 
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority=EventPriority.LOW)
+	public void onFishingHook(PlayerFishEvent event) {
 		
-		// This will check for damage via a fishing hook
-		
-		// is it possible that it couldn't be ..?
-		if( event.getPlayer() instanceof Player ) {
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return; // Universe support
+
+		// This will check for damage via a fishing hook			
+		if(event.getCaught() != null) {
+			UPlayer uPlayer = UPlayer.get(event.getPlayer());
 			
-			if( event.getCaught() != null ) {
-				
-				Player damagingPlayer = (Player) event.getPlayer();
-				
-				UPlayer UDamagingPlayer = UPlayer.get( damagingPlayer );
-				
-				EntityType entity = event.getCaught().getType();
-				if(
-						protectEntity( entity )
-						&& ( !UDamagingPlayer.isUsingAdminMode() )
-						&& ( !FP.permission.has( damagingPlayer, "factionsplus.cankillallmobs") )
-						&& ( ! canKillCheck( UDamagingPlayer ) )
-					) {
+			EntityType entity = event.getCaught().getType();
+			
+			if(
+				protectEntity(entity)
+				&& (!uPlayer.isUsingAdminMode())
+				&& (!FactionsPlus.permission.has(event.getPlayer(), "factionsplus.cankillallmobs"))
+				&& (!canKillCheck(uPlayer))
+			) {
+					
+				uPlayer.msg(Txt.parse(LConf.get().fpCantDamageThisMob));
+				event.setCancelled(true) ;
 						
-						damagingPlayer.sendMessage( ChatColor.RED + "You can't damage this mob type in this Faction land." );
-						event.setCancelled( true ) ;
-							
-					}
 			}
 		}
 	}
 	
-	@EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
-	public void onEntityAttacked( EntityDamageByEntityEvent event ) {
+	/**
+	 * Protects mobs being attacked by players. 
+	 * 
+	 * @param event
+	 */
+	@EventHandler(priority=EventPriority.LOW)
+	public void onEntityAttacked(EntityDamageByEntityEvent event) {
+		
+		if(!FPUConf.get(UPlayer.get(event.getDamager()).getUniverse()).enabled) return; // Universe support
 		
 		// This is to check if the player is damaging an animal
-		
-		// is the "damager" a player? 
-		if( ( event.getDamager() instanceof Player ) ) {
+		if((event.getDamager() instanceof Player)) {
 			
 			Player damagingPlayer = (Player) event.getDamager();
 			
@@ -75,15 +84,15 @@ public class AnimalDamageListener implements Listener {
 			EntityType entity = event.getEntityType();
 			
 			if(
-				protectEntity( entity )
-				&& ( !UDamagingPlayer.isUsingAdminMode() )
-				&& ( !FP.permission.has( damagingPlayer, "factionsplus.cankillallmobs") )
-				&& ( ! canKillCheck( UDamagingPlayer ) )
+				protectEntity(entity)
+				&& (!UDamagingPlayer.isUsingAdminMode())
+				&& (!FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs"))
+				&& (!canKillCheck(UDamagingPlayer))
 			) {
 				
 				// nup, nup. no do that *snaps fingers* 
-				damagingPlayer.sendMessage( ChatColor.RED + "You can't damage this mob type in this Faction land." );
-				event.setCancelled( true ) ;
+				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
+				event.setCancelled(true) ;
 					
 			}
 		
@@ -94,87 +103,71 @@ public class AnimalDamageListener implements Listener {
 	@EventHandler(priority=EventPriority.LOW, ignoreCancelled = true)
 	public void onEntityAttackThing( EntityDamageByEntityEvent event ) {
 		
+		if(!FPUConf.get(UPlayer.get(event.getDamager()).getUniverse()).enabled) return; // Universe support
 		
 		// this is to check if the player is attacking with an arrow, etc
 		Projectile projectile = null;
 		
-		if( event.getDamager() == null ) {
+		if(event.getDamager() == null) {
 			return;
 		}
 		
-		if( ( event.getDamager() instanceof Arrow ) ) {
-			
+		if((event.getDamager() instanceof Arrow)) {
 			projectile = (Arrow) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 					
-		} else if( ( event.getDamager() instanceof Snowball ) ) {
-			
+		} else if((event.getDamager() instanceof Snowball)) {
 			projectile = (Snowball) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 			
-		} else if( ( event.getDamager() instanceof Potion ) ) {
+		} else if((event.getDamager() instanceof Potion)) {
 			
-			// TODO: (do we cast ThrownPotion here?)
 			projectile = (ThrownPotion) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
-				return;
-				
+			if(!(projectile.getShooter() instanceof Player)) {
+				return;	
 			}
 
-		} else if( ( event.getDamager() instanceof ThrownPotion ) ) {
+		} else if((event.getDamager() instanceof ThrownPotion)) {
 			
 			projectile = (ThrownPotion) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 			
-		} else if( ( event.getDamager() instanceof EnderPearl ) ) {
+		} else if((event.getDamager() instanceof EnderPearl)) {
 			
 			projectile = (EnderPearl) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 			
-		} else if( ( event.getDamager() instanceof Egg ) ) {
+		} else if((event.getDamager() instanceof Egg)) {
 			
 			projectile = (Egg) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 			
-		} else if( ( event.getDamager() instanceof Fireball ) ) {
+		} else if((event.getDamager() instanceof Fireball)) {
 			
 			projectile = (Fireball) event.getDamager();
 			
-			if( ! ( projectile.getShooter() instanceof Player ) ) {
-				
+			if(!(projectile.getShooter() instanceof Player)) {
 				return;
-				
 			}
 		} 
 		
-		if( projectile != null ) {
+		if(projectile != null) {
 			
 			EntityType entity = event.getEntityType();
 
@@ -183,22 +176,28 @@ public class AnimalDamageListener implements Listener {
 			UPlayer UDamagingPlayer = UPlayer.get(damagingPlayer);
 			
 			if(
-					protectEntity( entity )
-					&& ( ! UDamagingPlayer.isUsingAdminMode() )
-					&& ( !FP.permission.has( damagingPlayer, "factionsplus.cankillallmobs") )
-					&& ( ! canKillCheck( UDamagingPlayer ) )
-				) {
+				protectEntity(entity)
+				&& (!UDamagingPlayer.isUsingAdminMode())
+				&& (!FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs"))
+				&& (!canKillCheck(UDamagingPlayer))
+			) {
 					
-					// nup, nup. no do that *snaps fingers* 
-					damagingPlayer.sendMessage( ChatColor.RED + "You can't damage this mob type in this Faction land." );
-					event.setCancelled( true ) ;
+				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
+				event.setCancelled(true);
 						
-				}
+			}
 		}
 	}
 	
+	/**
+	 * Confirms that the entity type needs to be protected 
+	 * @param entity
+	 * @return
+	 */
 	private boolean protectEntity(EntityType entity) {
 		
+		// This list is for mobs that don't attack players, and won't attack back.
+		// If outdated or missing something, please make a pull request! 
 		if( 
 			entity == EntityType.CHICKEN || 
 			entity == EntityType.COW  || 
@@ -224,54 +223,57 @@ public class AnimalDamageListener implements Listener {
 		}
 	}
 	
+	/**
+	 * This does a check on players location vs. configuration to see if it is allowed 
+	 * @param uPlayer
+	 * @return
+	 */
 	private boolean canKillCheck(UPlayer uPlayer) {
 		
-		// If the player is part of WILDERNESS (none) and is in a normal factions land, deny! 
-		if( FType.valueOf( uPlayer.getFaction() ) == FType.WILDERNESS
-				&& FType.valueOf(  BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) ) ) == FType.FACTION ) {
+		// If the player is part of WILDERNESS (none) and is in a normal factions land, then deny 
+		if(FType.valueOf( uPlayer.getFaction() ) == FType.WILDERNESS
+				&& FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation()))) == FType.FACTION) {
 			
 			return false;
 			
 		}
 		
-		if ( Config._extras._protection.protectSafeAnimalsInSafeZone._ ) {
-			
-			if ( FType.valueOf( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) ) ) == FType.SAFEZONE ) {
-
-				return false;
-				
-			}
-
+		// If we're in a safezone, and protecting safezone passive mobs, then deny
+		if(FPUConf.get(uPlayer.getUniverse()).protectPassiveMobsSafeZone
+				&& FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation()))) == FType.SAFEZONE) {
+			return false;
 		}
 		
-		if( ! Config._extras._protection.allowFactionKillAlliesMobs._ ) {
-			
-			if ( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() ) ).getRelationTo( uPlayer ).equals( Rel.ALLY ) ) {
-
+		// Confirm allyMob check 
+		if(!FPUConf.get(uPlayer.getUniverse()).allowFactionKill.get("allyMobs")) {
+			if(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation())).getRelationTo(uPlayer).equals(Rel.ALLY)) {
 				return false;
-				
-			}
-		}
-	
-		if( ! Config._extras._protection.allowFactionKillEnemyMobs._ ) {
-			
-			if( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() )).getRelationTo( uPlayer ).equals( Rel.ENEMY ) ) {
-				
-				return false;
-				
 			}
 		}
 		
-		if( ! Config._extras._protection.allowFactionKillNeutralMobs._ ) {
-			
-			if( BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() )).getRelationTo( uPlayer ).equals( Rel.NEUTRAL ) &&
-				!BoardColls.get().getFactionAt( PS.valueOf( uPlayer.getPlayer().getLocation() )).isNone()) {
-				
+		// Confirm neutralMob check
+		if(!FPUConf.get(uPlayer.getUniverse()).allowFactionKill.get("neturalMobs")) {
+			if(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation())).getRelationTo(uPlayer).equals(Rel.ENEMY)) {
 				return false;
-				
 			}
 		}
 		
+		// Confirm enemyMob check
+		if(FPUConf.get(uPlayer.getUniverse()).allowFactionKill.get("enemyMobs")) {
+			if(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation())).getRelationTo(uPlayer).equals(Rel.NEUTRAL) && 
+					!BoardColls.get().getFactionAt(PS.valueOf( uPlayer.getPlayer().getLocation())).isNone()) {
+				return false;		
+			}
+		}
+		
+		// Confirm truceMob check
+		if(FPUConf.get(uPlayer.getUniverse()).allowFactionKill.get("truceMobs")) {			
+			if(BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation())).getRelationTo(uPlayer).equals(Rel.TRUCE)) {
+				return false;
+			}
+		}
+		
+		// No issues - allow it.
 		return true;
 	}
 }

@@ -1,14 +1,9 @@
 package markehme.factionsplus.listeners;
 
-import java.util.Observer;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.config.Config;
-import markehme.factionsplus.references.FP;
-import markehme.factionsplus.references.FPP;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import me.libraryaddict.disguise.disguisetypes.FlagWatcher;
-import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.LConf;
 import me.libraryaddict.disguise.utilities.DisguiseUtilities;
 
 import org.bukkit.Bukkit;
@@ -19,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.PluginManager;
 
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 import de.robingrether.idisguise.api.DisguiseAPI;
 
@@ -26,8 +22,8 @@ import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 
 public class DisguiseListener implements Listener {
-	private static final String	IDISGUISE		= "iDisguise";
 	private static final String	DISGUISE_CRAFT	= "DisguiseCraft";
+	private static final String	IDISGUISE		= "iDisguise";
 	private static final String	LIBS_DISGUISE	= "LibsDisguises";
 
 	private static DisguiseListener	disguiselistener	= null;
@@ -39,9 +35,8 @@ public class DisguiseListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if(event.isCancelled()) {
-			return;
-		}
+		
+		if(!FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse()).enabled) return;
 		
 		UPlayer fplayer = UPlayer.get(event.getPlayer());
 		
@@ -57,17 +52,18 @@ public class DisguiseListener implements Listener {
 			DisguiseCraftAPI dcAPI = DisguiseCraft.getAPI();
 
 			if(dcAPI.isDisguised(event.getPlayer())) {
-				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
+				
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInEnemyTerritory) {
 					if(fplayer.isInEnemyTerritory()) {
 						dcAPI.undisguisePlayer(event.getPlayer());
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 
-				if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInOwnTerritory) {
 					if(fplayer.isInOwnTerritory()) {
 						dcAPI.undisguisePlayer(event.getPlayer());
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 			}
@@ -79,20 +75,20 @@ public class DisguiseListener implements Listener {
 		
 		if(isiDisguiseIntegrated()) {
 			
-			DisguiseAPI api = FP.server.getServicesManager().getRegistration(DisguiseAPI.class).getProvider();
+			DisguiseAPI api = FactionsPlus.server.getServicesManager().getRegistration(DisguiseAPI.class).getProvider();
 			
 			if(api.isDisguised(event.getPlayer())) {
-				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInEnemyTerritory) {
 					if(fplayer.isInEnemyTerritory()) {
 						api.undisguiseToAll(event.getPlayer());
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 
-				if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInOwnTerritory) {
 					if(fplayer.isInOwnTerritory()) {
 						api.undisguiseToAll(event.getPlayer());
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 			}
@@ -105,20 +101,20 @@ public class DisguiseListener implements Listener {
 		
 		if(isLibsDisguiseIntegrated()) {
 			
-			if(DisguiseUtilities.getDisguise(event.getPlayer(), event.getPlayer().getEntityId()) != null) {
+			if(DisguiseUtilities.getDisguise(event.getPlayer(), event.getPlayer()) != null) {
 
-				if(Config._extras._disguise.unDisguiseIfInEnemyTerritory._) {
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInEnemyTerritory) {
 					if(fplayer.isInEnemyTerritory()) {
 						me.libraryaddict.disguise.DisguiseAPI.undisguiseToAll(event.getPlayer());
 						
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 
-				if(Config._extras._disguise.unDisguiseIfInOwnTerritory._) {
+				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInOwnTerritory) {
 					if(fplayer.isInOwnTerritory()) {
 						me.libraryaddict.disguise.DisguiseAPI.undisguiseToAll(event.getPlayer());
-						event.getPlayer().sendMessage("You have been un-disguised!");
+						event.getPlayer().sendMessage(Txt.parse(LConf.get().disguisesUndisguised));
 					}
 				}
 			}
@@ -144,7 +140,7 @@ public class DisguiseListener implements Listener {
 			
 			HandlerList.unregisterAll( dclistener );
 			dclistener = null;
-			FP.info( "iDisguise is disintegrated" );
+			FactionsPlus.debug( "iDisguise is disintegrated" );
 			if (!isiDisguiseIntegrated()) {
 				disintegrateCommon();
 			}
@@ -157,7 +153,7 @@ public class DisguiseListener implements Listener {
 		if (null != idlistener) {
 			HandlerList.unregisterAll( idlistener );
 			idlistener = null;
-			FP.info( "iDisguise is disintegrated" );
+			FactionsPlus.debug( "iDisguise is disintegrated" );
 			if (!isDisguiseCraftIntegrated()) {
 				disintegrateCommon();
 			}
@@ -168,7 +164,7 @@ public class DisguiseListener implements Listener {
 		if (null != ldlistener) {
 			HandlerList.unregisterAll( ldlistener );
 			ldlistener = null;
-			FP.info( "Lib's Disguise is disintegrated" );
+			FactionsPlus.debug( "Lib's Disguise is disintegrated" );
 			if (!isLibsDisguiseIntegrated()) {
 				disintegrateCommon();
 			}
@@ -179,9 +175,6 @@ public class DisguiseListener implements Listener {
 		if (null != disguiselistener) {
 			HandlerList.unregisterAll( disguiselistener );
 			disguiselistener=null;
-//			FactionsPlus.info( "DC/MD common is disintegrated" );we don't need to show this, was for debug only
-			//TODO: should've used booleans instead of unlinking the already allocated instance, to avoid reallocating memory 
-			//on next state change but this should be insignificant
 		}
 	}
 
@@ -194,12 +187,8 @@ public class DisguiseListener implements Listener {
 	}
 	
 	public static final void enableOrDisable(FactionsPlus instance){
-		if(Config._extras._disguise.enableDisguiseIntegration._ && 
-				(Config._extras._disguise.unDisguiseIfInOwnTerritory._ || Config._extras._disguise.unDisguiseIfInEnemyTerritory._)) {
         	
 			PluginManager pm = Bukkit.getServer().getPluginManager();
-			
-			
 			
 			// Attempt to setup DisguiseCraft
 			boolean isDCplugin=pm.isPluginEnabled(DISGUISE_CRAFT);
@@ -208,7 +197,7 @@ public class DisguiseListener implements Listener {
 				dclistener = new DCListener();
 				pm.registerEvents( dclistener, instance );
 				ensureCommonIsAllocated( instance );
-				FPP.info( "Hooked into "+DISGUISE_CRAFT+"!" );
+				FactionsPlus.debug( "Hooked into "+DISGUISE_CRAFT+"!" );
 			} else if ( !isDCplugin && isDisguiseCraftIntegrated() ) {
 				// either the plugin unloaded or the configs changed, we need to disable integration:
 				disintegrateDC();
@@ -221,7 +210,7 @@ public class DisguiseListener implements Listener {
 				idlistener = new IDListener();
 				pm.registerEvents( idlistener, instance );
 				ensureCommonIsAllocated( instance );
-				FPP.info( "Hooked into "+IDISGUISE+"!" );
+				FactionsPlus.debug( "Hooked into "+IDISGUISE+"!" );
 			} else if ( !isiDplugin && isiDisguiseIntegrated() ) {
 					disintegrateiD();
 			}
@@ -233,32 +222,19 @@ public class DisguiseListener implements Listener {
 				ldlistener = new LDListener();
 				pm.registerEvents( ldlistener, instance );
 				ensureCommonIsAllocated( instance );
-				FPP.info( "Hooked into "+LIBS_DISGUISE+"!" );
+				FactionsPlus.debug( "Hooked into "+LIBS_DISGUISE+"!" );
 			} else if ( !isLDplugin && isLibsDisguiseIntegrated() ) {
 				disintegrateLD();
 			}
 			
 			// Now, confirm one of them at least existed
 				
-	        if (!isDCplugin && !isiDplugin && !isLDplugin) {//if neither plugin exists (we know the options exists though)
-	        	FPP.warn("DisguiseCraft, iDisguise, or LibsDisguises integration enabled in config, but " +
+	        if (!isDCplugin && !isiDplugin && !isLDplugin) { //if neither plugin exists (we know the options exists though)
+	        	FactionsPlus.warn("DisguiseCraft, iDisguise, or LibsDisguises integration enabled in config, but " +
 	        				"none of these plugins are installed!");
 	        
 	        }
 	        
-		} else {
-        	if (isDisguiseCraftIntegrated()) {
-        		disintegrateDC();
-        	}
-        	
-        	if (isiDisguiseIntegrated()) {
-        		disintegrateiD();
-        	}
-        	
-        	if (isLibsDisguiseIntegrated()) {
-        		disintegrateLD();
-        	}
-        }
 	}
 
 }

@@ -1,23 +1,20 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 
 import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
-import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
-import com.onarandombox.MultiverseCore.event.MVTeleportEvent;
+import com.massivecraft.mcore.util.Txt;
 import com.onarandombox.MultiversePortals.event.MVPortalEvent;
 
 public class MVPListener implements Listener {
@@ -28,54 +25,89 @@ public class MVPListener implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGH)
 	public void MVPlayerTouchedPortalEvent(MVPortalEvent e) {
-		// TODO: Put messages into template config
-		UPlayer fplayer = UPlayer.get( e.getTeleportee() );
-			
-		Rel rel = fplayer.getFaction().getRelationTo(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) ));
 		
-		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || fplayer.isInOwnTerritory() ) {
+		if(FPUConf.isDisabled(UPlayer.get(e.getTeleportee()).getUniverse())) return;
+
+		UPlayer uPlayer = UPlayer.get(e.getTeleportee());
+		Faction factionAt = uPlayer.getFaction();
+		
+		FPUConf fpUConf = FPUConf.get(uPlayer);
+				
+		Rel rel = factionAt.getRelationTo(factionAt);
+		
+		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || uPlayer.isInOwnTerritory() || uPlayer.isUsingAdminMode() ) {
 			return;
 		}
 		
-		
-		// SafeZone / Wilderness / WarZone = not a faction, so rules do not apply
-		if(Utilities.isSafeZone(BoardColls.get().getFactionAt( PS.valueOf(e.getTeleportee().getLocation() ))) || Utilities.isWilderness(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) )) || Utilities.isWarZone(BoardColls.get().getFactionAt( PS.valueOf( e.getTeleportee().getLocation() ) )) ) {
-			return;
-		}
-		
-		if(Config._extras._MultiVerse.enemyCantUseEnemyPortals._) {
-			if(fplayer.isInEnemyTerritory()) {
-				
-				fplayer.msg(ChatColor.RED + "Enemies can not share portals. ");
-				e.setCancelled(true);
-				
-				return;
-			}
-		}
-				
-		if(Config._extras._MultiVerse.alliesCanUseEachOthersPortals._ && Config._extras._MultiVerse.mustBeInOwnTerritoryToUsePortals._) {
-			
-			if ( !Rel.ALLY.equals( rel ) ) {
-				fplayer.msg(ChatColor.RED + "You can not use this portal as you are not an aly, and are not apart of this Faction. ");
-				e.setCancelled(true);
-				
-				return;
-				
-			} else {
-				if(fplayer.getFactionId() == "0") {
-					fplayer.msg(ChatColor.RED + "You are not apart of a Faction, so we can not determine if you are enemies or not.");
-					e.setCancelled(true);
-					return;
-				} else {
+		if(FType.valueOf(factionAt).equals(FType.SAFEZONE)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInSafezone")) {
+				if(!fpUConf.multiverse.get("usePortalsInSafezone")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
 					return;
 				}
 			}
-		} else {
-			fplayer.msg(ChatColor.RED + "You must be apart of this Faction to use this portal.");
-			e.setCancelled(true);
+			
 			return;
-		}		
+		}
 		
+		if(FType.valueOf(factionAt).equals(FType.WARZONE)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInWarzone")) {
+				if(!fpUConf.multiverse.get("usePortalsInWarzone")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+					return;
+				}
+			}
+			
+			return;
+		}
+		
+		if(FType.valueOf(factionAt).equals(FType.WILDERNESS)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInWilderness")) {
+				if(!fpUConf.multiverse.get("usePortalsInWilderness")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+				}
+			}
+			
+			return;
+		}
+		
+		if(rel.equals(Rel.ALLY)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInAlly")) {
+				if(!fpUConf.multiverse.get("usePortalsInAlly")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+					return;
+				}
+			}
+		}
+		
+		if(rel.equals(Rel.ENEMY)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInEnemy")) {
+				if(!fpUConf.multiverse.get("usePortalsInEnemy")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+					return;
+				}
+			}
+		}
+		
+		if(rel.equals(Rel.TRUCE)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInTruce")) {
+				if(!fpUConf.multiverse.get("usePortalsInTruce")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+					return;
+				}
+			}
+		}
+		
+		if(rel.equals(Rel.NEUTRAL)) {
+			if(fpUConf.multiverse.containsKey("usePortalsInNeutral")) {
+				if(!fpUConf.multiverse.get("usePortalsInNeutral")) {
+					uPlayer.msg(Txt.parse(LConf.get().multiverseCantUseThisPortal));
+					return;
+				}
+			}
+		}
+		
+		// If we reach here, it's fine. 
 	}
 	
 	public static final void enableOrDisable(FactionsPlus instance){
@@ -83,18 +115,18 @@ public class MVPListener implements Listener {
 			
 		boolean isMVPplugin = pm.isPluginEnabled("Multiverse-Portals");
 		
-		if ( isMVPplugin && !isMVPIntegrated ) {
+		if (isMVPplugin && !isMVPIntegrated) {
 			assert ( null == mvplistener );
 			
 			mvplistener = new MVPListener();
 			pm.registerEvents( mvplistener, instance );
 			
-			if (null == mvplistener) {
+			if(null == mvplistener) {
 				mvplistener = new MVPListener();
 				Bukkit.getServer().getPluginManager().registerEvents(mvplistener, instance);
 			}
 			
-			FactionsPlusPlugin.info( "Hooked into Multiverse-portals." );
+			FactionsPlus.debug("Hooked into Multiverse-portals.");
 		}	
 	}
 }
