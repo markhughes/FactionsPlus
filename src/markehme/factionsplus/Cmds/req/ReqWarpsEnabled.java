@@ -1,9 +1,10 @@
 package markehme.factionsplus.Cmds.req;
 
-import markehme.factionsplus.MCore.UConf;
+import markehme.factionsplus.MCore.FPUConf;
 
 import org.bukkit.command.CommandSender;
 
+import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.mcore.cmd.MCommand;
 import com.massivecraft.mcore.cmd.req.ReqAbstract;
 
@@ -23,7 +24,7 @@ public class ReqWarpsEnabled extends ReqAbstract {
 
 	@Override
 	public boolean apply(CommandSender sender, MCommand command) {
-		return !UConf.isDisabled(sender);
+		return FPUConf.get(UPlayer.get(sender).getUniverse()).warpsEnabled;
 	}
 
 	@Override
