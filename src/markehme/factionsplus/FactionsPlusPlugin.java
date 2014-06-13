@@ -2,22 +2,20 @@ package markehme.factionsplus;
 
 import java.util.logging.Level;
 
+import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.extras.BailingOutException;
-import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-
 
 public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
-	private boolean	didNotOverrideOnLoad	= false;
+	private boolean	didNotOverrideOnLoad = false;
 	
 	/**
-	 * Disallow using onLoad
+	 * Disallow using onLoad as it causes issues, this checks if
+	 * it's been override'd. 
 	 */
 	@Override
 	public void onLoad() {
@@ -29,31 +27,12 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onEnable() {
-		if ( !didNotOverrideOnLoad ) {
-			throw bailOut( "You should not override & use onLoad() because it may cause problems, please just use onEnable()"
+		if(!didNotOverrideOnLoad) {
+			throw bailOut("You should not override & use onLoad() because it may cause problems, please just use onEnable()"
 				+ " thus we won't allow bukkit to enable us at this time. This error is also caused by PlugMan not calling our " +
-				"onLoad() method after having unloaded the Plugin class. Maybe try using /f reloadfp instead." );
+				"onLoad() method after having unloaded the Plugin class. Maybe try using /f reloadfp instead.");
 		}
 	}
-	
-	
-	@Override
-	public FileConfiguration getConfig() {
-		throw Q.ni();// just in case something accidentally calls this, for now
-	}
-	
-	
-	@Override
-	public void saveConfig() {
-		throw Q.ni();// just in case something accidentally calls this, for now
-	}
-	
-	
-	@Override
-	public void reloadConfig() {
-		throw Q.ni();// just in case something accidentally calls this, for now
-	}
-	
 	
 	/**
 	 * allowed to be used as: throw bailOut(..); so that eclipse won't
@@ -122,9 +101,15 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		tellConsole( ChatColor.RED + "[FactionsPlus] " + ChatColor.DARK_PURPLE + sevLog );
 	}
 	
-	public static void debug( String debugMessage ) {
-		tellConsole( ChatColor.GOLD + "[FactionsPlus] "+ChatColor.WHITE+"[DEBUG] " + ChatColor.RESET + debugMessage );// they are logged with
-																									// [INFO] level
+	/**
+	 * Shows a debug message to the console, if it's enable in the configuration 
+	 * @param message
+	 */
+	public static void debug(String message) {
+		// Only show debug messages if we've enabled it
+		if(MConf.get().debug) {
+			tellConsole(ChatColor.GOLD + "[FactionsPlus] "+ChatColor.WHITE+"[DEBUG] " + ChatColor.RESET + message);
+		}
 	}
 	
 	/**
@@ -132,7 +117,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * 
 	 * @param msg
 	 */
-	public static void tellConsole( String msg ) {
+	public static void tellConsole(String msg) {
 		// nvm; find another way to display colored msgs in console without having [INFO] prefix
 		// there's no other way it's done via ColouredConsoleSender of craftbukkit
 		// there are only two ways: colors+[INFO] prefix, or no colors + whichever prefix
@@ -157,7 +142,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * 
 	 */
 	public void disableSelf() {
-		setEnabled( false );// it will call onDisable() if it was enabled
+		setEnabled(false); // it will call onDisable() if it was enabled
 	}
 	
 	
