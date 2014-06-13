@@ -12,10 +12,10 @@ import com.massivecraft.factions.entity.Faction;
  */
 public enum FType {
 	
-	FACTION (1, true, false, false,false),
-	SAFEZONE (2, false, true, false,false),
-	WARZONE (3, false, false, true,false),
-	WILDERNESS (3, false, false, true, true),
+	FACTION (1, "Faction", true, false, false,false),
+	SAFEZONE (2, "SafeZone", false, true, false,false),
+	WARZONE (3, "WarZone", false, false, true,false),
+	WILDERNESS (3, "Wilderness", false, false, true, true),
 	;
 
 	private final int _id;
@@ -23,6 +23,7 @@ public enum FType {
 	private final boolean iSafezone;
 	private final boolean iWarZone;
 	private final boolean iWilderness;
+	private final String nName;
 	
 	public int getID() { return this._id; }
 	public boolean isFaction() { return this.iFaction; }
@@ -38,12 +39,13 @@ public enum FType {
 	 * @param isWarZone
 	 * @param isWilderness
 	 */
-	private FType( final int id, final boolean isFaction, final boolean isSafezone, final boolean isWarZone, final boolean isWilderness ) {
+	private FType( final int id, final String niceName, final boolean isFaction, final boolean isSafezone, final boolean isWarZone, final boolean isWilderness ) {
 		this._id = id;
 		this.iFaction = isFaction;
 		this.iSafezone = isSafezone;
 		this.iWarZone = isWarZone;
 		this.iWilderness = isWilderness;
+		this.nName = niceName;
 
 	}
 	
@@ -55,7 +57,7 @@ public enum FType {
 	public static FType parse( String str ) {
 		if ( str == null ) return null;
 
-		String ty = str.toLowerCase();
+		String ty = str.trim().toLowerCase();
 		
 		if( ty == "safezone" ) return SAFEZONE;
 		if( ty == "warzone" ) return WARZONE;
@@ -104,6 +106,10 @@ public enum FType {
 		
 		// If FType is null, then Factions changed something and this library is out of date. 
 		return null;		
+	}
+	
+	public String getNiceName() {
+		return(this.nName);
 	}
 	
 }
