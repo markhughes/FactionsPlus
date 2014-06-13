@@ -14,9 +14,12 @@ import com.massivecraft.mcore.ps.PS;
  * FactionsPlusLink makes a simple way to retrieve the information for
  * the plugin.
  * 
+ * This entire thing needs to be redone. 
+ * 
  * @author MarkehMe
  *
  */
+@Deprecated
 public class FactionsPlusLink {
 	
 	/**
@@ -24,7 +27,7 @@ public class FactionsPlusLink {
 	 * @param player
 	 * @return UPlayer
 	 */
-	public static UPlayer getUPlayer( Player player ) {
+	public static UPlayer getUPlayer(Player player) {
 		return UPlayer.get( player );
 	}
 	
