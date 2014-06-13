@@ -1,3 +1,9 @@
+# FactionsPlus 0.6.9.3
+This is an emergency update. The AddWarp command was broken due to a change in
+the Factions project. 
+
+ * Fixes scoreboard lag by moving to new Objective.getScore( String ) method 
+
 # FactionsPlus 0.6.9.2
 This is an emergency update. The AddWarp command was broken due to a change in
 the Factions project. 

@@ -136,27 +136,27 @@ public class FactionsPlusScoreboard {
 						
 						switch( LimitCount ) {
 						case 0:
-							Score faction1 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction1 	= objective.getScore( ( faction_name ) );
 							faction1.setScore( faction_power );
 							break;
 							
 						case 1:
-							Score faction2 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction2 	= objective.getScore( ( faction_name ) );
 							faction2.setScore( faction_power );
 							break;
 							
 						case 2:
-							Score faction3 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction3 	= objective.getScore( ( faction_name ) );
 							faction3.setScore( faction_power );
 							break;
 							
 						case 3:
-							Score faction4 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction4 	= objective.getScore( ( faction_name ) );
 							faction4.setScore( faction_power );
 							break;
 							
 						case 4:
-							Score faction5 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction5 	= objective.getScore( ( faction_name ) );
 							faction5.setScore( faction_power );
 							break;
 							
