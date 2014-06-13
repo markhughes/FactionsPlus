@@ -2,7 +2,6 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.mcore.Aspect;
 
 

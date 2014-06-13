@@ -2,7 +2,6 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.mcore.ps.PS;
 import com.massivecraft.mcore.store.Coll;
 import com.massivecraft.mcore.store.MStore;
 
@@ -31,7 +30,4 @@ public class FactionDataColl extends Coll<FactionData> {
 
 		return ret;
 	}
-	
-
-
 }
