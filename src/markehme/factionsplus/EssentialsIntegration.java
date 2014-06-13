@@ -84,6 +84,7 @@ public abstract class EssentialsIntegration {
 		
 		checkInvariants();
 		try {
+			
 			return( getEssentialsInstance().getUser( player ).getHome( homeName ) );
 		} catch (Exception e) {
 			
@@ -151,7 +152,9 @@ public abstract class EssentialsIntegration {
 		try {
 			Teleport teleport = (Teleport) getEssentialsInstance().getUser(player).getTeleport();
 			
-			Trade trade = new Trade( (int) UConf.get(player).econCostHome, (IEssentials) getEssentialsInstance() );
+			// TODO: this is deprecated, is there a better way?
+			
+			Trade trade = new Trade( (double) UConf.get(player).econCostHome, (IEssentials) getEssentialsInstance() );
 			new Trade(0, null);
 			
 			teleport.teleport( loc, trade, TeleportCause.PLUGIN );
