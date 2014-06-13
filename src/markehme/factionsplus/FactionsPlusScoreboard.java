@@ -3,9 +3,10 @@ package markehme.factionsplus;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import markehme.factionsplus.config.Config;
+import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.references.FP;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,16 +19,18 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
+import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.mcore.util.Txt;
 
 
 public class FactionsPlusScoreboard {
 	
-	public static String objective_name = "FP_Top_Factions";
+	public static String objective_name = "FactionsPlus_TopFactions";
 	public static Scoreboard scoreBoard = null;
 	
 	public static void setup() {
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask( FP.instance, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlus.instance, new Runnable() {
 			
 			@Override
 			public void run() {
@@ -40,7 +43,6 @@ public class FactionsPlusScoreboard {
 				ScoreboardManager manager	= Bukkit.getScoreboardManager();
 				scoreBoard		= manager.getMainScoreboard(); // don't make a new one or we'll overwrite them all!
 				
-				if( Config._extras._scoreboards.showScoreboardOfFactions._ ) {
 					
 					Objective objective = null;
 					
@@ -48,13 +50,13 @@ public class FactionsPlusScoreboard {
 					
 					// Check if `objective_name` exists in the objectives. 
 					
-					if( scoreBoard.getObjective( objective_name ) != null) {
-						scoreBoard.getObjective( objective_name ).unregister();
+					if(scoreBoard.getObjective(objective_name) != null) {
+						scoreBoard.getObjective(objective_name).unregister();
 					}
 					
-					objective			= scoreBoard.registerNewObjective( objective_name, "dummy" );
+					objective			= scoreBoard.registerNewObjective(objective_name, "dummy");
 					
-					objective.setDisplayName( FactionsPlusTemplates.colorFormat(Config._extras._scoreboards.topFactionsTitle._ ));
+					objective.setDisplayName(Txt.parse(LConf.get().scoreboardTitle));
 					objective.setDisplaySlot( DisplaySlot.SIDEBAR );
 										
 					ArrayList<String> sFactions = new ArrayList<String>(); 
@@ -130,33 +132,33 @@ public class FactionsPlusScoreboard {
 							
 							faction_power = 0;
 							
-							FP.severe(e,  "Could not convert " + workingString[0] + " to int (faction power was assumed 0) - error should not have occured" );
+							FactionsPlus.severe(e,  "Could not convert " + workingString[0] + " to int (faction power was assumed 0) - error should not have occured" );
 							
 						}
 						
 						switch( LimitCount ) {
 						case 0:
-							Score faction1 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction1 	= objective.getScore(faction_name);
 							faction1.setScore( faction_power );
 							break;
 							
 						case 1:
-							Score faction2 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction2 	= objective.getScore(faction_name);
 							faction2.setScore( faction_power );
 							break;
 							
 						case 2:
-							Score faction3 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction3 	= objective.getScore(faction_name);
 							faction3.setScore( faction_power );
 							break;
 							
 						case 3:
-							Score faction4 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction4 	= objective.getScore(faction_name);
 							faction4.setScore( faction_power );
 							break;
 							
 						case 4:
-							Score faction5 	= objective.getScore( Bukkit.getOfflinePlayer( faction_name ) );
+							Score faction5 	= objective.getScore(faction_name);
 							faction5.setScore( faction_power );
 							break;
 							
@@ -172,9 +174,8 @@ public class FactionsPlusScoreboard {
 						}
 					}
 				
-				} else {
 
-					
+					/*
 					try {
 						
 						scoreBoard.getObjective( objective_name ).unregister();
@@ -185,16 +186,16 @@ public class FactionsPlusScoreboard {
 						// so put it in a try catch 
 						
 					}
+					*/
 					
-				}
 				
 
 				for ( Player p : Bukkit.getOnlinePlayers() ) {
 										
-					if( !( FP.permission.has( p, "factionsplus.hidesb." + p.getWorld().getName() ) && ! FP.permission.has( p, "factionsplus.hidesb" ) ) 
-							|| FP.permission.has( p, "factionsplus.forcesb") ) {
+					if( !( FactionsPlus.permission.has( p, "factionsplus.hidesb." + p.getWorld().getName() ) && ! FactionsPlus.permission.has( p, "factionsplus.hidesb" ) ) 
+							|| FactionsPlus.permission.has( p, "factionsplus.forcesb") ) {
 						
-						if( Config._extras._scoreboards.showScoreboardOfMap._ ) {
+						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardMapOfFactions) {
 							
 							// 16 character limit.. maybe map should not be too detailed
 							// e.g. not have any names of the Factions. No colours.. 
@@ -205,9 +206,9 @@ public class FactionsPlusScoreboard {
 							String mapLine_2	= "-------\\-------";
 							String mapLine_3	= "-------\\-------";
 							String mapLine_4	= "-------\\-------";
-							String mapLine_5	= "-------.//------";
-							String mapLine_6	= "----------------";
-							String mapLine_7	= "----------------";
+							String mapLine_5	= "----....//------";
+							String mapLine_6	= "----...---------";
+							String mapLine_7	= "----...---------";
 							String mapLine_8	= "----------------";
 							String mapLine_9	= "----------------";
 							String mapLine_10	= "----------------";
@@ -219,8 +220,11 @@ public class FactionsPlusScoreboard {
 							String mapLine_16	= "----------------";
 							*/
 						}
-								
-						p.setScoreboard( scoreBoard );
+						
+						// Yes - this is proper per-universe support for scoreboards. 
+						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardMapOfFactions || FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
+							p.setScoreboard(scoreBoard);
+						}
 						
 					} else {
 						
@@ -236,9 +240,11 @@ public class FactionsPlusScoreboard {
 						}
 					}
 				}
+
+				
 			}
 			
-	    }, 0L, Config._extras._scoreboards.secondsBetweenScoreboardUpdates._*20L );
+	    }, 0L, MConf.get().scoreboardUpdate*20L );
 
 	}
 	
