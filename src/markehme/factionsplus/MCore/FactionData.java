@@ -123,7 +123,7 @@ public class FactionData extends Entity<FactionData> {
 	
 	public Map<String, String> bannedPlayerIDs;	
 	
-	public Map<String, String> jailedPlayerIDs;	
+	public Map<String, PS> jailedPlayerIDs;	
 	public PS jailLocation = null;
 	
 	public List<String> rules;
