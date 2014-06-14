@@ -141,6 +141,11 @@ public class LConf extends Entity<LConf> {
 	public String jailsCantDoThatInJail = "<red>You can't do that! You're in jail.";
 	public String jailsSpawnedIntoJail = "<red>You're currently in jail!";
 	public String jailsCantTeleportInJail = "<red>You can't teleport away while jailed!";
+	public String jailsPlayerNotApartOfFaction = "<red>%s is not apart of your faction!";
+	public String jailsPlayerNeverOnServer = "<red>That player was never on this server!";
+	public String jailsPlayerNotInJail = "<red>%s is not in jail!";
+	public String jailsPlayerUnJailed = "<green>%s has been removed from jail.";
+	
 	
 	// ----------------------------
 	// Rules Related
