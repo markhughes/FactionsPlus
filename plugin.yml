@@ -3,8 +3,8 @@ main: markehme.factionsplus.FactionsPlus
 author: MarkehMe
 website: http://markeh.me
 version: 0.7.0
-depend: [ Factions, Vault ]
-soft-depend: [ DisguiseCraft, iDisguise, LibsDisguises, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette, ChestShop ]
+depend: [ Factions ]
+soft-depend: [ Vault, DisguiseCraft, iDisguise, LibsDisguises, LWC, WorldGuard, WorldEdit, Essentials, Multiverse-Portals, Lockette, ChestShop ]
 dev-url: http://dev.bukkit.org/bukkit-plugins/factionsplus/
 permissions:
   factionsplus.kit.jails:
