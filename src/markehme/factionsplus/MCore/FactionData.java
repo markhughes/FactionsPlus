@@ -1,5 +1,7 @@
 package markehme.factionsplus.MCore;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,18 @@ public class FactionData extends Entity<FactionData> {
 	@Override
 	public FactionData load(FactionData that) {
 		this.faction = that.faction;
+		
+		this.warpLocation = that.warpLocation;
+		this.warpPasswords = that.warpPasswords;
+		
+		this.announcement = that.announcement;
+		
+		this.bannedPlayerIDs = that.bannedPlayerIDs;	
+		
+		this.jailedPlayerIDs = that.jailedPlayerIDs;	
+		this.jailLocation = that.jailLocation;
+		
+		this.rules = that.rules;
 
 		return this;
 	}
@@ -116,17 +130,17 @@ public class FactionData extends Entity<FactionData> {
 	
 	public Faction faction = null; 
 	
-	public Map<String, PS> warpLocation;
-	public Map<String, String> warpPasswords;
+	public Map<String, PS> warpLocation = new LinkedHashMap<String, PS>();
+	public Map<String, String> warpPasswords = new LinkedHashMap<String, String>();
 	
 	public String announcement = null;
 	
-	public Map<String, String> bannedPlayerIDs;	
+	public Map<String, String> bannedPlayerIDs = new LinkedHashMap<String, String>();	
 	
-	public Map<String, PS> jailedPlayerIDs;	
+	public Map<String, PS> jailedPlayerIDs = new LinkedHashMap<String, PS>();	
 	public PS jailLocation = null;
 	
-	public List<String> rules;
+	public List<String> rules = new ArrayList<String>();
 	
 	
 }
