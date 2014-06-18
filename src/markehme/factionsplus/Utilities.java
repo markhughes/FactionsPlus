@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeSet;
 
-import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.util.Q;
