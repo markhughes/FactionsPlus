@@ -31,7 +31,7 @@ public class CmdDebug extends FPCommand {
 	
 	@Override
 	public void performfp() {
-		if(!sender.isOp()) {
+		if(!sender.isOp() && !usender.isUsingAdminMode()) {
 			return;
 		}
 		
