@@ -1,5 +1,9 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+
 import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
@@ -11,6 +15,7 @@ import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.mcore.cmd.req.ReqHasPerm;
 import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.mcore.ps.PS;
 import com.massivecraft.mcore.util.Txt;
 
 public class CmdJail extends FPCommand {
@@ -56,6 +61,30 @@ public class CmdJail extends FPCommand {
 			}
 		}
 		
-		// TODO: using UUID system, ban the player, using Mojangs API 
+		OfflinePlayer bPlayer = Bukkit.getPlayer(playerToJail);
+		
+		if(bPlayer == null) {
+			bPlayer = Bukkit.getOfflinePlayer(playerToJail);
+			
+			if(bPlayer == null) {
+				// ??
+				return;
+			}
+		}
+		
+		Location respawnLoc = null;
+		
+		if(bPlayer.isOnline()) {
+			respawnLoc = bPlayer.getPlayer().getLocation();
+		} else {
+			if(bPlayer.getBedSpawnLocation() != null) {
+				respawnLoc = bPlayer.getBedSpawnLocation();
+			} else {
+				respawnLoc = null;
+			}
+		}
+		
+		fData.jailedPlayerIDs.put(bPlayer.getUniqueId().toString(), PS.valueOf(respawnLoc));
+		
 	}
 }
