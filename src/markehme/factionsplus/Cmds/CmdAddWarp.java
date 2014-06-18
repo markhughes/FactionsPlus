@@ -155,7 +155,7 @@ public class CmdAddWarp extends FPCommand {
 		}
 		
 		// Notify the Faction 
-		usenderFaction.msg(Txt.parse(LConf.get().warpsCreateNotify), warpName);
+		usenderFaction.msg(Txt.parse(LConf.get().warpsCreateNotify, warpName));
 		
 	}
 }
