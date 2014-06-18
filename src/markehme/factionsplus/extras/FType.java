@@ -12,10 +12,10 @@ import com.massivecraft.factions.entity.Faction;
  */
 public enum FType {
 	
-	FACTION (1, "Faction", true, false, false,false),
-	SAFEZONE (2, "SafeZone", false, true, false,false),
-	WARZONE (3, "WarZone", false, false, true,false),
-	WILDERNESS (3, "Wilderness", false, false, true, true),
+	FACTION (1, "Faction", 			true,  false, false, false),
+	SAFEZONE (2, "SafeZone", 		false, true,  false, false),
+	WARZONE (3, "WarZone", 			false, false, true,  false),
+	WILDERNESS (4, "Wilderness",	false, false, false, true),
 	;
 
 	private final int _id;
@@ -73,6 +73,8 @@ public enum FType {
 	 * @return
 	 */
 	public static FType valueOf( Faction faction ) {
+		
+		if(faction == null) return FType.WILDERNESS;
 		
 		// isNone always returns wilderness/none, easiest to detect 
 		if( faction.isNone() ) {
