@@ -51,11 +51,11 @@ public class FactionData extends Entity<FactionData> {
 	 * @return
 	 */
 	public boolean warpExists(String name) {
-		if(warpLocation.get(name.toLowerCase()) == null) {
-			return false;
+		if(warpLocation.containsKey(name.toLowerCase())) {
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	/**
