@@ -149,13 +149,13 @@ public class CmdAddWarp extends FPCommand {
 		
 		// As of 0.7.x we supply alternative messages if there is a password
 		if(warpPass == null) {
-			msg(Txt.parse(LConf.get().warpsCreateSuccess), warpName, warpPass);
+			msg(Txt.parse(LConf.get().warpsCreateSuccess), warpName);
 		} else {
 			msg(Txt.parse(LConf.get().warpsCreateSuccessWithPassword), warpName, warpPass);
 		}
 		
 		// Notify the Faction 
-		usenderFaction.msg(Txt.parse(LConf.get().warpsCreateNotify, warpName));
+		usenderFaction.msg(Txt.parse(LConf.get().warpsCreateNotify, usender.getName(), warpName));
 		
 	}
 }
