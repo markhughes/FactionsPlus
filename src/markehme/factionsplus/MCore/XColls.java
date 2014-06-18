@@ -1,12 +1,13 @@
 package markehme.factionsplus.MCore;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.massivecraft.mcore.store.Coll;
 import com.massivecraft.mcore.store.Colls;
 import com.massivecraft.mcore.store.Entity;
 import com.massivecraft.mcore.util.MUtil;
-import com.massivecraft.mcore.util.SenderUtil;
 
 /**
  * Taken from: https://github.com/MassiveCraft/Factions/blob/master/src/com/massivecraft/factions/entity/XColls.java
@@ -34,7 +35,7 @@ public abstract class XColls<C extends Coll<E>, E> extends Colls<C, E> {
 			return this.getForUniverse(universe);
 		}
 
-		if (SenderUtil.isNonplayer(o))
+		if ((o instanceof CommandSender) && !(o instanceof Player))
 		{
 			return this.getForWorld(Bukkit.getWorlds().get(0).getName());
 		}
