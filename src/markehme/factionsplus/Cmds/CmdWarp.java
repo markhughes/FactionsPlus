@@ -173,7 +173,7 @@ public class CmdWarp extends FPCommand {
 			return;
 		}
 		
-		if(!FPUConf.get(usender.getUniverse()).allowWarpFrom.get("neutral") && factionIn.getRelationTo(usender).equals(Rel.NEUTRAL)) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpFrom.get("neurtal") && factionIn.getRelationTo(usender).equals(Rel.NEUTRAL)) {
 			msg(Txt.parse(LConf.get().warpsCantWarpFromTerritory));
 			return;
 		}
