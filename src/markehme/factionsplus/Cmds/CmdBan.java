@@ -9,6 +9,7 @@ import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.util.FPPerm;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Factions;
@@ -53,13 +54,15 @@ public class CmdBan extends FPCommand {
 			return;
 		}
 		
-		Player bPlayer = Utilities.getOnlinePlayerExact(this.arg(0));
+		OfflinePlayer bPlayer = Utilities.getOnlinePlayerExact(this.arg(0));
 		
-		if(Bukkit.getPlayerExact(bPlayer.getName()) == null) {
-			// Player is offline
-			// TODO: replace bPlayer with API lookup (in another thread too?) 
-			//	bPlayer = Bukkit.getOfflinePlayer(null);
-			return;
+		if(bPlayer == null) {
+			bPlayer = Bukkit.getOfflinePlayer(this.arg(0));
+			
+			if(bPlayer == null) {
+				msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't ban them."));
+				return;
+			}
 		}
 		
 		UPlayer ubPlayer = UPlayer.get(bPlayer);
