@@ -89,7 +89,9 @@ public class CmdListWarps extends FPCommand  {
 			String addition = "";
 			
 			if(usender.getRole() == Rel.LEADER) {
-				addition = " (" + fData.warpPasswords.get(warpName) + ")";
+				if(fData.warpPasswords.containsKey(warpName)) {
+					addition = " (" + fData.warpPasswords.get(warpName) + ")";
+				}
 			}
 			
 			// Make it into a displayable list 
