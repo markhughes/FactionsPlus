@@ -1,10 +1,7 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.Utilities;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.util.FPPerm;
-
-import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.arg.ARFaction;
@@ -38,17 +35,15 @@ public class CmdFactionHome extends FPCommand {
 	}
 	
 	@Override
-	public void performfp() {
-		Faction fTeleport = this.arg(0, ARFaction.get(sender), usenderFaction);
-		
-		Player player = Utilities.getOnlinePlayerExact(usender);
-		
-		if(fTeleport == null) {
+	public void performfp() {		
+		Faction currentF = this.arg(0, ARFaction.get(sender));
+				
+		if(currentF == null) {
 			msg(Txt.parse(LConf.get().factionHomeFactionNotFound));
 		} else {
-			if(fTeleport.hasHome()) {
-				player.teleport(PS.asBukkitLocation(fTeleport.getHome()));
-				msg(Txt.parse(LConf.get().factionHomeTeleportedTo, fTeleport.getName()));
+			if(currentF.hasHome()) {
+				me.teleport(PS.asBukkitLocation(currentF.getHome()));
+				msg(Txt.parse(LConf.get().factionHomeTeleportedTo, currentF.getName()));
 			} else {
 				msg(Txt.parse(LConf.get().factionHomeFactionNoHome));
 			}
