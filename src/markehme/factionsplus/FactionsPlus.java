@@ -1,10 +1,14 @@
 package markehme.factionsplus;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.MCore.Const;
+import markehme.factionsplus.MCore.LConfColl;
 import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.MCore.MConfColl;
 import markehme.factionsplus.MCore.FPUConfColls;
@@ -50,8 +54,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	// Factions instance
 	Factions factions;
 	
-	// Used by vault
+	// Used by vault 
     public static Permission permission 						= 	null;
+    
+    public static List<UUID> whosIgnoringNeeds 					= 	new ArrayList<UUID>();
     
     // See which plugins are enabled  
 	public static boolean isWorldEditEnabled 					= 	false;
@@ -124,6 +130,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			// Init MStore 
 			MConfColl.get().init();
 			FPUConfColls.get().init();
+			LConfColl.get().init();
 			
 			// Store some useful data for later
 			thefile = getFile();

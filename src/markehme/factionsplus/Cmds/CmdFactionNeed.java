@@ -1,13 +1,10 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusTemplates;
 import markehme.factionsplus.MCore.LConf;
-import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.util.FPPerm;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Rel;
@@ -42,9 +39,29 @@ public class CmdFactionNeed extends FPCommand {
 			return;
 		}
 		
+		if(this.args.size() > 0) {
+			if(this.arg(0).equalsIgnoreCase("ignore") && FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+				if(!FactionsPlus.whosIgnoringNeeds.contains(me.getUniqueId())) {
+					FactionsPlus.whosIgnoringNeeds.add(me.getUniqueId());
+					msg(Txt.parse(LConf.get().factionNeedNowIgnoring));
+				} else {
+					msg(Txt.parse(LConf.get().factionNeedAlreadyIgnoring));
+				}
+			} else if(this.arg(0).equalsIgnoreCase("listen") && FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+				if(FactionsPlus.whosIgnoringNeeds.contains(me.getUniqueId())) {
+					FactionsPlus.whosIgnoringNeeds.remove(me.getUniqueId());
+					msg(Txt.parse(LConf.get().factionNeedNowListening));
+				} else {
+					msg(Txt.parse(LConf.get().factionNeedAlreadyListening));
+				}
+			}
+			
+			if(!FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+				
+			}
+		}
 		// TODO: Move this into a thread
 		// TODO: Cooldown? 
-		// TODO: Allow certain Factions to ignore these messages ( /f needs ignore | /f needs listen )
 		
 		int i = 0;
 		

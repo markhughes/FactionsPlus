@@ -127,6 +127,10 @@ public class LConf extends Entity<LConf> {
 	public String factionNeedNotification = "<white>The player %s is looking for a Faction! You can invite them with <green>/f inv %s";
 	public String factionNeedClarifySent = "<white>Factions have been notified!";
 	public String factionNeedClarifyNoneSent = "<white>No Factions were notified, as no leaders or officers are online.";
+	public String factionNeedAlreadyListening = "<red>You are already listening for players that need a Faction!";
+	public String factionNeedAlreadyIgnoring = "<red>You are already ignoring players that need a Faction!";
+	public String factionNeedNowListening = "<green>You are now listening for players that need a Faction!";
+	public String factionNeedNowIgnoring = "<green>You are now listening for players that need a Faction!";
 	
 	// ----------------------------
 	// Jail Related
