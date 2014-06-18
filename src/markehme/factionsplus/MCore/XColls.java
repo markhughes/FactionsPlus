@@ -16,6 +16,7 @@ import com.massivecraft.mcore.util.MUtil;
  * @param <E>
  */
 public abstract class XColls<C extends Coll<E>, E> extends Colls<C, E> {
+	
 	@Override
 	public C get(Object o)
 	{
