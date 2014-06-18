@@ -156,7 +156,17 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
-
+			
+			// Let's test for Vault 
+			try {
+				Class.forName("net.milkbowl.vault.permission.Permission");
+			} catch (ClassNotFoundException ex) {
+				warn("Could not find Vault - please setup vault!");
+				info("Download Vault here: http://dev.bukkit.org/bukkit-plugins/vault/ ");
+				
+				disableSelf();
+				return;
+			}
 			
 			// Hook into vault for permissions
 			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
