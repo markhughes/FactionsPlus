@@ -1,6 +1,7 @@
 package markehme.factionsplus.MCore;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import markehme.factionsplus.extras.FType;
@@ -226,7 +227,7 @@ public class FPUConf extends Entity<FPUConf> {
 	public Boolean announcementsEnabled = false;
 	
 	public Map<Rel, Boolean> whoCanAnnounce = MUtil.map(
-			Rel.LEADER, false,
+			Rel.LEADER, true,
 			Rel.OFFICER, false,
 			Rel.MEMBER, false,
 			Rel.RECRUIT, false
@@ -428,4 +429,63 @@ public class FPUConf extends Entity<FPUConf> {
 			"crossBorderLiquidFlowBlockMakeCobblestone", true
 			
 		);
+	
+	public List<String> factionCommandHideDescriptionInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideAgeInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideOpenInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHidePowerInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideLandInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideBankInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHidePermanentInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHidePeacefulInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideIsTruceWithInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideIsAlyWithInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideIsEnemyWithInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	public List<String> factionCommandHideFollowersOnlineInfo = MUtil.list(
+			"enterFactionID"
+		);
+	public List<String> factionCommandHideFollowersOfflineInfo = MUtil.list(
+			"enterFactionID"
+		);
+	
+	
+	
+	
+	
+	
+	
+	
 }
