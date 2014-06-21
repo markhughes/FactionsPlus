@@ -44,13 +44,18 @@ public class LConf extends Entity<LConf> {
 	// ----------------------------
 	// FactionsPlus specific related
 	// ----------------------------
-	public String fpNotEnabled 			= "<red>This command is unavailable while FactionsPlus is not enabled.";
-	public String fpCantDamageThisMob	= "<red>You can't damage this mob type in this Faction land.";
-	public String fpNoAlterRelationship	= "<red>You can't change the relationship to this Faction!";
-	public String fpCommandDenied		= "<red>You can't run this command in this territory (%s)";
-	public String fpKeepInvDie			= "<red>You get to keep your inventory in this territory (%s)";
-	public String fpFactionPlayerJoin	= "%s from your Faction has joined.";
-	public String fpFactionPlayerLeave	= "%s from your Faction has left the game.";
+	public String fpNotEnabled 				= "<red>This command is unavailable while FactionsPlus is not enabled.";
+	public String fpCantDamageThisMob		= "<red>You can't damage this mob type in this Faction land.";
+	public String fpNoAlterRelationship		= "<red>You can't change the relationship to this Faction!";
+	public String fpCommandDenied			= "<red>You can't run this command in this territory (%s)";
+	public String fpKeepInvDie				= "<red>You get to keep your inventory in this territory (%s)";
+	public String fpFactionPlayerJoin		= "%s from your Faction has joined.";
+	public String fpFactionPlayerLeave		= "%s from your Faction has left the game.";
+	
+	// ----------------------------
+	// Faction Command
+	// ----------------------------
+	public String factionCommandPlayerName		= "<a>{name}%<aqua>(<green>{power}<aqua>)<a>";
 	
 	// ----------------------------
 	// Warp related
