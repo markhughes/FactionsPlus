@@ -10,6 +10,7 @@ import markehme.factionsplus.Cmds.CmdClearLocks;
 import markehme.factionsplus.Cmds.CmdDebug;
 import markehme.factionsplus.Cmds.CmdFactionHome;
 import markehme.factionsplus.Cmds.CmdFactionNeed;
+import markehme.factionsplus.Cmds.CmdFactionsFaction;
 import markehme.factionsplus.Cmds.CmdJail;
 import markehme.factionsplus.Cmds.CmdListWarps;
 import markehme.factionsplus.Cmds.CmdMoneyTop;
@@ -36,6 +37,7 @@ public class FactionsPlusCommandManager {
 	public static ArrayList<String> addedCommands = new ArrayList<String>();
 	
 	public static void setup() {
+		
 		// Warp Commands 
 		addSC(new CmdAddWarp()); 
 		addSC(new CmdRemoveWarp());
@@ -118,5 +120,30 @@ public class FactionsPlusCommandManager {
 			
 		}
 	}
-	
+
+	public static void integrateCmdFactionsFaction() throws Exception {
+		// Fetch all the sub commands - do NOT copy
+		List<MCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+		
+		boolean found = false;
+		
+		// We're hunting for the "faction" command
+		for (int i=0; i < commands.size(); i++) {
+			
+			if(commands.get(i).getAliases().contains("faction") || commands.get(i).getAliases().contains("f")) {
+				FactionsPlus.debug("Found the /f faction or /f f command - removing. ");
+				Factions.get().getOuterCmdFactions().getSubCommands().remove(i); // Remove it! 
+				
+				found= true;
+			}
+		}
+		if(found) {
+			FactionsPlus.debug("Adding our /f faction and /f f command");
+			addSC(new CmdFactionsFaction());
+		} else {
+			FactionsPlus.info("We could not locate the /f faction or /f f command:");
+			FactionsPlus.info("factionCommand* features disabled.");
+		}
+	}
+
 }
