@@ -1,3 +1,7 @@
+# FactionsPlus 0.6.9.4
+
+* Adds support for MassiveCore changes - ensure you use MassiveCore 7.3.0+
+
 # FactionsPlus 0.6.9.3
 This is an emergency update. The AddWarp command was broken due to a change in
 the Factions project. 
