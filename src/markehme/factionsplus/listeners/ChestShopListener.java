@@ -19,8 +19,8 @@ import com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
+import com.massivecraft.massivecore.ps.PS;
 
 public class ChestShopListener implements Listener {
 
@@ -47,7 +47,7 @@ public class ChestShopListener implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR )
-	public void onLandClaim( FactionsEventChunkChange event ) {
+	public void onLandClaim( EventFactionsChunkChange event ) {
 		if ( event.isCancelled() ) {
 			return;
 		} else {

@@ -26,12 +26,13 @@ import markehme.factionsplus.Cmds.CmdUnban;
 import markehme.factionsplus.Cmds.CmdUnsetJail;
 import markehme.factionsplus.Cmds.CmdWarp;
 import markehme.factionsplus.Cmds.FPCommand;
+import markehme.factionsplus.Cmds.Factions_CmdFactionsFaction;
 import markehme.factionsplus.config.Config;
 import markehme.factionsplus.extras.LWCBase;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.mcore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 
 
 
@@ -51,6 +52,17 @@ public class FactionsPlusCommandManager {
 	public static ArrayList<String> addedCommands = new ArrayList<String>();
 	
 	public static void setup() {
+		
+		/*
+		
+		try {
+			integrateCmdFactionsFaction();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		*/
+		
 		// Warp Commands 
 		if(Config._warps.enabled._) {
 			addSC(new CmdAddWarp()); 
@@ -127,25 +139,34 @@ public class FactionsPlusCommandManager {
 	}
 	
 	public static void disableSubCommands() throws Exception {
-		// Fetch all the sub commands
-		List<MCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+		List<MassiveCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
 				
-		// Go through each command 
 		for (int i=0; i < commands.size(); i++) {
-			// Loop through all our known added alias
 			for (String a: addedCommands) {
-				// Compare each alias to the current command
 				try {
 					if(commands.get(i).getAliases().contains(a)) {
-						// They match, so remove it. 
 						commands.remove(i);
 					}
 				} catch(Exception e) {
-					// .. normal 
 				}
 			}
-			
 		}
 	}
+	
+	public static void integrateCmdFactionsFaction() throws Exception {
+		// Fetch all the sub commands - do NOT copy
+		List<MassiveCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+		
+		for (int i=0; i < commands.size(); i++) {
+			
+			if(commands.get(i).getAliases().contains("faction") || commands.get(i).getAliases().contains("f")) {
+				FactionsPlus.info("Taking over the /f f/faction command ..  ");
+				Factions.get().getOuterCmdFactions().getSubCommands().remove(i); // Remove it! 
+			}
+		}
+		
+		addSC(new Factions_CmdFactionsFaction());
+	}
+
 	
 }

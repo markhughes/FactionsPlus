@@ -73,6 +73,9 @@ public enum FType {
 	public static FType valueOf( Faction faction ) {
 		
 		// isNone always returns wilderness/none, easiest to detect 
+		
+		if( faction == null) return FType.WILDERNESS;
+		
 		if( faction.isNone() ) {
 			
 			return FType.WILDERNESS;

@@ -16,7 +16,7 @@ import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 
 public class CmdDebug extends FPCommand {

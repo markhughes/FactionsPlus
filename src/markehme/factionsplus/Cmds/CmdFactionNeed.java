@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdFactionNeed extends FPCommand {
 	

@@ -7,8 +7,8 @@ import markehme.factionsplus.config.Config;
 import org.bukkit.command.CommandSender;
 
 import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.mcore.cmd.MCommand;
-import com.massivecraft.mcore.cmd.req.ReqAbstract;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
+import com.massivecraft.massivecore.cmd.req.ReqAbstract;
 
 /**
  * ReqAtLeastOneWarp isn't actually applicable in commands as all commands 
@@ -33,7 +33,7 @@ public class ReqAtLeastOneWarp extends ReqAbstract {
 	// -------------------------------------------- //
 
 	@Override
-	public boolean apply(CommandSender sender, MCommand command) {
+	public boolean apply(CommandSender sender, MassiveCommand command) {
 		File currentWarpFile = new File( Config.folderWarps, Faction.get(sender).getId() );
 		
 	    if ( ! currentWarpFile.exists() ) {
@@ -44,7 +44,7 @@ public class ReqAtLeastOneWarp extends ReqAbstract {
 	}
 
 	@Override
-	public String createErrorMessage(CommandSender sender, MCommand command) {
+	public String createErrorMessage(CommandSender sender, MassiveCommand command) {
 		return "Your Faction has no warps!";
 	}
 

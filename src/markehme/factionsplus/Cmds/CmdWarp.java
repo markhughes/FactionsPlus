@@ -31,9 +31,9 @@ import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.SmokeUtil;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.SmokeUtil;
 
 public class CmdWarp extends FPCommand {
 	public CmdWarp() {

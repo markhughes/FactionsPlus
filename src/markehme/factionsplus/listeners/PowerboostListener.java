@@ -17,7 +17,7 @@ import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MConf;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 public class PowerboostListener implements Listener{
 	

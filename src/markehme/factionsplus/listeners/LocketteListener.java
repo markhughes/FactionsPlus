@@ -12,12 +12,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 
 public class LocketteListener implements Listener  {
 	
 	@EventHandler(priority = EventPriority.MONITOR )
-	public void onLandClaim( FactionsEventChunkChange event ) {
+	public void onLandClaim( EventFactionsChunkChange event ) {
 		if ( event.isCancelled() ) {
 			return;
 		} else {

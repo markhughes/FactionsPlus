@@ -12,8 +12,8 @@ import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.ps.PS;
 
 public class CmdFactionHome extends FPCommand {
 	Factions factions;

@@ -19,9 +19,9 @@ import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdBan extends FPCommand {
 	public CmdBan() {
@@ -108,7 +108,7 @@ public class CmdBan extends FPCommand {
 			}
 			
 			
-			FactionsEventMembershipChange event = new FactionsEventMembershipChange(sender, fPlayerBanThisPlayer, FactionColls.get().get(fPlayerBanThisPlayer).getNone(), MembershipChangeReason.KICK);
+			EventFactionsMembershipChange event = new EventFactionsMembershipChange(sender, fPlayerBanThisPlayer, FactionColls.get().get(fPlayerBanThisPlayer).getNone(), MembershipChangeReason.KICK);
 			event.run();
 			
 			if (event.isCancelled()) return;

@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdToggleState extends FPCommand {
 	

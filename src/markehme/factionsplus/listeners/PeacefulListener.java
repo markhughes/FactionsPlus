@@ -6,12 +6,12 @@ import markehme.factionsplus.config.Config;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 
 public class PeacefulListener implements Listener{
 	@EventHandler
-	public void onFPlayerJoinEvent(FactionsEventMembershipChange event) {
+	public void onFPlayerJoinEvent(EventFactionsMembershipChange event) {
 		if(event.isCancelled() || event.getReason() != MembershipChangeReason.JOIN) {
 			return;
 		}

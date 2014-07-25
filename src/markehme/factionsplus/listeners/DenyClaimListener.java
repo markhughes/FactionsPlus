@@ -13,12 +13,12 @@ import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 
 public class DenyClaimListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.NORMAL)
-	public void onFClaim(FactionsEventChunkChange event) {
+	public void onFClaim(EventFactionsChunkChange event) {
 		if (event.isCancelled()) {
 			return;
 		}

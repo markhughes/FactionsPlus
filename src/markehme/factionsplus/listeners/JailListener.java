@@ -20,12 +20,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 
 public class JailListener implements Listener{
 	@EventHandler
-	public void onFPlayerJoinEvent(FactionsEventMembershipChange event) {
+	public void onFPlayerJoinEvent(EventFactionsMembershipChange event) {
 		if(event.isCancelled()) {
 			return;
 		}
@@ -147,7 +147,7 @@ public class JailListener implements Listener{
 	
 	
 	@EventHandler
-	public void onFPlayerLeaveEvent(FactionsEventMembershipChange event) {
+	public void onFPlayerLeaveEvent(EventFactionsMembershipChange event) {
 		if( event.isCancelled() || event.getReason() != MembershipChangeReason.LEAVE ) {
 			return;
 		}

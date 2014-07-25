@@ -24,7 +24,7 @@ import org.bukkit.potion.Potion;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 public class AnimalDamageListener implements Listener {
 

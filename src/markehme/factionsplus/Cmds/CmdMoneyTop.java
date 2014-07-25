@@ -23,8 +23,8 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.money.Money;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.money.Money;
 
 
 

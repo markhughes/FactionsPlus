@@ -17,8 +17,8 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.util.Txt;
 
 public class CmdPowSettings extends FPCommand {
 	

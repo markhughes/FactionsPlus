@@ -15,7 +15,7 @@ import org.bukkit.plugin.PluginManager;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 import com.onarandombox.MultiverseCore.event.MVPlayerTouchedPortalEvent;
 import com.onarandombox.MultiverseCore.event.MVTeleportEvent;
 import com.onarandombox.MultiversePortals.event.MVPortalEvent;

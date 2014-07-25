@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 
 
 
@@ -24,7 +24,7 @@ public class LWCListener implements Listener {
 	
 	
 	@EventHandler(priority = EventPriority.MONITOR )
-	public void onLandClaim( FactionsEventChunkChange event ) {
+	public void onLandClaim( EventFactionsChunkChange event ) {
 		if ( event.isCancelled() ) {
 			return;
 		} else {

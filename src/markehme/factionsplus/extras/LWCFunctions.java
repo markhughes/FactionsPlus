@@ -20,7 +20,7 @@ import com.griefcraft.model.Protection;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 /**
  * call these methods only when LWC plugin is loaded in bukkit, else NoClassDefFoundError<br>

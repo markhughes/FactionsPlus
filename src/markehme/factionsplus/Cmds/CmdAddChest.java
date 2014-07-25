@@ -4,7 +4,7 @@ import org.bukkit.ChatColor;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdAddChest extends FPCommand {
 	public CmdAddChest() {

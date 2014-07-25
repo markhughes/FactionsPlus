@@ -5,7 +5,7 @@ import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdSetJail extends FPCommand {
 	public CmdSetJail() {

@@ -13,7 +13,7 @@ import org.bukkit.plugin.PluginManager;
 
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 import at.pavlov.cannons.event.CannonUseEvent;
 

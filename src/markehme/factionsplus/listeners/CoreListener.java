@@ -47,12 +47,12 @@ import org.bukkit.inventory.ItemStack;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.factions.event.FactionsEventCreate;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.factions.event.FactionsEventRelationChange;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
+import com.massivecraft.factions.event.EventFactionsCreate;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsRelationChange;
+import com.massivecraft.massivecore.ps.PS;
 
 
 public class CoreListener implements Listener{
@@ -63,7 +63,7 @@ public class CoreListener implements Listener{
 	 * @param event
 	 */
 	@EventHandler
-	public void onFactionsEventRelationChange(FactionsEventRelationChange event) {
+	public void onEventFactionsRelationChange(EventFactionsRelationChange event) {
 		if(FType.valueOf(event.getFaction()) == FType.WILDERNESS || FType.valueOf(event.getOtherFaction()) == FType.WILDERNESS) {
 			if(Config._extras._Fixes.disallowChangingRelationshipToWilderness._) {
 				event.getUSender().msg(ChatColor.RED + "You can't change the relationship towards the wilderness!");
@@ -166,7 +166,7 @@ public class CoreListener implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLandClaim(FactionsEventChunkChange event) {
+	public void onLandClaim(EventFactionsChunkChange event) {
 		
 		if(Config._extras._protection.worldguardCanBuildCheck._) {
 			
@@ -260,7 +260,7 @@ public class CoreListener implements Listener{
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerCreateFaction( FactionsEventCreate event ) {
+	public void onPlayerCreateFaction( EventFactionsCreate event ) {
 		
 		if(Config._factions.factionNameFirstLetterForceUpperCase._ ) {
 			
@@ -448,7 +448,7 @@ public class CoreListener implements Listener{
 	}
 		
 	@EventHandler(priority=EventPriority.MONITOR)
-	public void onFactionsMembershipChange(FactionsEventMembershipChange event) {
+	public void onFactionsMembershipChange(EventFactionsMembershipChange event) {
 		
 		// Show rules on join 
 		if( event.getReason() == MembershipChangeReason.JOIN ) {
