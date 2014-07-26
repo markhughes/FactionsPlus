@@ -6,8 +6,8 @@ import markehme.factionsplus.MCore.FactionDataColls;
 import org.bukkit.command.CommandSender;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.cmd.MCommand;
-import com.massivecraft.mcore.cmd.req.ReqAbstract;
+import com.massivecraft.massivecore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.req.ReqAbstract;
 
 /**
  * ReqAtLeastOneWarp isn't actually applicable in commands as all commands 

@@ -12,7 +12,7 @@ import org.bukkit.Location;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
@@ -190,6 +190,7 @@ public class OldMigrate {
 		}
 		
 		// Migration finished - so we no longer need to use the database 
+		OldConfig.fileConfig.renameTo(new File( OldConfig.folderBase, "config_disabled.yml" ));
 		OldConfig.deInit();
 	}
 	

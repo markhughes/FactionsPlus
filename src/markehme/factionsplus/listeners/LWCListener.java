@@ -15,7 +15,7 @@ import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 
 
 

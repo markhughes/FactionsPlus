@@ -142,7 +142,6 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 	
 	@Override
 	public void putAll( Map<? extends LEFTSIDE, ? extends RIGHTSIDE> m ) {
-		// TODO Auto-generated method stub
 		throw Q.ni();
 	}
 	
@@ -156,21 +155,18 @@ public class TwoWayMapOfNonNulls<LEFTSIDE, RIGHTSIDE> implements Map<LEFTSIDE, R
 	
 	@Override
 	public Set<LEFTSIDE> keySet() {
-		// TODO Auto-generated method stub
 		throw Q.ni();
 	}
 	
 	
 	@Override
 	public Collection<RIGHTSIDE> values() {
-		// TODO Auto-generated method stub
 		throw Q.ni();
 	}
 	
 	
 	@Override
 	public Set<java.util.Map.Entry<LEFTSIDE, RIGHTSIDE>> entrySet() {
-		// TODO Auto-generated method stub
 		throw Q.ni();
 	}
 }

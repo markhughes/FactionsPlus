@@ -138,7 +138,7 @@ public abstract class WannabeYaml {
 								// add line as comment
 								// previousWYItem.setNext
 								// 7 check spaces for comment to decide...
-								// FIXME: if comment is at same level => store with previous, else don't
+								// DONTFIXME: if comment is at same level => store with previous, else don't
 //								previousWYItem = ;
 								// );//, parentSection, previousWYItem );
 								parentSection.append( new WYComment( lineNumber, line.substring( pos0based ) ) );/* this idents the comment to right level on next write */
@@ -216,11 +216,11 @@ public abstract class WannabeYaml {
 						// ok get identifier
 						// parse until ":" or non alphanumeric char
 						if ( ( ( c >= 'a' ) && ( c <= 'z' ) ) || ( ( c >= 'A' ) && ( c <= 'Z' ) )
-							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) // TODO: allow this later || c == Config.DOT
+							|| ( ( c >= '0' ) && ( c <= '9' ) ) || ( c == '_' ) // : allow this later || c == Config.DOT
 						)
 						{// allows ie. extras.lwc.disableSomething as an identifier !
 							// ok valid id char
-							// we don't actually do anything //FIXME: fix 'if'
+							// we don't actually do anything //DNTFIXME: fix 'if'
 						} else {
 							// expecting ":" not space and not eol
 							if ( c == IDVALUE_SEPARATOR ) {
@@ -229,7 +229,6 @@ public abstract class WannabeYaml {
 								expecting = ExpectingType.VALUESTART_OR_EOL;
 								continue inLineScan;// also skip this char
 							} else {
-								// TODO: replace with specific exception
 								throw new RuntimeException( "unexpected char, should be `" + IDVALUE_SEPARATOR
 									+ "` instead of `" + c + "` at line " + lineNumber + " pos " + ( pos0based + 1 )
 									+ '\n' + line );
@@ -342,7 +341,7 @@ public abstract class WannabeYaml {
 						+ ( pos0based + 1 ) + '\n' + line );
 				}
 				// throw null;
-			} while ( true );// evil goto hack, FIXME: try avoiding this, obviously
+			} while ( true );// evil goto hack, DONTFIXME: try avoiding this, obviously
 		}// all lines done aka EOF
 		
 		return END_OF_FILE;// end of file (aka end of all lines)

@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 
 /**
  * The JailListener adds features for FactionsPlus jails.

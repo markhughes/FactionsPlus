@@ -10,8 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitWorker;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
-import com.massivecraft.mcore.cmd.req.ReqHasPerm;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 
 public class CmdDebug extends FPCommand {
 	public CmdDebug() {

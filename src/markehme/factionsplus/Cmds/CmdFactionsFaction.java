@@ -19,12 +19,12 @@ import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChangeType;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.mcore.cmd.req.ReqHasPerm;
-import com.massivecraft.mcore.mixin.Mixin;
-import com.massivecraft.mcore.money.Money;
-import com.massivecraft.mcore.util.TimeDiffUtil;
-import com.massivecraft.mcore.util.TimeUnit;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
+import com.massivecraft.massivecore.mixin.Mixin;
+import com.massivecraft.massivecore.money.Money;
+import com.massivecraft.massivecore.util.TimeDiffUtil;
+import com.massivecraft.massivecore.util.TimeUnit;
+import com.massivecraft.massivecore.util.Txt;
 
 /**
  * This class is a clone of Factions f/faction command.

@@ -51,8 +51,8 @@ import com.massivecraft.factions.event.FactionsEventCreate;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
 import com.massivecraft.factions.event.FactionsEventRelationChange;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.Txt;
 
 
 public class CoreListener implements Listener {
@@ -68,10 +68,12 @@ public class CoreListener implements Listener {
 	@EventHandler
 	public void onFactionsEventRelationChange(FactionsEventRelationChange event) {
 		
-		if(!FPUConf.get(event.getUSender().getUniverse()).enabled) return; // Universe support
+		FPUConf fpuconf = FPUConf.get(event.getUSender());
+		
+		if(!fpuconf.enabled) return; // Universe support
 		
 		if(FType.valueOf(event.getFaction()) == FType.WILDERNESS || FType.valueOf(event.getOtherFaction()) == FType.WILDERNESS) {
-			if(FPUConf.get(event.getUSender().getUniverse()).fixes.get("disallowChangingRelationshipToWilderness")) {
+			if(fpuconf.fixes.get("disallowChangingRelationshipToWilderness")) {
 				event.getUSender().msg(Txt.parse(LConf.get().fpNoAlterRelationship));
 				event.setCancelled(true);
 				return;
@@ -79,7 +81,7 @@ public class CoreListener implements Listener {
 		}
 		
 		if(FType.valueOf(event.getFaction()) == FType.SAFEZONE || FType.valueOf(event.getOtherFaction()) == FType.SAFEZONE) {
-			if(FPUConf.get(event.getUSender().getUniverse()).fixes.get("disallowChangingRelationshipToSafezone")) {
+			if(fpuconf.fixes.get("disallowChangingRelationshipToSafezone")) {
 				event.getUSender().msg(Txt.parse(LConf.get().fpNoAlterRelationship));
 				event.setCancelled(true);
 				return;
@@ -87,7 +89,7 @@ public class CoreListener implements Listener {
 		}
 		
 		if(FType.valueOf(event.getFaction()) == FType.WARZONE || FType.valueOf(event.getOtherFaction()) == FType.WARZONE) {
-			if(FPUConf.get(event.getUSender().getUniverse()).fixes.get("disallowChangingRelationshipToWarzone")) {
+			if(fpuconf.fixes.get("disallowChangingRelationshipToWarzone")) {
 				event.getUSender().msg(Txt.parse(LConf.get().fpNoAlterRelationship));
 				event.setCancelled(true);
 				return;
@@ -209,9 +211,11 @@ public class CoreListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onLandClaim(FactionsEventChunkChange event) {
 		
-		if(!FPUConf.get(event.getUSender().getUniverse()).enabled) return; // Universe support
+		FPUConf fpuconf = FPUConf.get(event.getUSender());
 		
-		if(FPUConf.get(event.getUSender().getUniverse()).enableWorldGuardRegionCheck) {
+		if(!fpuconf.enabled) return; // Universe support
+		
+		if(fpuconf.enableWorldGuardRegionCheck) {
 			
 			if(event.getUSender() == null) return;
 			
@@ -252,12 +256,16 @@ public class CoreListener implements Listener {
 		
 		if(event.getEntity() instanceof Player) {
 			
-			if(!FPUConf.get(UPlayer.get(event.getEntity()).getUniverse()).enabled) return; // Universe support
-			
 			UPlayer uPlayer = UPlayer.get((Player) event.getEntity());
+
+			FPUConf fpuconf = FPUConf.get(uPlayer);
+			
+			if(!fpuconf.enabled) return; // Universe support
+			if(!fpuconf.makeSafeZoneExtraSafe) return;
+			
 			Faction factionAt = BoardColls.get().getFactionAt(PS.valueOf(uPlayer.getPlayer().getLocation()));
 			
-			if(FType.valueOf(factionAt) == FType.SAFEZONE && FPUConf.get(uPlayer.getUniverse()).makeSafeZoneExtraSafe) {
+			if(FType.valueOf(factionAt) == FType.SAFEZONE) {
 				event.setCancelled(true);
 			}
 		}

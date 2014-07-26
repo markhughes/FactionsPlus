@@ -2,7 +2,7 @@ package markehme.factionsplus.util;
 
 import org.bukkit.permissions.Permissible;
 
-import com.massivecraft.mcore.util.PermUtil;
+import com.massivecraft.massivecore.util.PermUtil;
 
 /**
  * FactionsPlus Permissions

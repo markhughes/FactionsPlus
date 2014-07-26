@@ -20,9 +20,9 @@ import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventMembershipChange;
 import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.mcore.cmd.req.ReqHasPerm;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.util.Txt;
 
 public class CmdBan extends FPCommand {
 	public CmdBan() {
@@ -67,13 +67,26 @@ public class CmdBan extends FPCommand {
 		
 		UPlayer ubPlayer = UPlayer.get(bPlayer);
 		
+		if(ubPlayer != null) {
+			if(ubPlayer.isUsingAdminMode()) {
+				msg(Txt.parse(LConf.get().banCannotBan));
+				return;
+			}
+
+		}
+		
+		if(ubPlayer.getPlayer().isOp()) {
+			msg(Txt.parse(LConf.get().banCannotBan));
+			return;
+		}
+		
 		// Disallow banning admins or ops
 		if((ubPlayer.isUsingAdminMode() || ubPlayer.getPlayer().isOp())) {
 			msg(Txt.parse(LConf.get().banCannotBan));
 			return;
 		}
 		
-		FactionData fData = FactionDataColls.get().getForUniverse(usender.getUniverse()).get(usenderFaction.getId());
+		FactionData fData = FactionDataColls.get().getForUniverse(this.universe).get(usenderFaction.getId());
 		
 		// Are they already banned?
 		if(fData.bannedPlayerIDs.containsKey(bPlayer.getUniqueId().toString())) {
@@ -88,7 +101,7 @@ public class CmdBan extends FPCommand {
 		}
 		
 		// Ensure we're following Faction rules of power 
-		if(!com.massivecraft.factions.entity.UConf.get(usender.getUniverse()).canLeaveWithNegativePower) {
+		if(!com.massivecraft.factions.entity.UConf.get(this.universe).canLeaveWithNegativePower) {
 			if(ubPlayer.getPower() < 0) {
 				msg(Txt.parse(LConf.get().banCantBanTooLowPower));
 				return;

@@ -4,10 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.massivecraft.mcore.store.Coll;
-import com.massivecraft.mcore.store.Colls;
-import com.massivecraft.mcore.store.Entity;
-import com.massivecraft.mcore.util.MUtil;
+import com.massivecraft.massivecore.store.Coll;
+import com.massivecraft.massivecore.store.Colls;
+import com.massivecraft.massivecore.store.Entity;
+import com.massivecraft.massivecore.util.MUtil;
 
 /**
  * Taken from: https://github.com/MassiveCraft/Factions/blob/master/src/com/massivecraft/factions/entity/XColls.java

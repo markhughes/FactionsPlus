@@ -4,8 +4,8 @@ import org.bukkit.command.CommandSender;
 
 import markehme.factionsplus.MCore.FPUConf;
 
-import com.massivecraft.mcore.cmd.MCommand;
-import com.massivecraft.mcore.cmd.req.ReqAbstract;
+import com.massivecraft.massivecore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.req.ReqAbstract;
 
 public class ReqFactionsPlusEnabled extends ReqAbstract {
 	private static final long serialVersionUID = 1L;

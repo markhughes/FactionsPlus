@@ -19,7 +19,7 @@ import org.yi.acru.bukkit.Lockette.Lockette;
 
 import com.griefcraft.model.Protection;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
+import com.massivecraft.massivecore.ps.PS;
 
 public class LocketteFunctions {
 	static LocketteListener lockettelisten = null;

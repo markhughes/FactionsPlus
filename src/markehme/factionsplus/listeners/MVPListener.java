@@ -14,7 +14,7 @@ import org.bukkit.plugin.PluginManager;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 import com.onarandombox.MultiversePortals.event.MVPortalEvent;
 
 public class MVPListener implements Listener {

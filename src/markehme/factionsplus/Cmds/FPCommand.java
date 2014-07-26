@@ -7,7 +7,7 @@ import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
 
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 
 public abstract class FPCommand extends FCommand {
 

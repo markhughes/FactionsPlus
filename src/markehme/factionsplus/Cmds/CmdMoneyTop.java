@@ -23,8 +23,8 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.integration.Econ;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.money.Money;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.money.Money;
 
 // TODO: REDO THIS ENTIRE DISGUSTING THING 
 
@@ -186,14 +186,10 @@ public class CmdMoneyTop extends FPCommand {
 				sender.sendMessage(ChatColor.RED + "No permission!");
 				return;
 			}
-			if ( !OldConfig._economy.isHooked() ) {
-				sender.sendMessage( "Economy is unavailable or disabled in FactionsPlus configs" );
+
+			if (!Econ.isEnabled(usender)) {
+				sender.sendMessage( "Economy is disabled in Factions plugin" );
 				return;
-			}else {
-				if (!Econ.isEnabled(usender)) {
-					sender.sendMessage( "Economy is disabled in Factions plugin" );
-					return;
-				}
 			}
 			
 			//get the page number requested

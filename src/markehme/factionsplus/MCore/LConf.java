@@ -1,7 +1,7 @@
 package markehme.factionsplus.MCore;
 
 
-import com.massivecraft.mcore.store.Entity;
+import com.massivecraft.massivecore.store.Entity;
 
 public class LConf extends Entity<LConf> {
 	/*
@@ -55,7 +55,7 @@ public class LConf extends Entity<LConf> {
 	// ----------------------------
 	// Faction Command
 	// ----------------------------
-	public String factionCommandPlayerName		= "<a>{name}%<aqua>(<green>{power}<aqua>)<a>";
+	public String factionCommandPlayerName		= "<a>{name}<aqua>(<green>{power}<aqua>)<a>";
 	
 	// ----------------------------
 	// Warp related

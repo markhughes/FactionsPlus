@@ -10,10 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 
 import com.massivecraft.factions.Rel;
-import com.massivecraft.mcore.store.Entity;
-import com.massivecraft.mcore.store.SenderEntity;
-import com.massivecraft.mcore.util.MUtil;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.store.Entity;
+import com.massivecraft.massivecore.store.SenderEntity;
+import com.massivecraft.massivecore.util.MUtil;
+import com.massivecraft.massivecore.util.Txt;
 
 public class FPUConf extends Entity<FPUConf> {
 	// -------------------------------------------- //
@@ -430,6 +430,9 @@ public class FPUConf extends Entity<FPUConf> {
 			
 		);
 	
+	// ----------------------------------------
+	// /f faction/f command additions section 
+	// ----------------------------------------
 	public List<String> factionCommandHideDescriptionInfo = MUtil.list(
 			"enterFactionID"
 		);
@@ -480,12 +483,4 @@ public class FPUConf extends Entity<FPUConf> {
 	public List<String> factionCommandHideFollowersOfflineInfo = MUtil.list(
 			"enterFactionID"
 		);
-	
-	
-	
-	
-	
-	
-	
-	
 }

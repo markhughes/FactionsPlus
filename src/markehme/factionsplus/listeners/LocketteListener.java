@@ -12,7 +12,7 @@ import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 
 public class LocketteListener implements Listener  {
 	

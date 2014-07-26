@@ -163,7 +163,6 @@ public class FactionsPlusJail {
 				}
 				*/
 				
-				// TODO: We're still going to delete it until the above is in-action.
 				jailingFile.delete();
 				
 			}

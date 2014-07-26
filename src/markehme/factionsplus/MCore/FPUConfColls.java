@@ -2,8 +2,8 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.mcore.Aspect;
-import com.massivecraft.mcore.MCore;
+import com.massivecraft.massivecore.Aspect;
+import com.massivecraft.massivecore.MCore;
 
 public class FPUConfColls extends XColls<FPUConfColl, FPUConf> {
 	// -------------------------------------------- //

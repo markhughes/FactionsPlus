@@ -28,9 +28,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.mcore.Aspect;
-import com.massivecraft.mcore.AspectColl;
-import com.massivecraft.mcore.Multiverse;
+import com.massivecraft.massivecore.Aspect;
+import com.massivecraft.massivecore.AspectColl;
+import com.massivecraft.massivecore.Multiverse;
 
 import com.onarandombox.MultiversePortals.MultiversePortals;
 

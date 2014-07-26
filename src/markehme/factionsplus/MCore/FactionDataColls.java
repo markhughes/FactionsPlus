@@ -2,7 +2,7 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.mcore.Aspect;
+import com.massivecraft.massivecore.Aspect;
 
 
 public class FactionDataColls extends XColls<FactionDataColl, FactionData> {

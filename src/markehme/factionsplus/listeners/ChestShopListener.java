@@ -19,8 +19,8 @@ import com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.Txt;
 
 public class ChestShopListener implements Listener {
 	

@@ -4,19 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
-import markehme.factionsplus.FactionsPlusJail;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
 import markehme.factionsplus.MCore.LConf;
-import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
-import com.massivecraft.mcore.cmd.req.ReqHasPerm;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.Txt;
 
 public class CmdJail extends FPCommand {
 	
@@ -44,19 +42,19 @@ public class CmdJail extends FPCommand {
 	public void performfp() {
 		String playerToJail = this.arg(0);
 		
-		if(!FPUConf.get(usender.getUniverse()).whoCanJail.get(usender.getRole())) {
+		if(fpuconf.whoCanJail.get(usender.getRole())) {
 			msg(Txt.parse(LConf.get().jailsNotHighEnoughRanking));
 			return;
 		}
 		
-		if(FPUConf.get(usender.getUniverse()).mustBeInOwnTerritoryToJail && !usender.isInOwnTerritory()) {
+		if(fpuconf.mustBeInOwnTerritoryToJail && !usender.isInOwnTerritory()) {
 			msg(Txt.parse(LConf.get().jailsMustBeInOwnTerritoryToJail));	
 			return;
 		}
 		
-		if(FPUConf.get(usender.getUniverse()).economyCost.get("jail") > 0) {
-			if(!Utilities.doCharge(FPUConf.get(usender.getUniverse()).economyCost.get("jail"), usender)) {
-				msg(Txt.parse(LConf.get().jailsCantAffordToJail, FPUConf.get(usender.getUniverse()).economyCost.get("jail")));
+		if(fpuconf.economyCost.get("jail") > 0) {
+			if(!Utilities.doCharge(fpuconf.economyCost.get("jail"), usender)) {
+				msg(Txt.parse(LConf.get().jailsCantAffordToJail, fpuconf.economyCost.get("jail")));
 				return;
 			}
 		}

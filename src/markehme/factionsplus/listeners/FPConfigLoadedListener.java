@@ -101,6 +101,8 @@ public class FPConfigLoadedListener implements Listener {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
+        // TODO: re-do all events in a more effecient way.
+        
         // Lockette 
         LocketteFunctions.enableOrDisable(FactionsPlus.instance);
         
@@ -116,7 +118,6 @@ public class FPConfigLoadedListener implements Listener {
         // Cannons
         CannonsListener.enableOrDisable(FactionsPlus.instance);
         
-		// TODO: look through usage UConf and see if these should be enabled (inc. ChestShop, ShowCaseStandalone
 		Listen.startOrStopListenerAsNeeded( true, PowerboostListener.class );
 		Listen.startOrStopListenerAsNeeded( true, AnnounceListener.class );
 		Listen.startOrStopListenerAsNeeded( true, BanListener.class );

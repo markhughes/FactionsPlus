@@ -30,7 +30,7 @@ import markehme.factionsplus.extras.LWCBase;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.mcore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 
 public class FactionsPlusCommandManager {
 	FactionsPlusCommandManager FactionsPlusCommandManager;

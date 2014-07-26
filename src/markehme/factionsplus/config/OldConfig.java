@@ -593,7 +593,7 @@ public abstract class OldConfig {
 					+ "' exists, it is not a file!" );
 			}
 		}else {
-			//FIXME: evil hack, creating empty file and allowing the following code(which is meant just for when file is not empty) to actually fill it up
+			//DONTFIXME: evil hack, creating empty file and allowing the following code(which is meant just for when file is not empty) to actually fill it up
 			// x: what to do when config doesn't exit, probably just saveConfig() or fill up virtualRoot
 			// will have to fill the root with the fields and their comments
 			
@@ -664,7 +664,7 @@ public abstract class OldConfig {
 		prependHeader(virtualRoot);
 		
 		
-		//TODO:
+		//:
 		//1.setvalues for all fields
 		//all config options should be already in the virtualRoot (even those upgraded or new non-existing ones)
 		setFieldValuesToThoseFromConfig();

@@ -1,20 +1,18 @@
 package markehme.factionsplus.Cmds;
 
-
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
-import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
-import com.massivecraft.mcore.cmd.req.ReqHasPerm;
-import com.massivecraft.mcore.cmd.req.ReqIsPlayer;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
+import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.Txt;
 
 public class CmdSetJail extends FPCommand {
 	public CmdSetJail() {
@@ -37,7 +35,7 @@ public class CmdSetJail extends FPCommand {
 	public void performfp() {
 		
 		// Ensure this player can set jails
-		if(!FPUConf.get(usender.getUniverse()).whoCanSetJails.get(usender.getRole())) {
+		if(!fpuconf.whoCanSetJails.get(usender.getRole())) {
 			msg(Txt.parse(LConf.get().jailsNotHighEnoughRanking));
 			return;
 		}
@@ -49,9 +47,9 @@ public class CmdSetJail extends FPCommand {
 		}
 		
 		// Ensure the player pays if required 
-		if(FPUConf.get(usender.getUniverse()).economyCost.get("setjail") > 0) {
-			if(!Utilities.doCharge(FPUConf.get(usender.getUniverse()).economyCost.get("setjail"), usender)) {
-				msg(Txt.parse(LConf.get().jailsCantAffordToJail, FPUConf.get(usender.getUniverse()).economyCost.get("setjail")));
+		if(fpuconf.economyCost.get("setJail") > 0) {
+			if(!Utilities.doCharge(fpuconf.economyCost.get("setJail"), usender)) {
+				msg(Txt.parse(LConf.get().jailsCantAffordToJail, fpuconf.economyCost.get("setJail")));
 				return;
 			}
 		}

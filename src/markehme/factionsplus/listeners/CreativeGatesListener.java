@@ -23,8 +23,8 @@ import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.util.MUtil;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.MUtil;
 
 public class CreativeGatesListener implements Listener {
 	

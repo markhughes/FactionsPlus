@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.mcore.ps.PS;
-import com.massivecraft.mcore.store.Entity;
+import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.store.Entity;
 
 public class FactionData extends Entity<FactionData> {
 	// -------------------------------------------- //

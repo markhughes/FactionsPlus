@@ -1,6 +1,6 @@
 package markehme.factionsplus.MCore;
 
-import com.massivecraft.mcore.store.Entity;
+import com.massivecraft.massivecore.store.Entity;
 
 public class MConf extends Entity<MConf> {
 	
