@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 import com.massivecraft.massivecore.util.Txt;
 
 /**
@@ -32,7 +32,7 @@ public class JailListener implements Listener{
 	 * 
 	 */
 	@EventHandler
-	public void onPlayerJoinFactionEvent(FactionsEventMembershipChange event) {
+	public void onPlayerJoinFactionEvent(EventFactionsMembershipChange event) {
 		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return; // universe support 
 
 		FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction());
@@ -197,7 +197,7 @@ public class JailListener implements Listener{
 	 * 
 	 */
 	@EventHandler
-	public void onFPlayerLeaveEvent(FactionsEventMembershipChange event) {
+	public void onFPlayerLeaveEvent(EventFactionsMembershipChange event) {
 		if(event.isCancelled() || event.getReason() != MembershipChangeReason.LEAVE ) return;
 		
 		UPlayer uPlayer = event.getUPlayer();

@@ -46,11 +46,11 @@ import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
-import com.massivecraft.factions.event.FactionsEventCreate;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
-import com.massivecraft.factions.event.FactionsEventRelationChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
+import com.massivecraft.factions.event.EventFactionsCreate;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsRelationChange;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.Txt;
 
@@ -66,7 +66,7 @@ public class CoreListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	public void onFactionsEventRelationChange(FactionsEventRelationChange event) {
+	public void onFactionsEventRelationChange(EventFactionsRelationChange event) {
 		
 		FPUConf fpuconf = FPUConf.get(event.getUSender());
 		
@@ -209,7 +209,7 @@ public class CoreListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onLandClaim(FactionsEventChunkChange event) {
+	public void onLandClaim(EventFactionsChunkChange event) {
 		
 		FPUConf fpuconf = FPUConf.get(event.getUSender());
 		
@@ -306,7 +306,7 @@ public class CoreListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerCreateFaction(FactionsEventCreate event) {
+	public void onPlayerCreateFaction(EventFactionsCreate event) {
 		if(!FPUConf.get(event.getUniverse()).enabled) return;
 		
 		if(FPUConf.get(event.getUniverse()).factionNameForceFirstLetterUppercase) {
@@ -571,7 +571,7 @@ public class CoreListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority=EventPriority.LOWEST)
-	public void onFactionsMembershipChange(FactionsEventMembershipChange event) {
+	public void onFactionsMembershipChange(EventFactionsMembershipChange event) {
 		
 		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return;
 		

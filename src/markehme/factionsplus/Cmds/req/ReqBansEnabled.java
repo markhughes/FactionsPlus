@@ -5,7 +5,7 @@ import markehme.factionsplus.MCore.FPUConf;
 import org.bukkit.command.CommandSender;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.massivecore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 import com.massivecraft.massivecore.cmd.req.ReqAbstract;
 
 public class ReqBansEnabled extends ReqAbstract {
@@ -23,12 +23,12 @@ public class ReqBansEnabled extends ReqAbstract {
 	// -------------------------------------------- //
 
 	@Override
-	public boolean apply(CommandSender sender, MCommand command) {
+	public boolean apply(CommandSender sender, MassiveCommand command) {
 		return FPUConf.get(UPlayer.get(sender).getUniverse()).bansEnabled;
 	}
 
 	@Override
-	public String createErrorMessage(CommandSender sender, MCommand command) {
+	public String createErrorMessage(CommandSender sender, MassiveCommand command) {
 		return "Bans are not enabled.";
 	}
 }

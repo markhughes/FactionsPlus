@@ -12,12 +12,12 @@ import org.bukkit.event.Listener;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 
 public class DenyClaimListener implements Listener {
 	
 	@EventHandler(priority=EventPriority.NORMAL)
-	public void onFactionsClaim(FactionsEventChunkChange event) {
+	public void onFactionsClaim(EventFactionsChunkChange event) {
 		if(!FPUConf.get(event.getUSender().getUniverse()).enabled) return;
 
 		Faction faction 	= event.getNewFaction();

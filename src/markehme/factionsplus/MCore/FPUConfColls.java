@@ -3,7 +3,7 @@ package markehme.factionsplus.MCore;
 import markehme.factionsplus.FactionsPlus;
 
 import com.massivecraft.massivecore.Aspect;
-import com.massivecraft.massivecore.MCore;
+import com.massivecraft.massivecore.MassiveCore;
 
 public class FPUConfColls extends XColls<FPUConfColl, FPUConf> {
 	// -------------------------------------------- //
@@ -36,7 +36,7 @@ public class FPUConfColls extends XColls<FPUConfColl, FPUConf> {
 	public FPUConf get2(Object worldNameExtractable) {
 		FPUConfColl coll = this.get(worldNameExtractable);
 		if (coll == null) return null;
-		return coll.get(MCore.INSTANCE);
+		return coll.get(MassiveCore.INSTANCE);
 	}
 
 

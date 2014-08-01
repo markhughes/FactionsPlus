@@ -18,8 +18,8 @@ import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 import com.massivecraft.massivecore.util.Txt;
@@ -112,7 +112,7 @@ public class CmdBan extends FPCommand {
 		fData.bannedPlayerIDs.put(bPlayer.getUniqueId().toString(), bPlayer.getUniqueId().toString());
 		
 		// Run the kick event
-		FactionsEventMembershipChange event = new FactionsEventMembershipChange(sender, ubPlayer, FactionColls.get().get(ubPlayer).getNone(), MembershipChangeReason.KICK);
+		EventFactionsMembershipChange event = new EventFactionsMembershipChange(sender, ubPlayer, FactionColls.get().get(ubPlayer).getNone(), MembershipChangeReason.KICK);
 		event.run();
 		
 		if (event.isCancelled()) return;
