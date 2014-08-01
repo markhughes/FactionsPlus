@@ -17,7 +17,7 @@ import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChangeType;
+import com.massivecraft.factions.event.EventFactionsChunkChangeType;
 import com.massivecraft.factions.integration.Econ;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 import com.massivecraft.massivecore.mixin.Mixin;
@@ -102,7 +102,7 @@ public class CmdFactionsFaction extends FPCommand {
 			{
 				long landCount = faction.getLandCount();
 				
-				for (FactionsEventChunkChangeType type : FactionsEventChunkChangeType.values())
+				for (EventFactionsChunkChangeType type : EventFactionsChunkChangeType.values())
 				{
 					Double money = uconf.econChunkCost.get(type);
 					if (money == null) continue;

@@ -22,7 +22,7 @@ import com.massivecraft.creativegates.entity.UGate;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.MUtil;
 
@@ -123,7 +123,7 @@ public class CreativeGatesListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true )
-	public void onLandClaim(FactionsEventChunkChange event) {
+	public void onLandClaim(EventFactionsChunkChange event) {
 		
 		// Confirm this is still enabled 
 		if(!FPUConf.get(UPlayer.get(event.getSender())).creativegates.get("destroyOnClaimUnclaim")) return;

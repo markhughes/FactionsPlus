@@ -9,8 +9,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.Rel;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 
 public class BanListener implements Listener {
 	
@@ -19,7 +19,7 @@ public class BanListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	public void onFactionsMembershipChangeEvent(FactionsEventMembershipChange event) {
+	public void onFactionsMembershipChangeEvent(EventFactionsMembershipChange event) {
 		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return;
 		
 		// Only check if they're actually joining

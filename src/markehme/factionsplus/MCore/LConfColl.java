@@ -2,7 +2,7 @@ package markehme.factionsplus.MCore;
 
 import markehme.factionsplus.FactionsPlus;
 
-import com.massivecraft.massivecore.MCore;
+import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.store.Coll;
 import com.massivecraft.massivecore.store.MStore;
 
@@ -24,7 +24,7 @@ public class LConfColl extends Coll<LConf> {
 	@Override
 	public void init() {
 		super.init();
-		LConf.i = this.get(MCore.INSTANCE, true);
+		LConf.i = this.get(MassiveCore.INSTANCE, true);
 	}
 
 }

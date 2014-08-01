@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventChunkChange;
+import com.massivecraft.factions.event.EventFactionsChunkChange;
 import com.massivecraft.massivecore.util.Txt;
 
 
@@ -22,7 +22,7 @@ import com.massivecraft.massivecore.util.Txt;
 public class LWCListener implements Listener {
 		
 	@EventHandler(priority = EventPriority.MONITOR )
-	public void onLandClaim(FactionsEventChunkChange event) {
+	public void onLandClaim(EventFactionsChunkChange event) {
 		if(FPUConf.isDisabled(event.getUSender().getUniverse())) return;
 		
 		if(!FPUConf.get(event.getUSender().getUniverse()).removeLWCProtectionOn) return;
