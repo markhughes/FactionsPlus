@@ -483,4 +483,11 @@ public class FPUConf extends Entity<FPUConf> {
 	public List<String> factionCommandHideFollowersOfflineInfo = MUtil.list(
 			"enterFactionID"
 		);
+	
+	// ----------------------------------------
+	// misc and unsorted 
+	// ----------------------------------------
+	public Map<Rel, Boolean> whoCanToggleListeningNeeds = MUtil.map(
+			Rel.LEADER, true
+		);
 }

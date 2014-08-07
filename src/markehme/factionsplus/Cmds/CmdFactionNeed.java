@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.massivecore.MassiveCore;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 import com.massivecraft.massivecore.util.Txt;
@@ -39,7 +38,15 @@ public class CmdFactionNeed extends FPCommand {
 		boolean didToggle = false;
 		
 		if(this.args.size() > 0) {
+			
+			if(!fpuconf.whoCanToggleListeningNeeds.containsKey(usender.getRole()) &&
+				(this.arg(0).equalsIgnoreCase("ignore") || this.arg(0).equalsIgnoreCase("listen"))) {
+				msg(Txt.parse(LConf.get().factionNeedNotHighEnoughRankToToggle));
+				return;
+			}
+			
 			if(this.arg(0).equalsIgnoreCase("ignore") && FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+
 				if(!fData.ignoringNeedRequests) {
 					fData.ignoringNeedRequests = true;
 					msg(Txt.parse(LConf.get().factionNeedNowIgnoring));
@@ -64,6 +71,8 @@ public class CmdFactionNeed extends FPCommand {
 				msg(Txt.parse("No permission")); // TODO: Nicer deny messages / customise
 				return;
 			}
+			
+			
 		}
 		
 		if(usender.hasFaction() && !didToggle) {

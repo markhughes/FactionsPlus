@@ -136,6 +136,7 @@ public class LConf extends Entity<LConf> {
 	public String factionNeedAlreadyIgnoring = "<red>You are already ignoring players that need a Faction!";
 	public String factionNeedNowListening = "<green>You are now listening for players that need a Faction!";
 	public String factionNeedNowIgnoring = "<green>You are now listening for players that need a Faction!";
+	public String factionNeedNotHighEnoughRankToToggle = "<red>Your rank is not high enough to toggle need requests.";
 	
 	// ----------------------------
 	// Jail Related
