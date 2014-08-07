@@ -25,8 +25,22 @@ import com.massivecraft.massivecore.ps.PS;
 public class PowerboostListener implements Listener{
 		
 	@EventHandler(priority=EventPriority.MONITOR)
-	public void onEntityDeath( EntityDeathEvent event ) {
-		FPUConf fpUConf = FPUConf.get(UPlayer.get((Player) event.getEntity()));
+	public void onEntityDeath(EntityDeathEvent event) {
+		
+		Player pPlayer = null;;
+		
+		if(event.getEntity() instanceof Player) {
+			pPlayer = (Player) event.getEntity();
+		} else {
+			if(event.getEntity() instanceof Monster) {
+				pPlayer = event.getEntity().getKiller();
+			}
+			
+			if(pPlayer == null) return;
+			
+		}
+		
+		FPUConf fpUConf = FPUConf.get(UPlayer.get(pPlayer));
 		
 		if(!fpUConf.enabled) return;
 		
