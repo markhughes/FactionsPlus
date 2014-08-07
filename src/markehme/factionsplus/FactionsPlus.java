@@ -15,15 +15,33 @@ import markehme.factionsplus.MCore.FPUConfColls;
 import markehme.factionsplus.config.OldMigrate;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
+import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.extras.WGFlagIntegration;
+import markehme.factionsplus.listeners.AnimalDamageListener;
+import markehme.factionsplus.listeners.AnnounceListener;
+import markehme.factionsplus.listeners.BanListener;
+import markehme.factionsplus.listeners.CannonsListener;
+import markehme.factionsplus.listeners.ChestShopListener;
 import markehme.factionsplus.listeners.CoreListener;
-import markehme.factionsplus.listeners.FPConfigLoadedListener;
+import markehme.factionsplus.listeners.CreativeGatesListener;
+import markehme.factionsplus.listeners.DenyClaimListener;
+import markehme.factionsplus.listeners.DisguiseListener;
+import markehme.factionsplus.listeners.JailListener;
+import markehme.factionsplus.listeners.LiquidFlowListener;
+import markehme.factionsplus.listeners.Listen;
+import markehme.factionsplus.listeners.MVPListener;
+import markehme.factionsplus.listeners.PeacefulListener;
+import markehme.factionsplus.listeners.PowerboostListener;
+import markehme.factionsplus.listeners.ShowCaseStandaloneListener;
+import markehme.factionsplus.listeners.TeleportsListener;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -148,8 +166,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			initFactions();
 			
-			// Publicise that the config has been loaded
-			pm.registerEvents(new FPConfigLoadedListener(), this);
+			registerAll();
 			
 			// Add our core listener
 			pm.registerEvents(this.corelistener, this);
@@ -306,5 +323,130 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		// Some debug output - can be helpful when debugging errors 
 		debug("Factions v" + FactionsVersion ); 
 
+	}
+	
+	public void registerAll() {
+        TeleportsListener.initOrDeInit(FactionsPlus.instance);
+        
+        PluginManager pm = Bukkit.getServer().getPluginManager();
+        
+        // Fetch world edit 
+        if(pm.isPluginEnabled("WorldEdit")) {
+       		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
+       		FactionsPlus.isWorldEditEnabled = true;
+       	}
+        
+        // fetch world guard
+        if(pm.isPluginEnabled("WorldGuard")) {
+        	FactionsPlus.worldGuardPlugin = (WorldGuardPlugin) pm.getPlugin("WorldGuard");	            	
+        	FactionsPlus.isWorldGuardEnabled = true;
+        }
+        
+        // fetch mvp
+        if(pm.isPluginEnabled("Multiverse-Portals")) { 
+        	Plugin MVc = pm.getPlugin("Multiverse-Portals");
+            
+            if(MVc instanceof MultiversePortals) {
+            	FactionsPlus.multiversePortalsPlugin = (MultiversePortals) MVc;
+            	
+            	FactionsPlus.isMultiversePortalsEnabled = true;
+            }
+            
+        }
+        
+        // WorldGuard Custom Flags integration
+        if(pm.isPluginEnabled("WGCustomFlags")) {
+        	WGFlagIntegration WGFi = new WGFlagIntegration();
+        	WGFi.addFlags();
+        }
+        
+        if ( LWCBase.isLWCPluginPresent() ) {
+        	
+			// TODO: is this still used ? - can't find in Factions config 
+        	/*
+			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
+				// if Faction plugin has setting to reset locks (which only resets for chests)
+				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
+				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
+					Config._extras._protection._lwc.removeAllLocksOnClaim._=true;
+					// meh: maybe someone can modify this message so that it would make sense to the console reader
+					FactionsPlusPlugin.info( "Automatically setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
+						+ "` for this session because you have Factions.`onCaptureResetLwcLocks` set to true" );
+					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
+				}
+				
+			}
+			*/
+
+			try { 
+				LWCFunctions.hookLWCIfNeeded();
+			} catch(NoClassDefFoundError e) {
+				FactionsPlus.debug( "Couldn't hook LWC.. ignoring." );
+			}
+			
+		} else { //no LWC
+			/*
+			if ( OldConfig._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
+				|| OldConfig._extras._protection._lwc.removeAllLocksOnClaim._ ) 
+			{
+				FPP
+					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
+						+ " This means those settings will be ignored & have no effect" );
+			}
+			*/
+			
+			//if there is no LWC anymore ie. plugman unload lwc
+			//then we might still have hooks into LWC from before, and we kinda take care of unlinking those here
+			LWCFunctions.deregListenerIfNeeded();
+		}
+        
+        // TODO: re-do all events in a more effecient way.
+        
+        // Lockette 
+        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
+        
+        // Disguises 
+        DisguiseListener.enableOrDisable(FactionsPlus.instance);
+        
+        // Multiverse-portals
+        MVPListener.enableOrDisable(FactionsPlus.instance);
+        
+        // CreativeGates
+        CreativeGatesListener.enableOrDisable(FactionsPlus.instance);
+        
+        // Cannons
+        CannonsListener.enableOrDisable(FactionsPlus.instance);
+        
+		Listen.startOrStopListenerAsNeeded( true, PowerboostListener.class );
+		Listen.startOrStopListenerAsNeeded( true, AnnounceListener.class );
+		Listen.startOrStopListenerAsNeeded( true, BanListener.class );
+		Listen.startOrStopListenerAsNeeded( true, JailListener.class );
+		Listen.startOrStopListenerAsNeeded( true, PeacefulListener.class );
+		Listen.startOrStopListenerAsNeeded( true, LiquidFlowListener.class );
+		Listen.startOrStopListenerAsNeeded( true, DenyClaimListener.class );
+		
+		// ChestShop
+		if( Bukkit.getPluginManager().getPlugin( "ChestShop" ) != null ) {
+			
+			Listen.startOrStopListenerAsNeeded( true, ChestShopListener.class );
+			
+		}
+		
+		// ChestShop
+		if( Bukkit.getPluginManager().getPlugin( "ShowCaseStandalone" ) != null ) {
+			
+			Listen.startOrStopListenerAsNeeded( true, ShowCaseStandaloneListener.class );
+			
+		}
+		
+
+		// Animal Damager Listener
+		Listen.startOrStopListenerAsNeeded( true, AnimalDamageListener.class );
+		
+		// Scoreboard Setup
+		FactionsPlusScoreboard.setup();
+		
+		// Updates
+		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
 	}
 }
