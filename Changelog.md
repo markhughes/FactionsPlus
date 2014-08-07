@@ -2,7 +2,7 @@
 
 * Huge code clean up
 * Fixed a small issue with not ensuring FactionsPlusUpdate was not running
-* Now using MCore
+* Now using MassiveCore
 * config.yml no longer used, now using mstore
 * templates are now referred to as languages, and is under LConf - all FactionsPlus texts are now editable! 
 * LWC features removed - now all handled by Factions
@@ -10,3 +10,4 @@
 * WorldGuard region check now also checks owners
 * Updates notify both ops and admins
 * Power Settings command now works again, and shows more information
+* Can now ignore need requests with /f need listen/ignore 
