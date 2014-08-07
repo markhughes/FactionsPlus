@@ -39,9 +39,10 @@ public class AnnounceListener implements Listener {
 		
 		if(fData == null) return;
 		if(fData.announcement == null) return;
+		if(fData.announcer == null) fData.announcement = "someone";
 		
 		if(FPUConf.get(uPlayer.getUniverse()).showAnnouncement.get("onlogin")) {
-			uPlayer.msg(Txt.parse(LConf.get().announcementNotify, fData.announcement));
+			uPlayer.msg(Txt.parse(LConf.get().announcementNotify, fData.announcer, fData.announcement));
 		}
 	}
 	
@@ -73,9 +74,11 @@ public class AnnounceListener implements Listener {
 					if(fData == null) return;
 					if(fData.announcement == null) return;
 					
-					me.msg(Txt.parse(LConf.get().announcementNotify, fData.announcement));
+					me.msg(Txt.parse(LConf.get().announcementNotify, fData.announcer, fData.announcement));
 				}
 			}
+		} else {
+			me.msg("onterritoryenter is false so no send?");
 		}
 	}
 }
