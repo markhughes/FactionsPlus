@@ -92,7 +92,7 @@ public class FactionData extends Entity<FactionData> {
 			return true;
 		}
 		
-		if(warpPasswords.get(name.toLowerCase()) == pass) {
+		if(warpPasswords.get(name.toLowerCase()).equals(pass)) {
 			return true;
 		}
 		
@@ -132,7 +132,8 @@ public class FactionData extends Entity<FactionData> {
 	
 	public Map<String, PS> warpLocation = new LinkedHashMap<String, PS>();
 	public Map<String, String> warpPasswords = new LinkedHashMap<String, String>();
-	
+
+	public String announcer = null;
 	public String announcement = null;
 	
 	public Map<String, String> bannedPlayerIDs = new LinkedHashMap<String, String>();	
@@ -142,6 +143,6 @@ public class FactionData extends Entity<FactionData> {
 	
 	public List<String> rules = new ArrayList<String>();
 	
-	public Boolean ignoringNeedRequests = true;
+	public Boolean ignoringNeedRequests = false;
 	
 }

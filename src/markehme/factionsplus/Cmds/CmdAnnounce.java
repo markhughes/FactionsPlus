@@ -61,6 +61,7 @@ public class CmdAnnounce extends FPCommand {
 		// Store the announcement data in their FactionData before we apply formatting 
 		FactionData fData = FactionDataColls.get().getForUniverse(usender.getUniverse()).get(usenderFaction.getId());
 		fData.announcement = message;
+		fData.announcer = me.getName();
 		
 		// If colours are enabled for announcements, we will parse it
 		if(FPUConf.get(usender.getUniverse()).allowColoursInAnnouncements) {
