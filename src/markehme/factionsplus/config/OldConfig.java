@@ -33,7 +33,6 @@ import markehme.factionsplus.config.yaml.WYRawButLeveledLine;
 import markehme.factionsplus.config.yaml.WYSection;
 import markehme.factionsplus.config.yaml.WY_IDBased;
 import markehme.factionsplus.config.yaml.WannabeYaml;
-import markehme.factionsplus.events.FPConfigLoadedEvent;
 import markehme.factionsplus.util.Q;
 import markehme.factionsplus.util.RethrownException;
 
@@ -265,15 +264,7 @@ public abstract class OldConfig {
 			reloadConfig();
 			
 			reloadTemplates();
-			
-			// last:
 			OldConfig.setLoaded( true );
-			// Create the event here
-			Event event = new FPConfigLoadedEvent();
-			// Call the event
-//			throw null;//this will be caught
-			Bukkit.getServer().getPluginManager().callEvent(event);
-			//exceptions from inside the hooked event cannot be caught here for they are not let thru
 		} catch ( Throwable t ) {
 //			FactionsPlus.warn("caught");
 			Q.rethrow( t );
