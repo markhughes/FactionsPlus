@@ -64,9 +64,11 @@ public class OldMigrate {
 				
 				if(fData == null) {
 					FactionDataColls.get().getForUniverse(faction.getUniverse()).create();
-					msg("[Faction] [FData] FactionData File created.");
+					msg("[Faction] [FData] FactionData file created.");
+					
+					fData = FactionDataColls.get().getForUniverse(faction.getUniverse()).get(faction.getId());
 				} else {
-					msg("[Faction] [FData] FactionData File already exists, moving on.");
+					msg("[Faction] [FData] FactionData file already exists, moving on.");
 				}
 				
 				// ----- Migrate Announcement ----- //
@@ -101,8 +103,11 @@ public class OldMigrate {
 					
 					Location jailLocation = new Location(Bukkit.getWorld(locationData[4]), Double.valueOf(locationData[0]), Double.valueOf(locationData[1]), Double.valueOf(locationData[2]));
 					
-					// Create the location and store it in our fData object 
-					fData.jailLocation = PS.valueOf(jailLocation);
+					// Create the PS version 
+					PS psJailLocation = PS.valueOf(jailLocation);
+					
+					// Store the location in our fData object 
+					fData.jailLocation = psJailLocation;
 					
 					msg("[Faction] [Jail] Jail location found and moved to x: " + locationData[0]+", y: " + locationData[1] + ", z: " + locationData[2] + ", in world: " + locationData[4]);
 					
@@ -161,6 +166,7 @@ public class OldMigrate {
 								String[] items = warpData.split(":");
 								
 								if (items.length > 0) {
+									
 									// is warp data
 									// TODO: convert
 								}
