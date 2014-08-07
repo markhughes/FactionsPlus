@@ -130,7 +130,7 @@ public class TeleportsListener implements Listener {
 		
 		String cmd = event.getMessage();
 		
-		Location whereTo = EssentialsIntegration.getLastLocation( playerInGame );
+		Location whereTo = playerInGame.getLocation();
 		Location safeTo = null;
 		
 		try {
