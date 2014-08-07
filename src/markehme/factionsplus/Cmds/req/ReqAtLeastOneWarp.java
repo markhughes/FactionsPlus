@@ -6,7 +6,7 @@ import markehme.factionsplus.MCore.FactionDataColls;
 import org.bukkit.command.CommandSender;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.massivecore.cmd.MCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 import com.massivecraft.massivecore.cmd.req.ReqAbstract;
 
 /**
@@ -32,7 +32,7 @@ public class ReqAtLeastOneWarp extends ReqAbstract {
 	// -------------------------------------------- //
 
 	@Override
-	public boolean apply(CommandSender sender, MCommand command) {
+	public boolean apply(CommandSender sender, MassiveCommand command) {
 		FactionData fData = FactionDataColls.get().getForUniverse(UPlayer.get(sender).getUniverse()).get(UPlayer.get(sender).getFaction().getId());
 		
 		if(fData.warpLocation.size() > 0) {
@@ -44,7 +44,7 @@ public class ReqAtLeastOneWarp extends ReqAbstract {
 	}
 
 	@Override
-	public String createErrorMessage(CommandSender sender, MCommand command) {
+	public String createErrorMessage(CommandSender sender, MassiveCommand command) {
 		return "This Faction has no warps.";
 	}
 

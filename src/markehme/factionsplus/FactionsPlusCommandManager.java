@@ -101,7 +101,7 @@ public class FactionsPlusCommandManager {
 	
 	public static void disableSubCommands() throws Exception {
 		// Fetch all the sub commands
-		List<MCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+		List<MassiveCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
 				
 		// Go through each command 
 		for (int i=0; i < commands.size(); i++) {
@@ -123,7 +123,7 @@ public class FactionsPlusCommandManager {
 
 	public static void integrateCmdFactionsFaction() throws Exception {
 		// Fetch all the sub commands - do NOT copy
-		List<MCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
+		List<MassiveCommand> commands = Factions.get().getOuterCmdFactions().getSubCommands();
 		
 		boolean found = false;
 		

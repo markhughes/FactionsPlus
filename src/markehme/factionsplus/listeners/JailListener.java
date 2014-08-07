@@ -17,8 +17,8 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.massivecraft.factions.entity.UPlayer;
-import com.massivecraft.factions.event.FactionsEventMembershipChange;
-import com.massivecraft.factions.event.FactionsEventMembershipChange.MembershipChangeReason;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
+import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 import com.massivecraft.massivecore.util.Txt;
 
 /**
@@ -32,8 +32,9 @@ public class JailListener implements Listener{
 	 * 
 	 */
 	@EventHandler
-	public void onPlayerJoinFactionEvent(FactionsEventMembershipChange event) {
-		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return; // universe support 
+	public void onPlayerJoinFactionEvent(EventFactionsMembershipChange event) {
+		if(!FPUConf.get(event.getUPlayer().getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(event.getUPlayer().getUniverse()).jailsEnabled) return; // check jails enabled
 
 		FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction());
 		
@@ -54,6 +55,7 @@ public class JailListener implements Listener{
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		
@@ -75,6 +77,7 @@ public class JailListener implements Listener{
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		
@@ -94,6 +97,7 @@ public class JailListener implements Listener{
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 		
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		
@@ -115,6 +119,7 @@ public class JailListener implements Listener{
 
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		if(fData == null) return;
@@ -135,8 +140,9 @@ public class JailListener implements Listener{
 		
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		if(!FPUConf.get(uPlayer.getUniverse()).denyChatWhileJailed) return; // best feature in 0.7.x, right? 
-
+		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		if(fData == null) return;
 		
@@ -156,6 +162,7 @@ public class JailListener implements Listener{
 		
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		if(fData == null) return;
@@ -174,6 +181,7 @@ public class JailListener implements Listener{
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		if(fData == null) return;
@@ -197,11 +205,12 @@ public class JailListener implements Listener{
 	 * 
 	 */
 	@EventHandler
-	public void onFPlayerLeaveEvent(FactionsEventMembershipChange event) {
+	public void onFPlayerLeaveEvent(EventFactionsMembershipChange event) {
 		if(event.isCancelled() || event.getReason() != MembershipChangeReason.LEAVE ) return;
 		
 		UPlayer uPlayer = event.getUPlayer();
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return; // universe support
+		if(!FPUConf.get(uPlayer.getUniverse()).jailsEnabled) return; // check jails enabled
 		
 		FactionData fData = FactionDataColls.get().getForUniverse(uPlayer.getUniverse()).get(uPlayer.getFaction());
 		if(fData == null) return;

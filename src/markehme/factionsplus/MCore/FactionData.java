@@ -142,5 +142,6 @@ public class FactionData extends Entity<FactionData> {
 	
 	public List<String> rules = new ArrayList<String>();
 	
+	public Boolean ignoringNeedRequests = true;
 	
 }

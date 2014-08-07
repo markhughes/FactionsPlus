@@ -214,52 +214,52 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				if(EssentialsIntegration.isHooked()) {
 					EssentialsIntegration.onDisable();
 				}
-			} catch ( Throwable t ) {
+			} catch (Throwable t) {
 				failed = t;
-				severe( t, "Exception on unhooking Essentials" );
+				severe(t, "Exception on unhooking Essentials");
 			} 
 			
 			try {
 				FactionsPlusCommandManager.disableSubCommands();
 			} catch(Throwable t) {
 				failed = t;
-				severe( t, "Exception on removing FactionsPlus commands" );
+				severe(t, "Exception on removing FactionsPlus commands");
 			}
 			try {
-				if ( LWCBase.isLWCPluginPresent() ) {
+				if (LWCBase.isLWCPluginPresent()) {
 					LWCFunctions.unhookLWC();
 				}
-			} catch ( Throwable t ) {
+			} catch (Throwable t) {
 				failed = t;
-				severe( t, "Exception on unhooking LWC" );
+				severe(t, "Exception on unhooking LWC");
 			}
 					
 			try {
 				FactionsPlusUpdate.ensureNotRunning();
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on disabling Updates" );
+				severe(t, "Exception on disabling Updates");
 			}
 			
 			try {
-				getServer().getServicesManager().unregisterAll( this );
+				getServer().getServicesManager().unregisterAll(this);
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unregistering services" );
+				severe(t, "Exception on unregistering services");
 			}
 			
 			try {
-				HandlerList.unregisterAll( FactionsPlus.instance );
+				HandlerList.unregisterAll(FactionsPlus.instance);
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception on unregistering from HandlerList" );
+				severe(t, "Exception on unregistering from HandlerList");
 			}
 			
 			try {
 				getServer().getScheduler().cancelTasks(this);
 			} catch ( Throwable t ) {
 				failed = t;
-				severe( t, "Exception when canceling schedule tasks" );
+				severe(t, "Exception when canceling schedule tasks");
 			}
 			
 			try {
@@ -268,19 +268,18 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				}
 			} catch( Exception t ) {
 				failed = t;
-				severe( t, "Exception when removing scoreboard" );
+				severe(t, "Exception when removing scoreboard");
 			}
 			
 			if(null == failed) {
 				info("Disabled successfuly.");
 			}
 			
-		} catch ( Throwable t ) {
+		} catch (Throwable t) {
 			failed = t;
 		} finally {
 			if ( null != failed ) {
-				info( "Did not disable successfuly! Please check over exceptions." );
-				
+				info("Did not disable successfuly! Please check over exceptions.");
 			}
 		}
 	}
@@ -296,7 +295,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		} catch (ClassNotFoundException ex) {
 			warn("Could not find Factions 2.x - please update to Factions 2.x.");
 			warn("(or not compaitable)");
-			info("You are required to use 0.5.x for Factions 1.x");
 			
 			disableSelf();
 			return;

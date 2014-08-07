@@ -1,11 +1,9 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
-import com.massivecraft.massivecore.ps.PS;
 
 public class CmdPlot extends FPCommand {
 	public CmdPlot() {
