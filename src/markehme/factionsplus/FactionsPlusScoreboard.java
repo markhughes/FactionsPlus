@@ -25,7 +25,7 @@ import com.massivecraft.massivecore.util.Txt;
 
 public class FactionsPlusScoreboard {
 	
-	public static String objective_name = "FactionsPlus_TopFactions";
+	public static String objective_name = "FactionsPlus_TF";
 	public static Scoreboard scoreBoard = null;
 	
 	public static void setup() {
