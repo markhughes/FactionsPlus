@@ -8,6 +8,9 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.MCore.Const;
+import markehme.factionsplus.MCore.FactionData;
+import markehme.factionsplus.MCore.FactionDataColl;
+import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConfColl;
 import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.MCore.MConfColl;
@@ -18,23 +21,7 @@ import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.extras.Metrics;
 import markehme.factionsplus.extras.WGFlagIntegration;
-import markehme.factionsplus.listeners.AnimalDamageListener;
-import markehme.factionsplus.listeners.AnnounceListener;
-import markehme.factionsplus.listeners.BanListener;
-import markehme.factionsplus.listeners.CannonsListener;
-import markehme.factionsplus.listeners.ChestShopListener;
-import markehme.factionsplus.listeners.CoreListener;
-import markehme.factionsplus.listeners.CreativeGatesListener;
-import markehme.factionsplus.listeners.DenyClaimListener;
-import markehme.factionsplus.listeners.DisguiseListener;
-import markehme.factionsplus.listeners.JailListener;
-import markehme.factionsplus.listeners.LiquidFlowListener;
-import markehme.factionsplus.listeners.Listen;
-import markehme.factionsplus.listeners.MVPListener;
-import markehme.factionsplus.listeners.PeacefulListener;
-import markehme.factionsplus.listeners.PowerboostListener;
-import markehme.factionsplus.listeners.ShowCaseStandaloneListener;
-import markehme.factionsplus.listeners.TeleportsListener;
+import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
@@ -46,6 +33,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.massivecore.Aspect;
 import com.massivecraft.massivecore.AspectColl;
 import com.massivecraft.massivecore.Multiverse;
@@ -83,7 +72,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static boolean isMultiversePortalsEnabled 			= 	false;
 	
 	// Our core listener
-	public final CoreListener corelistener 						=	new CoreListener();
+	public final CoreListener coreListener 						=	new CoreListener();
 	
 	// WorldEdit + World Guard plugins
 	public static WorldEditPlugin worldEditPlugin 				= 	null;
@@ -121,7 +110,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public FactionsPlus() {
 		super();
 		
-		//  instance was not null, which means we wern't disabled properly - bail!
 		if(null != instance) {
 			throw bailOut("This was not expected, getting new-ed again without getting unloaded first.\n" +
 							"Safest way to reload is to stop and start the server!");
@@ -169,7 +157,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			registerAll();
 			
 			// Add our core listener
-			pm.registerEvents(this.corelistener, this);
+			pm.registerEvents(coreListener, this);
 			
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
@@ -195,10 +183,35 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	        if(MConf.get().metrics.booleanValue()) {
 				try {
 					metrics = new Metrics(this);
-	                metrics.createGraph("Factions Version").addPlotter(new Metrics.Plotter(FactionsVersion) {
+					
+					// Fetch the Factions Version
+					metrics.createGraph("Factions Version").addPlotter(new Metrics.Plotter(FactionsVersion) {
 	                    @Override
 	                    public int getValue() { return 1; }
 	                });
+					
+					// Get the Factions count  
+					metrics.createGraph("Factions").addPlotter(new Metrics.Plotter(""+FactionColls.get().getColls().size()) {
+	                    @Override
+	                    public int getValue() { return 1; }
+	                });
+					
+					// Get the amount of chunks claimed 
+					metrics.createGraph("Chunks Claimed").addPlotter(new Metrics.Plotter(""+BoardColls.get().getColls().size()) {
+	                    @Override
+	                    public int getValue() { return 1; }
+	                });
+					
+					int warpC = countWarps();
+					
+					if(warpC > 0) { 
+					
+						metrics.createGraph("Total Warps").addPlotter(new Metrics.Plotter(""+warpC) {
+		                    @Override
+		                    public int getValue() { return 1; }
+		                });
+	                
+					}
 					metrics.start();
 					
 				} catch (Exception e) {
@@ -400,7 +413,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
-        // TODO: re-do all events in a more effecient way.
+        // TODO: re-do all events in a more efficient way.
         
         // Lockette 
         LocketteFunctions.enableOrDisable(FactionsPlus.instance);
@@ -448,5 +461,21 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		// Updates
 		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
+	}
+	
+	public int countWarps() {
+		int total = 0;
+		
+		for(FactionDataColl fColl : FactionDataColls.get().getColls()) {
+			for(String id : fColl.getIds()) {
+				FactionData fData = fColl.get(id);
+				
+				if(fData.warpLocation.size() > 0) {
+					total = total + fData.warpLocation.size();
+				}
+			}
+		}
+		
+		return total;
 	}
 }
