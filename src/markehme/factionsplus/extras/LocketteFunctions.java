@@ -1,9 +1,7 @@
 package markehme.factionsplus.extras;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.config.OldConfig;
 import markehme.factionsplus.listeners.LocketteListener;
-import markehme.factionsplus.listeners.MVPListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,12 +10,9 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.yi.acru.bukkit.Lockette.Lockette;
 
-import com.griefcraft.model.Protection;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
@@ -53,7 +48,7 @@ public class LocketteFunctions {
 				for ( int y = 0; y < 256; y++ ) {
 					
 					Block block = chunk.getBlock( x, y, z );
-					Material type = block.getType();
+					//Material type = block.getType();
 					
 					// Is the block protected?
 					// isProtected() checks the block type, we don't need to check the block type
@@ -112,7 +107,6 @@ public class LocketteFunctions {
 	public static final void enableOrDisable(FactionsPlus instance){
  		PluginManager pm = Bukkit.getServer().getPluginManager();
  		
- 		if(OldConfig._extras._protection.removeSignProtectionOnClaim._) {
  			if ( pm.isPluginEnabled("Lockette") ) {
 				assert ( null == lockettelisten );
 				
@@ -130,7 +124,6 @@ public class LocketteFunctions {
  			} else {
  				FactionsPlus.warn("extras.protection.removeSignProtectionOnClaim is enabled but Lockette was not found.");
  			}
-		}
  		
  		// TODO: unhook events if they're registered 
 	}

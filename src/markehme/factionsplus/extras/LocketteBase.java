@@ -1,7 +1,6 @@
 package markehme.factionsplus.extras;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.listeners.LWCListener;
 import markehme.factionsplus.listeners.LocketteListener;
 
 import org.bukkit.Bukkit;
