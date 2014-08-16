@@ -2,6 +2,8 @@ package markehme.factionsplus;
 
 
 
+import java.math.BigDecimal;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 
-import com.earth2me.essentials.IEssentials;
+import net.ess3.api.IEssentials;
 import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -108,7 +110,7 @@ public abstract class EssentialsIntegration {
 	 * @param player
 	 * @return can be null
 	 */
-	public final static Location getLastLocation( Player player) {
+	public final static Location getLastLocation(Player player) {
 		
 		checkInvariants();
 		
@@ -150,20 +152,18 @@ public abstract class EssentialsIntegration {
 		}
 		
 		try {
-			Teleport teleport = (Teleport) getEssentialsInstance().getUser(player).getTeleport();
+			Teleport teleport = getEssentialsInstance().getUser(player).getTeleport();
 			
-			// TODO: this is deprecated, is there a better way?
+			// Convert to BigDecimal - don't use the Double value! 
+			Trade trade = new Trade(BigDecimal.valueOf(UConf.get(player).econCostHome), getEssentialsInstance());
 			
-			Trade trade = new Trade( (double) UConf.get(player).econCostHome, (IEssentials) getEssentialsInstance() );
-			new Trade(0, null);
-			
-			teleport.teleport( loc, trade, TeleportCause.PLUGIN );
-			
+			teleport.teleport(loc, trade, TeleportCause.PLUGIN);
 		} catch (Exception e) {
 			player.sendMessage(ChatColor.RED.toString()+e.getMessage());
 			
 			return false;
 		}
+		
 		return true;
 	}
 	
