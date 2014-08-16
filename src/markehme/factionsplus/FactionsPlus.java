@@ -455,10 +455,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 		}
 		
-
-		// Animal Damager Listener
-		Listen.startOrStopListenerAsNeeded( true, AnimalDamageListener.class );
-		
 		// Scoreboard Setup
 		FactionsPlusScoreboard.setup();
 		
