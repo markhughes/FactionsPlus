@@ -3,8 +3,6 @@ package markehme.factionsplus.extras;
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.Utilities;
-import markehme.factionsplus.config.OldConfig;
-import markehme.factionsplus.listeners.LWCListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 
 import com.griefcraft.model.Protection;
 import com.massivecraft.factions.entity.BoardColls;
@@ -41,7 +38,6 @@ public abstract class LWCFunctions extends LWCBase {
 		//beware here NoClassDefFoundError if LWC isn't loaded
 		assert LWCBase.isLWCPluginPresent();
 		
-		if ( OldConfig._extras._protection._lwc.removeAllLocksOnClaim._ )  {
 			// register after we integrate
 			if ( !alreadyRegistered ) {
 				try {
@@ -51,9 +47,7 @@ public abstract class LWCFunctions extends LWCBase {
 					alreadyRegistered = true;
 				}
 			}
-		} else {
-			deregListenerIfNeeded();
-		}
+	
 		
 		if (!hooked) {
 			//we always need this in order to prevent people from locking ie. chests in enemy faction
