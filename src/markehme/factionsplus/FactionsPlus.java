@@ -73,6 +73,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	// Our core listener
 	public final CoreListener coreListener 						=	new CoreListener();
+	public final FactionsPlusListener FPListener				=	new FactionsPlusListener();
 	
 	// WorldEdit + World Guard plugins
 	public static WorldEditPlugin worldEditPlugin 				= 	null;
@@ -157,7 +158,11 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			registerAll();
 			
 			// Add our core listener
+			// TODO: Move away from this 
 			pm.registerEvents(coreListener, this);
+			
+			// Register the FactionsPlus Listener, used for a SubListeners 
+			pm.registerEvents(FPListener, this);
 			
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
@@ -224,9 +229,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			FactionsPlus.severe(t);
 			
-			if (isEnabled()) {
-				disableSelf();
-			}
+			if (isEnabled()) disableSelf();
 		}
 	}
 	
