@@ -32,6 +32,7 @@ import com.massivecraft.massivecore.util.Txt;
  * inside of Faction land.
  *
  */
+@Deprecated
 public class AnimalDamageListener implements Listener {
 	
 	/**
