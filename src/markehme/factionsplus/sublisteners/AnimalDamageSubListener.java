@@ -49,6 +49,7 @@ public class AnimalDamageSubListener {
 	);
 	
 	/**
+	 * Called on fish events related to the animal damage features
 	 * 
 	 * @param event
 	 * @return
@@ -56,7 +57,6 @@ public class AnimalDamageSubListener {
 	public PlayerFishEvent playerFishEvent(PlayerFishEvent event) {
 		// Ensure something was caught			
 		if(event.getCaught() != null) {
-			
 			// Fetch the UPlayer Object 
 			UPlayer uPlayer = UPlayer.get(event.getPlayer());
 			
@@ -72,8 +72,13 @@ public class AnimalDamageSubListener {
 		return event;
 	}
 	
+	/**
+	 * Called on entity damage events related to animal damage features
+	 * 
+	 * @param event
+	 * @return
+	 */
 	public EntityDamageByEntityEvent entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		
 		if(event.getDamager() == null) return event;
 		
 		// This is to check if the player is damaging an animal
@@ -89,6 +94,8 @@ public class AnimalDamageSubListener {
 			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs") && !canKillCheck(UDamagingPlayer)) {	
 				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
 				event.setCancelled(true) ;
+				
+				return event;
 			}
 		}
 		
@@ -133,7 +140,6 @@ public class AnimalDamageSubListener {
 		} 
 		
 		if(projectile != null) {
-			
 			EntityType entity = event.getEntityType();
 
 			Player damagingPlayer = (Player) projectile.getShooter();
@@ -142,6 +148,8 @@ public class AnimalDamageSubListener {
 			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs") && !canKillCheck(UDamagingPlayer)) {
 				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
 				event.setCancelled(true);
+				
+				return event;
 			}
 		}
 		
