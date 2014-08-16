@@ -123,7 +123,7 @@ public class FactionsPlusUpdate implements Runnable {
 				
 				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 					if (player.isOp()) {
-						player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + updater.getLatestGameVersion() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and for new features! " );
+						player.sendMessage(ChatColor.RED + "FactionsPlus version " + ChatColor.GOLD + updater.getLatestName() + ChatColor.RED + " is out! You should upgrade to avoid bugs, and for new features! " );
 					}
 				}
 			}
