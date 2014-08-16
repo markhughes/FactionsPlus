@@ -434,7 +434,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
         CannonsListener.enableOrDisable(FactionsPlus.instance);
         
 		Listen.startOrStopListenerAsNeeded( true, PowerboostListener.class );
-		Listen.startOrStopListenerAsNeeded( true, BanListener.class );
 		Listen.startOrStopListenerAsNeeded( true, JailListener.class );
 		Listen.startOrStopListenerAsNeeded( true, PeacefulListener.class );
 		Listen.startOrStopListenerAsNeeded( true, LiquidFlowListener.class );
