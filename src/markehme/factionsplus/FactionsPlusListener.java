@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
+import com.massivecraft.factions.event.EventFactionsMembershipChange;
 
 /**
  * Because of the nature of Factions, different worlds may or may not use features. So therefore, we create
@@ -23,8 +24,9 @@ import com.massivecraft.factions.entity.UPlayer;
  */
 public class FactionsPlusListener implements Listener {
 	
-	AnimalDamageSubListener animalDamageSubListener = new AnimalDamageSubListener();
-	AnnoucementsSubListener annoucementsSubListener = new AnnoucementsSubListener();
+	AnimalDamageSubListener animalDamageSubListener		= new AnimalDamageSubListener();
+	AnnoucementsSubListener annoucementsSubListener		= new AnnoucementsSubListener();
+	BanSubListener banSubListener						= new BanSubListener();
 	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
@@ -69,11 +71,21 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.announcementsEnabled) event = annoucementsSubListener.playerJoinEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerMoveEvent(PlayerMoveEvent event) {
 		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
 		FPUConf fpuconf = FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse());
 		
 		if(fpuconf.announcementsEnabled) event = annoucementsSubListener.playerMoveEvent(event);
+
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void EventFactionsMembershipChange(EventFactionsMembershipChange event) { 
+		if(!isEnabled(event.getUPlayer().getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getUPlayer().getUniverse());
+		
+		if(fpuconf.bansEnabled) event = banSubListener.eventFactionsMembershipChange(event);
 
 	}
 }
