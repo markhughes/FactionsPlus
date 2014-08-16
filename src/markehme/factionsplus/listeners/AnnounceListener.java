@@ -39,7 +39,7 @@ public class AnnounceListener implements Listener {
 		
 		if(fData == null) return;
 		if(fData.announcement == null) return;
-		if(fData.announcer == null) fData.announcement = "someone";
+		if(fData.announcer == null) fData.announcer = "someone";
 		
 		if(FPUConf.get(uPlayer.getUniverse()).showAnnouncement.get("onlogin")) {
 			uPlayer.msg(Txt.parse(LConf.get().announcementNotify, fData.announcer, fData.announcement));
