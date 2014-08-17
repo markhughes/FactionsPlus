@@ -8,8 +8,6 @@ import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.util.FPPerm;
 
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Factions;
@@ -54,18 +52,14 @@ public class CmdBan extends FPCommand {
 			return;
 		}
 		
-		OfflinePlayer bPlayer = Utilities.getOnlinePlayerExact(this.arg(0));
+		Player banningPlayer = Utilities.getPlayer(this.arg(0));
 		
-		if(bPlayer == null) {
-			bPlayer = Bukkit.getOfflinePlayer(this.arg(0));
-			
-			if(bPlayer == null) {
-				msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't ban them."));
-				return;
-			}
+		if(banningPlayer == null) {
+			msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't ban them."));
+			return;
 		}
 		
-		UPlayer ubPlayer = UPlayer.get(bPlayer);
+		UPlayer ubPlayer = UPlayer.get(banningPlayer);
 		
 		if(ubPlayer != null) {
 			if(ubPlayer.isUsingAdminMode()) {
@@ -89,7 +83,7 @@ public class CmdBan extends FPCommand {
 		FactionData fData = FactionDataColls.get().getForUniverse(this.universe).get(usenderFaction.getId());
 		
 		// Are they already banned?
-		if(fData.bannedPlayerIDs.containsKey(bPlayer.getUniqueId().toString())) {
+		if(fData.bannedPlayerIDs.containsKey(banningPlayer.getUniqueId().toString())) {
 			msg(Txt.parse(LConf.get().banPlayerAlreadyBanned));
 			return;
 		}
@@ -109,7 +103,7 @@ public class CmdBan extends FPCommand {
 		}
 		
 		// Store the player data
-		fData.bannedPlayerIDs.put(bPlayer.getUniqueId().toString(), bPlayer.getUniqueId().toString());
+		fData.bannedPlayerIDs.put(banningPlayer.getUniqueId().toString(), banningPlayer.getUniqueId().toString());
 		
 		// Run the kick event
 		EventFactionsMembershipChange event = new EventFactionsMembershipChange(sender, ubPlayer, FactionColls.get().get(ubPlayer).getNone(), MembershipChangeReason.KICK);

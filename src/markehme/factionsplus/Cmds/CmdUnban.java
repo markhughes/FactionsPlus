@@ -1,7 +1,8 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
+import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqBansEnabled;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
@@ -39,23 +40,31 @@ public class CmdUnban extends FPCommand {
 	@Override
 	public void performfp(){
 		
+		if(!FPUConf.get(usender.getUniverse()).whoCanBan.containsKey(usender.getRole())) {
+			msg(Txt.parse(LConf.get().banNotHighEnoughRanking));
+			return;
+		}
+		
 		if(!FPUConf.get(usender.getUniverse()).whoCanBan.get(usender.getRole())) {
 			msg(Txt.parse(LConf.get().banNotHighEnoughRanking));
 			return;
 		}
 		
 		FactionData fdata = FactionDataColls.get().getForUniverse(usender.getUniverse()).get(usender.getFactionId());
+				
+		Player unbanPlayer = Utilities.getPlayer(args.get(0));
 		
-		String id = null;
-		
-		if(Bukkit.getPlayer(args.get(0)) != null) {
-			id = Bukkit.getPlayer(args.get(0)).getUniqueId().toString();
-		} else {
-			// TODO: get ID from Mojang API
+		if(unbanPlayer == null) {
+			msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't unban them."));
+			return;
 		}
 		
 		// Remove that ID from the ban list
-		fdata.bannedPlayerIDs.remove(id);
+		if(!fdata.bannedPlayerIDs.containsKey(unbanPlayer.getUniqueId().toString())) {
+			msg(Txt.parse(LConf.get().banPlayerNotBanned));
+			return;
+		}
+		fdata.bannedPlayerIDs.remove(unbanPlayer.getUniqueId().toString());
 		
 	}
 }

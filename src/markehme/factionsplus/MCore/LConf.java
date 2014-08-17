@@ -109,6 +109,7 @@ public class LConf extends Entity<LConf> {
 	public String banCantBanTooLowPower = "<red>The player you are trying to ban has too low power to leave.";
 	public String banNotifyAll = "<red>%s <white>banned <red>%s> <white>from your faction!";
 	public String banYouAreBanned = "<red>You can't join this Faction as you have been banned!";
+	public String banPlayerNotBanned = "<red>That player is not banned!";
 	
 	// ----------------------------
 	// LWC Locks Related
