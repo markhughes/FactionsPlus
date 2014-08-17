@@ -1,6 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
@@ -59,15 +58,11 @@ public class CmdJail extends FPCommand {
 			}
 		}
 		
-		OfflinePlayer bPlayer = Bukkit.getPlayer(playerToJail);
+		OfflinePlayer bPlayer = Utilities.getPlayer(playerToJail);
 		
 		if(bPlayer == null) {
-			bPlayer = Bukkit.getOfflinePlayer(playerToJail);
-			
-			if(bPlayer == null) {
-				// ??
-				return;
-			}
+			msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't jail them."));
+			return;
 		}
 		
 		Location respawnLoc = null;

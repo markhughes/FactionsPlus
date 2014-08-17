@@ -1,6 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.Utilities;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.util.FPPerm;
@@ -27,7 +26,7 @@ public class CmdClearLocks extends FPCommand {
 	
 	@Override
 	public void performfp() {
-		int LWClockRemoveCount = LWCFunctions.clearLocksCommand(Utilities.getOnlinePlayerExact(usender), Utilities.getOnlinePlayerExact(usender).getLocation());
+		int LWClockRemoveCount = LWCFunctions.clearLocksCommand(usender.getPlayer(), usender.getPlayer().getLocation());
 		if(LWClockRemoveCount < 0) {	
 			LWClockRemoveCount = 0;
 		}
