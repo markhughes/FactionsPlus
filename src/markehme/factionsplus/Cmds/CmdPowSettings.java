@@ -50,10 +50,8 @@ public class CmdPowSettings extends FPCommand {
 	
 	private static final String _do_colorless		= "do"+msgColor1;
 	private static final String _dont_colorless		= "do not"+msgColor1;
-	private static final String _goodDO				= ChatColor.GREEN+_do_colorless;
 	private static final String _badDO				= ChatColor.RED+_do_colorless;
 	private static final String _goodDONT			= ChatColor.GREEN+_dont_colorless;
-	private static final String _badDONT			= ChatColor.RED+_dont_colorless;
 	
 	private List<String> allLines					= new ArrayList<String>();
 	
