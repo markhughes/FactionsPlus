@@ -144,27 +144,18 @@ public abstract class Utilities {
 	}
 
 	
-	/**
-	 * @param fplayer
-	 * @return null if offline
-	 */
-	public final static Player getOnlinePlayerExact(UPlayer uPlayer) {
-		if (null == uPlayer) {
-			return null;
-		}
-		return Utilities.getOnlinePlayerExact( uPlayer.getId() );
+	public final static Player getPlayer(String name) {
+		for(Player p : Bukkit.getServer().getOnlinePlayers())
+			if(p.getName().equalsIgnoreCase(name) )
+				return p;
+		
+		return Bukkit.getPlayer(name);
 	}
 	
-	/**
-	 * @param playerName
-	 * @return null if offline
-	 */
-	public final static Player getOnlinePlayerExact(String playerName) {
-		if ((null == playerName) || (playerName.isEmpty())) {
-			return null;
-		}
-		return Bukkit.getPlayerExact( playerName );
-	}
+
+	
+	
+	
 	
 //	public static boolean checkGroupPerm(World world, String group, String permission) {
 //		if(Config.config.getBoolean("enablePermissionGroups")) {
