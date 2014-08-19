@@ -36,6 +36,7 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <include name="*"/>
                 <include name="../LICENSE"/>
                 <include name="../plugin.yml"/>
                 <exclude name="**/*.launch"/>
@@ -53,6 +54,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
+            <include name="*"/>
             <include name="../LICENSE"/>
             <include name="../plugin.yml"/>
             <classpath refid="FactionsPlus.classpath"/>
