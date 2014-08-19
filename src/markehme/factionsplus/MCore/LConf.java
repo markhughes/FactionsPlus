@@ -40,6 +40,7 @@ public class LConf extends Entity<LConf> {
 	public String cmdDescUnBan			= "unbans a player allowing them to re-join the faction";
 	public String cmdDescUnJail			= "removes a player from jail";
 	public String cmdDescWarp			= "teleport to a warp";
+	public String cmdDescScoreboard		= "toggles scoreboard visibility";
 	
 	// ----------------------------
 	// FactionsPlus specific related
@@ -197,6 +198,10 @@ public class LConf extends Entity<LConf> {
 	// Scoreboard Related
 	// ----------------------------
 	public String scoreboardTitle = "Top Factions";
+	public String scoreboardAlreadyHidden = "<red>You are already hiding the scoreboard!";
+	public String scoreboardAlreadyShowing = "<red>You are already seeing the scoreboard!";
+	public String scoreboardToggled = "<green>Scoreboard toggled.";
+	public String scoreboardBadArgument = "<red>Incorrect argument! Please use with hide or show.";
 	
 	// ----------------------------
 	// WorldGuard Region Related
