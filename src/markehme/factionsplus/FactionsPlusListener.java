@@ -94,7 +94,8 @@ public class FactionsPlusListener implements Listener {
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void blockFromToEvent(BlockFromToEvent event) {
 		if(!isEnabled(event.getToBlock().getLocation())) return;
+		FPUConf fpuconf = FPUConf.get(event.getBlock().getLocation());
 		
-		// TODO: link up with LiquidFlowSubListener 
+		if(fpuconf.fixes.get("crossBorderLiquidFlowBlock")) event = liquidFlowSubListener.blockFromToEvent(event, fpuconf.fixes.get("crossBorderLiquidFlowBlockMakeCobblestone"));
 	}
 }

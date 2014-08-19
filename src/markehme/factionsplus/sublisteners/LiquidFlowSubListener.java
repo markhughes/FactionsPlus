@@ -10,7 +10,7 @@ import com.massivecraft.massivecore.ps.PS;
 
 public class LiquidFlowSubListener {
 	
-	public BlockFromToEvent blockFromToEvent(BlockFromToEvent event) {
+	public BlockFromToEvent blockFromToEvent(BlockFromToEvent event, Boolean createCobble) {
 		Chunk fromchunk = event.getBlock().getChunk();
 		Chunk tochunk = event.getToBlock().getChunk();
 		
@@ -33,7 +33,7 @@ public class LiquidFlowSubListener {
 			
 			event.setCancelled(true);
 			
-			event.getBlock().setType(Material.COBBLESTONE);
+			if(createCobble) event.getBlock().setType(Material.COBBLESTONE);
 		}
 		
 		return event;
