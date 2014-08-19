@@ -8,6 +8,8 @@
 * LWC features removed - now all handled by Factions
 * Added permission factionsplus.allowregionclaim.<id>
 * WorldGuard region check now also checks owners
-* Updates notify both ops and admins
+* Updates notify both ops and players in admin mode
 * Power Settings command now works again, and shows more information
 * Can now ignore need requests with /f need listen/ignore 
+* Added /f scoreboard/sb command 
+* Listeners completely re-organised into sublisteners 
