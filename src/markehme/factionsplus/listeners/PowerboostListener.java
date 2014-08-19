@@ -151,24 +151,24 @@ public class PowerboostListener implements Listener{
 					UPlayer uK = UPlayer.get(k);
 					
 					if(fpUConf.extraPowerBoosts.containsKey("whenKillEnemyPlayer") && uP.getRelationTo(uK).equals(Rel.ENEMY)) {
-						if(fpUConf.extraPowerLoss.get("whenKillEnemyPlayer") > 0) {
-							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillEnemyPlayer"));
+						if(fpUConf.extraPowerBoosts.get("whenKillEnemyPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerBoosts.get("whenKillEnemyPlayer"));
 						}
 					}
 					if(fpUConf.extraPowerBoosts.containsKey("whenKillAllyPlayer") && uP.getRelationTo(uK).equals(Rel.ALLY)) {
-						if(fpUConf.extraPowerLoss.get("whenKillAllyPlayer") > 0) {
-							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillAllyPlayer"));
+						if(fpUConf.extraPowerBoosts.get("whenKillAllyPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerBoosts.get("whenKillAllyPlayer"));
 						}
 					}
 					if(fpUConf.extraPowerBoosts.containsKey("whenKillTrucePlayer") && uP.getRelationTo(uK).equals(Rel.TRUCE)) {
-						if(fpUConf.extraPowerLoss.get("whenKillTrucePlayer") > 0) {
-							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillTrucePlayer"));
+						if(fpUConf.extraPowerBoosts.get("whenKillTrucePlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerBoosts.get("whenKillTrucePlayer"));
 						}
 					}
 					
 					if(fpUConf.extraPowerBoosts.containsKey("whenKillNeutralPlayer") && uP.getRelationTo(uK).equals(Rel.NEUTRAL)) {
-						if(fpUConf.extraPowerLoss.get("whenKillNeutralPlayer") > 0) {
-							Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillNeutralPlayer"));
+						if(fpUConf.extraPowerBoosts.get("whenKillNeutralPlayer") > 0) {
+							Utilities.addPower(k, fpUConf.extraPowerBoosts.get("whenKillNeutralPlayer"));
 						}
 					}
 
@@ -179,14 +179,14 @@ public class PowerboostListener implements Listener{
 		
 		//2of2
 		if(event.getEntity() instanceof Monster) {
-			Player k = event.getEntity().getKiller();
-			if (k == null) {
-				return;
-			}
-						
-			if(fpUConf.extraPowerBoosts.containsKey("whenKillAnotherMonster")) {
-				if(fpUConf.extraPowerLoss.get("whenKillAnotherMonster") > 0 && canLosePowerWherePlayerIsAt(k)) {
-					Utilities.addPower(k, fpUConf.extraPowerLoss.get("whenKillAnotherMonster"));
+			if(event.getEntity().getKiller() instanceof Player) {
+				Player k = event.getEntity().getKiller();
+				if (k == null) return;
+							
+				if(fpUConf.extraPowerBoosts.containsKey("whenKillAnotherMonster")) {
+					if(fpUConf.extraPowerBoosts.get("whenKillAnotherMonster") > 0 && canLosePowerWherePlayerIsAt(k)) {
+						Utilities.addPower(k, fpUConf.extraPowerBoosts.get("whenKillAnotherMonster"));
+					}
 				}
 			}
 		}
