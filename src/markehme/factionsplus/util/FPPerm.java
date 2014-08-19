@@ -29,6 +29,7 @@ public enum FPPerm {
 	WARP("warp"),
 	WARPOTHERS("warp.others"),
 	RULES("rules"),
+	SCOREBOARD("scoreboard"),
 	;
 
 	public final String node;
