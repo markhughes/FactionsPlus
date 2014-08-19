@@ -6,6 +6,7 @@ import markehme.factionsplus.sublisteners.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -27,6 +28,7 @@ public class FactionsPlusListener implements Listener {
 	AnimalDamageSubListener animalDamageSubListener		= new AnimalDamageSubListener();
 	AnnoucementsSubListener annoucementsSubListener		= new AnnoucementsSubListener();
 	BanSubListener banSubListener						= new BanSubListener();
+	LiquidFlowSubListener liquidFlowSubListener			= new LiquidFlowSubListener();
 	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
@@ -81,11 +83,18 @@ public class FactionsPlusListener implements Listener {
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)
-	public void EventFactionsMembershipChange(EventFactionsMembershipChange event) { 
+	public void eventFactionsMembershipChange(EventFactionsMembershipChange event) { 
 		if(!isEnabled(event.getUPlayer().getUniverse())) return;
 		FPUConf fpuconf = FPUConf.get(event.getUPlayer().getUniverse());
 		
 		if(fpuconf.bansEnabled) event = banSubListener.eventFactionsMembershipChange(event);
 
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void blockFromToEvent(BlockFromToEvent event) {
+		if(!isEnabled(event.getToBlock().getLocation())) return;
+		
+		// TODO: link up with LiquidFlowSubListener 
 	}
 }
