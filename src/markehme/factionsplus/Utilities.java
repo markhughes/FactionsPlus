@@ -302,40 +302,27 @@ public abstract class Utilities {
 	 * @param world
 	 * @return boolean (true if it is an ignored world)
 	 */
-	public static final boolean noMonitorPvPWorld(World world) {
-		String name = world.getName();
-		if(FactionsPlus.ignoredPvPWorlds.contains(name)) {
-			return true;
-		} else {
-			return false;
-		}
-		
+	@Deprecated
+	public static final boolean noMonitorPvPWorld(World world) {		
+		return false;
 	}
 	/**
 	 * Checks if claiming in world is disabled in config
 	 * @param world
 	 * @return boolean (true if it is a disabled claiming world)
 	 */
+	@Deprecated
 	public static final boolean noClaimWorld(World world) {
-		String name = world.getName();
-		if(FactionsPlus.noClaimingWorlds.contains(name)) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 	/**
 	 * Checks if powerloss in world is disabled in config
 	 * @param world
 	 * @return boolean (true if it is a powerloss disabled world)
 	 */
+	@Deprecated
 	public static final boolean noPowerLossWorld(World world) {
-		String name = world.getName();
-		if(FactionsPlus.noPowerLossWorlds.contains(name)) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 	
 	public static final void setPeaceful(Faction faction) {
