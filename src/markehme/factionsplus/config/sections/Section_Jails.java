@@ -101,7 +101,7 @@ public final class Section_Jails {
 			    && 
 				( 
 				  (!OldConfig._jails.furtherRestrictJailUnjailToThoseThatHavePermission._) || 
-						FactionsPlus.permission.playerHas( Utilities.getOnlinePlayerExact(whoCan), permissionNodeNameForCanJailUnjail ) 
+						FactionsPlus.permission.playerHas( whoCan.getPlayer(), permissionNodeNameForCanJailUnjail ) 
 				)
 			   );
 	}
