@@ -145,4 +145,6 @@ public class FactionData extends Entity<FactionData> {
 	
 	public Boolean ignoringNeedRequests = false;
 	
+	public List<String> membersHidingScoreboard = new ArrayList<String>();
+	
 }
