@@ -88,12 +88,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	
 	// Metrics - read dev.bukkit.org/bukkit-plugins/factionsplus for more information 
 	private static Metrics metrics 								= 	null;
-	
-	// Factions-specific world information 
-	public static Set<String> ignoredPvPWorlds 					= 	null;
-	public static Set<String> noClaimingWorlds 					= 	null;
-	public static Set<String> noPowerLossWorlds 				= 	null;
-		
+			
 	// Server reference
 	public static Server server;
 	
