@@ -28,7 +28,9 @@ public class FactionsPlusListener implements Listener {
 	AnimalDamageSubListener animalDamageSubListener		= new AnimalDamageSubListener();
 	AnnoucementsSubListener annoucementsSubListener		= new AnnoucementsSubListener();
 	BanSubListener banSubListener						= new BanSubListener();
+	DenyClaimSubListener denyClaimSubListener			= new DenyClaimSubListener();
 	LiquidFlowSubListener liquidFlowSubListener			= new LiquidFlowSubListener();
+	
 	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
