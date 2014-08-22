@@ -1,12 +1,10 @@
 package markehme.factionsplus.Cmds;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import markehme.factionsplus.EssentialsIntegration;
-import markehme.factionsplus.FactionsPlusJail;
+import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
@@ -14,15 +12,11 @@ import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.util.FPPerm;
 
-
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
-import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 import com.massivecraft.massivecore.util.Txt;
-
-
 
 public class CmdUnJail extends FPCommand {
 	
@@ -50,11 +44,7 @@ public class CmdUnJail extends FPCommand {
 	@Override
 	public void performfp() {
 		
-		OfflinePlayer jp = Bukkit.getPlayer(this.arg(0));
-		
-		if(jp == null) { 
-			jp = Bukkit.getOfflinePlayer(this.arg(0));
-		}
+		Player jp = Utilities.getPlayer(this.arg(0));
 		
 		if(jp == null) {
 			msg(Txt.parse(LConf.get().jailsPlayerNeverOnServer));
