@@ -242,5 +242,12 @@ public class LConf extends Entity<LConf> {
 	// MultiVerse Portals Related
 	// ----------------------------
 	public String multiverseCantUseThisPortal = "<red>You can't use this portal in this land type.";
+	
+	// ----------------------------
+	// Deny Claiming Related
+	// ----------------------------
+	public String denyClaimNotice = "<green>Someone (<red>%s<green>) tried to claim this chunk but was denied.";
+	public String denyClaimNotify = "<red>You may not claim this chunk while %s is within it.";
+	
 }
 
