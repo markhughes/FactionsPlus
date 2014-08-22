@@ -6,11 +6,16 @@ import markehme.factionsplus.sublisteners.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
@@ -30,7 +35,7 @@ public class FactionsPlusListener implements Listener {
 	BanSubListener banSubListener						= new BanSubListener();
 	DenyClaimSubListener denyClaimSubListener			= new DenyClaimSubListener();
 	LiquidFlowSubListener liquidFlowSubListener			= new LiquidFlowSubListener();
-	
+	JailSubListener jailSubListener						= new JailSubListener();
 	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
@@ -73,6 +78,8 @@ public class FactionsPlusListener implements Listener {
 		
 		// Announcements Events
 		if(fpuconf.announcementsEnabled) event = annoucementsSubListener.playerJoinEvent(event);
+		if(fpuconf.jailsEnabled) event = jailSubListener.playerJoinEvent(event);
+		
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)
@@ -80,8 +87,9 @@ public class FactionsPlusListener implements Listener {
 		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
 		FPUConf fpuconf = FPUConf.get(UPlayer.get(event.getPlayer()).getUniverse());
 		
+		if(fpuconf.jailsEnabled) event = jailSubListener.playerMoveEvent(event);
 		if(fpuconf.announcementsEnabled) event = annoucementsSubListener.playerMoveEvent(event);
-
+		
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)
@@ -90,7 +98,8 @@ public class FactionsPlusListener implements Listener {
 		FPUConf fpuconf = FPUConf.get(event.getUPlayer().getUniverse());
 		
 		if(fpuconf.bansEnabled) event = banSubListener.eventFactionsMembershipChange(event);
-
+		if(fpuconf.jailsEnabled) event = jailSubListener.eventFactionsMembershipChange(event);
+		
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)
@@ -99,5 +108,45 @@ public class FactionsPlusListener implements Listener {
 		FPUConf fpuconf = FPUConf.get(event.getBlock().getLocation());
 		
 		if(fpuconf.fixes.get("crossBorderLiquidFlowBlock")) event = liquidFlowSubListener.blockFromToEvent(event, fpuconf.fixes.get("crossBorderLiquidFlowBlockMakeCobblestone"));
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void playerRespawnEvent(PlayerRespawnEvent event) {
+		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+
+		if(fpuconf.jailsEnabled) event = jailSubListener.playerRespawnEvent(event);
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void blockBreakEvent(BlockBreakEvent event) {
+		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+		
+		if(fpuconf.jailsEnabled) event = jailSubListener.blockBreakEvent(event);
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void blockPlaceEvent(BlockPlaceEvent event) {
+		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+		
+		if(fpuconf.jailsEnabled) event = jailSubListener.blockPlaceEvent(event);
+
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void asyncPlayerChatEvent(AsyncPlayerChatEvent event) {
+		if(!isEnabled(UPlayer.get(event.getPlayer()).getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+		
+		if(fpuconf.jailsEnabled && fpuconf.denyChatWhileJailed) event = jailSubListener.asyncPlayerChatEvent(event);
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void playerTeleportEvent(PlayerTeleportEvent event) {
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+		
+		if(fpuconf.jailsEnabled) event = jailSubListener.playerTeleportEvent(event);
 	}
 }
