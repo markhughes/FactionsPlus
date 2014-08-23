@@ -3,7 +3,6 @@ package markehme.factionsplus;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -428,7 +427,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
         // Cannons
         CannonsListener.enableOrDisable(FactionsPlus.instance);
         
-		Listen.startOrStopListenerAsNeeded( true, PowerboostListener.class );
 		Listen.startOrStopListenerAsNeeded( true, PeacefulListener.class );
 		
 		// ChestShop
