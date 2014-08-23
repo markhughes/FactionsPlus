@@ -151,6 +151,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.jailsEnabled) event = jailSubListener.playerTeleportEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void entityDeathEvent(EntityDeathEvent event) {
 		if(!isEnabled(event.getEntity())) return;
 		FPUConf fpuconf = FPUConf.get(event.getEntity());
