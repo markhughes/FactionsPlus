@@ -38,6 +38,8 @@ public class FactionsPlusListener implements Listener {
 	LiquidFlowSubListener liquidFlowSubListener			= new LiquidFlowSubListener();
 	JailSubListener jailSubListener						= new JailSubListener();
 	PowerBoostSubListener powerBoostSubListener			= new PowerBoostSubListener();
+	PeacefulSubListener peacefulSubListener				= new PeacefulSubListener();
+	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
 	 * 
@@ -100,6 +102,7 @@ public class FactionsPlusListener implements Listener {
 		
 		if(fpuconf.bansEnabled) event = banSubListener.eventFactionsMembershipChange(event);
 		if(fpuconf.jailsEnabled) event = jailSubListener.eventFactionsMembershipChange(event);
+		if(fpuconf.enablePeacefulBoost) event = peacefulSubListener.eventFactionsMembershipChange(event);
 		
 	}
 	
@@ -154,7 +157,7 @@ public class FactionsPlusListener implements Listener {
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void entityDeathEvent(EntityDeathEvent event) {
 		if(!isEnabled(event.getEntity())) return;
-		FPUConf fpuconf = FPUConf.get(event.getEntity());
+		//FPUConf fpuconf = FPUConf.get(event.getEntity());
 		
 		event = powerBoostSubListener.entityDeathEvent(event);
 	}
