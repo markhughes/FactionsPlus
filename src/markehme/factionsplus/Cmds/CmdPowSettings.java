@@ -8,7 +8,7 @@ import markehme.factionsplus.Utilities;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
-import markehme.factionsplus.listeners.PowerboostListener;
+import markehme.factionsplus.sublisteners.PowerBoostSubListener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -155,7 +155,7 @@ public class CmdPowSettings extends FPCommand {
 
 			
 			sm("Estimating that you "+
-					(!PowerboostListener.canLosePowerWherePlayerIsAt(player )?
+					(!PowerBoostSubListener.canLosePowerWherePlayerIsAt(player )?
 						_goodDONT:_badDO)+
 					" lose power if you died in this spot." );
 		}

@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -36,7 +37,7 @@ public class FactionsPlusListener implements Listener {
 	DenyClaimSubListener denyClaimSubListener			= new DenyClaimSubListener();
 	LiquidFlowSubListener liquidFlowSubListener			= new LiquidFlowSubListener();
 	JailSubListener jailSubListener						= new JailSubListener();
-	
+	PowerBoostSubListener powerBoostSubListener			= new PowerBoostSubListener();
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
 	 * 
@@ -148,5 +149,12 @@ public class FactionsPlusListener implements Listener {
 		FPUConf fpuconf = FPUConf.get(event.getPlayer());
 		
 		if(fpuconf.jailsEnabled) event = jailSubListener.playerTeleportEvent(event);
+	}
+	
+	public void entityDeathEvent(EntityDeathEvent event) {
+		if(!isEnabled(event.getEntity())) return;
+		FPUConf fpuconf = FPUConf.get(event.getEntity());
+		
+		event = powerBoostSubListener.entityDeathEvent(event);
 	}
 }
