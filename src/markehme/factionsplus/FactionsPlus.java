@@ -426,9 +426,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
         
         // Cannons
         CannonsListener.enableOrDisable(FactionsPlus.instance);
-        
-		Listen.startOrStopListenerAsNeeded( true, PeacefulListener.class );
-		
+        		
 		// ChestShop
 		if( Bukkit.getPluginManager().getPlugin( "ChestShop" ) != null ) {
 			
