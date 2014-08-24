@@ -347,52 +347,12 @@ public class FactionsPlus extends FactionsPlusPlugin {
         	WGFi.addFlags();
         }
         
-        if ( LWCBase.isLWCPluginPresent() ) {
-        	
-			// TODO: is this still used ? - can't find in Factions config 
-        	/*
-			if ( ( com.massivecraft.factions.Conf.lwcIntegration ) && ( com.massivecraft.factions.Conf.onCaptureResetLwcLocks ) ) {
-				// if Faction plugin has setting to reset locks (which only resets for chests)
-				// then have FactionPlus suggest its setting so that also locked furnaces/doors etc. will get reset
-				if ( !Config._extras._protection._lwc.removeAllLocksOnClaim._ ) {
-					Config._extras._protection._lwc.removeAllLocksOnClaim._=true;
-					// meh: maybe someone can modify this message so that it would make sense to the console reader
-					FactionsPlusPlugin.info( "Automatically setting `" + Config._extras._protection._lwc.removeAllLocksOnClaim._dottedName_asString
-						+ "` for this session because you have Factions.`onCaptureResetLwcLocks` set to true" );
-					// this also means in Factions having onCaptureResetLwcLocks to false would be good, if ours is on true
-				}
-				
-			}
-			*/
-
-			try { 
-				LWCFunctions.hookLWCIfNeeded();
-			} catch(NoClassDefFoundError e) {
-				FactionsPlus.debug( "Couldn't hook LWC.. ignoring." );
-			}
-			
-		} else { //no LWC
-			/*
-			if ( OldConfig._extras._protection._lwc.blockCPublicAccessOnNonOwnFactionTerritory._ 
-				|| OldConfig._extras._protection._lwc.removeAllLocksOnClaim._ ) 
-			{
-				FPP
-					.warn( "LWC plugin was not found(or not enabled yet) but a few settings that require LWC are Enabled!"
-						+ " This means those settings will be ignored & have no effect" );
-			}
-			*/
-			
-			//if there is no LWC anymore ie. plugman unload lwc
-			//then we might still have hooks into LWC from before, and we kinda take care of unlinking those here
-			LWCFunctions.deregListenerIfNeeded();
-		}
-        
-		
 		// Scoreboard Setup
 		FactionsPlusScoreboard.setup();
 		
-		// Updates
 		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
+		
+
 	}
 	
 	public int countWarps() {
