@@ -18,6 +18,7 @@ import org.bukkit.plugin.PluginManager;
 import com.kellerkindt.scs.ShowCaseStandalone;
 import com.kellerkindt.scs.events.ShowCaseCreateEvent;
 import com.kellerkindt.scs.exceptions.InsufficientPermissionException;
+import com.kellerkindt.scs.interfaces.ShopHandler;
 import com.kellerkindt.scs.shops.Shop;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;
@@ -140,8 +141,10 @@ public class ShowCaseStandaloneListener implements Listener {
 							if(ShowCaseStandalone.get().getShopHandler().isShopBlock(block)) {
 								Shop s = ShowCaseStandalone.get().getShopHandler().getShop(block);
 								if(s == null) continue;
-								   
+								
 								new com.kellerkindt.scs.events.ShowCaseDeleteEvent(Bukkit.getPlayer(s.getOwner()), s);
+								
+								numberOfRemovedProtections++;
 							}
 						}
 					}
