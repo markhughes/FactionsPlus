@@ -10,7 +10,7 @@ import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.EventFactionsChunkChange;
-import com.massivecraft.mcore.util.Txt;
+import com.massivecraft.massivecore.util.Txt;
 
 
 public class DenyClaimSubListener {
