@@ -147,4 +147,5 @@ public class FactionData extends Entity<FactionData> {
 	
 	public List<String> membersHidingScoreboard = new ArrayList<String>();
 	
+	public long lastPeacefulToggle = 0;
 }

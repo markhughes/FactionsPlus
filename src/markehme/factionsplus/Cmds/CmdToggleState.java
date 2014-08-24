@@ -60,6 +60,19 @@ public class CmdToggleState extends FPCommand {
 			return;
 		}
 		
+		if(fpuconf.peacefulToggleDelayInSeconds > 0) {
+			if(fData.lastPeacefulToggle > 0) {
+				if(System.currentTimeMillis()-fData.lastPeacefulToggle < fpuconf.peacefulToggleDelayInSeconds*1000) {
+					msg(Txt.parse(LConf.get().toggleStateMustWait, fpuconf.peacefulToggleDelayInSeconds));
+					return;
+				}
+				
+			}
+			
+			fData.lastPeacefulToggle = System.currentTimeMillis();
+			
+		}
+		
 		if(togglingFaction.getFlag(FFlag.PEACEFUL)) {
 			if(FPUConf.get(usender.getUniverse()).economyCost.get("toggleUpPeaceful") > 0) {
 				if(!Utilities.doCharge(FPUConf.get(usender.getUniverse()).economyCost.get("toggleUpPeaceful"), usender)) {

@@ -197,6 +197,8 @@ public class FPUConf extends Entity<FPUConf> {
 			Rel.MEMBER, false,
 			Rel.RECRUIT, false);	
 	
+	public long peacefulToggleDelayInSeconds = 0;
+	
 	// ----------------------------------------
 	// Powerboosts
 	// ----------------------------------------

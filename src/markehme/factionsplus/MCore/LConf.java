@@ -187,6 +187,7 @@ public class LConf extends Entity<LConf> {
 	public String toggleStateNonExistant = "<red>This faction does not exist, so you can't change it's status.";
 	public String toggleStateCanAffordUp = "<red>You need %s to add the peaceful status.";
 	public String toggleStateCanAffordDown = "<red>You need %s to remove the peaceful status.";
+	public String toggleStateMustWait = "<red>You must wait %s seconds between toggling peaceful status.";
 	
 	// ----------------------------
 	// Flying Related
