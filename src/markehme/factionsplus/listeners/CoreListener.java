@@ -220,27 +220,24 @@ public class CoreListener implements Listener {
 			if(event.getUSender() == null) return;
 			
 			if(!event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FactionsPlus.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
-				// Ensure WorldGuard exists! 
 				if(Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
 					
-					if(FactionsPlus.worldGuardPlugin != null ) {
+					// Check for chunks
+					if(Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation(), event.getUSender().getPlayer())) {
+							
+						// TODO: 	Check region flags - this can be done by instead returning an array
+						//			of the regions in the chunk, checking the size of the array and then
+						//			loop through if we're supporting checkForWorldGuardRegionFlags
 						
-						// Check for chunks
-						if(Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation(), event.getUSender().getPlayer())) {
+						// The flag will be "faction" /region flag SomeRegion faction MyFactionName
+						// and thus, that Faction can build. 
+						
+						event.setCancelled(true);
+						
+						event.getUSender().msg(Txt.parse(LConf.get().worldGuardRegionInWay));
 							
-							// TODO: 	Check region flags - this can be done by instead returning an array
-							//			of the regions in the chunk, checking the size of the array and then
-							//			loop through if we're supporting checkForWorldGuardRegionFlags
-							
-							// The flag will be "faction" /region flag SomeRegion faction MyFactionName
-							// and thus, that Faction can build. 
-							
-							event.setCancelled(true);
-							
-							event.getUSender().msg(Txt.parse(LConf.get().worldGuardRegionInWay));
-								
-						}
 					}
+					
 				}
 			}
 		}
@@ -481,7 +478,7 @@ public class CoreListener implements Listener {
 		// Feature: Update Checks 
 		// Notify the op/admin that there is an update available 
 		if((UPlayer.get(event.getPlayer()).isUsingAdminMode() || event.getPlayer().isOp())
-				&& FactionsPlusUpdate.updateAvailable ) {
+				&& FactionsPlusUpdate.isUpdateAvailable() ) {
 			
 			event.getPlayer().sendMessage( ChatColor.GOLD + "[FactionsPlus] " + ChatColor.WHITE + "Attention op: There is an update available for FactionsPlus! Please upgrade ASAP." );
 		
@@ -490,10 +487,7 @@ public class CoreListener implements Listener {
 		// --------------------------------------------------
 		// START: FactionsPlus universe-based features 
 		// --------------------------------------------------
-		
-		// Ensure FactionsPlus is enabled in this universe 
-		if(!FPUConf.get(UPlayer.get(uPlayer.getUniverse())).enabled) return;
-		
+				
 		// Feature: scoreboards
 		
 		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardMapOfFactions) {
