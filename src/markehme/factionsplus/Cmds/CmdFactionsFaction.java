@@ -181,9 +181,6 @@ public class CmdFactionsFaction extends FPCommand {
 		List<UPlayer> followers = faction.getUPlayers();
 		Collections.sort(followers, PlayerRoleComparator.get());
 		
-
-
-		// START: FactionsPlus edits 
 		for (UPlayer follower : followers)
 		{
 			String uPower = String.valueOf(Math.ceil(follower.getPower())).replace(".0", "");
@@ -201,7 +198,7 @@ public class CmdFactionsFaction extends FPCommand {
 				followerNamesOffline.add(followerTemplate);
 			}
 		}
-		// END: FactionsPlus edits 
+		
 		if(!fpuconf.factionCommandHideFollowersOnlineInfo.contains((faction.getId())) && !fpuconf.factionCommandHideFollowersOnlineInfo.contains(("all"))) {
 			sendMessage(Txt.parse("<a>Followers online (%s): ", followerNamesOnline.size()) + Txt.implode(followerNamesOnline, sepparator));
 		}
