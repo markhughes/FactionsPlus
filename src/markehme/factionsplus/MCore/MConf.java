@@ -24,6 +24,9 @@ public class MConf extends Entity<MConf> {
 	// Enable update checks?
 	public Boolean updateCheck = true;
 	
+	// The Curse API Key
+	public String CurseAPIKey = "";
+	
 	// Enable metrics?
 	public Boolean metrics = true;
 	
