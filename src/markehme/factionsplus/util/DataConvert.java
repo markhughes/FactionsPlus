@@ -8,6 +8,7 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.config.OldConfig;
 
+@SuppressWarnings("deprecation")
 public class DataConvert {
 	public static void updated(String x, String y) {
 		FactionsPlus.info(ChatColor.WHITE + "          - "+x+" -> "+y+"");
