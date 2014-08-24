@@ -69,11 +69,6 @@
             <version>2.5.0</version>
         </dependency>
         <dependency>
-            <groupId>com.griefcraft</groupId>
-            <artifactId>lwc</artifactId>
-            <version>4.5.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.massivecraft</groupId>
             <artifactId>massivecore</artifactId>
             <version>7.3.0</version>
@@ -140,6 +135,13 @@
             <artifactId>Lockette</artifactId>
             <version>1.7.12</version>
             <systemPath>${project.basedir}/libs/Lockette.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.griefcraft.lwc</groupId>
+            <artifactId>LWC</artifactId>
+            <version>4.4.0</version>
+            <systemPath>${project.basedir}/libs/LWC.jar</systemPath>
             <scope>system</scope>
         </dependency>
         <dependency>
