@@ -118,23 +118,8 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	 * @param msg
 	 */
 	public static void tellConsole(String msg) {
-		// nvm; find another way to display colored msgs in console without having [INFO] prefix
-		// there's no other way it's done via ColouredConsoleSender of craftbukkit
-		// there are only two ways: colors+[INFO] prefix, or no colors + whichever prefix
-		Bukkit.getConsoleSender().sendMessage( msg );// this will log with [INFO] level
+		Bukkit.getConsoleSender().sendMessage(msg); // this will log with [INFO] level
 	}
-	
-	
-	// public static RuntimeException disableSelf( FactionsPlus fpInstance, boolean forceStop ) {
-	// fpInstance.disableSelf();
-	// if ( forceStop ) {
-	// // FactionsPlus.log.log( Level.INFO, )
-	// throw new RuntimeException( FactionsPlus.FP_TAG_IN_LOGS
-	// + " execution stopped by disableSelf() which means read the above colored message" );
-	// }
-	// return null;
-	// }
-	
 	
 	/**
 	 * calling this will not stop execution at the point where the call is made, but will mark the plugin as disabled<br>
