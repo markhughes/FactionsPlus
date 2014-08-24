@@ -1,7 +1,6 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
@@ -20,14 +19,46 @@ import at.pavlov.cannons.event.CannonUseEvent;
 
 public class CannonsListener implements Listener {
 	
-	public static boolean isCannonsIntegrated = false;
-	public static CannonsListener cannonslistener;
+	/**
+	 * Boolean to define if it is hooked in
+	 */
+	public static boolean isHooked = false;
 	
 	/**
-	 * Depending on the Cannons configuration, we allow
-	 * servers to control how cannons are used. 
-	 * @param e
+	 * Store our listener 
 	 */
+	public static CannonsListener listener;
+	
+	/**
+	 * Plugin Name
+	 */
+	public static String pluginName = "Cannons";
+	
+	/**
+	 * Determine if a plugin is enabled, and if so - setup our listeners 
+	 * @param instance
+	 */
+	public static final void enableOrDisable(FactionsPlus instance) {
+ 		PluginManager pm = Bukkit.getServer().getPluginManager();
+			
+ 		// Check if plugin is enabled, and check if the plugin is integrated
+		if(pm.isPluginEnabled(pluginName) && !isHooked) {
+			listener = new CannonsListener();
+			
+			pm.registerEvents(listener, instance);
+			
+			// Try again
+			if(listener == null) {
+				listener = new CannonsListener();
+				pm.registerEvents(listener, instance);
+			}
+			
+			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+		}
+	}
+	
+	/********/
+	
 	@EventHandler
 	public void cannonUseEvent(CannonUseEvent e) {
 		UPlayer uPlayer = UPlayer.get(e.getPlayer());
@@ -59,29 +90,5 @@ public class CannonsListener implements Listener {
 				return;
 			}
 		}
-	}
-	
-	/**
-	 * Determine if we should enable integration, and if so
-	 * commence the integration 
-	 * @param instance
-	 */
-	public static final void enableOrDisable(FactionsPlus instance) {
- 		PluginManager pm = Bukkit.getServer().getPluginManager();
-			
- 		// Check if plugin is enabled, and check if the plugin is integrated
-		if(pm.isPluginEnabled("Cannons") && !isCannonsIntegrated) {
-			cannonslistener = new CannonsListener();
-			
-			pm.registerEvents(cannonslistener, instance);
-			
-			// Try again
-			if(cannonslistener == null) {
-				cannonslistener = new CannonsListener();
-				pm.registerEvents(cannonslistener, instance);
-			}
-			
-			FactionsPlusPlugin.debug("Hooked into plugin: Cannons");
-		}	
 	}
 }

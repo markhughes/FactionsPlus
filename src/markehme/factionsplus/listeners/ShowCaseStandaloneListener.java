@@ -1,21 +1,19 @@
 package markehme.factionsplus.listeners;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 
 import com.kellerkindt.scs.ShowCaseStandalone;
 import com.kellerkindt.scs.events.ShowCaseCreateEvent;
@@ -30,6 +28,46 @@ import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.Txt;
 
 public class ShowCaseStandaloneListener implements Listener {
+	
+	/**
+	 * Boolean to define if it is hooked in
+	 */
+	public static boolean isHooked = false;
+	
+	/**
+	 * Store our listener 
+	 */
+	public static ShowCaseStandaloneListener listener;
+	
+	/**
+	 * Plugin Name
+	 */
+	public static String pluginName = "ShowCaseStandalone";
+	
+	/**
+	 * Determine if a plugin is enabled, and if so - setup our listeners 
+	 * @param instance
+	 */
+	public static final void enableOrDisable(FactionsPlus instance) {
+ 		PluginManager pm = Bukkit.getServer().getPluginManager();
+			
+ 		// Check if plugin is enabled, and check if the plugin is integrated
+		if(pm.isPluginEnabled(pluginName) && !isHooked) {
+			listener = new ShowCaseStandaloneListener();
+			
+			pm.registerEvents(listener, instance);
+			
+			// Try again
+			if(listener == null) {
+				listener = new ShowCaseStandaloneListener();
+				pm.registerEvents(listener, instance);
+			}
+			
+			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+		}
+	}
+	
+	/********/
 	
 	@EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
 	public void createShowCase( ShowCaseCreateEvent event ) {

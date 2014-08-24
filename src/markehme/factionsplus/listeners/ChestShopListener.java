@@ -5,6 +5,7 @@ import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,6 +14,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent;
 import com.Acrobot.ChestShop.Events.PreShopCreationEvent.CreationOutcome;
@@ -23,6 +25,47 @@ import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.Txt;
 
 public class ChestShopListener implements Listener {
+	
+	
+	/**
+	 * Boolean to define if it is hooked in
+	 */
+	public static boolean isHooked = false;
+	
+	/**
+	 * Store our listener 
+	 */
+	public static ChestShopListener listener;
+	
+	/**
+	 * Plugin Name
+	 */
+	public static String pluginName = "ChestShop";
+	
+	/**
+	 * Determine if a plugin is enabled, and if so - setup our listeners 
+	 * @param instance
+	 */
+	public static final void enableOrDisable(FactionsPlus instance) {
+ 		PluginManager pm = Bukkit.getServer().getPluginManager();
+			
+ 		// Check if plugin is enabled, and check if the plugin is integrated
+		if(pm.isPluginEnabled(pluginName) && !isHooked) {
+			listener = new ChestShopListener();
+			
+			pm.registerEvents(listener, instance);
+			
+			// Try again
+			if(listener == null) {
+				listener = new ChestShopListener();
+				pm.registerEvents(listener, instance);
+			}
+			
+			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+		}
+	}
+	
+	/********/
 	
 	/**
 	 * Detect if there is a ChestShop allowed in the area they're creating the
