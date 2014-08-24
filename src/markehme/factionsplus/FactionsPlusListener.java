@@ -1,6 +1,13 @@
 package markehme.factionsplus;
 
 import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.LocketteFunctions;
+import markehme.factionsplus.listeners.CannonsListener;
+import markehme.factionsplus.listeners.ChestShopListener;
+import markehme.factionsplus.listeners.CreativeGatesListener;
+import markehme.factionsplus.listeners.DisguiseListener;
+import markehme.factionsplus.listeners.MVPListener;
+import markehme.factionsplus.listeners.ShowCaseStandaloneListener;
 import markehme.factionsplus.sublisteners.*;
 
 import org.bukkit.event.EventHandler;
@@ -50,6 +57,22 @@ public class FactionsPlusListener implements Listener {
 		if(!UConf.get(oid).enabled || !FPUConf.get(oid).enabled) return false;		
 		
 		return true;
+	}
+	
+	/**
+	 * These are all plugin dependent, they have their own listeners
+	 * this may change in the future - however, we can't have them in
+	 * here!
+	 */
+	public void setupPermanentListeners(FactionsPlus instance) {
+		CannonsListener.enableOrDisable(instance);
+		LocketteFunctions.enableOrDisable(instance); // TODO: This should all be in the listener
+        DisguiseListener.enableOrDisable(instance);
+        MVPListener.enableOrDisable(instance); // TODO: rename this listener
+        CreativeGatesListener.enableOrDisable(instance); 
+        CannonsListener.enableOrDisable(instance);
+        ChestShopListener.enableOrDisable(instance);;
+        ShowCaseStandaloneListener.enableOrDisable(instance);
 	}
 	
 	/*
