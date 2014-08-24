@@ -36,7 +36,7 @@ public class FactionsPlusScoreboard {
 			public void run() {
 				
 				// Ensure there are players online to send a scoreboard to 
-				if( ! ( Bukkit.getServer().getOnlinePlayers().length > 0) ) {
+				if( ! ( Bukkit.getServer().getOnlinePlayers().size() > 0) ) {
 					return;
 				}
 				
