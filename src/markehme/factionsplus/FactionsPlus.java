@@ -64,22 +64,15 @@ public class FactionsPlus extends FactionsPlusPlugin {
     public static Permission permission 						= 	null;
     
     public static List<UUID> whosIgnoringNeeds 					= 	new ArrayList<UUID>();
-    
-    // See which plugins are enabled  
-	public static boolean isWorldEditEnabled 					= 	false;
-	public static boolean isWorldGuardEnabled 					= 	false;
-	public static boolean isMultiversePortalsEnabled 			= 	false;
-	
+    	
 	// Our core listener
 	public final CoreListener coreListener 						=	new CoreListener();
-	public final FactionsPlusListener FPListener				=	new FactionsPlusListener();
-	
-	// WorldEdit + World Guard plugins
-	public static WorldEditPlugin worldEditPlugin 				= 	null;
-	public static WorldGuardPlugin worldGuardPlugin 			= 	null;
-	
+	public FactionsPlusListener factionsPlusListener			=	null;
+		
 	// MultiversePortals plugin
 	public static MultiversePortals multiversePortalsPlugin 	= 	null;
+	
+	public static WorldGuardPlugin worldGuardPlugin;
 	
 	// Version information 
 	public static String pluginVersion;
@@ -154,10 +147,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			// Add our core listener
 			// TODO: Move away from this 
 			pm.registerEvents(coreListener, this);
-			
-			// Register the FactionsPlus Listener, used for a SubListeners 
-			pm.registerEvents(FPListener, this);
-			
+						
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
 			
@@ -336,33 +326,20 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	}
 	
 	public void registerAll() {
-        TeleportsListener.initOrDeInit(FactionsPlus.instance);
-        
-        PluginManager pm = Bukkit.getServer().getPluginManager();
-        
-        // Fetch world edit 
-        if(pm.isPluginEnabled("WorldEdit")) {
-       		FactionsPlus.worldEditPlugin = (WorldEditPlugin) pm.getPlugin("WorldEdit");
-       		FactionsPlus.isWorldEditEnabled = true;
-       	}
-        
-        // fetch world guard
-        if(pm.isPluginEnabled("WorldGuard")) {
-        	FactionsPlus.worldGuardPlugin = (WorldGuardPlugin) pm.getPlugin("WorldGuard");	            	
-        	FactionsPlus.isWorldGuardEnabled = true;
-        }
-        
-        // fetch mvp
-        if(pm.isPluginEnabled("Multiverse-Portals")) { 
-        	Plugin MVc = pm.getPlugin("Multiverse-Portals");
-            
-            if(MVc instanceof MultiversePortals) {
-            	FactionsPlus.multiversePortalsPlugin = (MultiversePortals) MVc;
-            	
-            	FactionsPlus.isMultiversePortalsEnabled = true;
-            }
-            
-        }
+		
+		if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+			if(worldGuardPlugin == null) worldGuardPlugin = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
+		}
+		
+		// Register our listener
+		factionsPlusListener = new FactionsPlusListener();
+		pm.registerEvents(factionsPlusListener, this);
+		
+		// Register our permanent listeners
+		factionsPlusListener.setupPermanentListeners(this);
+		
+		// TODO: move this into a sub listener
+        TeleportsListener.initOrDeInit(this);
         
         // WorldGuard Custom Flags integration
         if(pm.isPluginEnabled("WGCustomFlags")) {
@@ -410,36 +387,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			LWCFunctions.deregListenerIfNeeded();
 		}
         
-        // TODO: re-do all events in a more efficient way.
-        
-        // Lockette 
-        LocketteFunctions.enableOrDisable(FactionsPlus.instance);
-        
-        // Disguises 
-        DisguiseListener.enableOrDisable(FactionsPlus.instance);
-        
-        // Multiverse-portals
-        MVPListener.enableOrDisable(FactionsPlus.instance);
-        
-        // CreativeGates
-        CreativeGatesListener.enableOrDisable(FactionsPlus.instance);
-        
-        // Cannons
-        CannonsListener.enableOrDisable(FactionsPlus.instance);
-        		
-		// ChestShop
-		if( Bukkit.getPluginManager().getPlugin( "ChestShop" ) != null ) {
-			
-			Listen.startOrStopListenerAsNeeded( true, ChestShopListener.class );
-			
-		}
-		
-		// ChestShop
-		if( Bukkit.getPluginManager().getPlugin( "ShowCaseStandalone" ) != null ) {
-			
-			Listen.startOrStopListenerAsNeeded( true, ShowCaseStandaloneListener.class );
-			
-		}
 		
 		// Scoreboard Setup
 		FactionsPlusScoreboard.setup();
