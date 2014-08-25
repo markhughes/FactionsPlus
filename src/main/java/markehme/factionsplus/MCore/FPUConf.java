@@ -365,59 +365,13 @@ public class FPUConf extends Entity<FPUConf> {
 	
 	public Boolean disallowAccessToVillagersToOtherFactions = true;
 	
-	// ----------------------------------------
-	// Disguises Section 
-	// ----------------------------------------
-	public Boolean disguiseRemoveIfInOwnTerritory = false;
-	public Boolean disguiseRemoveIfInWilderness = false;
-	public Boolean disguiseRemoveIfInEnemyTerritory = false;
-	
-	// ----------------------------------------
-	// MultiVerse Section 
-	// ----------------------------------------
-	public Map<String, Boolean> multiverse = MUtil.map(
-		"usePortalsInEnemy", true,
-		"usePortalsInAlly", true,
-		"usePortalsInWilderness", true,
-		"usePortalsInWarzone", true,
-		"usePortalsInSafezone", true,
-		"usePortalsInTruce", true,
-		"usePortalsInNeutral", true
-		
-	);	
-	
-	// ----------------------------------------
-	// Cannons Section 
-	// ----------------------------------------
-	public Map<String, Boolean> cannons = MUtil.map(
-		"useCannonsInEnemy", true,
-		"useCannonsInAlly", true,
-		"useCannonsInWilderness", true,
-		"useCannonsInTruce", true,
-		"useCannonsInPermanent", true,
-		"useCannonsInOwn", true
-	);	
+
 	
 	// ----------------------------------------
 	// Flying Section 
 	// ----------------------------------------
 	public boolean allowAttackingWhileFlying = true;
 	public boolean allowSplashPotionsWhileFlying = true;
-	
-	// ----------------------------------------
-	// CreativeGates Section 
-	// ----------------------------------------
-	public Map<String, Boolean> creativegates = MUtil.map(
-			"destroyOnClaimUnclaim", true,
-			"allowCreateInOwnTerritories", true,
-			"allowCreateInWilderness", true,
-			"useCreativeGatesInEnemy", true,
-			"useCreativeGatesInAlly", true,
-			"useCreativeGatesInWilderness", true,
-			"useCreativeGatesInTruce", true,
-			"useCreativeGatesInNeutral", true,
-			"useCreativeGatesInPermanent", true
-		);
 	
 	// ----------------------------------------
 	// Fixes Section 
@@ -491,4 +445,52 @@ public class FPUConf extends Entity<FPUConf> {
 	public Map<Rel, Boolean> whoCanToggleListeningNeeds = MUtil.map(
 			Rel.LEADER, true
 		);
+
+	// ----------------------------------------
+	// CreativeGates Section 
+	// ----------------------------------------
+	public Map<String, Boolean> creativegates = MUtil.map(
+			"destroyOnClaimUnclaim", true,
+			"allowCreateInOwnTerritories", true,
+			"allowCreateInWilderness", true,
+			"useCreativeGatesInEnemy", true,
+			"useCreativeGatesInAlly", true,
+			"useCreativeGatesInWilderness", true,
+			"useCreativeGatesInTruce", true,
+			"useCreativeGatesInNeutral", true,
+			"useCreativeGatesInPermanent", true
+		);
+	
+	// ----------------------------------------
+	// Disguises Section 
+	// ----------------------------------------
+	public Boolean disguiseRemoveIfInOwnTerritory = false;
+	public Boolean disguiseRemoveIfInWilderness = false;
+	public Boolean disguiseRemoveIfInEnemyTerritory = false;
+	
+	// ----------------------------------------
+	// MultiVerse Section 
+	// ----------------------------------------
+	public Map<String, Boolean> multiverse = MUtil.map(
+		"usePortalsInEnemy", true,
+		"usePortalsInAlly", true,
+		"usePortalsInWilderness", true,
+		"usePortalsInWarzone", true,
+		"usePortalsInSafezone", true,
+		"usePortalsInTruce", true,
+		"usePortalsInNeutral", true
+		
+	);	
+	
+	// ----------------------------------------
+	// Cannons Section 
+	// ----------------------------------------
+	public Map<String, Boolean> cannons = MUtil.map(
+		"useCannonsInEnemy", true,
+		"useCannonsInAlly", true,
+		"useCannonsInWilderness", true,
+		"useCannonsInTruce", true,
+		"useCannonsInPermanent", true,
+		"useCannonsInOwn", true
+	);		
 }
