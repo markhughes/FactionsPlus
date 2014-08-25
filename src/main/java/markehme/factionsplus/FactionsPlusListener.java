@@ -10,6 +10,7 @@ import markehme.factionsplus.listeners.MVPListener;
 import markehme.factionsplus.listeners.ShowCaseStandaloneListener;
 import markehme.factionsplus.sublisteners.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -65,14 +66,25 @@ public class FactionsPlusListener implements Listener {
 	 * here!
 	 */
 	public void setupPermanentListeners(FactionsPlus instance) {
-		CannonsListener.enableOrDisable(instance);
-		LocketteFunctions.enableOrDisable(instance); // TODO: This should all be in the listener
-        DisguiseListener.enableOrDisable(instance);
-        MVPListener.enableOrDisable(instance); // TODO: rename this listener
-        CreativeGatesListener.enableOrDisable(instance); 
-        CannonsListener.enableOrDisable(instance);
-        ChestShopListener.enableOrDisable(instance);;
-        ShowCaseStandaloneListener.enableOrDisable(instance);
+		if(FactionsPlus.pm.isPluginEnabled("Cannons"))
+			CannonsListener.enableOrDisable(instance);
+		
+		if(FactionsPlus.pm.isPluginEnabled("Lockette"))
+			LocketteFunctions.enableOrDisable(instance); // TODO: This should all be in the listener
+		
+		DisguiseListener.enableOrDisable(instance);
+		
+		if(FactionsPlus.pm.isPluginEnabled("Multiverse-Portals"))
+			MVPListener.enableOrDisable(instance); // TODO: rename this listener
+		
+		if(FactionsPlus.pm.isPluginEnabled("CreativeGates"))
+			CreativeGatesListener.enableOrDisable(instance); 
+		
+		if(FactionsPlus.pm.isPluginEnabled("ChestShop"))
+			ChestShopListener.enableOrDisable(instance);
+			
+        if(FactionsPlus.pm.isPluginEnabled("ShowCaseStandalone"))
+        	ShowCaseStandaloneListener.enableOrDisable(instance);
 	}
 	
 	/*
