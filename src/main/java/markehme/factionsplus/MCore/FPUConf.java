@@ -493,4 +493,22 @@ public class FPUConf extends Entity<FPUConf> {
 		"useCannonsInPermanent", true,
 		"useCannonsInOwn", true
 	);		
+	
+	// ----------------------------------------
+	// Magic Section 
+	// ----------------------------------------
+	public boolean magicAllowInWilderness = true;
+	public boolean magicAllowInWarzone = true;
+	public boolean magicAllowInSafezone = true;
+	public boolean magicAllowInOwnFaction = true;
+	public boolean magicAllowInEnemyFaction = true;
+	public boolean magicAllowInAllyFaction = true;
+	public boolean magicMustBeInAFactionToUse = false;
+	
+	public List<String> magicDisallowInFactions = MUtil.list(
+			"enterFactionID"
+		);
+
+	public double magicRequiresMinimumPowerOf = 0;
+	
 }

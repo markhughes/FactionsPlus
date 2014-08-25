@@ -245,6 +245,13 @@ public class LConf extends Entity<LConf> {
 	public String multiverseCantUseThisPortal = "<red>You can't use this portal in this land type.";
 	
 	// ----------------------------
+	// MultiVerse Portals Related
+	// ----------------------------
+	public String magicDenyInThisLand = "<red>You can't use magic here.";
+	public String magicNotEnoughPower = "<red>You need at least %s power to use magic!";
+	public String magicNeedAFaction = "<red>You must be in a faction to use magic!";
+	
+	// ----------------------------
 	// Deny Claiming Related
 	// ----------------------------
 	public String denyClaimNotice = "<green>Someone (<red>%s<green>) tried to claim this chunk but was denied.";

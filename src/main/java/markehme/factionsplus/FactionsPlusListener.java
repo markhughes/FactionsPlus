@@ -2,12 +2,8 @@ package markehme.factionsplus;
 
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.LocketteFunctions;
-import markehme.factionsplus.listeners.CannonsListener;
-import markehme.factionsplus.listeners.ChestShopListener;
-import markehme.factionsplus.listeners.CreativeGatesListener;
-import markehme.factionsplus.listeners.DisguiseListener;
 import markehme.factionsplus.listeners.MVPListener;
-import markehme.factionsplus.listeners.ShowCaseStandaloneListener;
+import markehme.factionsplus.listeners.*;
 import markehme.factionsplus.sublisteners.*;
 
 import org.bukkit.Bukkit;
@@ -83,8 +79,13 @@ public class FactionsPlusListener implements Listener {
 		if(FactionsPlus.pm.isPluginEnabled("ChestShop"))
 			ChestShopListener.enableOrDisable(instance);
 			
-        if(FactionsPlus.pm.isPluginEnabled("ShowCaseStandalone"))
+		if(FactionsPlus.pm.isPluginEnabled("ShowCaseStandalone"))
         	ShowCaseStandaloneListener.enableOrDisable(instance);
+        
+		if(FactionsPlus.pm.isPluginEnabled("Magic"))
+        	MagicListener.enableOrDisable(instance);
+        
+        
 	}
 	
 	/*
