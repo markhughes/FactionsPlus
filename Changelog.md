@@ -13,3 +13,10 @@
 * Can now ignore need requests with /f need listen/ignore 
 * Added /f scoreboard/sb command 
 * Listeners completely re-organised into sublisteners 
+* Added support for Magic Plugin - although the Magic plugin adds integration, this is much feature packed! 
+* Added configuration option magicDisallowInEnemy
+* Added configuration option magicDisallowInOwn
+* Added configuration option magicDisallowInSafeZone
+* Added configuration option magicDisallowInWarZone
+* Added configuration option magicDisallowInFactions
+* Added configuration option magicRequiresMinimumPowerOf
