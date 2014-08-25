@@ -136,27 +136,27 @@ public class FactionsPlusScoreboard {
 					switch( LimitCount ) {
 					case 0:
 						Score faction1 	= objective.getScore(faction_name);
-						faction1.setScore( faction_power );
+						faction1.setScore(faction_power);
 						break;
 							
 					case 1:
 						Score faction2 	= objective.getScore(faction_name);
-						faction2.setScore( faction_power );
+						faction2.setScore(faction_power);
 						break;
 						
 					case 2:
 						Score faction3 	= objective.getScore(faction_name);
-						faction3.setScore( faction_power );
+						faction3.setScore(faction_power);
 						break;
 						
 					case 3:
 						Score faction4 	= objective.getScore(faction_name);
-						faction4.setScore( faction_power );
+						faction4.setScore(faction_power);
 						break;
 						
 					case 4:
 						Score faction5 	= objective.getScore(faction_name);
-						faction5.setScore( faction_power );
+						faction5.setScore(faction_power);
 						break;
 						
 					}
@@ -168,13 +168,11 @@ public class FactionsPlusScoreboard {
 					
 				}
 			
-				for (Player p : Bukkit.getOnlinePlayers() ) {
-										
-					if( !( FactionsPlus.permission.has( p, "factionsplus.hidesb." + p.getWorld().getName() ) && ! FactionsPlus.permission.has( p, "factionsplus.hidesb" ) ) 
-							|| FactionsPlus.permission.has( p, "factionsplus.forcesb") ) {
+				for(Player p : Bukkit.getOnlinePlayers()) {				
+					if(!(FactionsPlus.permission.has(p, "factionsplus.hidesb."+p.getWorld().getName()) && !FactionsPlus.permission.has(p, "factionsplus.hidesb")) 
+							|| FactionsPlus.permission.has(p, "factionsplus.forcesb")) {
 						
-						
-						// Yes - this is proper per-universe support for scoreboards. 
+						// Ensure it is enabled in this universe
 						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
 							p.setScoreboard(scoreBoard);
 							return;
@@ -184,14 +182,8 @@ public class FactionsPlusScoreboard {
 					if(p.getScoreboard() == scoreBoard) {
 						p.setScoreboard(manager.getMainScoreboard());
 					}
-					
 				}
-
-				
 			}
-			
 		}, 0L, MConf.get().scoreboardUpdate*20L );
-
 	}
-	
 }
