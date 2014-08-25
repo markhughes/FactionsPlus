@@ -302,7 +302,6 @@ public class FPUConf extends Entity<FPUConf> {
 	// Scoreboards 
 	// ----------------------------------------
 	public Boolean scoreboardTopFactions = false;
-	public Boolean scoreboardMapOfFactions = false;
 	
 	public int scoreboardUpdate = 5;
 	

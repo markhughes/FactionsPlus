@@ -490,7 +490,7 @@ public class CoreListener implements Listener {
 				
 		// Feature: scoreboards
 		
-		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardMapOfFactions) {
+		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardTopFactions) {
 			if(FactionsPlusScoreboard.scoreBoard != null) {
 				if(!( FactionsPlus.permission.has(event.getPlayer(), "factionsplus.hidesb." + event.getPlayer().getWorld().getName() ) && ! FactionsPlus.permission.has( event.getPlayer(), "factionsplus.hidesb" ) ) || FactionsPlus.permission.has(event.getPlayer(), "factionsplus.forcesb") ) {
 					event.getPlayer().setScoreboard(FactionsPlusScoreboard.scoreBoard);

@@ -24,7 +24,7 @@ public class ReqScoreboardEnabled  extends ReqAbstract {
 
 	@Override
 	public boolean apply(CommandSender sender, MassiveCommand command) {
-		return FPUConf.get(UPlayer.get(sender).getUniverse()).scoreboardTopFactions || FPUConf.get(UPlayer.get(sender).getUniverse()).scoreboardMapOfFactions;
+		return FPUConf.get(UPlayer.get(sender).getUniverse()).scoreboardTopFactions;
 	}
 
 	@Override

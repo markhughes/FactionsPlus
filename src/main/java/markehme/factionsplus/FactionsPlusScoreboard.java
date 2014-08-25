@@ -185,34 +185,9 @@ public class FactionsPlusScoreboard {
 					if( !( FactionsPlus.permission.has( p, "factionsplus.hidesb." + p.getWorld().getName() ) && ! FactionsPlus.permission.has( p, "factionsplus.hidesb" ) ) 
 							|| FactionsPlus.permission.has( p, "factionsplus.forcesb") ) {
 						
-						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardMapOfFactions) {
-							
-							// 16 character limit.. maybe map should not be too detailed
-							// e.g. not have any names of the Factions. No colours.. 
-							
-							// this map is 16x16
-							/*
-							String mapLine_1	= "----------------";
-							String mapLine_2	= "-------\\-------";
-							String mapLine_3	= "-------\\-------";
-							String mapLine_4	= "-------\\-------";
-							String mapLine_5	= "----....//------";
-							String mapLine_6	= "----...---------";
-							String mapLine_7	= "----...---------";
-							String mapLine_8	= "----------------";
-							String mapLine_9	= "----------------";
-							String mapLine_10	= "----------------";
-							String mapLine_11	= "----------------";
-							String mapLine_12	= "----------------";
-							String mapLine_13	= "----------------";
-							String mapLine_14	= "----------------";
-							String mapLine_15	= "----------------";
-							String mapLine_16	= "----------------";
-							*/
-						}
 						
 						// Yes - this is proper per-universe support for scoreboards. 
-						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardMapOfFactions || FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
+						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
 							p.setScoreboard(scoreBoard);
 						}
 						
