@@ -28,7 +28,7 @@ public class FactionsPlusScoreboard {
 	public static String objective_name = "FactionsPlus_TF";
 	public static Scoreboard scoreBoard = null;
 	
-	private static String strSplit = "[FP Str Splitter]";
+	private static String strSplit = "321FPStrSplitter123";
 	
 	public static void setup() {
 		
@@ -60,14 +60,12 @@ public class FactionsPlusScoreboard {
 				objective.setDisplaySlot( DisplaySlot.SIDEBAR );
 										
 				ArrayList<String> sFactions = new ArrayList<String>(); 
-				
-				int i = 0;
-				
+								
 				String some_number;
 				
-				for( FactionColl currentFactionColl : FactionColls.get().getColls() ) {
+				for(FactionColl currentFactionColl : FactionColls.get().getColls() ) {
 						
-					for( Faction sFaction : currentFactionColl.getAll() ) {
+					for(Faction sFaction : currentFactionColl.getAll() ) {
 							
 						// We want normal factions
 						if( FType.valueOf( sFaction ) == FType.FACTION ) {
@@ -94,15 +92,17 @@ public class FactionsPlusScoreboard {
 							
 							sFactions.add( some_number + strSplit + sFaction.getName() );
 							
-							i++;
 							
 						}
 						
 					}
 				}
-					
+				
+				// No Factions, so do nothing 
+				if(sFactions.size() == 0) return;
+				
 				// More than one Faction, so sort it. 
-				if(i > 1) {
+				if(sFactions.size() > 1) {
 					Collections.sort( sFactions, Collections.reverseOrder() );
 						
 				}
