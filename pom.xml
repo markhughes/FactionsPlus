@@ -45,6 +45,10 @@
             <id>sk89q</id>
             <url>http://maven.sk89q.com/repo</url>
         </repository>
+		<repository>
+		    <id>elmakers-repo</id>
+		    <url>http://maven.elmakers.com/repository/ </url>
+		</repository>
     </repositories>
 
     <dependencies>
@@ -93,6 +97,12 @@
             <artifactId>worldguard</artifactId>
             <version>5.9.1-SNAPSHOT</version>
         </dependency>
+		<dependency>
+		    <groupId>com.elmakers.mine.bukkit</groupId>
+		    <artifactId>MagicAPI</artifactId>
+		    <version>1.0</version>
+		    <scope>provided</scope>
+		</dependency>
 
 
         <dependency>
