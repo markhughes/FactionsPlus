@@ -28,6 +28,8 @@ public class FactionsPlusScoreboard {
 	public static String objective_name = "FactionsPlus_TF";
 	public static Scoreboard scoreBoard = null;
 	
+	private static String strSplit = "[FP Str Splitter]";
+	
 	public static void setup() {
 		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlus.instance, new Runnable() {
@@ -50,11 +52,12 @@ public class FactionsPlusScoreboard {
 					
 					// Check if `objective_name` exists in the objectives. 
 					
-					if(scoreBoard.getObjective(objective_name) != null) {
-						scoreBoard.getObjective(objective_name).unregister();
+					if(scoreBoard.getObjective(objective_name) == null) {
+						objective = scoreBoard.registerNewObjective(objective_name, "dummy");
+					} else {
+						objective = scoreBoard.getObjective(objective_name);
 					}
 					
-					objective			= scoreBoard.registerNewObjective(objective_name, "dummy");
 					
 					objective.setDisplayName(Txt.parse(LConf.get().scoreboardTitle));
 					objective.setDisplaySlot( DisplaySlot.SIDEBAR );
@@ -68,39 +71,39 @@ public class FactionsPlusScoreboard {
 					
 					for( FactionColl currentFactionColl : FactionColls.get().getColls() ) {
 						
-					    for( Faction sFaction : currentFactionColl.getAll() ) {
-					    	
-					    	// We want normal factions
-					    	if( FType.valueOf( sFaction ) == FType.FACTION ) {
-					    		some_number = Math.floor( sFaction.getLandCount() + sFaction.getPowerBoost() + sFaction.getPowerMaxRounded() ) + "";
-					    		if(some_number.length() == 1 ) { // changes power looking like "9" to "000009"
-					    			some_number = "00000"+some_number;
-					    			
-					    		} else if(some_number.length() == 2 ) { // changes power looking like "15" to "000015"
-					    			
-					    			some_number = "0000"+some_number;
-					    			
-					    		} else if(some_number.length() == 3 ) { // changes power looking like "200" to "000200"
-					    			
-					    			some_number = "000"+some_number;
-					    			
-					    		} else if(some_number.length() == 4 ) { // changes power looking like "5555" to "005555"
-					    			some_number = "00"+some_number;
-					    			
-					    		} else if(some_number.length() == 5 ) { // changes power looking like "99999" to "099999"
-					    			
-					    			some_number = "0"+some_number;
-					    			
-					    		}
-					    		
-					    		sFactions.add( some_number + "mooISplitStringsLuls123" + sFaction.getName() );
-					    		
-						    	i++;
-						    	
-					    	}
-					    	
-					    }
-					    
+						for( Faction sFaction : currentFactionColl.getAll() ) {
+							
+							// We want normal factions
+							if( FType.valueOf( sFaction ) == FType.FACTION ) {
+								some_number = Math.floor( sFaction.getLandCount() + sFaction.getPowerBoost() + sFaction.getPowerMaxRounded() ) + "";
+								if(some_number.length() == 1 ) { // changes power looking like "9" to "000009"
+									some_number = "00000"+some_number;
+									
+								} else if(some_number.length() == 2 ) { // changes power looking like "15" to "000015"
+									
+									some_number = "0000"+some_number;
+									
+								} else if(some_number.length() == 3 ) { // changes power looking like "200" to "000200"
+									
+									some_number = "000"+some_number;
+									
+								} else if(some_number.length() == 4 ) { // changes power looking like "5555" to "005555"
+									some_number = "00"+some_number;
+									
+								} else if(some_number.length() == 5 ) { // changes power looking like "99999" to "099999"
+									
+									some_number = "0"+some_number;
+									
+								}
+								
+								sFactions.add( some_number + strSplit + sFaction.getName() );
+								
+								i++;
+								
+							}
+							
+						}
+						
 					}
 					
 					// More than one Faction, so sort it. 
@@ -120,7 +123,7 @@ public class FactionsPlusScoreboard {
 					
 					
 					for ( String cFaction : sFactions ) {
-						workingString = cFaction.split( "mooISplitStringsLuls123" );
+						workingString = cFaction.split(strSplit);
 						
 						faction_name = workingString[1].substring( 0, Math.min( workingString[1].length(), scoreboard_charater_limit ) );
 						
@@ -132,7 +135,7 @@ public class FactionsPlusScoreboard {
 							
 							faction_power = 0;
 							
-							FactionsPlus.severe(e,  "Could not convert " + workingString[0] + " to int (faction power was assumed 0) - error should not have occured" );
+							FactionsPlus.severe(e, "Could not convert " + workingString[0] + " to int (faction power was assumed 0) - error should not have occured" );
 							
 						}
 						
@@ -174,19 +177,6 @@ public class FactionsPlusScoreboard {
 						}
 					}
 				
-
-					/*
-					try {
-						
-						scoreBoard.getObjective( objective_name ).unregister();
-						
-					} catch( Exception e ) {
-						
-						// Not sure if it'll throw an Exception on a non-existant scoreboard
-						// so put it in a try catch 
-						
-					}
-					*/
 					
 				
 
@@ -244,7 +234,7 @@ public class FactionsPlusScoreboard {
 				
 			}
 			
-	    }, 0L, MConf.get().scoreboardUpdate*20L );
+		}, 0L, MConf.get().scoreboardUpdate*20L );
 
 	}
 	
