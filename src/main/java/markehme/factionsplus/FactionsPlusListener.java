@@ -2,7 +2,7 @@ package markehme.factionsplus;
 
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.LocketteFunctions;
-import markehme.factionsplus.listeners.MVPListener;
+import markehme.factionsplus.listeners.MultiversePortals;
 import markehme.factionsplus.listeners.*;
 import markehme.factionsplus.sublisteners.*;
 
@@ -71,7 +71,7 @@ public class FactionsPlusListener implements Listener {
 		DisguiseListener.enableOrDisable(instance);
 		
 		if(FactionsPlus.pm.isPluginEnabled("Multiverse-Portals"))
-			MVPListener.enableOrDisable(instance); // TODO: rename this listener
+			MultiversePortals.enableOrDisable(instance); // TODO: rename this listener
 		
 		if(FactionsPlus.pm.isPluginEnabled("CreativeGates"))
 			CreativeGatesListener.enableOrDisable(instance); 

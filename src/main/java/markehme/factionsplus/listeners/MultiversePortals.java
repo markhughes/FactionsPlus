@@ -17,10 +17,10 @@ import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.util.Txt;
 import com.onarandombox.MultiversePortals.event.MVPortalEvent;
 
-public class MVPListener implements Listener {
+public class MultiversePortals implements Listener {
 	
 	public static boolean isMVPIntegrated = false;
-	public static MVPListener mvplistener;
+	public static MultiversePortals mvplistener;
 	
 
 	@EventHandler(priority=EventPriority.HIGH)
@@ -118,11 +118,11 @@ public class MVPListener implements Listener {
 		if (isMVPplugin && !isMVPIntegrated) {
 			assert ( null == mvplistener );
 			
-			mvplistener = new MVPListener();
+			mvplistener = new MultiversePortals();
 			pm.registerEvents( mvplistener, instance );
 			
 			if(null == mvplistener) {
-				mvplistener = new MVPListener();
+				mvplistener = new MultiversePortals();
 				Bukkit.getServer().getPluginManager().registerEvents(mvplistener, instance);
 			}
 			
