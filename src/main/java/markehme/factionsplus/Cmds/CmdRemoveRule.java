@@ -19,6 +19,8 @@ public class CmdRemoveRule extends FPCommand {
 		
 		this.errorOnToManyArgs = false;
 		
+		this.requiredArgs.add("rule");
+		
 		this.addRequirements(ReqFactionsEnabled.get());
 		this.addRequirements(ReqIsPlayer.get());
 		this.addRequirements(ReqHasFaction.get());
@@ -34,7 +36,6 @@ public class CmdRemoveRule extends FPCommand {
 	@Override
 	public void performfp() {
 		
-		// Ensure they have permission to set rules
 		if(!FPUConf.get(usender.getUniverse()).whoCanSetRules.get(usender.getRole())) {
 			msg(Txt.parse(LConf.get().rulesNotHighEnoughRankingToModify));
 			return;
