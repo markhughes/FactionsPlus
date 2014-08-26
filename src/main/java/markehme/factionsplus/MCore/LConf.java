@@ -169,6 +169,7 @@ public class LConf extends Entity<LConf> {
 	public String rulesNoRuleRemoved = "<b>No rule was removed - did it exist?";
 	public String rulesListingStart = "<b>The rules for your faction are:";
 	public String rulesHitMax = "<red>You have hit the maximum amount of rules for your faction (%s).";
+	public String rulesRuleAdded = "<green>Rule added!";
 
 	// ----------------------------
 	// Protection Related

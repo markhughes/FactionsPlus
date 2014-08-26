@@ -11,8 +11,7 @@ import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 import com.massivecraft.massivecore.util.Txt;
 
-public class CmdSetRule extends FPCommand{
-	
+public class CmdSetRule extends FPCommand {
 	public CmdSetRule() {
 		this.aliases.add("setrule");
 		this.aliases.add("addrule");
@@ -55,5 +54,6 @@ public class CmdSetRule extends FPCommand{
 		
 		fData.rules.add(newRule);
 		
+		msg(Txt.parse(LConf.get().rulesRuleAdded));
 	}
 }
