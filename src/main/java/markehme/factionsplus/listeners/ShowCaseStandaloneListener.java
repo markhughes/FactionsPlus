@@ -65,10 +65,15 @@ public class ShowCaseStandaloneListener implements Listener {
 			}
 			
 			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+			
+			// additional:
+			scs = (ShowCaseStandalone)instance.getServer().getPluginManager().getPlugin("ShowCaseStandalone");
 		}
 	}
 	
 	/********/
+	
+	private static ShowCaseStandalone scs = null;
 	
 	@EventHandler(ignoreCancelled=true, priority=EventPriority.HIGH)
 	public void createShowCase( ShowCaseCreateEvent event ) {
@@ -136,10 +141,8 @@ public class ShowCaseStandaloneListener implements Listener {
 							
 							Block block = chunk.getBlock( x, y, z );
 							
-							// TODO: .get() method is deprecated? How do we go about this now. 
-							
-							if(ShowCaseStandalone.get().getShopHandler().isShopBlock(block)) {
-								Shop s = ShowCaseStandalone.get().getShopHandler().getShop(block);
+							if(scs.getShopHandler().isShopBlock(block)) {
+								Shop s = scs.getShopHandler().getShop(block);
 								if(s == null) continue;
 								
 								new com.kellerkindt.scs.events.ShowCaseDeleteEvent(Bukkit.getPlayer(s.getOwner()), s);
