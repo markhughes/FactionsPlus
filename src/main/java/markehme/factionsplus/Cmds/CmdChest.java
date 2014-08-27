@@ -9,6 +9,7 @@ import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.cmd.req.ReqHasFaction;
+import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;
 import com.massivecraft.massivecore.cmd.req.ReqIsPlayer;
 import com.massivecraft.massivecore.ps.PS;
@@ -67,6 +68,13 @@ public class CmdChest extends FPCommand {
 		}
 		
 		Block chestBlock = fData.factionChest.asBukkitBlock();
+		
+		if(!BoardColls.get().getFactionAt(fData.factionChest).getId().equals(usender.getFactionId())) {
+			msg(Txt.parse(LConf.get().chestNotInTerritory));
+			return;
+		}
+		
+		// TODO: add extra lockette, etc, checks? 
 		
 		if(chestBlock.getType() != Material.CHEST) {
 			msg(Txt.parse(LConf.get().chestNotThere));
