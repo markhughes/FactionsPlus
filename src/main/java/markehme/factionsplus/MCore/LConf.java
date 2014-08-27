@@ -122,6 +122,7 @@ public class LConf extends Entity<LConf> {
 	public String chestNotThere = "<red>Your Faction Chest isn't a chest anymore..!";
 	public String chestNotHighRank = "<red>Your ranking is not high enough to set the Faction Chest.";
 	public String chestNotInTerritory = "<red>Your Faction Chest is not in your territory.";
+	public String chestSetTo = "<green>Faction Chest has been set to the best you're currently looking at!";
 	
 	// ----------------------------
 	// LWC Locks Related

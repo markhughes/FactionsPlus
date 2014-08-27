@@ -53,6 +53,7 @@ public class CmdChest extends FPCommand {
 					
 					if(targetBlock.getType() == Material.CHEST) {
 						fData.factionChest = PS.valueOf(targetBlock.getLocation());
+						msg(Txt.parse(LConf.get().chestSetTo));
 					} else {
 						msg(Txt.parse(LConf.get().chestNotLookingAt));
 					}
