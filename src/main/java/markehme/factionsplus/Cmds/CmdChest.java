@@ -1,5 +1,6 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -67,7 +68,8 @@ public class CmdChest extends FPCommand {
 			return;
 		}
 		
-		Block chestBlock = fData.factionChest.asBukkitBlock();
+		Location chestLoc = fData.factionChest.asBukkitLocation();
+		Block chestBlock = chestLoc.getBlock();
 		
 		if(!BoardColls.get().getFactionAt(fData.factionChest).getId().equals(usender.getFactionId())) {
 			msg(Txt.parse(LConf.get().chestNotInTerritory));
