@@ -20,3 +20,6 @@
 * Added configuration option magicDisallowInWarZone
 * Added configuration option magicDisallowInFactions
 * Added configuration option magicRequiresMinimumPowerOf
+* Added command /f chest
+* Added permission factionsplus.chest
+* Added permission factionsplus.chest.set
