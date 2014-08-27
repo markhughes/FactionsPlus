@@ -3,28 +3,7 @@ package markehme.factionsplus;
 import java.util.ArrayList;
 import java.util.List;
 
-import markehme.factionsplus.Cmds.CmdAddWarp;
-import markehme.factionsplus.Cmds.CmdAnnounce;
-import markehme.factionsplus.Cmds.CmdBan;
-import markehme.factionsplus.Cmds.CmdClearLocks;
-import markehme.factionsplus.Cmds.CmdDebug;
-import markehme.factionsplus.Cmds.CmdFactionHome;
-import markehme.factionsplus.Cmds.CmdFactionNeed;
-import markehme.factionsplus.Cmds.CmdFactionsFaction;
-import markehme.factionsplus.Cmds.CmdJail;
-import markehme.factionsplus.Cmds.CmdListWarps;
-import markehme.factionsplus.Cmds.CmdMoneyTop;
-import markehme.factionsplus.Cmds.CmdPowSettings;
-import markehme.factionsplus.Cmds.CmdRemoveRule;
-import markehme.factionsplus.Cmds.CmdRemoveWarp;
-import markehme.factionsplus.Cmds.CmdRules;
-import markehme.factionsplus.Cmds.CmdSetJail;
-import markehme.factionsplus.Cmds.CmdSetRule;
-import markehme.factionsplus.Cmds.CmdToggleState;
-import markehme.factionsplus.Cmds.CmdUnJail;
-import markehme.factionsplus.Cmds.CmdUnban;
-import markehme.factionsplus.Cmds.CmdUnsetJail;
-import markehme.factionsplus.Cmds.CmdWarp;
+import markehme.factionsplus.Cmds.*;
 import markehme.factionsplus.Cmds.FPCommand;
 import markehme.factionsplus.extras.LWCBase;
 
@@ -74,6 +53,7 @@ public class FactionsPlusCommandManager {
 		
 		// General Additional Commands
 		addSC(new CmdFactionNeed());
+		addSC(new CmdChest());
 		
 		addSC(new CmdDebug());
 		

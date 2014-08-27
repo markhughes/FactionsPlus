@@ -30,6 +30,8 @@ public enum FPPerm {
 	WARPOTHERS("warp.others"),
 	RULES("rules"),
 	SCOREBOARD("scoreboard"),
+	CHEST("chest"),
+	CHESTSET("chest.set"),
 	;
 
 	public final String node;

@@ -41,6 +41,7 @@ public class LConf extends Entity<LConf> {
 	public String cmdDescUnJail			= "removes a player from jail";
 	public String cmdDescWarp			= "teleport to a warp";
 	public String cmdDescScoreboard		= "toggles scoreboard visibility";
+	public String cmdDescChest			= "open or set your factions chest";
 	
 	// ----------------------------
 	// FactionsPlus specific related
@@ -111,6 +112,15 @@ public class LConf extends Entity<LConf> {
 	public String banNotifyAll = "<red>%s <white>banned <red>%s> <white>from your faction!";
 	public String banYouAreBanned = "<red>You can't join this Faction as you have been banned!";
 	public String banPlayerNotBanned = "<red>That player is not banned!";
+	
+	// ----------------------------
+	// Chest related
+	// ----------------------------
+	public String chestNotLookingAt = "<red>You must be looking at a chest to set a Faction Chest!";
+	public String chestNoPermission = "<red>You don't have permission to set a Faction Chest!";
+	public String chestNoneSet = "<red>No chest has been set for your faction, or it has been removed.";
+	public String chestNotThere = "<red>Your Faction Chest isn't a chest anymore..!";
+	public String chestNotHighRank = "<red>Your ranking is not high enough to set the Faction Chest.";
 	
 	// ----------------------------
 	// LWC Locks Related

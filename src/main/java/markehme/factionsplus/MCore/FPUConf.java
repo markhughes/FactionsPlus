@@ -154,6 +154,13 @@ public class FPUConf extends Entity<FPUConf> {
 	public Boolean factionNameForceFirstLetterUppercase = false;
 	public Boolean factionJoinLeaveMessagesLockedToFaction = false;
 	
+	public Boolean factionChestAllowAnywhere = false;
+	
+	public Map<Rel, Boolean> whoCanSetChest = MUtil.map(
+			Rel.LEADER, true,
+			Rel.OFFICER, true,
+			Rel.MEMBER, false,
+			Rel.RECRUIT, false);
 	
 	// ----------------------------------------
 	// Banning
