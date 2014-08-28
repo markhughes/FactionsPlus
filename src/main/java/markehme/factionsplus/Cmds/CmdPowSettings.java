@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import markehme.factionsplus.Utilities;
-import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.sublisteners.PowerBoostSubListener;
@@ -13,6 +11,7 @@ import markehme.factionsplus.sublisteners.PowerBoostSubListener;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UConf;
@@ -60,7 +59,7 @@ public class CmdPowSettings extends FPCommand {
 		
 		allLines.clear();
 		
-		sm(ChatColor.DARK_PURPLE,"----- " + ChatColor.GREEN + "power settings/stats" + ChatColor.DARK_PURPLE + " -----");
+		sm(ChatColor.DARK_PURPLE,"----- " + ChatColor.GREEN + "power settings/statistics" + ChatColor.DARK_PURPLE + " -----");
 		
 		sm("Factions "+(UConf.get(usender).factionPowerMax>0.0?badColor+"are limited to "+msgColor1+UConf.get(usender).factionPowerMax:
 			_goodDONT+" have a limit on")+" max power.");
@@ -69,19 +68,19 @@ public class CmdPowSettings extends FPCommand {
 		
 		Boolean extraPowerLossGainEnabled = false;
 		if (
-				FPUConf.get(usender).extraPowerLoss.get("whenDeathBySuicide") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByPVP") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByMob") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByCactus") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByTNT") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByFire") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByPotion") > 0
-				|| FPUConf.get(usender).extraPowerLoss.get("whenDeathByOther") > 0
-				|| FPUConf.get(usender).extraPowerBoosts.get("whenKillEnemyPlayer")>0
-				|| FPUConf.get(usender).extraPowerBoosts.get("whenKillAllyPlayer")>0
-				|| FPUConf.get(usender).extraPowerBoosts.get("whenKillTrucePlayer")>0
-				|| FPUConf.get(usender).extraPowerBoosts.get("whenKillNeutralPlayer")>0
-				|| FPUConf.get(usender).extraPowerBoosts.get("whenKillAnotherMonster")>0
+				fpuconf.extraPowerLoss.get("whenDeathBySuicide") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByPVP") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByMob") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByCactus") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByTNT") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByFire") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByPotion") > 0
+				|| fpuconf.extraPowerLoss.get("whenDeathByOther") > 0
+				|| fpuconf.extraPowerBoosts.get("whenKillEnemyPlayer")>0
+				|| fpuconf.extraPowerBoosts.get("whenKillAllyPlayer")>0
+				|| fpuconf.extraPowerBoosts.get("whenKillTrucePlayer")>0
+				|| fpuconf.extraPowerBoosts.get("whenKillNeutralPlayer")>0
+				|| fpuconf.extraPowerBoosts.get("whenKillAnotherMonster")>0
 				
 		) {
 			extraPowerLossGainEnabled = true;
@@ -91,20 +90,20 @@ public class CmdPowSettings extends FPCommand {
 		
 		if (extraPowerLossGainEnabled) {
 			
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathBySuicide") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathBySuicide"), "suicide");
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByCactus") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByCactus"), "cactus" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByFire") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByFire"), "fire" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByMob") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByMob"), "mob" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByPotion") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByPotion"), "potion" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByPVP") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByPVP"), "PVP/player" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByPVP") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByTNT"), "TNT" );
-			if(FPUConf.get(usender).extraPowerLoss.get("whenDeathByOther") >0) showExtraLoss(FPUConf.get(usender).extraPowerLoss.get("whenDeathByOther"), "other" );
+			if(fpuconf.extraPowerLoss.get("whenDeathBySuicide") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathBySuicide"), "suicide");
+			if(fpuconf.extraPowerLoss.get("whenDeathByCactus") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByCactus"), "cactus" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByFire") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByFire"), "fire" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByMob") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByMob"), "mob" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByPotion") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByPotion"), "potion" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByPVP") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByPVP"), "PVP/player" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByPVP") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByTNT"), "TNT" );
+			if(fpuconf.extraPowerLoss.get("whenDeathByOther") >0) showExtraLoss(fpuconf.extraPowerLoss.get("whenDeathByOther"), "other" );
 			
-			if(FPUConf.get(usender).extraPowerBoosts.get("whenKillEnemyPlayer") >0) showExtraGain(FPUConf.get(usender).extraPowerBoosts.get("whenKillEnemyPlayer"), "enemy players" );
-			if(FPUConf.get(usender).extraPowerBoosts.get("whenKillAllyPlayer") >0) showExtraGain(FPUConf.get(usender).extraPowerBoosts.get("whenKillAllyPlayer"), "ally players" );
-			if(FPUConf.get(usender).extraPowerBoosts.get("whenKillTrucePlayer") >0) showExtraGain(FPUConf.get(usender).extraPowerBoosts.get("whenKillTrucePlayer"), "truce players" );
-			if(FPUConf.get(usender).extraPowerBoosts.get("whenKillNeutralPlayer") >0) showExtraGain(FPUConf.get(usender).extraPowerBoosts.get("whenKillNeutralPlayer"), "neutral players" );
-			if(FPUConf.get(usender).extraPowerBoosts.get("whenKillAnotherMonster") >0) showExtraGain(FPUConf.get(usender).extraPowerBoosts.get("whenKillAnotherMonster"), "mob" );
+			if(fpuconf.extraPowerBoosts.get("whenKillEnemyPlayer") >0) showExtraGain(fpuconf.extraPowerBoosts.get("whenKillEnemyPlayer"), "enemy players" );
+			if(fpuconf.extraPowerBoosts.get("whenKillAllyPlayer") >0) showExtraGain(fpuconf.extraPowerBoosts.get("whenKillAllyPlayer"), "ally players" );
+			if(fpuconf.extraPowerBoosts.get("whenKillTrucePlayer") >0) showExtraGain(fpuconf.extraPowerBoosts.get("whenKillTrucePlayer"), "truce players" );
+			if(fpuconf.extraPowerBoosts.get("whenKillNeutralPlayer") >0) showExtraGain(fpuconf.extraPowerBoosts.get("whenKillNeutralPlayer"), "neutral players" );
+			if(fpuconf.extraPowerBoosts.get("whenKillAnotherMonster") >0) showExtraGain(fpuconf.extraPowerBoosts.get("whenKillAnotherMonster"), "mob" );
 
 		}
 
@@ -132,6 +131,7 @@ public class CmdPowSettings extends FPCommand {
 			Player player 		= (Player) sender;
 			UPlayer fplayer 	= UPlayer.get(player);
 			FactionData fdata	= FactionDataColls.get().getForUniverse(fplayer.getUniverse()).get(fplayer.getFactionId());
+			UConf uconf 		= UConf.get(fplayer);
 			
 			if (fdata.jailedPlayerIDs.containsKey(player.getUniqueId())) {
 				sm(ChatColor.RED+"You are currently in jail.");
@@ -139,16 +139,16 @@ public class CmdPowSettings extends FPCommand {
 			
 			sm("Your exact current power is "+num(fplayer.getPower()));
 			
-			boolean noLossWorld = Utilities.noPowerLossWorld(player.getWorld());
+			boolean noLossWorld = uconf.powerPerDeath==0.0;
 			
 			String worldName=ChatColor.GRAY+"("+player.getWorld().getName()+")"+msgColor1;
 			sm("Players "+(noLossWorld?_goodDONT:_badDO )+
 				" lose power if they died in this"+worldName+" world"+
-				(noLossWorld&&true?badColor+"(except inside its WarZone)":
-				//TODO: reinstate this -> (noLossWorld&&canLosePowerInWarZone?badColor+"(except inside its WarZone)":
-						(noLossWorld?"(not even in WarZone)":"(including in its WarZone)"))+".");
+				(noLossWorld?badColor+"(except inside its WarZone)":
+				(noLossWorld&&Faction.get(uconf.factionIdWarzone).getFlag(FFlag.POWERLOSS)?badColor+"(except inside its WarZone)":
+						(noLossWorld?"(not even in WarZone)":"(including in its WarZone)"))+"."));
 			
-			sm("Players "+(Utilities.confIs_wildernessPowerLoss(me.getWorld())?_badDO:_goodDONT)+" lose power if they died in any world's "+
+			sm("Players "+(Faction.get(uconf.factionIdNone).getFlag(FFlag.POWERLOSS)?_badDO:_goodDONT)+" lose power if they died in any world's "+
 					Faction.get("0").getName()+
 					(noLossWorld?msgColor1+"("+goodColor+"except"+msgColor1+" in the world that you are currenrly in"+worldName+")"
 						:msgColor1+"(including the world you're in"+worldName+")"));
@@ -162,28 +162,28 @@ public class CmdPowSettings extends FPCommand {
 		
 		List<String> allowedWarpsIn = new ArrayList<String>();
 		
-		if(FPUConf.get(usender).allowWarpsIn.get("owned")) {
+		if(fpuconf.allowWarpsIn.get("owned")) {
 			allowedWarpsIn.add("Own Territory");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("wilderness")) {
+		if(fpuconf.allowWarpsIn.get("wilderness")) {
 			allowedWarpsIn.add("The Wilderness");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("safezone")) {
+		if(fpuconf.allowWarpsIn.get("safezone")) {
 			allowedWarpsIn.add("SafeZone's");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("warzone")) {
+		if(fpuconf.allowWarpsIn.get("warzone")) {
 			allowedWarpsIn.add("WarZone's");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("ally")) {
+		if(fpuconf.allowWarpsIn.get("ally")) {
 			allowedWarpsIn.add("Ally Factions Land");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("enemy")) {
+		if(fpuconf.allowWarpsIn.get("enemy")) {
 			allowedWarpsIn.add("Enemy Factions Land");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("neutral")) {
+		if(fpuconf.allowWarpsIn.get("neutral")) {
 			allowedWarpsIn.add("Neutral Factions Land");
 		}
-		if(FPUConf.get(usender).allowWarpsIn.get("truce")) {
+		if(fpuconf.allowWarpsIn.get("truce")) {
 			allowedWarpsIn.add("Truce Factions Territory");
 		}
 		
