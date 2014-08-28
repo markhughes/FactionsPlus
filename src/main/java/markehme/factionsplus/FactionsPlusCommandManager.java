@@ -43,9 +43,6 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdRemoveRule());
 		addSC(new CmdRules());
 		
-		// Region based Commands
-		//addSC(new CmdPlot());
-
 		Factions.get().getOuterCmdFactions().cmdFactionsMoney.addSubCommand(new CmdMoneyTop());
 		
 		// New Admin commands 

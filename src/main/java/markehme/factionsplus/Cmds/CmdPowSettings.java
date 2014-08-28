@@ -109,6 +109,8 @@ public class CmdPowSettings extends FPCommand {
 
 		sm("Player regenerates "+num(UConf.get(usender).powerPerHour)+" power per hour.");
 		
+		UConf uconf 		= UConf.get(universe);
+		
 		/*
 		sm( "While offline, players " + ( Conf.powerRegenOffline ? _goodDO : _badDONT )
 			+ " regenerate and they "+
@@ -120,18 +122,17 @@ public class CmdPowSettings extends FPCommand {
 		
 		*/
 				
-		sm("Players "+(UConf.get(usender).canLeaveWithNegativePower?goodColor+"can":badColor+"cannot")+
+		sm("Players "+(uconf.canLeaveWithNegativePower?goodColor+"can":badColor+"cannot")+
 			msgColor1+" join/leave or be kicked from factions if their power is negative.");
 		
-		//boolean canLosePowerInWarZone = Utilities.confIs_warzonePowerLoss();//this means any warzone of even nopowerloss worlds
-		//sm("Players "+(canLosePowerInWarZone?_badDO:_goodDONT)+" lose power if they died in any world's WarZone.");
+		boolean canLosePowerInWarZone = Faction.get(uconf.factionIdWarzone).getFlag(FFlag.POWERLOSS);
+		sm("Players "+(canLosePowerInWarZone?_badDO:_goodDONT)+" lose power if they died in any world's WarZone.");
 		
 		if(sender instanceof Player) {
 			
 			Player player 		= (Player) sender;
 			UPlayer fplayer 	= UPlayer.get(player);
 			FactionData fdata	= FactionDataColls.get().getForUniverse(fplayer.getUniverse()).get(fplayer.getFactionId());
-			UConf uconf 		= UConf.get(fplayer);
 			
 			if (fdata.jailedPlayerIDs.containsKey(player.getUniqueId())) {
 				sm(ChatColor.RED+"You are currently in jail.");
@@ -139,7 +140,7 @@ public class CmdPowSettings extends FPCommand {
 			
 			sm("Your exact current power is "+num(fplayer.getPower()));
 			
-			boolean noLossWorld = uconf.powerPerDeath==0.0;
+			boolean noLossWorld = (uconf.powerPerDeath==0.0);
 			
 			String worldName=ChatColor.GRAY+"("+player.getWorld().getName()+")"+msgColor1;
 			sm("Players "+(noLossWorld?_goodDONT:_badDO )+
@@ -234,7 +235,6 @@ public class CmdPowSettings extends FPCommand {
 	}
 	
 	private final void sm(ChatColor startColor, String msg) {
-//		sender.sendMessage( startColor+msg );
 		allLines.add( startColor+msg  );
 	}
 }

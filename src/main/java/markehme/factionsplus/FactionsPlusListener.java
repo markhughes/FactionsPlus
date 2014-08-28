@@ -6,7 +6,6 @@ import markehme.factionsplus.listeners.MultiversePortals;
 import markehme.factionsplus.listeners.*;
 import markehme.factionsplus.sublisteners.*;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -71,7 +70,7 @@ public class FactionsPlusListener implements Listener {
 		DisguiseListener.enableOrDisable(instance);
 		
 		if(FactionsPlus.pm.isPluginEnabled("Multiverse-Portals"))
-			MultiversePortals.enableOrDisable(instance); // TODO: rename this listener
+			MultiversePortals.enableOrDisable(instance);
 		
 		if(FactionsPlus.pm.isPluginEnabled("CreativeGates"))
 			CreativeGatesListener.enableOrDisable(instance); 
