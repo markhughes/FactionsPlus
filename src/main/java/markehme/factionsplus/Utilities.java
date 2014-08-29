@@ -152,20 +152,6 @@ public abstract class Utilities {
 		return Bukkit.getPlayer(name);
 	}
 	
-
-	
-	
-	
-	
-//	public static boolean checkGroupPerm(World world, String group, String permission) {
-//		if(Config.config.getBoolean("enablePermissionGroups")) {
-//			return(FactionsPlus.permission.groupHas(world, group, permission));
-//		} else {
-//			return true;
-//		}
-//	}
-
-	
 	public static void addPower(Player player, double amount) {
 		UPlayer uPlayer = UPlayer.get(player);
 		uPlayer.setPower(Double.valueOf(uPlayer.getPower() + amount));
@@ -295,34 +281,6 @@ public abstract class Utilities {
 		from.setY( to.getY() );
 		from.setZ( to.getZ() );
 		return from;
-	}
-	//***********************************World Checking/Common Condition Checking for Listeners to also respect factions settings***********************//
-	/**
-	 * Checks if world is an ignored PvP world in faction config
-	 * @param world
-	 * @return boolean (true if it is an ignored world)
-	 */
-	@Deprecated
-	public static final boolean noMonitorPvPWorld(World world) {		
-		return false;
-	}
-	/**
-	 * Checks if claiming in world is disabled in config
-	 * @param world
-	 * @return boolean (true if it is a disabled claiming world)
-	 */
-	@Deprecated
-	public static final boolean noClaimWorld(World world) {
-		return false;
-	}
-	/**
-	 * Checks if powerloss in world is disabled in config
-	 * @param world
-	 * @return boolean (true if it is a powerloss disabled world)
-	 */
-	@Deprecated
-	public static final boolean noPowerLossWorld(World world) {
-		return false;
 	}
 	
 	public static final void setPeaceful(Faction faction) {
