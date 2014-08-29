@@ -107,8 +107,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); 
 			
-			// MCore is a go!
-			
+			// Check Factions before pushing forward with MassiveCore
+			checkFactions();
+						
 			this.aspect = AspectColl.get().get(Const.ASPECT, true);
 			this.aspect.register();
 			this.aspect.setDesc(
@@ -134,9 +135,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				
 				om.migrateDatabase();
 			}
-			
-			initFactions();
-			
+						
 			registerAll();
 			
 			// Setup the commands
@@ -296,15 +295,14 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	/**
 	 * Used to initialise Factions-based stuff
 	 */
-	public void initFactions() {
+	public void checkFactions() {
 		// Confirm this is running Factions 2.x - we don't want to cause any issues.
-		
+		// This is why Factions is soft-depended, we can make nicer errors this way.
 		try {
 			Class.forName("com.massivecraft.factions.entity.MConf");
 		} catch (ClassNotFoundException ex) {
-			warn("Could not find Factions 2.x - please update to Factions 2.x.");
-			warn("(or not compaitable)");
-			
+			warn("Could not find Factions 2.5.0+ - please update to Factions 2.5.0+");
+			warn("(or not compaitable - check for updates)");
 			disableSelf();
 			return;
 		}
