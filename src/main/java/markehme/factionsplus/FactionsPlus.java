@@ -2,6 +2,7 @@ package markehme.factionsplus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -35,9 +37,7 @@ import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.massivecore.Aspect;
 import com.massivecraft.massivecore.AspectColl;
 import com.massivecraft.massivecore.Multiverse;
-
 import com.onarandombox.MultiversePortals.MultiversePortals;
-
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 /**
@@ -215,81 +215,82 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	 */
 	@Override
 	public void onDisable() {
-		Throwable failed = null; 
+		HashMap<Throwable, String> errors = new HashMap<Throwable, String>();
 		
 		try {
-			try {
-				if(EssentialsIntegration.isHooked()) {
-					EssentialsIntegration.onDisable();
-				}
-			} catch (Throwable t) {
-				failed = t;
-				severe(t, "Exception on unhooking Essentials");
-			} 
-			
-			try {
-				FactionsPlusCommandManager.disableSubCommands();
-			} catch(Throwable t) {
-				failed = t;
-				severe(t, "Exception on removing FactionsPlus commands");
+			if(EssentialsIntegration.isHooked()) {
+				EssentialsIntegration.onDisable();
 			}
-			try {
-				if (LWCBase.isLWCPluginPresent()) {
-					LWCFunctions.unhookLWC();
-				}
-			} catch (Throwable t) {
-				failed = t;
-				severe(t, "Exception on unhooking LWC");
-			}
-					
-			try {
-				FactionsPlusUpdate.ensureNotRunning();
-			} catch ( Throwable t ) {
-				failed = t;
-				severe(t, "Exception on disabling Updates");
-			}
-			
-			try {
-				getServer().getServicesManager().unregisterAll(this);
-			} catch ( Throwable t ) {
-				failed = t;
-				severe(t, "Exception on unregistering services");
-			}
-			
-			try {
-				HandlerList.unregisterAll(FactionsPlus.instance);
-			} catch ( Throwable t ) {
-				failed = t;
-				severe(t, "Exception on unregistering from HandlerList");
-			}
-			
-			try {
-				getServer().getScheduler().cancelTasks(this);
-			} catch ( Throwable t ) {
-				failed = t;
-				severe(t, "Exception when canceling schedule tasks");
-			}
-			
-			try {
-				if(Bukkit.getScoreboardManager().getMainScoreboard().getObjective(FactionsPlusScoreboard.objective_name) != null) {
-					Bukkit.getScoreboardManager().getMainScoreboard().getObjective(FactionsPlusScoreboard.objective_name).unregister();
-				}
-			} catch( Exception t ) {
-				failed = t;
-				severe(t, "Exception when removing scoreboard");
-			}
-			
-			if(null == failed) {
-				info("Disabled successfuly.");
-			}
-			
 		} catch (Throwable t) {
-			failed = t;
-		} finally {
-			if ( null != failed ) {
-				info("Did not disable successfuly! Please check over exceptions.");
-			}
+			errors.put(t, "Exception on unhooking Essentials.");
+		} 
+		
+		try {
+			FactionsPlusCommandManager.disableSubCommands();
+		} catch(Throwable t) {
+			errors.put(t, "Exception on removing FactionsPlus commands.");
 		}
+		
+		try {
+			if (LWCBase.isLWCPluginPresent()) {
+				LWCFunctions.unhookLWC();
+			}
+		} catch (Throwable t) {
+			errors.put(t, "Exception on unhooking LWC.");
+		}
+			
+		try {
+			FactionsPlusUpdate.ensureNotRunning();
+		} catch (Throwable t) {
+			errors.put(t, "Exception on disabling Updates.");
+		}
+		
+		try {
+			getServer().getServicesManager().unregisterAll(this);
+		} catch (Throwable t) {
+			errors.put(t, "Exception on unregistering services.");
+		}
+		
+		try {
+			HandlerList.unregisterAll(FactionsPlus.instance);
+		} catch (Throwable t) {
+			errors.put(t, "Exception on unregistering from HandlerList.");
+		}
+		
+		try {
+			getServer().getScheduler().cancelTasks(this);
+		} catch (Throwable t) {
+			errors.put(t, "Exception when canceling schedule tasks.");
+		}
+			
+		try {
+			if(FactionsPlusScoreboard.scoreBoard != null) {
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					if(p.getScoreboard() == FactionsPlusScoreboard.scoreBoard) {
+						p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+					}
+				}
+				
+				FactionsPlusScoreboard.scoreBoard = null;
+			}
+
+		} catch(Exception t) {
+			errors.put(t, "Exception when removing scoreboard.");
+		}
+		
+		if(errors.size() == 0) {
+			info("Disabled successfuly.");
+		} else {
+			for(Throwable error : errors.keySet()) {
+				warn(errors.get(error));
+				error.printStackTrace();
+				warn(" ");
+			}
+			
+			warn("Did not disable successfuly! Please check above errors.");
+		}
+		
+		errors.clear();
 	}
 	
 	/**
