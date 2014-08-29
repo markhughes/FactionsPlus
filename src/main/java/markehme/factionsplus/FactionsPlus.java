@@ -1,10 +1,6 @@
 package markehme.factionsplus;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import markehme.factionsplus.MCore.Const;
@@ -25,7 +21,6 @@ import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -47,26 +42,20 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
  * pretty far since then.
  */
 public class FactionsPlus extends FactionsPlusPlugin {
-
-	// Our instance
+	
 	public static FactionsPlus instance;
 	
-	// The logger
-	public static Logger log 									= 	Logger.getLogger("Minecraft");
+	public static PluginManager pm;
 	
-	// Factions instance
-	Factions factions;
+	public static Logger log = Logger.getLogger("Minecraft");
 	
-	// Used by vault 
-    public static Permission permission 						= 	null;
-    
-    public static List<UUID> whosIgnoringNeeds 					= 	new ArrayList<UUID>();
-    
-	public FactionsPlusListener factionsPlusListener			=	null;
+	public static Permission permission;
+        
+	public FactionsPlusListener factionsPlusListener;
 		
-	// MultiversePortals plugin
-	public static MultiversePortals multiversePortalsPlugin 	= 	null;
-	
+	// Other Plugins
+	public static Factions factions;
+	public static MultiversePortals multiversePortalsPlugin;
 	public static WorldGuardPlugin worldGuardPlugin;
 	
 	// Version information 
@@ -74,16 +63,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static String FactionsVersion;
 	
 	// Metrics - read dev.bukkit.org/bukkit-plugins/factionsplus for more information 
-	private static Metrics metrics 								= 	null;
-			
-	// Server reference
-	public static Server server;
-	
+	private static Metrics metrics;
+				
 	// Had to put this here, so that Updater can access it
-	public static File thefile;
-	
-	// The plugin manager
-	public static PluginManager pm;
 	
 	// Aspect Stuff
 	private Aspect aspect;
@@ -94,7 +76,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		super();
 		
 		if(null != instance) {
-			throw bailOut("This was not expected, getting new-ed again without getting unloaded first.\n" +
+			throw bailOut(  "This was not expected, getting new-ed again without getting unloaded first.\n" +
 							"Safest way to reload is to stop and start the server!");
 		}
 		
@@ -109,7 +91,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			// Check Factions before pushing forward with MassiveCore
 			checkFactions();
-						
+			
+			// Setup MassiveCore related stuff 
 			this.aspect = AspectColl.get().get(Const.ASPECT, true);
 			this.aspect.register();
 			this.aspect.setDesc(
@@ -117,19 +100,16 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				"<i>What Factions exists and what players belong to them."
 			);
 			
-			// Init MStore 
 			MConfColl.get().init();
 			FPUConfColls.get().init();
 			LConfColl.get().init();
 			
 			// Store some useful data for later
-			thefile = getFile();
-			server = getServer();
-			pm = server.getPluginManager();	
+			pm = getServer().getPluginManager();	
 			pluginVersion = getDescription().getVersion(); 
 			
+			// Migration Check 
 			OldMigrate om = new OldMigrate();
-			
 			if(om.shouldMigrate()) {
 				info(ChatColor.GOLD + "Converting database and config, please wait ..");
 				
@@ -341,7 +321,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		FactionsPlusScoreboard.setup();
 		
 		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
-		
 
 	}
 	

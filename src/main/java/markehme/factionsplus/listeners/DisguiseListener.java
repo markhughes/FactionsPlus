@@ -75,7 +75,7 @@ public class DisguiseListener implements Listener {
 		
 		if(isiDisguiseIntegrated()) {
 			
-			DisguiseAPI api = FactionsPlus.server.getServicesManager().getRegistration(DisguiseAPI.class).getProvider();
+			DisguiseAPI api = FactionsPlus.instance.getServer().getServicesManager().getRegistration(DisguiseAPI.class).getProvider();
 			
 			if(api.isDisguised(event.getPlayer())) {
 				if(FPUConf.get(fplayer.getUniverse()).disguiseRemoveIfInEnemyTerritory) {
