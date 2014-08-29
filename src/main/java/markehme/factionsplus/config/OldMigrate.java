@@ -174,7 +174,7 @@ public class OldMigrate {
 								
 									fData.warpLocation.put(items[0], warpLoc);
 									
-									if(items[7] != "nullvalue") {
+									if(!items[7].trim().toLowerCase().equalsIgnoreCase("nullvalue")) {
 										fData.warpPasswords.put(items[0], items[7]);
 										msg("[Faction] [Warps] adding '"+items[0]+"' ");
 										msg("                  set password: "+items[7]);
