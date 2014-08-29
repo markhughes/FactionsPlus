@@ -111,7 +111,9 @@ public class OldMigrate {
 					
 					msg("[Faction] [Jail] Jail location found and moved to x: " + locationData[0]+", y: " + locationData[1] + ", z: " + locationData[2] + ", in world: " + locationData[4]);
 					
-					// TODO: read jailed players (since a jail has been set there could potentially be jailed players) 
+					
+					msg("[Faction] [Jailed Players] reset");
+					
 				}
 				
 				
@@ -166,12 +168,21 @@ public class OldMigrate {
 								String[] items = warpData.split(":");
 								
 								if (items.length > 0) {
+									msg("[Faction] [Warps] adding '"+items[0]+"' ");
 									
-									// is warp data
-									// TODO: convert
+									PS warpLoc = PS.valueOf(new Location(Bukkit.getWorld(items[6]), Double.valueOf(items[1]), Double.valueOf(items[2]), Double.valueOf(items[3]))); 
+								
+									fData.warpLocation.put(items[0], warpLoc);
+									
+									if(items[7] != "nullvalue") {
+										fData.warpPasswords.put(items[0], items[7]);
+										msg("[Faction] [Warps] adding '"+items[0]+"' ");
+										msg("                  set password: "+items[7]);
+									}
+									
 								}
 							} else {
-								msg("[Faction] [Warps] No warps have been found for this faction, moving on.");
+								msg("[Faction] [Warps] Empty Warps File Line");
 							}
 						}
 					} catch(Exception e) {
