@@ -44,27 +44,27 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
  */
 public class FactionsPlus extends FactionsPlusPlugin {
 	
-	public static FactionsPlus instance;
+	public static FactionsPlus instance = null;
 	
-	public static PluginManager pm;
+	public static PluginManager pm = null;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
 	
-	public static Permission permission;
+	public static Permission permission = null;
         
-	public FactionsPlusListener factionsPlusListener;
+	public FactionsPlusListener factionsPlusListener = null;
 		
 	// Other Plugins
-	public static Factions factions;
-	public static MultiversePortals multiversePortalsPlugin;
-	public static WorldGuardPlugin worldGuardPlugin;
+	public static Factions factions = null;
+	public static MultiversePortals multiversePortalsPlugin = null;
+	public static WorldGuardPlugin worldGuardPlugin = null;
 	
 	// Version information 
-	public static String pluginVersion;
-	public static String FactionsVersion;
+	public static String pluginVersion = "";
+	public static String FactionsVersion = "";
 	
 	// Metrics - read dev.bukkit.org/bukkit-plugins/factionsplus for more information 
-	private static Metrics metrics;
+	private static Metrics metrics = null;
 				
 	// Had to put this here, so that Updater can access it
 	
