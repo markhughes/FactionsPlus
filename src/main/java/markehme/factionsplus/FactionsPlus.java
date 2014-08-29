@@ -17,7 +17,6 @@ import markehme.factionsplus.MCore.FPUConfColls;
 import markehme.factionsplus.config.OldMigrate;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
-import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.extras.Metrics;
 import markehme.factionsplus.extras.WGFlagIntegration;
 import markehme.factionsplus.listeners.*;
@@ -27,7 +26,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.event.HandlerList;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -40,7 +38,6 @@ import com.massivecraft.massivecore.Multiverse;
 
 import com.onarandombox.MultiversePortals.MultiversePortals;
 
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 /**
@@ -64,9 +61,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
     public static Permission permission 						= 	null;
     
     public static List<UUID> whosIgnoringNeeds 					= 	new ArrayList<UUID>();
-    	
-	// Our core listener
-	public final CoreListener coreListener 						=	new CoreListener();
+    
 	public FactionsPlusListener factionsPlusListener			=	null;
 		
 	// MultiversePortals plugin
@@ -144,10 +139,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			registerAll();
 			
-			// Add our core listener
-			// TODO: Move away from this 
-			pm.registerEvents(coreListener, this);
-						
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
 			
