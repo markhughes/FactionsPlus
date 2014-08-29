@@ -23,3 +23,4 @@
 * Added command /f chest
 * Added permission factionsplus.chest
 * Added permission factionsplus.chest.set
+* Added interesting new metrics 
