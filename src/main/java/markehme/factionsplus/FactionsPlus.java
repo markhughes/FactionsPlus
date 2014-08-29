@@ -15,6 +15,7 @@ import markehme.factionsplus.config.OldMigrate;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
+import markehme.factionsplus.extras.Metrics.Graph;
 import markehme.factionsplus.extras.WGFlagIntegration;
 import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.permission.Permission;
@@ -171,6 +172,18 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		                });
 	                
 					}
+					
+					if(FactionsPlusListener.pluginFeaturesEnabled.size() > 0) {
+						Graph pluginsUsed = metrics.createGraph("Plugins Hooked");
+						
+						for(String name : FactionsPlusListener.pluginFeaturesEnabled) {
+							pluginsUsed.addPlotter(new Metrics.Plotter(name) {
+			                    @Override
+			                    public int getValue() { return 1; }
+			                });
+						}
+					}
+					
 					metrics.start();
 					
 				} catch (Exception e) {
