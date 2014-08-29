@@ -21,22 +21,16 @@ import pgDev.bukkit.DisguiseCraft.api.PlayerDisguiseEvent;
 public class DCListener implements Listener  { 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onPlayerDisguise(PlayerDisguiseEvent e) {
-		if (e.isCancelled()){
-			return;
-		}
-		
     	UPlayer uPlayer = UPlayer.get( e.getPlayer() );
     	
 		if(!FPUConf.get(uPlayer.getUniverse()).enabled) return;
-
-    	if (!uPlayer.hasFaction()){
-    		return;
-    	}
+    	if(!uPlayer.hasFaction()) return;
 		
     	if(FPUConf.get(UPlayer.get(e.getPlayer()).getUniverse()).disguiseRemoveIfInEnemyTerritory) {
     		if(uPlayer.isInEnemyTerritory()) {
     			uPlayer.msg(Txt.parse(LConf.get().disguisesCantDisguiseInEnemyTerritory));
     			e.setCancelled(true);
+    			return;
     		}
     	}
     		
@@ -44,6 +38,7 @@ public class DCListener implements Listener  {
     		if(uPlayer.isInOwnTerritory()) {
     			uPlayer.msg(Txt.parse(LConf.get().disguisesCantDisguiseInOwnTerritory));
     			e.setCancelled(true);
+    			return;
     		}
     	}
    	}
