@@ -197,10 +197,12 @@ public abstract class OldConfig {
 		
 		//this header will be included at the top of the config.yml
 		fpConfigHeaderArray	= new String[]{
-			FactionsPlus.instance.getDescription().getFullName()+" configuration file"
+			"@Deprecated"
+			,"FactionsPlus configuration file"
 			,""
 			,""
 			," This file is deprecated, and will be remvoed."
+			," Find the new configuration file in mstore, above the plugins directory."
 			,""
 			,""
 		};
@@ -790,8 +792,6 @@ public abstract class OldConfig {
 //								}
 								Typeo.setFieldValue( fpmeta.field, wid.getValue() );
 							} catch ( Throwable t ) {
-								//TODO: maybe collect these and display after instead of quitting on the first bad one, just in case 
-								// there are plenty it would require running or /f reloadfp multiple times after each fix
 								if ( t.getClass().equals( NumberFormatException.class )
 									|| t.getClass().equals( BooleanFormatException.class ) )
 								{
