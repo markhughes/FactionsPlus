@@ -310,6 +310,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 
 	}
 	
+	/**
+	 * Registers listeners, and other stuff needed for hooking in
+	 */
 	public void registerAll() {
 		
 		if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
@@ -339,6 +342,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 
 	}
 	
+	/**
+	 * Counts warps on server
+	 * @return
+	 */
 	public int countWarps() {
 		int total = 0;
 		
