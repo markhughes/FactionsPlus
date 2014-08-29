@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
@@ -25,7 +26,6 @@ import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.Txt;
 
 public class ChestShopListener implements Listener {
-	
 	
 	/**
 	 * Boolean to define if it is hooked in
@@ -62,6 +62,7 @@ public class ChestShopListener implements Listener {
 			}
 			
 			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+			FactionsPlusListener.pluginFeaturesEnabled.add(pluginName);
 		}
 	}
 	

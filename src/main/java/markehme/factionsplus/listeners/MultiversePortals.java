@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.FType;
@@ -127,6 +128,7 @@ public class MultiversePortals implements Listener {
 			}
 			
 			FactionsPlus.debug("Hooked into Multiverse-portals.");
+			FactionsPlusListener.pluginFeaturesEnabled.add("Multiverse-Portals");
 		}	
 	}
 }

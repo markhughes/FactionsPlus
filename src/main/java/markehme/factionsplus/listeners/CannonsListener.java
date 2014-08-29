@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
@@ -54,6 +55,7 @@ public class CannonsListener implements Listener {
 			}
 			
 			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+			FactionsPlusListener.pluginFeaturesEnabled.add(pluginName);
 		}
 	}
 	

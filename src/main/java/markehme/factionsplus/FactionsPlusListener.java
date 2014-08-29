@@ -1,5 +1,8 @@
 package markehme.factionsplus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.listeners.*;
@@ -55,6 +58,8 @@ public class FactionsPlusListener implements Listener {
 	PeacefulSubListener peacefulSubListener				= new PeacefulSubListener();
 	CoreSubListener coreSubListener						= new CoreSubListener();
 	
+	public static List<String> pluginFeaturesEnabled = new ArrayList<String>();
+	
 	/**
 	 * isEnabled ensures Factions and FactionsPlus are enabled in that world.
 	 * 
@@ -73,6 +78,8 @@ public class FactionsPlusListener implements Listener {
 	 * here!
 	 */
 	public void setupPermanentListeners(FactionsPlus instance) {
+		pluginFeaturesEnabled.clear();
+		
 		if(FactionsPlus.pm.isPluginEnabled("Cannons"))
 			CannonsListener.enableOrDisable(instance);
 		

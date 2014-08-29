@@ -2,6 +2,7 @@ package markehme.factionsplus.listeners;
 
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
 import me.libraryaddict.disguise.utilities.DisguiseUtilities;
@@ -17,7 +18,6 @@ import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.util.Txt;
 
 import de.robingrether.idisguise.api.DisguiseAPI;
-
 import pgDev.bukkit.DisguiseCraft.DisguiseCraft;
 import pgDev.bukkit.DisguiseCraft.api.DisguiseCraftAPI;
 
@@ -198,6 +198,7 @@ public class DisguiseListener implements Listener {
 				pm.registerEvents( dclistener, instance );
 				ensureCommonIsAllocated( instance );
 				FactionsPlus.debug( "Hooked into "+DISGUISE_CRAFT+"!" );
+				FactionsPlusListener.pluginFeaturesEnabled.add(DISGUISE_CRAFT);
 			} else if ( !isDCplugin && isDisguiseCraftIntegrated() ) {
 				// either the plugin unloaded or the configs changed, we need to disable integration:
 				disintegrateDC();
@@ -211,6 +212,7 @@ public class DisguiseListener implements Listener {
 				pm.registerEvents( idlistener, instance );
 				ensureCommonIsAllocated( instance );
 				FactionsPlus.debug( "Hooked into "+IDISGUISE+"!" );
+				FactionsPlusListener.pluginFeaturesEnabled.add(IDISGUISE);
 			} else if ( !isiDplugin && isiDisguiseIntegrated() ) {
 					disintegrateiD();
 			}
@@ -223,6 +225,7 @@ public class DisguiseListener implements Listener {
 				pm.registerEvents( ldlistener, instance );
 				ensureCommonIsAllocated( instance );
 				FactionsPlus.debug( "Hooked into "+LIBS_DISGUISE+"!" );
+				FactionsPlusListener.pluginFeaturesEnabled.add(LIBS_DISGUISE);
 			} else if ( !isLDplugin && isLibsDisguiseIntegrated() ) {
 				disintegrateLD();
 			}

@@ -1,6 +1,7 @@
 package markehme.factionsplus.listeners;
 
 import markehme.factionsplus.FactionsPlus;
+import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.extras.FType;
 
@@ -28,26 +29,45 @@ import com.massivecraft.massivecore.util.MUtil;
 
 public class CreativeGatesListener implements Listener {
 	
-	public static boolean isCreativeGatesIntegrated = false;
-	public static CreativeGatesListener creativegateslistener;
-
+	/**
+	 * Boolean to define if it is hooked in
+	 */
+	public static boolean isHooked = false;
+	
+	/**
+	 * Store our listener 
+	 */
+	public static CreativeGatesListener listener;
+	
+	/**
+	 * Plugin Name
+	 */
+	public static String pluginName = "CreativeGates";
+	
+	/**
+	 * Determine if a plugin is enabled, and if so - setup our listeners 
+	 * @param instance
+	 */
 	public static final void enableOrDisable(FactionsPlus instance) {
  		PluginManager pm = Bukkit.getServer().getPluginManager();
-		
-		boolean isMVPplugin = pm.isPluginEnabled("CreativeGates");
-		
-		if(isMVPplugin && !isCreativeGatesIntegrated ) {			
-			creativegateslistener = new CreativeGatesListener();
-			pm.registerEvents(creativegateslistener, instance);
 			
-			if(null == creativegateslistener) {
-				creativegateslistener = new CreativeGatesListener();
-				Bukkit.getServer().getPluginManager().registerEvents(creativegateslistener, instance);
+ 		// Check if plugin is enabled, and check if the plugin is integrated
+		if(pm.isPluginEnabled(pluginName) && !isHooked) {
+			listener = new CreativeGatesListener();
+			
+			pm.registerEvents(listener, instance);
+			
+			// Try again
+			if(listener == null) {
+				listener = new CreativeGatesListener();
+				pm.registerEvents(listener, instance);
 			}
 			
-			FactionsPlus.debug("Hooked into CreativeGates.");
-		}	
+			FactionsPlus.debug("Hooked into plugin: "+pluginName);
+			FactionsPlusListener.pluginFeaturesEnabled.add(pluginName);
+		}
 	}
+	
 
 	/*
 	 * Ok, so what're we're trying to do here is replicate the event that is done inside
