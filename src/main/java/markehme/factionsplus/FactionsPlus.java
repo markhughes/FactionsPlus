@@ -90,6 +90,10 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		try {
 			super.onEnable(); 
 			
+			// Store some useful data for later
+			pm = getServer().getPluginManager();	
+			pluginVersion = getDescription().getVersion(); 
+			
 			// Check Factions before pushing forward with MassiveCore
 			checkFactions();
 			
@@ -104,10 +108,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			MConfColl.get().init();
 			FPUConfColls.get().init();
 			LConfColl.get().init();
-			
-			// Store some useful data for later
-			pm = getServer().getPluginManager();	
-			pluginVersion = getDescription().getVersion(); 
 			
 			// Migration Check 
 			OldMigrate om = new OldMigrate();
