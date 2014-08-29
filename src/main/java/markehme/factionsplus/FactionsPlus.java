@@ -109,6 +109,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			FPUConfColls.get().init();
 			LConfColl.get().init();
 			
+			// CANNOT USE DEBUG METHOD BEFORE THIS LINE.
+			
 			// Migration Check 
 			OldMigrate om = new OldMigrate();
 			if(om.shouldMigrate()) {
@@ -304,7 +306,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		FactionsVersion = pm.getPlugin("Factions").getDescription().getVersion();
 		
 		// Some debug output - can be helpful when debugging errors 
-		debug("Factions v" + FactionsVersion ); 
+		info("Factions v" + FactionsVersion ); 
 
 	}
 	
