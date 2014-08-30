@@ -71,19 +71,29 @@ public class OldMigrate {
 					msg("[Faction] [FData] FactionData file already exists, moving on.");
 				}
 				
+				if(!fData.attached()) {
+					
+					msg("[Faction] [FData] " + ChatColor.RED + "[WARN]" + ChatColor.RESET + " The FactionData file exists/was created.. however, it's not attached.");
+				}
+				
 				// ----- Migrate Announcement ----- //
 				
 				File fileAnnouncementFile = new File(OldConfig.folderAnnouncements, faction.getId());
 				
 				if(fileAnnouncementFile.exists()) {
-					try {
-						fData.announcement = (Utilities.readFileAsString(fileAnnouncementFile)).trim();
-						
-						msg("[Faction] [Announcement] Announcement Migrated: " + fData.announcement);
-					} catch (Exception e) {
-						msg("[Faction] [Announcement] " + ChatColor.RED + "[ERROR]" + ChatColor.RESET + " Could not read the data for this announcement in this Faction" );
+					if(fileAnnouncementFile.canRead()) {
+						try {
+							fData.announcement = (Utilities.readFileAsString(fileAnnouncementFile)).trim();
+							
+							msg("[Faction] [Announcement] Announcement Migrated: " + fData.announcement);
+						} catch (Exception e) {
+							msg("[Faction] [Announcement] " + ChatColor.RED + "[ERROR]" + ChatColor.RESET + " Could not read the data for this announcement in this Faction" );
+	
+							e.printStackTrace();
+						}
+					} else {
+						msg("[Faction] [Announcement] " + ChatColor.RED + "[WARN]" + ChatColor.RESET + " Although the announcement file exists, we can't read it. Please check permissions." );
 
-						e.printStackTrace();
 					}
 				} else {
 					msg("[Faction] [Announcement] No announcement data to migrate, moving on.");
@@ -97,22 +107,26 @@ public class OldMigrate {
 					// If theres no jail location, then theres also no jailed players
 					msg("[Faction] [Jail] No jail location set, moving on.");
 				} else {
+					try {
+						// Read the old database information 
+						String locationData[] = Utilities.readFileAsString(jailLocationFile).split(":");
+						
+						Location jailLocation = new Location(Bukkit.getWorld(locationData[4]), Double.valueOf(locationData[0]), Double.valueOf(locationData[1]), Double.valueOf(locationData[2]));
+						
+						// Create the PS version 
+						PS psJailLocation = PS.valueOf(jailLocation);
+						
+						// Store the location in our fData object 
+						fData.jailLocation = psJailLocation;
+						
+						msg("[Faction] [Jail] Jail location found and moved to x: " + locationData[0]+", y: " + locationData[1] + ", z: " + locationData[2] + ", in world: " + locationData[4]);
+					} catch(Exception e) {
+						msg("[Faction] [Jail] " + ChatColor.RED + "[ERROR]" + ChatColor.RESET + " Could not read the data for the jail location in this Faction" );
+						
+						e.printStackTrace();
+					}
 					
-					// Read the old database information 
-					String locationData[] = Utilities.readFileAsString(jailLocationFile).split(":");
-					
-					Location jailLocation = new Location(Bukkit.getWorld(locationData[4]), Double.valueOf(locationData[0]), Double.valueOf(locationData[1]), Double.valueOf(locationData[2]));
-					
-					// Create the PS version 
-					PS psJailLocation = PS.valueOf(jailLocation);
-					
-					// Store the location in our fData object 
-					fData.jailLocation = psJailLocation;
-					
-					msg("[Faction] [Jail] Jail location found and moved to x: " + locationData[0]+", y: " + locationData[1] + ", z: " + locationData[2] + ", in world: " + locationData[4]);
-					
-					
-					msg("[Faction] [Jailed Players] reset");
+					msg("[Faction] [Jailed Players] Reset!");
 					
 				}
 				
