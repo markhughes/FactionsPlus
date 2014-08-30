@@ -95,25 +95,29 @@ public class CoreSubListener {
 	}
 	
 	public EntityShootBowEvent entityShootBowEvent(EntityShootBowEvent event) {
-		Player player = (Player) event.getEntity();
-		
-		// Is the player flying, not an op, and not using admin mode?
-		if(player.isFlying() && !player.isOp() && !UPlayer.get((Player) event.getEntity()).isUsingAdminMode()) {
-			player.sendMessage(Txt.parse(LConf.get().flyCantAttack));
-			event.setCancelled(true);
+		if(event.getEntity() instanceof Player) {
+			Player player = (Player) event.getEntity();
+			
+			// Is the player flying, not an op, and not using admin mode?
+			if(player.isFlying() && !player.isOp() && !UPlayer.get((Player) event.getEntity()).isUsingAdminMode()) {
+				player.sendMessage(Txt.parse(LConf.get().flyCantAttack));
+				event.setCancelled(true);
+			}
 		}
 		
 		return event;
 	}
 	
 	public EntityDamageByEntityEvent entityDamageByEntityEvent(EntityDamageByEntityEvent event) {
-		Player damager = (Player) event.getDamager();
-		
-		// Is the player flying, not an op, and not using admin mode?
-		if(damager.isFlying() && !damager.isOp() && !UPlayer.get(damager).isUsingAdminMode()) {
-			damager.sendMessage(Txt.parse(LConf.get().flyCantAttack));
-			event.setCancelled(true);
-		}	
+		if(event.getDamager() instanceof Player) {
+			Player damager = (Player) event.getDamager();
+			
+			// Is the player flying, not an op, and not using admin mode?
+			if(damager.isFlying() && !damager.isOp() && !UPlayer.get(damager).isUsingAdminMode()) {
+				damager.sendMessage(Txt.parse(LConf.get().flyCantAttack));
+				event.setCancelled(true);
+			}	
+		}
 		
 		return event;
 	}
@@ -160,6 +164,8 @@ public class CoreSubListener {
 	}
 	
 	public EntityDamageEvent entityDamageEvent(EntityDamageEvent event) {
+		if(!(event.getEntity() instanceof Player)) return event;
+		
 		UPlayer uPlayer = UPlayer.get((Player) event.getEntity());
 
 		//FPUConf fpuconf = FPUConf.get(uPlayer);
