@@ -141,7 +141,7 @@ public class FactionsPlusUpdate implements Runnable {
 	public void run() {
 		synchronized (FactionsPlusUpdate.class) {
 			try {
-				URL url = new URL("https://api.curseforge.com/servermods/files?projectIds=fp");
+				URL url = new URL("https://api.curseforge.com/servermods/files?projectIds=38249");
 				
 				final URLConnection conn = url.openConnection();
 				conn.setConnectTimeout(5000);
