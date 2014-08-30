@@ -224,6 +224,7 @@ public class FactionsPlusListener implements Listener {
 		event = powerBoostSubListener.entityDeathEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void eventFactionsRelationChange(EventFactionsRelationChange event) {
 		if(!isEnabled(event.getUSender())) return;
 		//FPUConf fpuconf = FPUConf.get(event.getEntity());
@@ -231,6 +232,7 @@ public class FactionsPlusListener implements Listener {
 		event = coreSubListener.eventFactionsRelationChange(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void projectileLaunchEvent(ProjectileLaunchEvent event) {
 		if(!isEnabled(event.getEntity())) return;
 		FPUConf fpuconf = FPUConf.get(event.getEntity());
@@ -238,6 +240,7 @@ public class FactionsPlusListener implements Listener {
 		if(!fpuconf.allowSplashPotionsWhileFlying) event = coreSubListener.projectileLaunchEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void entityShootBowEvent(EntityShootBowEvent event) {
 		if(!isEnabled(event.getEntity())) return;
 		FPUConf fpuconf = FPUConf.get(event.getEntity());
@@ -245,6 +248,7 @@ public class FactionsPlusListener implements Listener {
 		if(!fpuconf.allowAttackingWhileFlying) event = coreSubListener.entityShootBowEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void eventFactionsChunkChange(EventFactionsChunkChange event) {
 		if(!isEnabled(event.getUSender())) return;
 		FPUConf fpuconf = FPUConf.get(event.getUSender());
@@ -252,6 +256,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.enableWorldGuardRegionCheck) event = coreSubListener.eventFactionsChunkChange(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void entityDamageEvent(EntityDamageEvent event) {
 		if(!isEnabled(event.getEntity())) return;
 		FPUConf fpuconf = FPUConf.get(event.getEntity());
@@ -259,6 +264,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.makeSafeZoneExtraSafe) event = coreSubListener.entityDamageEvent(event); 
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void inventoryClickEvent(InventoryClickEvent event) {
 		if(!isEnabled(event.getWhoClicked())) return;
 		FPUConf fpuconf = FPUConf.get(event.getWhoClicked());
@@ -266,6 +272,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.disallowAccessToVillagersToOtherFactions) event = coreSubListener.inventoryClickEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void eventFactionsCreate(EventFactionsCreate event) {
 		if(!isEnabled(event.getUSender())) return;
 		FPUConf fpuconf = FPUConf.get(event.getUSender());
@@ -273,6 +280,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.factionNameForceFirstLetterUppercase) event = coreSubListener.eventFactionsCreate(event); 
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerInteractEntityEvent(PlayerInteractEntityEvent event) {
 		if(!isEnabled(event.getPlayer())) return;
 		//FPUConf fpuconf = FPUConf.get(event.getPlayer());
@@ -280,6 +288,7 @@ public class FactionsPlusListener implements Listener {
 		event = coreSubListener.playerInteractEntityEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerShearEntityEvent(PlayerShearEntityEvent event) {
 		if(!isEnabled(event.getPlayer())) return;
 		FPUConf fpuconf = FPUConf.get(event.getPlayer());
@@ -287,6 +296,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.strictFarming) event = coreSubListener.playerShearEntityEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerQuitEvent(PlayerQuitEvent event) {
 		if(!isEnabled(event.getPlayer())) return;
 		FPUConf fpuconf = FPUConf.get(event.getPlayer());
@@ -294,6 +304,7 @@ public class FactionsPlusListener implements Listener {
 		if(fpuconf.factionJoinLeaveMessagesLockedToFaction) event = coreSubListener.playerQuitEvent(event); 
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
 		if(!isEnabled(event.getPlayer())) return;
 		//FPUConf fpuconf = FPUConf.get(event.getPlayer());
@@ -301,6 +312,7 @@ public class FactionsPlusListener implements Listener {
 		event = coreSubListener.playerCommandPreprocessEvent(event);
 	}
 	
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void playerDeathEvent(PlayerDeathEvent event) {
 		if(!isEnabled(event.getEntity())) return;
 		//FPUConf fpuconf = FPUConf.get(event.getEntity());
