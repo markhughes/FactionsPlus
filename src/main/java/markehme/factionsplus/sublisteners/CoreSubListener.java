@@ -387,10 +387,18 @@ public class CoreSubListener {
 	
 	public EventFactionsMembershipChange eventFactionsMembershipChange(EventFactionsMembershipChange event) {
 		
-		// Show rules on join if configured
 		if(event.getReason() == MembershipChangeReason.JOIN ) {
+			FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
+
+			if(fData == null) {
+				FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).create(event.getUPlayer().getFactionId());
+				fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
+			}
+			
+			// Show rules on join if configured
 			if(FPUConf.get(event.getUPlayer().getUniverse()).showRulesOnJoin) {
-				FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
+				
+				
 				
 				// Rules exist, send through rules
 				if(fData.rules.size() > 0) {
