@@ -63,7 +63,7 @@ public class OldMigrate {
 				FactionData fData = FactionDataColls.get().getForUniverse(faction.getUniverse()).get(faction.getId());
 				
 				if(fData == null) {
-					FactionDataColls.get().getForUniverse(faction.getUniverse()).create();
+					FactionDataColls.get().getForUniverse(faction.getUniverse()).create(faction.getId());
 					msg("[Faction] [FData] FactionData file created.");
 					
 					fData = FactionDataColls.get().getForUniverse(faction.getUniverse()).get(faction.getId());
