@@ -42,6 +42,7 @@ public class LConf extends Entity<LConf> {
 	public String cmdDescWarp			= "teleport to a warp";
 	public String cmdDescScoreboard		= "toggles scoreboard visibility";
 	public String cmdDescChest			= "open or set your factions chest";
+	public String cmdDescMoneyTop		= "show the highest ranked factions by money";
 	
 	// ----------------------------
 	// FactionsPlus specific related
@@ -123,6 +124,12 @@ public class LConf extends Entity<LConf> {
 	public String chestNotHighRank = "<red>Your ranking is not high enough to set the Faction Chest.";
 	public String chestNotInTerritory = "<red>Your Faction Chest is not in your territory.";
 	public String chestSetTo = "<green>Faction Chest has been set to the best you're currently looking at!";
+	
+	// ----------------------------
+	// Money Top related
+	// ----------------------------
+	public String moneyTopCurrentlySorting = "<gold>Currently sorting, please wait - you will be notified ..";
+	public String moneyTopPagesStyle = "%s: %s";
 	
 	// ----------------------------
 	// LWC Locks Related
