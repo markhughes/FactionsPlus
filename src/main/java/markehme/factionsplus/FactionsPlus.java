@@ -28,7 +28,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.massivecore.Aspect;
 import com.massivecraft.massivecore.AspectColl;
@@ -152,14 +154,24 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	                    public int getValue() { return 1; }
 	                });
 					
+					int factionCount = 0;
+					for (FactionColl fc : FactionColls.get().getColls()) {
+						factionCount = factionCount + fc.getAll().size();
+					}
+					
 					// Get the Factions count  
-					metrics.createGraph("Factions").addPlotter(new Metrics.Plotter(""+FactionColls.get().getColls().size()) {
+					metrics.createGraph("Factions").addPlotter(new Metrics.Plotter(String.valueOf(factionCount)) {
 	                    @Override
 	                    public int getValue() { return 1; }
 	                });
 					
+					int chunkCount = 0;
+					for (BoardColl bc : BoardColls.get().getColls()) {
+						chunkCount = chunkCount + bc.getAll().size();
+					}
+					
 					// Get the amount of chunks claimed 
-					metrics.createGraph("Chunks Claimed").addPlotter(new Metrics.Plotter(""+BoardColls.get().getColls().size()) {
+					metrics.createGraph("Chunks Claimed").addPlotter(new Metrics.Plotter(String.valueOf(chunkCount)) {
 	                    @Override
 	                    public int getValue() { return 1; }
 	                });
@@ -350,9 +362,7 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		int total = 0;
 		
 		for(FactionDataColl fColl : FactionDataColls.get().getColls()) {
-			for(String id : fColl.getIds()) {
-				FactionData fData = fColl.get(id);
-				
+			for(FactionData fData : fColl.getAll()) {
 				if(fData.warpLocation.size() > 0) {
 					total = total + fData.warpLocation.size();
 				}
