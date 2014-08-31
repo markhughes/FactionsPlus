@@ -32,6 +32,8 @@ public enum FPPerm {
 	SCOREBOARD("scoreboard"),
 	CHEST("chest"),
 	CHESTSET("chest.set"),
+	MONETOP("moneytop"),
+	
 	;
 
 	public final String node;
