@@ -4,6 +4,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
+import org.bukkit.inventory.Inventory;
 
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.util.FPPerm;
@@ -51,7 +53,7 @@ public class CmdChest extends FPCommand {
 						return;
 					}
 					
-					if(targetBlock.getType() == Material.CHEST) {
+					if(targetBlock.getType() == Material.CHEST || targetBlock.getType() == Material.TRAPPED_CHEST) {
 						fData.factionChest = PS.valueOf(targetBlock.getLocation());
 						msg(Txt.parse(LConf.get().chestSetTo));
 					} else {
@@ -79,15 +81,27 @@ public class CmdChest extends FPCommand {
 		
 		// TODO: add extra lockette, etc, checks? 
 		
-		if(chestBlock.getType() != Material.CHEST) {
+		if(chestBlock.getType() != Material.CHEST && chestBlock.getType() != Material.TRAPPED_CHEST) {
 			msg(Txt.parse(LConf.get().chestNotThere));
 			fData.factionChest = null;
 			return;
 		}
 		
-		Chest chest = (Chest) chestBlock;
+		Inventory theInventory = null;
 		
-		me.openInventory(chest.getBlockInventory());
+		if(chestBlock instanceof DoubleChest) {
+			DoubleChest doubleChest = (DoubleChest) chestBlock.getState();
+			theInventory = doubleChest.getInventory();
+		} else if(chestBlock instanceof Chest) {
+			Chest chest = (Chest) chestBlock.getState();
+			theInventory = chest.getInventory();
+		} else {
+			msg(Txt.parse(LConf.get().chestNotThere));
+			fData.factionChest = null;
+			return;
+		}
+		
+		me.openInventory(theInventory);
 		
 	}
 }
