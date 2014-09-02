@@ -43,7 +43,7 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdRemoveRule());
 		addSC(new CmdRules());
 		
-		Factions.get().getOuterCmdFactions().cmdFactionsMoney.addSubCommand(new CmdMoneyTopOld());
+		Factions.get().getOuterCmdFactions().cmdFactionsMoney.addSubCommand(new CmdMoneyTop());
 		
 		// New Admin commands 
 		addSC(new CmdFactionHome());
