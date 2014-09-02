@@ -1,8 +1,12 @@
 package markehme.factionsplus.config;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import org.bukkit.Bukkit;
@@ -217,8 +221,84 @@ public class OldMigrate {
 						}
 					}
 				}
+				
+				// ----- Migrate Rules ----- //
+				File rulesFile = new File(OldConfig.folderFRules, faction.getId());
+				if(!rulesFile.exists()) {
+					msg("[Faction] [Rules] No rules, moving on..");
+				} else {
+					msg("[Faction] [Rules] Rules file found");
+					
+					FileInputStream fstream = 		null;
+					DataInputStream in =		null;
+					InputStreamReader isr 		=		null;
+					BufferedReader br 			= 		null;
+					
+					try {
+						fstream = new FileInputStream(rulesFile);
+						
+						in = new DataInputStream(fstream);
+						isr=new InputStreamReader(in);
+						br = new BufferedReader(isr);
+						
+						String strLine;
+						
+						int rCurrent = 0;
+						
+						while((strLine = br.readLine()) != null) {
+							rCurrent = rCurrent + 1;
+							
+							if(!strLine.isEmpty() || !strLine.trim().isEmpty()) {
+								msg("[Faction] [Rules] Addig rule #"+rCurrent+": "+strLine);
+								fData.rules.add(strLine);
+							}
+						}
+						
+						if(rCurrent == 0) {
+							msg("[Faction] [Rules] No rules to migrate.");
+						} else {
+							msg("[Faction] [Rules] migrated "+rCurrent+" rules!");
+						}
+					} catch(Exception e) {
+						e.printStackTrace();
+						return;
+					} finally {
+						if(null != br) {
+							try {
+								br.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						
+						if(null != isr) {
+							try {
+								isr.close();
+							} catch ( IOException e) {
+								e.printStackTrace();
+							}
+						}
+						
+						if(null != in) {
+							try {
+								in.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						
+						if(null != fstream) {
+							try {
+								fstream.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
 			}
 		}
+		
 		
 		// Migration finished - so we no longer need to use the database 
 		OldConfig.fileConfig.renameTo(new File( OldConfig.folderBase, "config_disabled.yml" ));
