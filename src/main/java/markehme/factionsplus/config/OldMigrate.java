@@ -300,6 +300,11 @@ public class OldMigrate {
 		}
 		
 		
+		msg(ChatColor.GREEN + "[DONE]" +ChatColor.GOLD+" If the migration was a success, please remove the folder /plugins/FactionsPlus/");
+		msg(ChatColor.GREEN + "[DONE]" +ChatColor.GOLD+" In future releases we will automatically remove the folder.");
+		msg(ChatColor.GREEN + "[DONE]" +ChatColor.GOLD+" Please report any migration issues to my GitHub page: https://github.com/MarkehMe/FactionsPlus/issues");
+		msg(ChatColor.GREEN + "[DONE]" +ChatColor.GOLD+" Thanks for using FactionsPlus! Enjoy :-)");
+		
 		// Migration finished - so we no longer need to use the database 
 		OldConfig.fileConfig.renameTo(new File( OldConfig.folderBase, "config_disabled.yml" ));
 		OldConfig.deInit();
