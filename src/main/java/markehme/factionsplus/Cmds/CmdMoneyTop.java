@@ -57,6 +57,10 @@ public class CmdMoneyTop extends FPCommand implements Runnable {
 	
 	@Override
 	public void performfp() {
+		if(!pages.containsKey(universe)) {
+			pages.put(universe, new ArrayList<String>());
+		}
+		
 		if(pages.get(universe).size() > 0) {
 			sendPage(usender, args);
 		} else {
