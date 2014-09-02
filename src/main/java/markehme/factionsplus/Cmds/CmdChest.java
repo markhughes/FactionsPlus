@@ -89,17 +89,8 @@ public class CmdChest extends FPCommand {
 		
 		Inventory theInventory = null;
 		
-		if(chestBlock instanceof DoubleChest) {
-			DoubleChest doubleChest = (DoubleChest) chestBlock.getState();
-			theInventory = doubleChest.getInventory();
-		} else if(chestBlock instanceof Chest) {
-			Chest chest = (Chest) chestBlock.getState();
-			theInventory = chest.getInventory();
-		} else {
-			msg(Txt.parse(LConf.get().chestNotThere));
-			fData.factionChest = null;
-			return;
-		}
+		Chest chest = (Chest) chestBlock.getState();
+		theInventory = chest.getInventory();
 		
 		me.openInventory(theInventory);
 		
