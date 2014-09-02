@@ -55,10 +55,10 @@ public abstract class EssentialsIntegration {
 //				haveEssentials = ESS_HAVE.INITED_AND_NOT_HAVE;
 //			}else{
 //				isLoadedButNotEnabled=false;
-				FactionsPlus.info( "Updated the cached reference to Essentials' instance: `"+ess+"`." );
+				FactionsPlus.debug( "Updated the cached reference to Essentials' instance: `"+ess+"`." );
 			}else {
 				if (null != ess) {
-					FactionsPlus.info( "Essentials plugin is nolonger on the system. FactionsPlus can't hook!");
+					FactionsPlus.debug( "Essentials plugin is nolonger on the system. FactionsPlus can't hook!");
 				}
 				ess=null;
 				
