@@ -95,13 +95,13 @@ public class CmdMoneyTop extends FPCommand implements Runnable {
 		int count = startAt;
 		
 		// Clone to be safe! 
-		ArrayList<String> ps = (ArrayList<String>) pages.get(usender.getUniverse()).clone();
+		ArrayList<String> ps = (ArrayList<String>) pages.get(usender.getUniverse());
 		
 		while(count != finishAt) {
-			if(ps.get(startAt + count) == null) {
+			if(!ps.contains(startAt+count)) {
 				break;
 			}
-			usender.msg(ps.get(startAt + count));
+			usender.msg(ps.get(startAt+count));
 			
 			count++;
 		}
