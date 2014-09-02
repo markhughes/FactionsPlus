@@ -223,7 +223,7 @@ public class OldMigrate {
 				}
 				
 				// ----- Migrate Rules ----- //
-				File rulesFile = new File(OldConfig.folderFRules, faction.getId());
+				File rulesFile = new File(OldConfig.folderFRules, faction.getId() + File.pathSeparator + ".rules");
 				if(!rulesFile.exists()) {
 					msg("[Faction] [Rules] No rules, moving on..");
 				} else {
