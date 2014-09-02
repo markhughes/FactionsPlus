@@ -53,7 +53,7 @@ public class CmdMoneyTop extends FPCommand implements Runnable {
 	
 	private static volatile int	taskId = Integer.MIN_VALUE;
 	
-	private static CmdMoneyTop sorterObject = null;
+	private static CmdMoneyTop sorter = null;
 	
 	@Override
 	public void performfp() {
@@ -112,14 +112,16 @@ public class CmdMoneyTop extends FPCommand implements Runnable {
 	
 	public static boolean isRunningSorter() {
 		synchronized(CmdMoneyTop.class) {
-			return(taskId >= 0) && (sorterObject != null);
+			return(taskId >= 0) && (sorter != null);
 		}
 	}
 	
 	public void sortFactionBanks() {
 		if(!isRunningSorter()) {
 			if(taskId < 0) {
-				taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(FactionsPlus.instance, sorterObject, 1, 60*5*20);
+				if(sorter == null) sorter = new CmdMoneyTop();
+				
+				taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(FactionsPlus.instance, sorter, 1, 60*5*20);
 				
 				if(taskId < 0) {
 					FactionsPlus.warn("Failed to start a thread to sort top factions by money");
