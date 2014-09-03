@@ -1,8 +1,10 @@
 package markehme.factionsplus.Cmds;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 
+import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.Cmds.req.ReqJailsEnabled;
 import markehme.factionsplus.MCore.LConf;
@@ -58,7 +60,7 @@ public class CmdJail extends FPCommand {
 			}
 		}
 		
-		OfflinePlayer bPlayer = Utilities.getPlayer(playerToJail);
+		final OfflinePlayer bPlayer = Utilities.getPlayer(playerToJail);
 		
 		if(bPlayer == null) {
 			msg(Txt.parse("<red>This player hasn't been on the server before and you therefore can't jail them."));
@@ -77,7 +79,23 @@ public class CmdJail extends FPCommand {
 			}
 		}
 		
-		fData.jailedPlayerIDs.put(bPlayer.getUniqueId().toString(), PS.valueOf(respawnLoc));
+		final Location finalRespawn = respawnLoc;
+		
+		if(fpuconf.delayBeforeSentToJail > 0) {
+			int delay = fpuconf.delayBeforeSentToJail*20;
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(FactionsPlus.instance, new Runnable() {
+
+				@Override
+				public void run() {
+					fData.jailedPlayerIDs.put(bPlayer.getUniqueId().toString(), PS.valueOf(finalRespawn));
+				}
+				
+			}, delay);
+		} else {
+			fData.jailedPlayerIDs.put(bPlayer.getUniqueId().toString(), PS.valueOf(finalRespawn));
+		}
+		
 		
 	}
 }
