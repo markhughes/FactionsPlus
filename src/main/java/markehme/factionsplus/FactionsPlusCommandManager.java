@@ -34,6 +34,7 @@ public class FactionsPlusCommandManager {
 		addSC(new CmdToggleState());
 		addSC(new CmdFactionNeed());
 		addSC(new CmdChest());
+		addSC(new CmdSetFlag());
 		
 		// Faction Bans
 		addSC(new CmdBan());

@@ -43,6 +43,7 @@ public class LConf extends Entity<LConf> {
 	public String cmdDescScoreboard		= "toggles scoreboard visibility";
 	public String cmdDescChest			= "open or set your factions chest";
 	public String cmdDescMoneyTop		= "show the highest ranked factions by money";
+	public String cmdDescSetFlag		= "allows setting flags for your faction";
 	
 	// ----------------------------
 	// FactionsPlus specific related
@@ -61,6 +62,13 @@ public class LConf extends Entity<LConf> {
 	// Faction Command
 	// ----------------------------
 	public String factionCommandPlayerName		= "<a>{name}<aqua>(<green>{power}<aqua>)<a>";
+	
+	// ----------------------------
+	// Faction Command
+	// ----------------------------
+	public String setFlagCommandInvalid			= "<red>%s is an invalid flag!";
+	public String setFlagCommandNoPermission	= "<red>You don't have permission to change the flag %s!";
+	public String setFlagCommandComplete		= "<green>Flag %s has been set to %s!";
 	
 	// ----------------------------
 	// Warp related

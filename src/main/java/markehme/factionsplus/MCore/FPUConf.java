@@ -162,6 +162,12 @@ public class FPUConf extends Entity<FPUConf> {
 			Rel.MEMBER, false,
 			Rel.RECRUIT, false);
 	
+	public Map<Rel, Boolean> whoCanSetFlags = MUtil.map(
+			Rel.LEADER, true,
+			Rel.OFFICER, false,
+			Rel.MEMBER, false,
+			Rel.RECRUIT, false);
+	
 	// ----------------------------------------
 	// Banning
 	// ----------------------------------------
