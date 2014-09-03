@@ -554,7 +554,7 @@ public class CoreSubListener {
 		Boolean isPeacefulLocation = BoardColls.get().getFactionAt(PS.valueOf(event.getPlayer().getLocation())).getFlag(FFlag.PEACEFUL);
 		
 		UPlayer uPlayer = UPlayer.get(event.getPlayer());
-		if(uPlayer.getFaction().getFlag(FFlag.PEACEFUL) && isPeacefulLocation) {
+		if(!uPlayer.getFaction().getFlag(FFlag.PEACEFUL) && isPeacefulLocation) {
 			uPlayer.msg(Txt.parse(LConf.get().fpPeacefulChestProtected));
 			event.setCancelled(true);
 		}
