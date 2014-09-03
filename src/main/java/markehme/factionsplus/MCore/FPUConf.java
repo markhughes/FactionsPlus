@@ -208,6 +208,8 @@ public class FPUConf extends Entity<FPUConf> {
 	
 	public boolean peacefulCantDisband = false;
 	
+	public boolean peacefulChestProtect = true;
+	
 	// ----------------------------------------
 	// Powerboosts
 	// ----------------------------------------

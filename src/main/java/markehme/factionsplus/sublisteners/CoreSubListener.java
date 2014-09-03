@@ -17,6 +17,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -37,6 +38,7 @@ import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.FType;
 
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.Faction;
@@ -541,6 +543,21 @@ public class CoreSubListener {
 
 			}
 		});
+		
+		return event;
+	}
+	
+	public InventoryOpenEvent inventoryOpenEvent(InventoryOpenEvent event) {
+		// Because of the intentions of this option, we're also going to block any inventory holder
+		// aka furnace, hopper, dispencer - so we won't do any extra checks. 
+		
+		Boolean isPeacefulLocation = BoardColls.get().getFactionAt(PS.valueOf(event.getPlayer().getLocation())).getFlag(FFlag.PEACEFUL);
+		
+		UPlayer uPlayer = UPlayer.get(event.getPlayer());
+		if(uPlayer.getFaction().getFlag(FFlag.PEACEFUL) && isPeacefulLocation) {
+			uPlayer.msg(Txt.parse(LConf.get().fpPeacefulChestProtected));
+			event.setCancelled(true);
+		}
 		
 		return event;
 	}

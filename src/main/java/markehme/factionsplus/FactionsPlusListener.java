@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -318,6 +319,14 @@ public class FactionsPlusListener implements Listener {
 		//FPUConf fpuconf = FPUConf.get(event.getEntity());
 
 		event = coreSubListener.playerDeathEvent(event);
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void inventoryOpenEvent(InventoryOpenEvent event) {
+		if(!isEnabled(event.getPlayer())) return;
+		FPUConf fpcuonf = FPUConf.get(event.getPlayer());
+		
+		if(fpcuonf.peacefulChestProtect) event = coreSubListener.inventoryOpenEvent(event);
 	}
 	
 }

@@ -55,6 +55,7 @@ public class LConf extends Entity<LConf> {
 	public String fpFactionPlayerJoin		= "%s from your Faction has joined.";
 	public String fpFactionPlayerLeave		= "%s from your Faction has left the game.";
 	public String fpPeacefulCantDisband		= "<red>A peaceful faction cannot be disbanded!";
+	public String fpPeacefulChestProtected	= "<red>You can't open this chest, you're not in a peaceful faction!";
 	
 	// ----------------------------
 	// Faction Command
