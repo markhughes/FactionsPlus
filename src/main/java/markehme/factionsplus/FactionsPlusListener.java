@@ -37,6 +37,7 @@ import com.massivecraft.factions.entity.UConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.EventFactionsChunkChange;
 import com.massivecraft.factions.event.EventFactionsCreate;
+import com.massivecraft.factions.event.EventFactionsDisband;
 import com.massivecraft.factions.event.EventFactionsMembershipChange;
 import com.massivecraft.factions.event.EventFactionsRelationChange;
 
@@ -327,6 +328,15 @@ public class FactionsPlusListener implements Listener {
 		FPUConf fpcuonf = FPUConf.get(event.getPlayer());
 		
 		if(fpcuonf.peacefulChestProtect) event = coreSubListener.inventoryOpenEvent(event);
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void eventFactionsDisband(EventFactionsDisband event) {
+		if(!isEnabled(event.getUSender().getUniverse())) return;
+		FPUConf fpuconf = FPUConf.get(event.getUSender().getUniverse());
+		
+		if(fpuconf.peacefulCantDisband) event = coreSubListener.eventFactionsDisband(event);
+
 	}
 	
 }

@@ -45,6 +45,7 @@ import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.factions.event.EventFactionsChunkChange;
 import com.massivecraft.factions.event.EventFactionsCreate;
+import com.massivecraft.factions.event.EventFactionsDisband;
 import com.massivecraft.factions.event.EventFactionsMembershipChange;
 import com.massivecraft.factions.event.EventFactionsRelationChange;
 import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
@@ -560,5 +561,17 @@ public class CoreSubListener {
 		}
 		
 		return event;
+	}
+	
+	public EventFactionsDisband eventFactionsDisband(EventFactionsDisband event) {
+		FPUConf fpuconf = FPUConf.get(event.getUSender().getUniverse());
+		
+		if(fpuconf.peacefulCantDisband) {
+			event.getUSender().sendMessage(Txt.parse(LConf.get().fpPeacefulCantDisband));
+			event.setCancelled(true);
+		}
+		
+		return event;
+
 	}
 }
