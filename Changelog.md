@@ -1,6 +1,8 @@
 # FactionsPlus 0.7.1
 * Added configuration option: noDisbandIfPeaceful
 * Added configuration option: peacefulChestProtect
+* Added command /f setflag <flag> <value>
+* Added permission factionsplus.setflag.(FFlag name)
 
 # FactionsPlus 0.7.0
 * Huge code clean up
