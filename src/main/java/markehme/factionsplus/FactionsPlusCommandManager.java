@@ -31,8 +31,9 @@ public class FactionsPlusCommandManager {
 
 		// General Commands
 		addSC(new CmdAnnounce());
-
 		addSC(new CmdToggleState());
+		addSC(new CmdFactionNeed());
+		addSC(new CmdChest());
 		
 		// Faction Bans
 		addSC(new CmdBan());
@@ -47,11 +48,7 @@ public class FactionsPlusCommandManager {
 		
 		// New Admin commands 
 		addSC(new CmdFactionHome());
-		
-		// General Additional Commands
-		addSC(new CmdFactionNeed());
-		addSC(new CmdChest());
-		
+				
 		addSC(new CmdDebug());
 		
 		//LWC Officer/Faction Owner clear chunk of non-member claims command
