@@ -206,6 +206,8 @@ public class FPUConf extends Entity<FPUConf> {
 	
 	public long peacefulToggleDelayInSeconds = 0;
 	
+	public boolean peacefulCantDisband = false;
+	
 	// ----------------------------------------
 	// Powerboosts
 	// ----------------------------------------

@@ -386,6 +386,7 @@ public class CoreSubListener {
 	}
 	
 	public EventFactionsMembershipChange eventFactionsMembershipChange(EventFactionsMembershipChange event) {
+		FPUConf fpuconf = FPUConf.get(event.getUSender().getUniverse());
 		
 		if(event.getReason() == MembershipChangeReason.JOIN ) {
 			FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
@@ -420,6 +421,13 @@ public class CoreSubListener {
 		if(event.getReason() == MembershipChangeReason.LEAVE) { 
 			Faction faction = event.getUPlayer().getFaction();
 			if (faction.getUPlayers().size() == 1) {
+				
+				if(fpuconf.peacefulCantDisband) {
+					event.getUPlayer().sendMessage(Txt.parse(LConf.get().fpPeacefulCantDisband));
+					event.setCancelled(true);
+					return event;
+				}
+				
 				// Last player, so remove all data
 				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender()) != null) {
 					FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender().detach());
@@ -431,6 +439,20 @@ public class CoreSubListener {
 		
 		// Remove data on disband 
 		if(event.getReason() == MembershipChangeReason.DISBAND) {
+			if(fpuconf.peacefulCantDisband) {
+				// We need to find and notify the leader..
+				for(Player playerMember : event.getUPlayer().getFaction().getOnlinePlayers()) {
+					UPlayer testPlayer = UPlayer.get(playerMember);
+					if(testPlayer.getRole() == Rel.LEADER) {
+						event.getUPlayer().sendMessage(Txt.parse(LConf.get().fpPeacefulCantDisband));
+					}
+				}
+				
+				// Cancel the event
+				event.setCancelled(true);
+				return event;
+			}
+			
 			// Only want to try and detach once - all members get disband event (see CmdFactionsDisband in Factions)
 			if(event.getUSender().getRole() == Rel.LEADER) {
 				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender()) != null) {

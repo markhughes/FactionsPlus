@@ -54,6 +54,7 @@ public class LConf extends Entity<LConf> {
 	public String fpKeepInvDie				= "<red>You get to keep your inventory in this territory (%s)";
 	public String fpFactionPlayerJoin		= "%s from your Faction has joined.";
 	public String fpFactionPlayerLeave		= "%s from your Faction has left the game.";
+	public String fpPeacefulCantDisband		= "<red>A peaceful faction cannot be disbanded!";
 	
 	// ----------------------------
 	// Faction Command

@@ -1,3 +1,6 @@
+# FactionsPlus 0.7.1
+* Added configuration option: noDisbandIfPeaceful
+
 # FactionsPlus 0.7.0
 
 * Huge code clean up
