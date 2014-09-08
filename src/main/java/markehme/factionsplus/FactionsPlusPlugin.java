@@ -3,7 +3,6 @@ package markehme.factionsplus;
 import java.util.logging.Level;
 
 import markehme.factionsplus.MCore.MConf;
-import markehme.factionsplus.extras.BailingOutException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,7 +50,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
 	public static RuntimeException bailOut( Throwable cause, String msg ) {
 		severe( cause, msg );
-		throw new BailingOutException( msg, cause );// disableSelf( FactionsPlus.instance, true );
+		throw new RuntimeException( msg, cause );// disableSelf( FactionsPlus.instance, true );
 	}
 	
 	
