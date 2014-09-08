@@ -5,8 +5,8 @@ import markehme.factionsplus.Cmds.req.ReqWarpsEnabled;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.Rel;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;

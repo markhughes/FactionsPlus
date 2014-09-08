@@ -1,7 +1,7 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.MCore.LConf;
-import markehme.factionsplus.util.FPPerm;
+import markehme.factionsplus.extras.FPPerm;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.cmd.arg.ARFaction;
@@ -35,7 +35,8 @@ public class CmdFactionHome extends FPCommand {
 	}
 	
 	@Override
-	public void performfp() {		
+	public void performfp() {
+		
 		Faction currentF = this.arg(0, ARFaction.get(sender));
 				
 		if(currentF == null) {

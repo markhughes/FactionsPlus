@@ -6,7 +6,7 @@ import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
-import markehme.factionsplus.util.FPPerm;
+import markehme.factionsplus.extras.FPPerm;
 
 import org.bukkit.entity.Player;
 

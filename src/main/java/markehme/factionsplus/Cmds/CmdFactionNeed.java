@@ -2,7 +2,7 @@ package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.MCore.LConf;
-import markehme.factionsplus.util.FPPerm;
+import markehme.factionsplus.extras.FPPerm;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

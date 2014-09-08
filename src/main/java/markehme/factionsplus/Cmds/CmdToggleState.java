@@ -3,8 +3,8 @@ package markehme.factionsplus.Cmds;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;

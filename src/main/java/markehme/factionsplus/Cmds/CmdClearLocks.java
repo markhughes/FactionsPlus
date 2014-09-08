@@ -1,8 +1,8 @@
 package markehme.factionsplus.Cmds;
 
 import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.LWCFunctions;
-import markehme.factionsplus.util.FPPerm;
 
 import com.massivecraft.factions.cmd.req.ReqFactionsEnabled;
 import com.massivecraft.massivecore.cmd.req.ReqHasPerm;

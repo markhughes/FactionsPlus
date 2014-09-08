@@ -10,8 +10,8 @@ import markehme.factionsplus.Cmds.req.ReqWarpsEnabled;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
-import markehme.factionsplus.util.FPPerm;
 
 import org.bukkit.Location;
 import org.bukkit.World;

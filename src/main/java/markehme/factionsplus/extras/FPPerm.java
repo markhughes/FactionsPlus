@@ -1,4 +1,4 @@
-package markehme.factionsplus.util;
+package markehme.factionsplus.extras;
 
 import org.bukkit.permissions.Permissible;
 
