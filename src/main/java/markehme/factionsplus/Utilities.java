@@ -18,7 +18,6 @@ import java.util.TreeSet;
 
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
-import markehme.factionsplus.util.Q;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -236,13 +235,9 @@ public abstract class Utilities {
 	
 
 	public static boolean isJustLookingAround(Location from, Location to) {
-		assert Q.nn( from );
-		assert Q.nn( to );
-
 	        if (from.getWorld() != to.getWorld() && (!from.getWorld().equals(to.getWorld()))) {
 	            return false;
 	        }
-//	        System.out.println(getIntegerPartMultipzliedBy(from.getX(), 10)+" vs "+from.getX());
 	        if (getIntegerPartMultipliedBy(from.getX(), margin) != getIntegerPartMultipliedBy(to.getX(), margin)) {
 	            return false;
 	        }
@@ -255,11 +250,10 @@ public abstract class Utilities {
 	        return true;
 	}
 	
-	@Deprecated
 	public static final int getIntegerPartMultipliedBy(double d, int multipliedByThis) {
 		assert multipliedByThis>0;
 		String asString = Double.toString( d*multipliedByThis );
-		int dotAt = asString.indexOf( markehme.factionsplus.config.OldConfig.DOT );
+		int dotAt = asString.indexOf( "." );
 		if (dotAt<0) {//assumed it's fully integer
 			dotAt=asString.length(); 
 		}
@@ -274,8 +268,6 @@ public abstract class Utilities {
 	 * @return from  (unneeded but hey)
 	 */
 	public static final Location setLocationExceptEye(Location from, Location to) {
-		assert Q.nn( from );
-		assert Q.nn(to);
 		from.setWorld( to.getWorld() );
 		from.setX( to.getX() );
 		from.setY( to.getY() );
@@ -288,7 +280,6 @@ public abstract class Utilities {
 	}
 
 	public static final void setPeaceful(Faction faction, boolean state) {
-		assert Q.nn( faction );
 		faction.setFlag(FFlag.PEACEFUL, state);
 	}
 	

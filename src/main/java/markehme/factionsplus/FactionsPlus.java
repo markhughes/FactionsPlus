@@ -11,7 +11,6 @@ import markehme.factionsplus.MCore.LConfColl;
 import markehme.factionsplus.MCore.MConf;
 import markehme.factionsplus.MCore.MConfColl;
 import markehme.factionsplus.MCore.FPUConfColls;
-import markehme.factionsplus.config.OldMigrate;
 import markehme.factionsplus.extras.LWCBase;
 import markehme.factionsplus.extras.LWCFunctions;
 import markehme.factionsplus.extras.Metrics;
@@ -21,7 +20,6 @@ import markehme.factionsplus.listeners.*;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -112,14 +110,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			LConfColl.get().init();
 			
 			// CANNOT USE DEBUG METHOD BEFORE THIS LINE.
-			
-			// Migration Check 
-			OldMigrate om = new OldMigrate();
-			if(om.shouldMigrate()) {
-				info(ChatColor.GOLD + "Converting database and config, please wait ..");
-				
-				om.migrateDatabase();
-			}
 						
 			registerAll();
 			
