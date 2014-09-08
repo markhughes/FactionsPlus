@@ -472,36 +472,10 @@ public class CoreSubListener {
 	public PlayerDeathEvent playerDeathEvent(PlayerDeathEvent event) {
 
 		final Player currentPlayer = (Player) event.getEntity();
-
-		
-		Boolean keepOnWarzoneDeath = false;
-		
-		// ---- start migration stuff 
-		// TODO: Remove 0.6 Migration in 1.0.0 stable release
-		if(FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeathInWarZone")) {
-			// It's pretty silly for us to migrate this permission. Vault needs methods for this.
-			
-			keepOnWarzoneDeath = true; // just let it go
-			
-			FactionsPlus.warn(ChatColor.GOLD + "The permission factionsplus.keepItemsOnDeathInWarZone in your permissions plugin should be changed to factionsplus.keepItemsOnDeath.WarZone");
-			FactionsPlus.warn(ChatColor.RED + "Please Migrate: factionsplus.keepItemsOnDeathInWarZone -> factionsplus.keepItemsOnDeath.WarZone + factionsplus.keepExperienceOnDeath.WarZone");
-			
-			FactionsPlus.warn("The permission factionsplus.keepItemsOnDeathInWarZone in your permissions plugin should be changed to factionsplus.keepItemsOnDeath.WarZone");
-			FactionsPlus.warn("Otherwise, this will cause issues in the future for player " + currentPlayer.getName() + " ("+currentPlayer.getUniqueId().toString()+")");
-			for(String g : FactionsPlus.permission.getPlayerGroups(currentPlayer)) {
-				if(FactionsPlus.permission.groupHas(currentPlayer.getWorld(), g, "factionsplus.keepItemsOnDeathInWarZone")) {
-					FactionsPlus.warn("Group " + g + " has factionsplus.keepItemsOnDeathInWarZone - PLEASE MIGRATE!");
-				}
-			}			
-			
-		}
-		// ---- end migration stuff
 		
 		FType fType = FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(currentPlayer.getLocation())));
-
 		
-		// TODO: Remove 0.6 Migration in 1.0.0 stable release (remove keepOnWarzoneDeath check here)
-		if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeath."+fType.getNiceName()) && !keepOnWarzoneDeath) return event;
+		if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeath."+fType.getNiceName())) return event;
 		
 		UPlayer uPlayer = UPlayer.get(currentPlayer);
 		
