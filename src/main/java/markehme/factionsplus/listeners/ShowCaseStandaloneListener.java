@@ -19,7 +19,6 @@ import org.bukkit.plugin.PluginManager;
 import com.kellerkindt.scs.ShowCaseStandalone;
 import com.kellerkindt.scs.events.ShowCaseCreateEvent;
 import com.kellerkindt.scs.exceptions.InsufficientPermissionException;
-import com.kellerkindt.scs.interfaces.ShopHandler;
 import com.kellerkindt.scs.shops.Shop;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.BoardColls;

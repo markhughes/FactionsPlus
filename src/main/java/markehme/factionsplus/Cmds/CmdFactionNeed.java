@@ -1,6 +1,5 @@
 package markehme.factionsplus.Cmds;
 
-import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.extras.FPPerm;
 
