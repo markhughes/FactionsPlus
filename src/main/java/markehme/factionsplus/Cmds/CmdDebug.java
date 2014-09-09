@@ -50,7 +50,7 @@ public class CmdDebug extends FPCommand {
 			msg("  workerOwner: "+bukkitWorker.getOwner()+" taskId="+bukkitWorker.getTaskId() +", "+bukkitWorker.getThread().getName());			
 		}
 		
-		msg("Permissions: " + FactionsPlus.permission.getClass().getName());
+		//msg("Permissions: " + FactionsPlus.permission.getClass().getName());
 		
 		msg("-=== Debug End ===-");
 	}

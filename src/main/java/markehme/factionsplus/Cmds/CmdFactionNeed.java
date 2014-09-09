@@ -45,7 +45,7 @@ public class CmdFactionNeed extends FPCommand {
 				return;
 			}
 			
-			if(this.arg(0).equalsIgnoreCase("ignore") && FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+			if(this.arg(0).equalsIgnoreCase("ignore") && FPPerm.IGNORENEEDS.has(sender)) {
 
 				if(!fData.ignoringNeedRequests) {
 					fData.ignoringNeedRequests = true;
@@ -56,7 +56,7 @@ public class CmdFactionNeed extends FPCommand {
 				
 				return;
 				
-			} else if(this.arg(0).equalsIgnoreCase("listen") && FactionsPlus.permission.has(sender, "factionsplus.ignoreneeds")) {
+			} else if(this.arg(0).equalsIgnoreCase("listen") && FPPerm.IGNORENEEDS.has(sender)) {
 				if(fData.ignoringNeedRequests) {
 					fData.ignoringNeedRequests = false;
 					msg(Txt.parse(LConf.get().factionNeedNowListening));
@@ -87,7 +87,7 @@ public class CmdFactionNeed extends FPCommand {
 		
 		for(Player p : Bukkit.getServer().getOnlinePlayers()) {
 			if(UPlayer.get(p).getRole() == Rel.LEADER || UPlayer.get(p).getRole() == Rel.OFFICER) {
-				if(!FactionsPlus.permission.has(p, "factionsplus.ignoreneeds")) {        			
+				if(!FPPerm.IGNORENEEDS.has(p)) {        			
 					i++;
 					p.sendMessage(Txt.parse(LConf.get().factionNeedNotification, sender.getName(), sender.getName()));
 				}

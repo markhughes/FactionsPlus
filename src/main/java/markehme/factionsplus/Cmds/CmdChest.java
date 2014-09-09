@@ -43,7 +43,7 @@ public class CmdChest extends FPCommand {
 	public void performfp() {
 		if(args.size() > 0) {
 			if(args.get(0).equalsIgnoreCase("set")) {
-				if(me.hasPermission(FPPerm.CHEST.node)) {
+				if(FPPerm.CHEST.has(me)) {
 					
 					// This is deprecated, keep an eye on it .. 
 					Block targetBlock = me.getTargetBlock(null, 100);

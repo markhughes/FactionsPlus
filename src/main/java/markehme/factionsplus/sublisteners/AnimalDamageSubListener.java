@@ -3,9 +3,9 @@ package markehme.factionsplus.sublisteners;
 import java.util.Arrays;
 import java.util.List;
 
-import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
 
 import org.bukkit.entity.Arrow;
@@ -63,7 +63,7 @@ public class AnimalDamageSubListener {
 			// Fetch the entity that we caught 
 			EntityType entity = event.getCaught().getType();
 			
-			if(protectedEntities.contains(entity) && !uPlayer.isUsingAdminMode() && !FactionsPlus.permission.has(event.getPlayer(), "factionsplus.cankillallmobs") && !canKillCheck(uPlayer)) {	
+			if(protectedEntities.contains(entity) && !uPlayer.isUsingAdminMode() && !FPPerm.CANKILLALLMOBS.has(event.getPlayer()) && !canKillCheck(uPlayer)) {	
 				uPlayer.msg(Txt.parse(LConf.get().fpCantDamageThisMob));
 				event.setCancelled(true);
 			}
@@ -91,7 +91,7 @@ public class AnimalDamageSubListener {
 			// Fetch the entity being damaged
 			EntityType entity = event.getEntityType();
 			
-			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs") && !canKillCheck(UDamagingPlayer)) {	
+			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FPPerm.CANKILLALLMOBS.has(damagingPlayer) && !canKillCheck(UDamagingPlayer)) {	
 				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
 				event.setCancelled(true) ;
 				
@@ -145,7 +145,7 @@ public class AnimalDamageSubListener {
 			Player damagingPlayer = (Player) projectile.getShooter();
 			UPlayer UDamagingPlayer = UPlayer.get(damagingPlayer);
 			
-			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FactionsPlus.permission.has(damagingPlayer, "factionsplus.cankillallmobs") && !canKillCheck(UDamagingPlayer)) {
+			if(protectedEntities.contains(entity) && !UDamagingPlayer.isUsingAdminMode() && !FPPerm.CANKILLALLMOBS.has(damagingPlayer) && !canKillCheck(UDamagingPlayer)) {
 				damagingPlayer.sendMessage(Txt.parse(LConf.get().fpCantDamageThisMob));
 				event.setCancelled(true);
 				

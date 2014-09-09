@@ -1,6 +1,5 @@
 package markehme.factionsplus.extras;
 
-import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
 
@@ -110,7 +109,7 @@ public class LWCModule extends JavaModule {//to fix
 		PS floc = PS.valueOf(b.getLocation());
 		Faction owner = BoardColls.get().getFactionAt(floc);
 
-		if(FType.valueOf(owner).equals(FType.WILDERNESS) || FactionsPlus.permission.has(p, "factionsplus.dontPreventLWCLocking") || p.isOp() || owner.equals(fp.getFaction())) {
+		if(FType.valueOf(owner).equals(FType.WILDERNESS) || FPPerm.DONTPREVENTLWCLOCKING.has(p)|| p.isOp() || owner.equals(fp.getFaction())) {
 			return;
 		} else {
 			event.setCancelled(true);

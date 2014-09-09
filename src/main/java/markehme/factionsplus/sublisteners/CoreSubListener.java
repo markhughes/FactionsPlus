@@ -36,6 +36,7 @@ import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.FactionData;
 import markehme.factionsplus.MCore.FactionDataColls;
 import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
 
 import com.massivecraft.factions.FFlag;
@@ -50,6 +51,7 @@ import com.massivecraft.factions.event.EventFactionsMembershipChange;
 import com.massivecraft.factions.event.EventFactionsRelationChange;
 import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.PermUtil;
 import com.massivecraft.massivecore.util.Txt;
 
 public class CoreSubListener {
@@ -143,7 +145,7 @@ public class CoreSubListener {
 	}
 	
 	public EventFactionsChunkChange eventFactionsChunkChange(EventFactionsChunkChange event) {
-		if(!event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FactionsPlus.permission.has(event.getUSender().getPlayer(), "factionsplus.bypassregioncheck")) {
+		if(!event.getUSender().getFaction().isNone() && !event.getUSender().isUsingAdminMode() && !event.getUSender().getPlayer().isOp() && !FPPerm.BYPASSREGIONCHECK.has((event.getUSender().getPlayer()))) {
 			if(Bukkit.getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
 				// Check for chunks
 				if(Utilities.checkForRegionsInChunk(event.getUSender().getPlayer().getLocation(), event.getUSender().getPlayer())) {
@@ -329,7 +331,7 @@ public class CoreSubListener {
 		// Feature: scoreboards
 		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardTopFactions) {
 			if(FactionsPlusScoreboard.scoreBoard != null) {
-				if(!( FactionsPlus.permission.has(event.getPlayer(), "factionsplus.hidesb." + event.getPlayer().getWorld().getName() ) && ! FactionsPlus.permission.has( event.getPlayer(), "factionsplus.hidesb" ) ) || FactionsPlus.permission.has(event.getPlayer(), "factionsplus.forcesb") ) {
+				if(!(FPPerm.HIDESCOREBOARD.has(event.getPlayer()) || FPPerm.FORCESCOREBOARD.has(event.getPlayer()))) {
 					event.getPlayer().setScoreboard(FactionsPlusScoreboard.scoreBoard);
 				}
 			}	
@@ -475,7 +477,7 @@ public class CoreSubListener {
 		
 		FType fType = FType.valueOf(BoardColls.get().getFactionAt(PS.valueOf(currentPlayer.getLocation())));
 		
-		if(!FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeath."+fType.getNiceName())) return event;
+		if(!PermUtil.has(currentPlayer, "factionsplus.keepItemsOnDeath."+fType.getNiceName(), false)) return event;
 		
 		UPlayer uPlayer = UPlayer.get(currentPlayer);
 		
@@ -488,7 +490,7 @@ public class CoreSubListener {
 		// remove items that're in their inventory or their armor. This can be bypassed with 
 		// factionsplus.keepItemsOnDeath.neverdrop.x
 		
-		if(FactionsPlus.permission.has(currentPlayer, "factionsplus.keepItemsOnDeath.neverdrop."+fType.getNiceName())) {
+		if(PermUtil.has(currentPlayer, "factionsplus.keepItemsOnDeath.neverdrop."+fType.getNiceName(), false)) {
 			// Don't drop anything
 			event.getDrops().clear();
 		} else {
@@ -504,7 +506,7 @@ public class CoreSubListener {
 		}
 		
 		// Keep Players Experience (if configured) 
-		if(FactionsPlus.permission.has(currentPlayer, "factionsplus.keepExperienceOnDeath."+fType.getNiceName())) {
+		if(PermUtil.has(currentPlayer, "factionsplus.keepExperienceOnDeath.."+fType.getNiceName(), false)){
 			event.setDroppedExp(0);
 		}
 		

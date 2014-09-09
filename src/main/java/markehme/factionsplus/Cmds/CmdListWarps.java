@@ -46,17 +46,17 @@ public class CmdListWarps extends FPCommand  {
 			currentFaction = Faction.get(arg(0));
 			
 			// If the Faction doesn't exist, ensure we give the correct response 
-			if(currentFaction == null && FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+			if(currentFaction == null && FPPerm.LISTWARPSOTHERS.has(usender.getPlayer())) {
 				msg(Txt.parse(LConf.get().warpsCantViewListNonExistant));
 				return;
-			} else if(currentFaction == null && !FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+			} else if(currentFaction == null && !FPPerm.LISTWARPSOTHERS.has(usender.getPlayer())) {
 				msg(Txt.parse(LConf.get().warpsCantViewOthersWarps));
 				return;
 			}
 			
 			// If the Factions is not the users original, ensure we have permission to do this
 			if(currentFaction.getId() != usenderFaction.getId()) { 
-				if(!FactionsPlus.permission.has(usender.getPlayer(), FPPerm.LISTWARPSOTHERS.node)) {
+				if(!FPPerm.LISTWARPSOTHERS.has(usender.getPlayer())) {
 					msg(Txt.parse(LConf.get().warpsCantViewOthersWarps));
 					return;
 				}

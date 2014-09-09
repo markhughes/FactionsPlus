@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import markehme.factionsplus.MCore.FPUConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.LocketteFunctions;
 import markehme.factionsplus.listeners.*;
 import markehme.factionsplus.sublisteners.*;
@@ -155,7 +156,7 @@ public class FactionsPlusListener implements Listener {
 		
 		if(fpuconf.jailsEnabled) event = jailSubListener.playerMoveEvent(event);
 		if(fpuconf.announcementsEnabled) event = annoucementsSubListener.playerMoveEvent(event);
-		if(event.getPlayer().hasPermission("factionsplus.flightinownterritory")) event = coreSubListener.playerMoveEvent(event);
+		if(FPPerm.FLIGHTINOWNTERRITORY.has(event.getPlayer())) event = coreSubListener.playerMoveEvent(event);
 	}
 	
 	@EventHandler(priority=EventPriority.LOWEST)

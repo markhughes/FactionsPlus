@@ -17,13 +17,11 @@ import markehme.factionsplus.extras.Metrics;
 import markehme.factionsplus.extras.Metrics.Graph;
 import markehme.factionsplus.extras.WGFlagIntegration;
 import markehme.factionsplus.listeners.*;
-import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
@@ -49,8 +47,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static PluginManager pm = null;
 	
 	public static Logger log = Logger.getLogger("Minecraft");
-	
-	public static Permission permission = null;
         
 	public FactionsPlusListener factionsPlusListener = null;
 		
@@ -115,23 +111,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			
 			// Setup the commands
 			FactionsPlusCommandManager.setup();
-			
-			// Let's test for Vault 
-			try {
-				Class.forName("net.milkbowl.vault.permission.Permission");
-			} catch (ClassNotFoundException ex) {
-				warn("Could not find Vault - please setup vault!");
-				info("Download Vault here: http://dev.bukkit.org/bukkit-plugins/vault/ ");
-				
-				disableSelf();
-				return;
-			}
-			
-			// Hook into vault for permissions
-			RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration( net.milkbowl.vault.permission.Permission.class );
-	        if(permissionProvider != null) {
-	            permission = permissionProvider.getProvider();
-	        }
 	        
 	        // Provide useful metrics information 
 	        if(MConf.get().metrics.booleanValue()) {

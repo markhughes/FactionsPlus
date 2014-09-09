@@ -33,7 +33,14 @@ public enum FPPerm {
 	CHEST("chest"),
 	CHESTSET("chest.set"),
 	MONETOP("moneytop"),
-	
+	FLIGHTINOWNTERRITORY("flightinownterritory"),
+	HIDESCOREBOARD("hidescoreboard"),
+	FORCESCOREBOARD("forcescoreboard"),
+	DONTPREVENTLWCLOCKING("dontPreventLWCLocking"),
+	USEANYPORTAL("useanyportal"),
+	CANKILLALLMOBS("cankillallmobs"),
+	BYPASSREGIONCHECK("bypassregioncheck"),
+	IGNORENEEDS("ignoreneeds"),
 	;
 
 	public final String node;
@@ -49,4 +56,5 @@ public enum FPPerm {
 	public boolean has(Permissible permissible) {
 		return has(permissible, false);
 	}
+
 }

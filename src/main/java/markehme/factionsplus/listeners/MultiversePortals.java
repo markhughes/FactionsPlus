@@ -4,6 +4,7 @@ import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusListener;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
@@ -36,7 +37,7 @@ public class MultiversePortals implements Listener {
 				
 		Rel rel = factionAt.getRelationTo(factionAt);
 		
-		if(FactionsPlus.permission.has(e.getTeleportee(), "factionsplus.useanyportal") || uPlayer.isInOwnTerritory() || uPlayer.isUsingAdminMode() ) {
+		if(FPPerm.USEANYPORTAL.has(e.getTeleportee()) || uPlayer.isInOwnTerritory() || uPlayer.isUsingAdminMode() ) {
 			return;
 		}
 		

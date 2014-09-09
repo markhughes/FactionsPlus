@@ -6,6 +6,7 @@ import java.util.Collections;
 import markehme.factionsplus.MCore.FPUConf;
 import markehme.factionsplus.MCore.LConf;
 import markehme.factionsplus.MCore.MConf;
+import markehme.factionsplus.extras.FPPerm;
 import markehme.factionsplus.extras.FType;
 
 import org.bukkit.Bukkit;
@@ -169,8 +170,8 @@ public class FactionsPlusScoreboard {
 				}
 			
 				for(Player p : Bukkit.getOnlinePlayers()) {				
-					if(!(FactionsPlus.permission.has(p, "factionsplus.hidesb."+p.getWorld().getName()) && !FactionsPlus.permission.has(p, "factionsplus.hidesb")) 
-							|| FactionsPlus.permission.has(p, "factionsplus.forcesb")) {
+					if(!FPPerm.HIDESCOREBOARD.has(p) 
+							|| FPPerm.FORCESCOREBOARD.has(p)) {
 						
 						// Ensure it is enabled in this universe
 						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
