@@ -1,8 +1,10 @@
 package markehme.factionsplus.extras;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import markehme.factionsplus.FactionsPlus;
 import markehme.factionsplus.FactionsPlusPlugin;
-import markehme.factionsplus.Utilities;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,26 +72,19 @@ public abstract class LWCFunctions extends LWCBase {
 
 	}
 	
-	
-	
-	
-	private final static Material[] protectionsTypesToRemove = {
-		 Material.CHEST //is TileEntity
-		,Material.FURNACE //is TileEntity
-		,Material.BURNING_FURNACE // unsure if it's TileEntity
-		,Material.WALL_SIGN //is TileEntity
-		,Material.SIGN_POST //is TileEntity
-		,Material.DISPENSER //is TileEntity
-		,Material.HOPPER
+	private final static List<Material> protectionsTypesToRemove = new ArrayList<Material>() {{
+		add(Material.CHEST);
+		add(Material.FURNACE);
+		add(Material.BURNING_FURNACE); 
+		add(Material.WALL_SIGN);
+		add(Material.SIGN_POST); 
+		add(Material.DISPENSER); 
+		add(Material.HOPPER);
 		
-		,Material.WOODEN_DOOR //is NOT TileEntity
-		,Material.IRON_DOOR_BLOCK //is NOT TileEntity
-		,Material.TRAP_DOOR //is NOT TileEntity
-//		,Material.SIGN //is NOT TileEntity but also redundant because WALL_SIGN+SIGN_POST should detect all signs
-		
-		//meaning BlockState[] blocks = chunk.getTileEntities(); will only return those marked as TileEntity
-		//for more tile entities see this: http://www.minecraftwiki.net/wiki/Tile_entity
-	};
+		add(Material.WOODEN_DOOR);
+		add(Material.IRON_DOOR_BLOCK);
+		add(Material.TRAP_DOOR);
+	}};
 	
 	
 	/**
@@ -142,7 +137,7 @@ public abstract class LWCFunctions extends LWCBase {
 						continue; // ignore all air blocks
 					}
 					
-					if ( isProtectionTypeToRemove( type ) ) {
+					if ( protectionsTypesToRemove.contains( type ) ) {
 						// If it is possibly protected ... 
 						
 						Protection protectedBlock = getLWC().findProtection( block );
@@ -165,11 +160,6 @@ public abstract class LWCFunctions extends LWCBase {
 		return numberOfRemovedProtections;
 	}
 	
-	
-	private final static boolean isProtectionTypeToRemove( Material type ) {
-		return Utilities.isReferenceInArray( type, protectionsTypesToRemove );
-	}
-
 
 	public static boolean checkInTerritory(Player p, Block b) {
 		
@@ -216,7 +206,7 @@ public abstract class LWCFunctions extends LWCBase {
 						continue;
 					}
 					
-					if ( isProtectionTypeToRemove( type ) ) {
+					if (protectionsTypesToRemove.contains( type ) ) {
 
 						Protection protectedBlock = getLWC().findProtection( block );
 						
