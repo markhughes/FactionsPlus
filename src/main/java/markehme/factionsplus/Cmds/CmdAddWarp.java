@@ -129,7 +129,8 @@ public class CmdAddWarp extends FPCommand {
 		
 		// If there is a warp limit, don't let them go over it
 		if(FPUConf.get(usender).maxWarps != 0) {
-			if(Utilities.getCountOfWarps(usenderFaction) >= FPUConf.get(usender).maxWarps) {
+			
+			if(fData.warpLocation.size() >= FPUConf.get(usender).maxWarps) {
 				msg(Txt.parse(LConf.get().warpsReachedMax));
 				return;
 			}
