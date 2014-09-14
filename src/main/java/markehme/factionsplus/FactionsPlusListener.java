@@ -24,6 +24,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -337,6 +338,14 @@ public class FactionsPlusListener implements Listener {
 		FPUConf fpuconf = FPUConf.get(event.getUSender().getUniverse());
 		
 		if(fpuconf.peacefulCantDisband) event = coreSubListener.eventFactionsDisband(event);
+
+	}
+	
+	public void playerChangedWorldEvent(PlayerChangedWorldEvent event) {
+		if(!isEnabled(event.getPlayer())) return;
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+		
+		if(fpuconf.scoreboardEnabled) event = coreSubListener.playerChangedWorldEvent(event);
 
 	}
 	
