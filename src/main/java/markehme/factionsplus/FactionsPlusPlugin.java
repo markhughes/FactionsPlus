@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
 public abstract class FactionsPlusPlugin extends JavaPlugin {
 	
 	private boolean	didNotOverrideOnLoad = false;
