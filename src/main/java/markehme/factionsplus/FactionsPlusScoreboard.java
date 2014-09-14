@@ -23,7 +23,10 @@ import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.util.Txt;
 
-
+/**
+ * Now using {@link markehme.factionsplus.scoreboard.ScoreboardManager}
+ */
+@Deprecated
 public class FactionsPlusScoreboard {
 	
 	public static String objective_name = "FactionsPlus_TF";
@@ -31,8 +34,11 @@ public class FactionsPlusScoreboard {
 	
 	private static String strSplit = "321FPStrSplitter123";
 	
-	public static void setup() {
-		
+	/**
+	 * Now using {@link markehme.factionsplus.scoreboard.ScoreboardManager.start()}
+	 */
+	@Deprecated
+	public static void setup() {		
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(FactionsPlus.instance, new Runnable() {
 			
 			@Override
@@ -57,7 +63,7 @@ public class FactionsPlusScoreboard {
 				
 				objective = scoreBoard.registerNewObjective(objective_name, "dummy");
 				
-				objective.setDisplayName(Txt.parse(LConf.get().scoreboardTitle));
+				objective.setDisplayName(Txt.parse(LConf.get().scoreboardTopPowerTitle));
 				objective.setDisplaySlot( DisplaySlot.SIDEBAR );
 										
 				ArrayList<String> sFactions = new ArrayList<String>(); 
@@ -138,6 +144,7 @@ public class FactionsPlusScoreboard {
 					case 0:
 						Score faction1 	= objective.getScore(faction_name);
 						faction1.setScore(faction_power);
+						
 						break;
 							
 					case 1:
@@ -174,13 +181,13 @@ public class FactionsPlusScoreboard {
 							|| FPPerm.FORCESCOREBOARD.has(p)) {
 						
 						// Ensure it is enabled in this universe
-						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardTopFactions) {
+						if(FPUConf.get(UPlayer.get(p).getUniverse()).scoreboardEnabled) {
 							p.setScoreboard(scoreBoard);
 							return;
 						} 	
 					}
 					
-					if(p.getScoreboard() == scoreBoard) {
+					if(p.getScoreboard().equals(scoreBoard)) {
 						p.setScoreboard(manager.getMainScoreboard());
 					}
 				}
