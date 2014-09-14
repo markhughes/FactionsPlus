@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import markehme.factionsplus.extras.FType;
+import markehme.factionsplus.scoreboard.CurrentScoreboard;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -318,9 +319,20 @@ public class FPUConf extends Entity<FPUConf> {
 	// ----------------------------------------
 	// Scoreboards 
 	// ----------------------------------------
-	public Boolean scoreboardTopFactions = false;
+	public Boolean scoreboardEnabled = false;
+	
+	public CurrentScoreboard scoreboardDefault = CurrentScoreboard.Power;
 	
 	public int scoreboardUpdate = 5;
+	
+	public Boolean scoreboardRotateEnabled = true;
+	
+	public Map<CurrentScoreboard, Boolean> scoreboardRotates = MUtil.map(
+			CurrentScoreboard.Power, true,
+			CurrentScoreboard.Land, true,
+			CurrentScoreboard.Members, false,
+			CurrentScoreboard.Money, false
+			);
 	
 	// ----------------------------------------
 	// Deny Commands In Areas 
