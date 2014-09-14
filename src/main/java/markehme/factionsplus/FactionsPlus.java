@@ -17,6 +17,7 @@ import markehme.factionsplus.extras.Metrics;
 import markehme.factionsplus.extras.Metrics.Graph;
 import markehme.factionsplus.extras.WGFlagIntegration;
 import markehme.factionsplus.listeners.*;
+import markehme.factionsplus.scoreboard.ScoreboardManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -49,7 +50,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
         
 	public FactionsPlusListener factionsPlusListener = null;
-		
+	public ScoreboardManager scoreboardmanager = null;
+	
 	// Other Plugins
 	public static Factions factions = null;
 	public static MultiversePortals multiversePortalsPlugin = null;
@@ -299,6 +301,9 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		if(Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
 			if(worldGuardPlugin == null) worldGuardPlugin = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
 		}
+		
+		// Prepare our Scoreboard Manager 
+		scoreboardmanager = new ScoreboardManager(this);
 		
 		// Register our listener
 		factionsPlusListener = new FactionsPlusListener();
