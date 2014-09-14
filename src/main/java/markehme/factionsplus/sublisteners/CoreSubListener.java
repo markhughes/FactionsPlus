@@ -19,6 +19,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -29,7 +30,6 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import markehme.factionsplus.FactionsPlus;
-import markehme.factionsplus.FactionsPlusScoreboard;
 import markehme.factionsplus.FactionsPlusUpdate;
 import markehme.factionsplus.Utilities;
 import markehme.factionsplus.MCore.FPUConf;
@@ -50,6 +50,7 @@ import com.massivecraft.factions.event.EventFactionsDisband;
 import com.massivecraft.factions.event.EventFactionsMembershipChange;
 import com.massivecraft.factions.event.EventFactionsRelationChange;
 import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
+import com.massivecraft.massivecore.Aspect;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.util.PermUtil;
 import com.massivecraft.massivecore.util.Txt;
@@ -329,12 +330,8 @@ public class CoreSubListener {
 				
 
 		// Feature: scoreboards
-		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardTopFactions) {
-			if(FactionsPlusScoreboard.scoreBoard != null) {
-				if(!(FPPerm.HIDESCOREBOARD.has(event.getPlayer()) || FPPerm.FORCESCOREBOARD.has(event.getPlayer()))) {
-					event.getPlayer().setScoreboard(FactionsPlusScoreboard.scoreBoard);
-				}
-			}	
+		if(FPUConf.get(UPlayer.get(event.getPlayer())).scoreboardEnabled) {
+			FactionsPlus.instance.scoreboardmanager.apply(event.getPlayer());
 		}
 			
 		// Feature: factionJoinLeaveMessagesLockedToFaction
@@ -549,5 +546,20 @@ public class CoreSubListener {
 		
 		return event;
 
+	}
+	
+	public PlayerChangedWorldEvent playerChangedWorldEvent(PlayerChangedWorldEvent event) {
+		FPUConf fpuconf = FPUConf.get(event.getPlayer());
+
+		if(fpuconf.scoreboardEnabled) {
+			if(Aspect.get("factions").getMultiverse().getWorlds().contains(event.getPlayer().getWorld().getName())) {
+				if(!FactionsPlus.instance.scoreboardmanager.isRunning()){
+					FactionsPlus.instance.scoreboardmanager.start();
+				} else {
+					FactionsPlus.instance.scoreboardmanager.apply(event.getPlayer());
+				}
+			}
+		}
+		return event;
 	}
 }
