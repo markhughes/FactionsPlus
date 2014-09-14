@@ -228,7 +228,11 @@ public class LConf extends Entity<LConf> {
 	// ----------------------------
 	// Scoreboard Related
 	// ----------------------------
-	public String scoreboardTitle = "Top Factions";
+	public String scoreboardTopPowerTitle = "Top Factions by Power";
+	public String scoreboardTopMoneyTitle = "Top Factions by Money";
+	public String scoreboardTopMembersTitle = "Top Factions by Members";
+	public String scoreboardTopLandTitle = "Top Factions by Land Ownership";
+	
 	public String scoreboardAlreadyHidden = "<red>You are already hiding the scoreboard!";
 	public String scoreboardAlreadyShowing = "<red>You are already seeing the scoreboard!";
 	public String scoreboardToggled = "<green>Scoreboard toggled.";
