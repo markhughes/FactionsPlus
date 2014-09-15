@@ -26,7 +26,9 @@ import com.massivecraft.massivecore.money.Money;
 import com.massivecraft.massivecore.util.Txt;
 
 /**
- * This code is
+ * TODO:
+ *  - Land info on entry
+ *  - MarkedMap
  */
 public class ScoreboardManager implements Runnable {
 	
@@ -49,6 +51,14 @@ public class ScoreboardManager implements Runnable {
 	
 	public ScoreboardManager(FactionsPlus instance) {
 		this.instance = instance;
+	}
+	
+	/**
+	 * Returns the prefix used by scoreboard identifiers 
+	 * @return Prefix
+	 */
+	public String getPrefix() {
+		return scoreboard_prefix;
 	}
 	
 	/**
@@ -76,7 +86,7 @@ public class ScoreboardManager implements Runnable {
 	public void apply(Player player) {
 		synchronized(ScoreboardManager.class) {
 			String universe = Factions.get().getMultiverse().getUniverseForWorldName(player.getWorld().getName());
-			FPUConf fpuconf = FPUConf.get(player);
+			final FPUConf fpuconf = FPUConf.get(player);
 			
 			if(Factions.get().getMultiverse().getUniverseForWorldName(universe) != null) {
 				if(UConf.get(universe).enabled) {
@@ -84,10 +94,19 @@ public class ScoreboardManager implements Runnable {
 						playerSteps.put(player, null);
 					}
 					
-					CurrentScoreboard next = playerSteps.get(player).getNext(fpuconf);
+					if(fpuconf.scoreboardRotateEnabled) {
+						CurrentScoreboard next = playerSteps.get(player).getNext(fpuconf);
+						
+						playerSteps.remove(player);
+						playerSteps.put(player, next);
+						
+						player.setScoreboard(scoreboards.get(universe).get(next));
+						
+						
+					} else {
+						player.setScoreboard(scoreboards.get(universe).get(fpuconf.scoreboardDefault));
+					}
 					
-					playerSteps.remove(player);
-					playerSteps.put(player, next);
 					
 					return;
 				}
@@ -99,6 +118,16 @@ public class ScoreboardManager implements Runnable {
 				}
 			}
 		}
+	}
+	
+	public void clean() {
+		for(String u : scoreboards.keySet()) {
+			for(CurrentScoreboard o : scoreboards.get(u).keySet()) {
+				scoreboards.get(u).get(o).getObjectives().clear();
+			}
+		}
+		
+		scoreboards.clear();
 	}
 	
 	@SuppressWarnings("unchecked")
