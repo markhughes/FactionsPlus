@@ -23,6 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.scoreboard.Objective;
 
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.BoardColl;
@@ -241,14 +242,19 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		}
 			
 		try {
-			if(FactionsPlusScoreboard.scoreBoard != null) {
+			// If the scoreboard manager is running, that means players have the scoreobard
+			if(scoreboardmanager.isRunning()) {
 				for(Player p : Bukkit.getOnlinePlayers()) {
-					if(p.getScoreboard() == FactionsPlusScoreboard.scoreBoard) {
-						p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+					for(Objective o : p.getScoreboard().getObjectives()) {
+						if(o.getName().startsWith(scoreboardmanager.getPrefix())) {
+							p.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+						}
 					}
 				}
 				
-				FactionsPlusScoreboard.scoreBoard = null;
+				scoreboardmanager.stop();
+				scoreboardmanager.clean();
+				
 			}
 
 		} catch(Exception t) {
@@ -321,9 +327,8 @@ public class FactionsPlus extends FactionsPlusPlugin {
         	WGFi.addFlags();
         }
         
-		// Scoreboard Setup
-		FactionsPlusScoreboard.setup();
-		
+		scoreboardmanager.start();
+
 		FactionsPlusUpdate.enableOrDisableCheckingForUpdates();
 
 	}
