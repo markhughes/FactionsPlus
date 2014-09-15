@@ -320,13 +320,14 @@ public class FPUConf extends Entity<FPUConf> {
 	// Scoreboards 
 	// ----------------------------------------
 	public Boolean scoreboardEnabled = false;
+	public int scoreboardUpdate = 5;
 	
 	public CurrentScoreboard scoreboardDefault = CurrentScoreboard.Power;
 	
-	public int scoreboardUpdate = 5;
+	public Boolean scoreboardShowMap = false;
+	public Boolean scoreboardShowInfoBoard = false;
 	
 	public Boolean scoreboardRotateEnabled = true;
-	
 	public Map<CurrentScoreboard, Boolean> scoreboardRotates = MUtil.map(
 			CurrentScoreboard.Power, true,
 			CurrentScoreboard.Land, true,
