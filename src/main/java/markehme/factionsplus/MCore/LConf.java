@@ -238,6 +238,13 @@ public class LConf extends Entity<LConf> {
 	public String scoreboardToggled = "<green>Scoreboard toggled.";
 	public String scoreboardBadArgument = "<red>Incorrect argument! Please use with hide or show.";
 	
+	
+	public String scoreboardInfoBoardTitle = "<bold>%s";
+	public String scoreboardIsYourEnemy = "<white>Is your <red>Enemy";
+	public String scoreboardIsYourAlly = "<white>Is your <purple>Ally";
+	public String scoreboardIsNeutral = "<white>Is a neutral faction.";
+	public String scoreboardIsInTruce = "<white>Is in a <gold>Truce";
+	
 	// ----------------------------
 	// WorldGuard Region Related
 	// ----------------------------
