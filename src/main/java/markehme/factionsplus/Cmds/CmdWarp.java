@@ -111,6 +111,14 @@ public class CmdWarp extends FPCommand {
 		
 		// Ensure the warp exists 
 		if(!fData.warpExists(warpName)) {
+			// Fix a data storing issue by converting all warp names to lower-case 
+			for(String n : fData.warpLocation.keySet()) {
+				PS backupLocation = fData.warpLocation.get(n);
+				
+				fData.warpLocation.remove(n);
+				fData.warpLocation.put(n.toLowerCase(), backupLocation);
+			}
+			
 			msg(Txt.parse(LConf.get().warpsCantWarpNonExistant, warpName));
 			return;
 		}
