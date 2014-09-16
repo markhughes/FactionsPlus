@@ -190,7 +190,7 @@ public class OldMigrate {
 									
 									PS warpLoc = PS.valueOf(new Location(Bukkit.getWorld(items[6]), Double.valueOf(items[1]), Double.valueOf(items[2]), Double.valueOf(items[3]))); 
 								
-									fData.warpLocation.put(items[0], warpLoc);
+									fData.warpLocation.put(items[0].toLowerCase(), warpLoc);
 									
 									if(!items[7].trim().toLowerCase().equalsIgnoreCase("nullvalue")) {
 										fData.warpPasswords.put(items[0], items[7]);
