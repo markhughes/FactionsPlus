@@ -167,6 +167,9 @@ public class ScoreboardManager implements Runnable {
 				
 				// Stage 1: Grab information and store in hashmap
 				for(Faction f : FactionColls.get().getForUniverse(universe).getAll()) {
+					if(f.getFlag(FFlag.PERMANENT)) continue;
+					if(f.isNone()) continue;
+					
 					// infotype 1: power
 					power.put(f, f.getPower());
 					
