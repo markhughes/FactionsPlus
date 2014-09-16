@@ -18,6 +18,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Factions;
 import com.massivecraft.factions.entity.Faction;
 import com.massivecraft.factions.entity.FactionColls;
@@ -96,7 +97,7 @@ public class ScoreboardManager implements Runnable {
 			if(Factions.get().getMultiverse().getUniverseForWorldName(universe) != null) {
 				if(UConf.get(universe).enabled) {
 					if(!playerSteps.containsKey(player)) {
-						playerSteps.put(player, null);
+						playerSteps.put(player, CurrentScoreboard.None);
 					}
 					
 					if(fpuconf.scoreboardRotateEnabled) {
@@ -107,11 +108,9 @@ public class ScoreboardManager implements Runnable {
 						
 						player.setScoreboard(scoreboards.get(universe).get(next));
 						
-						
 					} else {
 						player.setScoreboard(scoreboards.get(universe).get(fpuconf.scoreboardDefault));
 					}
-					
 					
 					return;
 				}
