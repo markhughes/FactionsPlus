@@ -3,6 +3,7 @@
 * Added configuration option: peacefulChestProtect
 * Added command /f setflag <flag> <value>
 * Added permission factionsplus.setflag.(FFlag name)
+* Fixes an issue with Faction names not being stored in lowercase - causing case sensitive issues
 
 # FactionsPlus 0.7.0
 * Huge code clean up
