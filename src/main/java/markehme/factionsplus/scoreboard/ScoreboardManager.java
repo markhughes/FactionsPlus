@@ -83,6 +83,11 @@ public class ScoreboardManager implements Runnable {
 		Bukkit.getScheduler().cancelTask(taskID);
 	}
 	
+	/**
+	 * Applies the next scoreboard for a player (if required), if no scoreboard is applied
+	 * then it will apply the default. 
+	 * @param player
+	 */
 	public void apply(Player player) {
 		synchronized(ScoreboardManager.class) {
 			String universe = Factions.get().getMultiverse().getUniverseForWorldName(player.getWorld().getName());
