@@ -389,7 +389,7 @@ public class CoreSubListener {
 	}
 	
 	public EventFactionsMembershipChange eventFactionsMembershipChange(EventFactionsMembershipChange event) {
-		FPUConf fpuconf = FPUConf.get(event.getUSender().getUniverse());
+		FPUConf fpuconf = FPUConf.get(event.getUPlayer().getUniverse());
 		
 		if(event.getReason() == MembershipChangeReason.JOIN ) {
 			FactionData fData = FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getNewFaction().getId());
@@ -432,8 +432,8 @@ public class CoreSubListener {
 				}
 				
 				// Last player, so remove all data
-				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender()) != null) {
-					FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender().detach());
+				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUPlayer()) != null) {
+					FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUPlayer().detach());
 				}
 			}
 			
@@ -457,9 +457,9 @@ public class CoreSubListener {
 			}
 			
 			// Only want to try and detach once - all members get disband event (see CmdFactionsDisband in Factions)
-			if(event.getUSender().getRole() == Rel.LEADER) {
-				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender()) != null) {
-					FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUSender().detach());
+			if(event.getUPlayer().getRole() == Rel.LEADER) {
+				if(FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUPlayer()) != null) {
+					FactionDataColls.get().getForUniverse(event.getUPlayer().getUniverse()).get(event.getUPlayer().detach());
 				}
 			}
 			
