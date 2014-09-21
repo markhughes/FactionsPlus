@@ -32,5 +32,4 @@ public enum CurrentScoreboard {
 		
 		return this.getNext(fpuconf);
 	}
-	
 }
