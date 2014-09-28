@@ -2,6 +2,7 @@ package markehme.factionsplus.extras;
 
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.entity.Faction;
+import com.massivecraft.factions.entity.UConf;
 
 /**
  * Anyone is free to use this FType enum as long as credit is 
@@ -93,14 +94,16 @@ public enum FType {
 		}
 		
 		// If there is no PVP AND it is a PERMANENT Faction then it must be a safezone 
-		if( ! faction.getFlag( FFlag.PVP ) && faction.getFlag( FFlag.PERMANENT ) ) {
+		if( ! faction.getFlag( FFlag.PVP ) && faction.getFlag( FFlag.PERMANENT ) 
+			|| UConf.get(faction).factionIdSafezone.equals(faction.getId()) ) {
 			
 			return FType.SAFEZONE;
 			
 		}
 		
 		// If there is PvP, and it's not wilderness, and its permanent .. then it must be a warzone
-		if( faction.getFlag( FFlag.PVP ) && faction.getFlag( FFlag.PERMANENT ) ) {
+		if( faction.getFlag( FFlag.PVP ) && faction.getFlag( FFlag.PERMANENT ) 
+			|| UConf.get(faction).factionIdWarzone.equals(faction.getId())) {
 			
 			return FType.WARZONE;
 			
@@ -113,5 +116,4 @@ public enum FType {
 	public String getNiceName() {
 		return(this.nName);
 	}
-	
 }
