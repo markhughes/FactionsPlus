@@ -283,45 +283,48 @@ public class CmdWarp extends FPCommand {
 		}
 		
 		PS warpToLocation = fData.warpLocation.get(warpName.toLowerCase());
+		Faction factionTo = BoardColls.get().getFactionAt(warpToLocation);
+		FType factionToType = FType.valueOf(factionIn);
+
 		
 		Boolean canHaveWarpHere = true;
 		
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("owned")  && factionIn.getId() == usenderFaction.getId()) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("owned")  && factionTo.getId() == usenderFaction.getId()) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for ally land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("ally") && factionIn.getRelationTo(usender).equals(Rel.ALLY)) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("ally") && factionTo.getRelationTo(usender).equals(Rel.ALLY)) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for enemy land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("enemy")  && factionIn.getRelationTo(usender).equals(Rel.ENEMY)) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("enemy")  && factionTo.getRelationTo(usender).equals(Rel.ENEMY)) {
 			canHaveWarpHere = false;
 		}
 
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for neutral land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("neutral")  && factionIn.getRelationTo(usender).equals(Rel.NEUTRAL)) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("neutral")  && factionTo.getRelationTo(usender).equals(Rel.NEUTRAL)) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for truce land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("truce")  && factionIn.getRelationTo(usender).equals(Rel.TRUCE)) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("truce")  && factionTo.getRelationTo(usender).equals(Rel.TRUCE)) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for safezone land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("safezone") && currentLocation == FType.SAFEZONE) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("safezone") && factionToType == FType.SAFEZONE) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for warzone land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("warzone") && currentLocation == FType.WARZONE) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("warzone") && factionToType == FType.WARZONE) {
 			canHaveWarpHere = false;
 		}
 		
 		// Confirm the ignoreDisallowWarpIfEnemyWithinIfIn for wilderness land
-		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("wilderness") && currentLocation == FType.WILDERNESS) {
+		if(!FPUConf.get(usender.getUniverse()).allowWarpsIn.get("wilderness") && factionToType == FType.WILDERNESS) {
 			canHaveWarpHere = false;
 		}		
 		
@@ -369,7 +372,6 @@ public class CmdWarp extends FPCommand {
 			} catch(NoClassDefFoundError e) {
 				FactionsPlus.severe("Sometimes Essentials has issues when it is reloaded (i.e. plugman, etc). Before reporting, please update Essentials, restart the server, and try again.");
 				FactionsPlus.severe("Essentials is out of date (or we're not up to date). Can not get safe location for warp - just using normal location!");
-				warpTo = warpToLocation.asBukkitLocation();
 			}
 			
 			try {
