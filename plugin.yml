@@ -1,0 +1,15 @@
+main: me.markeh.factionsplus.FactionsPlus
+name: FactionsPlus
+version: 2.0.0
+website: http://ma.rkhugh.es/factionsplus
+authors: [MarkehMe]
+description: §eFactionsPlus extends on-top of Factions to provide more features. §aMarkehMe §eis the lead programmer. See §bhttp://markeh.me/factionsplus§e for more information.
+softdepend: [Factions]
+permissions:
+# Commands
+  factionsplus.rules: {description: add, delete, and view faction rules, default: false}
+  factionsplus.chests: {description: use and set faction chests, default: false}
+  factionsplus.jail: {description: set and create jails, and jail players in your faction, default: false}
+  factionsplus.reload: {description: reload factions plus, default: false}
+  factionsplus.managewarps: {description: manage faction warps, default: false}
+  factionsplus.commandblockbypass: {description: bypass command block on radius feature, default: false}
