@@ -140,4 +140,9 @@ public class Faction16UUID extends Faction {
 		
 		return null;
 	}
+
+	@Override
+	public boolean isWilderness() {
+		return (this.faction.isWilderness());
+	}
 }

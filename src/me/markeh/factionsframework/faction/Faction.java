@@ -50,4 +50,6 @@ public abstract class Faction {
 	public abstract int getLandCount();
 	
 	public abstract Rel getRealtionshipTo(Object compare);
+
+	public abstract boolean isWilderness();
 }

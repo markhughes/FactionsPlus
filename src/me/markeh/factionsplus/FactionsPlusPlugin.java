@@ -107,7 +107,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 			writer.println("Error Log started on " + new Date().toString());
 			writer.println("----------------------------------------");
 			writer.println("Server Version: " + this.getServer().getVersion());
-			writer.println("FactionsAchievements Version: " + this.getDescription().getVersion());
+			writer.println("FactionsPlus Version: " + this.getDescription().getVersion());
 			
 			try {
 				writer.println("Factions Version: " + this.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion());
@@ -117,10 +117,6 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 				writer.println("MassiveCore Version: " + this.getServer().getPluginManager().getPlugin("MassiveCore").getDescription().getVersion());
 			} catch(Exception e3) { }
 			
-			try {
-				writer.println("FactionsExtended Version: " + this.getServer().getPluginManager().getPlugin("FactionsExtended").getDescription().getVersion());
-			} catch(Exception e3) { }
-
 			writer.println("----------------------------------------");
 			writer.println("Error:" + e.getMessage());
 			writer.println("----------------------------------------");
@@ -129,7 +125,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 			
 			writer.println("----------------------------------------");
 							
-			for (Player p : this.getServer().getOnlinePlayers()) if (p.isOp()) p.sendMessage(ChatColor.RED + "An internal error has occured inside FactionsAchievements. Please check console.");	
+			for (Player p : this.getServer().getOnlinePlayers()) if (p.isOp()) p.sendMessage(ChatColor.RED + "An internal error has occured inside FactionsPlus. Please check console.");	
 		}
 		
 		writer.close();

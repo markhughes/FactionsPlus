@@ -127,4 +127,9 @@ public class Faction2X extends Faction {
 		
 		return null;
 	}
+
+	@Override
+	public boolean isWilderness() {
+		return (this.faction.isNone());
+	}
 }
