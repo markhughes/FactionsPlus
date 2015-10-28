@@ -27,10 +27,13 @@ import org.bukkit.event.Listener;
 import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.factionsmanager.FactionsVersion;
+import me.markeh.factionsframework.objs.NotifyEvent;
 import me.markeh.factionsplus.commands.CommandManager;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
+import me.markeh.factionsplus.integration.IntegrationManager;
+import me.markeh.factionsplus.integration.chestshop.IntegrationChestShop;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.tools.*;
 
@@ -89,7 +92,21 @@ public class FactionsPlus extends FactionsPlusPlugin {
 			FactionsUUIDTools.get().removeFactionsUUIDWarpCommands();
 		}
 		
+		// Add our integrations 
+		IntegrationManager.get().addIntegration(new IntegrationChestShop());
+		
+		// Notify events
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			@Override
+			public void run() {
+				// Notify our services of things
+				IntegrationManager.get().notify(NotifyEvent.Loaded);
+			}
+		});
+		
+		// Notify console we're ready
 		log(Texts.ready);
+
 	}
 	
 	// Plugin Disable
@@ -105,6 +122,12 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		for(FactionData fData : FactionData.getAll()) {
 			fData.save();
 		}
+		
+		IntegrationManager.get().disableIntegrations();
+		
+		// Notify events
+		IntegrationManager.get().notify(NotifyEvent.Stopping);
+
 	}
 	
 	// Manage our listeners 

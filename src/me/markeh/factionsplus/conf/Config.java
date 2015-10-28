@@ -12,7 +12,7 @@ public class Config extends Configuration {
 	}
 	
 	// -----------------------
-	// Configuration Opts
+	//  Configuration Opts
 	// -----------------------
 	
 	// ---- Jails ---- //
@@ -49,6 +49,22 @@ public class Config extends Configuration {
 	@Option({"commandblock", "commands", "Commands to block (seperate with space and comma)"}) 
 	public List<String> commandBlockCommands = new ArrayList<String>();
 	
+	
+	// -----------------------
+	//  Integration Specific 
+	// -----------------------
+	
+	// ---- Chestshop ---- //
+	@Option({"chestShop", "allowInWilderness", "Should we allow chest shops in wilderness?"}) 
+	public Boolean chestShop_allowInWilderness = false;
+		
+	@Option({"chestShop", "allowInTerritory", "Shoudl we allow chest shops in their territory"}) 
+	public Boolean chestShop_allowInTerritory = false;
+	
+	@Option({"chestShop", "canUseEnemy", "Should we allow enemies to use chest shops"}) 
+	public Boolean chestShop_canUseEnemy = false;
+	
+		
 	// -----------------------
 	// Singleton
 	// -----------------------
