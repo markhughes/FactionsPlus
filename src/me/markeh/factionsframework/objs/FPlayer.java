@@ -11,6 +11,7 @@ import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -23,6 +24,13 @@ public class FPlayer {
 		
 		return fplayerMap.get(player.getUniqueId());
 	}
+	
+	public static FPlayer get(UUID playerUUID) {
+		if (fplayerMap.containsKey(playerUUID)) return fplayerMap.get(playerUUID);
+		
+		return get(Bukkit.getPlayer(playerUUID));
+	}
+
 	
 	private Factions factions;
 	private Player player;
@@ -132,6 +140,8 @@ public class FPlayer {
 		
 		return msg;
 	}
-
-
+	
+	public Loc getLocation() {
+		return new Loc(this.player.getLocation());
+	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 
 import me.markeh.factionsframework.objs.NotifyEvent;
+import me.markeh.factionsplus.FactionsPlus;
 
 public class IntegrationManager {
 	private static IntegrationManager instance = null;
@@ -21,8 +22,14 @@ public class IntegrationManager {
 		this.integrations.add(integration);
 	}
 	
+	public void addIntegrations(Integration... integrations) {
+		for (Integration integration : integrations) {
+			this.integrations.add(integration);
+		}
+	}
+	
 	public void disableIntegration(Integration integration) {
-		if ( ! this.integrations.contains(integration)) return;
+		if ( ! this.integrations.contains(integration) || integration == null) return;
 		
 		integration.getEvents().disable();
 		
@@ -30,7 +37,15 @@ public class IntegrationManager {
 	}
 	
 	public void notify(NotifyEvent event) {
-		for (Integration integration : this.integrations) integration.getEvents().notify(event);
+		if (event == NotifyEvent.Loaded) {
+			this.enableIntegrations();
+		}
+		
+		for (Integration integration : this.integrations) {
+			if (integration.getEvents() == null) continue;
+			
+			integration.getEvents().notify(event);
+		}
 	}
 	
 	public void enableIntegrations() {
@@ -42,6 +57,8 @@ public class IntegrationManager {
 				
 				// enable events 
 				integration.getEvents().enable();
+				
+				FactionsPlus.get().log("<gold>Enabled integration for <green><?>", integration.getPluginName());
 			}
 		}
 	}
@@ -50,8 +67,8 @@ public class IntegrationManager {
 		for(Integration integration : this.integrations) {
 			// check if our events have been enabled 
 			if (integration.getEvents() != null) {
-					integration.getEvents().disable();
-					integration.setEventsClass(null);
+				integration.getEvents().disable();
+				integration.setEventsClass(null);
 			}
 		}
 	}

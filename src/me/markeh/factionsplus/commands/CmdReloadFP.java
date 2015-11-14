@@ -28,10 +28,10 @@ public class CmdReloadFP extends FactionsCommand {
 
 	@Override
 	public void run() {
-		Plugin fe = Bukkit.getPluginManager().getPlugin("FactionsExtended");
+		Plugin factionsPlus = Bukkit.getPluginManager().getPlugin("FactionsPlus");
 		
-		Bukkit.getPluginManager().disablePlugin(fe);
-		Bukkit.getPluginManager().enablePlugin(fe);
+		Bukkit.getPluginManager().disablePlugin(factionsPlus);
+		Bukkit.getPluginManager().enablePlugin(factionsPlus);
 		
 		msg(Texts.pluginReloaded);
 		

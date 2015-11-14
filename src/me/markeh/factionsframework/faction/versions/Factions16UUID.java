@@ -3,9 +3,11 @@ package me.markeh.factionsframework.faction.versions;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.Board;
+import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayers;
 
@@ -50,5 +52,10 @@ public class Factions16UUID extends Factions {
 	@Override
 	public final String getWarZoneID() {
 		return com.massivecraft.factions.Factions.getInstance().getWarZone().getId();
+	}
+
+	@Override
+	public boolean isFactionsEnabled(World world) {
+		return ! Conf.worldsNoClaiming.contains(world.getName());
 	}
 }

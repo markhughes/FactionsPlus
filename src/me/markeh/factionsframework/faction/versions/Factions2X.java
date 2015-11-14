@@ -3,10 +3,12 @@ package me.markeh.factionsframework.faction.versions;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.massivecraft.factions.entity.BoardColl;
 import com.massivecraft.factions.entity.FactionColl;
+import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
@@ -46,5 +48,10 @@ public class Factions2X extends Factions {
 	@Override
 	public String getWarZoneID() {
 		return FactionColl.get().getWarzone().getId();
+	}
+
+	@Override
+	public boolean isFactionsEnabled(World world) {
+		return MConf.get().worldsClaimingEnabled.contains(world);
 	}
 }

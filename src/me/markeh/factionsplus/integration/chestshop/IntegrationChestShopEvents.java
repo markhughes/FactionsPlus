@@ -51,6 +51,7 @@ public class IntegrationChestShopEvents extends IntegrationEvents implements Lis
 		}
 	}
 	
+	@EventHandler
 	public void onShopUse(PreTransactionEvent event) {
 		if (event.getClient() == null) return;
 		

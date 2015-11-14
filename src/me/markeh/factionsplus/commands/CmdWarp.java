@@ -1,5 +1,6 @@
 package me.markeh.factionsplus.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.markeh.factionsframework.command.FactionsCommand;
@@ -39,6 +40,11 @@ public class CmdWarp extends FactionsCommand {
 		
 		if ( ! fdata.warpLocations.containsKey(warpName)) {
 			msg("<red>The warp " + getArg(0) + " does not exist!");
+			
+			String maybe = fdata.warpLocations.findKeyLike(warpName);
+			
+			if (maybe != null) msg(ChatColor.GRAY + "Maybe you meant " + ChatColor.WHITE + maybe);
+			
 			return;
 		}
 		
@@ -61,7 +67,7 @@ public class CmdWarp extends FactionsCommand {
 		}
 		
 		
-		if (this.factions.getFactionAt(fdata.warpLocations.get(warpName)).getID() != this.faction.getID()) {
+		if (this.factions.getFactionAt(fdata.warpLocations.get(warpName).getBukkitLocation()).getID() != this.faction.getID()) {
 			fdata.warpLocations.remove(warpName);
 			fdata.warpPasswords.remove(warpName);
 			
@@ -95,7 +101,7 @@ public class CmdWarp extends FactionsCommand {
 				new Runnable() {
 					@Override
 					public void run() {
-						warper.getPlayer().teleport(fdata.warpLocations.get(warpName));
+						warper.getPlayer().teleport(fdata.warpLocations.get(warpName).getBukkitLocation());
 						warper.msg("<gold>Taking you to <aqua>%s".replace("%s", getArg(0))); 
 					}
 				}, 
@@ -107,7 +113,7 @@ public class CmdWarp extends FactionsCommand {
 				}
 			);
 		} else {
-			this.player.teleport(fdata.warpLocations.get(warpName));
+			this.player.teleport(fdata.warpLocations.get(warpName).getBukkitLocation());
 			
 			// Use getArg here to show original input
 			msg("<gold>Taking you to <aqua>%s".replace("%s", getArg(0))); 

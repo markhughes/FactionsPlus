@@ -16,9 +16,9 @@ public class CmdAddRule extends FactionsCommand {
 		this.aliases.add("addrule");
 		this.requiredArguments.add("rule");
 		
-		this.requiredPermissions.add(Perm.get("factionsplus.rules", Texts.cmdJail_noPermission));
+		this.requiredPermissions.add(Perm.get("factionsplus.rules", Texts.cmdAddRule_noPermission));
 		
-		this.description = Texts.cmdJail_description;
+		this.description = Texts.cmdAddRule_description;
 		
 		this.mustHaveFaction = true;
 		

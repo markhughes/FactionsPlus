@@ -2,6 +2,8 @@ package me.markeh.factionsplus;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 	private static Utils instance;
@@ -10,7 +12,6 @@ public class Utils {
 		
 		return instance;
 	}
-	
 	
 	public String MD5(String msg) {
 		if (msg == null) return null;
@@ -35,4 +36,13 @@ public class Utils {
         return sb.toString();
 	}
 	
+	public List<String> getList(String... values) {
+		List<String> list = new ArrayList<String>();
+		
+		for (String value : values) {
+			list.add(value);
+		}
+		
+		return list;
+	}
 }

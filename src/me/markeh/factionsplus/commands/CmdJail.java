@@ -56,7 +56,7 @@ public class CmdJail extends FactionsCommand {
 			return;
 		}
 		
-		Faction faction = factions.getFactionAt(fdata.jailLoc);
+		Faction faction = factions.getFactionAt(fdata.jailLoc.getBukkitLocation());
 		
 		if (faction.getID() != faction.getID()) {
 			msg(Texts.cmdJail_notInLand);
@@ -84,7 +84,7 @@ public class CmdJail extends FactionsCommand {
 		
 		fdata.jailedPlayers.add(jailingPlayer.getUniqueId().toString());
 		
-		if (jailingPlayer.isOnline()) jailingPlayer.teleport(fdata.jailLoc);
+		if (jailingPlayer.isOnline()) jailingPlayer.teleport(fdata.jailLoc.getBukkitLocation());
 		
 		msg(String.format(Texts.cmdJail_sent, jailingPlayer.getName())); 
 	}

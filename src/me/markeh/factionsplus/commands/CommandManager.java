@@ -19,8 +19,9 @@ public class CommandManager {
 	private FactionsCommand cmdJail = new CmdJail();
 	private FactionsCommand cmdUnjail = new CmdUnjail();
 		
-	private FactionsCommand cmdSetWarp = new CmdSetWarp();
 	private FactionsCommand cmdWarp = new CmdWarp();
+	private FactionsCommand cmdWarps = new CmdWarps();
+	private FactionsCommand cmdSetWarp = new CmdSetWarp();
 	private FactionsCommand cmdRemoveWarp = new CmdRemoveWarp();
 	
 	private FactionsCommand cmdAddRule = new CmdAddRule();
@@ -42,8 +43,9 @@ public class CommandManager {
 		this.enableCmd(cmdJail);
 		this.enableCmd(cmdUnjail);
 		
-		this.enableCmd(cmdSetWarp);
 		this.enableCmd(cmdWarp);
+		this.enableCmd(cmdWarps);
+		this.enableCmd(cmdSetWarp);
 		this.enableCmd(cmdRemoveWarp);
 		
 		this.enableCmd(cmdAddRule);
@@ -51,7 +53,6 @@ public class CommandManager {
 		this.enableCmd(cmdRules);
 		
 		this.enableCmd(cmdChest);
-
 	}
 	
 	// Remove our commands 

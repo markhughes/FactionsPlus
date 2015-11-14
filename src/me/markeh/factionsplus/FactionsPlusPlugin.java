@@ -12,7 +12,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public abstract class FactionsPlusPlugin extends JavaPlugin {
+public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 
 	// ----------------------------------------
 	//  Methods
@@ -57,14 +57,52 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	}
 	
 	// log method
-	public final void log(String msg) {
-		getServer().getConsoleSender().sendMessage("" + ChatColor.BOLD + "" + ChatColor.DARK_AQUA + "[" + this.getDescription().getName() + "]" + ChatColor.RESET + " " + ChatColor.WHITE + msg);
+	@SuppressWarnings("unchecked")
+	public final T log(String msg) {
+		getServer().getConsoleSender().sendMessage("" + ChatColor.BOLD + "" + ChatColor.DARK_AQUA + "[" + this.getDescription().getName() + "]" + ChatColor.RESET + " " + ChatColor.WHITE + this.colourise(msg));
+		return (T) this;
 	}
 	
-	// debug method 
-	public final void debug(String msg) {
+	// log method
+	@SuppressWarnings("unchecked")
+	public final T log(String msg, String... params) {
+		msg = this.colourise(msg);
+		
+		for (String param : params) msg = msg.replaceFirst("\\<\\?\\>", param);
+		
+		getServer().getConsoleSender().sendMessage("" + ChatColor.BOLD + "" + ChatColor.DARK_AQUA + "[" + this.getDescription().getName() + "]" + ChatColor.RESET + " " + ChatColor.WHITE + msg);
+		
+		return (T) this;
+	}
+	
+	// log method
+	@SuppressWarnings("unchecked")
+	public final T debug(String msg, String... params) {
+		msg = this.colourise(msg);
+			
+		for (String param : params) msg = msg.replaceFirst("<?>", param);
+			
 		getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA +"" + ChatColor.BOLD + "[" + this.getDescription().getName() + "] " + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + ChatColor.WHITE + msg);
-
+			
+		return (T) this;
+	}
+		
+		
+	
+	// debug method 
+	@SuppressWarnings("unchecked")
+	public final T debug(String msg) {
+		getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA +"" + ChatColor.BOLD + "[" + this.getDescription().getName() + "] " + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + ChatColor.WHITE + this.colourise(msg));
+		return (T) this;
+	}
+	
+	// colourise a string 
+	public String colourise(String msg) {
+		for (ChatColor colour : ChatColor.values()) {
+			msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
+		}
+		
+		return msg;
 	}
 	
 	// ----------------------------------------
@@ -81,15 +119,16 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 	//  Error Management 
 	// ----------------------------------------
 	
-	public final void logError(Throwable e) {
+	@SuppressWarnings("unchecked")
+	public final T logError(Throwable e) {
 
 		File logFolder = new File(this.getDataFolder(), "logs");
 		File errorLog = new File(logFolder, new Date().getTime() + ".errorlog");
 		
 		if ( ! logFolder.exists()) logFolder.mkdirs();
 		
-		
 		PrintWriter writer = null;
+		
 		try {
 			writer = new PrintWriter(errorLog, "UTF-8");
 		} catch (FileNotFoundException | UnsupportedEncodingException e2) {
@@ -99,7 +138,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " Oh no, an internal error has occurred! :-(");
 			e.printStackTrace();
 
-			if (writer == null) return;
+			if (writer == null) return (T) this;
 			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " It has been saved to " + errorLog.getPath());
 			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " Please upload to pastebin.com and include in any error reports.");
 
@@ -129,5 +168,7 @@ public abstract class FactionsPlusPlugin extends JavaPlugin {
 		}
 		
 		writer.close();
+		
+		return (T) this;
 	}
 }

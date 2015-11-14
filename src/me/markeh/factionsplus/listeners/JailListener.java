@@ -49,7 +49,7 @@ public class JailListener implements Listener {
 		
 		if ( ! fdata.jailedPlayers.contains(player.getUniqueId().toString())) return false;
 		
-		player.teleport(fdata.jailLoc);
+		player.teleport(fdata.jailLoc.getBukkitLocation());
 		
 		if (notify) player.sendMessage(ChatColor.RED + "You are currently in jail. You can leave this faction if you're unhappy with it.");
 		

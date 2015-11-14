@@ -11,12 +11,11 @@ public class CmdRules extends FactionsCommand {
 	public CmdRules() {
 		this.aliases.add("rules");
 		
-		this.requiredPermissions.add(Perm.get("factionsplus.rules", ""));
+		this.requiredPermissions.add(Perm.get("factionsplus.rules", Texts.cmdRules_noPermission));
 		
-		this.description = "";
+		this.description = Texts.cmdRules_description;
 		
 		this.mustHaveFaction = true;
-
 	}
 	
 	@Override

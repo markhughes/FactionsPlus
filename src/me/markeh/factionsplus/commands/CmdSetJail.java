@@ -9,6 +9,7 @@ import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
+import me.markeh.factionsplus.conf.types.TLoc;
 
 public class CmdSetJail extends FactionsCommand {
 	
@@ -55,11 +56,11 @@ public class CmdSetJail extends FactionsCommand {
 		
 		FactionData fdata = FactionData.get(faction.getID());
 		
-		fdata.jailLoc = player.getLocation();
+		fdata.jailLoc = new TLoc(player.getLocation());
 		
 		for(String pid : fdata.jailedPlayers) {
 			if(Bukkit.getPlayer(UUID.fromString(pid)).isOnline()) {
-				Bukkit.getPlayer(UUID.fromString(pid)).teleport(fdata.jailLoc);
+				Bukkit.getPlayer(UUID.fromString(pid)).teleport(fdata.jailLoc.getBukkitLocation());
 			}
 		}
 		

@@ -33,11 +33,14 @@ import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.integration.IntegrationManager;
+import me.markeh.factionsplus.integration.cannons.IntegrationCannons;
 import me.markeh.factionsplus.integration.chestshop.IntegrationChestShop;
+import me.markeh.factionsplus.integration.disguisecraft.IntegrationDisguiseCraft;
+import me.markeh.factionsplus.integration.idisguise.IntegrationIDisguise;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.tools.*;
 
-public class FactionsPlus extends FactionsPlusPlugin {
+public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	
 	// ----------------------------------------
 	//  Singleton
@@ -93,7 +96,24 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		}
 		
 		// Add our integrations 
-		IntegrationManager.get().addIntegration(new IntegrationChestShop());
+		IntegrationManager.get().addIntegrations(
+			IntegrationChestShop.get(),
+			IntegrationDisguiseCraft.get(),
+			IntegrationIDisguise.get(),
+			IntegrationCannons.get()
+		);
+				
+		// Notify console we're ready
+		log(Texts.ready);
+		
+		// Enable metrics 
+		if (Config.get().metrics) {
+			try {
+				Metrics.get(this).enable();
+			} catch (Throwable e) {
+				this.logError(e);
+			}
+		}
 		
 		// Notify events
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
@@ -103,10 +123,6 @@ public class FactionsPlus extends FactionsPlusPlugin {
 				IntegrationManager.get().notify(NotifyEvent.Loaded);
 			}
 		});
-		
-		// Notify console we're ready
-		log(Texts.ready);
-
 	}
 	
 	// Plugin Disable
@@ -127,7 +143,13 @@ public class FactionsPlus extends FactionsPlusPlugin {
 		
 		// Notify events
 		IntegrationManager.get().notify(NotifyEvent.Stopping);
-
+		
+		// Disable metrics 
+		try {
+			Metrics.get().disable();
+		} catch (Throwable e) {
+			this.logError(e);
+		}
 	}
 	
 	// Manage our listeners 

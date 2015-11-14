@@ -105,15 +105,28 @@ public class Texts extends Configuration {
 	@Option({"Rules", "NoRules"})
 	public static String rules_noRules = "<red>Your faction has not listed their rules!";
 	
-	// -- CmdAddRule
-	@Option({"Rules", "AddRuleCommand.BadRank"})
-	public static String cmdAddRule_badRank = "<red>Your rank is not high enough to add rules!";
-	
-	@Option({"Rules", "AddRuleCommand.Added"})
-	public static String cmdAddRule_added = "<green>Rule added!";
+	// -- CmdRules
+	@Option({"Rules", "RulesCommand.NoPermission"})
+	public static String cmdRules_noPermission = "<red>You don't have permission to view the rules.";
+
+	@Option({"Rules", "RulesCommand.Description"})
+	public static String cmdRules_description = "View your faction rules";
 	
 	@Option({"Rules", "RulesCommand.Layout"})
 	public static String cmdRules_layout = "<i>. <rule>";
+
+	// -- CmdAddRule
+	@Option({"Rules", "AddRuleCommand.NoPermission"})
+	public static String cmdAddRule_noPermission = "<red>You don't have permission to add rules.";
+	
+	@Option({"Rules", "AddRuleCommand.BadRank"})
+	public static String cmdAddRule_badRank = "<red>Your rank is not high enough to add rules!";
+	
+	@Option({"Rules", "AddRuleCommand.Descripion"})
+	public static String cmdAddRule_description = "Add faction rules";
+	
+	@Option({"Rules", "AddRuleCommand.Added"})
+	public static String cmdAddRule_added = "<green>Rule added!";
 	
 	// ------------------------------ 
 	//  Warps Related
@@ -121,5 +134,9 @@ public class Texts extends Configuration {
 	
 	@Option({"Warps", "NotEnabled"})
 	public static String warps_notEnabled = "<red>Warps aren't enabled on this server.";
+
+
+
+
 
 }

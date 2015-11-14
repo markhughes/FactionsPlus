@@ -8,6 +8,7 @@ import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.cmd.arg.ARString;
+//import com.massivecraft.massivecore.command.type.primitive.TypeString;
 
 public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.FactionsCommand {
 
@@ -21,8 +22,9 @@ public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.Fact
 	//  Constructor
 	// ------------------------------
 	
-	public FactionsCommand2XWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments)
-	{
+	public FactionsCommand2XWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+		// Older arg system ..
+		
 		// Store our FactionsCommand
 		this.cmd = cmd;
 		
@@ -45,7 +47,34 @@ public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.Fact
 		
 		cmd.helpLine = this.getUseageTemplate(false).toRaw();
 		
+		this.setDesc(cmd.description);
 		this.setGivingErrorOnTooManyArgs(cmd.errorOnTooManyArgs);
+
+		// Newer Type system ...
+		
+		/*
+		// Store our FactionsCommand
+		this.cmd = cmd;
+		
+		// Register all the aliases
+		for(String alias : _aliases) {
+			this.aliases.add(alias);
+		}
+		
+		// Register all the required arguments 
+		for(String reqArg : reqArguments) {
+			this.addRequirements(Req);
+			this.addParameter(TypeString.get(), reqArg);
+		}
+		
+		// Register all the optional arguments
+		for(String optArg : optArguments.keySet()) {
+			this.addParameter(TypeString.get(), optArg, optArguments.get(optArg));
+		}
+		
+		this.setDesc(cmd.description);		
+		this.setOverflowSensitive(cmd.errorOnTooManyArgs);
+		*/
 	}
 
 	// ------------------------------
@@ -53,8 +82,7 @@ public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.Fact
 	// ------------------------------
 	
 	@Override
-	public void perform() throws MassiveException
-	{
+	public void perform() throws MassiveException {
 		try { 
 			cmd.reset();
 			

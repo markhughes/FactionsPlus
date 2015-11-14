@@ -1,6 +1,6 @@
 main: me.markeh.factionsplus.FactionsPlus
 name: FactionsPlus
-version: 2.0.0
+version: 2.0.0-beta1
 website: http://ma.rkhugh.es/factionsplus
 authors: [MarkehMe]
 description: §eFactionsPlus extends on-top of Factions to provide more features. §aMarkehMe §eis the lead programmer. See §bhttp://ma.rkhugh.es/factionsplus§e for more information.
@@ -13,3 +13,8 @@ permissions:
   factionsplus.reload: {description: reload factions plus, default: false}
   factionsplus.managewarps: {description: manage faction warps, default: false}
   factionsplus.commandblockbypass: {description: bypass command block on radius feature, default: false}
+  factionsplus.setwarp: {description: allows managing warps, default: false}
+  factionsplus.warp: {description: allows using warps, default: false}
+  factionsplus.disguseanywhere: {description: allows using disguise plugins anywhere, default: false}
+  factionsplus.cannonsanywhere: {description: allows using cannons anywhere, default: false}
+  

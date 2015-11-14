@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
-
-import org.bukkit.Location;
+import me.markeh.factionsplus.conf.types.TLoc;
+import me.markeh.factionsplus.conf.types.TMap;
 
 public class FactionData extends Configuration {
 	
@@ -19,22 +20,22 @@ public class FactionData extends Configuration {
 	public List<String> jailedPlayers = new ArrayList<String>();
 
 	@Option({"jails", "location", "Jail Location"})
-	public Location jailLoc = null;
+	public TLoc jailLoc = null;
 	
 	@Option({"rules", "rules", "Rules"})
 	public List<String> rules = new ArrayList<String>();
 	
 	@Option({"warps", "locations", "Warp Locations"})
-	public HashMap<String, Location> warpLocations = new HashMap<String, Location>();
-	
+	public TMap<String, TLoc> warpLocations = new TMap<String, TLoc>();
+		
 	@Option({"warps", "passwords", "Warp Passwords"})
-	public HashMap<String, String> warpPasswords = new HashMap<String, String>();
+	public TMap<String, String> warpPasswords = new TMap<String, String>();
 	
 	@Option({"fchest", "location", "Faction Chest"})
-	public Location factionChest = null;
+	public TLoc factionChest = null;
 	
 	// ----------------------------------------
-	// Static Fields and Methods
+	//  Static Fields and Methods
 	// ----------------------------------------
 	
 	// Collection of all data
@@ -45,6 +46,10 @@ public class FactionData extends Configuration {
 		if ( ! dataMap.containsKey(id)) dataMap.put(id, new FactionData(id));
 		
 		return dataMap.get(id);
+	}
+	
+	public static FactionData get(Faction faction) {
+		return get(faction.getID());
 	}
 	
 	// Returns all data in the map 

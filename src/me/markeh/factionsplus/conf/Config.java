@@ -1,19 +1,26 @@
 package me.markeh.factionsplus.conf;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
 
+
 public class Config extends Configuration {
-	public Config() {
-		this.setName("config");
-	}
+	
+	public Config() { this.setName("config"); }
 	
 	// -----------------------
 	//  Configuration Opts
 	// -----------------------
+
+	// ---- FactionsPlus Specific ---- //
+	@Option({"factionsplus", "debug", "Show debug messages?"}) 
+	public Boolean debugMode = false; 
+	
+	@Option({"factionsplus", "metrics", "Enable metrics?"}) 
+	public Boolean metrics = true; 
 	
 	// ---- Jails ---- //
 	@Option({"jails", "enabled", "Should jails be enabled?"}) 
@@ -44,10 +51,10 @@ public class Config extends Configuration {
 	
 	// ---- Extras ---- //
 	@Option({"commandblock", "inRadiusOf", "Radius to check for enemy players to block a command"}) 
-	public Double commandBlockInRadiusOf = 15.0;
+	public Double commandBlockInRadiusOf = 0.0;
 	
-	@Option({"commandblock", "commands", "Commands to block (seperate with space and comma)"}) 
-	public List<String> commandBlockCommands = new ArrayList<String>();
+	@Option({"commandblock", "commands", "Commands to block"}) 
+	public List<String> commandBlockCommands = Utils.get().getList("examplecommand1", "examplecommand2");
 	
 	
 	// -----------------------
@@ -58,13 +65,29 @@ public class Config extends Configuration {
 	@Option({"chestShop", "allowInWilderness", "Should we allow chest shops in wilderness?"}) 
 	public Boolean chestShop_allowInWilderness = false;
 		
-	@Option({"chestShop", "allowInTerritory", "Shoudl we allow chest shops in their territory"}) 
+	@Option({"chestShop", "allowInTerritory", "Should we allow chest shops in their territory?"}) 
 	public Boolean chestShop_allowInTerritory = false;
 	
-	@Option({"chestShop", "canUseEnemy", "Should we allow enemies to use chest shops"}) 
+	@Option({"chestShop", "canUseEnemy", "Should we allow enemies to use chest shops?"}) 
 	public Boolean chestShop_canUseEnemy = false;
 	
-		
+	// ---- Disguise Integration ---- //
+	@Option({"disguiseIntegration", "allowInWilderness", "Should we allow disguises in wilderness?"}) 
+	public Boolean disguise_allowInWilderness = true;
+	
+	@Option({"disguiseIntegration", "allowEnemy", "Should we allow disgusies in enemy territory?"}) 
+	public Boolean disguise_allowInEnemy = true;
+	
+	@Option({"disguiseIntegration", "allowTerritory", "Should we allow disgusies in their territory?"}) 
+	public Boolean disguise_allowInTerritory = true;
+	
+	// ---- Cannons Integration ---- //
+	@Option({"cannonsIntegration", "allowInWilderness", "Allow building and using cannons in the wilderness?"}) 
+	public Boolean cannons_allowInWilderness = true;
+	
+	@Option({"cannonsIntegration", "allowInTerritory", "Allow building and using cannons in claimed territories?"}) 
+	public Boolean cannons_allowInTerritories = true;
+	
 	// -----------------------
 	// Singleton
 	// -----------------------

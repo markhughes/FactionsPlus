@@ -11,6 +11,7 @@ import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
+import me.markeh.factionsplus.conf.types.TLoc;
 
 public class CmdChest  extends FactionsCommand {
 
@@ -52,7 +53,7 @@ public class CmdChest  extends FactionsCommand {
 				Block targetBlock = this.player.getTargetBlock((Set<Material>) null, 50);
 				
 				if (targetBlock.getType() == Material.CHEST) {
-					fdata.factionChest = targetBlock.getLocation();
+					fdata.factionChest = new TLoc(targetBlock.getLocation());
 					msg("<green>Faction chest set!");
 				} else {
 					msg("<red>You must be looking at a chest to set the location.");
@@ -67,7 +68,7 @@ public class CmdChest  extends FactionsCommand {
 			return;
 		}
 		
-		Faction faction = factions.getFactionAt(fdata.factionChest);
+		Faction faction = factions.getFactionAt(fdata.factionChest.getBukkitLocation());
 		
 		if (faction.getID() != faction.getID()) {
 			msg("The Faction chest is not in your Faction land");

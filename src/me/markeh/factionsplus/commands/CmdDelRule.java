@@ -11,9 +11,9 @@ public class CmdDelRule extends FactionsCommand {
 		this.aliases.add("delrule");
 		this.requiredArguments.add("rule number");
 		
-		this.requiredPermissions.add(Perm.get("factionsplus.rules", "No permission"));
+		this.requiredPermissions.add(Perm.get("factionsplus.rules", Texts.cmdAddRule_noPermission));
 		
-		this.description = "Remove a rule";
+		this.description = Texts.cmdAddRule_description;
 		
 		this.mustHaveFaction = true;
 		

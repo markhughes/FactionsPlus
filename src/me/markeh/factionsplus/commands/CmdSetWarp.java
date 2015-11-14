@@ -1,12 +1,12 @@
 package me.markeh.factionsplus.commands;
 
-import org.bukkit.Location;
 
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
+import me.markeh.factionsplus.conf.types.TLoc;
 
 public class CmdSetWarp extends FactionsCommand {
 	
@@ -54,15 +54,15 @@ public class CmdSetWarp extends FactionsCommand {
 			return;
 		}
 		
-		Location warpLocation = this.player.getLocation();	
+		TLoc warpLocation =  new TLoc(this.player.getLocation());	
 		
-		if (this.factions.getFactionAt(warpLocation).getID() != this.faction.getID()) {
+		if (this.factions.getFactionAt(warpLocation.getBukkitLocation()).getID() != this.faction.getID()) {
 			msg("You can only set warps in your faction land.");
 			return;
 		}
 		
-		fdata.warpLocations.put(warpName, warpLocation);
-		fdata.warpPasswords.put(warpName, warpPassword);
+		fdata.warpLocations.add(warpName, warpLocation);
+		fdata.warpPasswords.add(warpName, warpPassword);
 		
 		msg("Warp set!");
 		

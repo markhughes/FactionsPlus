@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
-
 import com.massivecraft.factions.Factions;
 
 import me.markeh.factionsframework.command.FactionsCommand;
@@ -26,12 +25,19 @@ public class FactionsCommandManager2X extends FactionsCommandManager {
 	@Override
 	public void addCommand(FactionsCommand cmd) {
 		wrappers.put(cmd, new FactionsCommand2XWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
+		// newer type system...
+		//getCmdFactions().addChild(wrappers.get(cmd));	
 		
-		getCmdFactions().addSubCommand(wrappers.get(cmd));	
+		// older arg system..
+		getCmdFactions().addSubCommand(wrappers.get(cmd));
 	}
 
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
+		// newer type system...
+		//getCmdFactions().removeChild(wrappers.get(cmd));
+		
+		// older arg system..
 		getCmdFactions().removeSubCommand(wrappers.get(cmd));
 	}
 
