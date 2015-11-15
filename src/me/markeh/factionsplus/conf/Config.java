@@ -61,7 +61,7 @@ public class Config extends Configuration {
 	//  Integration Specific 
 	// -----------------------
 	
-	// ---- Chestshop ---- //
+	// ---- Chestshop Integration ---- //
 	@Option({"chestShop", "allowInWilderness", "Should we allow chest shops in wilderness?"}) 
 	public Boolean chestShop_allowInWilderness = false;
 		
@@ -88,6 +88,16 @@ public class Config extends Configuration {
 	@Option({"cannonsIntegration", "allowInTerritory", "Allow building and using cannons in claimed territories?"}) 
 	public Boolean cannons_allowInTerritories = true;
 	
+	// ---- Showcase Integration ---- //
+	@Option({"showcase", "allowInWilderness", "Should we allow showcases in wilderness?"}) 
+	public Boolean showcase_allowInWilderness = false;
+			
+	@Option({"showcase", "allowInTerritory", "Should we allow showcases in their territory?"}) 
+	public Boolean showcase_allowInTerritory = false;
+		
+	@Option({"showcase", "canUseEnemy", "Should we allow enemies to use showcases?"}) 
+	public Boolean showcase_canUseEnemy = false;
+		
 	// -----------------------
 	// Singleton
 	// -----------------------

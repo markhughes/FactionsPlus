@@ -4,15 +4,21 @@ import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 public class Loc {
+	public static Loc from(Location loc) { return new Loc(loc); }
+	public static Loc from(Block block) { return new Loc(block.getLocation()); }
+	
 	// constructor
-	public Loc(Location loc) {
-		
+	protected Loc(Location loc) {
+		this.location = loc;
+		this.factionHere = FactionsManager.get().fetch().getFactionAt(this);
 	}
 	
 	// fields
 	private Location location;
+	private Faction factionHere;
 	
 	// methods
 	public Location asBukkitLocation() {
@@ -20,10 +26,14 @@ public class Loc {
 	}
 	
 	public boolean isWilderness() {
-		return FactionsManager.get().fetch().getFactionAt(this).isWilderness();
+		return this.factionHere.isWilderness();
 	}
 	
 	public boolean isOwnedBy(Faction faction) {
-		return FactionsManager.get().fetch().getFactionAt(this) == faction;
+		return this.factionHere.getID().equals(faction.getID());
+	}
+	
+	public Faction getFactionHere() {
+		return this.factionHere;
 	}
 }

@@ -28,7 +28,7 @@ public class IntegrationCannonsEvents extends IntegrationEvents implements Liste
 	public void onCannonCreate(CannonBeforeCreateEvent event) {
 		if( ! FactionsManager.get().fetch().isFactionsEnabled(event.getCannon().getLocation().getWorld())) return;
 		
-		Loc location = new Loc(event.getCannon().getLocation());
+		Loc location = Loc.from(event.getCannon().getLocation());
 		
 		FPlayer fplayer = FPlayer.get(event.getPlayer());
 		
@@ -47,7 +47,7 @@ public class IntegrationCannonsEvents extends IntegrationEvents implements Liste
 	public void onCannonUse(CannonUseEvent event) {
 		if( ! FactionsManager.get().fetch().isFactionsEnabled(event.getCannon().getLocation().getWorld())) return;
 		
-		Loc location = new Loc(event.getCannon().getLocation());
+		Loc location = Loc.from(event.getCannon().getLocation());
 		
 		FPlayer fplayer = FPlayer.get(event.getPlayer());
 		

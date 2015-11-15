@@ -115,6 +115,14 @@ public class FPlayer {
 		this.player.sendMessage(this.colourise(msg));
 	}
 	
+	public void msg(String msg, String... params) {
+		msg = this.colourise(msg);
+		
+		for (String param : params) msg = msg.replaceFirst("\\<\\?\\>", param);
+		
+		this.player.sendMessage(msg);
+	}
+	
 	public String colourise(String msg) {
 		msg = msg.replace("<aqua>", ChatColor.AQUA + "");
 		msg = msg.replace("<blue>", ChatColor.BLUE + "");

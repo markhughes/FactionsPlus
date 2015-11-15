@@ -726,4 +726,16 @@ public class Metrics {
 		}
 	}
 
+	public void attemptEnable() {
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				try {
+					Metrics.get().enable();
+				} catch (Exception e) {
+					Metrics.get().attemptEnable();
+				}		
+			}
+		} , 200L);
+	}
+
 }

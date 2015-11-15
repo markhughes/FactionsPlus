@@ -6,7 +6,10 @@ The following was changed in beta 2:
 * Added Cannons integration 
 * Added Lockette integration 
 * Added Deadbolt integration 
+* Added ShowCaseStandalone integration 
+* Added Libs Disguises integration
 * Internal changes in regards to location management 
+* Internal changes to improve performance of metrics (instead of showing an error, try again in 20s)
 
 The following is available in the beta:
 

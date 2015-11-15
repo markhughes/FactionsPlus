@@ -38,7 +38,9 @@ import me.markeh.factionsplus.integration.chestshop.IntegrationChestShop;
 import me.markeh.factionsplus.integration.deadbolt.IntegrationDeadbolt;
 import me.markeh.factionsplus.integration.disguisecraft.IntegrationDisguiseCraft;
 import me.markeh.factionsplus.integration.idisguise.IntegrationIDisguise;
+import me.markeh.factionsplus.integration.libsdisguises.IntegrationLibsDisguises;
 import me.markeh.factionsplus.integration.lockette.IntegrationLockette;
+import me.markeh.factionsplus.integration.showcasestandalone.IntegrationShowCaseStandalone;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.tools.*;
 
@@ -98,9 +100,11 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			IntegrationChestShop.get(),
 			IntegrationDisguiseCraft.get(),
 			IntegrationIDisguise.get(),
+			IntegrationLibsDisguises.get(),
 			IntegrationCannons.get(),
 			IntegrationLockette.get(),
-			IntegrationDeadbolt.get()
+			IntegrationDeadbolt.get(),
+			IntegrationShowCaseStandalone.get()
 		);
 				
 		// Notify console we're ready
@@ -108,11 +112,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		
 		// Enable metrics 
 		if (Config.get().metrics) {
-			try {
-				Metrics.get(this).enable();
-			} catch (Throwable e) {
-				this.logError(e);
-			}
+			Metrics.get(this).attemptEnable();
 		}
 		
 		// Notify events
