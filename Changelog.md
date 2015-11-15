@@ -4,7 +4,9 @@ Welcome to the new FactionsPlus! The entire plugin has been coded and supports b
 The following was changed in beta 2: 
 * Fixed a small bug with ChestShop integration
 * Added Cannons integration 
-* Internal changes in regard to location management 
+* Added Lockette integration 
+* Added Deadbolt integration 
+* Internal changes in regards to location management 
 
 The following is available in the beta:
 

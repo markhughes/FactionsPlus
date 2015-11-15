@@ -35,8 +35,10 @@ import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.integration.IntegrationManager;
 import me.markeh.factionsplus.integration.cannons.IntegrationCannons;
 import me.markeh.factionsplus.integration.chestshop.IntegrationChestShop;
+import me.markeh.factionsplus.integration.deadbolt.IntegrationDeadbolt;
 import me.markeh.factionsplus.integration.disguisecraft.IntegrationDisguiseCraft;
 import me.markeh.factionsplus.integration.idisguise.IntegrationIDisguise;
+import me.markeh.factionsplus.integration.lockette.IntegrationLockette;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.tools.*;
 
@@ -53,10 +55,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	// ----------------------------------------
 	//  Fields
 	// ----------------------------------------
-	
-	// Command Manager 
-	private CommandManager cmdManager = null;
-	
+		
 	// Listeners
 	private CoreListener coreListener;
 	private JailListener jailListener;
@@ -85,8 +84,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		FactionsFramework.get(this).ensureSetup();
 		
 		// Using our command manager we add our commands 
-		cmdManager = new CommandManager();
-		cmdManager.add();
+		CommandManager.get().add();
 		
 		this.manageListeners();
 		
@@ -100,7 +98,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			IntegrationChestShop.get(),
 			IntegrationDisguiseCraft.get(),
 			IntegrationIDisguise.get(),
-			IntegrationCannons.get()
+			IntegrationCannons.get(),
+			IntegrationLockette.get(),
+			IntegrationDeadbolt.get()
 		);
 				
 		// Notify console we're ready
@@ -129,10 +129,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	@Override
 	public final void disable() {
 		// Remove any commands we've added
-		if(cmdManager != null) {
-			cmdManager.remove();
-			cmdManager = null;
-		}
+		CommandManager.get().remove();
 		
 		// Save all the FactionData collections  
 		for(FactionData fData : FactionData.getAll()) {
@@ -163,7 +160,6 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			jailListener = new JailListener();
 			addListener(jailListener);
 		}
-		
 	}
 	
 	// Returns true if we have to create the listener and add it 

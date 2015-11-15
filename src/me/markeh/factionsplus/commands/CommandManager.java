@@ -8,6 +8,13 @@ import me.markeh.factionsframework.command.FactionsCommandManager;
 
 public class CommandManager {
 	
+	private static CommandManager instance = null;
+	public static CommandManager get() {
+		if (instance == null) instance = new CommandManager();
+		
+		return instance;
+	}
+	
 	// ----------------------------------------
 	// Fields
 	// ----------------------------------------

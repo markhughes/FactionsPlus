@@ -6,7 +6,6 @@ authors: [MarkehMe]
 description: §eFactionsPlus extends on-top of Factions to provide more features. §aMarkehMe §eis the lead programmer. See §bhttp://ma.rkhugh.es/factionsplus§e for more information.
 softdepend: [Factions]
 permissions:
-# Commands
   factionsplus.rules: {description: add, delete, and view faction rules, default: false}
   factionsplus.chests: {description: use and set faction chests, default: false}
   factionsplus.jail: {description: set and create jails, and jail players in your faction, default: false}
