@@ -3,9 +3,7 @@ package me.markeh.factionsplus.conf;
 import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
 
-// TODO: Move colours to MassiveCore standard 
-
-public class Texts extends Configuration {
+public class Texts extends Configuration<Texts> {
 	public Texts() {
 		this.setName("texts");	
 	}
@@ -134,9 +132,6 @@ public class Texts extends Configuration {
 	
 	@Option({"Warps", "NotEnabled"})
 	public static String warps_notEnabled = "<red>Warps aren't enabled on this server.";
-
-
-
 
 
 }

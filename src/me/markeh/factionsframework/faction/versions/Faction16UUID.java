@@ -85,14 +85,28 @@ public class Faction16UUID extends Faction {
 
 	@Override
 	public List<Faction> getEnemies() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Faction> enemies = new ArrayList<Faction>();
+		
+		for(com.massivecraft.factions.Faction f : Factions.getInstance().getAllFactions()) {
+			if (this.faction.getRelationWish(f) == Relation.ENEMY) {
+				enemies.add(me.markeh.factionsframework.faction.Factions.get().getFactionByID(f.getId()));
+			}
+		}
+		
+		return enemies;
 	}
 
 	@Override
 	public List<Faction> getAllies() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Faction> allies = new ArrayList<Faction>();
+		
+		for(com.massivecraft.factions.Faction f : Factions.getInstance().getAllFactions()) {
+			if (this.faction.getRelationWish(f) == Relation.ALLY) {
+				allies.add(me.markeh.factionsframework.faction.Factions.get().getFactionByID(f.getId()));
+			}
+		}
+		
+		return allies;	
 	}
 
 	@Override
@@ -144,5 +158,10 @@ public class Faction16UUID extends Faction {
 	@Override
 	public boolean isWilderness() {
 		return (this.faction.isWilderness());
+	}
+
+	@Override
+	public double getPower() {
+		return this.faction.getPower();
 	}
 }

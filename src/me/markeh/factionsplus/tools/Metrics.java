@@ -735,7 +735,7 @@ public class Metrics {
 					Metrics.get().attemptEnable();
 				}		
 			}
-		} , 200L);
+		} , 600L);
 	}
 
 }

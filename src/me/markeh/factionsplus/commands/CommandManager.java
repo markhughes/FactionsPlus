@@ -19,24 +19,21 @@ public class CommandManager {
 	// Fields
 	// ----------------------------------------
 	
-	// Commands
-	private FactionsCommand cmdReloadFP = new CmdReloadFP();
-	
+	// Commands	
 	private FactionsCommand cmdSetJail = new CmdSetJail();
 	private FactionsCommand cmdJail = new CmdJail();
 	private FactionsCommand cmdUnjail = new CmdUnjail();
 		
-	private FactionsCommand cmdWarp = new CmdWarp();
 	private FactionsCommand cmdWarps = new CmdWarps();
+	private FactionsCommand cmdWarp = new CmdWarp();
 	private FactionsCommand cmdSetWarp = new CmdSetWarp();
 	private FactionsCommand cmdRemoveWarp = new CmdRemoveWarp();
 	
+	private FactionsCommand cmdRules = new CmdRules();
 	private FactionsCommand cmdAddRule = new CmdAddRule();
 	private FactionsCommand cmdDelRule = new CmdDelRule();
-	private FactionsCommand cmdRules = new CmdRules();
 	
 	private FactionsCommand cmdChest = new CmdChest();
-	
 	
 	// ----------------------------------------
 	// Methods
@@ -44,8 +41,6 @@ public class CommandManager {
 
 	// Add in our commands
 	public void add() {
-		this.enableCmd(cmdReloadFP);
-
 		this.enableCmd(cmdSetJail);
 		this.enableCmd(cmdJail);
 		this.enableCmd(cmdUnjail);

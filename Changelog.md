@@ -10,8 +10,10 @@ The following was changed in beta 2:
 * Added Libs Disguises integration
 * Internal changes in regards to location management 
 * Internal changes to improve performance of metrics (instead of showing an error, try again in 20s)
+* Improvements to warps 
+* Configuration file now auto-reloads 
 
-The following is available in the beta:
+The following was already available in the beta:
 
 * Intelligent internal configuration system
 * Includes FactionsFramework - a new framework to add support for major versions of Factions

@@ -22,11 +22,19 @@
 
 package me.markeh.factionsframework;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,7 +45,6 @@ import me.markeh.factionsframework.events.listeners.FFListenerGlobal;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.factionsmanager.FactionsVersion;
 import me.markeh.factionsframework.objs.NotifyEvent;
-import me.markeh.factionsplus.FactionsPlus;
 
 public class FactionsFramework {
 	
@@ -102,10 +109,21 @@ public class FactionsFramework {
 			}
 			
 			if (listener != null) {
-				if(parent == null) throw new Error("No parent! Pass a plugin to FactionsFramework.get() so we have a parent.");
+				//
+				if (parent == null && this.plugins.size() > 0) {
+					for (JavaPlugin plugin : this.plugins) {
+						if ( ! plugin.isEnabled()) {
+							plugins.remove(parent);
+						} else {
+							parent = plugin;
+						}
+					}
+				}
 				
-				// We hook to the parent plugin (we need a plugin to rgister our listener against)
-				// TODO: If parent goes away, we should hook into the next available plugin 
+				if(parent == null) throw new Error("No parents! Pass a plugin to FactionsFramework.get() so we have a parent.");
+				
+				HandlerList.unregisterAll(listener);
+				
 				Bukkit.getServer().getPluginManager().registerEvents(listener, parent);
 				Bukkit.getLogger().log(Level.INFO, "[FactionsFramework] FactionsFramework has set its listener parent to " + parent.getName());
 			}
@@ -124,8 +142,7 @@ public class FactionsFramework {
 				}
 			});
 		} catch (Throwable e) {
-			// TODO: Don't depend on FactionsPlus 
-			FactionsPlus.get().logError(e);
+			this.logError(e);
 		}
 	}
 	
@@ -146,5 +163,61 @@ public class FactionsFramework {
 		supported.add("2.8.0");
 		
 		return supported;
+	}
+	
+	public final void logError(Throwable e) {
+		File logFolder = new File(this.parent.getDataFolder(), "FactionsFramework");
+		
+		if ( ! logFolder.exists()) logFolder.mkdir();
+		
+		File errorLog = new File(logFolder, new Date().getTime() + ".errorlog");
+		
+		if ( ! logFolder.exists()) logFolder.mkdirs();
+		
+		PrintWriter writer = null;
+		
+		try {
+			writer = new PrintWriter(errorLog, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e2) {
+			e2.printStackTrace();
+		} finally { 
+
+			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " Oh no, an internal error has occurred! :-(");
+			e.printStackTrace();
+
+			if (writer == null) return;
+			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " It has been saved to " + errorLog.getPath());
+			log(ChatColor.RED + "[Error]" + ChatColor.DARK_PURPLE + " Please upload to pastebin.com and include in any error reports.");
+
+			writer.println("----------------------------------------");
+			writer.println("Error Log started on " + new Date().toString());
+			writer.println("----------------------------------------");
+			writer.println("Server Version: " + parent.getServer().getVersion());
+			writer.println("Supported Versions: " + this.getSupported().toString());
+			
+			try {
+				writer.println("Factions Version: " + parent.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion());
+			} catch(Exception e3) { }
+
+			try {
+				writer.println("MassiveCore Version: " + parent.getServer().getPluginManager().getPlugin("MassiveCore").getDescription().getVersion());
+			} catch(Exception e3) { }
+			
+			writer.println("----------------------------------------");
+			writer.println("Error:" + e.getMessage());
+			writer.println("----------------------------------------");
+			
+			e.printStackTrace(writer);
+			
+			writer.println("----------------------------------------");
+							
+			for (Player p : parent.getServer().getOnlinePlayers()) if (p.isOp()) p.sendMessage(ChatColor.RED + "An internal error has occured inside FactionsFramework. Please check console.");	
+		}
+		
+		writer.close();
+	}
+	
+	private void log(String msg) {
+		
 	}
 }

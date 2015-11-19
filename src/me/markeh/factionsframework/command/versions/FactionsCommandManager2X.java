@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.massivecraft.factions.Factions;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.objs.NotifyEvent;
@@ -46,7 +47,7 @@ public class FactionsCommandManager2X extends FactionsCommandManager {
 		// NOTE: Not needed
 	}
 	
-	// We have to do this to simply the compiling process
+	// We have to do this to simplify the compiling process
 	private com.massivecraft.factions.cmd.CmdFactions getCmdFactions() {
 		try { 
 			Method getMethod = com.massivecraft.factions.Factions.class.getMethod("get");
@@ -58,8 +59,7 @@ public class FactionsCommandManager2X extends FactionsCommandManager {
 			return (com.massivecraft.factions.cmd.CmdFactions) field.get(factionsInstance);
 			
 		} catch(Exception e) {
-			e.printStackTrace();
-			// TODO: Freak the fuck out 
+			FactionsFramework.get().logError(e);
 			return null;
 		}
 	}

@@ -1,5 +1,8 @@
 package me.markeh.factionsframework.faction;
 
+import java.util.List;
+
+import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.objs.Loc;
 
 import org.bukkit.Location;
@@ -8,6 +11,13 @@ import org.bukkit.entity.Player;
 
 // Use FactionsManager.get().fetch() to get this
 public abstract class Factions {
+	
+	private static Factions factions = null;
+	public static Factions get() {
+		if (factions == null) factions = FactionsManager.get().fetch();
+		
+		return factions;
+	}
 	
 	// Get Faction by their ID
 	public abstract Faction getFactionByID(String id);
@@ -30,4 +40,6 @@ public abstract class Factions {
 	
 	// Check if factions is enabeld 
 	public abstract boolean isFactionsEnabled(World world);
+	
+	public abstract List<Faction> getAll();
 }

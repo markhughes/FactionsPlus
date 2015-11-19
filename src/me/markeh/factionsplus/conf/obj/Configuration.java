@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +17,8 @@ import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.types.TLoc;
 import me.markeh.factionsplus.conf.types.TMap;
 
-public abstract class Configuration {
+@SuppressWarnings("unchecked")
+public abstract class Configuration<T> {
 	
 	// ------------------------------
 	// Fields
@@ -23,8 +26,12 @@ public abstract class Configuration {
 	
 	private String fileName;
 	private String subFolder;
+	private List<String> headerLines = new ArrayList<String>();
+	
 	private File managingFile;
 	private PrintWriter writer;
+	
+	private Timer watchTimer = null;
 	
 	// ------------------------------
 	// Methods
@@ -40,9 +47,15 @@ public abstract class Configuration {
 		this.subFolder = subFolder;
 	}
 	
+	public final void setHeader(String... lines) {
+		headerLines.clear();
+		
+		for (String line : lines) headerLines.add(line);
+	}
+	
 	// Save the configuration file  
-	public final Configuration save() {
-		if (this.fileName == null) return this;
+	public final T save() {
+		if (this.fileName == null) return (T) this;
 
 		if (this.managingFile == null) {
 			if (this.subFolder != null) {
@@ -59,37 +72,108 @@ public abstract class Configuration {
 			FactionsPlus.get().logError(e);
 		}
 		
+		// Writer header as required
+		for (String headerLine : this.headerLines) writer.println("# " + headerLine);
+		
+		// Write sections and the fields 
 		List<String> sectionsCreated = new ArrayList<String>();
 		
-		for (Field field : this.getClass().getFields()) {			
+		for (Field field : this.getClass().getFields()) {
+			FieldMetaData metaData = FieldMetaData.get(field);
+			
+			if ( ! metaData.isConfigurationField()) continue;
+					
+			if ( ! sectionsCreated.contains(metaData.getSectionName())) {
+				sectionsCreated.add(metaData.getSectionName());
+				writeSectionLine(metaData.getSectionName());
+			}
+			
+			String value = null;
+			
+			try {
+				value = this.buildValue(field, metaData.getFieldDescription());
+			} catch(Exception e) {
+				FactionsPlus.get().logError(e);
+			}
+					
+			if (value != null) writeKeyLine(metaData.getFieldName(), value, metaData.getFieldDescription());
+			
+		}
+		
+		writer.close();
+		
+		return (T) this;
+	}
+	
+	// Load a configuration file
+	public final T load() {
+		if (this.fileName == null) return (T) this;
+
+		if (this.managingFile == null) {
+			if (this.subFolder != null) {
+				File dir = new File(FactionsPlus.get().getDataFolder(), this.subFolder);
+				
+				if ( ! dir.exists()) dir.mkdir();
+				
+				this.managingFile = new File(dir, this.fileName + ".yml");
+			} else {
+				this.managingFile = new File(FactionsPlus.get().getDataFolder(), this.fileName + ".yml");
+			}
+		}
+		
+		if ( ! this.managingFile.exists()) return (T) this;
+		
+		FileConfiguration yamlConfig = YamlConfiguration.loadConfiguration(this.managingFile);
+
+		for (Field field : this.getClass().getFields()) {
 			if (field.isAnnotationPresent(Option.class)) {
+				
 				try {
 					String[] metaData = field.getAnnotation(Option.class).value();
 					
 					String section = metaData[0];
+					String name = metaData[1];
+										
+					Object value = null;
 					
-					if ( ! sectionsCreated.contains(section)) {
-						sectionsCreated.add(section);
-						writeSectionLine(section);
+					if (field.getType() == List.class) {
+						value = yamlConfig.getList(section + "." + name);
+					} else {
+						value = yamlConfig.get(section + "." + name);
 					}
 					
-					String name = metaData[1];
-					String description = metaData[2];
-					String value = this.buildValue(field, description);
+					if (value == null) continue;
 					
-					if (value != null) writeKeyLine(name, value, description);
-
+					this.loadField(field, value);
+					
 				} catch(Exception e) {
 					FactionsPlus.get().logError(e);
 				}
 			}
 		}
 		
-		writer.close();
-		
-		return this;
+		return (T) this;
 	}
+	
+	public T watchStart() {
+		if (watchTimer == null) watchTimer = new Timer();
 		
+		watchTimer.schedule(new FileWatchTask(this.managingFile, this) {
+			@Override
+			protected void onChange(File file, Configuration<?> configuration) {
+				configuration.load();
+			}
+		}, new Date(), 3000);
+		
+		return (T) this;
+	}
+	
+	public T watchStop() {
+		if (watchTimer != null) watchTimer.cancel();
+		
+		return null;
+	}
+	
 	// Build a field value for the configuration file 
 	private final String buildValue(Field field, String description) throws IllegalArgumentException, IllegalAccessException {
 		Object value = field.get(this);
@@ -138,59 +222,7 @@ public abstract class Configuration {
 		writer.println("    ");
 	}
 	
-	// loading / reading 
-	
-	public final Configuration load() {
-		if (this.fileName == null) return this;
-
-		if (this.managingFile == null) {
-			if (this.subFolder != null) {
-				File dir = new File(FactionsPlus.get().getDataFolder(), this.subFolder);
-				
-				if ( ! dir.exists()) dir.mkdir();
-				
-				this.managingFile = new File(dir, this.fileName + ".yml");
-			} else {
-				this.managingFile = new File(FactionsPlus.get().getDataFolder(), this.fileName + ".yml");
-			}
-		}
-		
-		if ( ! this.managingFile.exists()) return this;
-		
-		FileConfiguration yamlConfig = YamlConfiguration.loadConfiguration(this.managingFile);
-
-		for (Field field : this.getClass().getFields()) {
-			if (field.isAnnotationPresent(Option.class)) {
-				
-				try {
-					String[] metaData = field.getAnnotation(Option.class).value();
-					
-					String section = metaData[0];
-					String name = metaData[1];
-										
-					Object value = null;
-					
-					if (field.getType() == List.class) {
-						value = yamlConfig.getList(section + "." + name);
-					} else {
-						value = yamlConfig.get(section + "." + name);
-					}
-					
-					if (value == null) continue;
-					
-					this.loadField(field, value);
-					
-				} catch(Exception e) {
-					FactionsPlus.get().logError(e);
-				}
-			}
-		}
-		
-		return this;
-	}
-	
 	// Load a field 
-	@SuppressWarnings("unchecked")
 	public final void loadField(Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
 		if (field.getType() == TLoc.class) {
 			field.set(this, TLoc.fromRaw(value.toString()));

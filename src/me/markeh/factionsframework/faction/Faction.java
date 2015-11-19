@@ -2,12 +2,14 @@ package me.markeh.factionsframework.faction;
 
 import java.util.List;
 
+import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public abstract class Faction {
+	
 	private final String id;
 	public Faction(String id) {
 		this.id = id;
@@ -52,4 +54,19 @@ public abstract class Faction {
 	public abstract Rel getRealtionshipTo(Object compare);
 
 	public abstract boolean isWilderness();
+	
+	public abstract double getPower();
+
+	public void msg(String string) {
+		for(Player player : this.getMembers()) {
+			FPlayer.get(player).msg(string);
+		}
+	}
+	
+	public void msg(String string, String... params) {
+		for(Player player : this.getMembers()) {
+			FPlayer.get(player).msg(string, params);
+		}
+	}
+	
 }

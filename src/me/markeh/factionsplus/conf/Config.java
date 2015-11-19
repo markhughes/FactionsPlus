@@ -7,12 +7,19 @@ import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
 
 
-public class Config extends Configuration {
+public class Config extends Configuration<Config> {
 	
-	public Config() { this.setName("config"); }
+	public Config() {
+		this.setName("config");
+		this.setHeader(
+			"FactionsPlus Configuration",
+			"----------------------------------------",
+			"This file is well documented for the configuration options throughout"
+		);
+	}
 	
 	// -----------------------
-	//  Configuration Opts
+	//  Configuration Options
 	// -----------------------
 
 	// ---- FactionsPlus Specific ---- //
@@ -42,6 +49,9 @@ public class Config extends Configuration {
 	@Option({"warps", "warmUp", "Time (in seconds) before a player is teleported. Recommended minimum 6 seconds."})
 	public Integer warpsWarmUp = 6;
 	
+	@Option({"warps", "announce", "Announce to Faction when warp is created or deleted"})
+	public Boolean warpsAnnounce = true;
+	
 	// ---- Rules ---- //
 	@Option({"rules", "enabled", "Should rules be enabled?"})
 	public Boolean enableRules = false;
@@ -56,6 +66,15 @@ public class Config extends Configuration {
 	@Option({"commandblock", "commands", "Commands to block"}) 
 	public List<String> commandBlockCommands = Utils.get().getList("examplecommand1", "examplecommand2");
 	
+	// ---- Scoreboard ---- //
+	@Option({"scoreboard", "enabled", "Enable the scoreboard?"}) 
+	public Boolean scoreboard_enabled = false;
+	
+	@Option({"scoreboard", "update", "Every x seconds we update the stats"}) 
+	public Integer scoreboard_update = 25;
+	
+	@Option({"scoreboard", "menus", "Which default menus should be enabled?"}) 
+	public List<String> scoreboard_menus = Utils.get().getList("TopMembers", "TopPower");
 	
 	// -----------------------
 	//  Integration Specific 

@@ -2,7 +2,6 @@ package me.markeh.factionsframework.faction.versions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -13,6 +12,7 @@ import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.MPlayer;
 
 import me.markeh.factionsframework.faction.Faction;
+import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 
@@ -74,15 +74,28 @@ public class Faction2X extends Faction {
 
 	@Override
 	public List<Faction> getEnemies() {
+		List<Faction> enemies = new ArrayList<Faction>();
 		
-		// TODO Auto-generated method stub
-		return null;
+		for (String factionid : faction.getRelationWishes().keySet()) {
+			if (faction.getRelationWishes().get(factionid) == com.massivecraft.factions.Rel.ENEMY) {
+				enemies.add(Factions.get().getFactionByID(factionid));
+			}
+		}
+		
+		return enemies;
 	}
 
 	@Override
 	public List<Faction> getAllies() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Faction> allies = new ArrayList<Faction>();
+		
+		for (String factionid : faction.getRelationWishes().keySet()) {
+			if (faction.getRelationWishes().get(factionid) == com.massivecraft.factions.Rel.ALLY) {
+				allies.add(Factions.get().getFactionByID(factionid));
+			}
+		}
+		
+		return allies;
 	}
 
 	@Override
@@ -97,7 +110,7 @@ public class Faction2X extends Faction {
 
 	@Override
 	public int getLandCount() {
-		return BoardColl.get().getCount(FactionColl.get().get(UUID.fromString(this.faction.getId())));
+		return BoardColl.get().getCount(this.faction);
 	}
 
 	@Override
@@ -127,9 +140,14 @@ public class Faction2X extends Faction {
 		
 		return null;
 	}
-
+	
 	@Override
 	public boolean isWilderness() {
 		return (this.faction.isNone());
+	}
+	
+	@Override
+	public double getPower() {
+		return this.faction.getPower();
 	}
 }

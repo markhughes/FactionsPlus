@@ -4,6 +4,7 @@ package me.markeh.factionsplus.commands;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.Utils;
+import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.conf.types.TLoc;
@@ -50,22 +51,25 @@ public class CmdSetWarp extends FactionsCommand {
 		FactionData fdata = FactionData.get(this.faction.getID());
 		
 		if (fdata.warpLocations.containsKey(warpName)) {
-			msg("That warp already exists!");
+			msg("<red>That warp already exists!");
 			return;
 		}
 		
 		TLoc warpLocation =  new TLoc(this.player.getLocation());	
 		
 		if (this.factions.getFactionAt(warpLocation.getBukkitLocation()).getID() != this.faction.getID()) {
-			msg("You can only set warps in your faction land.");
+			msg("<gold>You can only set warps in your faction land.");
 			return;
 		}
 		
 		fdata.warpLocations.add(warpName, warpLocation);
 		fdata.warpPasswords.add(warpName, warpPassword);
 		
-		msg("Warp set!");
+		msg("<green>Warp set!");
 		
+		if (Config.get().warpsAnnounce) {
+			this.faction.msg("<green><?> set the warp <gold><?>", this.player.getName(), warpName);
+		}
 	}
 
 }

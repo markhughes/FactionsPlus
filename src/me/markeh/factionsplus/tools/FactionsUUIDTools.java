@@ -10,6 +10,7 @@ public class FactionsUUIDTools {
 		return i;
 	}
 	
+	// Removes FactionsUUID warp commands 
 	public void removeFactionsUUIDWarpCommands() {
 		if(P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdFWarp)) {
 			P.p.cmdBase.subCommands.remove(P.p.cmdBase.cmdFWarp);
@@ -22,5 +23,19 @@ public class FactionsUUIDTools {
 		if(P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdSetFWarp)) {
 			P.p.cmdBase.subCommands.remove(P.p.cmdBase.cmdSetFWarp);
 		}
+	}
+
+	public void addFactionsUUIDWarpCommands() {
+		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdFWarp)) {
+			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdFWarp);
+		}
+		
+		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdDelFWarp)) {
+			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdDelFWarp);
+		}
+		
+		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdSetFWarp)) {
+			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdSetFWarp);
+		}	
 	}
 }

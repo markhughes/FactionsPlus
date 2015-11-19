@@ -42,6 +42,7 @@ import me.markeh.factionsplus.integration.libsdisguises.IntegrationLibsDisguises
 import me.markeh.factionsplus.integration.lockette.IntegrationLockette;
 import me.markeh.factionsplus.integration.showcasestandalone.IntegrationShowCaseStandalone;
 import me.markeh.factionsplus.listeners.*;
+import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
 import me.markeh.factionsplus.tools.*;
 
 public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
@@ -69,8 +70,8 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	// Plugin Enable
 	@Override
 	public final void enable() {
-		// Get, load, and save our configuration
-		Config.get().load().save();
+		// Get, load, save our configuration, and start watching.
+		Config.get().load().save().watchStart();
 		
 		if ( ! getServer().getPluginManager().isPluginEnabled("Factions")) {
 			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** Factions is not enabled ******************** ");
@@ -95,6 +96,8 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			FactionsUUIDTools.get().removeFactionsUUIDWarpCommands();
 		}
 		
+		FactionsPlusScoreboard.get().enable();
+		
 		// Add our integrations 
 		IntegrationManager.get().addIntegrations(
 			IntegrationChestShop.get(),
@@ -111,9 +114,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		log(Texts.ready);
 		
 		// Enable metrics 
-		if (Config.get().metrics) {
-			Metrics.get(this).attemptEnable();
-		}
+		if (Config.get().metrics) Metrics.get(this).attemptEnable();
 		
 		// Notify events
 		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
@@ -136,10 +137,16 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			fData.save();
 		}
 		
-		IntegrationManager.get().disableIntegrations();
+		FactionsPlusScoreboard.get().disable();
 		
+		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) {
+			FactionsUUIDTools.get().addFactionsUUIDWarpCommands();
+		}
+				
 		// Notify events
 		IntegrationManager.get().notify(NotifyEvent.Stopping);
+		
+		IntegrationManager.get().disableIntegrations();
 		
 		// Disable metrics 
 		try {
@@ -147,6 +154,8 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		} catch (Throwable e) {
 			this.logError(e);
 		}
+		
+		Config.get().watchStop();
 	}
 	
 	// Manage our listeners 

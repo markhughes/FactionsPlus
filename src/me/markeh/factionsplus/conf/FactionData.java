@@ -10,7 +10,7 @@ import me.markeh.factionsplus.conf.obj.Option;
 import me.markeh.factionsplus.conf.types.TLoc;
 import me.markeh.factionsplus.conf.types.TMap;
 
-public class FactionData extends Configuration {
+public class FactionData extends Configuration<FactionData> {
 	
 	// ----------------------------------------
 	// Options

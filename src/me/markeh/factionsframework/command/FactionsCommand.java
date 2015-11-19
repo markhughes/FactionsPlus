@@ -130,27 +130,7 @@ public abstract class FactionsCommand {
 	}
 	
 	public String colourise(String msg) {
-		msg = msg.replace("<aqua>", ChatColor.AQUA + "");
-		msg = msg.replace("<blue>", ChatColor.BLUE + "");
-		msg = msg.replace("<bold>", ChatColor.BOLD + "");
-		msg = msg.replace("<darkaqua>", ChatColor.DARK_AQUA + "");
-		msg = msg.replace("<darkblue>", ChatColor.DARK_BLUE + "");
-		msg = msg.replace("<darkgray>", ChatColor.DARK_GRAY + "");
-		msg = msg.replace("<darkgreen>", ChatColor.DARK_GREEN + "");
-		msg = msg.replace("<darkpurple>", ChatColor.DARK_PURPLE + "");
-		msg = msg.replace("<darkred>", ChatColor.DARK_RED + "");
-		msg = msg.replace("<gold>", ChatColor.GOLD + "");
-		msg = msg.replace("<gray>", ChatColor.GRAY + "");
-		msg = msg.replace("<green>", ChatColor.GREEN + "");
-		msg = msg.replace("<italic>", ChatColor.ITALIC + "");
-		msg = msg.replace("<lightpurple>", ChatColor.LIGHT_PURPLE + "");
-		msg = msg.replace("<magic>", ChatColor.MAGIC + "");
-		msg = msg.replace("<red>", ChatColor.RED + "");
-		msg = msg.replace("<reset>", ChatColor.RESET + "");
-		msg = msg.replace("<strikethrough>", ChatColor.STRIKETHROUGH + "");
-		msg = msg.replace("<underline>", ChatColor.UNDERLINE + "");
-		msg = msg.replace("<white>", ChatColor.WHITE + "");
-		msg = msg.replace("<yellow>", ChatColor.YELLOW + "");
+		for (ChatColor colour : ChatColor.values()) msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
 		
 		return msg;
 	}

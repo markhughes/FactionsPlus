@@ -22,8 +22,6 @@ public class CmdRemoveWarp extends FactionsCommand {
 	
 	@Override
 	public void run() {
-		// TODO: check warps enabled
-		
 		if ( ! Config.get().enableWarps) {
 			msg(Texts.warps_notEnabled);
 			return;
@@ -35,7 +33,7 @@ public class CmdRemoveWarp extends FactionsCommand {
 		}
 		
 		if ( ! this.fplayer.isLeader() && !this.fplayer.isOfficer()) {
-			msg("Your rank is not high enough to remove warps");
+			msg("<red>Your rank is not high enough to remove warps");
 			return;
 		}
 		
@@ -44,15 +42,17 @@ public class CmdRemoveWarp extends FactionsCommand {
 		FactionData fdata = FactionData.get(this.faction.getID());
 		
 		if (!fdata.warpLocations.containsKey(warpName)) {
-			msg("That warp does not exist.");
+			msg("<red>That warp does not exist.");
 			return;
 		}
 		
 		fdata.warpLocations.remove(warpName);
 		fdata.warpPasswords.remove(warpName);
 		
-		msg("Warp removed!");
+		msg("<green>Warp removed!");
 		
-		// TODO: add configuration option to announce the warp was removed to the entire faction 
+		if (Config.get().warpsAnnounce) {
+			this.faction.msg("<green><?> removed the warp <gold><?>", this.player.getName(), warpName);
+		}
 	}
 }

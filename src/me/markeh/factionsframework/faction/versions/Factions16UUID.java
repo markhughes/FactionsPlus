@@ -1,6 +1,8 @@
 package me.markeh.factionsframework.faction.versions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -57,5 +59,15 @@ public class Factions16UUID extends Factions {
 	@Override
 	public boolean isFactionsEnabled(World world) {
 		return ! Conf.worldsNoClaiming.contains(world.getName());
+	}
+
+	@Override
+	public List<Faction> getAll() {
+		List<Faction> factions = new ArrayList<Faction>();
+		for(com.massivecraft.factions.Faction faction : com.massivecraft.factions.Factions.getInstance().getAllFactions()) {
+			factions.add(Factions.get().getFactionByID(faction.getId()));
+		}
+		
+		return factions;
 	}
 }

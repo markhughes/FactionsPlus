@@ -6,18 +6,21 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+import me.markeh.factionsplus.conf.Config;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@SuppressWarnings("unchecked")
 public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 
 	// ----------------------------------------
 	//  Methods
 	// ----------------------------------------
-
+	
 	// Add a listener
 	public final void addListener(Listener listener) {
 		this.getServer().getPluginManager().registerEvents(listener, this);
@@ -57,14 +60,12 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	}
 	
 	// log method
-	@SuppressWarnings("unchecked")
 	public final T log(String msg) {
 		getServer().getConsoleSender().sendMessage("" + ChatColor.BOLD + "" + ChatColor.DARK_AQUA + "[" + this.getDescription().getName() + "]" + ChatColor.RESET + " " + ChatColor.WHITE + this.colourise(msg));
 		return (T) this;
 	}
 	
 	// log method
-	@SuppressWarnings("unchecked")
 	public final T log(String msg, String... params) {
 		msg = this.colourise(msg);
 		
@@ -76,21 +77,19 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	}
 	
 	// log method
-	@SuppressWarnings("unchecked")
 	public final T debug(String msg, String... params) {
+		if ( ! Config.get().debugMode) return (T) this;
+		
 		msg = this.colourise(msg);
 			
-		for (String param : params) msg = msg.replaceFirst("<?>", param);
+		for (String param : params) msg = msg.replaceFirst("\\<\\?\\>", param);
 			
 		getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA +"" + ChatColor.BOLD + "[" + this.getDescription().getName() + "] " + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + ChatColor.WHITE + msg);
 			
 		return (T) this;
 	}
-		
-		
 	
 	// debug method 
-	@SuppressWarnings("unchecked")
 	public final T debug(String msg) {
 		getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA +"" + ChatColor.BOLD + "[" + this.getDescription().getName() + "] " + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + ChatColor.WHITE + this.colourise(msg));
 		return (T) this;
@@ -119,7 +118,6 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	//  Error Management 
 	// ----------------------------------------
 	
-	@SuppressWarnings("unchecked")
 	public final T logError(Throwable e) {
 
 		File logFolder = new File(this.getDataFolder(), "logs");
