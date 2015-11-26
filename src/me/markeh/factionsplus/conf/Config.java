@@ -59,6 +59,13 @@ public class Config extends Configuration<Config> {
 	@Option({"rules", "max", "Maximum rules per faction"})
 	public Integer rulesMax = 10;
 	
+	// ---- Announcements ---- //
+	@Option({"announcements", "enabled", "Enable announements?"})
+	public Boolean enableAnnouncements = false;
+	
+	@Option({"announcements", "cooldown", "How long between announcement cooldowns in seconds"})
+	public Integer announcementsCooldown = 5;
+	
 	// ---- Extras ---- //
 	@Option({"commandblock", "inRadiusOf", "Radius to check for enemy players to block a command"}) 
 	public Double commandBlockInRadiusOf = 0.0;
@@ -75,6 +82,12 @@ public class Config extends Configuration<Config> {
 	
 	@Option({"scoreboard", "menus", "Which default menus should be enabled?"}) 
 	public List<String> scoreboard_menus = Utils.get().getList("TopMembers", "TopPower");
+	
+	@Option({"scoreboard", "tabplayers", "Only show Factions members in tab area"}) 
+	public Boolean scoreboard_tabplayers = false;
+	
+	@Option({"scoreboard", "disabled", "Which worlds should all scoreboard features be disabled?"}) 
+	public List<String> scoreboard_disabled = Utils.get().getList("gamelobby", "spleefarena1");
 	
 	// -----------------------
 	//  Integration Specific 

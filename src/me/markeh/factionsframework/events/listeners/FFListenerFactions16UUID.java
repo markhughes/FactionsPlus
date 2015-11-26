@@ -3,6 +3,7 @@ package me.markeh.factionsframework.events.listeners;
 import me.markeh.factionsframework.events.FactionCreateEvent;
 import me.markeh.factionsframework.events.FactionDisbandEvent;
 import me.markeh.factionsframework.events.FactionJoinEvent;
+import me.markeh.factionsframework.events.FactionRenameEvent;
 import me.markeh.factionsframework.events.LandChangeEvent;
 import me.markeh.factionsframework.events.LandChangeEvent.ChangeType;
 import me.markeh.factionsframework.objs.FPlayer;
@@ -96,8 +97,22 @@ public class FFListenerFactions16UUID implements Listener {
 		
 		Bukkit.getServer().getPluginManager().callEvent(event);
 		
-		if(event.isCancelled()) {
-			factionsEvent.setCancelled(true);
-		}
+		if(event.isCancelled()) factionsEvent.setCancelled(true);
+		
+	}
+	
+	@EventHandler
+	public void onFactionRename(com.massivecraft.factions.event.FactionRenameEvent factionsEvent) {
+		FactionRenameEvent event = new FactionRenameEvent(
+			factionsEvent.getFaction().getId(),
+			FPlayer.get(factionsEvent.getfPlayer().getPlayer()),
+			factionsEvent.getFaction().getTag(),
+			factionsEvent.getFactionTag()
+		);
+		
+		Bukkit.getServer().getPluginManager().callEvent(event);
+		
+		if(event.isCancelled()) factionsEvent.setCancelled(true);
+		
 	}
 }

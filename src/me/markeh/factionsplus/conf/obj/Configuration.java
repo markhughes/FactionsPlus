@@ -17,6 +17,8 @@ import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.types.TLoc;
 import me.markeh.factionsplus.conf.types.TMap;
 
+// TODO: WAY better way to do this 
+
 @SuppressWarnings("unchecked")
 public abstract class Configuration<T> {
 	
@@ -47,6 +49,7 @@ public abstract class Configuration<T> {
 		this.subFolder = subFolder;
 	}
 	
+	// Optional: Header lines
 	public final void setHeader(String... lines) {
 		headerLines.clear();
 		
@@ -97,7 +100,6 @@ public abstract class Configuration<T> {
 			}
 					
 			if (value != null) writeKeyLine(metaData.getFieldName(), value, metaData.getFieldDescription());
-			
 		}
 		
 		writer.close();
@@ -126,35 +128,31 @@ public abstract class Configuration<T> {
 		FileConfiguration yamlConfig = YamlConfiguration.loadConfiguration(this.managingFile);
 
 		for (Field field : this.getClass().getFields()) {
-			if (field.isAnnotationPresent(Option.class)) {
+			FieldMetaData metaData = FieldMetaData.get(field);
+			
+			if ( ! metaData.isConfigurationField()) continue;
 				
-				try {
-					String[] metaData = field.getAnnotation(Option.class).value();
+			Object value = null;
+			
+			if (field.getType() == List.class) {
+				value = yamlConfig.getList(metaData.getSectionName() + "." + metaData.getFieldName());
+			} else {
+				value = yamlConfig.get(metaData.getSectionName() + "." + metaData.getFieldName());
+			}
 					
-					String section = metaData[0];
-					String name = metaData[1];
-										
-					Object value = null;
-					
-					if (field.getType() == List.class) {
-						value = yamlConfig.getList(section + "." + name);
-					} else {
-						value = yamlConfig.get(section + "." + name);
-					}
-					
-					if (value == null) continue;
-					
-					this.loadField(field, value);
-					
-				} catch(Exception e) {
-					FactionsPlus.get().logError(e);
-				}
+			if (value == null) continue;
+
+			try {
+				this.loadField(field, value);
+			} catch (Exception e) {
+				FactionsPlus.get().logError(e);
 			}
 		}
 		
 		return (T) this;
 	}
 	
+	// Start watching the file for changes
 	public T watchStart() {
 		if (watchTimer == null) watchTimer = new Timer();
 		
@@ -168,6 +166,7 @@ public abstract class Configuration<T> {
 		return (T) this;
 	}
 	
+	// Stop watching the file for changes 
 	public T watchStop() {
 		if (watchTimer != null) watchTimer.cancel();
 		
@@ -179,6 +178,7 @@ public abstract class Configuration<T> {
 		Object value = field.get(this);
 		Class<?> clazz = field.getType();
 		
+		// Null is dangerous to work with, just make it a blank string
 		if (value == null) return "";
 		
 		if (clazz == TMap.class) {
@@ -194,9 +194,7 @@ public abstract class Configuration<T> {
 			writer.println("    " + field.getName() + ":");
 			
 			// Make this list raw, and put it on the writer 
-			for(String s : this.getRawList((List<?>) value)) {
-				writer.println("        - \"" + s + "\"");
-			}
+			for(String s : this.getRawList((List<?>) value)) writer.println("        - \"" + s + "\"");
 			
 			// Make sure everything is neat
 			writer.println("    ");

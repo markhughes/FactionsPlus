@@ -8,25 +8,28 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class FactionDisbandEvent extends Event implements Cancellable {
-	
+public class FactionRenameEvent extends Event implements Cancellable {
+
 	// ------------------------------
 	//  Fields
 	// ------------------------------
 	
 	private static final HandlerList handlers = new HandlerList();
-	private final String factionID;
-	private FPlayer player;
-	
+	private final String factionid;
+	private final FPlayer renamer;
+	private final String newName;
+	private final String oldName;
 	private Boolean cancelled = false;
 	
 	// ------------------------------
 	//  Constructor 
 	// ------------------------------
 	
-	public FactionDisbandEvent(String factionID, FPlayer fPlayer) {
-		this.factionID = factionID;
-		this.player = fPlayer;
+	public FactionRenameEvent(String factionid, FPlayer renamer, String oldName, String newName) {
+		this.factionid = factionid;
+		this.renamer = renamer;
+		this.newName = newName;
+		this.oldName = oldName;
 	}
 	
 	// ------------------------------
@@ -34,9 +37,10 @@ public class FactionDisbandEvent extends Event implements Cancellable {
 	// ------------------------------
 	
 	// Gets the Faction that has just been created 
-	public String getFactionID() { return this.factionID; }
-	public FPlayer getFPlayer() { return this.player; }
-	public Faction getFaction() { return Factions.get().getFactionByID(this.factionID); }
+	public Faction getFaction() { return Factions.get().getFactionByID(this.factionid); }
+	public FPlayer getRenamer() { return this.renamer; }
+	public String getNewName() { return this.newName; }
+	public String getOldName() { return this.oldName; } 
 	
 	// Cancel Stuff...	
 	public boolean isCancelled() { return this.cancelled; }

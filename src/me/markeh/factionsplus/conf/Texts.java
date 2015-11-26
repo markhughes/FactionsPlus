@@ -127,11 +127,30 @@ public class Texts extends Configuration<Texts> {
 	public static String cmdAddRule_added = "<green>Rule added!";
 	
 	// ------------------------------ 
+	//  Announcements Related
+	// ------------------------------ 
+	
+	@Option({"Announcements", "NotEnabled"})
+	public static String announcements_notEnabled = "<red>Announcements aren't enabled on this server.";
+	
+	@Option({"Announcements", "CmdAnnounce.NoPermission"})
+	public static String cmdAnnounce_noPermission = "<red>You don't have permission to make announcements.";
+
+	// ------------------------------ 
 	//  Warps Related
 	// ------------------------------ 
 	
 	@Option({"Warps", "NotEnabled"})
 	public static String warps_notEnabled = "<red>Warps aren't enabled on this server.";
+	
+	// ------------------------------ 
+	//  Scoreboard Related
+	// ------------------------------ 
+	
+	@Option({"Scoreboard", "CmdScoreboard.NoPermission"})
+	public static String cmdScoreboard_noPermission = "<red>You don't have permission to toggle the scoreboard.";
 
+	@Option({"Scoreboard", "CmdScoreboard.Description"})
+	public static String cmdScoreboard_description = "Toggle the scoreboard";
 
 }

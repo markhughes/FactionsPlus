@@ -95,9 +95,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) {
 			FactionsUUIDTools.get().removeFactionsUUIDWarpCommands();
 		}
-		
-		FactionsPlusScoreboard.get().enable();
-		
+				
 		// Add our integrations 
 		IntegrationManager.get().addIntegrations(
 			IntegrationChestShop.get(),
@@ -122,6 +120,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			public void run() {
 				// Notify our services of things
 				IntegrationManager.get().notify(NotifyEvent.Loaded);
+				
+				// Enable FactionsPlusScoreboard - this is also so we can easily depend on compatibility plugins
+				//FactionsPlusScoreboard.get().enable();
 			}
 		});
 	}
@@ -133,19 +134,16 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		CommandManager.get().remove();
 		
 		// Save all the FactionData collections  
-		for(FactionData fData : FactionData.getAll()) {
-			fData.save();
-		}
+		for(FactionData fData : FactionData.getAll()) fData.save();
 		
 		FactionsPlusScoreboard.get().disable();
 		
-		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) {
-			FactionsUUIDTools.get().addFactionsUUIDWarpCommands();
-		}
-				
+		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) FactionsUUIDTools.get().addFactionsUUIDWarpCommands();
+		
 		// Notify events
 		IntegrationManager.get().notify(NotifyEvent.Stopping);
 		
+		// Disable integrations 
 		IntegrationManager.get().disableIntegrations();
 		
 		// Disable metrics 
@@ -155,6 +153,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			this.logError(e);
 		}
 		
+		// Stop our watch
 		Config.get().watchStop();
 	}
 	

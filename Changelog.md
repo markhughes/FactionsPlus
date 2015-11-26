@@ -12,6 +12,7 @@ The following was changed in beta 2:
 * Internal changes to improve performance of metrics (instead of showing an error, try again in 20s)
 * Improvements to warps 
 * Configuration file now auto-reloads 
+* Scoreboard is underway but is not yet useable 
 
 The following was already available in the beta:
 

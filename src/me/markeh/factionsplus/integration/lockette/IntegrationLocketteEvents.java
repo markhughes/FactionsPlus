@@ -26,10 +26,14 @@ public class IntegrationLocketteEvents extends IntegrationEvents implements List
 	public void onBlockBreak(BlockBreakEvent event){
 		FPlayer fplayer = FPlayer.get(event.getPlayer());
 		
-		if (Lockette.isProtected(event.getBlock()) && fplayer.isLeader() && ! Lockette.isOwner(event.getBlock(), event.getPlayer())) {
-			String owner = Lockette.getProtectedOwner(event.getBlock());
+		if (Lockette.isProtected(event.getBlock()) && fplayer.isLeader()) {
+			String owner = "a player";
 			
-			fplayer.msg("<green>This block is owned by <gold>" + owner + "<green> but has been broken as you're the leader.");
+			try {
+				owner = Lockette.getProtectedOwner(event.getBlock());
+			} catch (Exception e) { }
+			
+			fplayer.msg("<green>This block is owned by <gold>" + owner + "<green> but has been broken as you're the leader of this faction.");
 			
 			event.setCancelled(true);
 			event.getBlock().breakNaturally();

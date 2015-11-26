@@ -60,4 +60,7 @@ public class LandChangeEvent extends Event implements Cancellable {
 	// Handler stuff...
 	public HandlerList getHandlers() { return handlers; }
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 }

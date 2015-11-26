@@ -13,6 +13,19 @@ import me.markeh.factionsplus.conf.types.TMap;
 public class FactionData extends Configuration<FactionData> {
 	
 	// ----------------------------------------
+	// Fields
+	// ----------------------------------------
+	
+	// Identifier for the Faction
+	public final String id;
+	
+	// ----------------------------------------
+	// Temporary Data ( don't save this )
+	// ----------------------------------------
+	
+	public long lastAnnouncement = 0;
+	
+	// ----------------------------------------
 	// Options
 	// ----------------------------------------
 	
@@ -41,13 +54,16 @@ public class FactionData extends Configuration<FactionData> {
 	// Collection of all data
 	private static HashMap<String, FactionData> dataMap = new HashMap<String, FactionData>();
 	
-	// Fetches a data collection
+	// Fetch FactionData based on id
 	public static FactionData get(String id) {
+		id = id.toLowerCase();
+		
 		if ( ! dataMap.containsKey(id)) dataMap.put(id, new FactionData(id));
 		
 		return dataMap.get(id);
 	}
 	
+	// Fetch FactionData based on faction object 
 	public static FactionData get(Faction faction) {
 		return get(faction.getID());
 	}
@@ -56,9 +72,7 @@ public class FactionData extends Configuration<FactionData> {
 	public static List<FactionData> getAll() {
 		List<FactionData> dataCollection = new ArrayList<FactionData>();
 		
-		for(FactionData dataSet : dataMap.values()) {
-			dataCollection.add(dataSet);
-		}
+		for (FactionData dataSet : dataMap.values()) dataCollection.add(dataSet);
 		
 		return dataCollection;
 	}
@@ -76,11 +90,4 @@ public class FactionData extends Configuration<FactionData> {
 		
 		this.load().save();
 	}
-	
-	// ----------------------------------------
-	// Fields
-	// ----------------------------------------
-	
-	// Identifier for the Faction
-	public final String id;
 }

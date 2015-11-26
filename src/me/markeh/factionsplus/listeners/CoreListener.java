@@ -1,10 +1,14 @@
 package me.markeh.factionsplus.listeners;
 
+import me.markeh.factionsframework.events.FactionDisbandEvent;
+import me.markeh.factionsframework.events.FactionRenameEvent;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
+import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
+import me.markeh.factionsplus.scoreboard.obj.SBMenu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -60,6 +64,22 @@ public class CoreListener implements Listener {
 				event.getPlayer().sendMessage(ChatColor.RED + "There is an enemy too close to use this command!");
 				return;
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onDisbandRemoveFromScoreboard(FactionDisbandEvent event) {
+		if ( ! FactionsPlusScoreboard.get().isEnabled()) return;
+		for (SBMenu<?> menu : FactionsPlusScoreboard.get().getMenus()) {
+			menu.getObjective().getScore(event.getFaction().getName()).setScore(-1);
+		}
+	}
+	
+	@EventHandler
+	public void onFactionNameChange(FactionRenameEvent event) {
+		if ( ! FactionsPlusScoreboard.get().isEnabled()) return;
+		for (SBMenu<?> menu : FactionsPlusScoreboard.get().getMenus()) {
+			menu.getObjective().getScore(event.getFaction().getName()).setScore(-1);
 		}
 	}
 }

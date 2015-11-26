@@ -7,6 +7,10 @@ import me.markeh.factionsplus.FactionsPlus;
 
 public class FieldMetaData {
 	
+	// ------------------------------
+	// Getter
+	// ------------------------------
+	
 	private static HashMap<Field, FieldMetaData> fieldMetaDatas = new HashMap<Field, FieldMetaData>();
 	public static FieldMetaData get(Field field) {
 		if ( ! fieldMetaDatas.containsKey(field)) fieldMetaDatas.put(field, new FieldMetaData(field));
@@ -48,19 +52,15 @@ public class FieldMetaData {
 	// Methods
 	// ------------------------------
 	
-	public String getSectionName() {
-		return this.sectionName;
-	}
+	// Fetch the section name
+	public String getSectionName() { return this.sectionName; }
 	
-	public String getFieldName() {
-		return this.fieldName;
-	}
+	// Fetch the field name
+	public String getFieldName() { return this.fieldName; }
 	
-	public String getFieldDescription() {
-		return this.fieldDescription;
-	}
+	// Fetch the field description
+	public String getFieldDescription() { return this.fieldDescription; }
 	
-	public Boolean isConfigurationField() {
-		return this.configurationField;
-	}
+	// Is it a configuration field
+	public Boolean isConfigurationField() { return this.configurationField; }
 }

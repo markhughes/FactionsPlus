@@ -1,6 +1,6 @@
 main: me.markeh.factionsplus.FactionsPlus
 name: FactionsPlus
-version: 2.0.0-beta1
+version: 2.0.0-beta2
 website: http://ma.rkhugh.es/factionsplus
 authors: [MarkehMe]
 description: §eFactionsPlus extends on-top of Factions to provide more features. §aMarkehMe §eis the lead programmer. See §bhttp://ma.rkhugh.es/factionsplus§e for more information.
@@ -16,4 +16,5 @@ permissions:
   factionsplus.warp: {description: allows using warps, default: false}
   factionsplus.disguseanywhere: {description: allows using disguise plugins anywhere, default: false}
   factionsplus.cannonsanywhere: {description: allows using cannons anywhere, default: false}
-  
+  factionsplus.announce: {description: allow using announcements, default: false}
+  factionsplus.togglescoreboard: {description: allows using the scoreboard sub command, default: true} 

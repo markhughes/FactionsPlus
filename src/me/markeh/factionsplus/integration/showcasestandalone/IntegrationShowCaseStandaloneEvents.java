@@ -72,7 +72,7 @@ public class IntegrationShowCaseStandaloneEvents extends IntegrationEvents imple
 			}
 		}
 
-		if (removed > 0) fplayer.msg("<gold><?> protections have been removed", String.valueOf(removed));
+		if (removed > 0) fplayer.msg("<gold><?> showcase shops have been removed", String.valueOf(removed));
 		
 	}
 	

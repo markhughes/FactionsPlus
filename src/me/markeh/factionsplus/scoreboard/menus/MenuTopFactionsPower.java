@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.scoreboard.obj.SBMenu;
 
-public class MenuTopFactionsPower extends SBMenu {
+public class MenuTopFactionsPower extends SBMenu<MenuTopFactionsPower> {
 	
 	@Override
 	public String getTitle() {
@@ -50,5 +52,17 @@ public class MenuTopFactionsPower extends SBMenu {
 				result = tempResult;
 			}
 		};
+	}
+
+	@Override
+	public Scoreboard getScoreboard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Objective getObjective() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

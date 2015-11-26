@@ -3,6 +3,8 @@ package me.markeh.factionsplus.integration.cannons;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import at.pavlov.cannons.Enum.BreakCause;
+import at.pavlov.cannons.Enum.MessageEnum;
 import at.pavlov.cannons.event.CannonBeforeCreateEvent;
 import at.pavlov.cannons.event.CannonUseEvent;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
@@ -36,9 +38,13 @@ public class IntegrationCannonsEvents extends IntegrationEvents implements Liste
 		
 		if (location.isWilderness() && ! Config.get().cannons_allowInWilderness) {
 			fplayer.msg("<red>You can't create cannons in the wilderness!");
+			event.getCannon().destroyCannon(true, false, BreakCause.PlayerBreak);
+			event.setMessage(MessageEnum.CannonDestroyed);
 			event.setCancelled(true);
 		} else if ( ! Config.get().cannons_allowInTerritories) {
 			fplayer.msg("<red>You can't create cannons in territories!");
+			event.getCannon().destroyCannon(true, false, BreakCause.PlayerBreak);
+			event.setMessage(MessageEnum.CannonDestroyed);
 			event.setCancelled(true);
 		}
 	}
