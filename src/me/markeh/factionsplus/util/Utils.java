@@ -1,4 +1,4 @@
-package me.markeh.factionsplus;
+package me.markeh.factionsplus.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

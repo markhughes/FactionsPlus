@@ -22,7 +22,13 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
+import me.markeh.factionsframework.FactionsFramework;
+import me.markeh.factionsframework.faction.Faction;
+import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsplus.FactionsPlus;
+import me.markeh.factionsplus.conf.FactionData;
+import me.markeh.factionsplus.integration.Integration;
+import me.markeh.factionsplus.integration.IntegrationManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -727,6 +733,8 @@ public class Metrics {
 	}
 
 	public void attemptEnable() {
+		this.addGraphs();
+		
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
 				try {
@@ -737,5 +745,53 @@ public class Metrics {
 			}
 		} , 600L);
 	}
-
+	
+	public void addGraphs() {
+		// Graph: Factions Version
+		// Fetches the Factions Version
+		this.createGraph("Factions Version").addPlotter(new Metrics.Plotter(FactionsFramework.get().getFactionsVersion()) {
+			@Override public int getValue() { return 1; }
+		});
+		
+		// Graph: Faction Count
+		// Get the amount of Factions on the server
+		this.createGraph("Factions").addPlotter(new Metrics.Plotter(String.valueOf(Factions.get().getAll().size())) {
+			@Override public int getValue() { return 1; }
+		});
+		
+		// Graph: Total Land Claimed
+		// Get the total amount of land claimed
+		int totalLandClaim = 0;
+		
+		for (Faction faction : Factions.get().getAll()) {
+			totalLandClaim = totalLandClaim + faction.getLandCount();
+		}
+				
+		this.createGraph("Chunks Claimed").addPlotter(new Metrics.Plotter(String.valueOf(totalLandClaim)) {
+			@Override public int getValue() { return 1; }
+		});
+		
+		// Graph: Total Warps
+		// Get the total amount of warps created on the server
+		int warps = 0;	
+		for(FactionData fdata : FactionData.getAll()) warps = warps + fdata.warpLocations.getKeys().size();
+	
+		if(warps > 0) { 
+			this.createGraph("Total Warps").addPlotter(new Metrics.Plotter(String.valueOf(warps)) {
+				@Override public int getValue() { return 1; }
+			});
+		}
+		
+		// Graph: Integration
+		// Plot every integration enabled on the server 
+		if(IntegrationManager.get().getAll().size() > 0) {
+			Graph integrationsGraph = this.createGraph("Integrations");
+			
+			for(Integration integration : IntegrationManager.get().getAll()) {
+				integrationsGraph.addPlotter(new Metrics.Plotter(integration.getPluginName()) {
+					@Override public int getValue() { return 1; }
+				});
+			}
+		}		
+	}
 }

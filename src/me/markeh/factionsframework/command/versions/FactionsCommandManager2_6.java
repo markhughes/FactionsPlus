@@ -1,23 +1,26 @@
 package me.markeh.factionsframework.command.versions;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-
-import com.massivecraft.factions.Factions;
 
 import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.objs.NotifyEvent;
+import me.markeh.factionsplus.FactionsPlus;
 
-public class FactionsCommandManager2X extends FactionsCommandManager {
+import com.massivecraft.factions.Factions;
+import com.massivecraft.factions.cmd.FCommand;
+
+public class FactionsCommandManager2_6 extends FactionsCommandManager {
 
 	// ------------------------------
 	//  Fields
 	// ------------------------------
 	
-	private HashMap<FactionsCommand, FactionsCommand2XWrapper> wrappers = new HashMap<FactionsCommand, FactionsCommand2XWrapper>();
+	private HashMap<FactionsCommand, FactionsCommand2_6Wrapper> wrappers = new HashMap<FactionsCommand, FactionsCommand2_6Wrapper>();
 	
 	// ------------------------------
 	//  Methods
@@ -25,21 +28,24 @@ public class FactionsCommandManager2X extends FactionsCommandManager {
 
 	@Override
 	public void addCommand(FactionsCommand cmd) {
-		wrappers.put(cmd, new FactionsCommand2XWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
-		// newer type system...
-		//getCmdFactions().addChild(wrappers.get(cmd));	
+		wrappers.put(cmd, new FactionsCommand2_6Wrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
 		
-		// older arg system..
-		getCmdFactions().addSubCommand(wrappers.get(cmd));
+		// older 2.6 style needs to be able to take FCommand 
+		try {
+			getCmdFactions().getClass().getMethod("addSubCommand", FCommand.class).invoke(this, (FCommand) wrappers.get(cmd));
+		} catch (Exception e) {
+			FactionsPlus.get().logError(e);
+		}
 	}
 
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
-		// newer type system...
-		//getCmdFactions().removeChild(wrappers.get(cmd));
-		
-		// older arg system..
-		getCmdFactions().removeSubCommand(wrappers.get(cmd));
+		try {
+			getCmdFactions().getClass().getMethod("removeSubCommand", FCommand.class).invoke(this, (FCommand) wrappers.get(cmd));
+		} catch (Exception e) {
+			FactionsPlus.get().logError(e);
+		}
+
 	}
 
 	@Override

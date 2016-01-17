@@ -110,7 +110,8 @@ public abstract class Configuration<T> {
 	// Load a configuration file
 	public final T load() {
 		if (this.fileName == null) return (T) this;
-
+		
+		// Set the managing file if it is not set 
 		if (this.managingFile == null) {
 			if (this.subFolder != null) {
 				File dir = new File(FactionsPlus.get().getDataFolder(), this.subFolder);
@@ -123,28 +124,35 @@ public abstract class Configuration<T> {
 			}
 		}
 		
+		// If it doesn't exist we have nothing to load, so we stop here and leave everything at defaults 
 		if ( ! this.managingFile.exists()) return (T) this;
 		
+		// Use the YamlConfiguration options for this, as it is a hell lot more easier 
 		FileConfiguration yamlConfig = YamlConfiguration.loadConfiguration(this.managingFile);
-
+		
+		// Go through each field, and see if its a configuration field
 		for (Field field : this.getClass().getFields()) {
 			FieldMetaData metaData = FieldMetaData.get(field);
 			
-			if ( ! metaData.isConfigurationField()) continue;
+			if ( ! metaData.isConfigurationField()) continue; // Not a configuration field, so ignore
 				
 			Object value = null;
 			
+			// Lists will be read using the getList method 
 			if (field.getType() == List.class) {
 				value = yamlConfig.getList(metaData.getSectionName() + "." + metaData.getFieldName());
 			} else {
+				// Just get the object raw 
 				value = yamlConfig.get(metaData.getSectionName() + "." + metaData.getFieldName());
 			}
 					
 			if (value == null) continue;
 
 			try {
+				// Load the field
 				this.loadField(field, value);
 			} catch (Exception e) {
+				// Log the error 
 				FactionsPlus.get().logError(e);
 			}
 		}
@@ -156,6 +164,7 @@ public abstract class Configuration<T> {
 	public T watchStart() {
 		if (watchTimer == null) watchTimer = new Timer();
 		
+		// Using a File Watch Task we'll reload the configuration file when its modified 
 		watchTimer.schedule(new FileWatchTask(this.managingFile, this) {
 			@Override
 			protected void onChange(File file, Configuration<?> configuration) {
@@ -167,10 +176,10 @@ public abstract class Configuration<T> {
 	}
 	
 	// Stop watching the file for changes 
-	public T watchStop() {
+	public final T watchStop() {
 		if (watchTimer != null) watchTimer.cancel();
 		
-		return null;
+		return (T) this;
 	}
 	
 	// Build a field value for the configuration file 
@@ -268,7 +277,7 @@ public abstract class Configuration<T> {
 			} else if(field.getType() == TMap.class) {
 				convertedList.add(TMap.fromRaw(rawValue));
 			} else {
-				// Unsafe, so try as a last resort and ignore errors 
+				// Unsafe, so try as a last resort
 				try {
 					convertedList.add(rawValue);
 				} catch(Exception e) {

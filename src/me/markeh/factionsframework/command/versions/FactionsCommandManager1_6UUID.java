@@ -9,14 +9,14 @@ import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.objs.NotifyEvent;
 
-public class FactionsCommandManager16UUID extends FactionsCommandManager {
+public class FactionsCommandManager1_6UUID extends FactionsCommandManager {
 	
 	// ------------------------------
 	//  Fields
 	// ------------------------------
 	
 	// Wrappers
-	private HashMap<FactionsCommand, FactionsCommand16UUIDWrapper> wrappers = new HashMap<FactionsCommand, FactionsCommand16UUIDWrapper>();
+	private HashMap<FactionsCommand, FactionsCommand1_6UUIDWrapper> wrappers = new HashMap<FactionsCommand, FactionsCommand1_6UUIDWrapper>();
 	
 	// Backup of help pages
 	private ArrayList<ArrayList<String>> pagesBackup;
@@ -30,7 +30,7 @@ public class FactionsCommandManager16UUID extends FactionsCommandManager {
 	
 	@Override
 	public void addCommand(FactionsCommand cmd) {	
-		wrappers.put(cmd, new FactionsCommand16UUIDWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
+		wrappers.put(cmd, new FactionsCommand1_6UUIDWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
 		P.p.cmdBase.addSubCommand(wrappers.get(cmd));
 		
 		helpLine.put(cmd, cmd.helpLine);		

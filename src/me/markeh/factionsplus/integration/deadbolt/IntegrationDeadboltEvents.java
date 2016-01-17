@@ -35,5 +35,4 @@ public class IntegrationDeadboltEvents extends IntegrationEvents implements List
 			event.setCancelled(true);
 			event.getBlock().breakNaturally();
 		}
-	}
-}
+	}}

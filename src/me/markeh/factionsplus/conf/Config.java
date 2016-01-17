@@ -2,10 +2,9 @@ package me.markeh.factionsplus.conf;
 
 import java.util.List;
 
-import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
-
+import me.markeh.factionsplus.util.Utils;
 
 public class Config extends Configuration<Config> {
 	
@@ -13,7 +12,7 @@ public class Config extends Configuration<Config> {
 		this.setName("config");
 		this.setHeader(
 			"FactionsPlus Configuration",
-			"----------------------------------------",
+			"-----------------------------------------------",
 			"This file is well documented for the configuration options throughout"
 		);
 	}
@@ -73,6 +72,13 @@ public class Config extends Configuration<Config> {
 	@Option({"commandblock", "commands", "Commands to block"}) 
 	public List<String> commandBlockCommands = Utils.get().getList("examplecommand1", "examplecommand2");
 	
+	@Option({"wildernessregen", "enabled", "Should we enable wilderness chunk regeneration?"}) 
+	public Boolean wildernessregenEnabled = false;
+	
+	@Option({"wildernessregen", "timer", "After how many milliseconds of inactivity should they be regenerated?"}) 
+	public Long wildernessregenTimer = 43200000L;
+	
+	
 	// ---- Scoreboard ---- //
 	@Option({"scoreboard", "enabled", "Enable the scoreboard?"}) 
 	public Boolean scoreboard_enabled = false;
@@ -83,8 +89,8 @@ public class Config extends Configuration<Config> {
 	@Option({"scoreboard", "menus", "Which default menus should be enabled?"}) 
 	public List<String> scoreboard_menus = Utils.get().getList("TopMembers", "TopPower");
 	
-	@Option({"scoreboard", "tabplayers", "Only show Factions members in tab area"}) 
-	public Boolean scoreboard_tabplayers = false;
+	@Option({"scoreboard", "teams", "Add players to scoreboard teams "}) 
+	public Boolean scoreboard_teams = false;
 	
 	@Option({"scoreboard", "disabled", "Which worlds should all scoreboard features be disabled?"}) 
 	public List<String> scoreboard_disabled = Utils.get().getList("gamelobby", "spleefarena1");

@@ -6,11 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.NameTagVisibility;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
+import me.markeh.factionsframework.command.FactionsCommandManager;
+import me.markeh.factionsframework.faction.Faction;
+import me.markeh.factionsframework.faction.Factions;
+import me.markeh.factionsframework.objs.Rel;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
+import me.markeh.factionsplus.scoreboard.commands.CmdScoreboard;
 import me.markeh.factionsplus.scoreboard.compatibility.ScoreboardCompatibility;
 import me.markeh.factionsplus.scoreboard.menus.MenuTopFactionsMembers;
 import me.markeh.factionsplus.scoreboard.menus.MenuTopFactionsPower;
@@ -44,6 +53,8 @@ public class FactionsPlusScoreboard {
 	private int masterRoutineTask = -1;
 	
 	private HashMap<Player, SBMenu<?>> currentMenu = new HashMap<Player, SBMenu<?>>();
+	
+	private CmdScoreboard scoreboardCommand = new CmdScoreboard();
 	
 	// ------------------------------ 
 	// Methods
@@ -124,12 +135,16 @@ public class FactionsPlusScoreboard {
 		this.addDefaults();
 		this.startMasterRoutine();
 		
+		FactionsCommandManager.get().addCommand(this.scoreboardCommand);
+		
 		this.enabled = true;
 	}
 	
 	// Disable the scoreboard
 	public void disable() {
 		this.enabled = false;
+		
+		FactionsCommandManager.get().removeCommand(this.scoreboardCommand);
 		
 		this.stopMasterRoutine();
 		this.removeDefaults();
@@ -184,7 +199,7 @@ public class FactionsPlusScoreboard {
 			
 			try { 
 				// Attempt to grab the next menu
-				newMenu = this.getMenus().get(at + 1);
+				newMenu = this.getMenus().get(at++);
 			} catch (Exception e) {
 				newMenu = this.getMenus().get(0);
 			}
@@ -197,7 +212,33 @@ public class FactionsPlusScoreboard {
 	
 	public void updateScoreboard(Player player, SBMenu<?> menu) {
 		if ( ! ScoreboardCompatibility.get().showForPlayer(player)) return;
-		
-		// TODO: this 
+		player.setScoreboard(this.scoreboardAlter(menu.getScoreboard(), player));
+	}
+	
+	// Apply an alterations to the scoreboard before we send it out
+	@SuppressWarnings("deprecation")
+	private Scoreboard scoreboardAlter(Scoreboard scoreboard, Player player) {
+		if (Config.get().scoreboard_teams) {
+			for (Faction faction : Factions.get().getAll()) {
+				Rel rel = faction.getRealtionshipTo(player);
+				
+				ChatColor color = null;
+				if (rel == Rel.ALLY) color = ChatColor.GREEN;
+				if (rel == Rel.ENEMY) color = ChatColor.DARK_RED;
+				
+				if (faction.getMembers().contains(player)) color = ChatColor.BLUE;
+				
+				Team team = scoreboard.getTeam(faction.getID());
+				
+				if (team == null) team = scoreboard.registerNewTeam(faction.getID());
+				
+				team.setDisplayName(color + faction.getName());
+				team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+				
+				for (Player member : faction.getMembers()) if (player.isOnline()) team.addPlayer(member);
+				
+			}
+		}
+		return scoreboard;
 	}
 }

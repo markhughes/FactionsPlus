@@ -3,11 +3,11 @@ package me.markeh.factionsplus.commands;
 
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.objs.Perm;
-import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.conf.types.TLoc;
+import me.markeh.factionsplus.util.Utils;
 
 public class CmdSetWarp extends FactionsCommand {
 	

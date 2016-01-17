@@ -10,7 +10,7 @@ import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.cmd.arg.ARString;
 //import com.massivecraft.massivecore.command.type.primitive.TypeString;
 
-public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.FactionsCommand {
+public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.FactionsCommand {
 
 	// ------------------------------
 	//  Fields
@@ -22,7 +22,7 @@ public class FactionsCommand2XWrapper extends com.massivecraft.factions.cmd.Fact
 	//  Constructor
 	// ------------------------------
 	
-	public FactionsCommand2XWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+	public FactionsCommand2_XWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
 		// Older arg system ..
 		
 		// Store our FactionsCommand

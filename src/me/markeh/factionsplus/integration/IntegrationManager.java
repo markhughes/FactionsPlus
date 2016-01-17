@@ -1,6 +1,7 @@
 package me.markeh.factionsplus.integration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -71,5 +72,9 @@ public class IntegrationManager {
 				integration.setEventsClass(null);
 			}
 		}
+	}
+
+	public List<Integration> getAll() {
+		return Collections.unmodifiableList(this.integrations);
 	}
 }

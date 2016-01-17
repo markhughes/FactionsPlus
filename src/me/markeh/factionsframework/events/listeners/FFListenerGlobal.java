@@ -30,11 +30,11 @@ public class FFListenerGlobal implements Listener {
 	public void killWarmUpOnDamage(EntityDamageByEntityEvent event) {
 		
 		if (event.getEntityType() == EntityType.PLAYER) {
-			FPlayer.get((Player) event.getEntity()).killWarmUpTasks();;
+			FPlayer.get((Player) event.getEntity()).killWarmUpTasks();
 		}
 		
 		if (event.getDamager().getType() == EntityType.PLAYER) {
-			FPlayer.get((Player) event.getDamager()).killWarmUpTasks();;
+			FPlayer.get((Player) event.getDamager()).killWarmUpTasks();
 		}
 	}
 

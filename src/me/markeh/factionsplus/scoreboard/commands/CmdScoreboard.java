@@ -49,5 +49,4 @@ public class CmdScoreboard extends FactionsCommand {
 		
 		msg("<green>Menu changed to <gold>" + newMenu.getTitle());
 	}
-
 }

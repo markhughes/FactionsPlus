@@ -5,10 +5,13 @@ import me.markeh.factionsframework.factionsmanager.FactionsManager;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 public class Loc {
 	public static Loc from(Location loc) { return new Loc(loc); }
 	public static Loc from(Block block) { return new Loc(block.getLocation()); }
+	public static Loc from(Player player) { return new Loc(player.getLocation()); }
+	public static Loc from(FPlayer fplayer) { return fplayer.getLocation(); }
 	
 	// constructor
 	protected Loc(Location loc) {

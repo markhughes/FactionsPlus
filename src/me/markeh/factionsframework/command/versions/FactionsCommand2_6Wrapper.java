@@ -1,5 +1,6 @@
 package me.markeh.factionsframework.command.versions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,20 +9,28 @@ import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.zcore.util.TL;
+import com.massivecraft.massivecore.MassiveException;
+import com.massivecraft.massivecore.cmd.arg.ARString;
 
-public class FactionsCommand16UUIDWrapper extends FCommand {
+public class FactionsCommand2_6Wrapper extends FCommand {
+	
+	// Stay compatible with Factions UUID, ensure you have Factions 2.6 Patches
+	// 
+	public TL getUsageTranslation() { return null; }
 	
 	// ------------------------------
 	//  Fields
 	// ------------------------------
-	
+
 	private FactionsCommand cmd;
 	
 	// ------------------------------
 	//  Constructor
 	// ------------------------------
-
-	public FactionsCommand16UUIDWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+	
+	public FactionsCommand2_6Wrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+		// Older arg system ..
+		
 		// Store our FactionsCommand
 		this.cmd = cmd;
 		
@@ -30,34 +39,39 @@ public class FactionsCommand16UUIDWrapper extends FCommand {
 			this.aliases.add(alias);
 		}
 		
+		
 		// Register all the required arguments 
 		for(String reqArg : reqArguments) {
 			this.requiredArgs.add(reqArg);
+			//this.addArg(ARString.get(), reqArg);
 		}
 		
 		// Register all the optional arguments
 		for(String optArg : optArguments.keySet()) {
 			this.optionalArgs.put(optArg, optArguments.get(optArg));
+			//this.addArg(ARString.get(), optArg, optArguments.get(optArg));
 		}
 		
-		this.setHelpShort(cmd.description);
-		
-		cmd.helpLine = this.getUseageTemplate();
+		try {
+			this.getClass().getMethod("setDesc", String.class).invoke(this, cmd.description);
+			this.getClass().getMethod("setHelp", String.class).invoke(this, cmd.description);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			FactionsPlus.get().logError(e);
+		}
 		
 		this.errorOnToManyArgs = cmd.errorOnTooManyArgs;
 	}
-	
+
 	// ------------------------------
 	//  Methods
 	// ------------------------------
-
-	@Override
-	public void perform() {
+	
+	public final void perform() {
 		try { 
 			cmd.reset();
-					
+			
 			// Set our information
-			if(me != null) {
+			if(me != null && me.getPlayer() != null) {
 				cmd.player = me.getPlayer();
 			}
 			
@@ -72,8 +86,5 @@ public class FactionsCommand16UUIDWrapper extends FCommand {
 			FactionsPlus.get().logError(e);
 		}
 	}
-	
-	// FactionsUUID has a really dumb translation system, we ca'nt do anything with this 
-	@Override
-	public TL getUsageTranslation() { return null; }
+
 }

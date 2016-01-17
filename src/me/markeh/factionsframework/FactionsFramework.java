@@ -220,4 +220,8 @@ public class FactionsFramework {
 	private void log(String msg) {
 		
 	}
+
+	public String getFactionsVersion() {
+		return parent.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion();
+	}
 }

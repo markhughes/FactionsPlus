@@ -66,6 +66,11 @@ public class CoreListener implements Listener {
 			}
 		}
 	}
+
+	// ------------------------------ 
+	// Destroy Events
+	// Removes the faction from a scoreboard when its renamed or disbanded 
+	// ------------------------------ 
 	
 	@EventHandler
 	public void onDisbandRemoveFromScoreboard(FactionDisbandEvent event) {

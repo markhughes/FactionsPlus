@@ -12,8 +12,8 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
-import me.markeh.factionsplus.Utils;
 import me.markeh.factionsplus.scoreboard.obj.SBMenu;
+import me.markeh.factionsplus.util.Utils;
 
 public class MenuTopFactionsMembers extends SBMenu<MenuTopFactionsMembers> {
 

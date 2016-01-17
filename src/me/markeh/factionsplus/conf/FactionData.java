@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.scoreboard.Team;
+
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsplus.conf.obj.Configuration;
 import me.markeh.factionsplus.conf.obj.Option;
 import me.markeh.factionsplus.conf.types.TLoc;
 import me.markeh.factionsplus.conf.types.TMap;
+import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
 
 public class FactionData extends Configuration<FactionData> {
 	
@@ -24,7 +27,7 @@ public class FactionData extends Configuration<FactionData> {
 	// ----------------------------------------
 	
 	public long lastAnnouncement = 0;
-	
+		
 	// ----------------------------------------
 	// Options
 	// ----------------------------------------
