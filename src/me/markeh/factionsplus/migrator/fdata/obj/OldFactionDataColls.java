@@ -4,15 +4,52 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.massivecraft.massivecore.Aspect;
 import com.massivecraft.massivecore.store.Coll;
 import com.massivecraft.massivecore.store.Colls;
 import com.massivecraft.massivecore.store.Entity;
 import com.massivecraft.massivecore.util.MUtil;
 
-public abstract class XColls<C extends Coll<E>, E> extends Colls<C, E> {
+public class OldFactionDataColls extends Colls<OldFactionDataColl, OldFactionData> {
+	// -------------------------------------------- //
+	// INSTANCE & CONSTRUCT
+	// -------------------------------------------- //
+
+	private static OldFactionDataColls i = new OldFactionDataColls();
+	public static OldFactionDataColls get() { return i; }
+
+	// -------------------------------------------- //
+	// OVERRIDE: COLLS
+	// -------------------------------------------- //
+
+	@Override
+	public OldFactionDataColl createColl(String collName) {
+		return new OldFactionDataColl(collName);
+	}
+
+	@Override
+	public Aspect getAspect() {
+		return FactionsPlusAspect.get().getAspect();
+	}
+
+	@Override
+	public String getBasename() {
+		return Const.COLLECTION_FACTION;
+	}
+
+	@Override
+	public void init() {
+		super.init();
+
+		this.migrate();
+	}
+	
+	public void migrate() {
+		// Create file objects
+	}
 	
 	@Override
-	public C get(Object o)
+	public OldFactionDataColl get(Object o)
 	{
 		if (o == null) return null;
 

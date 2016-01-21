@@ -11,14 +11,14 @@ import com.massivecraft.factions.entity.MPlayer;
 import com.massivecraft.massivecore.ps.PS;
 import com.massivecraft.massivecore.store.Entity;
 
-public class FactionData extends Entity<FactionData> {
+public class OldFactionData extends Entity<OldFactionData> {
 	
 	// -------------------------------------------- //
 	// META
 	// -------------------------------------------- //
 
-	public static FactionData get(Object oid) {
-		return FactionDataColls.get().get2(oid);
+	public static OldFactionData get(Object oid) {
+		return OldFactionDataColls.get().get2(oid);
 	}
 
 	// -------------------------------------------- //
@@ -26,7 +26,7 @@ public class FactionData extends Entity<FactionData> {
 	// -------------------------------------------- //
 	
 	@Override
-	public FactionData load(FactionData that) {
+	public OldFactionData load(OldFactionData that) {
 		this.faction = that.faction;
 		
 		this.warpLocation = that.warpLocation;

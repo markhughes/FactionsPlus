@@ -15,7 +15,7 @@ import org.bukkit.event.Listener;
 import com.massivecraft.factions.event.EventFactionsMembershipChange.MembershipChangeReason;
 import com.massivecraft.massivecore.ps.PS;
 
-public class FFListenerFactions2 implements Listener {
+public class FFListenerFactions2_X implements Listener {
 
 	@EventHandler
 	public void onFactionCreate(com.massivecraft.factions.event.EventFactionsCreate factionsEvent) {

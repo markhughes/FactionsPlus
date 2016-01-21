@@ -7,6 +7,7 @@ import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.conf.types.TLoc;
+import me.markeh.factionsplus.conf.types.TMap;
 import me.markeh.factionsplus.util.Utils;
 
 public class CmdSetWarp extends FactionsCommand {
@@ -49,6 +50,10 @@ public class CmdSetWarp extends FactionsCommand {
 		}
 		
 		FactionData fdata = FactionData.get(this.faction.getID());
+		
+		if (fdata.warpLocations == null) fdata.warpLocations = new TMap<String, TLoc>();
+		if (fdata.warpPasswords == null) fdata.warpPasswords = new TMap<String, String>();
+		
 		
 		if (fdata.warpLocations.containsKey(warpName)) {
 			msg("<red>That warp already exists!");

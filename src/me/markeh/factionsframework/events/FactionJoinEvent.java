@@ -30,9 +30,9 @@ public class FactionJoinEvent extends Event implements Cancellable {
 	public FactionJoinEvent(String factionFromID, String factionToID,
 			FPlayer player) {
 		this.fromFaction = FactionsManager.get().fetch()
-				.getFactionByID(factionFromID);
+				.getFactionById(factionFromID);
 		this.toFaction = FactionsManager.get().fetch()
-				.getFactionByID(factionToID);
+				.getFactionById(factionToID);
 		this.player = player;
 	}
 

@@ -231,9 +231,10 @@ public abstract class Configuration<T> {
 	
 	// Load a field 
 	public final void loadField(Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
+		
 		if (field.getType() == TLoc.class) {
 			field.set(this, TLoc.fromRaw(value.toString()));
-		} else if(field.getType() == TMap.class) {
+		} else if(field.getType() == TMap.class) {			
 			field.set(this, TMap.fromRaw(value.toString()));
 		} else if(field.getType() == List.class) {			
 			field.set(this, this.readList(field, (List<String>) value));
@@ -241,12 +242,12 @@ public abstract class Configuration<T> {
 			field.set(this, Double.valueOf(value.toString()));
 		} else if(field.getType() == Integer.class) {
 			field.set(this, Integer.valueOf(value.toString()));
+		} else if(field.getType() == Long.class) {
+			field.set(this, Long.valueOf(value.toString()));
 		} else if(field.getType() == Boolean.class) {
 			field.set(this, Boolean.valueOf(value.toString()));
 		} else if(field.getType() == String.class) {
 			field.set(this, String.valueOf(value));
-		} else if(field.getType() == TMap.class) {
-			field.set(this, TMap.fromRaw(value.toString()));
 		} else {
 			// Unsafe, so try as a last resort and ignore errors 
 			try {
@@ -270,6 +271,8 @@ public abstract class Configuration<T> {
 				convertedList.add(Double.valueOf(rawValue));
 			} else if(field.getType() == Integer.class) {
 				convertedList.add(Integer.valueOf(rawValue));
+			} else if(field.getType() == Long.class) {
+				convertedList.add(Long.valueOf(rawValue));
 			} else if(field.getType() == Boolean.class) {
 				convertedList.add(Boolean.valueOf(rawValue));
 			} else if(field.getType() == String.class) {

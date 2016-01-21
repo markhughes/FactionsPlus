@@ -65,7 +65,7 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 		return (T) this;
 	}
 	
-	// log method
+	// log method with params 
 	public final T log(String msg, String... params) {
 		msg = this.colourise(msg);
 		
@@ -76,9 +76,9 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 		return (T) this;
 	}
 	
-	// log method
+	// debug method with params
 	public final T debug(String msg, String... params) {
-		if ( ! Config.get().debugMode) return (T) this;
+		if ( ! Config.get().debug) return (T) this;
 		
 		msg = this.colourise(msg);
 			
@@ -91,6 +91,8 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	
 	// debug method 
 	public final T debug(String msg) {
+		if ( ! Config.get().debug) return (T) this;
+		
 		getServer().getConsoleSender().sendMessage(ChatColor.DARK_AQUA +"" + ChatColor.BOLD + "[" + this.getDescription().getName() + "] " + ChatColor.GOLD + "[Debug] " + ChatColor.RESET + ChatColor.WHITE + this.colourise(msg));
 		return (T) this;
 	}

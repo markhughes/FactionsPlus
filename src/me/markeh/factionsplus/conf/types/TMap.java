@@ -11,17 +11,68 @@ public class TMap<K, V> extends TType<TMap<?, ?>> {
 	public static TMap<?, ?> fromRaw(String raw) {
 		String[] rows = raw.split("',");
 		
+		FactionsPlus.get().debug("Rows:");
+		
+		Class<?> keyType = null;
+		Class<?> valueType = null;
+		
+		TMap<Object, Object> newTMap = new TMap<Object, Object>();
+		
+		Boolean isFirst = true;
+		
 		for(String row : rows) {
-			FactionsPlus.get().log(row);
+			row = row.trim();
+			
+			if (row.isEmpty() || row.equalsIgnoreCase("'")) continue;
+			
+			if ( ! row.endsWith("'")) row = row + "'";
+			
+			FactionsPlus.get().debug("row raw:" + row);
+			
+			String[] data = row.split("' => '");
+			
+			if (data.length == 0) continue;
+			
+			String key = data[0];
+			
+			if (isFirst) {
+				isFirst = false;
+				
+				String[] data2 = key.split(" ");
+				String[] data3 = data2[0].split(":");
+				
+				try {
+					keyType = Class.forName(data3[0]);
+					valueType = Class.forName(data3[1]);
+				} catch (ClassNotFoundException e) {
+					FactionsPlus.get().logError(e);
+					return newTMap;
+				}
+				
+				key = data2[1];
+			}
+			key = key.substring(1);
+			
+			// use raw value 
+			String rawValue = data[1].substring(0, data[1].length()-1);
+			
+			newTMap.add(buildObject(keyType, key), buildObject(valueType, rawValue));
+			FactionsPlus.get().debug("key ("+keyType.toGenericString()+") = " + key);
+			FactionsPlus.get().debug("raw value ("+valueType.toGenericString()+") = " + rawValue);
 		}
 		
-		return null;
+		FactionsPlus.get().debug("");
+		
+		return newTMap;
 	}
-
+	
 	private HashMap<K, V> hashMap = new HashMap<K, V>();
 		
 	@Override
 	public String asRawString() {
+		// if the keys are empty then don't bother 
+		if (this.getKeys().size() == 0 || this.getValues().size() == 0) return "";
+
 		Boolean isFirst = true;
 		StringBuilder sb = new StringBuilder();
 		
@@ -37,34 +88,23 @@ public class TMap<K, V> extends TType<TMap<?, ?>> {
 			if (this.hashMap.get(key) instanceof TType) {
 				value = "'" + ((TType<?>) this.hashMap.get(key)).asRawString().replaceAll("'", "\'") + "'";
 			} else {
-				value = "'" + this.hashMap.get(key).toString().replaceAll("'", "\'") + "'";
+				if (this.hashMap.get(key) != null) value = "'" + this.hashMap.get(key).toString().replaceAll("'", "\'") + "'";
+				else value = "''";
 			}
 						
 			sb.append("'"+ key.toString().replace("'", "\'") + "' => " + value);
 		}
 		
-		return sb.toString();
+		try {
+			return this.getKeys().toArray()[0].getClass().getName() + ":" + this.getValues().toArray()[0].getClass().getName() + " " + sb.toString();
+		} catch (Exception e) {
+			return "";
+		}
 	}
 
 	@Override
+	@Deprecated
 	public TMap<K, V> valueOf(String raw) {
-		/*
-		 
-		for(String key : this.hashMap.keySet()) {
-			if(isFirst) {
-				isFirst = false;
-			} else {
-				sb.append(", ");
-			}
-			
-			String value = "'" + this.hashMap.get(key).toString().replaceAll("'", "\'") + "'";
-			
-			sb.append("'"+ key.replaceAll("'", "\'") + "' => " + value);
-		}
-		
-		 */
-		
-		// TODO: convert this string back into a delicious map
 		return null;
 	}
 	
@@ -128,6 +168,25 @@ public class TMap<K, V> extends TType<TMap<?, ?>> {
 		}
 		
 		return null;
+	}
+	
+	private static Object buildObject(Class<?> type, String rawValue) {
+		if (type == TLoc.class) {
+			return TLoc.fromRaw(rawValue);
+		} else if(type == Double.class) {
+			return Double.valueOf(rawValue);
+		} else if(type == Integer.class) {
+			return Integer.valueOf(rawValue);
+		} else if(type == Long.class) {
+			return Long.valueOf(rawValue);
+		} else if(type == Boolean.class) {
+			return Boolean.valueOf(rawValue);
+		} else if(type == String.class) {
+			return String.valueOf(rawValue);
+		} else {
+			// Unsupported or can take a raw form..
+			return rawValue;
+		}
 	}
 
 }

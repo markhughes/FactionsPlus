@@ -37,7 +37,7 @@ public class FactionRenameEvent extends Event implements Cancellable {
 	// ------------------------------
 	
 	// Gets the Faction that has just been created 
-	public Faction getFaction() { return Factions.get().getFactionByID(this.factionid); }
+	public Faction getFaction() { return Factions.get().getFactionById(this.factionid); }
 	public FPlayer getRenamer() { return this.renamer; }
 	public String getNewName() { return this.newName; }
 	public String getOldName() { return this.oldName; } 

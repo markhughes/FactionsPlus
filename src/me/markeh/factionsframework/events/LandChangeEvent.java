@@ -35,8 +35,8 @@ public class LandChangeEvent extends Event implements Cancellable {
 	// ------------------------------
 	
 	public LandChangeEvent(String oldFactionID, String factionToID, Player player, Chunk chunk, ChangeType changeType) {
-		this.oldFaction = FactionsManager.get().fetch().getFactionByID(oldFactionID);
-		this.toFaction = FactionsManager.get().fetch().getFactionByID(factionToID);
+		this.oldFaction = FactionsManager.get().fetch().getFactionById(oldFactionID);
+		this.toFaction = FactionsManager.get().fetch().getFactionById(factionToID);
 		this.changeType = changeType;
 		this.player = player;
 		this.chunk = chunk;

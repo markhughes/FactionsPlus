@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.obj.TType;
 
 public class TLoc extends TType<TLoc>  {
@@ -15,8 +16,19 @@ public class TLoc extends TType<TLoc>  {
 	}
 	
 	public static TLoc fromRaw(String raw) {
+		if (raw.trim().isEmpty()) return null;
+		
+		FactionsPlus.get().debug("'" + raw + "'");
+		
 		String[] data = raw.split(" / ");
 		
+		FactionsPlus.get().debug("0 = " + data[0]);
+		FactionsPlus.get().debug("1 = " + data[1]);
+		FactionsPlus.get().debug("2 = " + data[2]);
+		FactionsPlus.get().debug("3 = " + data[3]);
+		FactionsPlus.get().debug("4 = " + data[4]);
+		FactionsPlus.get().debug("5 = " + data[5]);
+
 		Location location = new Location(
 				Bukkit.getWorld(UUID.fromString(data[5])),
 				Double.valueOf(data[0]),
@@ -50,18 +62,7 @@ public class TLoc extends TType<TLoc>  {
 
 	@Override
 	public TLoc valueOf(String raw) {
-		String[] data = raw.split(" / ");
-		
-		Location location = new Location(
-				Bukkit.getWorld(UUID.fromString(data[5])),
-				Double.valueOf(data[0]),
-				Double.valueOf(data[1]),
-				Double.valueOf(data[2]));
-		
-		location.setPitch(Float.valueOf(data[3]));
-		location.setYaw(Float.valueOf(data[4]));
-		
-		return new TLoc(location);
+		return fromRaw(raw);
 	}
 	
 	public Location getBukkitLocation() {

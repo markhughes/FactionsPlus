@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 import com.massivecraft.factions.Factions;
+import com.massivecraft.massivecore.command.MassiveCommand;
 
 import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
@@ -26,20 +27,37 @@ public class FactionsCommandManager2_X extends FactionsCommandManager {
 	@Override
 	public void addCommand(FactionsCommand cmd) {
 		wrappers.put(cmd, new FactionsCommand2_XWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
-		// newer type system...
-		//getCmdFactions().addChild(wrappers.get(cmd));	
-		
-		// older arg system..
-		getCmdFactions().addSubCommand(wrappers.get(cmd));
+		// newer type system in 2.7+ versions
+		try {
+			getCmdFactions().getClass().getMethod("addChild", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
+		} catch (Exception e1) {
+			try {
+				getCmdFactions().getClass().getMethod("addSubCommand", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
+			} catch (Exception e2) {
+				// Failed to add, so we remove the wrapper
+				wrappers.remove(cmd);
+				FactionsFramework.get().logError(e1);
+				FactionsFramework.get().logError(e2);
+			}
+
+		}
 	}
 
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
-		// newer type system...
-		//getCmdFactions().removeChild(wrappers.get(cmd));
-		
-		// older arg system..
-		getCmdFactions().removeSubCommand(wrappers.get(cmd));
+		try {
+			getCmdFactions().getClass().getMethod("removeChild", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
+			wrappers.remove(cmd);
+		} catch (Exception e1) {
+			try {
+				getCmdFactions().getClass().getMethod("removeSubCommand", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
+				wrappers.remove(cmd);
+			} catch (Exception e2) {
+				FactionsFramework.get().logError(e1);
+				FactionsFramework.get().logError(e2);
+			}
+
+		}
 	}
 
 	@Override

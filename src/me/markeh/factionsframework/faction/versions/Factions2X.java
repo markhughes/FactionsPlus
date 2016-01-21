@@ -22,7 +22,7 @@ public class Factions2X extends Factions {
 	private HashMap<String, Faction2X> factionMap = new HashMap<String, Faction2X>();
 	
 	@Override
-	public Faction getFactionByID(String id) {
+	public Faction getFactionById(String id) {
 		id = id.toLowerCase();
 		
 		if( ! factionMap.containsKey(id)) {
@@ -34,22 +34,27 @@ public class Factions2X extends Factions {
 
 	@Override
 	public Faction getFactionAt(Location location) {
-		return (this.getFactionByID(BoardColl.get().getFactionAt(PS.valueOf(location)).getId()));
+		return (this.getFactionById(BoardColl.get().getFactionAt(PS.valueOf(location)).getId()));
 	}
 
 	@Override
 	public Faction getFactionFor(Player player) {
-		return (this.getFactionByID(MPlayer.get(player).getFactionId()));
+		return (this.getFactionById(MPlayer.get(player).getFactionId()));
 	}
 
 	@Override
-	public String getWildernessID() {
+	public String getWildernessId() {
 		return FactionColl.get().getNone().getId();
 	}
 
 	@Override
-	public String getWarZoneID() {
+	public String getWarZoneId() {
 		return FactionColl.get().getWarzone().getId();
+	}
+	
+	@Override
+	public String getSafeZoneId() {
+		return FactionColl.get().getSafezone().getId();
 	}
 
 	@Override
@@ -62,7 +67,7 @@ public class Factions2X extends Factions {
 		List<Faction> factions = new ArrayList<Faction>();
 		
 		for(com.massivecraft.factions.entity.Faction faction : FactionColl.get().getAll()) {
-			factions.add(Factions.get().getFactionByID(faction.getId()));
+			factions.add(Factions.get().getFactionById(faction.getId()));
 		}
 		
 		return factions;

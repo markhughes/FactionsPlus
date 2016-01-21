@@ -40,7 +40,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.events.listeners.FFListenerFactions16UUID;
-import me.markeh.factionsframework.events.listeners.FFListenerFactions2;
+import me.markeh.factionsframework.events.listeners.FFListenerFactions2_6;
+import me.markeh.factionsframework.events.listeners.FFListenerFactions2_X;
 import me.markeh.factionsframework.events.listeners.FFListenerGlobal;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.factionsmanager.FactionsVersion;
@@ -100,8 +101,10 @@ public class FactionsFramework {
 			if (listener == null) {
 				if (factionsManager.determineVersion() == FactionsVersion.FactionsUUID) {
 					listener = new FFListenerFactions16UUID();
-				} else if (factionsManager.determineVersion() == FactionsVersion.Factions2) {
-					listener = new FFListenerFactions2();
+				} else if (factionsManager.determineVersion() == FactionsVersion.Factions2_X) {
+					listener = new FFListenerFactions2_X();
+				} else if (factionsManager.determineVersion() == FactionsVersion.Factions2_6) {
+					listener = new FFListenerFactions2_6();
 				} else {
 					Bukkit.getLogger().log(Level.SEVERE, "[FactionsFramework] FactionsFramework can not work out your Factions version.");
 					Bukkit.getLogger().log(Level.SEVERE, "[FactionsFramework] FactionsFramework did not register our listener.");	
@@ -150,17 +153,14 @@ public class FactionsFramework {
 	public final List<String> getSupported() {
 		List<String> supported = new ArrayList<String>();
 		
-		// Factions 1.6 UUID
-		supported.add("1.6.9.5-U0.1.18");
-		
 		// Original Factions
-		supported.add("2.7.0");
-		supported.add("2.7.1");
-		supported.add("2.7.2");
-		supported.add("2.7.3");
-		supported.add("2.7.4");
-		supported.add("2.7.5");
-		supported.add("2.8.0");
+		supported.add("2.5");
+		supported.add("2.6");
+		supported.add("2.7");
+		supported.add("2.8");
+		
+		// Factions 1.6 UUID
+		supported.add("1.6.9.5-U");
 		
 		return supported;
 	}
@@ -211,15 +211,26 @@ public class FactionsFramework {
 			
 			writer.println("----------------------------------------");
 							
-			for (Player p : parent.getServer().getOnlinePlayers()) if (p.isOp()) p.sendMessage(ChatColor.RED + "An internal error has occured inside FactionsFramework. Please check console.");	
+			for (Player p : parent.getServer().getOnlinePlayers()) if (p.isOp()) p.sendMessage(ChatColor.RED + "An internal error has occured inside FactionsFramework (part of FactionsPlus). Please check console.");	
 		}
 		
 		writer.close();
 	}
 	
+	// log to console 
 	private void log(String msg) {
-		
+		Bukkit.getServer().getConsoleSender().sendMessage("" + ChatColor.BOLD + "" + ChatColor.DARK_AQUA + "[FactionsFramework]" + ChatColor.RESET + " " + ChatColor.WHITE + this.colourise(msg));
 	}
+	
+	// colourise a string 
+	public String colourise(String msg) {
+		for (ChatColor colour : ChatColor.values()) {
+			msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
+		}
+		
+		return msg;
+	}
+	
 
 	public String getFactionsVersion() {
 		return parent.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion();

@@ -1,14 +1,14 @@
 package me.markeh.factionsframework.command.versions;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.massivecore.MassiveException;
-import com.massivecraft.massivecore.cmd.arg.ARString;
-//import com.massivecraft.massivecore.command.type.primitive.TypeString;
 
 public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.FactionsCommand {
 
@@ -22,6 +22,7 @@ public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.Fac
 	//  Constructor
 	// ------------------------------
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public FactionsCommand2_XWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
 		// Older arg system ..
 		
@@ -33,48 +34,57 @@ public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.Fac
 			this.aliases.add(alias);
 		}
 		
-		// Register all the required arguments 
-		for(String reqArg : reqArguments) {
-			this.addArg(ARString.get(), reqArg);
-		}
+		// --- Older AR Style ( <= 2.8.2 ) --- //
 		
-		// Register all the optional arguments
-		for(String optArg : optArguments.keySet()) {
-			this.addArg(ARString.get(), optArg, optArguments.get(optArg));
-		}
+		// (eg: com.massivecraft.massivecore.cmd.arg.ARString)
 		
-		this.desc = cmd.description;
-		
-		cmd.helpLine = this.getUseageTemplate(false).toRaw();
-		
-		this.setDesc(cmd.description);
-		this.setGivingErrorOnTooManyArgs(cmd.errorOnTooManyArgs);
+		try {
+			Class ARString = Class.forName("com.massivecraft.massivecore.cmd.arg.ARString");
+			Method addArg = this.getClass().getMethod("addArg", ARString, String.class);
+			
+			// Register the required arguments 
+			for(String reqArg : reqArguments) {
+				addArg.invoke(this, ARString.getMethod("get").invoke(this), reqArg);
+			}
+			
+			Method addArgOpt = this.getClass().getMethod("addArg", ARString, String.class, String.class);
+			
+			// Register all the optional arguments
+			for(String optArg : optArguments.keySet()) {
+				addArgOpt.invoke(this, ARString.getMethod("get").invoke(this), optArg, optArguments.get(optArg));
 
-		// Newer Type system ...
-		
-		/*
-		// Store our FactionsCommand
-		this.cmd = cmd;
-		
-		// Register all the aliases
-		for(String alias : _aliases) {
-			this.aliases.add(alias);
+			}
+			
+			this.getClass().getMethod("setGivingErrorOnTooManyArgs", Boolean.class).invoke(this, cmd.errorOnTooManyArgs);
+					
+			
+			cmd.helpLine = (String) this.getClass().getMethod("getUseageTemplate", Boolean.class).invoke(this).getClass().getMethod("toRaw").invoke(this);
+
+		} catch(Exception e) {
+			
+			// --- Newer TYPE Style ( > 2.8.2 ) --- //
+			
+			// Register the required arguments 
+			try { 
+				
+				for(String reqArg : reqArguments) {
+					this.addParameter(com.massivecraft.massivecore.command.type.primitive.TypeString.get(), reqArg);
+				}
+				
+				// Register the optional arguments
+				for(String optArg : optArguments.keySet()) {
+					this.addParameter(com.massivecraft.massivecore.command.type.primitive.TypeString.get(), optArg, optArguments.get(optArg));
+				}
+			} catch (Exception e2) {
+				FactionsFramework.get().logError(e);
+			}
+			
+			this.overflowSensitive = cmd.errorOnTooManyArgs;
+			cmd.helpLine = this.getTemplate(true).toRaw();
+
 		}
-		
-		// Register all the required arguments 
-		for(String reqArg : reqArguments) {
-			this.addRequirements(Req);
-			this.addParameter(TypeString.get(), reqArg);
-		}
-		
-		// Register all the optional arguments
-		for(String optArg : optArguments.keySet()) {
-			this.addParameter(TypeString.get(), optArg, optArguments.get(optArg));
-		}
-		
-		this.setDesc(cmd.description);		
-		this.setOverflowSensitive(cmd.errorOnTooManyArgs);
-		*/
+				
+		this.setDesc(cmd.description);
 	}
 
 	// ------------------------------

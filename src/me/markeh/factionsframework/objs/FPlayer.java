@@ -46,7 +46,7 @@ public class FPlayer {
 	public Boolean hasFaction() {
 		if (this.getFaction() == null) return false;
 		if (this.getFaction().getID() == "none") return false;
-		if (this.getFaction().getID() == FactionsManager.get().fetch().getWildernessID()) return false;
+		if (this.getFaction().getID() == FactionsManager.get().fetch().getWildernessId()) return false;
 		
 		return true;
 	}

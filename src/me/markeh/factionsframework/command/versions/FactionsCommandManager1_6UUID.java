@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.massivecraft.factions.P;
+import com.massivecraft.factions.zcore.MCommand;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.objs.NotifyEvent;
@@ -38,7 +40,11 @@ public class FactionsCommandManager1_6UUID extends FactionsCommandManager {
 	
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
-		P.p.cmdBase.subCommands.remove(wrappers.get(cmd));
+		try {
+			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("remove", MCommand.class).invoke(this, wrappers.get(cmd));
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+		}
 		
 		wrappers.remove(cmd);
 		helpLine.remove(cmd);

@@ -23,7 +23,7 @@ public class Config extends Configuration<Config> {
 
 	// ---- FactionsPlus Specific ---- //
 	@Option({"factionsplus", "debug", "Show debug messages?"}) 
-	public Boolean debugMode = false; 
+	public Boolean debug = false; 
 	
 	@Option({"factionsplus", "metrics", "Enable metrics?"}) 
 	public Boolean metrics = true; 
@@ -72,13 +72,12 @@ public class Config extends Configuration<Config> {
 	@Option({"commandblock", "commands", "Commands to block"}) 
 	public List<String> commandBlockCommands = Utils.get().getList("examplecommand1", "examplecommand2");
 	
-	@Option({"wildernessregen", "enabled", "Should we enable wilderness chunk regeneration?"}) 
+	@Option({"wildernessregen", "enabled", "(unstable) Should we enable wilderness chunk regeneration?"}) 
 	public Boolean wildernessregenEnabled = false;
 	
-	@Option({"wildernessregen", "timer", "After how many milliseconds of inactivity should they be regenerated?"}) 
+	@Option({"wildernessregen", "timer", "(unstable) After how many milliseconds of inactivity should they be regenerated?"}) 
 	public Long wildernessregenTimer = 43200000L;
-	
-	
+		
 	// ---- Scoreboard ---- //
 	@Option({"scoreboard", "enabled", "Enable the scoreboard?"}) 
 	public Boolean scoreboard_enabled = false;

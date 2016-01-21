@@ -1,7 +1,6 @@
 package me.markeh.factionsframework.command.versions;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -12,7 +11,7 @@ import me.markeh.factionsframework.objs.NotifyEvent;
 import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 
 public class FactionsCommandManager2_6 extends FactionsCommandManager {
 
@@ -30,9 +29,9 @@ public class FactionsCommandManager2_6 extends FactionsCommandManager {
 	public void addCommand(FactionsCommand cmd) {
 		wrappers.put(cmd, new FactionsCommand2_6Wrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
 		
-		// older 2.6 style needs to be able to take FCommand 
+		// <= 2.6 needs to be able to use FCommand 
 		try {
-			getCmdFactions().getClass().getMethod("addSubCommand", FCommand.class).invoke(this, (FCommand) wrappers.get(cmd));
+			getCmdFactions().getClass().getMethod("addSubCommand", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
 		} catch (Exception e) {
 			FactionsPlus.get().logError(e);
 		}
@@ -40,12 +39,14 @@ public class FactionsCommandManager2_6 extends FactionsCommandManager {
 
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
+		// TODO: use reflection to unprotected the subCommands variable and then remove it ourselves 
+		/*
 		try {
-			getCmdFactions().getClass().getMethod("removeSubCommand", FCommand.class).invoke(this, (FCommand) wrappers.get(cmd));
+			getCmdFactions().getClass().getMethod("removeSubCommand", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
 		} catch (Exception e) {
 			FactionsPlus.get().logError(e);
 		}
-
+		*/
 	}
 
 	@Override

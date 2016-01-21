@@ -13,8 +13,10 @@ import com.massivecraft.factions.Conf;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayers;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
+import me.markeh.factionsplus.FactionsPlus;
 
 public class Factions16UUID extends Factions {
 	
@@ -22,7 +24,7 @@ public class Factions16UUID extends Factions {
 	private HashMap<String, Faction> knownFactions = new HashMap<String, Faction>();
 	
 	@Override
-	public final Faction getFactionByID(String id) {
+	public final Faction getFactionById(String id) {
 		id = id.toLowerCase();
 		
 		if( ! knownFactions.containsKey(id)) {
@@ -36,24 +38,48 @@ public class Factions16UUID extends Factions {
 	public final Faction getFactionAt(Location location) {
 		String id = Board.getInstance().getFactionAt(new FLocation(location)).getId();
 		
-		return(this.getFactionByID(id));
+		return(this.getFactionById(id));
 	}
 
 	@Override
 	public final Faction getFactionFor(Player player) {
 		String id = FPlayers.getInstance().getByPlayer(player).getFaction().getId();
 		
-		return(this.getFactionByID(id));
+		return(this.getFactionById(id));
 	}
 
 	@Override
-	public final String getWildernessID() {
-		return com.massivecraft.factions.Factions.getInstance().getWilderness().getId();
+	public final String getWildernessId() {
+		try {
+			return ((com.massivecraft.factions.Faction) this.getInstance().getClass().getMethod("getWilderness").invoke(this)).getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FactionsFramework.get().logError(e);
+			return null;
+		}
+
 	}
 
 	@Override
-	public final String getWarZoneID() {
-		return com.massivecraft.factions.Factions.getInstance().getWarZone().getId();
+	public final String getWarZoneId() {
+		try {
+			return ((com.massivecraft.factions.Faction) this.getInstance().getClass().getMethod("getWarZone").invoke(this)).getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FactionsFramework.get().logError(e);
+			return null;
+		}
+	}
+	
+	@Override
+	public final String getSafeZoneId() {
+		try {
+			return ((com.massivecraft.factions.Faction) this.getInstance().getClass().getMethod("getSafeZoneId").invoke(this)).getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			FactionsFramework.get().logError(e);
+			return null;
+		}
 	}
 
 	@Override
@@ -64,10 +90,29 @@ public class Factions16UUID extends Factions {
 	@Override
 	public List<Faction> getAll() {
 		List<Faction> factions = new ArrayList<Faction>();
-		for(com.massivecraft.factions.Faction faction : com.massivecraft.factions.Factions.getInstance().getAllFactions()) {
-			factions.add(Factions.get().getFactionByID(faction.getId()));
+		for(com.massivecraft.factions.Faction faction : this.getAllOriginalFactions()) {
+			factions.add(Factions.get().getFactionById(faction.getId()));
 		}
 		
 		return factions;
+	}
+	
+	private com.massivecraft.factions.Factions getInstance() {
+		try {
+			return (com.massivecraft.factions.Factions) Factions.class.getMethod("getInstance").invoke(this);
+		} catch (Exception e) {
+			FactionsPlus.get().logError(e);
+			return null;
+		}
+	}
+		
+	@SuppressWarnings("unchecked")
+	private List<com.massivecraft.factions.Faction> getAllOriginalFactions() {
+		try {
+			return (List<com.massivecraft.factions.Faction>) this.getInstance().getClass().getMethod("getAllFactions").invoke(this);
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+			return null;
+		}
 	}
 }

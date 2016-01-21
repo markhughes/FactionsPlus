@@ -6,6 +6,8 @@ import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.Texts;
+import me.markeh.factionsplus.conf.types.TLoc;
+import me.markeh.factionsplus.conf.types.TMap;
 
 public class CmdWarps extends FactionsCommand {
 	public CmdWarps() {
@@ -26,6 +28,10 @@ public class CmdWarps extends FactionsCommand {
 		}
 		
 		FactionData fdata = FactionData.get(this.faction);
+		
+		if (fdata.warpLocations == null) fdata.warpLocations = new TMap<String, TLoc>();
+		if (fdata.warpPasswords == null) fdata.warpPasswords = new TMap<String, String>();
+		
 		if (fdata.warpLocations.isEmpty()) {
 			msg("<red>Your faction has no warps!");
 			return;

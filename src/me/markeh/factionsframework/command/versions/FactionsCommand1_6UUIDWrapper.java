@@ -1,8 +1,10 @@
 package me.markeh.factionsframework.command.versions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsplus.FactionsPlus;
 
@@ -40,7 +42,11 @@ public class FactionsCommand1_6UUIDWrapper extends FCommand {
 			this.optionalArgs.put(optArg, optArguments.get(optArg));
 		}
 		
-		this.setHelpShort(cmd.description);
+		try {
+			this.getClass().getMethod("setHelpShort", String.class).invoke(this, cmd.description);
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+		}
 		
 		cmd.helpLine = this.getUseageTemplate();
 		
@@ -73,7 +79,6 @@ public class FactionsCommand1_6UUIDWrapper extends FCommand {
 		}
 	}
 	
-	// FactionsUUID has a really dumb translation system, we ca'nt do anything with this 
-	@Override
+	// FactionsUUID has a really dumb translation system, we can't do anything with this 
 	public TL getUsageTranslation() { return null; }
 }

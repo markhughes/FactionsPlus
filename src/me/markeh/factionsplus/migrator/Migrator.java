@@ -14,7 +14,7 @@ public class Migrator {
 	public List<MigrationRunner> migrators = new ArrayList<MigrationRunner>();
 	
 	public void addMigrator(MigrationRunner migrator) {
-		this.migrators.add(null);
+		this.migrators.add(migrator);
 	}
 	
 	public void execute() {

@@ -4,13 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.zcore.util.TL;
-import com.massivecraft.massivecore.MassiveException;
-import com.massivecraft.massivecore.cmd.arg.ARString;
 
 public class FactionsCommand2_6Wrapper extends FCommand {
 	
@@ -48,13 +47,16 @@ public class FactionsCommand2_6Wrapper extends FCommand {
 		
 		// Register all the optional arguments
 		for(String optArg : optArguments.keySet()) {
-			this.optionalArgs.put(optArg, optArguments.get(optArg));
-			//this.addArg(ARString.get(), optArg, optArguments.get(optArg));
+			try { 
+				this.getClass().getMethod("addOptionalArg", String.class, String.class).invoke(this, optArg, optArguments.get(optArg));
+			} catch (Exception e) {
+				FactionsFramework.get().logError(e);
+			}
 		}
 		
 		try {
 			this.getClass().getMethod("setDesc", String.class).invoke(this, cmd.description);
-			this.getClass().getMethod("setHelp", String.class).invoke(this, cmd.description);
+			// this.getClass().getMethod("setHelp", String[].class).invoke(this, cmd.description);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			FactionsPlus.get().logError(e);
 		}

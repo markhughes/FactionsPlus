@@ -47,7 +47,7 @@ public abstract class Faction {
 	
 	// Determines if a Faction is an ally 
 	public abstract Boolean isAllyOf(Faction faction);
-	
+		
 	// Returns how much the Faction has claimed 
 	public abstract int getLandCount();
 	

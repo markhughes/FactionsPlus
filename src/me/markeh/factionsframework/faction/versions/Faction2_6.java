@@ -3,37 +3,49 @@ package me.markeh.factionsframework.faction.versions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
-import com.massivecraft.factions.RelationParticipator;
-import com.massivecraft.factions.entity.BoardColl;
-import com.massivecraft.factions.entity.FactionColl;
-import com.massivecraft.factions.entity.MPlayer;
-
+import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 
-public class Faction2X extends Faction {
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+import com.massivecraft.factions.RelationParticipator;
+import com.massivecraft.factions.entity.BoardColls;
+import com.massivecraft.factions.entity.FactionColl;
+import com.massivecraft.factions.entity.FactionColls;
+import com.massivecraft.factions.entity.MPlayer;
+import com.massivecraft.factions.entity.UPlayer;
+
+public class Faction2_6 extends Faction {
 	
 	private com.massivecraft.factions.entity.Faction faction = null;
 	
-	public Faction2X(String uuid) {
+	public Faction2_6(String uuid) {
 		super(uuid);
 		
 		if (this.faction != null) return;
 		
-		this.faction = FactionColl.get().get(uuid);
+		for (FactionColl fc : FactionColls.get().getColls()) {
+			for(com.massivecraft.factions.entity.Faction f : fc.getAll()) {
+				if (f.getId().equalsIgnoreCase(uuid)) this.faction = f;
+			}
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Player> getMembers() {
 		List<Player> members = new ArrayList<Player>();
 		
-		for (MPlayer mplayer : this.faction.getMPlayers()) {
-			members.add(mplayer.getPlayer());
+		try {
+			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
+				members.add(mplayer.getPlayer());
+			}
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
 		}
 		
 		return members;
@@ -44,14 +56,19 @@ public class Faction2X extends Faction {
 		return this.faction.getLeader().getPlayer();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Player> getOfficers() {
 		List<Player> members = new ArrayList<Player>();
 		
-		for (MPlayer mplayer : this.faction.getMPlayers()) {
-			if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
-				members.add(mplayer.getPlayer());
+		try {
+			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
+				if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
+					members.add(mplayer.getPlayer());
+				}
 			}
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
 		}
 		
 		return members;
@@ -100,17 +117,17 @@ public class Faction2X extends Faction {
 
 	@Override
 	public Boolean isEnemyOf(Faction faction) {
-		return this.faction.getRelationWish(FactionColl.get().get(faction.getID())) == com.massivecraft.factions.Rel.ENEMY;
+		return this.getRealtionshipTo(faction) == Rel.ENEMY;
 	}
 
 	@Override
 	public Boolean isAllyOf(Faction faction) {
-		return this.faction.getRelationWish(FactionColl.get().get(faction.getID())) == com.massivecraft.factions.Rel.ALLY;
+		return this.getRealtionshipTo(faction) == Rel.ALLY;
 	}
 
 	@Override
 	public int getLandCount() {
-		return BoardColl.get().getCount(this.faction);
+		return BoardColls.get().getChunks(this.faction).size();
 	}
 
 	@Override
@@ -124,7 +141,7 @@ public class Faction2X extends Faction {
 		}
 		
 		if (compare instanceof Faction) {
-			compare = FactionColl.get().get(((Faction) compare).getID());
+			compare = FactionColls.get().get2(compare);
 		}
 		
 		com.massivecraft.factions.Rel rel = this.faction.getRelationTo((RelationParticipator) compare);

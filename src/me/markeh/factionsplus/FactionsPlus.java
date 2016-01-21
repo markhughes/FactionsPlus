@@ -96,6 +96,19 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) {
 			FactionsUUIDTools.get().removeFactionsUUIDWarpCommands();
 		}
+		
+		// Ensure MassiveCore is enabled 
+		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_X || FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6) {
+			if ( ! getServer().getPluginManager().isPluginEnabled("MCore") &&  ! getServer().getPluginManager().isPluginEnabled("MassiveCore")) {
+				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** MassiveCore is not enabled ******************** ");
+				log("Factions still requires a MassiveCore/MCore plugin to be present!");
+				log("You can download it from either dev.bukkit.org or Spigot resources:");
+				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "https://www.spigotmc.org/resources/massivecore.1901/");
+				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/mcore/");
+				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************************************************************** ");
+				return;
+			}
+		}
 				
 		// Add our integrations 
 		IntegrationManager.get().addIntegrations(

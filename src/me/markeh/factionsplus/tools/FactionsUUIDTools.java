@@ -1,6 +1,10 @@
 package me.markeh.factionsplus.tools;
 
+import me.markeh.factionsframework.FactionsFramework;
+
 import com.massivecraft.factions.P;
+import com.massivecraft.factions.cmd.FCommand;
+import com.massivecraft.massivecore.cmd.MassiveCommand;
 
 public class FactionsUUIDTools {
 	private static FactionsUUIDTools i = null;
@@ -12,30 +16,57 @@ public class FactionsUUIDTools {
 	
 	// Removes FactionsUUID warp commands 
 	public void removeFactionsUUIDWarpCommands() {
-		if(P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdFWarp)) {
-			P.p.cmdBase.subCommands.remove(P.p.cmdBase.cmdFWarp);
+		if( this.containsCommand(P.p.cmdBase.cmdFWarp)) {
+			this.removeCommand(P.p.cmdBase.cmdFWarp);
 		}
 		
-		if(P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdDelFWarp)) {
-			P.p.cmdBase.subCommands.remove(P.p.cmdBase.cmdDelFWarp);
+		if( this.containsCommand(P.p.cmdBase.cmdDelFWarp)) {
+			this.removeCommand(P.p.cmdBase.cmdDelFWarp);
 		}
 		
-		if(P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdSetFWarp)) {
-			P.p.cmdBase.subCommands.remove(P.p.cmdBase.cmdSetFWarp);
+		if( this.containsCommand(P.p.cmdBase.cmdSetFWarp)) {
+			this.removeCommand(P.p.cmdBase.cmdSetFWarp);
 		}
 	}
 
 	public void addFactionsUUIDWarpCommands() {
-		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdFWarp)) {
-			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdFWarp);
+		if ( ! this.containsCommand(P.p.cmdBase.cmdFWarp)) {
+			this.addCommand(P.p.cmdBase.cmdFWarp);
 		}
 		
-		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdDelFWarp)) {
-			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdDelFWarp);
+		if ( ! this.containsCommand(P.p.cmdBase.cmdDelFWarp)) {
+			this.addCommand(P.p.cmdBase.cmdDelFWarp);
 		}
 		
-		if ( ! P.p.cmdBase.subCommands.contains(P.p.cmdBase.cmdSetFWarp)) {
-			P.p.cmdBase.subCommands.add(P.p.cmdBase.cmdSetFWarp);
+		if ( ! this.containsCommand(P.p.cmdBase.cmdSetFWarp)) {
+			this.addCommand(P.p.cmdBase.cmdSetFWarp);
 		}	
+	}
+	
+	public boolean containsCommand(FCommand fcommand) {
+		try {
+			Boolean result = (Boolean) P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("contains", MassiveCommand.class).invoke(this, fcommand);
+			return result;
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+			
+			return false;
+		}
+	}
+	
+	public void removeCommand(FCommand fcommand) {
+		try {
+			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("remove", MassiveCommand.class).invoke(this, fcommand);
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+		}
+	}
+	
+	public void addCommand(FCommand fcommand) {
+		try {
+			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("add", MassiveCommand.class).invoke(this, fcommand);
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+		}
 	}
 }

@@ -5,14 +5,14 @@ import me.markeh.factionsplus.FactionsPlus;
 import com.massivecraft.massivecore.store.Coll;
 import com.massivecraft.massivecore.store.MStore;
 
-public class FactionDataColl extends Coll<FactionData> {
+public class OldFactionDataColl extends Coll<OldFactionData> {
 	
 	// -------------------------------------------- //
 	// CONSTRUCT
 	// -------------------------------------------- //
 
-	public FactionDataColl(String name) {
-		super(name, FactionData.class, MStore.getDb(), FactionsPlus.get());
+	public OldFactionDataColl(String name) {
+		super(name, OldFactionData.class, MStore.getDb(), FactionsPlus.get());
 	}
 
 	// -------------------------------------------- //
@@ -25,8 +25,8 @@ public class FactionDataColl extends Coll<FactionData> {
 	}
 
 	@Override
-	public FactionData get(Object oid) {
-		FactionData ret = super.get(oid);
+	public OldFactionData get(Object oid) {
+		OldFactionData ret = super.get(oid);
 
 		return ret;
 	}

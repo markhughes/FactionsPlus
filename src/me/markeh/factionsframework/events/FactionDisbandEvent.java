@@ -36,7 +36,7 @@ public class FactionDisbandEvent extends Event implements Cancellable {
 	// Gets the Faction that has just been created 
 	public String getFactionID() { return this.factionID; }
 	public FPlayer getFPlayer() { return this.player; }
-	public Faction getFaction() { return Factions.get().getFactionByID(this.factionID); }
+	public Faction getFaction() { return Factions.get().getFactionById(this.factionID); }
 	
 	// Cancel Stuff...	
 	public boolean isCancelled() { return this.cancelled; }
