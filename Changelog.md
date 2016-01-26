@@ -1,3 +1,7 @@
+# FactionsPlus v2.0.0-beta5
+
+* Added notice for Factions 2.6 Patches plugin requirement 
+
 # FactionsPlus v2.0.0-beta4
 Welcome to the new FactionsPlus! The entire plugin has been coded and supports both Factions 2.0 and FactionsUUID 1.6!
 

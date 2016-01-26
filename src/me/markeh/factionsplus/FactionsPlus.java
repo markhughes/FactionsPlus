@@ -84,6 +84,18 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			return;
 		}
 		
+		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6) {
+			if ( ! getServer().getPluginManager().isPluginEnabled("Factions26Patches")) {
+				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "************** Factions 2.6 Patches is not enabled ************** ");
+				log("Factions Version <= 2.6.0 requires the plugin Factions 2.6 Patches");
+				log("You can download it from dev.bukkit.org:");
+				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/factions26patches");
+				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
+				return;
+			}
+
+		}
+		
 		// Ensure the FactionsFramework is setup 
 		FactionsFramework.get(this).ensureSetup();
 		
