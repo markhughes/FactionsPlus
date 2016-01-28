@@ -45,7 +45,6 @@ import me.markeh.factionsplus.integration.prism.IntegrationPrism;
 import me.markeh.factionsplus.integration.showcasestandalone.IntegrationShowCaseStandalone;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
-import me.markeh.factionsplus.tools.*;
 import me.markeh.factionsplus.util.FactionsUUIDTools;
 import me.markeh.factionsplus.util.Metrics;
 import me.markeh.factionsplus.util.PatreonBadge;
