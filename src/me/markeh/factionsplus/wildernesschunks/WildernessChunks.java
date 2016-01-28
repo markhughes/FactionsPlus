@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.markeh.factionsplus.FactionsPlus;
+import me.markeh.factionsplus.conf.Config;
+import me.markeh.factionsplus.wildernesschunks.integrations.HawkEyeRegegenerator;
+import me.markeh.factionsplus.wildernesschunks.integrations.Regenerator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -43,11 +47,19 @@ public class WildernessChunks {
 	}
 	
 	public void startCheck() {
+		this.loadLogCache();
+		
+		FactionsPlus.get().addListener(WildernessChunksEvents.get());
+		
 		this.task = new OutdatedChunkCheck().runTaskTimerAsynchronously(FactionsPlus.get(), 10L, 20L);
 	}
 	
 	public void stopCheck() {
+		FactionsPlus.get().removeListener(WildernessChunksEvents.get());
+		
 		this.task.cancel();
+		
+		this.saveLogCache();
 	}
 	
 	public HashMap<UUID, HashMap<Integer, HashMap<Integer, Long>>> getChunkLog() {
@@ -55,6 +67,28 @@ public class WildernessChunks {
 	}
 
 	public void callRegen(Chunk chunkAt) {
-		// TODO call regen 
+		if (Config.get().wildernessregenUseGriefManagementPlugin && this.griefManagementPluginAvailable() != null) {
+			
+		} else {
+			chunkAt.getWorld().regenerateChunk(chunkAt.getX(), chunkAt.getZ());
+		}
+	}
+	
+	private Regenerator regeneratorInstance = null;
+	
+	public Regenerator griefManagementPluginAvailable() {
+		if (regeneratorInstance == null) {
+			if (Bukkit.getPluginManager().isPluginEnabled("HawkEye")) regeneratorInstance = new HawkEyeRegegenerator();
+		}
+		
+		return regeneratorInstance;
+	}
+	
+	private void loadLogCache() {
+		
+	}
+	
+	private void saveLogCache() {
+		
 	}
 }

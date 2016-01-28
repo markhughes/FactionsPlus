@@ -17,9 +17,12 @@ public class OutdatedChunkCheck extends BukkitRunnable {
 				for (Integer z : WildernessChunks.get().getChunkLog().get(world).get(x).keySet()) {
 					Long timestamp = WildernessChunks.get().getChunkLog().get(world).get(x).get(z);
 					
-					if (new Date().getTime()- timestamp > Config.get().wildernessregenTimer) {
-						WildernessChunks.get().callRegen(Bukkit.getWorld(world).getChunkAt(x, z));
-					}
+					if (new Date().getTime()- timestamp <= Config.get().wildernessregenTimer) continue;
+					
+					WildernessChunks.get().getChunkLog().get(world).get(x).remove(z);
+						
+					WildernessChunks.get().callRegen(Bukkit.getWorld(world).getChunkAt(x, z));
+					
 				}
 			}
 		}
