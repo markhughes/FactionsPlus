@@ -1,6 +1,8 @@
 package me.markeh.factionsplus.commands;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -15,8 +17,8 @@ public class CmdDelRule extends FactionsCommand {
 		
 		this.description = Texts.cmdAddRule_description;
 		
-		this.mustHaveFaction = true;
-		
+		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqHasFaction.get());
 	}
 	
 	// ----------------------------------------
@@ -24,12 +26,7 @@ public class CmdDelRule extends FactionsCommand {
 	// ----------------------------------------
 	
 	@Override
-	public void run() {
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
-		}
-		
+	public void run() {		
 		if ( ! Config.get().enableRules) {
 			msg(Texts.rules_notEnabled);
 			return;

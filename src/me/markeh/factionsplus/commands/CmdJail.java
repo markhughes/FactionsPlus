@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
@@ -25,7 +27,8 @@ public class CmdJail extends FactionsCommand {
 		
 		this.description = Texts.cmdJail_description;
 		
-		this.mustHaveFaction = true;
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
 	}
 	
 	// ----------------------------------------
@@ -34,11 +37,6 @@ public class CmdJail extends FactionsCommand {
 	
 	@Override
 	public void run() {
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
-		}
-		
 		if ( ! Config.get().enableJails) {
 			msg(Texts.jails_notEnabled);
 			return;

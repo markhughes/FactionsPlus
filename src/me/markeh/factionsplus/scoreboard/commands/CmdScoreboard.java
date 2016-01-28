@@ -1,6 +1,8 @@
 package me.markeh.factionsplus.scoreboard.commands;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
@@ -16,9 +18,10 @@ public class CmdScoreboard extends FactionsCommand {
 		
 		this.description = Texts.cmdScoreboard_description;
 		
-		this.mustHaveFaction = true;
-		
 		this.errorOnTooManyArgs = false;
+		
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
 	}
 	
 	@Override

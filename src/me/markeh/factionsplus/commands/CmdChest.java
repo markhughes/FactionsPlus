@@ -8,10 +8,11 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
-import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.conf.types.TLoc;
 
 public class CmdChest  extends FactionsCommand {
@@ -28,7 +29,8 @@ public class CmdChest  extends FactionsCommand {
 		
 		this.description = "Set and use a chest for your faction";
 		
-		this.mustHaveFaction = true;
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
 	}
 	
 	// ----------------------------------------
@@ -37,11 +39,6 @@ public class CmdChest  extends FactionsCommand {
 	
 	@Override
 	public void run() {
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
-		}
-		
 		FactionData fdata = FactionData.get(faction.getID());
 				
 		if (this.getArg(0) != null) {

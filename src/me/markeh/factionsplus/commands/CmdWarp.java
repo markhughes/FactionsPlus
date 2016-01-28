@@ -4,12 +4,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
-import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.util.Utils;
 
 public class CmdWarp extends FactionsCommand {
@@ -23,16 +24,13 @@ public class CmdWarp extends FactionsCommand {
 		
 		this.requiredPermissions.add(Perm.get("factionsplus.warp", "You don't have permission to do that."));
 		
-		this.mustHaveFaction = true;
-		
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
+
 	}
 	
 	@Override
 	public void run() {
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
-		}
 		
 		final FactionData fdata = FactionData.get(this.faction.getID());
 		

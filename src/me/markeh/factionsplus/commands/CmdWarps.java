@@ -3,9 +3,10 @@ package me.markeh.factionsplus.commands;
 import org.bukkit.ChatColor;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
-import me.markeh.factionsplus.conf.Texts;
 import me.markeh.factionsplus.conf.types.TLoc;
 import me.markeh.factionsplus.conf.types.TMap;
 
@@ -16,17 +17,12 @@ public class CmdWarps extends FactionsCommand {
 				
 		this.requiredPermissions.add(Perm.get("factionsplus.warp", "You don't have permission to do that."));
 		
-		this.mustHaveFaction = true;
-		
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
 	}
 
 	@Override
 	public void run() {
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
-		}
-		
 		FactionData fdata = FactionData.get(this.faction);
 		
 		if (fdata.warpLocations == null) fdata.warpLocations = new TMap<String, TLoc>();

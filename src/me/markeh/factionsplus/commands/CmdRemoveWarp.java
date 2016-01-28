@@ -1,6 +1,8 @@
 package me.markeh.factionsplus.commands;
 
 import me.markeh.factionsframework.command.FactionsCommand;
+import me.markeh.factionsframework.command.requirements.ReqHasFaction;
+import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -16,7 +18,8 @@ public class CmdRemoveWarp extends FactionsCommand {
 		
 		this.requiredPermissions.add(Perm.get("factionsplus.managewarps", "You don't have permission to remove warps."));
 		
-		this.mustHaveFaction = true;
+		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsPlayer.get());
 		
 	}
 	
@@ -25,11 +28,6 @@ public class CmdRemoveWarp extends FactionsCommand {
 		if ( ! Config.get().enableWarps) {
 			msg(Texts.warps_notEnabled);
 			return;
-		}
-		
-		if ( ! this.isPlayer() ) {
-			msg(Texts.playerOnlyCommand);
-			return; 
 		}
 		
 		if ( ! this.fplayer.isLeader() && !this.fplayer.isOfficer()) {
