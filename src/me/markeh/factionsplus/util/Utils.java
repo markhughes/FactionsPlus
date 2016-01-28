@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.Chunk;
+import org.bukkit.util.Vector;
+
 public class Utils {
 	private static Utils instance;
 	public static Utils get() {
@@ -63,5 +66,19 @@ public class Utils {
 		);
 		
 		return sortedEntries;
+	}
+	
+	public Vector getChunkMinVector(Chunk chunk) {
+		int minX = chunk.getX() * 16;
+		int minZ = chunk.getZ() * 16;
+		return new Vector(minX, 0, minZ);
+	}
+	
+	public Vector getChunkMaxVector(Chunk chunk) {
+		int minX = chunk.getX() * 16;
+		int minZ = chunk.getZ() * 16;
+		int maxX = minX + 15;
+		int maxZ = minZ + 15;
+		return new Vector(maxX, chunk.getWorld().getMaxHeight(), maxZ);
 	}
 }
