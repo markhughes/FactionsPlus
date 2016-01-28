@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+import me.markeh.factionsframework.command.requirements.Requirement;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
@@ -43,6 +44,7 @@ public abstract class FactionsCommand {
 	// Description
 	public String description;
 	
+	@Deprecated
 	public Boolean mustHaveFaction = false;
 	
 	public Boolean errorOnTooManyArgs = true;
@@ -65,8 +67,19 @@ public abstract class FactionsCommand {
 	public String helpLine = "";
 	
 	// ------------------------------
+	//  Private Fields
+	// ------------------------------
+	
+	private List<Requirement> requirements = new ArrayList<Requirement>();
+	
+	// ------------------------------
 	//  Methods
 	// ------------------------------
+	
+	
+	public final void addRequirement(Requirement requirement) {
+		requirements.add(requirement);
+	}
 	
 	public final void reset() {
 		this.player = null;
@@ -87,6 +100,14 @@ public abstract class FactionsCommand {
 			
 			for(Perm perm : this.requiredPermissions) {
 				if(!perm.has(this.player, true)) this.canRun = false;
+			}
+		}
+		
+		// Check requirements 
+		for (Requirement requirement : this.requirements) {
+			if ( ! requirement.isMet(this)) {
+				this.canRun = false;
+				return;
 			}
 		}
 		
@@ -129,7 +150,7 @@ public abstract class FactionsCommand {
 		return this.fplayer != null;
 	}
 	
-	public String colourise(String msg) {
+	public final String colourise(String msg) {
 		for (ChatColor colour : ChatColor.values()) msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
 		
 		return msg;
