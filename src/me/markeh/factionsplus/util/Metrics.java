@@ -1,4 +1,4 @@
-package me.markeh.factionsplus.tools;
+package me.markeh.factionsplus.util;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -776,7 +776,7 @@ public class Metrics {
 		int warps = 0;	
 		for(FactionData fdata : FactionData.getAll()) warps = warps + fdata.warpLocations.getKeys().size();
 	
-		if(warps > 0) { 
+		if (warps > 0) { 
 			this.createGraph("Total Warps").addPlotter(new Metrics.Plotter(String.valueOf(warps)) {
 				@Override public int getValue() { return 1; }
 			});

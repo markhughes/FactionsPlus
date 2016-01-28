@@ -1,4 +1,4 @@
-package me.markeh.factionsplus.tools;
+package me.markeh.factionsplus.util;
 
 import me.markeh.factionsframework.FactionsFramework;
 

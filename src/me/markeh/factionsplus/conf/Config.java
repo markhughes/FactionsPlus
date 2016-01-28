@@ -78,6 +78,9 @@ public class Config extends Configuration<Config> {
 	@Option({"wildernessregen", "timer", "(unstable) After how many milliseconds of inactivity should they be regenerated?"}) 
 	public Long wildernessregenTimer = 43200000L;
 		
+	@Option({"wildernessregen", "useGriefManagementPlugin", "(unstable) If available, use a grief management plugin to roll back."}) 
+	public Boolean wildernessregenUseGriefManagementPlugin = true;
+
 	// ---- Scoreboard ---- //
 	@Option({"scoreboard", "enabled", "Enable the scoreboard?"}) 
 	public Boolean scoreboard_enabled = false;
