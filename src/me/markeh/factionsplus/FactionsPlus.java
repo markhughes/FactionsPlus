@@ -37,13 +37,17 @@ import me.markeh.factionsplus.integration.cannons.IntegrationCannons;
 import me.markeh.factionsplus.integration.chestshop.IntegrationChestShop;
 import me.markeh.factionsplus.integration.deadbolt.IntegrationDeadbolt;
 import me.markeh.factionsplus.integration.disguisecraft.IntegrationDisguiseCraft;
+import me.markeh.factionsplus.integration.hawkeye.IntegrationHawkEye;
 import me.markeh.factionsplus.integration.idisguise.IntegrationIDisguise;
 import me.markeh.factionsplus.integration.libsdisguises.IntegrationLibsDisguises;
 import me.markeh.factionsplus.integration.lockette.IntegrationLockette;
+import me.markeh.factionsplus.integration.prism.IntegrationPrism;
 import me.markeh.factionsplus.integration.showcasestandalone.IntegrationShowCaseStandalone;
 import me.markeh.factionsplus.listeners.*;
 import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
 import me.markeh.factionsplus.tools.*;
+import me.markeh.factionsplus.util.FactionsUUIDTools;
+import me.markeh.factionsplus.util.Metrics;
 import me.markeh.factionsplus.util.PatreonBadge;
 
 public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
@@ -93,7 +97,6 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
 				return;
 			}
-
 		}
 		
 		// Ensure the FactionsFramework is setup 
@@ -131,7 +134,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			IntegrationCannons.get(),
 			IntegrationLockette.get(),
 			IntegrationDeadbolt.get(),
-			IntegrationShowCaseStandalone.get()
+			IntegrationShowCaseStandalone.get(),
+			IntegrationHawkEye.get(),
+			IntegrationPrism.get()
 		);
 				
 		// Notify console we're ready
