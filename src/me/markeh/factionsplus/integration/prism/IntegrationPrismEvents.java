@@ -26,7 +26,8 @@ public class IntegrationPrismEvents  extends IntegrationEvents implements Listen
 			Prism.getActionRegistry().registerCustomAction(FactionsPlus.get(), new ActionType("factions-p-join", false, false, false, "FactionJoin", "join faction"));
 
 		} catch (InvalidActionException e) {
-			FactionsPlus.get().logError(e);
+			FactionsPlus.get().log("<red>Warning: Please add 'FactionsPlus' to your Prism config.yml file");
+			FactionsPlus.get().log("<red>         in the prism.tracking.api.allowed-plugins list.");
 		}
 	}
 	
