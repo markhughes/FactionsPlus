@@ -1,6 +1,8 @@
-# FactionsPlus v2.0.0-beta5
+# FactionsPlus v2.0.0
 
 * Added notice for Factions 2.6 Patches plugin requirement 
+* Wilderness chunk regeneration is in place 
+* HawkEye log integration
 
 # FactionsPlus v2.0.0-beta4
 Welcome to the new FactionsPlus! The entire plugin has been coded and supports both Factions 2.0 and FactionsUUID 1.6!
