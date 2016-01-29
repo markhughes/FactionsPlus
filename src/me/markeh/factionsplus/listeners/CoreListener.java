@@ -76,6 +76,7 @@ public class CoreListener implements Listener {
 	public void onDisbandRemoveFromScoreboard(FactionDisbandEvent event) {
 		if ( ! FactionsPlusScoreboard.get().isEnabled()) return;
 		for (SBMenu<?> menu : FactionsPlusScoreboard.get().getMenus()) {
+			if (menu.getObjective().getScore(event.getFaction().getName()) == null) continue;
 			menu.getObjective().getScore(event.getFaction().getName()).setScore(-1);
 		}
 	}
