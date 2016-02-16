@@ -5,6 +5,7 @@ import me.markeh.factionsframework.factionsmanager.FactionsManager;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Loc {
@@ -12,6 +13,7 @@ public class Loc {
 	public static Loc from(Block block) { return new Loc(block.getLocation()); }
 	public static Loc from(Player player) { return new Loc(player.getLocation()); }
 	public static Loc from(FPlayer fplayer) { return fplayer.getLocation(); }
+	public static Loc from(CommandSender sender) { return Loc.from((Player) sender); }
 	
 	// constructor
 	protected Loc(Location loc) {
