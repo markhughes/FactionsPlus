@@ -9,6 +9,7 @@ import me.markeh.factionsframework.events.LandChangeEvent.ChangeType;
 import me.markeh.factionsframework.objs.FPlayer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -21,7 +22,7 @@ public class FFListenerFactions2_X implements Listener {
 	public void onFactionCreate(com.massivecraft.factions.event.EventFactionsCreate factionsEvent) {
 		FactionCreateEvent event = new FactionCreateEvent(
 			factionsEvent.getFactionName(),
-			FPlayer.get(factionsEvent.getMSender().getPlayer())
+			FPlayer.get(factionsEvent.getSender())
 		); 
 			
 		Bukkit.getServer().getPluginManager().callEvent(event);
@@ -44,7 +45,7 @@ public class FFListenerFactions2_X implements Listener {
 			LandChangeEvent event = new LandChangeEvent(
 				factionsEvent.getOldChunkFaction().get(key).getId(),
 				factionsEvent.getNewFaction().getId(),
-				factionsEvent.getMSender().getPlayer(),
+				(Player) factionsEvent.getSender(),
 				key.asBukkitChunk(),
 				changeType
 			);
@@ -82,7 +83,7 @@ public class FFListenerFactions2_X implements Listener {
 	public void onFactionDisband(com.massivecraft.factions.event.EventFactionsDisband factionsEvent) {
 		FactionDisbandEvent event = new FactionDisbandEvent(
 			factionsEvent.getFactionId(),
-			FPlayer.get(factionsEvent.getMSender().getPlayer())
+			FPlayer.get(factionsEvent.getSender())
 		);
 		
 		Bukkit.getServer().getPluginManager().callEvent(event);
@@ -96,7 +97,7 @@ public class FFListenerFactions2_X implements Listener {
 	public void onFactionRename(com.massivecraft.factions.event.EventFactionsNameChange factionsEvent) {
 		FactionRenameEvent event = new FactionRenameEvent(
 				factionsEvent.getFaction().getId(),
-				FPlayer.get(factionsEvent.getMSender().getPlayer()),
+				FPlayer.get(factionsEvent.getSender()),
 				factionsEvent.getFaction().getName(),
 				factionsEvent.getNewName()
 			);
