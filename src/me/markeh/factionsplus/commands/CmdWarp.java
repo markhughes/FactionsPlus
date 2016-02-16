@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.FactionsPlus;
@@ -22,10 +23,9 @@ public class CmdWarp extends FactionsCommand {
 		this.requiredArguments.add("name");
 		this.optionalArguments.put("password", "none");
 		
-		this.requiredPermissions.add(Perm.get("factionsplus.warp", "You don't have permission to do that."));
-		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.warp", "You don't have permission to do that.")));
 
 	}
 	
@@ -75,15 +75,19 @@ public class CmdWarp extends FactionsCommand {
 		}
 		
 		
-		if (Config.get().warpsDistanceCheckForEnemies > 0) {			
+		if (Config.get().warpsDistanceCheckForEnemies > 0) {	
 			double radiusSquared = Config.get().warpsDistanceCheckForEnemies*Config.get().warpsDistanceCheckForEnemies;
 			
-			
 			for (Player otherPlayer : FactionsPlus.get().getServer().getOnlinePlayers()) {
-				if (player.getWorld() != otherPlayer.getWorld()) continue;
-					
-				if (otherPlayer.getLocation().distanceSquared(player.getLocation()) <= radiusSquared) {
-					
+				
+				// Check if we can override this option
+				if (Config.get().warpsDistanceCheckForEnemiesTerritoryOverride && fplayer.getLocation().getFactionHere() == fplayer.getFaction()) break;
+				
+				// Ensure the players are in the same world 
+				if (this.fplayer.getWorld() != otherPlayer.getWorld()) continue;
+				
+				// Check how close they are 
+				if (otherPlayer.getLocation().distanceSquared(this.fplayer.getLocation().asBukkitLocation()) <= radiusSquared) {
 					FPlayer fOtherPlayer = FPlayer.get(otherPlayer);
 					if (fOtherPlayer.getFaction().isEnemyOf(faction)) {
 						msg("<red>There is an enemy nearby, you can't warp right now.");
@@ -115,7 +119,7 @@ public class CmdWarp extends FactionsCommand {
 				}
 			);
 		} else {
-			this.player.teleport(fdata.warpLocations.get(warpName).getBukkitLocation());
+			this.fplayer.getPlayer().teleport(fdata.warpLocations.get(warpName).getBukkitLocation());
 			
 			// Use getArg here to show original input
 			msg("<gold>Taking you to <aqua>%s".replace("%s", getArg(0))); 

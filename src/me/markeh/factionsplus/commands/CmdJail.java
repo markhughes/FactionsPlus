@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
@@ -22,13 +23,13 @@ public class CmdJail extends FactionsCommand {
 	public CmdJail() {
 		this.aliases.add("jail");
 		this.requiredArguments.add("player");
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.jail", Texts.cmdJail_noPermission));
-		
+				
 		this.description = Texts.cmdJail_description;
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdJail_noPermission)));
+
 	}
 	
 	// ----------------------------------------
@@ -42,12 +43,12 @@ public class CmdJail extends FactionsCommand {
 			return;
 		}
 
-		if ( ! fplayer.isLeader() && !fplayer.isOfficer()) {
+		if ( ! getFPlayer().isLeader() && !getFPlayer().isOfficer()) {
 			msg(Texts.cmdJail_badRank);
 			return;
 		}
 		
-		FactionData fdata = FactionData.get(faction.getID());
+		FactionData fdata = FactionData.get(getFaction());
 		
 		if (fdata.jailLoc == null) {
 			msg(Texts.cmdJail_notSet);

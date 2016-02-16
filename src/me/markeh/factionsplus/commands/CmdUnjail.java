@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -22,12 +23,11 @@ public class CmdUnjail extends FactionsCommand {
 		this.requiredArguments.add("player");
 		
 		this.description = "Release a player from jail";
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.jail", Texts.cmdUnjail_noPermission));
-		
+				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdUnjail_noPermission)));
+
 	}
 
 	// ----------------------------------------

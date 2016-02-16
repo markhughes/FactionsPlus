@@ -3,6 +3,7 @@ package me.markeh.factionsplus.commands;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -15,12 +16,11 @@ public class CmdRemoveWarp extends FactionsCommand {
 		this.requiredArguments.add("name");
 		
 		this.description = "Remove a faction warp";
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.managewarps", "You don't have permission to remove warps."));
-		
+				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.managewarps", "You don't have permission to remove warps.")));
+
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class CmdRemoveWarp extends FactionsCommand {
 		msg("<green>Warp removed!");
 		
 		if (Config.get().warpsAnnounce) {
-			this.faction.msg("<green><?> removed the warp <gold><?>", this.player.getName(), warpName);
+			this.faction.msg("<green><?> removed the warp <gold><?>", this.sender.getName(), warpName);
 		}
 	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -23,12 +24,10 @@ public class CmdSetJail extends FactionsCommand {
 		this.aliases.add("setjail");
 		
 		this.description = "Set your faction jail location";
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.jail", Texts.cmdSetJail_noPermission));
-		
+				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdSetJail_noPermission)));
 	}
 	
 	// ----------------------------------------
@@ -47,14 +46,14 @@ public class CmdSetJail extends FactionsCommand {
 			return;
 		}
 		
-		if (factions.getFactionAt(player.getLocation()) != faction) {
+		if (factions.getFactionAt(this.fplayer.getPlayer().getLocation()) != faction) {
 			msg(Texts.cmdSetJail_notInLand);
 			return;
 		}
 		
 		FactionData fdata = FactionData.get(faction.getID());
 		
-		fdata.jailLoc = new TLoc(player.getLocation());
+		fdata.jailLoc = new TLoc(this.fplayer.getPlayer().getLocation());
 		
 		for(String pid : fdata.jailedPlayers) {
 			if(Bukkit.getPlayer(UUID.fromString(pid)).isOnline()) {

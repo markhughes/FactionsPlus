@@ -3,6 +3,7 @@ package me.markeh.factionsplus.commands;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.conf.FactionData;
@@ -18,11 +19,11 @@ public class CmdSetWarp extends FactionsCommand {
 		
 		this.requiredArguments.add("warpname");
 		this.optionalArguments.put("password", "none");
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.setwarp", "You don't have permission to set warps!"));
-		
+				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.setwarp", "You don't have permission to set warps!")));
+
 	}
 	
 	@Override
@@ -55,7 +56,7 @@ public class CmdSetWarp extends FactionsCommand {
 			return;
 		}
 		
-		TLoc warpLocation =  new TLoc(this.player.getLocation());	
+		TLoc warpLocation =  new TLoc(this.fplayer.getLocation());	
 		
 		if (this.factions.getFactionAt(warpLocation.getBukkitLocation()).getID() != this.faction.getID()) {
 			msg("<gold>You can only set warps in your faction land.");
@@ -68,7 +69,7 @@ public class CmdSetWarp extends FactionsCommand {
 		msg("<green>Warp set!");
 		
 		if (Config.get().warpsAnnounce) {
-			this.faction.msg("<green><?> set the warp <gold><?>", this.player.getName(), warpName);
+			this.faction.msg("<green><?> set the warp <gold><?>", this.fplayer.getPlayer().getName(), warpName);
 		}
 	}
 

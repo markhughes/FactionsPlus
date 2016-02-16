@@ -10,6 +10,7 @@ import org.bukkit.block.DoubleChest;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
@@ -24,13 +25,13 @@ public class CmdChest  extends FactionsCommand {
 	public CmdChest() {
 		this.aliases.add("chest");
 		this.optionalArguments.put("set", "no");
-		
-		this.requiredPermissions.add(Perm.get("factionsplus.chests", "You don't have permission to uses faction chests."));
-		
+				
 		this.description = "Set and use a chest for your faction";
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.chests", "You don't have permission to uses faction chests.")));
+
 	}
 	
 	// ----------------------------------------
@@ -39,16 +40,16 @@ public class CmdChest  extends FactionsCommand {
 	
 	@Override
 	public void run() {
-		FactionData fdata = FactionData.get(faction.getID());
+		FactionData fdata = FactionData.get(getFaction().getID());
 				
 		if (this.getArg(0) != null) {
 			if (this.getArg(0).equalsIgnoreCase("set")) {
-				if ( ! fplayer.isLeader() && !fplayer.isOfficer()) {
+				if ( ! getFPlayer().isLeader() && ! getFPlayer().isOfficer()) {
 					msg("Your rank is not high enough to set the faction chest");
 					return;
 				}
 				
-				Block targetBlock = this.player.getTargetBlock((Set<Material>) null, 50);
+				Block targetBlock = getPlayer().getTargetBlock((Set<Material>) null, 50);
 				
 				if (targetBlock.getType() == Material.CHEST) {
 					fdata.factionChest = new TLoc(targetBlock.getLocation());
@@ -80,10 +81,10 @@ public class CmdChest  extends FactionsCommand {
 		
 		if (fdata.factionChest.getBlock() instanceof DoubleChest) {
 			DoubleChest chest = (DoubleChest) fdata.factionChest.getBlock().getState();
-			player.openInventory(chest.getInventory());
+			getPlayer().openInventory(chest.getInventory());
 		} else {
 			Chest chest = (Chest) fdata.factionChest.getBlock().getState();
-			player.openInventory(chest.getInventory());
+			getPlayer().openInventory(chest.getInventory());
 		}
 		
 	}

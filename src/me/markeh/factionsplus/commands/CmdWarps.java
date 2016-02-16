@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
+import me.markeh.factionsframework.command.requirements.ReqPermission;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.FactionData;
 import me.markeh.factionsplus.conf.types.TLoc;
@@ -14,11 +15,11 @@ public class CmdWarps extends FactionsCommand {
 	public CmdWarps() {
 		this.aliases.add("warps");
 		this.description = "List available warps";
-				
-		this.requiredPermissions.add(Perm.get("factionsplus.warp", "You don't have permission to do that."));
-		
+						
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.warp", "You don't have permission to do that.")));
+
 	}
 
 	@Override
