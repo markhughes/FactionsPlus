@@ -7,6 +7,7 @@ import me.markeh.factionsframework.objs.Loc;
 
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 // Use FactionsManager.get().fetch() to get this
@@ -31,6 +32,14 @@ public abstract class Factions {
 		
 	// Get Faction for a player
 	public abstract Faction getFactionFor(Player player);
+	
+	// Get Faction for a sender
+	public Faction getFactionFor(CommandSender sender) {
+		if (sender instanceof Player) return this.getFactionFor((Player) sender);
+		
+		// Must be a console sender - assume wilderness 
+		return this.getFactionById(this.getWildernessId());
+	}
 	
 	// Get Wilderness ID
 	public abstract String getWildernessId();
