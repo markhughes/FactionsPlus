@@ -13,9 +13,13 @@ import me.markeh.factionsframework.factionsmanager.FactionsManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class FPlayer {
+	private static FPlayer consoleFPlayer;
+	
 	private static HashMap<UUID, FPlayer> fplayerMap = new HashMap<UUID, FPlayer>();
 	public static FPlayer get(Player player) {
 		if ( ! fplayerMap.containsKey(player.getUniqueId())) {
@@ -25,28 +29,47 @@ public class FPlayer {
 		return fplayerMap.get(player.getUniqueId());
 	}
 	
+	public static FPlayer get(CommandSender sender) {
+		if (sender instanceof Player) {
+			return get((Player) sender);
+		} else {
+			if (consoleFPlayer == null) consoleFPlayer = new FPlayer(null, true);
+			return consoleFPlayer;
+		}
+	}
+	
 	public static FPlayer get(UUID playerUUID) {
 		if (fplayerMap.containsKey(playerUUID)) return fplayerMap.get(playerUUID);
 		
 		return get(Bukkit.getPlayer(playerUUID));
 	}
-
 	
-	private Factions factions;
+	private Factions factions = FactionsManager.get().fetch();
 	private Player player;
+	private Boolean isConsole;
+	public FPlayer(Player player, Boolean isConsole) {
+		if (! isConsole) {
+			this.player = player;
+		} else {
+			this.isConsole = true;
+		}
+	}
 	
 	public FPlayer(Player player) {
-		this.factions = FactionsManager.get().fetch();
 		this.player = player;
 	}
 	
 	public Player getPlayer() { return this.player; }
-	public Faction getFaction() { return factions.getFactionFor(this.player); }
+	public Faction getFaction() {
+		if (this.isConsole) return factions.getFactionById(factions.getWildernessId());
+		
+		return factions.getFactionFor(this.player);
+	}
 	
 	public Boolean hasFaction() {
 		if (this.getFaction() == null) return false;
 		if (this.getFaction().getID() == "none") return false;
-		if (this.getFaction().getID() == FactionsManager.get().fetch().getWildernessId()) return false;
+		if (this.getFaction().isWilderness()) return false;
 		
 		return true;
 	}
@@ -151,5 +174,9 @@ public class FPlayer {
 	
 	public Loc getLocation() {
 		return new Loc(this.player.getLocation());
+	}
+
+	public World getWorld() {
+		return this.player.getWorld();
 	}
 }
