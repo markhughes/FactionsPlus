@@ -1,14 +1,10 @@
 package me.markeh.factionsplus.listeners;
 
-import me.markeh.factionsframework.events.FactionDisbandEvent;
-import me.markeh.factionsframework.events.FactionRenameEvent;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
-import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
-import me.markeh.factionsplus.scoreboard.obj.SBMenu;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -67,25 +63,4 @@ public class CoreListener implements Listener {
 		}
 	}
 
-	// ------------------------------ 
-	// Destroy Events
-	// Removes the faction from a scoreboard when its renamed or disbanded 
-	// ------------------------------ 
-	
-	@EventHandler
-	public void onDisbandRemoveFromScoreboard(FactionDisbandEvent event) {
-		if ( ! FactionsPlusScoreboard.get().isEnabled()) return;
-		for (SBMenu<?> menu : FactionsPlusScoreboard.get().getMenus()) {
-			if (menu.getObjective().getScore(event.getFaction().getName()) == null) continue;
-			menu.getObjective().getScore(event.getFaction().getName()).setScore(-1);
-		}
-	}
-	
-	@EventHandler
-	public void onFactionNameChange(FactionRenameEvent event) {
-		if ( ! FactionsPlusScoreboard.get().isEnabled()) return;
-		for (SBMenu<?> menu : FactionsPlusScoreboard.get().getMenus()) {
-			menu.getObjective().getScore(event.getFaction().getName()).setScore(-1);
-		}
-	}
 }

@@ -98,12 +98,16 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	}
 	
 	// colourise a string 
-	public String colourise(String msg) {
+	public final String colourise(String msg) {
 		for (ChatColor colour : ChatColor.values()) {
 			msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
 		}
 		
 		return msg;
+	}
+	
+	public final Boolean isPluginEnabled(String plugin) {
+		return this.getServer().getPluginManager().isPluginEnabled(plugin);
 	}
 	
 	// ----------------------------------------

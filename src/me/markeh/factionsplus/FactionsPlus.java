@@ -48,6 +48,7 @@ import me.markeh.factionsplus.scoreboard.FactionsPlusScoreboard;
 import me.markeh.factionsplus.util.FactionsUUIDTools;
 import me.markeh.factionsplus.util.Metrics;
 import me.markeh.factionsplus.util.PatreonBadge;
+import me.markeh.factionsplus.wildernesschunks.WildernessChunks;
 
 public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	
@@ -66,6 +67,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	// Listeners
 	private CoreListener coreListener;
 	private JailListener jailListener;
+	private ScoreboardListener scoreboardListener;
 	
 	// ----------------------------------------
 	//  Methods
@@ -74,10 +76,15 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	// Plugin Enable
 	@Override
 	public final void enable() {
-		// Get, load, save our configuration, and start watching.
+		// Get, load, save our configuration and texts. Then start watching.
 		Config.get().load().save().watchStart();
 		
-		if ( ! getServer().getPluginManager().isPluginEnabled("Factions")) {
+		Texts.get().setHeader(
+				"It is suggested that you do not make major changes to the texts file.",
+				"Proceed with caution!"
+			).load().save().watchStart();
+		
+		if ( ! this.isPluginEnabled("Factions")) {
 			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** Factions is not enabled ******************** ");
 			log("FactionsPlus still requires a Factions plugin to be present!");
 			log("You can download it from either dev.bukkit.org or Spigot resources:");
@@ -87,15 +94,13 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			return;
 		}
 		
-		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6) {
-			if ( ! getServer().getPluginManager().isPluginEnabled("Factions26Patches")) {
-				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "************** Factions 2.6 Patches is not enabled ************** ");
-				log("Factions Version <= 2.6.0 requires the plugin Factions 2.6 Patches");
-				log("You can download it from dev.bukkit.org:");
-				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/factions26patches");
-				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
-				return;
-			}
+		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6 && ! this.isPluginEnabled("Factions26Patches")) {
+			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "************** Factions 2.6 Patches is not enabled ************** ");
+			log("Factions Version <= 2.6.0 requires the plugin Factions 2.6 Patches");
+			log("You can download it from dev.bukkit.org:");
+			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/factions26patches");
+			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
+			return;
 		}
 		
 		// Ensure the FactionsFramework is setup 
@@ -154,6 +159,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 				// Enable FactionsPlusScoreboard - this is also so we can easily depend on compatibility plugins
 				FactionsPlusScoreboard.get().enable();
 				
+				// If wilderness regen is enabled, launch it
+				if (Config.get().wildernessregenEnabled) WildernessChunks.get().startCheck();
+				
 				// Patreon Badge
 				PatreonBadge badge = new PatreonBadge();
 				badge.setup();
@@ -181,6 +189,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		// Disable integrations 
 		IntegrationManager.get().disableIntegrations();
 		
+		// Stop Wilderness Chunks if its enabled 
+		WildernessChunks.get().stopCheck();
+		
 		// Disable metrics 
 		try {
 			Metrics.get().disable();
@@ -192,8 +203,8 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		Config.get().watchStop();
 	}
 	
-	// Manage our listeners 
-	private void manageListeners() {
+	// Manage our listeners, only add as we need it 
+	public final void manageListeners() {
 		if (this.shouldCreateListener(coreListener, true)) {
 			coreListener = new CoreListener();
 			addListener(coreListener);
@@ -203,19 +214,30 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 			jailListener = new JailListener();
 			addListener(jailListener);
 		}
+		
+		if (this.shouldCreateListener(scoreboardListener, Config.get().scoreboard_enabled)) {
+			scoreboardListener = new ScoreboardListener();
+			addListener(scoreboardListener);
+		}
 	}
 	
 	// Returns true if we have to create the listener and add it 
-	private boolean shouldCreateListener(Listener listener, Boolean enabled) {
-		if (listener == null && enabled) return true;  // listener is null and its enabled
-		if (listener != null && enabled) return false;  // listener exists and is enabled
-		
-		// Shouldn't be enabled, so remove it (if its not already), and set it to null 
-		if(listener != null && HandlerList.getRegisteredListeners(this).contains(listener)) {
-			removeListener(listener);
-			listener = null;
+	private final boolean shouldCreateListener(Listener listener, Boolean enabled) {
+		// Not Enabled ... 
+		if ( ! enabled) {
+			if (listener != null && HandlerList.getRegisteredListeners(this).contains(listener)) this.removeListener(listener);
+			
+			return false;
 		}
+		// Enabled ...
 		
+		// listener is null, create it 
+		if (listener == null) return true;
+		
+		// listener is not null, but we're not registered - create it
+		if ( ! HandlerList.getRegisteredListeners(this).contains(listener)) return true;
+		
+		// is fine otherwise 
 		return false; 
 	}
 }

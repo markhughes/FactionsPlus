@@ -13,11 +13,20 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 public class JailListener implements Listener {
-	Factions factions = FactionsManager.get().fetch();
 	
+	// ----------------------------------------
+	//  Fields
+	// ----------------------------------------
+	
+	private final Factions factions = FactionsManager.get().fetch();
+	
+	// ----------------------------------------
+	//  Events
+	// ----------------------------------------
+
 	// Send a player to jail when they try to move out of the X Y Z coords, but allow looking around
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public final void onPlayerMove(PlayerMoveEvent event) {
 		Player player = event.getPlayer();
 		if (player == null) return;
 		
@@ -26,23 +35,27 @@ public class JailListener implements Listener {
 			event.getFrom().getY() == event.getTo().getY() &&
 			event.getFrom().getZ() == event.getTo().getZ()) return;
 		
-		this.jailCheck(player, false); 
+		this.jailCheck(player, false);
 	}
 	
 	// Jail a player when they join, let them know they're in jail too with a little more information
 	@EventHandler
-	public void onPlayerJoin(PlayerLoginEvent event) {
+	public final void onPlayerJoin(PlayerLoginEvent event) {
 		this.jailCheck(event.getPlayer(), true);
 	}
 	
-	// Incase they move worlds, we'll check it extra early 
+	// In case they move worlds, we'll check it extra early 
 	@EventHandler
-	public void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
+	public final void onPlayerChangedWorldEvent(PlayerChangedWorldEvent event) {
 		this.jailCheck(event.getPlayer(), true);
 	}
 	
+	// ----------------------------------------
+	//  Methods
+	// ----------------------------------------
+
 	// Simple method which does two things; returns true if they're in jail, and teleports if they are 
-	public boolean jailCheck(Player player, Boolean notify) {
+	public final boolean jailCheck(Player player, Boolean notify) {
 		if(player == null) return false;
 		
 		FactionData fdata = FactionData.get(factions.getFactionFor(player).getID());

@@ -67,10 +67,11 @@ public class IntegrationManager {
 	public void disableIntegrations() {
 		for(Integration integration : this.integrations) {
 			// check if our events have been enabled 
-			if (integration.getEvents() != null) {
-				integration.getEvents().disable();
-				integration.setEventsClass(null);
-			}
+			if (integration.getEvents() == null) continue;
+			
+			integration.getEvents().disable();
+			integration.setEventsClass(null);
+			
 		}
 	}
 

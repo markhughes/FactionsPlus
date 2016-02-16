@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
+import me.markeh.factionsframework.objs.Loc;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.obj.TType;
 
@@ -44,6 +45,10 @@ public class TLoc extends TType<TLoc>  {
 		this.bukkitLocation = location;
 	}
 	
+	public TLoc(Loc location) {
+		this.bukkitLocation = location.asBukkitLocation();
+	}
+
 	private Location bukkitLocation;
 	
 	@Override

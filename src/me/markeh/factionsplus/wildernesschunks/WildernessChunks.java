@@ -7,6 +7,7 @@ import java.util.UUID;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
 import me.markeh.factionsplus.wildernesschunks.integrations.HawkEyeRegegenerator;
+import me.markeh.factionsplus.wildernesschunks.integrations.PrismRegenerator;
 import me.markeh.factionsplus.wildernesschunks.integrations.Regenerator;
 
 import org.bukkit.Bukkit;
@@ -57,7 +58,7 @@ public class WildernessChunks {
 	public void stopCheck() {
 		FactionsPlus.get().removeListener(WildernessChunksEvents.get());
 		
-		this.task.cancel();
+		if (this.task != null) this.task.cancel();
 		
 		this.saveLogCache();
 	}
@@ -79,6 +80,7 @@ public class WildernessChunks {
 	public Regenerator griefManagementPluginAvailable() {
 		if (regeneratorInstance == null) {
 			if (Bukkit.getPluginManager().isPluginEnabled("HawkEye")) regeneratorInstance = new HawkEyeRegegenerator();
+			if (Bukkit.getPluginManager().isPluginEnabled("Prism")) regeneratorInstance = new PrismRegenerator();
 		}
 		
 		return regeneratorInstance;
