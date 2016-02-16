@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import net.md_5.bungee.api.ChatColor;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Perm {
@@ -29,8 +30,18 @@ public class Perm {
 	}
 	
 	public boolean has(Player player, Boolean notify) {
-		if(!player.hasPermission(this.permission)) player.sendMessage(ChatColor.RED + this.message);
+		if (notify && ! player.hasPermission(this.permission)) player.sendMessage(ChatColor.RED + this.message);
 		
 		return(player.hasPermission(this.permission));
+	}
+
+	public boolean has(CommandSender sender) {
+		return(sender.hasPermission(this.permission));
+	}
+	
+	public boolean has(CommandSender sender, boolean notify) {
+		if (notify && ! sender.hasPermission(this.permission)) sender.sendMessage(ChatColor.RED + this.message);
+		
+		return(sender.hasPermission(this.permission));
 	}
 }
