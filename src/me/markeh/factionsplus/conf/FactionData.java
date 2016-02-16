@@ -29,22 +29,22 @@ public class FactionData extends Configuration<FactionData> {
 	// Options
 	// ----------------------------------------
 	
-	@Option({"jails", "players", "Jailed Players"})
+	@Option(section = "jails", name = "players", comment = "Jailed Players") 
 	public List<String> jailedPlayers = new ArrayList<String>();
 
-	@Option({"jails", "location", "Jail Location"})
+	@Option(section = "jails", name = "location", comment = "Jail Location") 
 	public TLoc jailLoc = null;
 	
-	@Option({"rules", "rules", "Rules"})
+	@Option(section = "rules", name = "rules", comment = "Rules") 
 	public List<String> rules = new ArrayList<String>();
 	
-	@Option({"warps", "locations", "Warp Locations"})
+	@Option(section = "warps", name = "locations", comment = "Warp Locations") 
 	public TMap<String, TLoc> warpLocations = new TMap<String, TLoc>();
 		
-	@Option({"warps", "passwords", "Warp Passwords"})
+	@Option(section = "warps", name = "password", comment = "Warp Passwords") 
 	public TMap<String, String> warpPasswords = new TMap<String, String>();
 	
-	@Option({"fchest", "location", "Faction Chest"})
+	@Option(section = "fchest", name = "location", comment = "Faction Chest") 
 	public TLoc factionChest = null;
 	
 	// ----------------------------------------

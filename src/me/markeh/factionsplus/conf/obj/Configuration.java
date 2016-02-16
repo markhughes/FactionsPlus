@@ -35,6 +35,8 @@ public abstract class Configuration<T> {
 	
 	private Timer watchTimer = null;
 	
+	private Boolean saveable = true;
+	
 	// ------------------------------
 	// Methods
 	// ------------------------------
@@ -44,20 +46,45 @@ public abstract class Configuration<T> {
 		this.fileName = fileName;
 	}
 	
+	public final String getName() { return this.fileName; }
+	
+	// Optional: Set saveable
+	public final void setSaveable(Boolean saveable) {
+		this.saveable = saveable;
+	}
+	
+	public final Boolean isSaveable() { 
+		return this.saveable;
+	}
+	
 	// Optional: The folder the file will be stored under
 	public final void setSub(String subFolder) {
 		this.subFolder = subFolder;
 	}
 	
+	public final String getSub() { return this.subFolder; }
+	
 	// Optional: Header lines
-	public final void setHeader(String... lines) {
+	private final T setHeader(List<String> header) {
+		this.headerLines = header;	
+		
+		return (T) this;
+	}
+	
+	public final T setHeader(String... lines) {
 		headerLines.clear();
 		
 		for (String line : lines) headerLines.add(line);
+		
+		return (T) this;
 	}
+	
+	public final List<String> getHeader() { return this.headerLines; }
 	
 	// Save the configuration file  
 	public final T save() {
+		if ( ! this.isSaveable()) return (T) this;
+		
 		if (this.fileName == null) return (T) this;
 
 		if (this.managingFile == null) {
@@ -110,7 +137,7 @@ public abstract class Configuration<T> {
 	// Load a configuration file
 	public final T load() {
 		if (this.fileName == null) return (T) this;
-		
+				
 		// Set the managing file if it is not set 
 		if (this.managingFile == null) {
 			if (this.subFolder != null) {
@@ -163,12 +190,14 @@ public abstract class Configuration<T> {
 	// Start watching the file for changes
 	public T watchStart() {
 		if (watchTimer == null) watchTimer = new Timer();
-		
+				
 		// Using a File Watch Task we'll reload the configuration file when its modified 
 		watchTimer.schedule(new FileWatchTask(this.managingFile, this) {
 			@Override
 			protected void onChange(File file, Configuration<?> configuration) {
+				preUpdatePing();
 				configuration.load();
+				postUpdatePing();
 			}
 		}, new Date(), 3000);
 		
@@ -224,7 +253,9 @@ public abstract class Configuration<T> {
 	
 	// Writes a key line
 	private final void writeKeyLine(String key, String value, String comment) {
-		writer.println("    # " + comment);
+		// Comment can be null, so we'll check that first 
+		if (comment != null) writer.println("    # " + comment);
+		
 		writer.println("    " + key + ": \"" + value.replaceAll("\"", "\\\\\"") + "\"");
 		writer.println("    ");
 	}
@@ -310,4 +341,32 @@ public abstract class Configuration<T> {
 		
 		return rawList;
 	}
+	 
+	public final T safeClone(Object cloneTo) {
+		Configuration<T> newClass = (Configuration<T>) cloneTo;
+		
+		newClass.setSaveable(false); // by default we wont be saveable 
+		
+		newClass.setName(this.getName());
+		newClass.setHeader(this.getHeader());
+		newClass.setSub(this.getSub());
+		
+		for (Field field : this.getClass().getFields()) {
+			FieldMetaData meta = FieldMetaData.get(field);
+			
+			if ( ! meta.isConfigurationField()) continue; // Not a configuration field, so ignore
+								
+			try {
+				newClass.getClass().getField(field.getName()).set(this, field.get(this));
+			} catch (Exception e) {
+				// Log the error 
+				FactionsPlus.get().logError(e);
+			}
+		}
+		
+		return (T) cloneTo;
+	}
+	
+	public void preUpdatePing() { /* Override if needed */ }
+	public void postUpdatePing() { /* Override if needed */ }
 }

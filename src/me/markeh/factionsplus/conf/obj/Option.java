@@ -5,5 +5,11 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Option {
-	String[] value();
+	String section();
+
+	String name();
+
+	String comment() default "";
+
+	boolean pingOnUpdate() default false;
 }

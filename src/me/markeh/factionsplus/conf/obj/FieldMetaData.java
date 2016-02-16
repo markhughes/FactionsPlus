@@ -27,12 +27,10 @@ public class FieldMetaData {
 			this.configurationField = true;
 			
 			try {
-				String[] rawMetaData = field.getAnnotation(Option.class).value();
+				this.fieldDescription = field.getAnnotation(Option.class).comment();
+				this.sectionName = field.getAnnotation(Option.class).section();
+				this.fieldName = field.getAnnotation(Option.class).name();
 				
-				this.sectionName = rawMetaData[0];
-				this.fieldName = rawMetaData[1];
-				this.fieldDescription = rawMetaData[2];
-
 			} catch(Exception e) {
 				FactionsPlus.get().logError(e);
 			}
