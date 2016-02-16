@@ -97,9 +97,7 @@ public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.Fac
 			cmd.reset();
 			
 			// Set our information
-			if(me != null && me.getPlayer() != null) {
-				cmd.player = me.getPlayer();
-			}
+			cmd.sender = this.sender;
 			
 			cmd.arguments = this.args;
 			

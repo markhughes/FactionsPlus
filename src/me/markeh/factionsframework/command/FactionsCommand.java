@@ -3,7 +3,6 @@ package me.markeh.factionsframework.command;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
 
 import me.markeh.factionsframework.command.requirements.Requirement;
 import me.markeh.factionsframework.faction.Faction;
@@ -13,8 +12,8 @@ import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Texts;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public abstract class FactionsCommand {
@@ -30,8 +29,6 @@ public abstract class FactionsCommand {
 	//  Command Fields
 	// ------------------------------
 
-	// Required Permissions
-	public List<Perm> requiredPermissions = new ArrayList<Perm>();
 	
 	// Required Arguments
 	public List<String> requiredArguments = new ArrayList<String>();
@@ -44,27 +41,41 @@ public abstract class FactionsCommand {
 	// Description
 	public String description;
 	
+	// Help line show in in /f help
+	public String helpLine = "";
+	
+	public Boolean errorOnTooManyArgs = true;
+	
+	// Deprecated - use ReqHasFaction 
 	@Deprecated
 	public Boolean mustHaveFaction = false;
 	
-	public Boolean errorOnTooManyArgs = true;
+	// Deprecated - use ReqPermission
+	@Deprecated
+	public List<Perm> requiredPermissions = new ArrayList<Perm>();
+
+	// Deprecated - use sender / getSender 
+	@Deprecated
+	public Player player = null;
 	
 	// ------------------------------
 	//  Runtime Fields
 	// ------------------------------
 	
-	// Player running the command
-	public Player player = null;
+	// Sender running the command
+	public CommandSender sender = null;
+		
 	// FPlayer running the command
 	public FPlayer fplayer = null;
+	
 	// Arguments passed to the command
 	public List<String> arguments = new ArrayList<String>();
+	
 	// Players Faction
 	public Faction faction = null;
-	// IF change to false before calling run() the command isn't called
+	
+	// If changed to false before calling run() the command isn't called
 	public Boolean canRun = true;
-	// Help line show in in /f help
-	public String helpLine = "";
 	
 	// ------------------------------
 	//  Private Fields
@@ -76,13 +87,12 @@ public abstract class FactionsCommand {
 	//  Methods
 	// ------------------------------
 	
-	
 	public final void addRequirement(Requirement requirement) {
 		requirements.add(requirement);
 	}
 	
 	public final void reset() {
-		this.player = null;
+		this.sender = null;
 		this.faction = null;
 		this.fplayer = null;
 		this.canRun = true;
@@ -92,15 +102,19 @@ public abstract class FactionsCommand {
 	public final void preRun() {
 		
 		// Player specific 
-		if(this.player != null) {
+		if (this.sender instanceof Player) {
 			// Fetch Faction
-			this.faction = this.factions.getFactionFor(this.player);
+			this.faction = this.factions.getFactionFor(this.sender);
 			
-			this.fplayer = FPlayer.get(this.player);
+			this.fplayer = FPlayer.get(this.sender);
 			
-			for(Perm perm : this.requiredPermissions) {
-				if(!perm.has(this.player, true)) this.canRun = false;
+			this.player = (Player) this.sender;
+			
+			for (Perm perm : this.requiredPermissions) {
+				if ( ! perm.has(this.fplayer.getPlayer(), true)) this.canRun = false;
 			}
+		} else {
+			this.faction = this.factions.getFactionById(this.factions.getWildernessId());
 		}
 		
 		// Check requirements 
@@ -112,11 +126,7 @@ public abstract class FactionsCommand {
 		}
 		
 		if (this.mustHaveFaction) {
-			if(this.player == null || this.faction == null) {
-				msg(Texts.playerMustHaveFaction);
-				this.canRun = false;
-				return;
-			} else if( ! this.fplayer.hasFaction()) {
+			if (this.faction == null || this.faction.isWilderness() || ! this.fplayer.hasFaction()) {
 				msg(Texts.playerMustHaveFaction);
 				this.canRun = false;
 				return;
@@ -128,32 +138,43 @@ public abstract class FactionsCommand {
 	public final String msg(String msg) {
 		msg = this.colourise(msg);
 		
-		if (this.player == null) {
-			Bukkit.getLogger().log(Level.INFO, msg);
-		} else {
-			this.player.sendMessage(msg);
-		}
+		this.sender.sendMessage(msg);
 		
 		return msg;
 	}
 	
 	public final String getArg(int index) {
-		if (arguments.size() >= index+1) {
-			return(arguments.get(index));
+		if (this.arguments.size() >= index+1) {
+			return(this.arguments.get(index));
 		}
 		
 		return null;
 	}
 	
-	// fplayer is null if it's not a player 
 	public final boolean isPlayer() {
-		return this.fplayer != null;
+		return (this.sender instanceof Player);
 	}
 	
 	public final String colourise(String msg) {
 		for (ChatColor colour : ChatColor.values()) msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
 		
 		return msg;
+	}
+	
+	public final CommandSender getSender() {
+		return this.sender;
+	}
+	
+	public final FPlayer getFPlayer() {
+		return this.fplayer;
+	}
+	
+	public final Player getPlayer() {
+		return (Player) this.sender;
+	}
+	
+	public final Faction getFaction() {
+		return this.faction;
 	}
 	
 	// Must be overridden, is called on run

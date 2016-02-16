@@ -12,9 +12,11 @@ public class ReqPlayerIsLeader extends Requirement {
 	
 	@Override
 	public boolean isMet(FactionsCommand command) {
-		if (command.fplayer.isLeader()) return true;
+		if (command.fplayer == null || ! command.fplayer.isLeader()) {
+			command.sender.sendMessage(command.colourise("<reset><red>This command can <bold>only<reset><red> be run by a leader!"));
+			return false;
+		}
 		
-		command.fplayer.msg("<reset><red>This command can <bold>only<reset><red> be run by a leader!");
-		return false;
+		return true;
 	}
 }

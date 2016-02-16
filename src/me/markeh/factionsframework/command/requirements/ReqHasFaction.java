@@ -12,9 +12,11 @@ public class ReqHasFaction extends Requirement {
 	
 	@Override
 	public boolean isMet(FactionsCommand command) {
-		if (command.fplayer.hasFaction()) return true;
+		if (command.fplayer == null || ! command.fplayer.hasFaction()) {
+			command.sender.sendMessage(command.colourise("<reset><red>You must be in a <bold>faction<reset><red> to run this command!"));
+			return false;
+		}
 		
-		command.fplayer.msg("<reset><red>You must be in a <bold>faction<reset><red> to run this command!");
-		return false;
+		return true;
 	}
 }

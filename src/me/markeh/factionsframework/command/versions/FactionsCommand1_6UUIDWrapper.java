@@ -63,7 +63,7 @@ public class FactionsCommand1_6UUIDWrapper extends FCommand {
 					
 			// Set our information
 			if(me != null) {
-				cmd.player = me.getPlayer();
+				cmd.sender = this.sender;
 			}
 			
 			cmd.arguments = this.args;
