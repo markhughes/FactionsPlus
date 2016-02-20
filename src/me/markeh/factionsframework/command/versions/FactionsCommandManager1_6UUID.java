@@ -41,7 +41,7 @@ public class FactionsCommandManager1_6UUID extends FactionsCommandManager {
 	@Override
 	public void removeCommand(FactionsCommand cmd) {
 		try {
-			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("remove", MCommand.class).invoke(this, wrappers.get(cmd));
+			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("remove", MCommand.class).invoke(P.p.cmdBase, wrappers.get(cmd));
 		} catch (Exception e) {
 			FactionsFramework.get().logError(e);
 		}

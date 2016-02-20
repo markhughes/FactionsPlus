@@ -179,7 +179,7 @@ public class Faction16UUID extends Faction {
 	
 	public com.massivecraft.factions.Faction getFactionById(String id) {
 		try {
-			return (com.massivecraft.factions.Faction) this.getInstance().getClass().getMethod("getFactionById", String.class).invoke(this, id);
+			return (com.massivecraft.factions.Faction) this.getInstance().getClass().getMethod("getFactionById", String.class).invoke(this.getInstance(), id);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException
 				| SecurityException e) {
@@ -191,7 +191,7 @@ public class Faction16UUID extends Faction {
 	@SuppressWarnings("unchecked")
 	public List<com.massivecraft.factions.Faction> getAllFactions() {
 		try {
-			return (List<com.massivecraft.factions.Faction>) this.getInstance().getClass().getMethod("getAllFactions").invoke(this);
+			return (List<com.massivecraft.factions.Faction>) this.getInstance().getClass().getMethod("getAllFactions").invoke(this.getInstance());
 		} catch (Exception e) {
 			FactionsFramework.get().logError(e);
 			return null;

@@ -1,10 +1,15 @@
 package me.markeh.factionsplus.util;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import me.markeh.factionsframework.FactionsFramework;
 
 import com.massivecraft.factions.P;
+import com.massivecraft.factions.cmd.FCmdRoot;
 import com.massivecraft.factions.cmd.FCommand;
-import com.massivecraft.massivecore.cmd.MassiveCommand;
+import com.massivecraft.factions.zcore.MCommand;
 
 public class FactionsUUIDTools {
 	private static FactionsUUIDTools i = null;
@@ -44,29 +49,26 @@ public class FactionsUUIDTools {
 	}
 	
 	public boolean containsCommand(FCommand fcommand) {
-		try {
-			Boolean result = (Boolean) P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("contains", MassiveCommand.class).invoke(this, fcommand);
-			return result;
-		} catch (Exception e) {
-			FactionsFramework.get().logError(e);
-			
-			return false;
-		}
+		return this.getSubcommands().add(fcommand);
 	}
 	
 	public void removeCommand(FCommand fcommand) {
-		try {
-			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("remove", MassiveCommand.class).invoke(this, fcommand);
-		} catch (Exception e) {
-			FactionsFramework.get().logError(e);
-		}
+		this.getSubcommands().remove(fcommand);
 	}
 	
 	public void addCommand(FCommand fcommand) {
-		try {
-			P.p.cmdBase.getClass().getField("subCommands").getClass().getMethod("add", MassiveCommand.class).invoke(this, fcommand);
+		this.getSubcommands().add(fcommand);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<MCommand<?>> getSubcommands() {
+		try { 
+			Class<? extends FCmdRoot> cmdBase = P.p.cmdBase.getClass();
+			Field subCommands = cmdBase.getField("subCommands");
+			return (List<MCommand<?>>) subCommands.get(P.p.cmdBase);
 		} catch (Exception e) {
 			FactionsFramework.get().logError(e);
 		}
+		return null;
 	}
 }

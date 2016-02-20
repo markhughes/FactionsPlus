@@ -97,19 +97,25 @@ public class Factions16UUID extends Factions {
 		return factions;
 	}
 	
+	private com.massivecraft.factions.Factions factionsInstance = null;
+	
 	private com.massivecraft.factions.Factions getInstance() {
+		if (this.factionsInstance != null) return factionsInstance;
+		
 		try {
-			return (com.massivecraft.factions.Factions) Factions.class.getMethod("getInstance").invoke(this);
+			factionsInstance = (com.massivecraft.factions.Factions) com.massivecraft.factions.Factions.class.getMethod("getInstance").invoke(this);
 		} catch (Exception e) {
 			FactionsPlus.get().logError(e);
 			return null;
 		}
+		
+		return factionsInstance;
 	}
 		
 	@SuppressWarnings("unchecked")
-	private List<com.massivecraft.factions.Faction> getAllOriginalFactions() {
+	private ArrayList<com.massivecraft.factions.Faction> getAllOriginalFactions() {
 		try {
-			return (List<com.massivecraft.factions.Faction>) this.getInstance().getClass().getMethod("getAllFactions").invoke(this);
+			return (ArrayList<com.massivecraft.factions.Faction>) this.getInstance().getClass().getMethod("getAllFactions").invoke(this.getInstance());
 		} catch (Exception e) {
 			FactionsFramework.get().logError(e);
 			return null;
