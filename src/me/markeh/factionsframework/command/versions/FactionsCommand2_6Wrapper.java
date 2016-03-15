@@ -56,7 +56,6 @@ public class FactionsCommand2_6Wrapper extends FCommand {
 		
 		try {
 			this.getClass().getMethod("setDesc", String.class).invoke(this, cmd.description);
-			// this.getClass().getMethod("setHelp", String[].class).invoke(this, cmd.description);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			FactionsPlus.get().logError(e);
 		}

@@ -54,12 +54,10 @@ public class FactionsManager {
 	// Determine the version of Factions
 	public FactionsVersion determineVersion() {
 		
-		if(this.version != null) return version;
+		if (this.version != null) return version;
 		
 		Plugin factionsPlugin = Bukkit.getPluginManager().getPlugin("Factions");
-		if(factionsPlugin == null) {
-			return null;
-		}
+		if (factionsPlugin == null) return null;
 		
 		String factionsVersion = factionsPlugin.getDescription().getVersion();
 		
@@ -67,15 +65,24 @@ public class FactionsManager {
 		if(factionsVersion.startsWith("1.6.9.5-U")) {
 			return FactionsVersion.FactionsUUID;
 		} else if(factionsVersion.startsWith("2.")) {
+			
+			// <= 2.6 uses FactionColls/Universe System
 			try {
-				// <= 2.6 uses FactionColls/Universe System
 				Class.forName("com.massivecraft.factions.entity.FactionColls");
 				
 				return FactionsVersion.Factions2_6;
-			} catch (Exception e) {
-				// Using a more recent version of Factions
-				return FactionsVersion.Factions2_X;
-			}
+			} catch (Exception e) { }
+			
+			// <= 2.8.6 has Spigot integration in an older spot 
+			try {
+				Class.forName("com.massivecraft.factions.spigot.SpigotFeatures");
+				
+				return FactionsVersion.Factions2_8_6;
+			} catch (Exception e2) { }
+			
+			// We assume it's a more recent version of Factions 
+			return FactionsVersion.Factions2_X;					
+
 		}
 		
 		throw new Error("Please use FactionsUUID (1.6.9.5-U) or Factions 2.5+");
@@ -85,7 +92,7 @@ public class FactionsManager {
 	// Fetch the correct Factions object
 	public Factions fetch() {
 		if(factions == null) {
-			if(this.version.equals(FactionsVersion.Factions2_X)) {
+			if (this.version.equals(FactionsVersion.Factions2_X) || this.version.equals(FactionsVersion.Factions2_8_6)) {
 				factions = new Factions2X();
 			} else if(this.version.equals(FactionsVersion.Factions2_6)) {
 				factions = new Factions2_6();

@@ -14,6 +14,14 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class CoreListener implements Listener {
 
+	private static CoreListener instance = null;
+	public static CoreListener get() {
+		if (instance == null) instance = new CoreListener();
+		return instance;
+	}
+	
+	protected CoreListener() { }
+	
 	// Check for commands, and if an enemy is in a radius we block it 
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent event) {
@@ -62,5 +70,6 @@ public class CoreListener implements Listener {
 			}
 		}
 	}
+
 
 }

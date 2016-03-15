@@ -54,7 +54,7 @@ public class FactionsFramework {
 	// ------------------------------
 	
 	private static FactionsFramework instance;
-	public FactionsFramework(JavaPlugin plugin) {
+	protected FactionsFramework(JavaPlugin plugin) {
 		plugins.add(plugin);
 		if(parent == null) parent = plugin;
 	}
@@ -64,6 +64,7 @@ public class FactionsFramework {
 		
 		return instance;
 	}
+	
 	public static FactionsFramework get() { 
 		if(instance == null) instance = new FactionsFramework(null);
 		
@@ -99,20 +100,28 @@ public class FactionsFramework {
 			factionsManager = FactionsManager.get();
 			
 			if (listener == null) {
-				if (factionsManager.determineVersion() == FactionsVersion.FactionsUUID) {
-					listener = new FFListenerFactions16UUID();
-				} else if (factionsManager.determineVersion() == FactionsVersion.Factions2_X) {
-					listener = new FFListenerFactions2_X();
-				} else if (factionsManager.determineVersion() == FactionsVersion.Factions2_6) {
-					listener = new FFListenerFactions2_6();
-				} else {
+				if (factionsManager.determineVersion() == FactionsVersion.FactionsUUID) listener = new FFListenerFactions16UUID();
+				if (factionsManager.determineVersion() == FactionsVersion.Factions2_6) listener = new FFListenerFactions2_6();
+				if (factionsManager.determineVersion() == FactionsVersion.Factions2_X || factionsManager.determineVersion() == FactionsVersion.Factions2_8_6) listener = new FFListenerFactions2_X();
+				
+				if (listener == null) {
 					Bukkit.getLogger().log(Level.SEVERE, "[FactionsFramework] FactionsFramework can not work out your Factions version.");
 					Bukkit.getLogger().log(Level.SEVERE, "[FactionsFramework] FactionsFramework did not register our listener.");	
 				}
 			}
 			
 			if (listener != null) {
-				//
+				// If the parent is there we will check if it's still useable 
+				if (parent != null) {
+					// if its not enabled ... 
+					if ( ! Bukkit.getServer().getPluginManager().isPluginEnabled(parent)) {
+						// remove it from the plugins list
+						plugins.remove(parent);
+						// set parent to null
+						parent = null;
+					}
+				}
+				
 				if (parent == null && this.plugins.size() > 0) {
 					for (JavaPlugin plugin : this.plugins) {
 						if ( ! plugin.isEnabled()) {
@@ -121,7 +130,7 @@ public class FactionsFramework {
 							parent = plugin;
 						}
 					}
-				}
+				} 
 				
 				if(parent == null) throw new Error("No parents! Pass a plugin to FactionsFramework.get() so we have a parent.");
 				
@@ -166,6 +175,7 @@ public class FactionsFramework {
 	}
 	
 	public final void logError(Throwable e) {
+		// TODO: move to NIO instead of older file crap 
 		File logFolder = new File(this.parent.getDataFolder(), "FactionsFramework");
 		
 		if ( ! logFolder.exists()) logFolder.mkdir();
@@ -203,6 +213,10 @@ public class FactionsFramework {
 				writer.println("MassiveCore Version: " + parent.getServer().getPluginManager().getPlugin("MassiveCore").getDescription().getVersion());
 			} catch(Exception e3) { }
 			
+			try {
+				writer.println("MCore Version: " + parent.getServer().getPluginManager().getPlugin("MCore").getDescription().getVersion());
+			} catch(Exception e3) { }
+			
 			writer.println("----------------------------------------");
 			writer.println("Error:" + e.getMessage());
 			writer.println("----------------------------------------");
@@ -231,7 +245,7 @@ public class FactionsFramework {
 		return msg;
 	}
 	
-
+	// Get Factions version as a String
 	public String getFactionsVersion() {
 		return parent.getServer().getPluginManager().getPlugin("Factions").getDescription().getVersion();
 	}

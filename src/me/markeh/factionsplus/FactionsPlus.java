@@ -20,10 +20,6 @@
 
 package me.markeh.factionsplus;
 
-import org.bukkit.ChatColor;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-
 import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.factionsmanager.FactionsVersion;
@@ -61,20 +57,9 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	public FactionsPlus() { instance = this; }
 	
 	// ----------------------------------------
-	//  Fields
-	// ----------------------------------------
-		
-	// Listeners
-	private CoreListener coreListener;
-	private JailListener jailListener;
-	private ScoreboardListener scoreboardListener;
-	
-	// ----------------------------------------
 	//  Methods
 	// ----------------------------------------
 
-	// Plugin Enable
-	@Override
 	public final void enable() {
 		// Get, load, save our configuration and texts. Then start watching.
 		Config.get().load().save().watchStart();
@@ -84,49 +69,20 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 				"Proceed with caution!"
 			).load().save().watchStart();
 		
-		if ( ! this.isPluginEnabled("Factions")) {
-			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** Factions is not enabled ******************** ");
-			log("FactionsPlus still requires a Factions plugin to be present!");
-			log("You can download it from either dev.bukkit.org or Spigot resources:");
-			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "https://www.spigotmc.org/resources/factions.1900/");
-			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/factions/");
-			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
-			return;
-		}
+		// Add our Factions dependency and MassiveCore dependency (if required) 
+		this.addDependency("Factions");
+		this.addDependency(FactionsManager.get().determineVersion().requiresMassiveCore(), "MassiveCore", "MCore");
 		
-		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6 && ! this.isPluginEnabled("Factions26Patches")) {
-			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "************** Factions 2.6 Patches is not enabled ************** ");
-			log("Factions Version <= 2.6.0 requires the plugin Factions 2.6 Patches");
-			log("You can download it from dev.bukkit.org:");
-			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/factions26patches");
-			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "***************************************************************** ");
-			return;
-		}
-		
-		// Ensure the FactionsFramework is setup 
+		// Ensure FactionsFramework is setup
 		FactionsFramework.get(this).ensureSetup();
 		
-		// Using our command manager we add our commands 
 		CommandManager.get().add();
 		
 		this.manageListeners();
 		
-		// Remove FactionsUUID /warp command 
-		if (FactionsManager.get().determineVersion() == FactionsVersion.FactionsUUID) {
+		// Remove FactionsUUID /warp command (it's shit) 
+		if (FactionsManager.get().determineVersion().isFactions1_6UUID()) {
 			FactionsUUIDTools.get().removeFactionsUUIDWarpCommands();
-		}
-		
-		// Ensure MassiveCore is enabled 
-		if (FactionsManager.get().determineVersion() == FactionsVersion.Factions2_X || FactionsManager.get().determineVersion() == FactionsVersion.Factions2_6) {
-			if ( ! getServer().getPluginManager().isPluginEnabled("MCore") &&  ! getServer().getPluginManager().isPluginEnabled("MassiveCore")) {
-				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** MassiveCore is not enabled ******************** ");
-				log("Factions still requires a MassiveCore/MCore plugin to be present!");
-				log("You can download it from either dev.bukkit.org or Spigot resources:");
-				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "https://www.spigotmc.org/resources/massivecore.1901/");
-				log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/mcore/");
-				log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************************************************************** ");
-				return;
-			}
 		}
 				
 		// Add our integrations 
@@ -163,21 +119,18 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 				if (Config.get().wildernessregenEnabled) WildernessChunks.get().startCheck();
 				
 				// Patreon Badge
-				PatreonBadge badge = new PatreonBadge();
-				badge.setup();
-				badge.display();
+				PatreonBadge.get().setup();
+				PatreonBadge.get().display();
 			}
 		});
 	}
 	
-	// Plugin Disable
-	@Override
 	public final void disable() {
 		// Remove any commands we've added
 		CommandManager.get().remove();
 		
 		// Save all the FactionData collections  
-		for(FactionData fData : FactionData.getAll()) fData.save();
+		for(FactionData data : FactionData.getAll()) data.save();
 		
 		FactionsPlusScoreboard.get().disable();
 		
@@ -205,39 +158,24 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 	
 	// Manage our listeners, only add as we need it 
 	public final void manageListeners() {
-		if (this.shouldCreateListener(coreListener, true)) {
-			coreListener = new CoreListener();
-			addListener(coreListener);
+		// Always enable our core listener
+		if ( ! this.isListenerEnabled(CoreListener.get())) {
+			this.addListener(CoreListener.get());
 		}
 		
-		if (this.shouldCreateListener(jailListener, Config.get().enableJails)) {
-			jailListener = new JailListener();
-			addListener(jailListener);
+		// Enable jail listener if jails are enabled 
+		if (Config.get().enableJails && ! this.isListenerEnabled(JailListener.get())) {
+			this.addListener(JailListener.get());
+		} else if (this.isListenerEnabled(JailListener.get())) {
+			this.removeListener(JailListener.get());
 		}
 		
-		if (this.shouldCreateListener(scoreboardListener, Config.get().scoreboard_enabled)) {
-			scoreboardListener = new ScoreboardListener();
-			addListener(scoreboardListener);
+		// Enable scoreboard listener if scoreboards are enabled 
+		if (Config.get().scoreboard_enabled && ! this.isListenerEnabled(ScoreboardListener.get())) {
+			this.addListener(ScoreboardListener.get());
+		} else if (this.isListenerEnabled(ScoreboardListener.get())) {
+			this.removeListener(ScoreboardListener.get());
 		}
-	}
-	
-	// Returns true if we have to create the listener and add it 
-	private final boolean shouldCreateListener(Listener listener, Boolean enabled) {
-		// Not Enabled ... 
-		if ( ! enabled) {
-			if (listener != null && HandlerList.getRegisteredListeners(this).contains(listener)) this.removeListener(listener);
-			
-			return false;
-		}
-		// Enabled ...
 		
-		// listener is null, create it 
-		if (listener == null) return true;
-		
-		// listener is not null, but we're not registered - create it
-		if ( ! HandlerList.getRegisteredListeners(this).contains(listener)) return true;
-		
-		// is fine otherwise 
-		return false; 
 	}
 }

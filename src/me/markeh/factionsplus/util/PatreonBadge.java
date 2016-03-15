@@ -6,6 +6,13 @@ import java.util.Scanner;
 import me.markeh.factionsplus.FactionsPlus;
 
 public class PatreonBadge {
+	
+	private static PatreonBadge instance = null;
+	public static PatreonBadge get() {
+		if (instance == null) instance = new PatreonBadge();
+		return instance;
+	}
+	
 	private boolean isPatreon = false;
 	private String name = "";
 	

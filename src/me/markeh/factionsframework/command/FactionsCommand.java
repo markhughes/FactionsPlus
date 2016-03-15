@@ -12,6 +12,7 @@ import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Perm;
 import me.markeh.factionsplus.conf.Texts;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -151,12 +152,69 @@ public abstract class FactionsCommand {
 		return null;
 	}
 	
+	public final Faction getArgAs(Class<? extends Faction> type, int index, Faction defaultValue) {
+		if (this.arguments.size() >= index+1) {
+			Faction f = this.factions.getFactionById(this.arguments.get(index));
+			
+			return f;
+		}
+		
+		return defaultValue;
+	}
+	
+	public final FPlayer getArgAs(Class<? extends FPlayer> type, int index, FPlayer defaultValue) {
+		if (this.arguments.size() >= index+1) {
+			FPlayer f = FPlayer.get(Bukkit.getPlayer(this.arguments.get(index)));
+			
+			return f;
+		}
+		
+		return defaultValue;
+	}
+	
+	public final Boolean getArgAs(Class<? extends Boolean> type, int index, Boolean defaultValue) {
+		if (this.arguments.size() >= index+1) {
+			String v = this.arguments.get(index).toLowerCase().trim();
+			if (v.startsWith("y") || v.startsWith("allow")) return true;
+			if (v.startsWith("n") || v.startsWith("deny")) return false;
+			
+			return Boolean.valueOf(v);
+		}
+		
+		return defaultValue;
+	}
+	
+	public final Long getArgAs(Class<? extends Long> type, int index, Long defaultValue) {
+		if (this.arguments.size() >= index+1) {
+			return Long.valueOf(this.arguments.get(index));
+		}
+		
+		return defaultValue;
+	}
+	
+	public final Integer getArgAs(Class<? extends Integer> type, int index, Integer defaultValue) {
+		if (this.arguments.size() >= index+1) {
+			return Integer.valueOf(this.arguments.get(index));
+		}
+		
+		return defaultValue;
+	}
+	
+	public final String getArgsConcated(int indexFrom) {
+		int i = 0;
+		String argLine = "";
+		
+		for (String arg : this.arguments) if (i >= indexFrom) argLine += " " + arg;
+		
+		return argLine;
+	}
+	
 	public final boolean isPlayer() {
 		return (this.sender instanceof Player);
 	}
 	
 	public final String colourise(String msg) {
-		for (ChatColor colour : ChatColor.values()) msg = msg.replace("<"+colour.name().toLowerCase()+">", colour+"");
+		for (ChatColor colour : ChatColor.values()) msg = msg.replaceAll("<"+colour.name().toLowerCase()+">", colour+"");
 		
 		return msg;
 	}
@@ -170,7 +228,9 @@ public abstract class FactionsCommand {
 	}
 	
 	public final Player getPlayer() {
-		return (Player) this.sender;
+		if (this.isPlayer()) return (Player) this.sender;
+		
+		return null;
 	}
 	
 	public final Faction getFaction() {

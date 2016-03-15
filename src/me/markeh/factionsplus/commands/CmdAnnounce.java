@@ -34,9 +34,7 @@ public class CmdAnnounce extends FactionsCommand {
 			return;
 		}
 		
-		String announcement = "";
-		
-		for (String word : this.arguments) announcement += " " + word;
+		String announcement = this.getArgsConcated(0);
 		
 		FactionData fdata = FactionData.get(this.getFaction());
 		

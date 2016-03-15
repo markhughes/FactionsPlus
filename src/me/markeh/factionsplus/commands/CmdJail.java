@@ -1,8 +1,5 @@
 package me.markeh.factionsplus.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.requirements.ReqHasFaction;
 import me.markeh.factionsframework.command.requirements.ReqIsPlayer;
@@ -55,35 +52,33 @@ public class CmdJail extends FactionsCommand {
 			return;
 		}
 		
-		Faction faction = factions.getFactionAt(fdata.jailLoc.getBukkitLocation());
+		Faction factionAt = factions.getFactionAt(fdata.jailLoc.getBukkitLocation());
 		
-		if (faction.getID() != faction.getID()) {
+		if (factionAt.getID() != faction.getID()) {
 			msg(Texts.cmdJail_notInLand);
 			return;
 		}
 		
-		Player jailingPlayer = Bukkit.getPlayer(getArg(0));
+		FPlayer jailingPlayer = this.getArgAs(FPlayer.class, 0, null);
 		
 		if (jailingPlayer == null) {
 			msg(Texts.playerNotFound);
 			return;
 		}
-		
-		FPlayer fJailingPlayer = FPlayer.get(jailingPlayer);
-		
-		if (fJailingPlayer.isLeader() || fJailingPlayer.isOfficer()) {
+				
+		if (jailingPlayer.isLeader() || jailingPlayer.isOfficer()) {
 			msg("You cant jail this player because they're too high of a rank.");
 			return;
 		}
 		
-		if (factions.getFactionFor(jailingPlayer).getID() != faction.getID()) {
+		if (jailingPlayer.getFaction().getID() != faction.getID()) {
 			msg(String.format(Texts.playerNotInYourFaction, jailingPlayer.getName())); 
 			return;
 		}
 		
-		fdata.jailedPlayers.add(jailingPlayer.getUniqueId().toString());
+		fdata.jailedPlayers.add(jailingPlayer.getUUID().toString());
 		
-		if (jailingPlayer.isOnline()) jailingPlayer.teleport(fdata.jailLoc.getBukkitLocation());
+		if (jailingPlayer.isOnline()) jailingPlayer.teleport(fdata.jailLoc);
 		
 		msg(String.format(Texts.cmdJail_sent, jailingPlayer.getName())); 
 	}

@@ -10,9 +10,11 @@ import me.markeh.factionsframework.FactionsFramework;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
+import me.markeh.factionsplus.conf.types.TLoc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -46,16 +48,15 @@ public class FPlayer {
 	
 	private Factions factions = FactionsManager.get().fetch();
 	private Player player;
-	private Boolean isConsole;
+	private Boolean isConsole = false;
 	public FPlayer(Player player, Boolean isConsole) {
-		if (! isConsole) {
-			this.player = player;
-		} else {
-			this.isConsole = true;
-		}
+		this.isConsole = isConsole;
+		
+		if ( ! isConsole) this.player = player;
 	}
 	
 	public FPlayer(Player player) {
+		this.isConsole = false;
 		this.player = player;
 	}
 	
@@ -147,27 +148,11 @@ public class FPlayer {
 	}
 	
 	public String colourise(String msg) {
-		msg = msg.replace("<aqua>", ChatColor.AQUA + "");
-		msg = msg.replace("<blue>", ChatColor.BLUE + "");
-		msg = msg.replace("<bold>", ChatColor.BOLD + "");
-		msg = msg.replace("<darkaqua>", ChatColor.DARK_AQUA + "");
-		msg = msg.replace("<darkblue>", ChatColor.DARK_BLUE + "");
-		msg = msg.replace("<darkgray>", ChatColor.DARK_GRAY + "");
-		msg = msg.replace("<darkgreen>", ChatColor.DARK_GREEN + "");
-		msg = msg.replace("<darkpurple>", ChatColor.DARK_PURPLE + "");
-		msg = msg.replace("<darkred>", ChatColor.DARK_RED + "");
-		msg = msg.replace("<gold>", ChatColor.GOLD + "");
-		msg = msg.replace("<gray>", ChatColor.GRAY + "");
-		msg = msg.replace("<green>", ChatColor.GREEN + "");
-		msg = msg.replace("<italic>", ChatColor.ITALIC + "");
-		msg = msg.replace("<lightpurple>", ChatColor.LIGHT_PURPLE + "");
-		msg = msg.replace("<magic>", ChatColor.MAGIC + "");
-		msg = msg.replace("<red>", ChatColor.RED + "");
-		msg = msg.replace("<reset>", ChatColor.RESET + "");
-		msg = msg.replace("<strikethrough>", ChatColor.STRIKETHROUGH + "");
-		msg = msg.replace("<underline>", ChatColor.UNDERLINE + "");
-		msg = msg.replace("<white>", ChatColor.WHITE + "");
-		msg = msg.replace("<yellow>", ChatColor.YELLOW + "");
+		for (ChatColor colour : ChatColor.values()) {
+			String name = "<"+colour.name().toLowerCase()+">";
+			
+			msg = msg.replace(name, colour.toString());
+		}
 		
 		return msg;
 	}
@@ -177,6 +162,36 @@ public class FPlayer {
 	}
 
 	public World getWorld() {
+		// TODO: console - use spawn world 
 		return this.player.getWorld();
+	}
+
+	public String getName() {
+		if (this.isConsole) return "@console";
+		return this.player.getName();
+	}
+
+	public UUID getUUID() {
+		// TODO: console - get console UUID
+		return this.player.getUniqueId();
+	}
+
+	public boolean isOnline() {
+		if (this.isConsole) return true;
+		if (this.player == null) return false;
+		
+		return this.player.isOnline();
+	}
+
+	public void teleport(Location bukkitLocation) {
+		this.player.teleport(bukkitLocation);
+	}
+	
+	public void teleport(Loc loc) {
+		this.teleport(loc.asBukkitLocation());
+	}
+
+	public void teleport(TLoc jailLoc) {
+		this.teleport(jailLoc.getBukkitLocation());
 	}
 }

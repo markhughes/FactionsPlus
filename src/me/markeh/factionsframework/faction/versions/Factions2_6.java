@@ -16,6 +16,7 @@ import com.massivecraft.factions.entity.BoardColls;
 import com.massivecraft.factions.entity.FactionColl;
 import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.MConf;
+import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.ps.PS;
 
 public class Factions2_6 extends Factions {
@@ -38,13 +39,10 @@ public class Factions2_6 extends Factions {
 		return (this.getFactionById(BoardColls.get().getFactionAt(PS.valueOf(location)).getId()));
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Faction getFactionFor(Player player) {
 		try {
-			Class UPlayer = Class.forName("com.massivecraft.factions.entity.UPlayer");
-			
-			return (this.getFactionById((String) UPlayer.getMethod("get", Object.class).invoke(this, player).getClass().getMethod("getFactionId").invoke(this)));
+			return this.getFactionById(UPlayer.get(player).getFactionId());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -99,6 +97,7 @@ public class Factions2_6 extends Factions {
 		Set<String> worldsNoClaiming = null;
 		
 		try {
+			// Requires reflection, not in latest MConf - ref is broken 
 			worldsNoClaiming = (Set<String>) MConf.get().getClass().getField("worldsNoClaiming").get(this);
 		} catch (Exception e) { }
 		

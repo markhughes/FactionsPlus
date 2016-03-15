@@ -22,6 +22,7 @@ public class WildernessChunks {
 	
 	private static WildernessChunks instance = null;
 	public static WildernessChunks get() {
+		if (instance == null) instance = new WildernessChunks();
 		return instance;
 	}
 	
@@ -52,13 +53,15 @@ public class WildernessChunks {
 		
 		FactionsPlus.get().addListener(WildernessChunksEvents.get());
 		
-		this.task = new OutdatedChunkCheck().runTaskTimerAsynchronously(FactionsPlus.get(), 10L, 20L);
+		this.task = new OutdatedChunkCheck().runTaskTimerAsynchronously(FactionsPlus.get(), 20, 60);
 	}
 	
 	public void stopCheck() {
 		FactionsPlus.get().removeListener(WildernessChunksEvents.get());
 		
 		if (this.task != null) this.task.cancel();
+		
+		this.task = null;
 		
 		this.saveLogCache();
 	}
@@ -69,7 +72,7 @@ public class WildernessChunks {
 
 	public void callRegen(Chunk chunkAt) {
 		if (Config.get().wildernessregenUseGriefManagementPlugin && this.griefManagementPluginAvailable() != null) {
-			
+			this.griefManagementPluginAvailable().regenerateChunk(chunkAt);
 		} else {
 			chunkAt.getWorld().regenerateChunk(chunkAt.getX(), chunkAt.getZ());
 		}

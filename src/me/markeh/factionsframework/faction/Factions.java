@@ -3,6 +3,7 @@ package me.markeh.factionsframework.faction;
 import java.util.List;
 
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
+import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Loc;
 
 import org.bukkit.Location;
@@ -10,8 +11,11 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-// Use FactionsManager.get().fetch() to get this
 public abstract class Factions {
+	
+	// ----------------------------------------
+	// Static Getters
+	// ----------------------------------------
 	
 	private static Factions factions = null;
 	public static Factions get() {
@@ -19,6 +23,26 @@ public abstract class Factions {
 		
 		return factions;
 	}
+
+	public static Faction get(String id) {
+		return get().getFactionById(id);
+	}
+	
+	public static Faction get(Loc loc) {
+		return get().getFactionAt(loc);
+	}
+	
+	public static Faction get(Player player) {
+		return get().getFactionFor(player);
+	}
+	
+	public static Faction get(FPlayer player) {
+		return get(player.getPlayer());
+	}
+	
+	// ----------------------------------------
+	// Abstract Methods
+	// ----------------------------------------
 	
 	// Get Faction by their ID
 	public abstract Faction getFactionById(String id);
@@ -55,8 +79,10 @@ public abstract class Factions {
 	
 	public abstract List<Faction> getAll();
 	
-	/* Deprecated Rewrites */
-	
+	// ----------------------------------------
+	// Deprecated Methods 
+	// ----------------------------------------
+			
 	// EOL: 4 Releases after 2.0.0-beta4
 	@Deprecated
 	public String getWildernessID() { return this.getWildernessId(); }

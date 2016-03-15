@@ -15,6 +15,19 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 public class JailListener implements Listener {
 	
 	// ----------------------------------------
+	//  Singleton
+	// ----------------------------------------
+
+	private static JailListener instance = null;
+	public static JailListener get() {
+		if (instance == null) instance = new JailListener();
+		return instance;
+	}
+	
+	protected JailListener() { }
+
+	
+	// ----------------------------------------
 	//  Fields
 	// ----------------------------------------
 	
@@ -68,4 +81,5 @@ public class JailListener implements Listener {
 		
 		return true;
 	}
+
 }

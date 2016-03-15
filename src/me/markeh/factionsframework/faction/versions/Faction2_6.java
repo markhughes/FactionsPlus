@@ -41,6 +41,7 @@ public class Faction2_6 extends Faction {
 		List<Player> members = new ArrayList<Player>();
 		
 		try {
+			// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
 			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
 				members.add(mplayer.getPlayer());
 			}
@@ -62,6 +63,7 @@ public class Faction2_6 extends Faction {
 		List<Player> members = new ArrayList<Player>();
 		
 		try {
+			// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
 			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
 				if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
 					members.add(mplayer.getPlayer());

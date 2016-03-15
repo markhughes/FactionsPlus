@@ -97,9 +97,10 @@ public class CmdWarp extends FactionsCommand {
 			}
 		}
 		
-		final FPlayer warper = this.fplayer;
 		
 		if (Config.get().warpsWarmUp > 0) {
+			final FPlayer warper = this.fplayer;
+			
 			msg("<gold>Warping you in %s seconds.".replace("%s", Config.get().warpsWarmUp + "")); 
 			
 			warper.warmUpTask(

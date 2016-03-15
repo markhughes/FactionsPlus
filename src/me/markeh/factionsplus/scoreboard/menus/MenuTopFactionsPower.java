@@ -56,13 +56,11 @@ public class MenuTopFactionsPower extends SBMenu<MenuTopFactionsPower> {
 
 	@Override
 	public Scoreboard getScoreboard() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Objective getObjective() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

@@ -5,7 +5,7 @@ import me.markeh.factionsframework.command.FactionsCommand;
 public abstract class FactionsCommand2_6 extends FactionsCommand {
 	public FactionsCommand2_6() { super(); }
 	
-	public FactionsCommand2_XWrapper wrapper;
+	public FactionsCommand2_8_6Wrapper wrapper;
 	
 	public abstract void run();
 	

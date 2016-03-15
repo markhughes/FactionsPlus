@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public abstract class Faction {
-	
+		
 	private final String id;
 	public Faction(String id) {
 		this.id = id;

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import me.markeh.factionsplus.conf.Config;
 
@@ -18,8 +20,67 @@ import org.bukkit.plugin.java.JavaPlugin;
 public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 
 	// ----------------------------------------
+	//  Fields
+	// ----------------------------------------
+	
+	private List<String> pluginsDependenOn = new ArrayList<String>();
+	
+	// ----------------------------------------
 	//  Methods
 	// ----------------------------------------
+	
+	public final void addDependency(String pluginName) {
+		if ( ! this.pluginsDependenOn.contains(pluginName)) this.pluginsDependenOn.add(pluginName);
+		
+		if ( ! this.isPluginEnabled(pluginName)) {
+			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** " + pluginName + " is not enabled ******************** ");
+			log("FactionsPlus requires the plugin " + pluginName + " to be present!");
+			log("You can download plugins from either dev.bukkit.org or Spigot resources:");
+			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "https://www.spigotmc.org/resources/");
+			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/");
+			log("");
+			log("");
+			return;
+		}
+	}
+	
+	public final void addDependency(Boolean add, String pluginName) {
+		if ( ! add) return;
+		this.addDependency(pluginName);
+	}
+	
+	public final void addDependency(String... pluginNames) {
+		String foundPlugin = null;
+		String presentableString = "";
+		
+		for (String name : pluginNames) {
+			if (presentableString == "") {
+				presentableString += name;
+			} else {
+				presentableString += " / " + name;
+			}
+			
+			if (this.isPluginEnabled(name)) foundPlugin = name;
+		}
+		
+		if (foundPlugin != null) {
+			this.addDependency(foundPlugin);
+		} else {
+			log(" " + ChatColor.DARK_RED + ChatColor.BOLD +  "******************** " + presentableString + " is not enabled ******************** ");
+			log("FactionsPlus requires the plugin " + presentableString + " to be present!");
+			log("You can download plugins from either dev.bukkit.org or Spigot resources:");
+			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "https://www.spigotmc.org/resources/");
+			log(" - " + ChatColor.DARK_BLUE + ChatColor.UNDERLINE +  "http://dev.bukkit.org/bukkit-plugins/");
+			log("");
+			log("");
+		}
+	}
+	
+	public final void addDependency(Boolean add, String... pluginNames) {
+		if ( ! add) return;
+		
+		this.addDependency(pluginNames);
+	}
 	
 	// Add a listener
 	public final void addListener(Listener listener) {
@@ -29,6 +90,11 @@ public abstract class FactionsPlusPlugin<T> extends JavaPlugin {
 	// Remove a listener 
 	public final void removeListener(Listener listener) {
 		HandlerList.unregisterAll(listener);
+	}
+	
+	// Is a listener enabled  
+	public final boolean isListenerEnabled(Listener listener) {
+		return HandlerList.getRegisteredListeners(this).contains(listener);
 	}
 	
 	// onEnable
