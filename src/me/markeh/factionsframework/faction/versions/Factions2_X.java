@@ -17,16 +17,16 @@ import com.massivecraft.massivecore.ps.PS;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 
-public class Factions2X extends Factions {
+public class Factions2_X extends Factions {
 	
-	private HashMap<String, Faction2X> factionMap = new HashMap<String, Faction2X>();
+	private HashMap<String, Faction2_X> factionMap = new HashMap<String, Faction2_X>();
 	
 	@Override
 	public Faction getFactionById(String id) {
 		id = id.toLowerCase();
 		
 		if( ! factionMap.containsKey(id)) {
-			factionMap.put(id, new Faction2X(id));
+			factionMap.put(id, new Faction2_X(id));
 		}
 		
 		return (factionMap.get(id));

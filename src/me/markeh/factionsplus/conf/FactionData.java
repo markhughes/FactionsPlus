@@ -85,6 +85,9 @@ public class FactionData extends Configuration<FactionData> {
 		this.setSub("fdata");
 		this.setName(id);
 		
+		this.setHeader("You probably shouldn't modify this file, as its",
+					   "data types are not human friendly.");
+		
 		// Simply store the identifier and load the data
 		this.id = id;
 		

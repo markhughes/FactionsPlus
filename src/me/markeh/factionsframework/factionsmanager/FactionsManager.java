@@ -4,8 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import me.markeh.factionsframework.faction.Factions;
-import me.markeh.factionsframework.faction.versions.Factions16UUID;
-import me.markeh.factionsframework.faction.versions.Factions2X;
+import me.markeh.factionsframework.faction.versions.Factions1_6UUID;
+import me.markeh.factionsframework.faction.versions.Factions2_X;
 import me.markeh.factionsframework.faction.versions.Factions2_6;
 import me.markeh.factionsframework.objs.NotifyEvent;
 
@@ -93,11 +93,11 @@ public class FactionsManager {
 	public Factions fetch() {
 		if(factions == null) {
 			if (this.version.equals(FactionsVersion.Factions2_X) || this.version.equals(FactionsVersion.Factions2_8_6)) {
-				factions = new Factions2X();
+				factions = new Factions2_X();
 			} else if(this.version.equals(FactionsVersion.Factions2_6)) {
 				factions = new Factions2_6();
 			} else {
-				factions = new Factions16UUID();
+				factions = new Factions1_6UUID();
 			}
 		}
 		

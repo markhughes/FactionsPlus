@@ -51,5 +51,5 @@ public abstract class FactionsCommandManager {
 	public abstract void removeCommand(FactionsCommand cmd);
 	
 	// Simple event notification
-	public abstract void notify(NotifyEvent event);
+	public void notify(NotifyEvent event) { /* optional override */ }
 }

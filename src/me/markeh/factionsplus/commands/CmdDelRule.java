@@ -14,11 +14,11 @@ public class CmdDelRule extends FactionsCommand {
 		this.aliases.add("delrule");
 		this.requiredArguments.add("rule number");
 				
-		this.description = Texts.cmdAddRule_description;
+		this.description = Texts.get().cmdAddRule_description;
 		
 		this.addRequirement(ReqIsPlayer.get());
 		this.addRequirement(ReqHasFaction.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.cmdAddRule_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.get().cmdAddRule_noPermission)));
 
 	}
 	
@@ -29,12 +29,12 @@ public class CmdDelRule extends FactionsCommand {
 	@Override
 	public void run() {		
 		if ( ! Config.get().enableRules) {
-			msg(Texts.rules_notEnabled);
+			msg(Texts.get().rules_notEnabled);
 			return;
 		}
 
 		if ( ! getFPlayer().isLeader() && ! getFPlayer().isOfficer()) {
-			msg(Texts.cmdAddRule_badRank);
+			msg(Texts.get().cmdAddRule_badRank);
 			return;
 		}
 		

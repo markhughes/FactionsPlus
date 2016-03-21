@@ -6,35 +6,33 @@ import com.massivecraft.factions.cmd.CmdFactions;
 
 import me.markeh.factionsframework.command.FactionsCommand;
 import me.markeh.factionsframework.command.FactionsCommandManager;
-import me.markeh.factionsframework.objs.NotifyEvent;
 
 public class FactionsCommandManager2_X extends FactionsCommandManager {
-
-	// ------------------------------
-	//  Fields
-	// ------------------------------
+	
+	// ----------------------------------------
+	//  FIELDS
+	// ----------------------------------------
 	
 	private HashMap<FactionsCommand, FactionsCommand2_XWrapper> wrappers = new HashMap<FactionsCommand, FactionsCommand2_XWrapper>();
 	
-	// ------------------------------
-	//  Methods
-	// ------------------------------
-
+	// ----------------------------------------
+	//  METHODS
+	// ----------------------------------------
+	
 	@Override
-	public void addCommand(FactionsCommand cmd) {
-		wrappers.put(cmd, new FactionsCommand2_XWrapper(cmd, cmd.aliases, cmd.requiredArguments, cmd.optionalArguments));
+	public void addCommand(FactionsCommand command) {
+		FactionsCommand2_XWrapper wrapper = new FactionsCommand2_XWrapper(command, command.aliases, command.requiredArguments, command.optionalArguments);
 		
-		CmdFactions.get().addChild(wrappers.get(cmd));
+		wrappers.put(command, wrapper);
+		
+		CmdFactions.get().addChild(wrappers.get(command));
 		
 	}
 
 	@Override
-	public void removeCommand(FactionsCommand cmd) {
-		CmdFactions.get().removeChild(wrappers.get(cmd));
+	public void removeCommand(FactionsCommand command) {
+		CmdFactions.get().removeChild(wrappers.get(command));
 		
-		wrappers.remove(cmd);
+		wrappers.remove(command);
 	}
-
-	@Override
-	public void notify(NotifyEvent event) { }
 }

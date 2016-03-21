@@ -11,7 +11,6 @@ import me.markeh.factionsframework.objs.NotifyEvent;
 import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.factions.Factions;
-import com.massivecraft.massivecore.cmd.MassiveCommand;
 
 public class FactionsCommandManager2_6 extends FactionsCommandManager {
 
@@ -31,7 +30,7 @@ public class FactionsCommandManager2_6 extends FactionsCommandManager {
 		
 		// <= 2.6 needs to be able to use FCommand 
 		try {
-			getCmdFactions().getClass().getMethod("addSubCommand", MassiveCommand.class).invoke(getCmdFactions(), wrappers.get(cmd));
+			getCmdFactions().getClass().getMethod("addSubCommand", Class.forName("com.massivecraft.massivecore.cmd.MassiveCommand")).invoke(getCmdFactions(), wrappers.get(cmd));
 		} catch (Exception e) {
 			FactionsPlus.get().logError(e);
 		}

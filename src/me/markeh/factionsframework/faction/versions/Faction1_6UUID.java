@@ -19,10 +19,10 @@ import me.markeh.factionsframework.factionsmanager.FactionsManager;
 import me.markeh.factionsframework.objs.Rel;
 import me.markeh.factionsplus.FactionsPlus;
 
-public class Faction16UUID extends Faction {
+public class Faction1_6UUID extends Faction {
 	com.massivecraft.factions.Faction faction = null;
 	
-	public Faction16UUID(String id) {
+	public Faction1_6UUID(String id) {
 		super(id);
 		
 		if (this.faction != null) return;

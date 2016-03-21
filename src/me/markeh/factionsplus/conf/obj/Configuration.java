@@ -109,24 +109,24 @@ public abstract class Configuration<T> {
 		List<String> sectionsCreated = new ArrayList<String>();
 		
 		for (Field field : this.getClass().getFields()) {
-			FieldMetaData metaData = FieldMetaData.get(field);
+			Option metaData = this.getOption(field);
 			
-			if ( ! metaData.isConfigurationField()) continue;
+			if (metaData == null) continue;
 					
-			if ( ! sectionsCreated.contains(metaData.getSectionName())) {
-				sectionsCreated.add(metaData.getSectionName());
-				writeSectionLine(metaData.getSectionName());
+			if ( ! sectionsCreated.contains(metaData.section().toLowerCase())) {
+				sectionsCreated.add(metaData.name().toLowerCase());
+				this.writeSectionLine(metaData.section());
 			}
 			
 			String value = null;
 			
 			try {
-				value = this.buildValue(field, metaData.getFieldDescription());
+				value = this.buildValue(field, metaData.comment());
 			} catch(Exception e) {
 				FactionsPlus.get().logError(e);
 			}
 					
-			if (value != null) writeKeyLine(metaData.getFieldName(), value, metaData.getFieldDescription());
+			if (value != null) writeKeyLine(metaData.name(), value, metaData.comment());
 		}
 		
 		writer.close();
@@ -159,18 +159,20 @@ public abstract class Configuration<T> {
 		
 		// Go through each field, and see if its a configuration field
 		for (Field field : this.getClass().getFields()) {
-			FieldMetaData metaData = FieldMetaData.get(field);
+			Option metaData = this.getOption(field);
 			
-			if ( ! metaData.isConfigurationField()) continue; // Not a configuration field, so ignore
+			if (metaData == null) continue; // Not a configuration field, so ignore
 				
 			Object value = null;
 			
+			String path = metaData.section() + "." + metaData.name();
+			
 			// Lists will be read using the getList method 
 			if (field.getType() == List.class) {
-				value = yamlConfig.getList(metaData.getSectionName() + "." + metaData.getFieldName());
+				value = yamlConfig.getList(path);
 			} else {
 				// Just get the object raw 
-				value = yamlConfig.get(metaData.getSectionName() + "." + metaData.getFieldName());
+				value = yamlConfig.get(path);
 			}
 					
 			if (value == null) continue;
@@ -228,7 +230,10 @@ public abstract class Configuration<T> {
 			// Convert the list to a YAML format.
 			// We need to print to the writer for this one
 			
-			writer.println("    # " + description);
+			if (description != null && description != "") {
+				writer.println("    # " + description);
+			}
+			
 			writer.println("    " + field.getName() + ":");
 			
 			// Make this list raw, and put it on the writer 
@@ -254,7 +259,7 @@ public abstract class Configuration<T> {
 	// Writes a key line
 	private final void writeKeyLine(String key, String value, String comment) {
 		// Comment can be null, so we'll check that first 
-		if (comment != null) writer.println("    # " + comment);
+		if (comment != null && ! comment.trim().isEmpty()) writer.println("    # " + comment);
 		
 		writer.println("    " + key + ": \"" + value.replaceAll("\"", "\\\\\"") + "\"");
 		writer.println("    ");
@@ -262,7 +267,6 @@ public abstract class Configuration<T> {
 	
 	// Load a field 
 	public final void loadField(Field field, Object value) throws IllegalArgumentException, IllegalAccessException {
-		
 		if (field.getType() == TLoc.class) {
 			field.set(this, TLoc.fromRaw(value.toString()));
 		} else if(field.getType() == TMap.class) {			
@@ -341,7 +345,8 @@ public abstract class Configuration<T> {
 		
 		return rawList;
 	}
-	 
+	
+	// Safe clone method
 	public final T safeClone(Object cloneTo) {
 		Configuration<T> newClass = (Configuration<T>) cloneTo;
 		
@@ -352,9 +357,9 @@ public abstract class Configuration<T> {
 		newClass.setSub(this.getSub());
 		
 		for (Field field : this.getClass().getFields()) {
-			FieldMetaData meta = FieldMetaData.get(field);
+			Option metaData = this.getOption(field);
 			
-			if ( ! meta.isConfigurationField()) continue; // Not a configuration field, so ignore
+			if (metaData == null) continue; // Not a configuration field, so ignore
 								
 			try {
 				newClass.getClass().getField(field.getName()).set(this, field.get(this));
@@ -365,6 +370,15 @@ public abstract class Configuration<T> {
 		}
 		
 		return (T) cloneTo;
+	}
+	
+	// Simple method to get the Option annotation
+	public final Option getOption(Field field) {
+		if (field.isAnnotationPresent(Option.class)) {
+			return field.getAnnotation(Option.class);
+		} else {
+			return null;
+		}
 	}
 	
 	public void preUpdatePing() { /* Override if needed */ }

@@ -1,4 +1,13 @@
-# FactionsPlus v2.0.0 
+# FactionsPlus v2.0.0-beta6.1
+ 
+* Improves support for Factions 2.8.7Beta
+
+# FactionsPlus v2.0.0-beta6
+
+* Removed unnecessary reflection for Factions 2.6 
+* Fixed a bug with the isConsole variable being null
+
+# FactionsPlus v2.0.0-beta5
 
 * Added notice for Factions 2.6 Patches plugin requirement 
 * Wilderness chunk regeneration is in place, works with natural regeneration and can use block logging plugins
@@ -14,6 +23,8 @@
 * FactionsFramework: Added: FPlayer#get(CommandSender sender) and FPlayer#getWorld
 * FactionsFramework: Added Loc#from(CommandSender sender)
 * FactionsFramework: Added Sender support for Perm object
+* Fixes FactionsUUID issues 
+* Reflection improvements for 2.8.7
 
 The following was already available in the beta:
 

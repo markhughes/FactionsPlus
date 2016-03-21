@@ -16,11 +16,11 @@ import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 
-public class Faction2X extends Faction {
+public class Faction2_X extends Faction {
 	
 	private com.massivecraft.factions.entity.Faction faction = null;
 	
-	public Faction2X(String uuid) {
+	public Faction2_X(String uuid) {
 		super(uuid);
 		
 		if (this.faction != null) return;

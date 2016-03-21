@@ -17,20 +17,20 @@ public class CmdAnnounce extends FactionsCommand {
 		this.aliases.add("announce");
 		this.requiredArguments.add("message");
 				
-		this.description = Texts.cmdAddRule_description;
+		this.description = Texts.get().cmdAddRule_description;
 		
 		this.addRequirement(ReqIsPlayer.get());
 		this.addRequirement(ReqHasFaction.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.announce", Texts.cmdAnnounce_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.announce", Texts.get().cmdAnnounce_noPermission)));
 
-		this.errorOnTooManyArgs = false;
+		this.setErrorOnTooManyArgs(false);
 	}
 	
 	@Override
 	public void run() {
 		
 		if ( ! Config.get().enableAnnouncements) {
-			msg(Texts.announcements_notEnabled);
+			msg(Texts.get().announcements_notEnabled);
 			return;
 		}
 		

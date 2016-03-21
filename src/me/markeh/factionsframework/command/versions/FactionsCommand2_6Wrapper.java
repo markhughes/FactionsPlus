@@ -60,7 +60,7 @@ public class FactionsCommand2_6Wrapper extends FCommand {
 			FactionsPlus.get().logError(e);
 		}
 		
-		this.errorOnToManyArgs = cmd.errorOnTooManyArgs;
+		this.errorOnToManyArgs = cmd.doErrorOnTooManyArgs();
 	}
 
 	// ------------------------------

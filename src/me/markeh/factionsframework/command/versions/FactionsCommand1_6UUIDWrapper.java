@@ -49,7 +49,7 @@ public class FactionsCommand1_6UUIDWrapper extends FCommand {
 		
 		cmd.helpLine = this.getUseageTemplate();
 		
-		this.errorOnToManyArgs = cmd.errorOnTooManyArgs;
+		this.errorOnToManyArgs = cmd.doErrorOnTooManyArgs();
 	}
 	
 	// ------------------------------

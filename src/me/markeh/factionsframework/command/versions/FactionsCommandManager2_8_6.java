@@ -39,7 +39,6 @@ public class FactionsCommandManager2_8_6 extends FactionsCommandManager {
 				FactionsFramework.get().logError(e1);
 				FactionsFramework.get().logError(e2);
 			}
-
 		}
 	}
 

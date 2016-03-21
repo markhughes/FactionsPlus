@@ -26,7 +26,7 @@ public class CmdUnjail extends FactionsCommand {
 				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdUnjail_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.get().cmdUnjail_noPermission)));
 
 	}
 
@@ -37,12 +37,12 @@ public class CmdUnjail extends FactionsCommand {
 	@Override
 	public void run() {
 		if ( ! Config.get().enableJails) {
-			msg(Texts.jails_notEnabled);
+			msg(Texts.get().jails_notEnabled);
 			return;
 		}
 		
 		if (!fplayer.isLeader() && !fplayer.isOfficer()) {
-			msg(Texts.cmdUnjail_badRank);
+			msg(Texts.get().cmdUnjail_badRank);
 			return;
 		}
 		
@@ -51,18 +51,18 @@ public class CmdUnjail extends FactionsCommand {
 		Player player = Bukkit.getPlayer(getArg(0));
 		
 		if (player == null) {
-			msg(Texts.playerNotFound);
+			msg(Texts.get().playerNotFound);
 			return;
 		}
 		
 		if ( ! fdata.jailedPlayers.contains(player.getUniqueId().toString())) {
-			msg(String.format(Texts.cmdUnjail_notJailed, player.getName()));
+			msg(String.format(Texts.get().cmdUnjail_notJailed, player.getName()));
 			return;
 		}
 		
 		fdata.jailedPlayers.remove(player.getUniqueId().toString());
-		player.sendMessage(Texts.cmdUnjail_notifyJailedPlayer);
+		player.sendMessage(Texts.get().cmdUnjail_notifyJailedPlayer);
 		
-		msg(String.format(Texts.cmdUnJail_notifyUnjailer, getArg(0)));
+		msg(String.format(Texts.get().cmdUnJail_notifyUnjailer, getArg(0)));
 	}
 }

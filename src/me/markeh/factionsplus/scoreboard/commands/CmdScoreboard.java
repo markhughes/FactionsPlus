@@ -15,13 +15,13 @@ public class CmdScoreboard extends FactionsCommand {
 		this.aliases.add("scoreboard");
 		this.aliases.add("sb");
 				
-		this.description = Texts.cmdScoreboard_description;
+		this.description = Texts.get().cmdScoreboard_description;
 		
-		this.errorOnTooManyArgs = false;
+		this.setErrorOnTooManyArgs(false);
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.togglescoreboard", Texts.cmdScoreboard_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.togglescoreboard", Texts.get().cmdScoreboard_noPermission)));
 
 	}
 	

@@ -21,11 +21,11 @@ public class CmdJail extends FactionsCommand {
 		this.aliases.add("jail");
 		this.requiredArguments.add("player");
 				
-		this.description = Texts.cmdJail_description;
+		this.description = Texts.get().cmdJail_description;
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdJail_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.get().cmdJail_noPermission)));
 
 	}
 	
@@ -36,33 +36,33 @@ public class CmdJail extends FactionsCommand {
 	@Override
 	public void run() {
 		if ( ! Config.get().enableJails) {
-			msg(Texts.jails_notEnabled);
+			msg(Texts.get().jails_notEnabled);
 			return;
 		}
 
 		if ( ! getFPlayer().isLeader() && !getFPlayer().isOfficer()) {
-			msg(Texts.cmdJail_badRank);
+			msg(Texts.get().cmdJail_badRank);
 			return;
 		}
 		
 		FactionData fdata = FactionData.get(getFaction());
 		
 		if (fdata.jailLoc == null) {
-			msg(Texts.cmdJail_notSet);
+			msg(Texts.get().cmdJail_notSet);
 			return;
 		}
 		
 		Faction factionAt = factions.getFactionAt(fdata.jailLoc.getBukkitLocation());
 		
 		if (factionAt.getID() != faction.getID()) {
-			msg(Texts.cmdJail_notInLand);
+			msg(Texts.get().cmdJail_notInLand);
 			return;
 		}
 		
 		FPlayer jailingPlayer = this.getArgAs(FPlayer.class, 0, null);
 		
 		if (jailingPlayer == null) {
-			msg(Texts.playerNotFound);
+			msg(Texts.get().playerNotFound);
 			return;
 		}
 				
@@ -72,7 +72,7 @@ public class CmdJail extends FactionsCommand {
 		}
 		
 		if (jailingPlayer.getFaction().getID() != faction.getID()) {
-			msg(String.format(Texts.playerNotInYourFaction, jailingPlayer.getName())); 
+			msg(String.format(Texts.get().playerNotInYourFaction, jailingPlayer.getName())); 
 			return;
 		}
 		
@@ -80,6 +80,6 @@ public class CmdJail extends FactionsCommand {
 		
 		if (jailingPlayer.isOnline()) jailingPlayer.teleport(fdata.jailLoc);
 		
-		msg(String.format(Texts.cmdJail_sent, jailingPlayer.getName())); 
+		msg(String.format(Texts.get().cmdJail_sent, jailingPlayer.getName())); 
 	}
 }

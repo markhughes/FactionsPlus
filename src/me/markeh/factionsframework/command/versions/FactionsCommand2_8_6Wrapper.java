@@ -55,7 +55,7 @@ public class FactionsCommand2_8_6Wrapper extends com.massivecraft.factions.cmd.F
 
 			}
 			
-			this.getClass().getMethod("setGivingErrorOnTooManyArgs", Boolean.class).invoke(this, cmd.errorOnTooManyArgs);
+			this.getClass().getMethod("setGivingErrorOnTooManyArgs", Boolean.class).invoke(this, cmd.doErrorOnTooManyArgs());
 					
 			
 			cmd.helpLine = (String) this.getClass().getMethod("getUseageTemplate", Boolean.class).invoke(this).getClass().getMethod("toRaw").invoke(this);
@@ -79,7 +79,7 @@ public class FactionsCommand2_8_6Wrapper extends com.massivecraft.factions.cmd.F
 				FactionsFramework.get().logError(e);
 			}
 			
-			this.overflowSensitive = cmd.errorOnTooManyArgs;
+			this.overflowSensitive = cmd.doErrorOnTooManyArgs();
 			cmd.helpLine = this.getTemplate(true).toRaw();
 
 		}

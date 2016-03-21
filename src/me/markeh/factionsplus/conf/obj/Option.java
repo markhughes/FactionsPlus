@@ -12,4 +12,5 @@ public @interface Option {
 	String comment() default "";
 
 	boolean pingOnUpdate() default false;
+	
 }

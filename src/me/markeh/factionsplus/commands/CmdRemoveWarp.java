@@ -26,7 +26,7 @@ public class CmdRemoveWarp extends FactionsCommand {
 	@Override
 	public void run() {
 		if ( ! Config.get().enableWarps) {
-			msg(Texts.warps_notEnabled);
+			msg(Texts.get().warps_notEnabled);
 			return;
 		}
 		

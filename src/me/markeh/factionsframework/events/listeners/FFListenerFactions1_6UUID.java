@@ -14,7 +14,7 @@ import org.bukkit.event.Listener;
 
 import com.massivecraft.factions.Board;
 
-public class FFListenerFactions16UUID implements Listener {
+public class FFListenerFactions1_6UUID implements Listener {
 	
 	@EventHandler
 	public void onFactionCreate(com.massivecraft.factions.event.FactionCreateEvent factionsEvent) {

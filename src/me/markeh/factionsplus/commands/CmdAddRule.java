@@ -18,15 +18,14 @@ public class CmdAddRule extends FactionsCommand {
 	public CmdAddRule() {
 		this.aliases.add("addrule");
 		this.requiredArguments.add("rule");
-				
-		this.description = Texts.cmdAddRule_description;
 		
-		this.errorOnTooManyArgs = false;
+		this.description = Texts.get().cmdAddRule_description;
+		
+		this.setErrorOnTooManyArgs(false);
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.cmdAddRule_noPermission)));
-
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.get().cmdAddRule_noPermission)));
 	}
 	
 	// ----------------------------------------
@@ -36,12 +35,12 @@ public class CmdAddRule extends FactionsCommand {
 	@Override
 	public void run() {
 		if ( ! Config.get().enableRules) {
-			msg(Texts.rules_notEnabled);
+			msg(Texts.get().rules_notEnabled);
 			return;
 		}
 
 		if ( ! getFPlayer().isLeader() && ! getFPlayer().isOfficer()) {
-			msg(Texts.cmdAddRule_badRank);
+			msg(Texts.get().cmdAddRule_badRank);
 			return;
 		}
 		
@@ -51,6 +50,6 @@ public class CmdAddRule extends FactionsCommand {
 		
 		fdata.rules.add(rule);
 		
-		msg(Texts.cmdAddRule_added);
+		msg(Texts.get().cmdAddRule_added);
 	}
 }

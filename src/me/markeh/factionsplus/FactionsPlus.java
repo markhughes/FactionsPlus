@@ -100,7 +100,7 @@ public class FactionsPlus extends FactionsPlusPlugin<FactionsPlus> {
 		);
 				
 		// Notify console we're ready
-		log(Texts.ready);
+		log(Texts.get().ready);
 		
 		// Enable metrics 
 		if (Config.get().metrics) Metrics.get(this).attemptEnable();

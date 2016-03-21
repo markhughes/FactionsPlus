@@ -27,7 +27,7 @@ public class CmdSetJail extends FactionsCommand {
 				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
-		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.cmdSetJail_noPermission)));
+		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.get().cmdSetJail_noPermission)));
 	}
 	
 	// ----------------------------------------
@@ -37,17 +37,17 @@ public class CmdSetJail extends FactionsCommand {
 	@Override
 	public void run() {
 		if ( ! Config.get().enableJails) {
-			msg(Texts.jails_notEnabled);
+			msg(Texts.get().jails_notEnabled);
 			return;
 		}
 
 		if ( ! fplayer.isLeader() && !fplayer.isOfficer()) {
-			msg(Texts.cmdSetJail_badRank);
+			msg(Texts.get().cmdSetJail_badRank);
 			return;
 		}
 		
 		if (factions.getFactionAt(this.fplayer.getPlayer().getLocation()) != faction) {
-			msg(Texts.cmdSetJail_notInLand);
+			msg(Texts.get().cmdSetJail_notInLand);
 			return;
 		}
 		
@@ -61,6 +61,6 @@ public class CmdSetJail extends FactionsCommand {
 			}
 		}
 		
-		msg(Texts.cmdSetJail_jailSet);
+		msg(Texts.get().cmdSetJail_jailSet);
 	}
 }

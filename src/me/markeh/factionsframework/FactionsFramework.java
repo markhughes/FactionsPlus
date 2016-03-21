@@ -39,7 +39,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.markeh.factionsframework.command.FactionsCommandManager;
-import me.markeh.factionsframework.events.listeners.FFListenerFactions16UUID;
+import me.markeh.factionsframework.events.listeners.FFListenerFactions1_6UUID;
 import me.markeh.factionsframework.events.listeners.FFListenerFactions2_6;
 import me.markeh.factionsframework.events.listeners.FFListenerFactions2_X;
 import me.markeh.factionsframework.events.listeners.FFListenerGlobal;
@@ -100,7 +100,7 @@ public class FactionsFramework {
 			factionsManager = FactionsManager.get();
 			
 			if (listener == null) {
-				if (factionsManager.determineVersion() == FactionsVersion.FactionsUUID) listener = new FFListenerFactions16UUID();
+				if (factionsManager.determineVersion() == FactionsVersion.FactionsUUID) listener = new FFListenerFactions1_6UUID();
 				if (factionsManager.determineVersion() == FactionsVersion.Factions2_6) listener = new FFListenerFactions2_6();
 				if (factionsManager.determineVersion() == FactionsVersion.Factions2_X || factionsManager.determineVersion() == FactionsVersion.Factions2_8_6) listener = new FFListenerFactions2_X();
 				

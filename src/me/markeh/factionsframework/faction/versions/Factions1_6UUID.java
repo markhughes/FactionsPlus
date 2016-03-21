@@ -18,7 +18,7 @@ import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsplus.FactionsPlus;
 
-public class Factions16UUID extends Factions {
+public class Factions1_6UUID extends Factions {
 	
 	// Collection of Faction objects we've already created 
 	private HashMap<String, Faction> knownFactions = new HashMap<String, Faction>();
@@ -28,7 +28,7 @@ public class Factions16UUID extends Factions {
 		id = id.toLowerCase();
 		
 		if( ! knownFactions.containsKey(id)) {
-			knownFactions.put(id, new Faction16UUID(id));
+			knownFactions.put(id, new Faction1_6UUID(id));
 		}
 		
 		return(knownFactions.get(id));
