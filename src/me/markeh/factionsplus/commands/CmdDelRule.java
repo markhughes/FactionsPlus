@@ -18,6 +18,8 @@ public class CmdDelRule extends FactionsCommand {
 		
 		this.addRequirement(ReqIsPlayer.get());
 		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.get().cmdAddRule_noPermission)));
 
 	}
