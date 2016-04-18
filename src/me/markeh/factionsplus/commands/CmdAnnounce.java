@@ -21,6 +21,8 @@ public class CmdAnnounce extends FactionsCommand {
 		
 		this.addRequirement(ReqIsPlayer.get());
 		this.addRequirement(ReqHasFaction.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.announce", Texts.get().cmdAnnounce_noPermission)));
 
 		this.setErrorOnTooManyArgs(false);
