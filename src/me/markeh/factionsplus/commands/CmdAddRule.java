@@ -25,6 +25,8 @@ public class CmdAddRule extends FactionsCommand {
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.rules", Texts.get().cmdAddRule_noPermission)));
 	}
 	
