@@ -18,6 +18,8 @@ public class CmdWarps extends FactionsCommand {
 						
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.warp", "You don't have permission to do that.")));
 
 	}

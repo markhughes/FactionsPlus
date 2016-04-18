@@ -30,6 +30,8 @@ public class CmdChest  extends FactionsCommand {
 		
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.chests", "You don't have permission to uses faction chests.")));
 
 	}

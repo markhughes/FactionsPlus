@@ -27,6 +27,8 @@ public class CmdSetJail extends FactionsCommand {
 				
 		this.addRequirement(ReqHasFaction.get());
 		this.addRequirement(ReqIsPlayer.get());
+		this.addRequirement(ReqIsLeader.get());
+		this.addRequirement(ReqIsOfficer.get());
 		this.addRequirement(ReqPermission.get(Perm.get("factionsplus.jail", Texts.get().cmdSetJail_noPermission)));
 	}
 	
