@@ -1,0 +1,22 @@
+package me.markeh.factionsframework.command.requirements;
+
+import me.markeh.factionsframework.command.FactionsCommand;
+
+public class ReqPlayerIsOfficer extends Requirement {
+	
+	private static ReqPlayerIsOfficer i;
+	public static ReqPlayerIsOfficer get() {
+		if (i == null) i = new ReqPlayerIsOfficer();
+		return i;
+	}
+	
+	@Override
+	public boolean isMet(FactionsCommand command) {
+		if (command.fplayer == null || ! command.fplayer.isOfficer()) {
+			command.sender.sendMessage(command.colourise("<reset><red>This command can <bold>only<reset><red> be run from officer rank!"));
+			return false;
+		}
+		
+		return true;
+	}
+}
