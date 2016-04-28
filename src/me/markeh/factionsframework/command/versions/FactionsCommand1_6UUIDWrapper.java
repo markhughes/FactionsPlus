@@ -10,74 +10,68 @@ import me.markeh.factionsplus.FactionsPlus;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.zcore.util.TL;
 
+/**
+ * Command Wrapper
+ * Supports: Latest Factions UUID
+ * 
+ * Some version of Factions make major changes, in which a new
+ * command wrapper should be created.
+ * 
+ * The latest wrapper should not initiate any reflection.
+ */
 public class FactionsCommand1_6UUIDWrapper extends FCommand {
 	
-	// ------------------------------
-	//  Fields
-	// ------------------------------
+	// ---------------------------------------- //
+	// FIELDS
+	// ---------------------------------------- //
 	
-	private FactionsCommand cmd;
+	private FactionsCommand command;
 	
-	// ------------------------------
-	//  Constructor
-	// ------------------------------
+	// ---------------------------------------- //
+	// CONSTRUCTOR
+	// ---------------------------------------- //
 
-	public FactionsCommand1_6UUIDWrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+	public FactionsCommand1_6UUIDWrapper(FactionsCommand command, List<String> aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
 		// Store our FactionsCommand
-		this.cmd = cmd;
+		this.command = command;
 		
 		// Register all the aliases
-		for(String alias : _aliases) {
-			this.aliases.add(alias);
-		}
+		this.aliases.addAll(aliases);
 		
 		// Register all the required arguments 
-		for(String reqArg : reqArguments) {
-			this.requiredArgs.add(reqArg);
-		}
+		this.requiredArgs.addAll(reqArguments);
 		
 		// Register all the optional arguments
-		for(String optArg : optArguments.keySet()) {
+		for (String optArg : optArguments.keySet()) {
 			this.optionalArgs.put(optArg, optArguments.get(optArg));
 		}
 		
+		// Reflection required here 
 		try {
-			this.getClass().getMethod("setHelpShort", String.class).invoke(this, cmd.description);
+			this.getClass().getMethod("setHelpShort", String.class).invoke(this, this.command.getDescription());
 		} catch (Exception e) {
 			FactionsFramework.get().logError(e);
 		}
 		
-		cmd.helpLine = this.getUseageTemplate();
-		
-		this.errorOnToManyArgs = cmd.doErrorOnTooManyArgs();
+		this.errorOnToManyArgs = this.command.doErrorOnTooManyArgs();
 	}
 	
-	// ------------------------------
-	//  Methods
-	// ------------------------------
+	// ---------------------------------------- //
+	// METHODS
+	// ---------------------------------------- //
 
 	@Override
 	public void perform() {
 		try { 
-			cmd.reset();
-					
-			// Set our information
-			if(me != null) {
-				cmd.sender = this.sender;
-			}
-			
-			cmd.arguments = this.args;
-			
-			// Call our pre-run
-			cmd.preRun();		
-			
-			// Run the command (if we're allowed) 
-			if(cmd.canRun) cmd.run();
+			this.command.executeAs(this.sender, this.args);
 		} catch (Throwable e) {
 			FactionsPlus.get().logError(e);
 		}
 	}
 	
-	// FactionsUUID has a really dumb translation system, we can't do anything with this 
-	public TL getUsageTranslation() { return null; }
+	// FactionsUUID translation system (can't do anything with this)
+	public TL getUsageTranslation() {
+		return null;
+	}
+	
 }

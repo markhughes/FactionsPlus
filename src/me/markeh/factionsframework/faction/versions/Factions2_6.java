@@ -2,6 +2,7 @@ package me.markeh.factionsframework.faction.versions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import com.massivecraft.factions.entity.FactionColls;
 import com.massivecraft.factions.entity.MConf;
 import com.massivecraft.factions.entity.UPlayer;
 import com.massivecraft.massivecore.ps.PS;
+import com.massivecraft.massivecore.util.IdUtil;
 
 public class Factions2_6 extends Factions {
 	
@@ -116,4 +118,35 @@ public class Factions2_6 extends Factions {
 		
 		return factions;
 	}
+	
+	public static Set<UPlayer> getClaimInformees(UPlayer usender, com.massivecraft.factions.entity.Faction oldFaction, com.massivecraft.factions.entity.Faction newFaction, Class<?> clazz) {
+		Set<UPlayer> ret = new HashSet<UPlayer>();
+		
+		if (usender != null) ret.add(usender);
+		
+		for (com.massivecraft.factions.entity.Faction faction : com.massivecraft.factions.entity.BoardColls.get().get2(usender).getFactionToChunks().keySet())
+		{
+			if (faction == null) continue;
+			if (faction.isNone()) continue;
+			ret.addAll(getUPlayersIn(faction, clazz));
+		}
+		
+		if (MConf.get().logLandClaims)
+		{
+			ret.add(UPlayer.get(IdUtil.getConsole()));
+		}
+		
+		return ret;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<UPlayer> getUPlayersIn(com.massivecraft.factions.entity.Faction faction, Class<?> clazz) {
+		try { 
+			List<UPlayer> uplayers = (List<UPlayer>) faction.getClass().getMethod("getUPlayers").invoke(clazz);
+			return uplayers;
+		} catch(Exception e) { }
+		
+		return new ArrayList<UPlayer>();
+	}
+	
 }

@@ -6,7 +6,6 @@ import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 public abstract class Faction {
 		
@@ -19,13 +18,13 @@ public abstract class Faction {
 	public String getID() { return id; }
 	
 	// Returns a list of players in the Faction
-	public abstract List<Player> getMembers();
+	public abstract List<FPlayer> getMembers();
 	
 	// Gets the leader of the Faction
-	public abstract Player getLeader();
+	public abstract FPlayer getLeader();
 	
 	// Returns a list of the officers in a Faction
-	public abstract List<Player> getOfficers();
+	public abstract List<FPlayer> getOfficers();
 	
 	// Gets the Home location of the Faction
 	public abstract Location getHome();
@@ -58,14 +57,14 @@ public abstract class Faction {
 	public abstract double getPower();
 
 	public void msg(String string) {
-		for(Player player : this.getMembers()) {
-			FPlayer.get(player).msg(string);
+		for(FPlayer member : this.getMembers()) {
+			member.msg(string);
 		}
 	}
 	
 	public void msg(String string, String... params) {
-		for(Player player : this.getMembers()) {
-			FPlayer.get(player).msg(string, params);
+		for(FPlayer member : this.getMembers()) {
+			member.msg(string, params);
 		}
 	}
 	

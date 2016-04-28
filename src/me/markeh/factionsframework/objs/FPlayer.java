@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import me.markeh.factionsframework.FactionsFramework;
+import me.markeh.factionsframework.IdUtil;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
 import me.markeh.factionsframework.factionsmanager.FactionsManager;
@@ -22,10 +23,10 @@ import org.bukkit.entity.Player;
 public class FPlayer {
 	private static FPlayer consoleFPlayer;
 	
-	private static HashMap<UUID, FPlayer> fplayerMap = new HashMap<UUID, FPlayer>();
+	private static HashMap<String, FPlayer> fplayerMap = new HashMap<String, FPlayer>();
 	public static FPlayer get(Player player) {
-		if ( ! fplayerMap.containsKey(player.getUniqueId())) {
-			fplayerMap.put(player.getUniqueId(), new FPlayer(player));
+		if ( ! fplayerMap.containsKey(IdUtil.get(player))) {
+			fplayerMap.put(IdUtil.get(player), new FPlayer(player));
 		}
 		
 		return fplayerMap.get(player.getUniqueId());
@@ -40,10 +41,10 @@ public class FPlayer {
 		}
 	}
 	
-	public static FPlayer get(UUID playerUUID) {
-		if (fplayerMap.containsKey(playerUUID)) return fplayerMap.get(playerUUID);
-		
-		return get(Bukkit.getPlayer(playerUUID));
+	public static FPlayer get(UUID uuid) {
+		if (fplayerMap.containsKey(uuid.toString())) return fplayerMap.get(uuid.toString());
+				
+		return get(Bukkit.getPlayer(uuid));
 	}
 	
 	private Factions factions = FactionsManager.get().fetch();
@@ -75,8 +76,8 @@ public class FPlayer {
 		return true;
 	}
 	
-	public Boolean isLeader() { return this.getFaction().getLeader() == this.player; }
-	public Boolean isOfficer() { return this.getFaction().getOfficers().contains(this.player); }
+	public Boolean isLeader() { return this.getFaction().getLeader() == this; }
+	public Boolean isOfficer() { return this.getFaction().getOfficers().contains(this); }
 	public String getFactionID() { return this.getFaction().getID(); }
 	
 	private HashMap<Integer, Runnable> warmUpTasks = new HashMap<Integer, Runnable>();

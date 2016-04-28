@@ -2,6 +2,8 @@ package me.markeh.factionsframework.command.requirements;
 
 import me.markeh.factionsframework.command.FactionsCommand;
 
+//Use ReqIsAtLeast
+@Deprecated
 public class ReqPlayerIsLeader extends Requirement {
 	
 	private static ReqPlayerIsLeader i;

@@ -29,28 +29,31 @@ public class Faction2_X extends Faction {
 	}
 
 	@Override
-	public List<Player> getMembers() {
-		List<Player> members = new ArrayList<Player>();
+	public List<FPlayer> getMembers() {
+		List<FPlayer> members = new ArrayList<FPlayer>();
 		
 		for (MPlayer mplayer : this.faction.getMPlayers()) {
-			members.add(mplayer.getPlayer());
+			members.add(FPlayer.get(mplayer.getPlayer()));
 		}
 		
 		return members;
 	}
 
 	@Override
-	public Player getLeader() {
-		return this.faction.getLeader().getPlayer();
+	public FPlayer getLeader() {
+		if (this.faction.getLeader() == null) return null;
+		if (this.faction.getLeader().getPlayer() == null) return null;
+		
+		return FPlayer.get(this.faction.getLeader().getPlayer());
 	}
 
 	@Override
-	public List<Player> getOfficers() {
-		List<Player> members = new ArrayList<Player>();
+	public List<FPlayer> getOfficers() {
+		List<FPlayer> members = new ArrayList<FPlayer>();
 		
 		for (MPlayer mplayer : this.faction.getMPlayers()) {
 			if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
-				members.add(mplayer.getPlayer());
+				members.add(FPlayer.get(mplayer.getPlayer()));
 			}
 		}
 		
@@ -150,4 +153,5 @@ public class Faction2_X extends Faction {
 	public double getPower() {
 		return this.faction.getPower();
 	}
+	
 }

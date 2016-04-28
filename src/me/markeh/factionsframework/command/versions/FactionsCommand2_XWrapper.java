@@ -11,6 +11,15 @@ import com.massivecraft.factions.Factions;
 import com.massivecraft.massivecore.MassiveException;
 import com.massivecraft.massivecore.command.type.primitive.TypeString;
 
+/**
+ * Command Wrapper
+ * Supports: Factions >= 2.8.7
+ * 
+ * Some version of Factions make major changes, in which a new
+ * command wrapper should be created.
+ * 
+ * The latest wrapper should not initiate any reflection.
+ */
 public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.FactionsCommand {
 
 	// ----------------------------------------
@@ -53,20 +62,8 @@ public class FactionsCommand2_XWrapper extends com.massivecraft.factions.cmd.Fac
 	
 	@Override
 	public void perform() throws MassiveException {
-		try { 
-			this.command.reset();
-			
-			// Set our information
-			this.command.sender = this.sender;
-			this.command.arguments = this.args;
-			this.command.preRun();		
-			
-			// Check if we can still run the command
-			if ( ! this.command.canRun) return;
-			
-			// Run the command 
-			this.command.run();
-			
+		try {
+			this.command.executeAs(this.sender, this.args);
 		} catch (Throwable e) {
 			FactionsPlus.get().logError(e);
 		}

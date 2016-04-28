@@ -9,13 +9,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import me.markeh.factionsframework.command.FactionsCommandManager;
 import me.markeh.factionsframework.faction.Faction;
 import me.markeh.factionsframework.faction.Factions;
+import me.markeh.factionsframework.objs.FPlayer;
 import me.markeh.factionsframework.objs.Rel;
 import me.markeh.factionsplus.FactionsPlus;
 import me.markeh.factionsplus.conf.Config;
@@ -233,9 +233,8 @@ public class FactionsPlusScoreboard {
 				if (team == null) team = scoreboard.registerNewTeam(faction.getID());
 				
 				team.setDisplayName(color + faction.getName());
-				team.setNameTagVisibility(NameTagVisibility.ALWAYS);
-				
-				for (Player member : faction.getMembers()) if (player.isOnline()) team.addPlayer(member);
+				// team.setNameTagVisibility(NameTagVisibility.ALWAYS);
+				for (FPlayer member : faction.getMembers()) if (member.isOnline()) team.addPlayer(member.getPlayer());
 				
 			}
 		}

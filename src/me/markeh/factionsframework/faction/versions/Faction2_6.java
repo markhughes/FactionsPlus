@@ -34,43 +34,32 @@ public class Faction2_6 extends Faction {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
-	public List<Player> getMembers() {
-		List<Player> members = new ArrayList<Player>();
+	public List<FPlayer> getMembers() {
+		List<FPlayer> members = new ArrayList<FPlayer>();
 		
-		try {
-			// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
-			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
-				members.add(mplayer.getPlayer());
-			}
-		} catch (Exception e) {
-			FactionsFramework.get().logError(e);
+		for (UPlayer mplayer : this.getUPlayers()) {
+			members.add(FPlayer.get(mplayer.getPlayer()));
 		}
 		
 		return members;
 	}
 
 	@Override
-	public Player getLeader() {
-		return this.faction.getLeader().getPlayer();
+	public FPlayer getLeader() {
+		return FPlayer.get(this.faction.getLeader().getPlayer());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<Player> getOfficers() {
-		List<Player> members = new ArrayList<Player>();
+	public List<FPlayer> getOfficers() {
+		List<FPlayer> members = new ArrayList<FPlayer>();
 		
-		try {
-			// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
-			for (UPlayer mplayer : (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this)) {
-				if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
-					members.add(mplayer.getPlayer());
-				}
+		// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
+		for (UPlayer mplayer : this.getUPlayers()) {
+			if (mplayer.getRole() == com.massivecraft.factions.Rel.OFFICER) {
+				members.add(FPlayer.get(mplayer.getPlayer()));
 			}
-		} catch (Exception e) {
-			FactionsFramework.get().logError(e);
 		}
 		
 		return members;
@@ -168,5 +157,17 @@ public class Faction2_6 extends Faction {
 	@Override
 	public double getPower() {
 		return this.faction.getPower();
+	}
+	
+	// Requires reflection - getUPlayers is not in latest Faction class, so the ref is broken
+	@SuppressWarnings("unchecked")
+	private List<UPlayer> getUPlayers() {
+		try {
+			return (List<UPlayer>) this.faction.getClass().getMethod("getUPlayers").invoke(this);
+		} catch (Exception e) {
+			FactionsFramework.get().logError(e);
+		}
+		
+		return null;
 	}
 }

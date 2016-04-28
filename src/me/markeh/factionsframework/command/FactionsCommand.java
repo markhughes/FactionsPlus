@@ -62,9 +62,6 @@ public abstract class FactionsCommand {
 	// Players Faction
 	public Faction faction = null;
 	
-	// If changed to false before calling run() the command isn't called
-	public Boolean canRun = true;
-	
 	// ----------------------------------------
 	//  PRIVATE FIELDS
 	// ----------------------------------------
@@ -79,24 +76,21 @@ public abstract class FactionsCommand {
 		requirements.add(requirement);
 	}
 	
-	// Reset values 
-	public final FactionsCommand reset() {
-		this.sender = null;
-		this.faction = null;
-		this.fplayer = null;
-		this.canRun = true;
-		this.arguments.clear();
-		
-		return this;
-	}
-	
 	// Should we error on too many arguments? 
 	public final void setErrorOnTooManyArgs(Boolean value) {
 		this.errorOnTooManyArgs = value;
 	}
 	
-	// Called before run() and sets up important fields
-	public final void preRun() {
+	public final void executeAs(CommandSender sender, List<String> arguments) {
+		// Clear all existing information first
+		this.sender = null;
+		this.faction = null;
+		this.fplayer = null;
+		this.arguments.clear();
+		
+		// Update with information we've been told about 
+		this.sender = sender;
+		this.arguments = arguments;
 		this.fplayer = FPlayer.get(this.sender);
 		
 		// Grab Faction
@@ -107,13 +101,21 @@ public abstract class FactionsCommand {
 			this.faction = this.factions.getFactionById(this.factions.getWildernessId());
 		}
 		
+		Boolean canRun = true;
+		
 		// Check requirements 
 		for (Requirement requirement : this.requirements) {
 			if ( requirement.isMet(this)) continue;
 			
-			this.canRun = false;
-			return;
+			canRun = false;
+			break;
 		}
+		
+		if (canRun) this.run();
+	}
+	// Called before run() and sets up important fields
+	public final void preRun() {
+
 	}
 	
 	// Simple way to send a message to a sender

@@ -13,4 +13,5 @@ public abstract class FactionsCommand1_6UUID extends FactionsCommand {
 	public final FactionsCommand1_6UUIDWrapper getWrapper() {
 		return new FactionsCommand1_6UUIDWrapper(this, aliases, requiredArguments, optionalArguments);
 	}
+	
 }

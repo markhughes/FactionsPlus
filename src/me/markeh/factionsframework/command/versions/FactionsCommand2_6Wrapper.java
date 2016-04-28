@@ -1,6 +1,5 @@
 package me.markeh.factionsframework.command.versions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,39 +10,42 @@ import me.markeh.factionsplus.FactionsPlus;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.zcore.util.TL;
 
+/**
+ * Command Wrapper
+ * Supports: Factions <= 2.6
+ * 
+ * Some version of Factions make major changes, in which a new
+ * command wrapper should be created.
+ *
+ * The latest wrapper should not initiate any reflection.
+ */
 public class FactionsCommand2_6Wrapper extends FCommand {
 	
 	// Stay compatible with Factions UUID, ensure you have Factions 2.6 Patches
 	// 
 	public TL getUsageTranslation() { return null; }
 	
-	// ------------------------------
-	//  Fields
-	// ------------------------------
+	// ---------------------------------------- //
+	// FIELDS
+	// ---------------------------------------- //
 
-	private FactionsCommand cmd;
+	private FactionsCommand command;
 	
-	// ------------------------------
-	//  Constructor
-	// ------------------------------
+	// ---------------------------------------- //
+	// CONSTRUCTOR 
+	// ---------------------------------------- //
 	
-	public FactionsCommand2_6Wrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+	public FactionsCommand2_6Wrapper(FactionsCommand command, List<String> aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
 		// Older arg system ..
 		
 		// Store our FactionsCommand
-		this.cmd = cmd;
+		this.command = command;
 		
 		// Register all the aliases
-		for(String alias : _aliases) {
-			this.aliases.add(alias);
-		}
-		
+		this.aliases.addAll(aliases);		
 		
 		// Register all the required arguments 
-		for(String reqArg : reqArguments) {
-			this.requiredArgs.add(reqArg);
-			//this.addArg(ARString.get(), reqArg);
-		}
+		this.requiredArgs.addAll(reqArguments);
 		
 		// Register all the optional arguments
 		for(String optArg : optArguments.keySet()) {
@@ -55,34 +57,21 @@ public class FactionsCommand2_6Wrapper extends FCommand {
 		}
 		
 		try {
-			this.getClass().getMethod("setDesc", String.class).invoke(this, cmd.description);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			this.getClass().getMethod("setDesc", String.class).invoke(this, this.command.getDescription());
+		} catch (Exception e) {
 			FactionsPlus.get().logError(e);
 		}
 		
-		this.errorOnToManyArgs = cmd.doErrorOnTooManyArgs();
+		this.errorOnToManyArgs = command.doErrorOnTooManyArgs();
 	}
 
-	// ------------------------------
-	//  Methods
-	// ------------------------------
+	// ---------------------------------------- //
+	//  METHODS
+	// ---------------------------------------- //
 	
 	public final void perform() {
 		try { 
-			cmd.reset();
-			
-			// Set our information
-			if(me != null && me.getPlayer() != null) {
-				cmd.sender = this.sender;
-			}
-			
-			cmd.arguments = this.args;
-			
-			// Call our pre-run
-			cmd.preRun();		
-			
-			// Run the command (if we're allowed) 
-			if(cmd.canRun) cmd.run();
+			this.command.executeAs(this.sender, this.args);
 		} catch (Throwable e) {
 			FactionsPlus.get().logError(e);
 		}

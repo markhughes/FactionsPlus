@@ -10,29 +10,36 @@ import me.markeh.factionsplus.FactionsPlus;
 
 import com.massivecraft.massivecore.MassiveException;
 
+/**
+ * Command Wrapper
+ * Supports: Factions > 2.6 & <= 2.8.6
+ * 
+ * Some version of Factions make major changes, in which a new
+ * command wrapper should be created.
+ * 
+ * The latest wrapper should not initiate any reflection.
+ */
 public class FactionsCommand2_8_6Wrapper extends com.massivecraft.factions.cmd.FactionsCommand {
 
-	// ------------------------------
-	//  Fields
-	// ------------------------------
+	// ---------------------------------------- //
+	// FIELDS
+	// ---------------------------------------- //
 
-	private FactionsCommand cmd;
+	private FactionsCommand command;
 	
-	// ------------------------------
-	//  Constructor
-	// ------------------------------
+	// ---------------------------------------- //
+	// CONSTRUCTOR
+	// ---------------------------------------- //
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public FactionsCommand2_8_6Wrapper(FactionsCommand cmd, List<String> _aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
+	public FactionsCommand2_8_6Wrapper(FactionsCommand command, List<String> aliases, List<String> reqArguments, HashMap<String, String> optArguments) {
 		// Older arg system ..
 		
 		// Store our FactionsCommand
-		this.cmd = cmd;
+		this.command = command;
 		
 		// Register all the aliases
-		for(String alias : _aliases) {
-			this.aliases.add(alias);
-		}
+		this.aliases.addAll(aliases);
 		
 		// --- Older AR Style ( <= 2.8.2 ) --- //
 		
@@ -55,10 +62,10 @@ public class FactionsCommand2_8_6Wrapper extends com.massivecraft.factions.cmd.F
 
 			}
 			
-			this.getClass().getMethod("setGivingErrorOnTooManyArgs", Boolean.class).invoke(this, cmd.doErrorOnTooManyArgs());
+			this.getClass().getMethod("setGivingErrorOnTooManyArgs", Boolean.class).invoke(this, this.command.doErrorOnTooManyArgs());
 					
 			
-			cmd.helpLine = (String) this.getClass().getMethod("getUseageTemplate", Boolean.class).invoke(this).getClass().getMethod("toRaw").invoke(this);
+			this.command.helpLine = (String) this.getClass().getMethod("getUseageTemplate", Boolean.class).invoke(this).getClass().getMethod("toRaw").invoke(this);
 
 		} catch(Exception e) {
 			
@@ -79,33 +86,22 @@ public class FactionsCommand2_8_6Wrapper extends com.massivecraft.factions.cmd.F
 				FactionsFramework.get().logError(e);
 			}
 			
-			this.overflowSensitive = cmd.doErrorOnTooManyArgs();
-			cmd.helpLine = this.getTemplate(true).toRaw();
+			this.overflowSensitive = this.command.doErrorOnTooManyArgs();
+			this.command.helpLine = this.getTemplate(true).toRaw();
 
 		}
 				
-		this.setDesc(cmd.description);
+		this.setDesc(this.command.description);
 	}
 
-	// ------------------------------
-	//  Methods
-	// ------------------------------
+	// ---------------------------------------- //
+	// METHODS
+	// ---------------------------------------- //
 	
 	@Override
 	public void perform() throws MassiveException {
 		try { 
-			cmd.reset();
-			
-			// Set our information
-			cmd.sender = this.sender;
-			
-			cmd.arguments = this.args;
-			
-			// Call our pre-run
-			cmd.preRun();		
-			
-			// Run the command (if we're allowed) 
-			if(cmd.canRun) cmd.run();
+			this.command.executeAs(this.sender, this.args);
 		} catch (Throwable e) {
 			FactionsPlus.get().logError(e);
 		}

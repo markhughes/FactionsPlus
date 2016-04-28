@@ -39,32 +39,32 @@ public class Faction1_6UUID extends Faction {
 	}
 
 	@Override
-	public List<Player> getMembers() {
-		List<Player> members = new ArrayList<Player>();
+	public List<me.markeh.factionsframework.objs.FPlayer> getMembers() {
+		List<me.markeh.factionsframework.objs.FPlayer> members = new ArrayList<me.markeh.factionsframework.objs.FPlayer>();
 		
 		for(FPlayer fPlayer : this.faction.getFPlayers()) {
-			members.add(fPlayer.getPlayer());
+			members.add(me.markeh.factionsframework.objs.FPlayer.get(fPlayer.getPlayer()));
 		}
 		
 		return members;
 	}
 
 	@Override
-	public Player getLeader() {
+	public me.markeh.factionsframework.objs.FPlayer getLeader() {
 		if(this.faction == null) return null;
 		if(this.faction.getId() == FactionsManager.get().fetch().getWildernessId()) return null;
 		if(this.faction.getFPlayerAdmin() == null) return null;
 		
-		return this.faction.getFPlayerAdmin().getPlayer();
+		return me.markeh.factionsframework.objs.FPlayer.get(this.faction.getFPlayerAdmin().getPlayer());
 	}
 
 	@Override
-	public List<Player> getOfficers() {
-		List<Player> officers = new ArrayList<Player>();
+	public List<me.markeh.factionsframework.objs.FPlayer> getOfficers() {
+		List<me.markeh.factionsframework.objs.FPlayer> officers = new ArrayList<me.markeh.factionsframework.objs.FPlayer>();
 		
 		for(FPlayer fPlayer : this.faction.getFPlayers()) {
 			if(fPlayer.getRole().equals(Role.MODERATOR)) {
-				officers.add(fPlayer.getPlayer());
+				officers.add(me.markeh.factionsframework.objs.FPlayer.get(fPlayer.getPlayer()));
 			}
 		}
 		
